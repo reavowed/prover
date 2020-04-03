@@ -3,6 +3,7 @@ package net.prover.model.entries
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.controllers.Identity
 import net.prover.controllers.models.StepWithReferenceChange
+import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.Theorem.Proof
@@ -12,6 +13,7 @@ import scalaz.Functor
 import scalaz.syntax.functor._
 
 import scala.reflect.ClassTag
+import scala.util.{Failure, Try}
 
 @JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
@@ -74,8 +76,12 @@ case class Theorem(
     oldInference: Inference,
     newInference: Inference,
     provingContext: ProvingContext
-  ): Theorem = {
-    copy(proofs = proofs.map(_.replaceInference(oldInference, newInference, StepProvingContext(initialStepContext, provingContext))))
+  ): Try[Theorem] = {
+    proofs.zipWithIndex.map { case (proof, index) =>
+      proof.replaceInference(oldInference, newInference, StepProvingContext(initialStepContext, provingContext)).recoverWith {
+        case InferenceReplacementException.AtStep(message, stepPath) => Failure(InferenceReplacementException.AtTheorem(message, stepPath, index, name))
+      }
+    }.traverseTry.map(proofs => copy(proofs = proofs))
   }
   override def replaceDefinition(
     oldDefinition: ExpressionDefinition,
@@ -164,7 +170,9 @@ object Theorem extends Inference.EntryParser {
       oldInference: Inference,
       newInference: Inference,
       stepProvingContext: StepProvingContext
-    ): Proof = Proof(steps.replaceInference(oldInference, newInference, stepProvingContext))
+    ): Try[Proof] = {
+      steps.replaceInference(oldInference, newInference, stepProvingContext).map(Proof(_))
+    }
     def replaceDefinition(
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition,

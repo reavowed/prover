@@ -218,8 +218,9 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                 case Some(intendedPremiseStatements) =>
                   for {
                     (intendedInferencePremises, intendedExtractionPremises) <- intendedPremiseStatements.takeAndRemainingIfValid(inference.premises.length).orBadRequest("Not enough intended premises statements provided")
+                    substitutedIntendedExtractionPremises <- intendedExtractionPremises.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to extraction premises")
                     _ <- (intendedInferencePremises == inference.premises).orBadRequest("Intended premises did not match inference premises")
-                  } yield (inference.copy(premises = intendedInferencePremises), Some(intendedExtractionPremises))
+                  } yield (inference.copy(premises = intendedInferencePremises), Some(substitutedIntendedExtractionPremises))
                 case None =>
                   Success((inference, None))
               }

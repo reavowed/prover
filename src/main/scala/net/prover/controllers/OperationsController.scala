@@ -3,31 +3,35 @@ package net.prover.controllers
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, TermDefinition, Theorem, WritingShorthand}
 import net.prover.model.{Book, Chapter, EntryContext, ProvingContext}
+import net.prover.controllers._
+import net.prover.exceptions.InferenceReplacementException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
+
+import scala.util.{Failure, Success}
 
 @RestController
 @RequestMapping(Array("/"))
 class OperationsController @Autowired() (val bookService: BookService) extends BookModification with ReactViews {
 
-  private def updateEntries[TMetadata](initial: TMetadata, f: Definitions => (ChapterEntry, EntryContext, TMetadata) => (ChapterEntry, TMetadata)): Unit = {
+  private def updateEntries[TMetadata](initial: TMetadata, f: Definitions => (Book, Chapter, ChapterEntry, EntryContext, TMetadata) => (ChapterEntry, TMetadata)): Unit = {
     println("Beginning update operation")
     bookService.modifyBooks[Identity] { (books, definitions) =>
       val update = f(definitions)
-      def modifyEntry(tuple: (TMetadata, EntryContext), chapterEntry: ChapterEntry): ((TMetadata, EntryContext), ChapterEntry) = {
+      def modifyEntry(book: Book, chapter: Chapter, tuple: (TMetadata, EntryContext), chapterEntry: ChapterEntry): ((TMetadata, EntryContext), ChapterEntry) = {
         val (metadata, entryContext) = tuple
-        val (newEntry, newMetadata) = update(chapterEntry, entryContext, metadata)
+        val (newEntry, newMetadata) = update(book, chapter, chapterEntry, entryContext, metadata)
         ((newMetadata, entryContext.addEntry(newEntry)), newEntry)
       }
-      def modifyChapter(tuple: (TMetadata, EntryContext), chapter: Chapter): ((TMetadata, EntryContext), Chapter) = {
+      def modifyChapter(book: Book, tuple: (TMetadata, EntryContext), chapter: Chapter): ((TMetadata, EntryContext), Chapter) = {
         println("  - " + chapter.title)
-        chapter.entries.mapFold(tuple)(modifyEntry)
+        chapter.entries.mapFold(tuple)(modifyEntry(book, chapter, _, _))
           .mapRight(entries => chapter.copy(entries = entries))
       }
       def modifyBook(changedInferences: TMetadata, previousBooks: Seq[Book], book: Book): (TMetadata, Book) = {
         println("- " + book.title)
         val entryContext = EntryContext.forBookExclusive(previousBooks, book)
-        book.chapters.mapFold((changedInferences, entryContext))(modifyChapter)
+        book.chapters.mapFold((changedInferences, entryContext))(modifyChapter(book, _, _))
           .mapRight(chapters => book.copy(chapters = chapters))
           .mapLeft(_._1)
       }
@@ -38,7 +42,7 @@ class OperationsController @Autowired() (val bookService: BookService) extends B
 
   @GetMapping(value = Array("replaceZero"))
   def replaceZero(): Unit = {
-    updateEntries[Map[String, String]](Map.empty, _ => (chapterEntry, entryContext, changedInferences) => {
+    updateEntries[Map[String, String]](Map.empty, _ => (_, _, chapterEntry, entryContext, changedInferences) => {
       if (chapterEntry.asOptionalInstanceOf[TermDefinition].exists(_.symbol == "0_ℤ")) {
         (WritingShorthand.parser(entryContext).parseFromString("apply ⍳_ℤ 0 as 0_ℤ", ""), changedInferences)
       } else {
@@ -59,13 +63,20 @@ class OperationsController @Autowired() (val bookService: BookService) extends B
     @RequestParam("new") newInferenceId: String
   ): Unit = {
     updateEntries[Unit](Map.empty, definitions => {
-      val oldInference = definitions.inferenceEntries.find(_.id == oldInferenceId).get
-      val newInference = definitions.inferenceEntries.find(_.id == newInferenceId).get
-      (chapterEntry, entryContext, _) => {
+      val oldInference = definitions.allInferences.find(_.id == oldInferenceId).get
+      val newInference = definitions.allInferences.find(_.id == newInferenceId).get
+      (book, chapter, chapterEntry, entryContext, _) => {
         val updated = chapterEntry.asOptionalInstanceOf[Theorem] match {
           case Some(theorem) =>
             val provingContext = ProvingContext(entryContext, definitions)
-            theorem.replaceInference(oldInference, newInference, provingContext).recalculateReferences(provingContext)._1
+            theorem.replaceInference(oldInference, newInference, provingContext) match {
+              case Success(theorem) =>
+                theorem.recalculateReferences(provingContext)._1
+              case Failure(InferenceReplacementException.AtTheorem(message, stepPath, proofIndex, theoremName)) =>
+                throw InferenceReplacementException.AtBook(message, stepPath, proofIndex, theoremName, chapter.title, book.title)
+              case Failure(e) =>
+                throw e
+            }
           case _ =>
             chapterEntry
         }

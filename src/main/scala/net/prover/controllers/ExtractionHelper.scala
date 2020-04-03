@@ -69,10 +69,9 @@ object ExtractionHelper {
       }
       ExtractionApplication(innerResult, innerPremise, innerSteps, innerPremises, innerTargets) <- applyExtractions(extractedConclusion, inferencesRemaining, mainSubstitutions, innerIntendedPremises, intendedConclusion, variableTracker, findPremiseStepsOrTargets)
       updatedSubstitutionsFromIntendedPremises <- intendedPremisesForThisInference match {
-        case Some(premises) =>
+        case Some(intendedPremises) =>
           for {
-            substitutedPremises <- premises.map(p => p.applySubstitutions(mainSubstitutions).orBadRequest(s"Could not apply substitutions to intended premise $p")).traverseTry
-            substitutions <- otherPremises.zip(substitutedPremises).foldLeft(Try(Substitutions.Possible.empty)) { case (substitutionsSoFarTry, (otherPremise, intendedPremise)) =>
+            substitutions <- otherPremises.zip(intendedPremises).foldLeft(Try(Substitutions.Possible.empty)) { case (substitutionsSoFarTry, (otherPremise, intendedPremise)) =>
               for {
                 substitutionsSoFar <- substitutionsSoFarTry
                 newSubstitutions <- otherPremise.calculateSubstitutions(intendedPremise, substitutionsSoFar).orBadRequest(s"Could not calculate substitutions for premise $otherPremise from $intendedPremise")

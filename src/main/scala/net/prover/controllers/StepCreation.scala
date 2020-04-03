@@ -30,8 +30,9 @@ trait StepCreation extends BookModification {
         case Some(newTargetStatements) =>
           for {
             (targetStatementsForInference, targetStatementsForExtraction) <- newTargetStatements.takeAndRemainingIfValid(inference.premises.length).orBadRequest("Not enough target statements provided")
+            substitutedTargetStatementsForExtraction <- targetStatementsForExtraction.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to extraction premises")
             _ <- (targetStatementsForInference == inference.premises).orBadRequest("Target statements did not match inference premise")
-          } yield (inference.copy(premises = targetStatementsForInference), Some(targetStatementsForExtraction))
+          } yield (inference.copy(premises = targetStatementsForInference), Some(substitutedTargetStatementsForExtraction))
         case None =>
           Success((inference, None))
       }

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.controllers.ExtractionHelper
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.StepWithReferenceChange
+import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ExpressionDefinition, StatementDefinition}
@@ -14,7 +15,7 @@ import net.prover.model.expressions.{DefinedStatement, Statement}
 import scalaz.Functor
 import scalaz.syntax.functor._
 
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 @JsonIgnoreProperties(Array("substitutions", "isComplete"))
 sealed trait Step {
@@ -32,7 +33,7 @@ sealed trait Step {
     oldInference: Inference,
     newInference: Inference,
     stepProvingContext: StepProvingContext
-  ): Step
+  ): Try[Step]
   def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange])
   def isComplete(definitions: Definitions): Boolean
   def referencedInferenceIds: Set[String]
@@ -65,8 +66,8 @@ object Step {
       oldInference: Inference,
       newInference: Inference,
       stepProvingContext: StepProvingContext
-    ): Step = {
-      replaceSubsteps(substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext)))
+    ): Try[Step] = {
+      substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext)).map(replaceSubsteps)
     }
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
       substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
@@ -204,16 +205,17 @@ object Step {
         premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
         substitutions.replaceDefinition(oldDefinition, newDefinition))
     }
-    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Step = {
+    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = {
       if (inference == oldInference) {
-        val updatedAssertion = Assertion(statement, inference, premises, substitutions)
-          .replaceInference(oldInference, newInference, stepProvingContext)
-          .asOptionalInstanceOf[Assertion].getOrElse(throw new Exception("Cannot replace naming with an elided step"))
-        Naming(
+        for {
+          updatedStep <- Assertion(statement, inference, premises, substitutions).replaceInference(oldInference, newInference, stepProvingContext)
+          updatedAssertion <- updatedStep.asOptionalInstanceOf[Step.Assertion].failIfUndefined(InferenceReplacementException.AtStep("Cannot replace naming with an elided step")(stepProvingContext.stepContext))
+          updatedSubsteps <- substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext))
+        } yield Naming(
           variableName,
           assumption,
           statement,
-          substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext)),
+          updatedSubsteps,
           updatedAssertion.inference,
           updatedAssertion.premises,
           updatedAssertion.substitutions)
@@ -325,7 +327,7 @@ object Step {
         s <- statement.removeExternalParameters(numberOfParametersToRemove, internalDepth)
       } yield copy(statement = s)
     }
-    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Step = this
+    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = Success(this)
     override def replaceDefinition(
       oldDefinition: ExpressionDefinition,
       newDefinition: ExpressionDefinition,
@@ -363,11 +365,11 @@ object Step {
       } yield Elided(newSubsteps, highlightedInference, description)
     }
 
-    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Step = {
+    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = {
       if (highlightedInference.contains(oldInference)) {
-        copy(
-          highlightedInference = Some(newInference.summary),
-          substeps = substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext)))
+        for {
+          updatedSubsteps <- substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext))
+        } yield copy(highlightedInference = Some(newInference.summary), substeps = updatedSubsteps)
       } else {
         super.replaceInference(oldInference, newInference, stepProvingContext)
       }
@@ -447,19 +449,30 @@ object Step {
         newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove, internalDepth)
       } yield Assertion(newStatement, inference, newPremises, newSubstitutions)
     }
-    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Step = {
+    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = {
       implicit val spc = stepProvingContext
       if (inference == oldInference) {
-        (for {
+        val substitutionsOption = (for {
           extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(newInference.id)
           substitutionsAfterConclusion <- extractionOption.conclusion.calculateSubstitutions(statement).toSeq
           substitutionsAfterPremises <- extractionOption.premises.zipStrict(premises).flatMap(_.foldLeft(Option(substitutionsAfterConclusion)) { case (so, (ep, p)) => so.flatMap(s => ep.calculateSubstitutions(p.statement, s)) }).toSeq
           substitutions <- substitutionsAfterPremises.confirmTotality.toSeq
-          assertionStep <- Assertion.forInference(newInference, substitutions).toSeq
-          ExtractionApplication(_, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, newInference, substitutions, Some(premises.map(_.statement)), Some(statement), _ => (Nil, Nil)).toOption.toSeq
-          extractionStep <- Elided.ifNecessary(assertionStep +: extractionSteps, newInference).toSeq
-        } yield extractionStep).headOption.getOrElse(throw new Exception("Could not replace assertion"))
-      } else this
+        } yield (extractionOption, substitutions)).headOption
+        for {
+          (extractionOption, substitutions) <- substitutionsOption.failIfUndefined(InferenceReplacementException.AtStep("Could not find extraction option")(stepProvingContext.stepContext))
+          assertionStep <- Assertion.forInference(newInference, substitutions).failIfUndefined(InferenceReplacementException.AtStep("Could not apply substitutions")(stepProvingContext.stepContext))
+          ExtractionApplication(_, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(
+            assertionStep.statement,
+            extractionOption.extractionInferences,
+            newInference,
+            substitutions,
+            Some(premises.drop(newInference.premises.length).map(_.statement)),
+            Some(statement),
+            _ => (Nil, Nil)
+          ).recoverWith { case e => Failure(InferenceReplacementException.AtStep(e.getMessage)(stepProvingContext.stepContext)) }
+          extractionStep <- Elided.ifNecessary(assertionStep +: extractionSteps, newInference).failIfUndefined(InferenceReplacementException.AtStep("Could not elide step")(stepProvingContext.stepContext))
+        } yield extractionStep
+      } else Success(this)
     }
     override def replaceDefinition(
       oldDefinition: ExpressionDefinition,
@@ -565,12 +578,13 @@ object Step {
       oldInference: Inference,
       newInference: Inference,
       outerStepProvingContext: StepProvingContext
-    ): Seq[Step] = {
-      steps.zipWithIndex.mapFold(outerStepProvingContext) { case (currentStepProvingContext, (step, index)) =>
+    ): Try[Seq[Step]] = {
+      steps.zipWithIndex.mapFoldTry(outerStepProvingContext) { case (currentStepProvingContext, (step, index)) =>
         val innerStepProvingContext = currentStepProvingContext.updateStepContext(_.atIndex(index))
-        val newStep = step.replaceInference(oldInference, newInference, innerStepProvingContext)
-        currentStepProvingContext.updateStepContext(_.addStep(newStep, innerStepProvingContext.stepContext.stepReference)) -> newStep
-      }._2
+        for {
+          newStep <- step.replaceInference(oldInference, newInference, innerStepProvingContext)
+        } yield currentStepProvingContext.updateStepContext(_.addStep(newStep, innerStepProvingContext.stepContext.stepReference)) -> newStep
+      }.map(_._2)
     }
   }
 

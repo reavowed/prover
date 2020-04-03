@@ -126,6 +126,14 @@ package object model {
         } yield previous :+ s
       }
     }
+    def mapFoldTry[R, S](initial: R)(f: (R, T) => Try[(R, S)]): Try[(R, Seq[S])] = {
+      seq.foldLeft(Try((initial, Seq.empty[S]))) { case (currentTry, t) =>
+        for {
+          (currentAccumulator, currentValues) <- currentTry
+          (newAccumulator, newValue) <- f(currentAccumulator, t)
+        } yield (newAccumulator, currentValues :+ newValue)
+      }
+    }
     def mapFoldOption[R, S](initial: R)(f: (R, T) => Option[(R, S)]): Option[(R, Seq[S])] = {
       seq.foldLeft(Option((initial, Seq.empty[S]))) { case (accOption, t) =>
         for {
@@ -506,6 +514,10 @@ package object model {
     def ifEmpty(action: => Unit): Option[T] = {
       if (x.isEmpty) action
       x
+    }
+    def failIfUndefined(e: => Exception): Try[T] = x match {
+      case Some(t) => Success(t)
+      case None => Failure(e)
     }
   }
 
