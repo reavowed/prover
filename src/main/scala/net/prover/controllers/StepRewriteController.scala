@@ -53,9 +53,9 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       def getSuggestions(termRewriteInference: TermRewriteInference): Option[InferenceRewriteSuggestion] = {
         val suggestions = replacementPossibilities.mapCollect { case ReplacementPossibility(term, _, depth, path, unwrappers) =>
           for {
-            substitutions <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
-            result <- termRewriteInference.rhs.applySubstitutions(substitutions.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
-            _ <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutions)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
+            substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
+            (_, _, substitutionsAfterPremises) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
+            result <- termRewriteInference.rhs.applySubstitutions(substitutionsAfterPremises.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
           } yield InferenceRewritePath(path, result)
         }
         if (suggestions.nonEmpty)
@@ -73,10 +73,9 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       stepProvingContext.provingContext.termRewriteInferences
         .filter { case TermRewriteInference(i, _, _, _) => filter(i) }
         .sortBy(_.extractionOption.conclusion.structuralComplexity)(implicitly[Ordering[Int]].reverse)
-        .iterator
-        .flatMap { getSuggestions(_).toSeq}
+        .flatMap { getSuggestions(_).toSeq }
+        .sortBy(_.rewriteSuggestions.map(_.result.structuralComplexity).max)
         .take(10)
-        .toList
     }).toResponseEntity
   }
 

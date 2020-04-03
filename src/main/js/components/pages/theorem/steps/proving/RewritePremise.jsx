@@ -9,7 +9,8 @@ export default function RewritePremise({path, availablePremises, entryContext, o
 
   const rewrite = (rewrites) => {
     return context.fetchJsonForStepAndInsert(path, "rewritePremise", {method: "POST", body: rewrites})
-      .catch(onError);
+      .catch(onError)
+      .then(onCancel);
   };
   return <>
     <PremiseChooser premise={premiseToRewrite} setPremise={setPremiseToRewrite} availablePremises={availablePremises} entryContext={entryContext}/>
