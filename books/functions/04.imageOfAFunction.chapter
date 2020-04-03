@@ -47,7 +47,12 @@ conclusion function f A image f
       let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0, ∈ $0 product A image f) () {
         let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0, ∈ $$0 product A image f) () {
           prove ∈ orderedPair $$0 $0 f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$0 f) ($$$0, orderedPair $$0 $0) 0.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.0a
-          prove = $0 apply f $$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (f, A, B, $$0, $0) p0 0.0.1.0.0
+          elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+            prove ↔ ∈ orderedPair $$0 $0 f ∧ ∈ $$0 A = $0 apply f $$0 a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 () (f, A, B, $$0, $0) p0
+            prove → ∈ orderedPair $$0 $0 f ∧ ∈ $$0 A = $0 apply f $$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$0 $0 f, ∧ ∈ $$0 A = $0 apply f $$0) () 0.0.1.0.1.0
+            prove ∧ ∈ $$0 A = $0 apply f $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 f, ∧ ∈ $$0 A = $0 apply f $$0) () 0.0.1.0.1.1 0.0.1.0.0
+            prove = $0 apply f $$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 A, = $0 apply f $$0) () 0.0.1.0.1.2
+          }
           elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
             prove ∧ ∈ $$0 A = $0 apply f $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$0 A, = $0 apply f $$0) () 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.1.0.1
             prove ∃ a ∧ ∈ $0 A = $$0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$$0 A = $0 apply f $$$$0) ($$0) 0.0.1.0.2.0

@@ -1284,3 +1284,49 @@ conclusion ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^�
     }
   }
 }
+
+theorem Non-Negative Integer Has a Corresponding Natural
+premise ∈ a ℤ
+premise ∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ
+conclusion ∃! n ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0
+{
+  prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
+  elided 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c {
+    prove ∧ ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥ 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c () (⍳_ℤ, ℕ, ℤ^≥) 0
+    prove ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ, ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥) () 1.0
+  }
+  elided 5d6a8d072a1b3a5050a47dfbc798c7ef3c64d836ea6111bf28111452df1e8425 {
+    prove ∧ ∈ a ℤ ∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a ℤ, ∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ) () p0 p1
+    elided 5d6a8d072a1b3a5050a47dfbc798c7ef3c64d836ea6111bf28111452df1e8425 {
+      prove ∀ a ↔ ∈ $0 ℤ^≥ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0 $0 ≤_ℤ 5d6a8d072a1b3a5050a47dfbc798c7ef3c64d836ea6111bf28111452df1e8425 () ()
+      prove ↔ ∈ a ℤ^≥ ∧ ∈ a ℤ ∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ℤ^≥ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0 $0 ≤_ℤ) (a) 2.1.0
+      prove → ∧ ∈ a ℤ ∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ ∈ a ℤ^≥ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ a ℤ^≥, ∧ ∈ a ℤ ∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ) () 2.1.1
+      prove ∈ a ℤ^≥ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ a ℤ ∈ orderedPair apply ⍳_ℤ 0 a ≤_ℤ, ∈ a ℤ^≥) () 2.1.2 2.0
+    }
+  }
+  prove ∈ apply inverseFunction ⍳_ℤ a ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (inverseFunction ⍳_ℤ, ℤ^≥, ℕ, a) 1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 2
+  elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
+    prove = apply ⍳_ℤ apply inverseFunction ⍳_ℤ a a edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 () (⍳_ℤ, ℕ, ℤ^≥, a) 0 2
+    prove = a apply ⍳_ℤ apply inverseFunction ⍳_ℤ a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℤ apply inverseFunction ⍳_ℤ a, a) 4.0
+  }
+  elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+    prove ∧ ∈ apply inverseFunction ⍳_ℤ a ℕ = a apply ⍳_ℤ apply inverseFunction ⍳_ℤ a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply inverseFunction ⍳_ℤ a ℕ, = a apply ⍳_ℤ apply inverseFunction ⍳_ℤ a) () 3 4
+    prove ∃ n ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $0 ℕ = a apply ⍳_ℤ $0) (apply inverseFunction ⍳_ℤ a) 5.0
+  }
+  take n {
+    take m {
+      assume ∧ ∧ ∈ $$0 ℕ = a apply ⍳_ℤ $$0 ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0 {
+        prove = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$$0 apply ⍳_ℤ $0) (a, apply ⍳_ℤ $$0) 6.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 6.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        elided 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba {
+          prove ↔ = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 = $$0 $0 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba () ($$0, $0) 6.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 6.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+          prove → = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 = $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= apply ⍳_ℤ $$0 apply ⍳_ℤ $0, = $$0 $0) () 6.0.0.1.0
+          prove = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply ⍳_ℤ $$0 apply ⍳_ℤ $0, = $$0 $0) () 6.0.0.1.1 6.0.0.0
+        }
+      }
+    }
+  }
+  elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
+    prove ∧ ∃ n ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0 ∀ n ∀ m → ∧ ∧ ∈ $$0 ℕ = a apply ⍳_ℤ $$0 ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0, ∀ x ∀ y → ∧ ∧ ∈ $$0 ℕ = a apply ⍳_ℤ $$0 ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0 = $$0 $0) () 5 6
+    prove ∃! n ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0 f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 (∧ ∈ $0 ℕ = a apply ⍳_ℤ $0) () 7.0
+  }
+}

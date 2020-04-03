@@ -43,7 +43,10 @@ premise function f n A
 conclusion ∈ f powerSet product ℕ A
 {
   prove ⊆ n ℕ c660722cbf1cd12662afceb43da350b308473e86467cf5d9f72cd22c5e8cfcf6 () (n) p0
-  prove ⊆ f product n A 705bc6d0a9c7294952a982320cb92c85f80cd0f847ceb55af0724b2f7d13a248 () (f, n, A) p1
+  elided 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 {
+    prove ∧ ⊆ f product n A ∀ x → ∈ $0 n ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, n, A) p1
+    prove ⊆ f product n A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f product n A, ∀ x → ∈ $0 n ∃! y ∈ orderedPair $$0 $0 f) () 1.0
+  }
   prove ⊆ product n A product ℕ A 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 () (n, ℕ, A) 0
   prove ⊆ f product ℕ A 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, product n A, product ℕ A) 1 2
   prove ∈ f powerSet product ℕ A 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (f, product ℕ A) 3
@@ -93,8 +96,13 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
           prove ∈ orderedPair 0 g_0 singleton orderedPair 0 g_0 e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (orderedPair 0 g_0)
           prove ∈ orderedPair 0 g_0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ orderedPair 0 g_0 $$$0) ($0, singleton orderedPair 0 g_0) 0.2.0a 0.2.0.2.0
         }
-        elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
-          prove = g_0 apply $0 0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($0, 1, X, 0, g_0) 0.2.0.0 0.2.0.2
+        elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+          elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+            prove ↔ ∈ orderedPair 0 g_0 $0 ∧ ∈ 0 1 = g_0 apply $0 0 a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 () ($0, 1, X, 0, g_0) 0.2.0.0
+            prove → ∈ orderedPair 0 g_0 $0 ∧ ∈ 0 1 = g_0 apply $0 0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair 0 g_0 $0, ∧ ∈ 0 1 = g_0 apply $0 0) () 0.2.0.3.0.0
+            prove ∧ ∈ 0 1 = g_0 apply $0 0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair 0 g_0 $0, ∧ ∈ 0 1 = g_0 apply $0 0) () 0.2.0.3.0.1 0.2.0.2
+            prove = g_0 apply $0 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ 0 1, = g_0 apply $0 0) () 0.2.0.3.0.2
+          }
           prove = apply $0 0 g_0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (g_0, apply $0 0) 0.2.0.3.0
         }
         take n {
@@ -150,7 +158,12 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                 }
                 prove ¬ ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 872156a627b48127aaf94f85dae6db43b564ad471e9f83890f421a2127ae266d (∧ = 0 successor $$$$$0 = apply $$0 0 apply f apply $$0 $$$$$0) () 0.3.0.0.1.1.1.0
               }
-              prove = $$$0 apply $$0 0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, $0, X, 0, $$$0) 0.3.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.3.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+              elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+                prove ↔ ∈ orderedPair 0 $$$0 $$0 ∧ ∈ 0 $0 = $$$0 apply $$0 0 a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 () ($$0, $0, X, 0, $$$0) 0.3.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                prove → ∈ orderedPair 0 $$$0 $$0 ∧ ∈ 0 $0 = $$$0 apply $$0 0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair 0 $$$0 $$0, ∧ ∈ 0 $0 = $$$0 apply $$0 0) () 0.3.0.0.1.1.2.0
+                prove ∧ ∈ 0 $0 = $$$0 apply $$0 0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair 0 $$$0 $$0, ∧ ∈ 0 $0 = $$$0 apply $$0 0) () 0.3.0.0.1.1.2.1 0.3.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                prove = $$$0 apply $$0 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ 0 $0, = $$$0 apply $$0 0) () 0.3.0.0.1.1.2.2
+              }
               elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
                 prove → ∈ 0 $0 ∨ ∧ = 0 0 = apply $$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$0 $0 ∨ ∧ = $$$$$0 0 = apply $$0 $$$$$0 g_0 ∃ b ∧ = $$$$$$0 successor $0 = apply $$$0 $$$$$$0 apply f apply $$$0 $0) (0) 0.3.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                 prove ∨ ∧ = 0 0 = apply $$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0 $0, ∨ ∧ = 0 0 = apply $$0 0 g_0 ∃ b ∧ = 0 successor $0 = apply $$$0 0 apply f apply $$$0 $0) () 0.3.0.0.1.1.3.0 0.3.0.0.1.1.0
@@ -181,7 +194,12 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                 let m_n ∧ ∈ $0 ℕ ∧ function $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0 = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 ℕ ∧ function $0 $$$$$0 X ∀ a → ∈ $0 $$$$$$0 ∨ ∧ = $0 0 = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0, ∃! y ∈ orderedPair successor $$$$0 $0 union $$$$$0) () {
                   subproof (Existence) {
                     prove ∈ $$$$0 $0 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () ($$0, $0, X, $$$$0, $$$0) 0.5.0.0.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.5.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                    prove = $$$0 apply $$0 $$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, $0, X, $$$$0, $$$0) 0.5.0.0.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.5.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+                      prove ↔ ∈ orderedPair $$$$0 $$$0 $$0 ∧ ∈ $$$$0 $0 = $$$0 apply $$0 $$$$0 a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 () ($$0, $0, X, $$$$0, $$$0) 0.5.0.0.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove → ∈ orderedPair $$$$0 $$$0 $$0 ∧ ∈ $$$$0 $0 = $$$0 apply $$0 $$$$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$$$0 $$$0 $$0, ∧ ∈ $$$$0 $0 = $$$0 apply $$0 $$$$0) () 0.5.0.0.0.0.1.1.0.1.0
+                      prove ∧ ∈ $$$$0 $0 = $$$0 apply $$0 $$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$$$0 $$$0 $$0, ∧ ∈ $$$$0 $0 = $$$0 apply $$0 $$$$0) () 0.5.0.0.0.0.1.1.0.1.1 0.5.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove = $$$0 apply $$0 $$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$$$0 $0, = $$$0 apply $$0 $$$$0) () 0.5.0.0.0.0.1.1.0.1.2
+                    }
                     elided c06768d75c05348690098b02ae1dd805419c16771314db00c4d82f16a9522255 {
                       prove ∀ n → ∈ $0 ℕ ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 c06768d75c05348690098b02ae1dd805419c16771314db00c4d82f16a9522255 () ()
                       prove → ∈ $0 ℕ ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 ℕ ∀ m ↔ ∈ $0 $$$$$$$0 ∨ ∈ successor $0 $$$$$$$0 = successor $0 $$$$$$$0) ($0) 0.5.0.0.0.0.1.1.0.2.0
@@ -345,8 +363,13 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                                         prove = apply $$0 $$$$$$0 apply $$$$0 $$$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply $$$$0 $$$$$$0, apply $$0 $$$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.4.0.1.0.2.0.0.1
                                       }
                                       prove = apply $$0 $$$$$$0 $$$$$0 c23a01cc15e828d72e0e45b93e062cd3e609d01d59029b2516edf5993bfc6565 () (apply $$0 $$$$$$0, apply $$$$0 $$$$$$0, $$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.4.0.1.0.2.0.0 0.5.0.0.0.0.1.1.0.1
-                                      elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
-                                        prove = apply f $$$$$0 apply $$0 successor $$$$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, successor successor $$$$$$0, X, successor $$$$$$0, apply f $$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.1 0.5.0.0.0.0.1.1.0.4.0.0.0
+                                      elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+                                        elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+                                          prove ↔ ∈ orderedPair successor $$$$$$0 apply f $$$$$0 $$0 ∧ ∈ successor $$$$$$0 successor successor $$$$$$0 = apply f $$$$$0 apply $$0 successor $$$$$$0 a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 () ($$0, successor successor $$$$$$0, X, successor $$$$$$0, apply f $$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.1
+                                          prove → ∈ orderedPair successor $$$$$$0 apply f $$$$$0 $$0 ∧ ∈ successor $$$$$$0 successor successor $$$$$$0 = apply f $$$$$0 apply $$0 successor $$$$$$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair successor $$$$$$0 apply f $$$$$0 $$0, ∧ ∈ successor $$$$$$0 successor successor $$$$$$0 = apply f $$$$$0 apply $$0 successor $$$$$$0) () 0.5.0.0.0.0.1.1.0.4.0.0.4.0.1.0.2.0.2.0.0
+                                          prove ∧ ∈ successor $$$$$$0 successor successor $$$$$$0 = apply f $$$$$0 apply $$0 successor $$$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair successor $$$$$$0 apply f $$$$$0 $$0, ∧ ∈ successor $$$$$$0 successor successor $$$$$$0 = apply f $$$$$0 apply $$0 successor $$$$$$0) () 0.5.0.0.0.0.1.1.0.4.0.0.4.0.1.0.2.0.2.0.1 0.5.0.0.0.0.1.1.0.4.0.0.0
+                                          prove = apply f $$$$$0 apply $$0 successor $$$$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ successor $$$$$$0 successor successor $$$$$$0, = apply f $$$$$0 apply $$0 successor $$$$$$0) () 0.5.0.0.0.0.1.1.0.4.0.0.4.0.1.0.2.0.2.0.2
+                                        }
                                         prove = apply $$0 successor $$$$$$0 apply f $$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f $$$$$0, apply $$0 successor $$$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.4.0.1.0.2.0.2.0
                                       }
                                       prove = apply $$0 successor $$$$$$0 apply f apply $$0 $$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (= apply $$0 successor $$$$$$0 apply f $$$$$$$$0) (apply $$0 $$$$$$0, $$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.4.0.1.0.2.0.1 0.5.0.0.0.0.1.1.0.4.0.0.4.0.1.0.2.0.2
@@ -429,7 +452,12 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
                                 prove = apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $$$$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (= apply $$$0 successor $$$$$$$$0 apply f apply $$$0 $$$$$$$$$$0) ($$$$$$$$0, $0) 0.5.0.0.0.0.1.1.1.0.0.1.1.1.5.0 0.5.0.0.0.0.1.1.1.0.0.1.1.1.5a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                               } 0.5.0.0.0.0.1.1.1.0.0.1.1.1.4
                             }
-                            prove = $$$0 apply $$0 successor $$$$$$$0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, $0, X, successor $$$$$$$0, $$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.5.0.0.0.0.1.1.1.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                            elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+                              prove ↔ ∈ orderedPair successor $$$$$$$0 $$$0 $$0 ∧ ∈ successor $$$$$$$0 $0 = $$$0 apply $$0 successor $$$$$$$0 a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 () ($$0, $0, X, successor $$$$$$$0, $$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                              prove → ∈ orderedPair successor $$$$$$$0 $$$0 $$0 ∧ ∈ successor $$$$$$$0 $0 = $$$0 apply $$0 successor $$$$$$$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair successor $$$$$$$0 $$$0 $$0, ∧ ∈ successor $$$$$$$0 $0 = $$$0 apply $$0 successor $$$$$$$0) () 0.5.0.0.0.0.1.1.1.0.0.1.1.2.0
+                              prove ∧ ∈ successor $$$$$$$0 $0 = $$$0 apply $$0 successor $$$$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair successor $$$$$$$0 $$$0 $$0, ∧ ∈ successor $$$$$$$0 $0 = $$$0 apply $$0 successor $$$$$$$0) () 0.5.0.0.0.0.1.1.1.0.0.1.1.2.1 0.5.0.0.0.0.1.1.1.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                              prove = $$$0 apply $$0 successor $$$$$$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ successor $$$$$$$0 $0, = $$$0 apply $$0 successor $$$$$$$0) () 0.5.0.0.0.0.1.1.1.0.0.1.1.2.2
+                            }
                             prove = apply $$0 successor $$$$$$$0 apply f $$$$$$0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (= apply $$0 successor $$$$$$$0 apply f $$$$$$$$$0) ($$$$$$0, apply $$0 $$$$$$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1.0 0.5.0.0.0.0.1.1.1.0.0.1.1.1
                             prove = $$$0 apply f $$$$$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply $$0 successor $$$$$$$0, apply f $$$$$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1.2 0.5.0.0.0.0.1.1.1.0.0.1.1.3
                           } 0.5.0.0.0.0.1.1.1.0.0.1.0
@@ -451,8 +479,13 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
       prove function union $0 ℕ X 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (union $0, ℕ, X) 0.7.0
     }
     subproof (Function value - base case) {
-      elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
-        prove = g_0 apply union $0 0 bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () (union $0, ℕ, X, 0, g_0) 0.7 0.2
+      elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+        elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+          prove ↔ ∈ orderedPair 0 g_0 union $0 ∧ ∈ 0 ℕ = g_0 apply union $0 0 a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 () (union $0, ℕ, X, 0, g_0) 0.7
+          prove → ∈ orderedPair 0 g_0 union $0 ∧ ∈ 0 ℕ = g_0 apply union $0 0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair 0 g_0 union $0, ∧ ∈ 0 ℕ = g_0 apply union $0 0) () 0.8.0.0.0
+          prove ∧ ∈ 0 ℕ = g_0 apply union $0 0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair 0 g_0 union $0, ∧ ∈ 0 ℕ = g_0 apply union $0 0) () 0.8.0.0.1 0.2
+          prove = g_0 apply union $0 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ 0 ℕ, = g_0 apply union $0 0) () 0.8.0.0.2
+        }
         prove = apply union $0 0 g_0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (g_0, apply union $0 0) 0.8.0.0
       }
     }

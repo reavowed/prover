@@ -309,8 +309,13 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
       take a {
         assume ∈ $0 A {
           prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0 d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () ($$0, A, orderedPair equivalenceClass $$$0 ≈ apply f $$$0, $0) 0a 0.1.0.0a
-          elided bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 {
-            prove = apply f $0 apply $$0 equivalenceClass $0 ≈ bc9d353d6fafac85e305cc0a6a115053c7aaed0078f44d5a1d2c05213d1a9545 () ($$0, equivalenceQuotient A ≈, B, equivalenceClass $0 ≈, apply f $0) 0.0 0.1.0.0.0
+          elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+            elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
+              prove ↔ ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0 ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈ a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 () ($$0, equivalenceQuotient A ≈, B, equivalenceClass $0 ≈, apply f $0) 0.0
+              prove → ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0 ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0, ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈) () 0.1.0.0.1.0.0
+              prove ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0, ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈) () 0.1.0.0.1.0.1 0.1.0.0.0
+              prove = apply f $0 apply $$0 equivalenceClass $0 ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈, = apply f $0 apply $$0 equivalenceClass $0 ≈) () 0.1.0.0.1.0.2
+            }
             prove = apply $$0 equivalenceClass $0 ≈ apply f $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f $0, apply $$0 equivalenceClass $0 ≈) 0.1.0.0.1.0
           }
         }
