@@ -36,8 +36,9 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
           stepProvingContext.stepContext.boundVariableLists.map(_.zipWithIndex))
         conclusionOption <- getConclusionOption(epc, substitutions)
         newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
+        substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to intended new targets")).swap
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
-        ExtractionApplication(result, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, newTargetStatementsOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)
+        ExtractionApplication(result, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, substitutedNewTargetStatementsOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)
         extractionStep = Step.Elided.ifNecessary(extractionSteps, "Extracted").get
         finalStep = Step.Elided.ifNecessary(extractionPremises :+ extractionStep, "Extracted").get
       } yield (result, finalStep, extractionTargets)
