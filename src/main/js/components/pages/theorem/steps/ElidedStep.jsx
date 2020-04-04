@@ -1,6 +1,8 @@
 import React from "react";
+import {Button, InputGroup} from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import Form from "react-bootstrap/Form";
 import {ElidedStep as ElidedStepModel} from "../../../../models/Step";
 import HashParamsContext from "../../../HashParamsContext";
 import ProofContext from "../ProofContext";
@@ -16,7 +18,9 @@ class ElidedStepProofLineWithContexts extends React.Component {
     const isHighlightedInference = props.step.highlightedInference && _.isEqual(props.hashParamsContext.inferencesToHighlight, [props.step.highlightedInference.id]);
     this.proofLineRef = React.createRef();
     this.state = {
-      showProofCard: !props.step.isComplete || (containsHighlightedInference && !isHighlightedInference)
+      showProofCard: !props.step.isComplete || (containsHighlightedInference && !isHighlightedInference),
+      draftDescription: "",
+      savingDescription: false
     }
   }
 
@@ -32,10 +36,13 @@ class ElidedStepProofLineWithContexts extends React.Component {
   };
 
   setDescription = (description) => {
-    this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "description", {
-      method: "POST",
-      body: description
-    });
+    this.setStatePromise({savingDescription: true})
+      .then(() => this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "description", {
+        method: "POST",
+        body: description
+      }))
+      .catch(() => {})
+      .then(() => this.setStatePromise({savingDescription: false}));
   };
 
   highlightInference = (inferenceId) => {
@@ -59,6 +66,7 @@ class ElidedStepProofLineWithContexts extends React.Component {
 
   render() {
     let {step, path, children} = this.props;
+    let {draftDescription, savingDescription} = this.state;
     let buttons = <>
       {step.highlightedInference && <span className="mr-2"><InferenceLink inference={step.highlightedInference}/></span>}
       {step.description && <span className="text-muted text-uppercase mr-2" style={{"fontFamily": "monospace"}}>{step.description}</span>}
@@ -66,6 +74,10 @@ class ElidedStepProofLineWithContexts extends React.Component {
         {_.chain(step.getAllSubsteps()).filter(s => (s instanceof ElidedStepModel)).map(s => s.description).filter().uniq().value().map(d => <Dropdown.Item key={d} onClick={() => this.setDescription(d)}>{d}</Dropdown.Item>)  }
         {_.uniqBy(step.inferencesUsed, "id").map(i => <Dropdown.Item key={i.id} onClick={() => this.highlightInference(i.id)}>{i.name}</Dropdown.Item>)}
       </DropdownButton>}
+      {!step.highlightedInference && !step.description && <InputGroup className="mr-2 d-inline-flex w-auto">
+        <Form.Control type="text" readOnly={savingDescription} value={draftDescription} onChange={e => this.setState({draftDescription: e.target.value})}/>
+        <InputGroup.Append><Button variant="success" disabled={savingDescription} onClick={() => this.setDescription(draftDescription)}><span className={savingDescription ? "fas fa-spin fa-spinner" : "fas fa-check"}/></Button></InputGroup.Append>
+      </InputGroup>}
       <span className="fas fa-ellipsis-v text-muted mr-2" onClick={this.toggleProofCard} style={{cursor: "pointer"}}/>
     </>;
     const proofLine = <ProofLine premiseReferences={step.filterReferences(path)}
