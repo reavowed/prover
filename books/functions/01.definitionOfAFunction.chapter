@@ -389,3 +389,71 @@ conclusion function f A B
     prove function f A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ f functionSpace A B, function f A B) () 1.1 p0
   }
 }
+
+comment Applying a function to a subset of its domain.
+
+term applySet (f X)
+  name (Function Application on Set)
+  format (f[X])
+  premises (function f A B, ⊆ X A)
+  (= $0 replacementSet x X apply f $0)
+
+theorem Membership Condition for Function Application on Set
+premise function f A B
+premise ⊆ X A
+conclusion ∀ b ↔ ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0
+{
+  prove = applySet f X replacementSet x X apply f $0 645bc12616a9459077e0ec0e2e5f0c7d43bf3714b7b645c6c9c2324cfce703b0 () (f, A, B, X) p0 p1
+  prove ∀ b ↔ ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0 b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 () (applySet f X, X, apply f $0) 0
+}
+
+theorem Function Application on Set Is Subset of Range
+premise function f A B
+premise ⊆ X A
+conclusion ⊆ applySet f X B
+{
+  take b {
+    assume ∈ $0 applySet f X {
+      elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+        prove ∀ b ↔ ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 () (f, A, B, X) p0 p1
+        prove ↔ ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 applySet f X ∃ a ∧ ∈ $0 X = $$$0 apply f $0) ($0) 0.0.0.0
+        prove → ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 applySet f X, ∃ a ∧ ∈ $0 X = $$0 apply f $0) () 0.0.0.1
+        prove ∃ a ∧ ∈ $0 X = $$0 apply f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 applySet f X, ∃ a ∧ ∈ $0 X = $$0 apply f $0) () 0.0.0.2 0.0a
+      }
+      let a ∧ ∈ $0 X = $$0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 X = $0 apply f $$0, ∈ $0 B) () {
+        elided 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 {
+          elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+            prove ∀ x → ∈ $0 X ∈ $0 A f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (X, A) p1
+            prove → ∈ $0 X ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 X ∈ $$$0 A) ($0) 0.0.1.0.0.0
+            prove ∈ $0 A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 X, ∈ $0 A) () 0.0.1.0.0.1 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+          }
+          prove ∈ apply f $0 B 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (f, A, B, $0) p0 0.0.1.0.0
+        }
+        elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+          prove = apply f $0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$0, apply f $0) 0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove ∈ $$0 B 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$0 B) (apply f $0, $$0) 0.0.1.1.0 0.0.1.0
+        }
+      } 0.0.0
+    }
+  }
+  prove ⊆ applySet f X B 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (applySet f X, B) 0
+}
+
+theorem Function Application of Element of Set Is Element of Function Application on Set
+premise function f A B
+premise ⊆ X A
+premise ∈ a X
+conclusion ∈ apply f a applySet f X
+{
+  prove = apply f a apply f a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (apply f a)
+  elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+    prove ∧ ∈ a X = apply f a apply f a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a X, = apply f a apply f a) () p2 0
+    prove ∃ a ∧ ∈ $0 X = apply f a apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $0 X = apply f a apply f $0) (a) 1.0
+  }
+  elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+    prove ∀ b ↔ ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 () (f, A, B, X) p0 p1
+    prove ↔ ∈ apply f a applySet f X ∃ a ∧ ∈ $0 X = apply f a apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0) (apply f a) 2.0
+    prove → ∃ a ∧ ∈ $0 X = apply f a apply f $0 ∈ apply f a applySet f X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ apply f a applySet f X, ∃ a ∧ ∈ $0 X = apply f a apply f $0) () 2.1
+    prove ∈ apply f a applySet f X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a ∧ ∈ $0 X = apply f a apply f $0, ∈ apply f a applySet f X) () 2.2 1
+  }
+}

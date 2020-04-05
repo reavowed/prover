@@ -660,6 +660,103 @@ conclusion = apply ∘ g f a apply g apply f a
   }
 }
 
+theorem Application of Function Composition on Set
+premise function f A B
+premise function g B C
+premise ⊆ X A
+conclusion = applySet ∘ g f X applySet g applySet f X
+{
+  take c {
+    assume ∈ $0 applySet ∘ g f X {
+      elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+        prove function ∘ g f A C c419d535e7fc0e17bf00d2c1313d085f6e027d5ab28e3af2684b29d94161a44f () (f, A, B, g, C) p0 p1
+        elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+          prove ∀ b ↔ ∈ $0 applySet ∘ g f X ∃ a ∧ ∈ $0 X = $$0 apply ∘ g f $0 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 () (∘ g f, A, C, X) 0.0.0.0 p2
+          prove ↔ ∈ $0 applySet ∘ g f X ∃ a ∧ ∈ $0 X = $$0 apply ∘ g f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 applySet ∘ g f X ∃ a ∧ ∈ $0 X = $$$0 apply ∘ g f $0) ($0) 0.0.0.1.0
+          prove → ∈ $0 applySet ∘ g f X ∃ a ∧ ∈ $0 X = $$0 apply ∘ g f $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 applySet ∘ g f X, ∃ a ∧ ∈ $0 X = $$0 apply ∘ g f $0) () 0.0.0.1.1
+          prove ∃ a ∧ ∈ $0 X = $$0 apply ∘ g f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 applySet ∘ g f X, ∃ a ∧ ∈ $0 X = $$0 apply ∘ g f $0) () 0.0.0.1.2 0.0a
+        }
+      }
+      let a ∧ ∈ $0 X = $$0 apply ∘ g f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 X = $0 apply ∘ g f $$0, ∈ $0 applySet g applySet f X) () {
+        elided 96d9e143346e57fdc99a9139ed65e4fa56fb8bdb7251decf62fe7f9400d54351 {
+          elided 96d9e143346e57fdc99a9139ed65e4fa56fb8bdb7251decf62fe7f9400d54351 {
+            elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+              prove ∀ x → ∈ $0 X ∈ $0 A f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (X, A) p2
+              prove → ∈ $0 X ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 X ∈ $$$0 A) ($0) 0.0.1.0.0.0.0
+              prove ∈ $0 A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 X, ∈ $0 A) () 0.0.1.0.0.0.1 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            }
+            prove = apply ∘ g f $0 apply g apply f $0 96d9e143346e57fdc99a9139ed65e4fa56fb8bdb7251decf62fe7f9400d54351 () (f, A, B, g, C, $0) p0 p1 0.0.1.0.0.0
+          }
+          prove = $$0 apply g apply f $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$0 $$$0) (apply ∘ g f $0, apply g apply f $0) 0.0.1.0.0 0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        }
+        prove ∈ apply f $0 applySet f X 9b0ba08ade2fe1111f8c06d6c31dce4aa591c875e27dd645e591e51ad840997d () (f, A, B, X, $0) p0 p2 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+          prove ∧ ∈ apply f $0 applySet f X = $$0 apply g apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply f $0 applySet f X, = $$0 apply g apply f $0) () 0.0.1.1 0.0.1.0
+          prove ∃ a ∧ ∈ $0 applySet f X = $$$0 apply g $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 applySet f X = $$0 apply g $$$0) (apply f $0) 0.0.1.2.0
+        }
+        elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+          prove ⊆ applySet f X B f2dd0d7334d7a8a8e4e8a931bef302b37683577fa81e40589fa58d3b36c9ccfc () (f, A, B, X) p0 p2
+          elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+            prove ∀ b ↔ ∈ $0 applySet g applySet f X ∃ a ∧ ∈ $0 applySet f X = $$0 apply g $0 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 () (g, B, C, applySet f X) p1 0.0.1.3.0
+            prove ↔ ∈ $$0 applySet g applySet f X ∃ a ∧ ∈ $0 applySet f X = $$$0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 applySet g applySet f X ∃ a ∧ ∈ $0 applySet f X = $$$$0 apply g $0) ($$0) 0.0.1.3.1.0
+            prove → ∃ a ∧ ∈ $0 applySet f X = $$$0 apply g $0 ∈ $$0 applySet g applySet f X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $$0 applySet g applySet f X, ∃ a ∧ ∈ $0 applySet f X = $$$0 apply g $0) () 0.0.1.3.1.1
+            prove ∈ $$0 applySet g applySet f X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a ∧ ∈ $0 applySet f X = $$$0 apply g $0, ∈ $$0 applySet g applySet f X) () 0.0.1.3.1.2 0.0.1.2
+          }
+        }
+      } 0.0.0
+    }
+    assume ∈ $0 applySet g applySet f X {
+      prove ⊆ applySet f X B f2dd0d7334d7a8a8e4e8a931bef302b37683577fa81e40589fa58d3b36c9ccfc () (f, A, B, X) p0 p2
+      elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+        prove ∀ b ↔ ∈ $0 applySet g applySet f X ∃ a ∧ ∈ $0 applySet f X = $$0 apply g $0 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 () (g, B, C, applySet f X) p1 0.1.0
+        prove ↔ ∈ $0 applySet g applySet f X ∃ a ∧ ∈ $0 applySet f X = $$0 apply g $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 applySet g applySet f X ∃ a ∧ ∈ $0 applySet f X = $$$0 apply g $0) ($0) 0.1.1.0
+        prove → ∈ $0 applySet g applySet f X ∃ a ∧ ∈ $0 applySet f X = $$0 apply g $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 applySet g applySet f X, ∃ a ∧ ∈ $0 applySet f X = $$0 apply g $0) () 0.1.1.1
+        prove ∃ a ∧ ∈ $0 applySet f X = $$0 apply g $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 applySet g applySet f X, ∃ a ∧ ∈ $0 applySet f X = $$0 apply g $0) () 0.1.1.2 0.1a
+      }
+      let b ∧ ∈ $0 applySet f X = $$0 apply g $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 applySet f X = $0 apply g $$0, ∈ $0 applySet ∘ g f X) () {
+        elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+          prove ∀ b ↔ ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 () (f, A, B, X) p0 p2
+          prove ↔ ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 applySet f X ∃ a ∧ ∈ $0 X = $$$$0 apply f $0) ($0) 0.1.2.0.0
+          prove → ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 applySet f X, ∃ a ∧ ∈ $0 X = $$0 apply f $0) () 0.1.2.0.1
+          prove ∃ a ∧ ∈ $0 X = $$0 apply f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 applySet f X, ∃ a ∧ ∈ $0 X = $$0 apply f $0) () 0.1.2.0.2 0.1.2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        }
+        let a ∧ ∈ $0 X = $$0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 X = $0 apply f $$$0, ∈ $$0 applySet ∘ g f X) () {
+          prove = $$$0 apply g apply f $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$$0 apply g $$$$0) ($$0, apply f $0) 0.1.2.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.1.2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          elided 96d9e143346e57fdc99a9139ed65e4fa56fb8bdb7251decf62fe7f9400d54351 {
+            elided 96d9e143346e57fdc99a9139ed65e4fa56fb8bdb7251decf62fe7f9400d54351 {
+              elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+                prove ∀ x → ∈ $0 X ∈ $0 A f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (X, A) p2
+                prove → ∈ $0 X ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 X ∈ $$$$0 A) ($0) 0.1.2.1.1.0.0.0
+                prove ∈ $0 A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 X, ∈ $0 A) () 0.1.2.1.1.0.0.1 0.1.2.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+              }
+              elided 96d9e143346e57fdc99a9139ed65e4fa56fb8bdb7251decf62fe7f9400d54351 {
+                prove = apply ∘ g f $0 apply g apply f $0 96d9e143346e57fdc99a9139ed65e4fa56fb8bdb7251decf62fe7f9400d54351 () (f, A, B, g, C, $0) p0 p1 0.1.2.1.1.0.0
+                prove = apply g apply f $0 apply ∘ g f $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ∘ g f $0, apply g apply f $0) 0.1.2.1.1.0.1.0
+              }
+            }
+            prove = $$$0 apply ∘ g f $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$$0 $$$$0) (apply g apply f $0, apply ∘ g f $0) 0.1.2.1.1.0 0.1.2.1.0
+          }
+          elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+            prove ∧ ∈ $0 X = $$$0 apply ∘ g f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 X, = $$$0 apply ∘ g f $0) () 0.1.2.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.1.2.1.1
+            prove ∃ a ∧ ∈ $0 X = $$$$0 apply ∘ g f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$$0 X = $$$0 apply ∘ g f $$$$0) ($0) 0.1.2.1.2.0
+          }
+          elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+            prove function ∘ g f A C c419d535e7fc0e17bf00d2c1313d085f6e027d5ab28e3af2684b29d94161a44f () (f, A, B, g, C) p0 p1
+            elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+              prove ∀ b ↔ ∈ $0 applySet ∘ g f X ∃ a ∧ ∈ $0 X = $$0 apply ∘ g f $0 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 () (∘ g f, A, C, X) 0.1.2.1.3.0 p2
+              prove ↔ ∈ $$$0 applySet ∘ g f X ∃ a ∧ ∈ $0 X = $$$$0 apply ∘ g f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$0 applySet ∘ g f X ∃ a ∧ ∈ $0 X = $$$$$0 apply ∘ g f $0) ($$$0) 0.1.2.1.3.1.0
+              prove → ∃ a ∧ ∈ $0 X = $$$$0 apply ∘ g f $0 ∈ $$$0 applySet ∘ g f X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $$$0 applySet ∘ g f X, ∃ a ∧ ∈ $0 X = $$$$0 apply ∘ g f $0) () 0.1.2.1.3.1.1
+              prove ∈ $$$0 applySet ∘ g f X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a ∧ ∈ $0 X = $$$$0 apply ∘ g f $0, ∈ $$$0 applySet ∘ g f X) () 0.1.2.1.3.1.2 0.1.2.1.2
+            }
+          }
+        } 0.1.2.0
+      } 0.1.1
+    }
+    prove ↔ ∈ $0 applySet ∘ g f X ∈ $0 applySet g applySet f X 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 applySet ∘ g f X, ∈ $0 applySet g applySet f X) () 0.0 0.1
+  }
+  prove = applySet ∘ g f X applySet g applySet f X 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (applySet ∘ g f X, applySet g applySet f X) 0
+}
+
 theorem Function Composition Is Associative
 premise function f A B
 premise function g B C
@@ -754,4 +851,63 @@ conclusion ∧ = ∘ identityFunction B f f = ∘ f identityFunction A f
   }
   prove = ∘ f identityFunction A f 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () (∘ f identityFunction A, A, B, f) 5 p0 6
   prove ∧ = ∘ identityFunction B f f = ∘ f identityFunction A f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= ∘ identityFunction B f f, = ∘ f identityFunction A f) () 3 7
+}
+
+theorem Function Application of Identity on Set
+premise ⊆ X A
+conclusion = applySet identityFunction A X X
+{
+  prove function identityFunction A A A a97d05d75651d3e58eb988400b024c10ce4335dd4fe6e0742fb2af932dd40e86 () (A)
+  take a {
+    assume ∈ $0 applySet identityFunction A X {
+      elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+        prove ∀ b ↔ ∈ $0 applySet identityFunction A X ∃ a' ∧ ∈ $0 X = $$0 apply identityFunction A $0 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 () (identityFunction A, A, A, X) 0 p0
+        prove ↔ ∈ $0 applySet identityFunction A X ∃ a' ∧ ∈ $0 X = $$0 apply identityFunction A $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 applySet identityFunction A X ∃ a' ∧ ∈ $0 X = $$$0 apply identityFunction A $0) ($0) 1.0.0.0
+        prove → ∈ $0 applySet identityFunction A X ∃ a' ∧ ∈ $0 X = $$0 apply identityFunction A $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 applySet identityFunction A X, ∃ a ∧ ∈ $0 X = $$0 apply identityFunction A $0) () 1.0.0.1
+        prove ∃ a' ∧ ∈ $0 X = $$0 apply identityFunction A $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 applySet identityFunction A X, ∃ a ∧ ∈ $0 X = $$0 apply identityFunction A $0) () 1.0.0.2 1.0a
+      }
+      let a' ∧ ∈ $0 X = $$0 apply identityFunction A $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 X = $0 apply identityFunction A $$0, ∈ $0 X) () {
+        elided cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad {
+          elided cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad {
+            elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+              prove ∀ x → ∈ $0 X ∈ $0 A f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (X, A) p0
+              prove → ∈ $0 X ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 X ∈ $$$0 A) ($0) 1.0.1.0.0.0.0
+              prove ∈ $0 A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 X, ∈ $0 A) () 1.0.1.0.0.0.1 1.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            }
+            prove = apply identityFunction A $0 $0 cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad () ($0, A) 1.0.1.0.0.0
+          }
+          prove = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$0 $$$0) (apply identityFunction A $0, $0) 1.0.1.0.0 1.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        }
+        elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+          prove = $0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$0, $0) 1.0.1.0
+          prove ∈ $$0 X 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$0 X) ($0, $$0) 1.0.1.1.0 1.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        }
+      } 1.0.0
+    }
+    assume ∈ $0 X {
+      elided cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad {
+        elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+          prove ∀ x → ∈ $0 X ∈ $0 A f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (X, A) p0
+          prove → ∈ $0 X ∈ $0 A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 X ∈ $$0 A) ($0) 1.1.0.0.0
+          prove ∈ $0 A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 X, ∈ $0 A) () 1.1.0.0.1 1.1a
+        }
+        elided cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad {
+          prove = apply identityFunction A $0 $0 cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad () ($0, A) 1.1.0.0
+          prove = $0 apply identityFunction A $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply identityFunction A $0, $0) 1.1.0.1.0
+        }
+      }
+      elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+        prove ∧ ∈ $0 X = $0 apply identityFunction A $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 X, = $0 apply identityFunction A $0) () 1.1a 1.1.0
+        prove ∃ a' ∧ ∈ $0 X = $$0 apply identityFunction A $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$0 X = $0 apply identityFunction A $$0) ($0) 1.1.1.0
+      }
+      elided 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 {
+        prove ∀ b ↔ ∈ $0 applySet identityFunction A X ∃ a ∧ ∈ $0 X = $$0 apply identityFunction A $0 739bd0e6081eb76c3cff155211f62c9962a490f33a76530bf0c8990babc5b0b5 () (identityFunction A, A, A, X) 0 p0
+        prove ↔ ∈ $0 applySet identityFunction A X ∃ a ∧ ∈ $0 X = $$0 apply identityFunction A $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 applySet identityFunction A X ∃ a ∧ ∈ $0 X = $$$0 apply identityFunction A $0) ($0) 1.1.2.0
+        prove → ∃ a ∧ ∈ $0 X = $$0 apply identityFunction A $0 ∈ $0 applySet identityFunction A X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 applySet identityFunction A X, ∃ a ∧ ∈ $0 X = $$0 apply identityFunction A $0) () 1.1.2.1
+        prove ∈ $0 applySet identityFunction A X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a ∧ ∈ $0 X = $$0 apply identityFunction A $0, ∈ $0 applySet identityFunction A X) () 1.1.2.2 1.1.1
+      }
+    }
+    prove ↔ ∈ $0 applySet identityFunction A X ∈ $0 X 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 applySet identityFunction A X, ∈ $0 X) () 1.0 1.1
+  }
+  prove = applySet identityFunction A X X 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (applySet identityFunction A X, X) 1
 }

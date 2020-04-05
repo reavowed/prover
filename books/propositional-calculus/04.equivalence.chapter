@@ -104,3 +104,23 @@ conclusion ↔ → φ ψ → φ χ
   }
   prove ↔ → φ ψ → φ χ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (→ φ ψ, → φ χ) () 0 1
 }
+
+theorem Negated Equivalence
+conclusion ↔ ↔ φ ψ ↔ ¬ φ ¬ ψ
+{
+  assume ↔ φ ψ {
+    prove → ψ φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (φ, ψ) () 0a
+    prove → ¬ φ ¬ ψ 43f73837a4d1b1957a8c4ecb53ba340d7b67553ed2dafd6205d61d6397eec1b0 (ψ, φ) () 0.0
+    prove → φ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () 0a
+    prove → ¬ ψ ¬ φ 43f73837a4d1b1957a8c4ecb53ba340d7b67553ed2dafd6205d61d6397eec1b0 (φ, ψ) () 0.2
+    prove ↔ ¬ φ ¬ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (¬ φ, ¬ ψ) () 0.1 0.3
+  }
+  assume ↔ ¬ φ ¬ ψ {
+    prove → ¬ ψ ¬ φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (¬ φ, ¬ ψ) () 1a
+    prove → φ ψ be704d2121bfc4d5ecd1a8772ae4c9fc1c32b76591efbd0effa8e6b5fb3d11a2 (ψ, φ) () 1.0
+    prove → ¬ φ ¬ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (¬ φ, ¬ ψ) () 1a
+    prove → ψ φ be704d2121bfc4d5ecd1a8772ae4c9fc1c32b76591efbd0effa8e6b5fb3d11a2 (φ, ψ) () 1.2
+    prove ↔ φ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (φ, ψ) () 1.1 1.3
+  }
+  prove ↔ ↔ φ ψ ↔ ¬ φ ¬ ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (↔ φ ψ, ↔ ¬ φ ¬ ψ) () 0 1
+}
