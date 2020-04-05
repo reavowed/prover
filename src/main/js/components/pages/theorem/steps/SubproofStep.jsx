@@ -1,12 +1,17 @@
 import React from "react";
+import styled from "styled-components";
 import {StepReference} from "../../../../models/Step";
-import {HighlightableExpression} from "../../../ExpressionComponent";
 import HashParamsContext from "../../../HashParamsContext";
+import {formatHtml} from "../../../helpers/Formatter";
 import ProofLine from "./components/ProofLine";
-import {ElidedStepProofLine} from "./ElidedStep";
 import Step from "./Step";
 import {Steps} from "./Steps";
-import {formatHtml} from "../../../helpers/Formatter";
+
+const SubproofOutline = styled.div`
+  border: 1px solid black;
+  border-radius: .25rem;
+  padding: 0.5rem 1rem 0.5rem 0;
+`;
 
 export class SubproofStep extends React.Component {
   static contextType = HashParamsContext;
@@ -29,9 +34,11 @@ export class SubproofStep extends React.Component {
     return showingSubproof ?
       <Step.WithSubsteps path={path}>
         <Step.Antecedent>{titleElement}</Step.Antecedent>
-        <Steps.Children steps={step.substeps}
-                        path={path}
-                        propsForLastStep={{additionalReferences: [...additionalReferences, reference]}} />
+        <SubproofOutline>
+          <Steps.Children steps={step.substeps}
+                          path={path}
+                          propsForLastStep={{additionalReferences: [...additionalReferences, reference]}} />
+        </SubproofOutline>
       </Step.WithSubsteps> :
       <Step.WithoutSubsteps>
         {titleElement}
