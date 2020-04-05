@@ -3,6 +3,7 @@ package net.prover.model.proof
 import net.prover.controllers.ExtractionHelper
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.model._
+import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions._
 
 object ProofHelper {
@@ -27,14 +28,14 @@ object ProofHelper {
     }
   }
 
-  def findNamingInferences(implicit entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement)] = {
+  def findNamingInferences(implicit entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement, StatementDefinition, StatementDefinition)] = {
     entryContext.allInferences.mapCollect(i =>
       getNamingPremisesAndAssumption(i).map {
-        case (premises, assumption) => (i, premises, assumption)
+        case (premises, assumption, generalizationDefinition, deductionDefinition) => (i, premises, assumption, generalizationDefinition, deductionDefinition)
       })
   }
 
-  def getNamingPremisesAndAssumption(inference: Inference)(implicit entryContext: EntryContext): Option[(Seq[Statement], Statement)] = {
+  def getNamingPremisesAndAssumption(inference: Inference)(implicit entryContext: EntryContext): Option[(Seq[Statement], Statement, StatementDefinition, StatementDefinition)] = {
     (entryContext.generalizationDefinitionOption, entryContext.deductionDefinitionOption) match {
       case (Some(generalizationDefinition), Some(deductionDefinition)) =>
         inference match {
@@ -49,7 +50,7 @@ object ProofHelper {
               `generalizationDefinition`),
             StatementVariable(conclusionVariableName, Nil)
           ) if deductionConclusionVariableName == conclusionVariableName =>
-            Some((initialPremises, assumption))
+            Some((initialPremises, assumption, generalizationDefinition, deductionDefinition))
           case _ =>
             None
         }

@@ -28,7 +28,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       for {
         variableName <- Option(definition.variableName.trim).filter(_.nonEmpty).orBadRequest("Variable name must be provided")
         inference <- findInference(definition.inferenceId)
-        (namingPremises, assumption) <- ProofHelper.getNamingPremisesAndAssumption(inference).orBadRequest(s"Inference ${definition.inferenceId} is not a naming inference")
+        (namingPremises, assumption, generalizationDefinition, deductionDefinition) <- ProofHelper.getNamingPremisesAndAssumption(inference).orBadRequest(s"Inference ${definition.inferenceId} is not a naming inference")
         substitutions <- definition.substitutions.parse()
         _ <- inference.substituteConclusion(substitutions).filter(_ == step.statement).orBadRequest("Conclusion was incorrect")
         premiseStatements <- namingPremises.map(inference.substituteStatement(_, substitutions)).traverseOption.orBadRequest("Could not substitute premises")
@@ -43,7 +43,9 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
           Seq(Step.Target(step.statement.insertExternalParameters(1))),
           inference,
           premises,
-          substitutions)
+          substitutions,
+          generalizationDefinition,
+          deductionDefinition)
       }
     }.toResponseEntity
   }
@@ -63,9 +65,9 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         premiseStatement <- Statement.parser.parseFromString(serializedPremise, "premise").recoverWithBadRequest
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).orBadRequest("Premise did not have single bound variable")
-        (namingInference, namingInferenceAssumption, substitutionsAfterPremise) <- ProofHelper.findNamingInferences.mapFind {
-          case (i, Seq(singlePremise), a) =>
-            singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s) }
+        (namingInference, namingInferenceAssumption, substitutionsAfterPremise, generalizationDefinition, deductionDefinition) <- ProofHelper.findNamingInferences.mapFind {
+          case (i, Seq(singlePremise), a, generalizationDefinition, deductionDefinition) =>
+            singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s, generalizationDefinition, deductionDefinition) }
           case _ =>
             None
         }.orBadRequest("Could not find naming inference matching premise")
@@ -80,7 +82,9 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
           Seq(Step.Target(targetStep.statement.insertExternalParameters(1))),
           namingInference.summary,
           Seq(premise),
-          substitutions))
+          substitutions,
+          generalizationDefinition,
+          deductionDefinition))
       }
     }.toResponseEntity
   }

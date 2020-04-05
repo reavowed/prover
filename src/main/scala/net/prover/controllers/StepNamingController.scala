@@ -29,7 +29,7 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
           .mapCollect { inference =>
             val conclusions = for {
               extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id)
-              if ProofHelper.findNamingInferences.exists { case (_, initialPremises, _) =>
+              if ProofHelper.findNamingInferences.exists { case (_, initialPremises, _, _, _) =>
                 initialPremises.single.exists(_.calculateSubstitutions(extractionOption.conclusion)(SubstitutionContext.outsideProof).nonEmpty)
               }
             } yield PossibleConclusionWithPremises.fromExtractionOption(extractionOption, None)
@@ -57,9 +57,9 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
       def getNamingWrapper(premiseStatement: Statement, resultStatement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Statement, SubstitutionContext, Step => Step.Naming)] = {
         for {
           variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single)
-          (namingInference, namingInferenceAssumption, substitutionsAfterPremise) <- ProofHelper.findNamingInferences.mapFind {
-            case (i, Seq(singlePremise), a) =>
-              singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s) }
+          (namingInference, namingInferenceAssumption, substitutionsAfterPremise, generalizationDefinition, deductionDefinition) <- ProofHelper.findNamingInferences.mapFind {
+            case (i, Seq(singlePremise), a, generalizationDefinition, deductionDefinition) =>
+              singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s, generalizationDefinition, deductionDefinition) }
             case _ =>
               None
           }
@@ -78,7 +78,9 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
             Seq(step),
             namingInference.summary,
             Seq(Premise.Pending(premiseStatement)),
-            substitutions))
+            substitutions,
+            generalizationDefinition,
+            deductionDefinition))
       }
 
       def recurseNamingWrappers(currentAssumption: Statement, currentConclusion: Statement)(implicit currentContext: SubstitutionContext): Step = {
