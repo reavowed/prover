@@ -49,33 +49,51 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       expression <- Expression.parser(stepProvingContext).parseFromString(serializedExpression, "expression").recoverWithBadRequest
     } yield {
       implicit val spc = stepProvingContext
+
       val replacementPossibilities = getReplacementPossibilities(expression, pathsAlreadyRewrittenText)
-      def getSuggestions(termRewriteInference: TermRewriteInference): Option[InferenceRewriteSuggestion] = {
-        val suggestions = replacementPossibilities.mapCollect { case ReplacementPossibility(term, _, depth, path, unwrappers) =>
-          for {
-            substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
-            (_, _, substitutionsAfterPremises) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
-            result <- termRewriteInference.rhs.applySubstitutions(substitutionsAfterPremises.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
-          } yield InferenceRewritePath(path, result)
-        }
-        if (suggestions.nonEmpty)
-          Some(InferenceRewriteSuggestion(
+
+      case class InferenceRewriteSuggestionWithMaximumMatchingComplexity(inferenceRewriteSuggestion: InferenceRewriteSuggestion, maximumMatchingComplexity: Int)
+
+      def getRewritePath(termRewriteInference: TermRewriteInference, replacementPossibility: ReplacementPossibility[_ <: Expression]): Option[InferenceRewritePath] = {
+        import replacementPossibility._
+        for {
+          substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
+          (_, _, substitutionsAfterPremises) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
+          result <- termRewriteInference.rhs.applySubstitutions(substitutionsAfterPremises.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
+        } yield InferenceRewritePath(path, result)
+      }
+
+      def getSuggestionsForInference(termRewriteInference: TermRewriteInference): Option[InferenceRewriteSuggestionWithMaximumMatchingComplexity] = {
+        val suggestions = replacementPossibilities.mapCollect(p => getRewritePath(termRewriteInference, p).map(_ -> p.term.structuralComplexity))
+        if (suggestions.nonEmpty) {
+          val suggestion = InferenceRewriteSuggestion(
             termRewriteInference.inferenceSummary,
             termRewriteInference.extractionOption.extractionInferences.map(_.id),
             termRewriteInference.lhs,
             termRewriteInference.rhs,
-            suggestions))
-        else
+            suggestions.map(_._1))
+          Some(InferenceRewriteSuggestionWithMaximumMatchingComplexity(suggestion, suggestions.map(_._2).max))
+        } else
           None
+      }
+
+      def getSuggestionsForInferenceBatch(rewriteInferences: Seq[TermRewriteInference]): Seq[InferenceRewriteSuggestion] = {
+        rewriteInferences
+          .mapCollect(getSuggestionsForInference)
+          .sortBy(_.maximumMatchingComplexity)(Ordering[Int].reverse)
+          .map(_.inferenceRewriteSuggestion)
       }
 
       val filter = inferenceFilter(searchText)
       stepProvingContext.provingContext.termRewriteInferences
         .filter { case TermRewriteInference(i, _, _, _) => filter(i) }
-        .sortBy(_.extractionOption.conclusion.structuralComplexity)(implicitly[Ordering[Int]].reverse)
-        .flatMap { getSuggestions(_).toSeq }
-        .sortBy(_.rewriteSuggestions.map(_.result.structuralComplexity).max)
-        .take(10)
+        .groupBy(_.lhs.structuralComplexity).toSeq
+        .sortBy(_._1)(Ordering[Int].reverse)
+        .iterator
+        .map(_._2)
+        .flatMap(getSuggestionsForInferenceBatch)
+        .take(NumberOfSuggestionsToReturn)
+        .toSeq
     }).toResponseEntity
   }
 
