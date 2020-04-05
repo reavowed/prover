@@ -1,5 +1,7 @@
 package net.prover.model.proof
 
+import net.prover.controllers.ExtractionHelper
+import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.model.expressions._
 import net.prover.model.{Inference, Substitutions}
 
@@ -11,15 +13,35 @@ object PremiseFinder {
     findPremiseStepsWithInferencesForStatement(targetStatement).map(_.map(_._1))
   }
 
+  def findPremiseStepsWithInferencesForStatementDirectly(
+    targetStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[Seq[(Step, Inference)]] = {
+    import stepProvingContext._
+    def fromPremises = allPremiseExtractions.find(_._1 == targetStatement).map(_._2)
+    def fromFact = ProofHelper.findFact(targetStatement).map(Seq(_))
+    def fromSimplification = allPremiseSimplifications.find(_._1 == targetStatement).map(_._2)
+    fromPremises orElse fromFact orElse fromSimplification
+  }
+
   def findPremiseStepsWithInferencesForStatement(
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
   ): Option[Seq[(Step, Inference)]] = {
     import stepProvingContext._
 
-    def fromPremises = allPremiseExtractions.find(_._1 == targetStatement).map(_._2)
-    def fromFact = ProofHelper.findFact(targetStatement).map(Seq(_))
-    def fromSimplification = allPremiseSimplifications.find(_._1 == targetStatement).map(_._2)
+    def directly = findPremiseStepsWithInferencesForStatementDirectly(targetStatement)
+
+    def byDirectInference = provingContext.directInferences.iterator.findFirst { case (inference, extractionOption) =>
+      for {
+        substitutions <- extractionOption.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality)
+        substitutedPremises <- extractionOption.premises.map(_.applySubstitutions(substitutions)).traverseOption
+        premiseStepsAndInferences <- substitutedPremises.map(findPremiseStepsWithInferencesForStatementDirectly).traverseOption.map(_.flatten)
+        assertionStep <- Step.Assertion.forInference(inference, substitutions)
+        ExtractionApplication(_, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, substitutions, None, None, _ => (Nil, Nil)).toOption
+        extractionStep <- Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference)
+      } yield premiseStepsAndInferences :+ (extractionStep, inference)
+    }
 
     def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>
       for {
@@ -36,7 +58,7 @@ object PremiseFinder {
       } yield stepsForSimplifiedTarget :+ (step, conclusionRelationSimplificationInference.inference)
     }
 
-    fromPremises orElse fromFact orElse fromSimplification orElse bySimplifyingTarget orElse bySimplifyingTargetRelation
+    directly orElse byDirectInference orElse bySimplifyingTarget orElse bySimplifyingTargetRelation
   }
 
   def findPremiseStepsForStatements(
