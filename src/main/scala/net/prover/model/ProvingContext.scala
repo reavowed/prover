@@ -153,7 +153,6 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     filter(definitions.rearrangeableFunctions)
   }
 
-  lazy val directInferences: Seq[(Inference, ExtractionOption)] = filter(definitions.directInferences)
   lazy val premiseRelationSimplificationInferences: Seq[PremiseRelationSimplificationInference] = filter(definitions.premiseRelationSimplificationInferences)
   lazy val premiseRelationRewriteInferences: Seq[PremiseRelationRewriteInference] = filter(definitions.premiseRelationRewriteInferences)
   lazy val conclusionRelationSimplificationInferences: Seq[ConclusionRelationSimplificationInference] = filter(definitions.conclusionRelationSimplificationInferences)

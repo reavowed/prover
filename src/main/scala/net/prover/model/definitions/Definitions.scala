@@ -224,14 +224,6 @@ case class Definitions(rootEntryContext: EntryContext) {
     definedBinaryRelations.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => (relation, lhs, rhs) })
   }
 
-  lazy val directInferences: Seq[(Inference, ExtractionOption)] = {
-    for {
-      inference <- allInferences
-      extractionOption <- extractionOptionsByInferenceId(inference.id)
-      if (extractionOption.conclusion.requiredSubstitutions.contains(extractionOption.requiredSubstitutions))
-    } yield (inference, extractionOption)
-  }
-
   lazy val premiseRelationSimplificationInferences: Seq[PremiseRelationSimplificationInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
