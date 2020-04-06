@@ -18,7 +18,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   def updateBoundVariableNames(newBoundVariableNames: Seq[String]): ExpressionType
 
   override def structuralComplexity: Int = {
-    components.map(_.structuralComplexity).sum + 1
+    components.map(_.structuralComplexity).sum + (components.length max 1)
   }
   override def definitionalComplexity: Int = {
     components.map(_.definitionalComplexity).sum + definition.complexity
