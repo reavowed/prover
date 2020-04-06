@@ -93,7 +93,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
         .map(_._2)
         .flatMap(getSuggestionsForInferenceBatch)
         .take(NumberOfSuggestionsToReturn)
-        .toSeq
+        .toList
     }).toResponseEntity
   }
 
