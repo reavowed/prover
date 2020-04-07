@@ -8,14 +8,9 @@ import BoundVariableLists from "./pages/theorem/steps/BoundVariableLists";
 import ProofContext from "./pages/theorem/ProofContext";
 import TheoremContext from "./pages/theorem/TheoremContext";
 
-const HighlightedPremise = styled.span`
-  color: red;
-`;
-const HighlightedConclusion = styled.span`
-  color: blue;
-`;
-const ClickablePremise = styled(HighlightedPremise)`
-  cursor: pointer;
+const HighlightingStyle = styled.span`
+  color: ${props => props.isPremise ? "red" : props.isConclusion ? "blue" : null};
+  cursor: ${props => props.isClickable && "pointer"};
 `;
 
 function filterPaths(actions, initialPath) {
@@ -151,10 +146,12 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
     const matchingActionHighlight = _.find(actionHighlights, p => p.path.length === 0);
     const shouldStaticHighlight = _.some(staticHighlights, p => p.path.length === 0);
 
-    const tag =
-      shouldStaticHighlight ? HighlightedConclusion :
-        matchingActionHighlight ? (matchingActionHighlight.action ? ClickablePremise : HighlightedPremise) :
-          React.Fragment;
+    const highlightingProps = {
+      isConclusion: !!shouldStaticHighlight,
+      isPremise: !shouldStaticHighlight && !!matchingActionHighlight,
+      isClickable: !!(matchingActionHighlight && matchingActionHighlight.action)
+    };
+
     const props = {};
     if (!shouldStaticHighlight && matchingActionHighlight && matchingActionHighlight.action) {
       props.onClick = (e) => {
@@ -162,7 +159,9 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         e.stopPropagation();
       }
     }
-    return React.createElement(tag, props, renderChildrenOfTag(expression, path, actionHighlights || [], staticHighlights || [], boundVariableLists || [], wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>));
+    return <HighlightingStyle {...highlightingProps}>
+      {renderChildrenOfTag(expression, path, actionHighlights || [], staticHighlights || [], boundVariableLists || [], wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)}
+    </HighlightingStyle>;
   }
   path = path || [];
 
@@ -234,7 +233,5 @@ export class HighlightableExpression extends React.Component {
           renderFromContext(theoremContext)
         }</TheoremContext.Consumer>
     }</ProofContext.Consumer>
-
-
   }
 }
