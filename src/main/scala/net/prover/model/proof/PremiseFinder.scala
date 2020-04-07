@@ -88,6 +88,10 @@ object PremiseFinder {
       finalSubstitutions <- unsubstitutedPremiseStatement.calculateSubstitutions(premise, initialSubstitutions).toSeq
     } yield (stepsAndInferences.map(_._1), premise, finalSubstitutions)
 
+    def fromFact = for {
+      (step, statement, _, substitutions) <- ProofHelper.findFactBySubstituting(unsubstitutedPremiseStatement, initialSubstitutions)
+    } yield (Seq(step), statement, substitutions)
+
     def bySimplifying = unsubstitutedPremiseStatement match {
       case DefinedStatement(firstComponent +: _, statementDefinition) =>
         for {
@@ -112,7 +116,7 @@ object PremiseFinder {
       case Some(substitutedPremiseStatement) =>
         findPremiseStepsForStatement(substitutedPremiseStatement).map((_, substitutedPremiseStatement, initialSubstitutions)).toSeq
       case None =>
-        directly ++ bySimplifying
+        directly ++ fromFact ++ bySimplifying
     }
   }
 

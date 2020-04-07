@@ -12,7 +12,7 @@ case class PremiseRelationRewriteInference(inference: Inference, initialPremise:
       substitutionsAfterMainPremise <- mainPremise.calculateSubstitutions(premiseToMatch).flatMap(_.confirmTotality)
       (premiseStepsAndInferences, substitutionsAfterInitialPremise) <- existingPremises.mapFind { case (premiseStatement, stepsAndInferences) =>
         initialPremise.calculateSubstitutions(premiseStatement, substitutionsAfterMainPremise).map { s => stepsAndInferences -> s }
-      } orElse ProofHelper.findFactBySubstituting(initialPremise, substitutionsAfterMainPremise).map { case (step, inference, substitutions) => (Seq((step, inference)), substitutions) }
+      } orElse ProofHelper.findFactBySubstituting(initialPremise, substitutionsAfterMainPremise).map { case (step, _, inference, substitutions) => (Seq((step, inference)), substitutions) }
       substitutions <- substitutionsAfterInitialPremise.confirmTotality
       assertionStep <- Step.Assertion.forInference(inference, substitutions)
       ExtractionApplication(extractionResult, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionInferences, inference, substitutions, None, None, _ => (Nil, Nil)).toOption
