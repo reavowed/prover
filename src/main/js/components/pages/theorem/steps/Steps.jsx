@@ -65,7 +65,7 @@ class RightHandSide extends React.Component {
                                      additionalPremiseReferences={additionalReferences} />
             {' '}
           </PositionToLeft>}
-      <HighlightableExpression expression={{textForHtml: () => rightHandSide.symbol}}
+      <HighlightableExpression expression={{textForHtml: () => (hovered && rightHandSide.internalSymbol) || rightHandSide.symbol}}
                                expressionToCopy={rightHandSide.step.provenStatement}
                                references={rightHandSide.referencesForRhs}
                                additionalReferences={additionalReferences}/>
@@ -235,6 +235,7 @@ export class Steps extends React.Component {
         const linkingReference = new StepReference([...basePath, linkingIndex]);
         const newRhs = {
           symbol: linkingRelation.symbol,
+          internalSymbol: nextRelation.symbol,
           expression: continuingStepMatch[1].expression,
           step,
           linkingStep,
