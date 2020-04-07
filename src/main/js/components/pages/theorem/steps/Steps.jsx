@@ -289,69 +289,72 @@ export class Steps extends React.Component {
     return null;
   };
 
-  static renderNextStep(stepsWithIndexes, path, propsForLastStep, theoremContext) {
-    const {step, index} = stepsWithIndexes.shift();
-    const stepPath = [...path, index];
-    const serializedPath = [...path, index].join(".");
-    if (!theoremContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.provenStatement && step.provenStatement.definition) {
-      const binaryRelation = findBinaryRelation(step.provenStatement, theoremContext.entryContext);
-      if (binaryRelation && isChainable(binaryRelation)) {
-        const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, theoremContext.entryContext);
-        if (chainingDetails) {
-          return {
-            element: <ChainedSteps propsForLastStep={stepsWithIndexes.length === 0 ? propsForLastStep : {}}
-                                      {...chainingDetails} />
-          };
-        }
-      }
-    }
-    const props = {
-      step,
-      path: stepPath,
-      ...(!stepsWithIndexes.length ? propsForLastStep : {})
-    };
-    let elidableVariableDescription;
-
-    if (!theoremContext.disableAssumptionCollapse &&
-      step instanceof GeneralizationStepModel &&
-      step.substeps.length === 1 &&
-      step.substeps[0] instanceof DeductionStepModel &&
-      (elidableVariableDescription = matchElidableVariableDescription(step.substeps[0].assumption))) {
-      return {
-        key: step.id,
-        element: <GeneralizedDeductionStep {...props} variableDescription={elidableVariableDescription} />
-      };
-    }
-
-    if (!theoremContext.disableAssumptionCollapse && (step instanceof AssertionStepModel || step instanceof ElidedStepModel) &&
-      step.provenStatement &&
-      stepsWithIndexes.length &&
-      stepsWithIndexes[0].step instanceof NamingStepModel &&
-      _.some(stepsWithIndexes[0].step.referencedLinesForExtraction, r => _.isEqual(r.stepPath, stepPath)) &&
-      !_.some(stepsWithIndexes.slice(1), ({step}) => _.some(step.referencedLines, r => _.isEqual(r.stepPath, stepPath))))
-    {
-      let {step: namingStep} = stepsWithIndexes.shift();
-      return {
-        key: namingStep.id,
-        element: <NamingStep {...props} step={namingStep} assertionStep={step} />
-      };
-    }
-
-    return {
-      key: step.id,
-      element: React.createElement(Steps.getElementName(step), props)
-    }
-  };
-
   static renderSteps(steps, path, propsForLastStep, theoremContext) {
     const stepsWithIndexes = steps.map((step, index) => ({step,index}));
     const finalIndex = steps.length;
     const results = [];
     const indexLookup = [];
     let currentIndex = 0;
+    let currentChainingNumber = 0;
+
+    const renderNextStep = (stepsWithIndexes, path, propsForLastStep, theoremContext) => {
+      const {step, index} = stepsWithIndexes.shift();
+      const stepPath = [...path, index];
+      if (!theoremContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.provenStatement && step.provenStatement.definition) {
+        const binaryRelation = findBinaryRelation(step.provenStatement, theoremContext.entryContext);
+        if (binaryRelation && isChainable(binaryRelation)) {
+          const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, theoremContext.entryContext);
+          if (chainingDetails) {
+            return {
+              key: `chain-${++currentChainingNumber}`,
+              element: <ChainedSteps propsForLastStep={stepsWithIndexes.length === 0 ? propsForLastStep : {}}
+                                     {...chainingDetails} />
+            };
+          }
+        }
+      }
+      const props = {
+        step,
+        path: stepPath,
+        ...(!stepsWithIndexes.length ? propsForLastStep : {})
+      };
+      let elidableVariableDescription;
+
+      if (!theoremContext.disableAssumptionCollapse &&
+        step instanceof GeneralizationStepModel &&
+        step.substeps.length === 1 &&
+        step.substeps[0] instanceof DeductionStepModel &&
+        (elidableVariableDescription = matchElidableVariableDescription(step.substeps[0].assumption))) {
+        return {
+          key: step.id,
+          element: <GeneralizedDeductionStep {...props} variableDescription={elidableVariableDescription} />
+        };
+      }
+
+      if (!theoremContext.disableAssumptionCollapse && (step instanceof AssertionStepModel || step instanceof ElidedStepModel) &&
+        step.provenStatement &&
+        stepsWithIndexes.length &&
+        stepsWithIndexes[0].step instanceof NamingStepModel &&
+        _.some(stepsWithIndexes[0].step.referencedLinesForExtraction, r => _.isEqual(r.stepPath, stepPath)) &&
+        !_.some(stepsWithIndexes.slice(1), ({step}) => _.some(step.referencedLines, r => _.isEqual(r.stepPath, stepPath))))
+      {
+        let {step: namingStep} = stepsWithIndexes.shift();
+        return {
+          key: namingStep.id,
+          element: <NamingStep {...props} step={namingStep} assertionStep={step} />
+        };
+      }
+
+      return {
+        key: step.id,
+        element: React.createElement(Steps.getElementName(step), props)
+      }
+    }
+
+
     while (stepsWithIndexes.length) {
       const startIndex = stepsWithIndexes[0].index;
-      const {key, element} = this.renderNextStep(stepsWithIndexes, path, propsForLastStep, theoremContext);
+      const {key, element} = renderNextStep(stepsWithIndexes, path, propsForLastStep, theoremContext);
       results.push({key, element, data: {path, startIndex}});
       indexLookup.push(startIndex);
       currentIndex += 1;
