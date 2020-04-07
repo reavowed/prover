@@ -51,7 +51,7 @@ export default function DraggableList({type, enabled, onDrop, children}) {
   const entryContext = useContext(EntryContext);
   const path = entryContext ? entryContext.path : [];
 
-  const context = {
+  const listContext = {
     type,
     path,
     hiddenIndex,
@@ -66,7 +66,7 @@ export default function DraggableList({type, enabled, onDrop, children}) {
     reset
   };
 
-  return <ListContext.Provider value={context}>
+  return <ListContext.Provider value={listContext}>
     {children}
   </ListContext.Provider>;
 };
@@ -113,8 +113,8 @@ DraggableList.Entries = function Entries({entries}) {
       entries.map((entry, index) => {
         const {key, element, data} = entry;
         const path = [...outerPath, index];
-        const context = {type, index, path, data, enabled, onDragStart, listContext, originalListContext: listContext};
-        return {element: <Entry context={context}>{element}</Entry>, key};
+        const entryContext = {type, index, path, data, enabled, onDragStart, listContext, originalListContext: listContext};
+        return {element: <Entry context={entryContext}>{element}</Entry>, key};
       })
     );
   } else {
@@ -221,7 +221,7 @@ DraggableList.Before = function Before({children}) {
     const clientOffset = monitor.getClientOffset();
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
     if (hoverClientY < hoverMiddleY) {
-      move(itemBeingDragged, context.parentContext, context.entryContext.index, null, false);
+      move(itemBeingDragged, context.parentContext, context.entryContext.index, context.entryContext, false);
     } else {
       move(itemBeingDragged, context, 0, null, false);
     }
