@@ -561,9 +561,9 @@ conclusion wellOrder ≤ ℕ
     assume ⊆ $0 ℕ {
       assume ¬ = $0 ∅ {
         prove ∃ s ∈ $0 $$0 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () ($0) 3.0.0a
-        let s ∈ $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 $0, ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤) () {
+        let s ∈ $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 $0, ∃ x ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤) () {
           prove ∈ $0 ℕ ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () ($$0, ℕ, $0) 3.0a 3.0.0.1a
-          let L = $0 comprehension a ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ a ∧ ∈ $0 $$$0 ∀ b → ∈ $0 $$$$0 ∈ orderedPair $$0 $0 ≤) (comprehension a ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair $$0 $0 ≤) {
+          let L = $0 comprehension a ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ x ∧ ∈ $0 $$$0 ∀ b → ∈ $0 $$$$0 ∈ orderedPair $$0 $0 ≤) (comprehension a ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair $$0 $0 ≤) {
             subproof (0 is a lower bound) {
               take b {
                 assume ∈ $0 $$$$0 {
@@ -718,7 +718,7 @@ conclusion wellOrder ≤ ℕ
                 prove ∃ x ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0 4e1baa7f31829a472647ff0c26af3e00308af8ed31ab25b1d5c229c0fcec6381 (∧ ∈ $$$$0 $0 ¬ ∈ successor $$$$0 $0) () 3.0.0.1.1.2.2.2
               }
             }
-            let t ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$0 $0 ¬ ∈ successor $$$$0 $0, ∃ a ∧ ∈ $0 $$$$0 ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤) () {
+            let t ∧ ∈ $0 $$0 ¬ ∈ successor $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$0 $0 ¬ ∈ successor $$$$0 $0, ∃ x ∧ ∈ $0 $$$$0 ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤) () {
               elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
                 prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ ∀ b → ∈ $0 $$$$$$0 ∈ orderedPair $$0 $0 ≤ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$$$$$0 $0 ≤) ($$0, ℕ) 3.0.0.1.1a
                 prove ↔ ∈ $0 $$0 ∧ ∈ $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 $$0 ∧ ∈ $$$$$0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$$$$$0 $0 ≤) ($0) 3.0.0.1.1.3.0.0

@@ -661,7 +661,7 @@ conclusion ↔ ∈ orderedPair n m <_ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = ap
               }
               assume ∈ orderedPair n $0 <_ℕ {
                 prove ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair n $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair n $0 <_ℕ, ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair n $0 $$0) () 0.1.0.0.0a 0.1.0.0.0.0.2a
-                let d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair n $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ ∧ ¬ = $$0 0 = apply + orderedPair n $$0 $0, ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair n $0 successor $$0) () {
+                let d ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair n $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ ∧ ¬ = $$0 0 = apply + orderedPair n $$0 $0, ∃ x ∧ ∈ $0 ℕ ∧ ¬ = $0 0 = apply + orderedPair n $0 successor $$0) () {
                   prove = apply + orderedPair n successor $0 successor apply + orderedPair n $0 66c1f17e675ab9d7a8bb38ed126fc787cbe7401da467aa972872728b29e83f8f () (n, $0) p0 0.1.0.0.0.0.2.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                   prove = successor apply + orderedPair n $0 successor $$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply + orderedPair n $0, $$0, successor $$$0) 0.1.0.0.0.0.2.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                   prove = apply + orderedPair n successor $0 successor $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply + orderedPair n successor $0, successor apply + orderedPair n $0, successor $$0) 0.1.0.0.0.0.2.1.0 0.1.0.0.0.0.2.1.1

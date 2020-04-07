@@ -181,7 +181,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0 g_0 ∀ n → ∈ $0 �
       take n {
         assume ∈ $0 ℕ {
           assume ∃! y ∈ orderedPair $$0 $0 union $$$0 {
-            let x_n ∈ orderedPair $$0 $0 union $$$0 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∈ orderedPair $0 $$$0 union $$0, ∃! x ∈ orderedPair successor $$0 $0 union $$$0) () {
+            let x_n ∈ orderedPair $$0 $0 union $$$0 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∈ orderedPair $0 $$$0 union $$0, ∃! y ∈ orderedPair successor $$0 $0 union $$$0) () {
               prove ∃ g ∧ ∈ orderedPair $$$0 $$0 $0 ∈ $0 $$$$0 472eddef60867ac070dd66ad918a784fde28fd847d53799f21afbcd45b40c9a9 () (orderedPair $$0 $0, $$$0) 0.5.0.0.0.0a
               let g_n ∧ ∈ orderedPair $$$0 $$0 $0 ∈ $0 $$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ orderedPair $$0 $0 $$$$0 ∈ $$$$0 $$$0, ∃! y ∈ orderedPair successor $$$0 $0 union $$$$0) () {
                 elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
@@ -582,7 +582,7 @@ conclusion ∃! g ∧ function $0 product ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = a
     }
   }
   prove ∃! f ∧ function $0 ℕ functionSpace ℕ A ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+ 777979cf73d2d0bf6c4057a5958662ad04ea6cfd5cc34a242121423362f17f89 (∧ = apply $1 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply $$1 successor $0 with ($$0 apply $$1 $0) F_+) (ℕ, functionSpace ℕ A) 1
-  let f ∧ function $0 ℕ functionSpace ℕ A ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+ 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∧ function $0 ℕ functionSpace ℕ A ∀ a → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+, ∃! g ∧ function $0 product ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () {
+  let f ∧ function $0 ℕ functionSpace ℕ A ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+ 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∧ function $0 ℕ functionSpace ℕ A ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0 with ($0) F_0 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) F_+, ∃! g ∧ function $0 product ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0 with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+) () {
     prove ∃! g ∧ function $0 product ℕ ℕ A ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 f7957dc8414647c15438d241018c8ac8185e6d16353e9f60dca7570f7affb754 () ($0, ℕ, ℕ, A) 3a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
     subproof (Equivalence of definitions) {
       take g {

@@ -5,7 +5,7 @@ conclusion ∃! f ∧ function $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ =
 {
   take n {
     assume ∈ $0 ℕ {
-      let f_n = $0 functionMap m ℕ apply + orderedPair $0 $$$0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! f ∧ function $0 ℕ ℕ ∧ = apply $0 0 0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply + orderedPair apply $$0 $0 $$$0) (functionMap m ℕ apply + orderedPair $0 $$0) {
+      let f_n = $0 functionMap m ℕ apply + orderedPair $0 $$$0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! x ∧ function $0 ℕ ℕ ∧ = apply $0 0 0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply + orderedPair apply $$0 $0 $$$0) (functionMap m ℕ apply + orderedPair $0 $$0) {
         elided ca3465bfac5bc8294749b6861f05413cbf73fb1facc9bb123d883da7ae3773c2 {
           take m {
             assume ∈ $0 ℕ {
@@ -47,7 +47,7 @@ term × ()
   shorthand (xN)
   attributes (infix-function)
 
-display apply × orderedPair a b as (%0%1)
+display apply × orderedPair a b as (%0%1) requires-brackets
 
 write apply × orderedPair a b as mulN
 

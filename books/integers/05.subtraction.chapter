@@ -1549,7 +1549,7 @@ premise ¬ = S ∅
 premise ∃ b ∧ ∈ $0 ℤ ∀ s → ∈ $0 S ∈ orderedPair $$0 $0 ≤_ℤ
 conclusion ∃ b ∧ ∈ $0 S ∀ s → ∈ $0 S ∈ orderedPair $$0 $0 ≤_ℤ
 {
-  let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 S ∈ orderedPair $$0 $0 ≤_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $0 ℤ ∀ b → ∈ $0 S ∈ orderedPair $$0 $0 ≤_ℤ, ∃ a ∧ ∈ $0 S ∀ b → ∈ $0 S ∈ orderedPair $$0 $0 ≤_ℤ) () {
+  let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 S ∈ orderedPair $$0 $0 ≤_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $0 ℤ ∀ s → ∈ $0 S ∈ orderedPair $$0 $0 ≤_ℤ, ∃ b ∧ ∈ $0 S ∀ s → ∈ $0 S ∈ orderedPair $$0 $0 ≤_ℤ) () {
     let S^+ = $0 replacementSet s S apply -_ℤ orderedPair $0 $$$0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ b ∧ ∈ $0 S ∀ s → ∈ $0 S ∈ orderedPair $$0 $0 ≤_ℤ) (replacementSet s S apply -_ℤ orderedPair $0 $$0) {
       subproof (S^+ is non-negative) {
         take x {
