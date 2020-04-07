@@ -1,107 +1,110 @@
 Define some literal natural numbers - 0, 1, 2, etc.
 
-term 0 ()
+term 0_ℕ ()
   (= $0 ∅)
+  shorthand (0N)
 
 theorem 0 Is a Natural Number
-conclusion ∈ 0 ℕ
+conclusion ∈ 0_ℕ ℕ
 {
-  prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () ()
+  prove = 0_ℕ ∅ 53f99379979c71fc6b4f183a1415ab8254a1d1ed08e1bea6d445453ee25267ed () ()
   take X {
     assume inductive $0 {
       prove ∈ ∅ $0 3e870e42bf1edc2865bf93e39a0af9d460cd47418ca5cdd474bf5876ef434d66 () ($0) 1.0a
-      prove ∈ 0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ $$0 $0) (0, ∅) 0 1.0.0
+      prove ∈ 0_ℕ $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ $$0 $0) (0_ℕ, ∅) 0 1.0.0
     }
   }
-  prove ∈ 0 ℕ 3094218044e941a9ae278629bb25c91256f3cf5b82853fae2c5155f82e0b64f6 () (0) 1
+  prove ∈ 0_ℕ ℕ 3094218044e941a9ae278629bb25c91256f3cf5b82853fae2c5155f82e0b64f6 () (0_ℕ) 1
 }
 
 theorem 0 Is Not the Successor of Any Natural Number
-conclusion ¬ = successor n 0
+conclusion ¬ = successor n 0_ℕ
 {
   prove ∈ n successor n bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n)
   prove ¬ = successor n ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (n, successor n) 0
-  elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
-    prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () ()
-    prove ¬ = successor n 0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (¬ = successor n $0) (0, ∅) 2.0 1
+  elided 53f99379979c71fc6b4f183a1415ab8254a1d1ed08e1bea6d445453ee25267ed {
+    prove = 0_ℕ ∅ 53f99379979c71fc6b4f183a1415ab8254a1d1ed08e1bea6d445453ee25267ed () ()
+    prove ¬ = successor n 0_ℕ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (¬ = successor n $0) (0_ℕ, ∅) 2.0 1
   }
 }
 
 theorem 0 Is Not the Successor of Any Natural Number
-conclusion ¬ = 0 successor n
+conclusion ¬ = 0_ℕ successor n
 {
-  assume = 0 successor n {
-    prove = successor n 0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (0, successor n) 0a
+  assume = 0_ℕ successor n {
+    prove = successor n 0_ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (0_ℕ, successor n) 0a
   }
-  prove ¬ = successor n 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () (n)
-  prove ¬ = 0 successor n 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= 0 successor n, = successor n 0) () 0 1
+  prove ¬ = successor n 0_ℕ 78d40ccd2dc920d073881127bc30b7150d66131b790c09ba0a5fd19317fb0811 () (n)
+  prove ¬ = 0_ℕ successor n 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= 0_ℕ successor n, = successor n 0_ℕ) () 0 1
 }
 
-term 1 ()
-  (= $0 successor 0)
+term 1_ℕ ()
+  (= $0 successor 0_ℕ)
+  shorthand (1N)
 
 theorem 1 Is a Natural Number
-conclusion ∈ 1 ℕ
+conclusion ∈ 1_ℕ ℕ
 {
-  prove ∈ 0 ℕ a73b6266c8b2b7a833ffae9f89f153c5b2413f7ee8e034bc375cd17a3c77df61 () ()
-  prove ∈ successor 0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (0) 0
-  prove = 1 successor 0 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca () ()
-  prove ∈ 1 ℕ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ $0 ℕ) (1, successor 0) 2 1
+  prove ∈ 0_ℕ ℕ 2bee065d68b53d44ab4f34834ac32e198a553cc46ed7133c242b53b2a67065a6 () ()
+  prove ∈ successor 0_ℕ ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (0_ℕ) 0
+  prove = 1_ℕ successor 0_ℕ 0267f09f711776f31be424a4e1056837eb25d58f155e5a627021f575ed10a230 () ()
+  prove ∈ 1_ℕ ℕ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ $0 ℕ) (1_ℕ, successor 0_ℕ) 2 1
 }
 
 theorem 1 Is the Singleton of 0
-conclusion = 1 singleton 0
+conclusion = 1_ℕ singleton 0_ℕ
 {
-  prove = 1 successor 0 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca () ()
-  prove = successor 0 ∪ 0 singleton 0 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (0)
-  prove = 1 ∪ 0 singleton 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (1, successor 0, ∪ 0 singleton 0) 0 1
-  elided 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf {
-    prove = 0 ∅ 26a7561843121db662a830bef5d0cb7074e99e8dd9e01d815217bedac2038cbf () ()
-    prove = 1 ∪ ∅ singleton 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= 1 ∪ $0 singleton 0) (0, ∅) 3.0 2
+  prove = 1_ℕ successor 0_ℕ 0267f09f711776f31be424a4e1056837eb25d58f155e5a627021f575ed10a230 () ()
+  prove = successor 0_ℕ ∪ 0_ℕ singleton 0_ℕ 86108ee9da52ad80ddd653672c6c72a1a673c61f2a31f56f082754fd0ffa1a9c () (0_ℕ)
+  prove = 1_ℕ ∪ 0_ℕ singleton 0_ℕ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (1_ℕ, successor 0_ℕ, ∪ 0_ℕ singleton 0_ℕ) 0 1
+  elided 53f99379979c71fc6b4f183a1415ab8254a1d1ed08e1bea6d445453ee25267ed {
+    prove = 0_ℕ ∅ 53f99379979c71fc6b4f183a1415ab8254a1d1ed08e1bea6d445453ee25267ed () ()
+    prove = 1_ℕ ∪ ∅ singleton 0_ℕ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= 1_ℕ ∪ $0 singleton 0_ℕ) (0_ℕ, ∅) 3.0 2
   }
-  prove = ∪ ∅ singleton 0 singleton 0 7b4af45d996d58a9bc0a3545d5d2d90cc5493de12289c3038266d3afae1628e4 () (singleton 0)
-  prove = 1 singleton 0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (1, ∪ ∅ singleton 0, singleton 0) 3 4
+  prove = ∪ ∅ singleton 0_ℕ singleton 0_ℕ 7b4af45d996d58a9bc0a3545d5d2d90cc5493de12289c3038266d3afae1628e4 () (singleton 0_ℕ)
+  prove = 1_ℕ singleton 0_ℕ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (1_ℕ, ∪ ∅ singleton 0_ℕ, singleton 0_ℕ) 3 4
 }
 
 theorem One Is Not Zero
-conclusion ¬ = 1 0
+conclusion ¬ = 1_ℕ 0_ℕ
 {
-  prove ¬ = successor 0 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () (0)
-  elided 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca {
-    elided 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca {
-      prove = 1 successor 0 1c4f6652856a9579f7db5e6784c2bf9c982a2dfbc95cae821440419856c6bfca () ()
-      prove = successor 0 1 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (1, successor 0) 1.0.0
+  prove ¬ = successor 0_ℕ 0_ℕ 78d40ccd2dc920d073881127bc30b7150d66131b790c09ba0a5fd19317fb0811 () (0_ℕ)
+  elided 0267f09f711776f31be424a4e1056837eb25d58f155e5a627021f575ed10a230 {
+    elided 0267f09f711776f31be424a4e1056837eb25d58f155e5a627021f575ed10a230 {
+      prove = 1_ℕ successor 0_ℕ 0267f09f711776f31be424a4e1056837eb25d58f155e5a627021f575ed10a230 () ()
+      prove = successor 0_ℕ 1_ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (1_ℕ, successor 0_ℕ) 1.0.0
     }
-    prove ¬ = 1 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ = $0 0) (successor 0, 1) 1.0 0
+    prove ¬ = 1_ℕ 0_ℕ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ = $0 0_ℕ) (successor 0_ℕ, 1_ℕ) 1.0 0
   }
 }
 
-term 2 ()
-  (= $0 successor 1)
+term 2_ℕ ()
+  (= $0 successor 1_ℕ)
+  shorthand (2N)
 
 theorem 2 Is a Natural Number
-conclusion ∈ 2 ℕ
+conclusion ∈ 2_ℕ ℕ
 {
-  prove ∈ 1 ℕ 0ea2cae46b5b1dec42fef1b2b68f5d829b809f821651b8628f2f94b1abd87ac5 () ()
-  prove ∈ successor 1 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (1) 0
-  elided 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 {
-    elided 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 {
-      prove = 2 successor 1 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 () ()
-      prove = successor 1 2 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (2, successor 1) 2.0.0
+  prove ∈ 1_ℕ ℕ d14b132e3b3e8bf02bd59c53a0859056d151ec965f57f32511a5c108d6f30faf () ()
+  prove ∈ successor 1_ℕ ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () (1_ℕ) 0
+  elided 4188f10bb8e479bb4944ee7616576ef3720c6eefe0fb6559d0d042461e59e9ce {
+    elided 4188f10bb8e479bb4944ee7616576ef3720c6eefe0fb6559d0d042461e59e9ce {
+      prove = 2_ℕ successor 1_ℕ 4188f10bb8e479bb4944ee7616576ef3720c6eefe0fb6559d0d042461e59e9ce () ()
+      prove = successor 1_ℕ 2_ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (2_ℕ, successor 1_ℕ) 2.0.0
     }
-    prove ∈ 2 ℕ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 ℕ) (successor 1, 2) 2.0 1
+    prove ∈ 2_ℕ ℕ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 ℕ) (successor 1_ℕ, 2_ℕ) 2.0 1
   }
 }
 
 theorem 2 Is Not Zero
-conclusion ¬ = 2 0
+conclusion ¬ = 2_ℕ 0_ℕ
 {
-  prove ¬ = successor 1 0 0693bdedd577766639c71967ba2a5efd8b1fed55c8dafc2a8085836bcfb4fd50 () (1)
-  elided 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 {
-    elided 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 {
-      prove = 2 successor 1 4eeb860a31dca53cca6130f9acf53e630f35c85d048e3a541b77d8b0e2559302 () ()
-      prove = successor 1 2 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (2, successor 1) 1.0.0
+  prove ¬ = successor 1_ℕ 0_ℕ 78d40ccd2dc920d073881127bc30b7150d66131b790c09ba0a5fd19317fb0811 () (1_ℕ)
+  elided 4188f10bb8e479bb4944ee7616576ef3720c6eefe0fb6559d0d042461e59e9ce {
+    elided 4188f10bb8e479bb4944ee7616576ef3720c6eefe0fb6559d0d042461e59e9ce {
+      prove = 2_ℕ successor 1_ℕ 4188f10bb8e479bb4944ee7616576ef3720c6eefe0fb6559d0d042461e59e9ce () ()
+      prove = successor 1_ℕ 2_ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (2_ℕ, successor 1_ℕ) 1.0.0
     }
-    prove ¬ = 2 0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ = $0 0) (successor 1, 2) 1.0 0
+    prove ¬ = 2_ℕ 0_ℕ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ = $0 0_ℕ) (successor 1_ℕ, 2_ℕ) 1.0 0
   }
 }
