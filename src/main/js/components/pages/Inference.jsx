@@ -12,7 +12,7 @@ export class Inference extends React.Component {
   updateName = (newName) => {
     return window.fetchJson(path.join(this.props.url, "name"), {method: "PUT", body: newName})
       .then(url => window.location.pathname = url);
-  }
+  };
   render() {
     const {inference, title, url, bookLink, chapterLink, previous, next, usages, children, buttons, createPremiseElement} = this.props;
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: inference.name, url}]}/>}>
