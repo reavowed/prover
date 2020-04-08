@@ -1,0 +1,20 @@
+Show that the integers can be embedded in the rationals in a natural way.
+
+term ⍳_ℚ ()
+  (= $0 functionMap a ℤ equivalenceClass orderedPair $0 apply ⍳_ℤ 1_ℕ ~_ℚ)
+  shorthand (iQ)
+
+theorem Function Properties of ⍳_ℚ
+conclusion ∧ ∧ function ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ℤ ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1_ℕ ~_ℚ
+{
+  prove = ⍳_ℚ functionMap a ℤ equivalenceClass orderedPair $0 apply ⍳_ℤ 1_ℕ ~_ℚ 980712c5e7c8d173e7c291e0b0e44d9dccf4df289e29705c0e922fa64d6680eb () ()
+  subproof (Function) {
+    target function ⍳_ℚ ℤ ℚ
+  }
+  target injectiveFunction ⍳_ℚ ℤ ℚ
+  target ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1_ℕ ~_ℚ
+  elided bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d {
+    prove ∧ function ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ℤ ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function ⍳_ℚ ℤ ℚ, injectiveFunction ⍳_ℚ ℤ ℚ) () 1 2
+    prove ∧ ∧ function ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ℤ ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1_ℕ ~_ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ℤ ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1_ℕ ~_ℚ) () 4.0 3
+  }
+}
