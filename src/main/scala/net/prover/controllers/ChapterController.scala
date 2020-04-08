@@ -234,6 +234,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       val name = getOptionalString(newTermDefinition.name)
+      val disambiguator = getOptionalString(newTermDefinition.disambiguator)
       val shorthand = getOptionalString(newTermDefinition.shorthand)
       val attributes = getWords(newTermDefinition.attributes)
       for {
@@ -249,6 +250,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           symbol,
           boundVariables,
           componentTypes,
+          disambiguator,
           name,
           format,
           premises,
@@ -442,6 +444,7 @@ object ChapterController {
   case class NewTermDefinitionModel(
     symbol: String,
     components: String,
+    disambiguator: String,
     name: String,
     format: String,
     premises: Seq[String],

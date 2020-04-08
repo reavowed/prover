@@ -74,6 +74,7 @@ class PremiseFinderSpec extends Specification {
         "negatedZ",
         Nil,
         Seq(ComponentType.TermComponent("a", Nil)),
+        None,
         Some("negated integer"),
         Format.Explicit("-a", Seq("a"), false, true),
         Seq(ElementOf(a, Naturals)),
@@ -93,6 +94,7 @@ class PremiseFinderSpec extends Specification {
         "ℤ",
         Nil,
         Nil,
+        None,
         None,
         Format.default("ℤ", Nil),
         Nil,
@@ -141,12 +143,13 @@ class PremiseFinderSpec extends Specification {
         Seq("a"),
         Seq(ComponentType.TermComponent("A", Nil), ComponentType.StatementComponent("φ", Seq(ComponentArgument("a", 0)))),
         None,
+        None,
         Format.Explicit("{ a ∈ A | φ }", Seq("a", "A", "φ"), false, true),
         Nil,
         ForAll("a")(Equivalence(ElementOf($), Conjunction(ElementOf($, A), φ($)))),
         None,
         Nil)
-      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, Format.default("ℕ^+", Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
+      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default("ℕ^+", Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
 
@@ -166,12 +169,13 @@ class PremiseFinderSpec extends Specification {
         Seq("a"),
         Seq(ComponentType.TermComponent("A", Nil), ComponentType.StatementComponent("φ", Seq(ComponentArgument("a", 0)))),
         None,
+        None,
         Format.Explicit("{ a ∈ A | φ }", Seq("a", "A", "φ"), false, true),
         Nil,
         ForAll("a")(Equivalence(ElementOf($), Conjunction(ElementOf($, A), φ($)))),
         None,
         Nil)
-      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, Format.default("ℕ^+", Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
+      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default("ℕ^+", Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val PositiveNaturalsAreASubsetOfTheNaturals = Axiom("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
 

@@ -8,6 +8,7 @@ case class TermDefinition(
     symbol: String,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
+    disambiguatorOption: Option[String],
     explicitName: Option[String],
     format: Format,
     premises: Seq[Statement],
@@ -47,7 +48,8 @@ case class TermDefinition(
   override def inferences: Seq[Inference.FromEntry] = Seq(Inference.Definition(name, premises, definingStatement))
 
   override def serializedLines: Seq[String] = Seq(s"term $symbol $serializedComponents") ++
-    (explicitName.map(n => s"name ($n)").toSeq ++
+    (disambiguatorOption.map(d => s"disambiguator $d").toSeq ++
+      explicitName.map(n => s"name ($n)").toSeq ++
       format.serialized.toSeq ++
       (if (premises.nonEmpty) Seq(s"premises (${premises.map(_.serialized).mkString(", ")})") else Nil) ++
       Seq("(" + definitionPredicate.serialized + ")") ++
@@ -64,6 +66,7 @@ case class TermDefinition(
       symbol,
       boundVariableNames,
       componentTypes,
+      disambiguatorOption,
       explicitName,
       format,
       premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
@@ -110,6 +113,7 @@ object TermDefinition extends ChapterEntryParser {
       boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
       boundVariables = boundVariablesAndComponentTypes._1
       componentTypes = boundVariablesAndComponentTypes._2
+      disambiguatorOption <- Parser.optional("disambiguator", Parser.singleWord)
       name <- nameParser
       format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
       premises <- premisesParser
@@ -121,6 +125,7 @@ object TermDefinition extends ChapterEntryParser {
         symbol,
         boundVariables,
         componentTypes,
+        disambiguatorOption,
         name,
         format,
         premises,
