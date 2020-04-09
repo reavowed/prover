@@ -8,10 +8,15 @@ import {NavLinks} from "./pages/components/NavLinks";
 import {Usages} from "./pages/components/Usages";
 import {Page} from "./pages/Page";
 
-export function ExpressionDefinition({url, title, definition, bookLink, chapterLink, previous, next, usages, children, entryContext}) {
+export function ExpressionDefinition({url, title, definition, bookLink, chapterLink, previous, next, usages, hasDisambiguator, children, entryContext}) {
 
   const saveSymbol = (newSymbol) => {
-    return window.fetchJson(path.join(url, "symbol"), {method: "PUT", body: newSymbol});
+    return window.fetchJson(path.join(url, "symbol"), {method: "PUT", body: newSymbol})
+      .then(url => window.location.pathname = url);
+  };
+  const saveDisambiguator = (newDisambiguator) => {
+    return window.fetchJson(path.join(url, "disambiguator"), {method: "PUT", body: newDisambiguator})
+      .then(url => window.location.pathname = url);
   };
   const saveName = (newName) => {
     return window.fetchJson(path.join(url, "name"), {method: "PUT", body: newName})
@@ -41,6 +46,7 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
       {children}
       <hr/>
       <EditableProperty label="Symbol" initialValue={definition.symbol} onSave={saveSymbol} />
+      {hasDisambiguator && <EditableProperty label="Disambiguator" initialValue={definition.disambiguator} onSave={saveDisambiguator} />}
       <EditableProperty label="Name" initialValue={definition.explicitName} onSave={saveName} />
       <EditableProperty label="Shorthand" initialValue={definition.shorthand} onSave={saveShorthand} />
       <EditableProperty label="Components" initialValue={definition.componentTypes.map(x => x.name).join(" ")} onSave={saveComponents} />

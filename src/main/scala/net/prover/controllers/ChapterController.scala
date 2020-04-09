@@ -18,7 +18,7 @@ import scala.util.{Failure, Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}"))
-class ChapterController @Autowired() (val bookService: BookService) extends BookModification with ReactViews {
+class ChapterController @Autowired() (val bookService: BookService) extends BookModification with ParameterValidation with ReactViews {
 
   private def getChapterProps(books: Seq[Book], definitions: Definitions, book: Book, bookKey: String, chapter: Chapter, chapterKey: String): ChapterProps = {
     val chaptersWithKeys = BookService.getChaptersWithKeys(book)
@@ -146,22 +146,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }).toResponseEntity
   }
 
-  def getOptionalString(source: String): Option[String] = {
-    Option(source.trim()).filter(_.nonEmpty)
-  }
-  def getWords(source: String): Seq[String] = {
-    source.splitByWhitespace().flatMap(getOptionalString)
-  }
-  def getMandatoryString(source: String, name: String): Try[String] = {
-    getOptionalString(source).orBadRequest(s"$name must be given")
-  }
-  def getFormat(source: String, symbol: String, componentNames: Seq[String]): Try[Format] = {
-    getOptionalString(source)
-      .map(f => Format.parser(componentNames).parseFromString(f, "format"))
-      .getOrElse(Format.default(symbol, componentNames))
-      .recoverWithBadRequest
-  }
-
   @PostMapping(value = Array("/theorems"), produces = Array("application/json;charset=UTF-8"))
   def createTheorem(
     @PathVariable("bookKey") bookKey: String,
@@ -234,11 +218,11 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       val name = getOptionalString(newTermDefinition.name)
-      val disambiguator = getOptionalString(newTermDefinition.disambiguator)
       val shorthand = getOptionalString(newTermDefinition.shorthand)
       val attributes = getWords(newTermDefinition.attributes)
       for {
         symbol <- getMandatoryString(newTermDefinition.symbol, "Symbol")
+        disambiguator <- getOptionalSingleWord(newTermDefinition.disambiguator, "Disambiguator")
         boundVariablesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefinition.components, "components").recoverWithBadRequest
         boundVariables = boundVariablesAndComponentTypes._1
         componentTypes = boundVariablesAndComponentTypes._2

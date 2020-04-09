@@ -8,7 +8,7 @@ case class TermDefinition(
     symbol: String,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
-    disambiguatorOption: Option[String],
+    disambiguator: Option[String],
     explicitName: Option[String],
     format: Format,
     premises: Seq[Statement],
@@ -17,8 +17,8 @@ case class TermDefinition(
     attributes: Seq[String])
   extends ExpressionDefinition with TypedExpressionDefinition[TermDefinition]
 {
-  override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(symbol, disambiguatorOption)
-  override def name: String = explicitName.getOrElse(symbol)
+  override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(symbol, disambiguator)
+  override def name: String = explicitName.getOrElse(disambiguatedSymbol.forDisplay)
   override def typeName: String = "Term"
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions - this ++ premises.flatMap(_.referencedDefinitions).toSet
   override val complexity: Int = definitionPredicate.definitionalComplexity
@@ -41,7 +41,7 @@ case class TermDefinition(
   }
 
   override def withSymbol(newSymbol: String): TermDefinition = copy(symbol = newSymbol)
-  def withDisambiguator(newDisambiguatorOption: Option[String]): TermDefinition = copy(disambiguatorOption = newDisambiguatorOption)
+  def withDisambiguator(newDisambiguator: Option[String]): TermDefinition = copy(disambiguator = newDisambiguator)
   override def withName(newName: Option[String]): TermDefinition = copy(explicitName = newName)
   override def withShorthand(newShorthand: Option[String]): TermDefinition = copy(shorthand = newShorthand)
   override def withAttributes(newAttributes: Seq[String]): TermDefinition = copy(attributes = newAttributes)
@@ -50,7 +50,7 @@ case class TermDefinition(
   override def inferences: Seq[Inference.FromEntry] = Seq(Inference.Definition(name, premises, definingStatement))
 
   override def serializedLines: Seq[String] = Seq(s"term $symbol $serializedComponents") ++
-    (disambiguatorOption.map(d => s"disambiguator $d").toSeq ++
+    (disambiguator.map(d => s"disambiguator $d").toSeq ++
       explicitName.map(n => s"name ($n)").toSeq ++
       format.serialized.toSeq ++
       (if (premises.nonEmpty) Seq(s"premises (${premises.map(_.serialized).mkString(", ")})") else Nil) ++
@@ -68,7 +68,7 @@ case class TermDefinition(
       symbol,
       boundVariableNames,
       componentTypes,
-      disambiguatorOption,
+      disambiguator,
       explicitName,
       format,
       premises.map(_.replaceDefinition(oldDefinition, newDefinition)),

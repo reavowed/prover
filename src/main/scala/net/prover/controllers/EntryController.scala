@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
-import net.prover.model.entries.{ChapterEntry, ExpressionDefinition, TypeDefinition}
+import net.prover.model.entries.{ChapterEntry, ExpressionDefinition, TermDefinition, TypeDefinition}
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,7 +12,7 @@ import scala.util.{Failure, Success}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{entryKey}"))
-class EntryController @Autowired() (val bookService: BookService) extends BookModification {
+class EntryController @Autowired() (val bookService: BookService) extends BookModification with ParameterValidation {
 
   @PutMapping(value = Array("/name"), produces = Array("application/json;charset=UTF-8"))
   def editName(
@@ -57,6 +57,31 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
           Success((newDefinition, modifyTypeDefinition(definition, newDefinition)._1))
         case _ =>
           Failure(BadRequestException(s"Cannot edit symbol of ${entry.getClass.getName}"))
+      }
+      newBook <- bookService.findBook(newBooks, bookKey)
+      newChapter <- bookService.findChapter(newBook, chapterKey)
+      newKey <- BookService.getEntriesWithKeys(newChapter).find(_._1 == newEntry).map(_._2).orException(new Exception("Couldn't find new entry"))
+    } yield BookService.getEntryUrl(bookKey, chapterKey, newKey)).toResponseEntity
+  }
+
+  @PutMapping(value = Array("/disambiguator"), produces = Array("application/json;charset=UTF-8"))
+  def editDisambiguator(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String,
+    @RequestBody(required = false) newDisambiguator: String
+  ): ResponseEntity[_] = {
+    (for {
+      book <- bookService.findBook(bookKey)
+      chapter <- bookService.findChapter(book, chapterKey)
+      entry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
+      disambiguator <- getOptionalSingleWord(newDisambiguator, "Disambiguator")
+      (newEntry, newBooks) <- entry match {
+        case definition: TermDefinition =>
+          val newDefinition = definition.withDisambiguator(disambiguator)
+          Success((newDefinition, modifyExpressionDefinition(definition, newDefinition)._1))
+        case _ =>
+          Failure(BadRequestException(s"Cannot edit disambiguator of ${entry.getClass.getName}"))
       }
       newBook <- bookService.findBook(newBooks, bookKey)
       newChapter <- bookService.findChapter(newBook, chapterKey)

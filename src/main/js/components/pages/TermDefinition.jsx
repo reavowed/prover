@@ -16,7 +16,7 @@ export function TermDefinition({definition: definitionJson, definitions, typeDef
     <><CopiableExpression expression={definition.defaultValue}/> is defined to be equal to <CopiableExpression expression={definition.definingStatement.components[1]}/></> :
     <><CopiableExpression expression={definition.defaultValue}/> is defined such that <CopiableExpression expression={definition.definingStatement}/></>;
 
-  return <ExpressionDefinition title="Term Definition" definition={definition} entryContext={entryContext} parser={parser} {...otherProps}>
+  return <ExpressionDefinition title="Term Definition" definition={definition} entryContext={entryContext} parser={parser} hasDisambiguator {...otherProps}>
     <ResultWithPremises premises={definition.premises}
                         result={result}/>
   </ExpressionDefinition>;
