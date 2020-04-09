@@ -32,11 +32,11 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
   function replaceShorthands(text, selectionPosition, requireWhitespace) {
     const initialText = text.substring(0, selectionPosition);
     const finalText = text.substring(selectionPosition);
-    const replacedInitialText =_.reduce(_.toPairs(context.definitionShorthands), (text, [valueToReplace, symbol]) => {
+    const replacedInitialText =_.reduce(_.toPairs(context.definitionShorthands), (text, [valueToReplace, {baseSymbol}]) => {
       const regex = new RegExp('(^|\\s)' + _.escapeRegExp(valueToReplace) + (requireWhitespace ? '(\\s$)' : '$'));
       const match = text.match(regex);
       if (match) {
-        return text.substring(0, match.index + match[1].length) + symbol + text.substring(match.index + match[1].length + valueToReplace.length)
+        return text.substring(0, match.index + match[1].length) + baseSymbol + text.substring(match.index + match[1].length + valueToReplace.length)
       } else {
         return text;
       }
@@ -121,7 +121,7 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
         .value();
       const matchingShorthands = _.chain(context.definitionShorthands)
         .filter((value, key) => isMatch(key, lastWord))
-        .map((value) => value)
+        .map(({baseSymbol}) => baseSymbol)
         .value();
       const matchingTypes = _.chain(context.typeDefinitions)
         .flatMap((value, key) => [key, ..._.values(value.properties).map(p => p.symbol)])

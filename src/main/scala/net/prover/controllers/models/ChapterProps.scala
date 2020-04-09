@@ -1,6 +1,7 @@
 package net.prover.controllers.models
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.model.DisambiguatedSymbol
 import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions.{Statement, Term}
 
@@ -16,7 +17,7 @@ case class ChapterProps(
   typeDefinitions: Map[String, TypeDefinitionSummary],
   standalonePropertyDefinitions: Map[String, StandalonePropertyDefinitionSummary],
   displayShorthands: Seq[DisplayShorthand],
-  definitionShorthands: Map[String, String])
+  definitionShorthands: Map[String, DisambiguatedSymbol])
 
 object ChapterProps {
   sealed trait EntryProps {

@@ -411,10 +411,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     ).map{ case (books, definitions, book, chapter, _) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
-  private def getDefinitionShorthands(entryContext: EntryContext): Map[String, String] = {
-    val shorthandsFromDefinitions = entryContext.availableEntries.ofType[ExpressionDefinition].mapCollect(d => d.shorthand.map(_ -> d.symbol)).toMap
+  private def getDefinitionShorthands(entryContext: EntryContext): Map[String, DisambiguatedSymbol] = {
+    val shorthandsFromDefinitions = entryContext.availableEntries.ofType[ExpressionDefinition].mapCollect(d => d.shorthand.map(_ -> d.disambiguatedSymbol)).toMap
     val greekLetterShorthands = 'α'.to('ω')
-      .map(c => Character.getName(c).splitByWhitespace().last.toLowerCase -> c.toString)
+      .map(c => Character.getName(c).splitByWhitespace().last.toLowerCase -> DisambiguatedSymbol(c.toString, None))
       .toMap
     shorthandsFromDefinitions ++ greekLetterShorthands
   }
