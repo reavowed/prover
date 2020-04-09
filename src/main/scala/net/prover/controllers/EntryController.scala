@@ -51,8 +51,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
       (newEntry, newBooks) <- entry match {
         case definition: ExpressionDefinition =>
           val newDefinition = definition.withSymbol(newSymbol)
-          val newDefinitionWithFormat = if (definition.format.isInstanceOf[Format.Default]) newDefinition.withFormat(Format.default(newSymbol, definition.boundVariableNames ++ definition.componentTypes.map(_.name))) else newDefinition
-          Success((newDefinition, modifyExpressionDefinition(definition, newDefinitionWithFormat)._1))
+          Success((newDefinition, modifyExpressionDefinition(definition, newDefinition)._1))
         case definition: TypeDefinition =>
           val newDefinition = definition.withSymbol(newSymbol)
           Success((newDefinition, modifyTypeDefinition(definition, newDefinition)._1))

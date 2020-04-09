@@ -134,7 +134,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       const renderedComponents = expression.components.map((c, i) =>
         renderExpression(c, [...path, i], filterPaths(actionHighlights, [i]), filterPaths(staticHighlights, [i]), innerBoundVariables, expression.definition ? expression.definition.requiresComponentBrackets : true)
       );
-      return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [...renderedBoundVariables, ...renderedComponents]));
+      return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [...renderedBoundVariables, ...renderedComponents, formatHtml(expression.symbol)]));
     } else if (expression.textForHtml) {
       return formatHtmlWithoutWrapping(expression.textForHtml(boundVariableLists));
     } else {

@@ -17,6 +17,7 @@ case class TermDefinition(
     attributes: Seq[String])
   extends ExpressionDefinition with TypedExpressionDefinition[TermDefinition]
 {
+  override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(symbol, disambiguatorOption)
   override def name: String = explicitName.getOrElse(symbol)
   override def typeName: String = "Term"
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions - this ++ premises.flatMap(_.referencedDefinitions).toSet
@@ -40,6 +41,7 @@ case class TermDefinition(
   }
 
   override def withSymbol(newSymbol: String): TermDefinition = copy(symbol = newSymbol)
+  def withDisambiguator(newDisambiguatorOption: Option[String]): TermDefinition = copy(disambiguatorOption = newDisambiguatorOption)
   override def withName(newName: Option[String]): TermDefinition = copy(explicitName = newName)
   override def withShorthand(newShorthand: Option[String]): TermDefinition = copy(shorthand = newShorthand)
   override def withAttributes(newAttributes: Seq[String]): TermDefinition = copy(attributes = newAttributes)
@@ -115,7 +117,7 @@ object TermDefinition extends ChapterEntryParser {
       componentTypes = boundVariablesAndComponentTypes._2
       disambiguatorOption <- Parser.optional("disambiguator", Parser.singleWord)
       name <- nameParser
-      format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
+      format <- Format.optionalParser(boundVariables ++ componentTypes.map(_.name))
       premises <- premisesParser
       definitionPredicate <- Statement.parser(expressionParsingContext.addInitialParameter("_")).inParens
       shorthand <- ExpressionDefinition.shorthandParser

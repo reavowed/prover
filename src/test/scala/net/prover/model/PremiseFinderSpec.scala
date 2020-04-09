@@ -96,7 +96,7 @@ class PremiseFinderSpec extends Specification {
         Nil,
         None,
         None,
-        Format.default("ℤ", Nil),
+        Format.default(Nil),
         Nil,
         BlankDefinition,
         None,
@@ -149,7 +149,7 @@ class PremiseFinderSpec extends Specification {
         ForAll("a")(Equivalence(ElementOf($), Conjunction(ElementOf($, A), φ($)))),
         None,
         Nil)
-      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default("ℕ^+", Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
+      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
 
@@ -175,7 +175,7 @@ class PremiseFinderSpec extends Specification {
         ForAll("a")(Equivalence(ElementOf($), Conjunction(ElementOf($, A), φ($)))),
         None,
         Nil)
-      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default("ℕ^+", Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
+      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val PositiveNaturalsAreASubsetOfTheNaturals = Axiom("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
 

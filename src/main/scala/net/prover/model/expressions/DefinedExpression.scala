@@ -1,8 +1,5 @@
 package net.prover.model.expressions
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model._
 import net.prover.model.entries.ExpressionDefinition
 
@@ -129,10 +126,10 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
 
   override def toString: String = {
-    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), parentRequiresBrackets = false)
+    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.symbol, parentRequiresBrackets = false)
   }
   override def safeToString: String = {
-    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), parentRequiresBrackets = true)
+    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.symbol, parentRequiresBrackets = true)
   }
   override def serialized: String = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
   override def serializedForHash: String = (Seq(definition.symbol) ++ components.map(_.serializedForHash)).mkString(" ")

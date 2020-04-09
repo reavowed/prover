@@ -13,8 +13,8 @@ trait Format {
   def requiresComponentBrackets: Boolean
   def serialized: Option[String]
 
-  def formatText(components: Seq[String], parentRequiresBrackets: Boolean = false): String = {
-    components.zipWithIndex.foldLeft(getSafeFormatString(parentRequiresBrackets)) { case (textSoFar, (component, index)) =>
+  def formatText(components: Seq[String], symbol: String, parentRequiresBrackets: Boolean = false): String = {
+    (symbol +: components).zipWithIndex.foldLeft(getSafeFormatString(parentRequiresBrackets)) { case (textSoFar, (component, index)) =>
       textSoFar.replaceFirst(s"%$index", Matcher.quoteReplacement(component))
     }
   }
@@ -48,17 +48,14 @@ object Format {
     }
   }
 
-  def default(
-    symbol: String,
-    replacementNames: Seq[String]
-  ): Format = {
+  def default(replacementNames: Seq[String]): Format = {
     val (formatString, requiresBrackets) = replacementNames match {
       case Nil =>
-        (symbol, false)
+        ("%0", false)
       case Seq(a) =>
-        (s"$symbol%0", false)
+        (s"%1%0", false)
       case Seq(a, b) =>
-        (s"%0 $symbol %1", true)
+        (s"%0 %2 %1", true)
       case _ =>
         throw new Exception("Explicit format must be supplied with more than two components")
     }
@@ -75,10 +72,10 @@ object Format {
     }
   }
 
-  def optionalParser(symbol: String, replacementNames: Seq[String]): Parser[Format] = {
+  def optionalParser(replacementNames: Seq[String]): Parser[Format] = {
     Parser.optional(
       "format",
       parser(replacementNames),
-      default(symbol, replacementNames))
+      default(replacementNames))
   }
 }

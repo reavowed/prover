@@ -118,6 +118,7 @@ interface TextBasedExpression {
   replaceAtPath(path: number[], expression: Expression): [Expression, number[][]]
 }
 interface FormatBasedExpression {
+  symbol: String
   components: Expression[]
   serialize(): string
   serializeNicely(boundVariableLists: string[][]): string
@@ -128,6 +129,7 @@ interface FormatBasedExpression {
 
 export class Variable {
   constructor(public name: string, public components: Expression[]) {}
+  symbol: String = this.name;
   serialize() {
     return this.components.length == 0 ?
         this.name :
@@ -140,8 +142,8 @@ export class Variable {
   }
   formatForHtml() {
     return this.components.length == 0 ?
-        this.name :
-        this.name + "(" + this.components.map((_, i) => "%" + i).join(", ") + ")";
+        "%0" :
+        "%0" + "(" + this.components.map((_, i) => "%" + (i+1)).join(", ") + ")";
   }
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in variable"
@@ -160,6 +162,7 @@ export class Variable {
 
 export class DefinedExpression {
   constructor(public definition: ExpressionDefinition, public boundVariableNames: string[], public components: Expression[]) {}
+  symbol: String = this.definition.symbol;
   serialize() {
     return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
   }

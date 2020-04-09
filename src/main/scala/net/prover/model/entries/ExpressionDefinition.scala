@@ -8,6 +8,7 @@ trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinitio
 
 trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry.Standalone { self: ExpressionDefinition =>
   def symbol: String
+  def disambiguatedSymbol: DisambiguatedSymbol
   def boundVariableNames: Seq[String]
   def componentTypes: Seq[ComponentType]
   def format: Format

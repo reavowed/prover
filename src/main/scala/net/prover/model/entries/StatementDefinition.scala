@@ -15,6 +15,7 @@ case class StatementDefinition(
     attributes: Seq[String])
   extends ExpressionDefinition with TypedExpressionDefinition[StatementDefinition]
 {
+  override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(symbol, None)
   override def name: String = explicitName.getOrElse(symbol)
   override def typeName: String = "Statement"
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.map(_.referencedDefinitions).getOrElse(Set.empty).toType[ChapterEntry] - this
@@ -114,7 +115,7 @@ object StatementDefinition extends ChapterEntryParser {
       boundVariables = boundVariablesAndComponentTypes._1
       componentTypes = boundVariablesAndComponentTypes._2
       name <- nameParser
-      format <- Format.optionalParser(symbol, boundVariables ++ componentTypes.map(_.name))
+      format <- Format.optionalParser(boundVariables ++ componentTypes.map(_.name))
       optionalDefiningStatement <- definingStatementParser(ExpressionParsingContext.outsideProof(entryContext))
       shorthand <- ExpressionDefinition.shorthandParser
       attributes <- ExpressionDefinition.attributesParser
