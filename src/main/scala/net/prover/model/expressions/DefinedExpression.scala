@@ -126,11 +126,11 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
 
   override def toString: String = {
-    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.symbol, parentRequiresBrackets = false)
+    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.disambiguatedSymbol.serialized, parentRequiresBrackets = false)
   }
   override def safeToString: String = {
-    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.symbol, parentRequiresBrackets = true)
+    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.disambiguatedSymbol.serialized, parentRequiresBrackets = true)
   }
-  override def serialized: String = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
-  override def serializedForHash: String = (Seq(definition.symbol) ++ components.map(_.serializedForHash)).mkString(" ")
+  override def serialized: String = (Seq(definition.disambiguatedSymbol.serialized) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
+  override def serializedForHash: String = (Seq(definition.disambiguatedSymbol.serialized) ++ components.map(_.serializedForHash)).mkString(" ")
 }

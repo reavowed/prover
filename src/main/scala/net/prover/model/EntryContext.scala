@@ -78,7 +78,7 @@ object EntryContext {
       entries,
       entries.flatMap(_.inferences).toMapWithKey(_.id),
       entries.mapCollect(getStatementDefinitionFromEntry).toMapWithKey(_.symbol),
-      entries.ofType[TermDefinition].toMapWithKey(_.symbol))
+      entries.ofType[TermDefinition].toMapWithKey(_.disambiguatedSymbol.serialized))
   }
 
 
