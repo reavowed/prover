@@ -5,7 +5,7 @@ import net.prover.model.expressions._
 import net.prover.model._
 
 case class TermDefinition(
-    symbol: String,
+    baseSymbol: String,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
     disambiguator: Option[String],
@@ -18,7 +18,8 @@ case class TermDefinition(
     disambiguatorAdders: Seq[DisambiguatorAdder])
   extends ExpressionDefinition with TypedExpressionDefinition[TermDefinition]
 {
-  override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(symbol, disambiguator)
+  override def symbol: String = disambiguatedSymbol.serialized
+  override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(baseSymbol, disambiguator)
   override def name: String = explicitName.getOrElse(disambiguatedSymbol.forDisplay)
   override def typeName: String = "Term"
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions - this ++ premises.flatMap(_.referencedDefinitions).toSet
@@ -41,7 +42,7 @@ case class TermDefinition(
     }
   }
 
-  override def withSymbol(newSymbol: String): TermDefinition = copy(symbol = newSymbol)
+  override def withSymbol(newSymbol: String): TermDefinition = copy(baseSymbol = newSymbol)
   def withDisambiguator(newDisambiguator: Option[String]): TermDefinition = copy(disambiguator = newDisambiguator)
   override def withName(newName: Option[String]): TermDefinition = copy(explicitName = newName)
   override def withShorthand(newShorthand: Option[String]): TermDefinition = copy(shorthand = newShorthand)
@@ -51,7 +52,7 @@ case class TermDefinition(
 
   override def inferences: Seq[Inference.FromEntry] = Seq(Inference.Definition(name, premises, definingStatement))
 
-  override def serializedLines: Seq[String] = Seq(s"term $symbol $serializedComponents") ++
+  override def serializedLines: Seq[String] = Seq(s"term $baseSymbol $serializedComponents") ++
     (disambiguator.map(d => s"disambiguator $d").toSeq ++
       explicitName.map(n => s"name ($n)").toSeq ++
       format.serialized.toSeq ++
@@ -68,7 +69,7 @@ case class TermDefinition(
     entryContext: EntryContext
   ): TermDefinition = {
     TermDefinition(
-      symbol,
+      baseSymbol,
       boundVariableNames,
       componentTypes,
       disambiguator,
@@ -115,7 +116,7 @@ object TermDefinition extends ChapterEntryParser {
   def parser(implicit entryContext: EntryContext): Parser[TermDefinition] = {
     implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
-      symbol <- Parser.singleWord
+      baseSymbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinition.boundVariablesAndComponentTypesParser
       boundVariables = boundVariablesAndComponentTypes._1
       componentTypes = boundVariablesAndComponentTypes._2
@@ -129,7 +130,7 @@ object TermDefinition extends ChapterEntryParser {
       disambiguatorAdders <- Parser.optional("disambiguatorAdders", DisambiguatorAdder.listParser).getOrElse(Nil)
     } yield {
       TermDefinition(
-        symbol,
+        baseSymbol,
         boundVariables,
         componentTypes,
         disambiguatorOption,

@@ -48,7 +48,7 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
       <h3>{title}:  <CopiableExpression expression={definition.defaultValue} /></h3>
       {children}
       <hr/>
-      <EditableProperty label="Symbol" initialValue={definition.symbol} onSave={saveSymbol} />
+      <EditableProperty label="Symbol" initialValue={definition.baseSymbol} onSave={saveSymbol} />
       {hasDisambiguator && <EditableProperty label="Disambiguator" initialValue={definition.disambiguator} onSave={saveDisambiguator} />}
       <EditableProperty label="Name" initialValue={definition.explicitName} onSave={saveName} />
       <EditableProperty label="Shorthand" initialValue={definition.shorthand} onSave={saveShorthand} />

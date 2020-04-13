@@ -5,7 +5,7 @@ import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 
 case class StatementDefinition(
-    symbol: String,
+    baseSymbol: String,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
     explicitName: Option[String],
@@ -15,8 +15,8 @@ case class StatementDefinition(
     attributes: Seq[String])
   extends ExpressionDefinition with TypedExpressionDefinition[StatementDefinition]
 {
-  override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(symbol, None)
-  override def name: String = explicitName.getOrElse(symbol)
+  override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(baseSymbol, None)
+  override def name: String = explicitName.getOrElse(baseSymbol)
   override def typeName: String = "Statement"
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.map(_.referencedDefinitions).getOrElse(Set.empty).toType[ChapterEntry] - this
   override val complexity: Int = definingStatement.map(_.definitionalComplexity).getOrElse(1)
@@ -37,7 +37,7 @@ case class StatementDefinition(
     }
   }
 
-  override def withSymbol(newSymbol: String): StatementDefinition = copy(symbol = newSymbol)
+  override def withSymbol(newSymbol: String): StatementDefinition = copy(baseSymbol = newSymbol)
   override def withName(newName: Option[String]): StatementDefinition = copy(explicitName = newName)
   override def withShorthand(newShorthand: Option[String]): StatementDefinition = copy(shorthand = newShorthand)
   override def withAttributes(newAttributes: Seq[String]): StatementDefinition = copy(attributes = newAttributes)
@@ -48,7 +48,7 @@ case class StatementDefinition(
 
   override def inferences: Seq[Inference.FromEntry] = constructionInference.toSeq ++ deconstructionInference.toSeq
 
-  override def serializedLines: Seq[String] = Seq(s"statement $symbol $serializedComponents") ++
+  override def serializedLines: Seq[String] = Seq(s"statement $baseSymbol $serializedComponents") ++
     (explicitName.map(n => s"name ($n)").toSeq ++
       format.serialized.toSeq ++
       definingStatement.map(s => s"definition (${s.serialized})").toSeq ++
@@ -62,7 +62,7 @@ case class StatementDefinition(
     entryContext: EntryContext
   ): StatementDefinition = {
     StatementDefinition(
-      symbol,
+      baseSymbol,
       boundVariableNames,
       componentTypes,
       explicitName,
