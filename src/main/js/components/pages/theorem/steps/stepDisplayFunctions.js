@@ -8,7 +8,7 @@ export function matchElidableVariableDescription(statement) {
     statement.components[0].index === 0)
   {
     return {
-      format: statement.definition.baseFormatString,
+      definition: statement.definition,
       otherComponents: statement.components.slice(1)
     }
   }

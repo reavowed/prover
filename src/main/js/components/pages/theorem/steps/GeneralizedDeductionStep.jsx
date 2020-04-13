@@ -31,7 +31,7 @@ export default class GeneralizedDeductionStep extends React.Component {
       return <InlineTextEditor text={name} callback={callback} />;
     };
 
-    const patchedExpression = new DefinedExpression({baseFormatString: variableDescription.format}, [step.variableName], variableDescription.otherComponents);
+    const patchedExpression = new DefinedExpression(variableDescription.definition, [step.variableName], variableDescription.otherComponents);
 
     return <Step.WithSubsteps path={path}>
       <Step.Antecedent>

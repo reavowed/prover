@@ -70,7 +70,7 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
         let stepElement;
         if (variableDescription) {
           const assumptionReference = new StepReference(path, "a");
-          const patchedExpression = new DefinedExpression({baseFormatString: variableDescription.format}, [step.variableName], variableDescription.otherComponents);
+          const patchedExpression = new DefinedExpression(variableDescription.definition, [step.variableName], variableDescription.otherComponents);
           const wrapBoundVariable = (name, index, boundVariablePath) => {
             const callback = (_.isEqual(boundVariablePath, [0]) && index === 0) ?
               updateBoundVariable(path) :

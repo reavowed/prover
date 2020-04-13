@@ -8,6 +8,12 @@ declare global {
     }
 }
 
+export interface DisambiguatedSymbol {
+  baseSymbol: string;
+  disambiguator: string | null;
+  serialized: string;
+}
+
 export interface PropertyDefinition {
   symbol: String;
   qualifiedSymbol: String;
@@ -23,7 +29,7 @@ export interface StandalonePropertyDefinition {
 }
 
 export interface ExpressionDefinition {
-  symbol: string;
+  symbol: DisambiguatedSymbol;
   baseFormatString: string;
   requiresBrackets: boolean;
   requiresComponentBrackets: boolean;
@@ -119,6 +125,7 @@ interface TextBasedExpression {
 }
 interface FormatBasedExpression {
   symbol: String
+  disambiguator: String | null;
   components: Expression[]
   serialize(): string
   serializeNicely(boundVariableLists: string[][]): string
@@ -130,6 +137,7 @@ interface FormatBasedExpression {
 export class Variable {
   constructor(public name: string, public components: Expression[]) {}
   symbol: String = this.name;
+  disambiguator: String | null = null;
   serialize() {
     return this.components.length == 0 ?
         this.name :
@@ -162,13 +170,14 @@ export class Variable {
 
 export class DefinedExpression {
   constructor(public definition: ExpressionDefinition, public boundVariableNames: string[], public components: Expression[]) {}
-  symbol: String = this.definition.symbol;
+  symbol: String = this.definition.symbol.baseSymbol;
+  disambiguator: String | null = this.definition.symbol.disambiguator;
   serialize() {
-    return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
+    return [this.definition.symbol.serialized, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
     const innerBoundVariables = this.boundVariableNames.length ? [...boundVariableLists, this.boundVariableNames] : boundVariableLists;
-    return [this.definition.symbol, ...this.boundVariableNames, ...this.components.map(c => c.serializeNicely(innerBoundVariables))].join(" ");
+    return [this.definition.symbol.serialized, ...this.boundVariableNames, ...this.components.map(c => c.serializeNicely(innerBoundVariables))].join(" ");
   }
   formatForHtml(parentRequiresBrackets: boolean) {
     return (parentRequiresBrackets && this.definition.requiresBrackets) ?
