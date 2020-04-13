@@ -3,10 +3,9 @@ Show that the naturals can be embedded in the integers in a natural way.
 term ⍳_ℤ ()
   (= $0 functionMap n ℕ equivalenceClass orderedPair $0 0ℕ ~_ℤ)
   shorthand (iZ)
+  disambiguatorAdders (apply $0 a ℤ)
 
 write apply ⍳_ℤ a as toZ
-
-display apply ⍳_ℤ a as (%0_ℤ)
 
 theorem Function Properties of ⍳_ℤ
 conclusion ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ
