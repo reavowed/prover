@@ -33,7 +33,7 @@ case class StatementDefinition(
 
   def templateParser(implicit templateParsingContext: TemplateParsingContext): Parser[Template] = {
     componentTemplateParser.map { case (newBoundVariableNames, components) =>
-      Template.DefinedStatement(this, newBoundVariableNames, components)
+      DefinedStatementTemplate(this, newBoundVariableNames, components)
     }
   }
 

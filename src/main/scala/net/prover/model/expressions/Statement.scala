@@ -74,7 +74,7 @@ object Statement {
 
   def templateParserFunction(implicit templateParsingContext: TemplateParsingContext): PartialFunction[String, Parser[Template]] = {
       case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
-        Parser.constant(Template.StatementVariable(name))
+        Parser.constant(StatementVariableTemplate(name))
       case templateParsingContext.entryContext.RecognisedStatementDefinition(definition) =>
         definition.templateParser
   }

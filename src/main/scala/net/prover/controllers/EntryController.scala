@@ -99,7 +99,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (allBooks, _, book, chapter, entry) => {
       val entryContext = EntryContext.forEntry(allBooks, book, chapter, entry)
       for {
-        newDisambiguatorAdders <- serializedNewDisambiguatorAdders.mapWithIndex((s, i) => DisambigatorAdder.parser(entryContext).parseFromString(s, s"disambiguator adder ${i + 1}").recoverWithBadRequest).traverseTry
+        newDisambiguatorAdders <- serializedNewDisambiguatorAdders.mapWithIndex((s, i) => DisambiguatorAdder.parser(entryContext).parseFromString(s, s"disambiguator adder ${i + 1}").recoverWithBadRequest).traverseTry
         result <- entry match {
           case definition: TermDefinition =>
             Success(definition.withDisambiguatorAdders(newDisambiguatorAdders))

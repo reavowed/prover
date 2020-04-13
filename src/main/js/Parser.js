@@ -313,4 +313,9 @@ export class Parser {
     relation.template = this.parseExpression(relation.template);
     return relation;
   };
+  parseDisambiguatorAdder = (json) => {
+    const disambiguatorAdder = _.cloneDeep(json);
+    disambiguatorAdder.template = this.parseExpression(disambiguatorAdder.template);
+    return disambiguatorAdder;
+  };
 }

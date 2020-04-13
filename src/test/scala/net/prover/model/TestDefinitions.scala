@@ -29,12 +29,12 @@ trait VariableDefinitions {
   case class TermVariablePlaceholder(name: String) extends Placeholder[TermVariable] {
     def apply(terms: Term*) = TermVariable(name, terms)
     override def toVariable = TermVariable(name, Nil)
-    def template: Template = Template.TermVariable(name)
+    def template: Template = TermVariableTemplate(name)
   }
   implicit def placeholderToTermComponent(placeholder: TermVariablePlaceholder): TermComponent = TermComponent(placeholder.name, Nil)
 
   case object $ {
-    def template: Template = Template.FunctionParameter($ToFunctionParameter(this))
+    def template: Template = FunctionParameterTemplate($ToFunctionParameter(this))
     def apply(index: Int) = FunctionParameter(index, 0)
     def ^ : FunctionParameter = FunctionParameter(0, 1)
     def ^^ : FunctionParameter = ^^(0)
@@ -46,10 +46,10 @@ trait VariableDefinitions {
 
 
   implicit class TermDefinitionOps(termDefinition: TermDefinition) {
-    def template(components: Seq[Template]): Template = Template.DefinedTerm(termDefinition, Nil, components)
+    def template(components: Seq[Template]): Template = DefinedTermTemplate(termDefinition, Nil, components)
   }
   implicit class FunctionParameterOps(functionParameter: FunctionParameter) {
-    def template: Template = Template.FunctionParameter(functionParameter)
+    def template: Template = FunctionParameterTemplate(functionParameter)
   }
 
   val a = TermVariablePlaceholder("a")
@@ -306,7 +306,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
   def lessThan(a: Term, b: Term): Statement = ElementOf(Pair(a, b), LessThan)
 
   val InfixRelationShorthand = DisplayShorthand(
-    Template.DefinedStatement(ElementOf, Nil, Seq(Template.DefinedTerm(Pair, Nil, Seq(Template.TermVariable("a"), Template.TermVariable("b"))), Template.TermVariable("<"))),
+    DefinedStatementTemplate(ElementOf, Nil, Seq(DefinedTermTemplate(Pair, Nil, Seq(TermVariableTemplate("a"), TermVariableTemplate("b"))), TermVariableTemplate("<"))),
     Format.Explicit("a < b", Seq("a", "b", "<"), false, false),
     Seq(("<", "infix-relation")))
 

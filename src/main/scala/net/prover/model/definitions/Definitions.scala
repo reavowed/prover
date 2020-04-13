@@ -466,14 +466,14 @@ object Definitions {
 
     def fromGeneralShorthands = for {
       shorthand <- shorthands
-      if shorthand.template.isInstanceOf[Template.DefinedStatement]
+      if shorthand.template.isInstanceOf[DefinedStatementTemplate]
       if shorthand.template.variables.length == 3
       Seq(lhsIndex, symbolIndex, rhsIndex) <- "%(\\d) %(\\d) %(\\d)".r.unapplySeq(shorthand.format.baseFormatString).map(_.map(_.toInt)).toSeq
       if lhsIndex != symbolIndex && lhsIndex != rhsIndex && symbolIndex != rhsIndex
       lhsVariable = shorthand.template.variables(lhsIndex)
       symbolVariable = shorthand.template.variables(symbolIndex)
       rhsVariable = shorthand.template.variables(rhsIndex)
-      if lhsVariable.isInstanceOf[Template.TermVariable] && symbolVariable.isInstanceOf[Template.TermVariable] && rhsVariable.isInstanceOf[Template.TermVariable]
+      if lhsVariable.isInstanceOf[TermVariableTemplate] && symbolVariable.isInstanceOf[TermVariableTemplate] && rhsVariable.isInstanceOf[TermVariableTemplate]
       if shorthand.conditions.forall(_._1 == symbolVariable.name)
       definition <- termDefinitions
       if definition.componentTypes.isEmpty
@@ -492,7 +492,7 @@ object Definitions {
 
     def fromSpecificShorthands = for {
       shorthand <- shorthands
-      if shorthand.template.isInstanceOf[Template.DefinedStatement]
+      if shorthand.template.isInstanceOf[DefinedStatementTemplate]
       if shorthand.template.variables.length == 2
       Seq(lhsIndexText, symbol, rhsIndexText) <- "%(\\d) (.) %(\\d)".r.unapplySeq(shorthand.format.baseFormatString).toSeq
       lhsIndex <- Try(lhsIndexText.toInt).toOption
@@ -500,7 +500,7 @@ object Definitions {
       if lhsIndex != rhsIndex
       lhsVariable = shorthand.template.variables(lhsIndex)
       rhsVariable = shorthand.template.variables(rhsIndex)
-      if lhsVariable.isInstanceOf[Template.TermVariable] && rhsVariable.isInstanceOf[Template.TermVariable]
+      if lhsVariable.isInstanceOf[TermVariableTemplate] && rhsVariable.isInstanceOf[TermVariableTemplate]
       if shorthand.conditions.isEmpty
       relation = BinaryRelation(
         symbol,

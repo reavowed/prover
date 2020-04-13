@@ -44,13 +44,13 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
   }
 
   object RecognisedStatementShorthand {
-    def unapply(string: String): Option[Template.DefinedStatement] = {
-      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[Template.DefinedStatement])
+    def unapply(string: String): Option[DefinedStatementTemplate] = {
+      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[DefinedStatementTemplate])
     }
   }
   object RecognisedTermShorthand {
-    def unapply(string: String): Option[Template.DefinedTerm] = {
-      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[Template.DefinedTerm])
+    def unapply(string: String): Option[DefinedTermTemplate] = {
+      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[DefinedTermTemplate])
     }
   }
 

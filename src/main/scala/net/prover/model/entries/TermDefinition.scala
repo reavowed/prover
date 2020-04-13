@@ -15,7 +15,7 @@ case class TermDefinition(
     definitionPredicate: Statement,
     shorthand: Option[String],
     attributes: Seq[String],
-    disambiguatorAdders: Seq[DisambigatorAdder])
+    disambiguatorAdders: Seq[DisambiguatorAdder])
   extends ExpressionDefinition with TypedExpressionDefinition[TermDefinition]
 {
   override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(symbol, disambiguator)
@@ -37,7 +37,7 @@ case class TermDefinition(
 
   def templateParser(implicit context: TemplateParsingContext): Parser[Template] = {
     componentTemplateParser.map { case (newBoundVariableNames, components) =>
-      Template.DefinedTerm(this, newBoundVariableNames, components)
+      DefinedTermTemplate(this, newBoundVariableNames, components)
     }
   }
 
@@ -47,7 +47,7 @@ case class TermDefinition(
   override def withShorthand(newShorthand: Option[String]): TermDefinition = copy(shorthand = newShorthand)
   override def withAttributes(newAttributes: Seq[String]): TermDefinition = copy(attributes = newAttributes)
   override def withFormat(newFormat: Format): TermDefinition = copy(format = newFormat)
-  def withDisambiguatorAdders(newDisambiguatorAdders: Seq[DisambigatorAdder]): TermDefinition = copy(disambiguatorAdders = newDisambiguatorAdders)
+  def withDisambiguatorAdders(newDisambiguatorAdders: Seq[DisambiguatorAdder]): TermDefinition = copy(disambiguatorAdders = newDisambiguatorAdders)
 
   override def inferences: Seq[Inference.FromEntry] = Seq(Inference.Definition(name, premises, definingStatement))
 
@@ -126,7 +126,7 @@ object TermDefinition extends ChapterEntryParser {
       definitionPredicate <- Statement.parser(expressionParsingContext.addInitialParameter("_")).inParens
       shorthand <- ExpressionDefinition.shorthandParser
       attributes <- ExpressionDefinition.attributesParser
-      disambiguatorAdders <- Parser.optional("disambiguatorAdders", DisambigatorAdder.listParser).getOrElse(Nil)
+      disambiguatorAdders <- Parser.optional("disambiguatorAdders", DisambiguatorAdder.listParser).getOrElse(Nil)
     } yield {
       TermDefinition(
         symbol,

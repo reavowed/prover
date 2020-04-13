@@ -70,8 +70,8 @@ object Term {
     case context.entryContext.RecognisedTermDefinition(definition) =>
       definition.templateParser
     case context.RecognisedParameter(parameter) =>
-      Parser.constant(Template.FunctionParameter(parameter))
+      Parser.constant(FunctionParameterTemplate(parameter))
     case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
-      Parser.constant(Template.TermVariable(name))
+      Parser.constant(TermVariableTemplate(name))
   }
 }
