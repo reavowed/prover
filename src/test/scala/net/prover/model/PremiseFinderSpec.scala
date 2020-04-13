@@ -80,6 +80,7 @@ class PremiseFinderSpec extends Specification {
         Seq(ElementOf(a, Naturals)),
         Conjunction(ElementOf($, Naturals), Equals(add($, a), Zero)),
         None,
+        Nil,
         Nil)
       val entryContextWithDefinition = defaultEntryContext.addEntry(Negated)
 
@@ -100,6 +101,7 @@ class PremiseFinderSpec extends Specification {
         Nil,
         BlankDefinition,
         None,
+        Nil,
         Nil)
       val Integers = IntegerDefinition()
       val PairIsInteger = Axiom("Pair Is Integer", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(Pair(a, b), Integers))
@@ -148,8 +150,9 @@ class PremiseFinderSpec extends Specification {
         Nil,
         ForAll("a")(Equivalence(ElementOf($), Conjunction(ElementOf($, A), φ($)))),
         None,
+        Nil,
         Nil)
-      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
+      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
 
@@ -174,8 +177,9 @@ class PremiseFinderSpec extends Specification {
         Nil,
         ForAll("a")(Equivalence(ElementOf($), Conjunction(ElementOf($, A), φ($)))),
         None,
+        Nil,
         Nil)
-      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil)
+      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val PositiveNaturalsAreASubsetOfTheNaturals = Axiom("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
 

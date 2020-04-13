@@ -29,10 +29,12 @@ trait VariableDefinitions {
   case class TermVariablePlaceholder(name: String) extends Placeholder[TermVariable] {
     def apply(terms: Term*) = TermVariable(name, terms)
     override def toVariable = TermVariable(name, Nil)
+    def template: Template = Template.TermVariable(name)
   }
   implicit def placeholderToTermComponent(placeholder: TermVariablePlaceholder): TermComponent = TermComponent(placeholder.name, Nil)
 
   case object $ {
+    def template: Template = Template.FunctionParameter($ToFunctionParameter(this))
     def apply(index: Int) = FunctionParameter(index, 0)
     def ^ : FunctionParameter = FunctionParameter(0, 1)
     def ^^ : FunctionParameter = ^^(0)
@@ -41,6 +43,14 @@ trait VariableDefinitions {
     def ^^^^ : FunctionParameter = FunctionParameter(0, 4)
   }
   implicit def $ToFunctionParameter(x: $.type): FunctionParameter = FunctionParameter(0, 0)
+
+
+  implicit class TermDefinitionOps(termDefinition: TermDefinition) {
+    def template(components: Seq[Template]): Template = Template.DefinedTerm(termDefinition, Nil, components)
+  }
+  implicit class FunctionParameterOps(functionParameter: FunctionParameter) {
+    def template: Template = Template.FunctionParameter(functionParameter)
+  }
 
   val a = TermVariablePlaceholder("a")
   val b = TermVariablePlaceholder("b")
@@ -136,6 +146,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     ForAll("x")(Negation(ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)))),
     None,
+    Nil,
     Nil)
   val EmptySet = DefinedTerm(Nil, EmptySetDefinition)(Nil)
 
@@ -151,6 +162,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
       ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)),
       Subset(FunctionParameter(0, 0), a))),
     None,
+    Nil,
     Nil)
 
   val Singleton = TermDefinition(
@@ -163,6 +175,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
+    Nil,
     Nil)
 
   val Pair = TermDefinition(
@@ -175,6 +188,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
+    Nil,
     Nil)
   val Product = TermDefinition(
     "product",
@@ -186,6 +200,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
+    Nil,
     Nil)
   val First = TermDefinition(
     "first",
@@ -197,6 +212,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
+    Nil,
     Nil)
   val Second = TermDefinition(
     "second",
@@ -208,6 +224,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
+    Nil,
     Nil)
 
   val ZeroDefinition = TermDefinition(
@@ -220,6 +237,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
+    Nil,
     Nil)
   val Zero = DefinedTerm(Nil, ZeroDefinition)(Nil)
   val NaturalsDefinition = TermDefinition(
@@ -232,6 +250,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
+    Nil,
     Nil)
   val Naturals = DefinedTerm(Nil, NaturalsDefinition)(Nil)
   val Successor = TermDefinition(
@@ -244,6 +263,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
+    Nil,
     Nil)
   val AdditionDefinition = TermDefinition(
     "+",
@@ -255,6 +275,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
+    Nil,
     Nil)
   val Addition = DefinedTerm(Nil, AdditionDefinition)(Nil)
   val Apply = TermDefinition(
@@ -267,6 +288,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
+    Nil,
     Nil)
   val LessThanDefinition = TermDefinition(
     "<",
@@ -278,7 +300,8 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     BlankDefinition,
     None,
-    Seq("infix-relation"))
+    Seq("infix-relation"),
+    Nil)
   val LessThan = DefinedTerm(Nil, LessThanDefinition)(Nil)
   def lessThan(a: Term, b: Term): Statement = ElementOf(Pair(a, b), LessThan)
 

@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.TermDefinition
-import net.prover.model.expressions.FunctionParameter
+import net.prover.model.expressions.{FunctionParameter, Template}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
@@ -27,6 +27,7 @@ class TermDefinitionSpec extends Specification {
           Nil,
           ForAll("x")(Negation(ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)))),
           None,
+          Nil,
           Nil))
     }
 
@@ -46,6 +47,7 @@ class TermDefinitionSpec extends Specification {
               ElementOf(FunctionParameter(0, 0), a),
               ElementOf(FunctionParameter(0, 1), FunctionParameter(0, 0)))))),
           None,
+          Nil,
           Nil))
     }
     "parse a term with a disambiguator" in {
@@ -60,7 +62,23 @@ class TermDefinitionSpec extends Specification {
           Nil,
           Equals($, EmptySet),
           None,
+          Nil,
           Nil))
+    }
+    "parse a term with a disambiguator adder" in {
+      testParsingAndSerialization(
+        TermDefinition(
+          "⍳",
+          Nil,
+          Nil,
+          Some("ℤ"),
+          None,
+          Format.default(Nil),
+          Nil,
+          Equals($, EmptySet),
+          None,
+          Nil,
+          Seq(DisambigatorAdder(Apply.template(Seq($.template, a.template)), "ℤ"))))
     }
   }
 }

@@ -240,7 +240,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           premises,
           definition,
           shorthand,
-          attributes)
+          attributes,
+          Nil)
       } yield newTerm
     }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }

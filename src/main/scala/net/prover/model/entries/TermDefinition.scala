@@ -14,7 +14,8 @@ case class TermDefinition(
     premises: Seq[Statement],
     definitionPredicate: Statement,
     shorthand: Option[String],
-    attributes: Seq[String])
+    attributes: Seq[String],
+    disambigatorAdders: Seq[DisambigatorAdder])
   extends ExpressionDefinition with TypedExpressionDefinition[TermDefinition]
 {
   override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(symbol, disambiguator)
@@ -56,7 +57,8 @@ case class TermDefinition(
       (if (premises.nonEmpty) Seq(s"premises (${premises.map(_.serialized).mkString(", ")})") else Nil) ++
       Seq("(" + definitionPredicate.serialized + ")") ++
       shorthand.map(s => s"shorthand ($s)").toSeq ++
-      Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq
+      Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq ++
+      (if (disambigatorAdders.nonEmpty) Seq("disambiguatorAdders " + disambigatorAdders.serialized) else Nil)
     ).indent
 
   override def replaceDefinition(
@@ -74,7 +76,8 @@ case class TermDefinition(
       premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
       definitionPredicate.replaceDefinition(oldDefinition, newDefinition),
       shorthand,
-      attributes)
+      attributes,
+      disambigatorAdders.map(_.replaceDefinition(oldDefinition, newDefinition)))
   }
 
   def apply(components: Expression*): DefinedTerm = {
@@ -122,6 +125,7 @@ object TermDefinition extends ChapterEntryParser {
       definitionPredicate <- Statement.parser(expressionParsingContext.addInitialParameter("_")).inParens
       shorthand <- ExpressionDefinition.shorthandParser
       attributes <- ExpressionDefinition.attributesParser
+      disambiguatorAdders <- Parser.optional("disambiguatorAdders", DisambigatorAdder.listParser).getOrElse(Nil)
     } yield {
       TermDefinition(
         symbol,
@@ -133,7 +137,8 @@ object TermDefinition extends ChapterEntryParser {
         premises,
         definitionPredicate,
         shorthand,
-        attributes)
+        attributes,
+        disambiguatorAdders)
     }
   }
 }
