@@ -1,9 +1,13 @@
 package net.prover.model.expressions
 
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.expressions
 import net.prover.model._
 import net.prover.model.entries.{ExpressionDefinition, StatementDefinition, TermDefinition}
 
+@JsonSerialize(using = classOf[TemplateSerializer])
 sealed trait Template {
   def names: Seq[String]
   def matchExpression(expression: Expression): Option[Seq[Template.Match]] = matchExpression(expression, Nil, Nil)
@@ -214,5 +218,11 @@ object Template {
   def parser(implicit entryContext: EntryContext): Parser[Template] = {
     implicit val templateParsingContext: TemplateParsingContext = TemplateParsingContext(entryContext, Nil)
     Parser.selectWordParser("template")(Statement.templateParserFunction orElse Term.templateParserFunction)
+  }
+}
+
+private class TemplateSerializer extends JsonSerializer[Template] {
+  override def serialize(value: Template, gen: JsonGenerator, serializers: SerializerProvider): Unit = {
+    gen.writeString(value.serialized)
   }
 }

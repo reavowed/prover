@@ -227,6 +227,7 @@ export class Parser {
     definition.definingStatement && (definition.definingStatement = this.parseExpression(definition.definingStatement));
     definition.defaultValue = this.parseExpression(definition.defaultValue);
     definition.premises && (definition.premises = definition.premises.map(this.parseExpression));
+    _.forEach(definition.disambiguatorAdders, da => da.template = this.parseExpression(da.template));
     return definition;
   };
   parseTypeDefinition = (definitionJson) => {

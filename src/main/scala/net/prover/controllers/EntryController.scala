@@ -89,6 +89,27 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     } yield BookService.getEntryUrl(bookKey, chapterKey, newKey)).toResponseEntity
   }
 
+  @PutMapping(value = Array("/disambiguatorAdders"), produces = Array("application/json;charset=UTF-8"))
+  def editDisambiguatorAdders(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String,
+    @RequestBody(required = false) serializedNewDisambiguatorAdders: Seq[String]
+  ): ResponseEntity[_] = {
+    bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (allBooks, _, book, chapter, entry) => {
+      val entryContext = EntryContext.forEntry(allBooks, book, chapter, entry)
+      for {
+        newDisambiguatorAdders <- serializedNewDisambiguatorAdders.mapWithIndex((s, i) => DisambigatorAdder.parser(entryContext).parseFromString(s, s"disambiguator adder ${i + 1}").recoverWithBadRequest).traverseTry
+        result <- entry match {
+          case definition: TermDefinition =>
+            Success(definition.withDisambiguatorAdders(newDisambiguatorAdders))
+          case _ =>
+            Failure(BadRequestException(s"Cannot set disambiguator adders of ${entry.getClass.getName}"))
+        }
+      } yield result
+    }).toEmptyResponseEntity
+  }
+
   @PutMapping(value = Array("/attributes"), produces = Array("application/json;charset=UTF-8"))
   def editAttributes(
     @PathVariable("bookKey") bookKey: String,

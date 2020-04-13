@@ -13,7 +13,7 @@ export default class EditableProperty extends React.Component {
   }
 
   render() {
-    const {label, onSave} = this.props;
+    const {label, onSave, as} = this.props;
     const {currentValue, saving, savedValue} = this.state;
 
     const save = () => {
@@ -27,7 +27,7 @@ export default class EditableProperty extends React.Component {
 
     return <InputGroup className="mb-2">
       <InputGroup.Prepend><InputGroup.Text>{label}</InputGroup.Text></InputGroup.Prepend>
-      <Form.Control type="text" readOnly={saving} value={currentValue} onChange={e => this.setState({currentValue: e.target.value})}/>
+      <Form.Control type="text" as={as} readOnly={saving} value={currentValue} onChange={e => this.setState({currentValue: e.target.value})}/>
       <InputGroup.Append><Button variant="success" disabled={saving} onClick={save}><span className={saving ? "fas fa-spin fa-spinner" : "fas fa-check"}/></Button></InputGroup.Append>
     </InputGroup>
   }

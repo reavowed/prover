@@ -15,7 +15,7 @@ case class TermDefinition(
     definitionPredicate: Statement,
     shorthand: Option[String],
     attributes: Seq[String],
-    disambigatorAdders: Seq[DisambigatorAdder])
+    disambiguatorAdders: Seq[DisambigatorAdder])
   extends ExpressionDefinition with TypedExpressionDefinition[TermDefinition]
 {
   override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(symbol, disambiguator)
@@ -47,6 +47,7 @@ case class TermDefinition(
   override def withShorthand(newShorthand: Option[String]): TermDefinition = copy(shorthand = newShorthand)
   override def withAttributes(newAttributes: Seq[String]): TermDefinition = copy(attributes = newAttributes)
   override def withFormat(newFormat: Format): TermDefinition = copy(format = newFormat)
+  def withDisambiguatorAdders(newDisambiguatorAdders: Seq[DisambigatorAdder]): TermDefinition = copy(disambiguatorAdders = newDisambiguatorAdders)
 
   override def inferences: Seq[Inference.FromEntry] = Seq(Inference.Definition(name, premises, definingStatement))
 
@@ -58,7 +59,7 @@ case class TermDefinition(
       Seq("(" + definitionPredicate.serialized + ")") ++
       shorthand.map(s => s"shorthand ($s)").toSeq ++
       Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq ++
-      (if (disambigatorAdders.nonEmpty) Seq("disambiguatorAdders " + disambigatorAdders.serialized) else Nil)
+      (if (disambiguatorAdders.nonEmpty) Seq("disambiguatorAdders " + disambiguatorAdders.serialized) else Nil)
     ).indent
 
   override def replaceDefinition(
@@ -77,7 +78,7 @@ case class TermDefinition(
       definitionPredicate.replaceDefinition(oldDefinition, newDefinition),
       shorthand,
       attributes,
-      disambigatorAdders.map(_.replaceDefinition(oldDefinition, newDefinition)))
+      disambiguatorAdders.map(_.replaceDefinition(oldDefinition, newDefinition)))
   }
 
   def apply(components: Expression*): DefinedTerm = {

@@ -34,6 +34,9 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
   const saveAttributes = (attributeText) => {
     return window.fetchJson(path.join(url, "attributes"), {method: "PUT", body: attributeText.split(" ")})
   };
+  const saveDisambiguatorAdders = (newDisambiguatorAdders) => {
+    return window.fetchJson(path.join(url, "disambiguatorAdders"), {method: "PUT", body: _.filter(newDisambiguatorAdders.split(/\r?\n/).map(_.trim), s => s.length)});
+  };
 
   const serializedFormat = definition.format.originalValue ?
     "(" + definition.format.originalValue + ")" + (definition.format.requiresBrackets ? " requires-brackets" : "") + (definition.format.requiresComponentBrackets ? "" : " no-component-brackets") :
@@ -52,6 +55,7 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
       <EditableProperty label="Components" initialValue={definition.componentTypes.map(x => x.name).join(" ")} onSave={saveComponents} />
       <EditableProperty label="Format" initialValue={serializedFormat} onSave={saveFormat} />
       <EditableProperty label="Attributes" initialValue={definition.attributes.join(" ")} onSave={saveAttributes} />
+      {hasDisambiguator && <EditableProperty label="Disambiguator Adders" as="textarea" initialValue={definition.disambiguatorAdders.map(d => d.template.serializeNicely([["_"]]) + " " + d.disambiguator).join("\n")} onSave={saveDisambiguatorAdders} />}
 
       {usages.length > 0 && <><hr/><Usages usages={usages}/></>}
     </Page>
