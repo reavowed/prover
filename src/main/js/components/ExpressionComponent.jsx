@@ -86,7 +86,6 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
           displayShorthand.baseFormatString;
         return formatHtmlWithoutWrapping(formatString, s => replacePlaceholders(s, renderedMatches));
       }
-
       let {disambiguatorAdder, match} = matchDisambiguatorAdder(expression) || {};
       if (disambiguatorAdder) {
         while (match) {
@@ -105,6 +104,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         }
       }
     }
+
     return renderNormally();
 
 
@@ -123,7 +123,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       const renderedComponents = expression.components.map((c, i) =>
         renderExpression(c, [...path, i], filterPaths(actionHighlights, [i]), filterPaths(staticHighlights, [i]), innerBoundVariables, expression.definition ? expression.definition.requiresComponentBrackets : true)
       );
-      const renderedSymbol = disambiguator ?
+      const renderedSymbol = (disambiguator && !(displayContext?.disambiguators?.[expression.symbol]?.length <= 1)) ?
         <>{formatHtml(expression.symbol)}<sub>{disambiguator}</sub></> :
         formatHtml(expression.symbol);
       return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [renderedSymbol, ...renderedBoundVariables, ...renderedComponents]));

@@ -15,15 +15,15 @@ export interface DisambiguatedSymbol {
 }
 
 export interface PropertyDefinition {
-  symbol: String;
-  qualifiedSymbol: String;
-  name: String;
+  symbol: string;
+  qualifiedSymbol: string;
+  name: string;
 }
 
 export interface StandalonePropertyDefinition {
-  symbol: String;
-  qualifiedSymbol: String;
-  name: String;
+  symbol: string;
+  qualifiedSymbol: string;
+  name: string;
   numberOfComponents: number;
   componentFormatString: string;
 }
@@ -114,30 +114,18 @@ export function matchTemplate(template: Expression, expression: Expression, path
   return undefined;
 }
 
-export type Expression = TextBasedExpression | FormatBasedExpression | TypeExpression | PropertyExpression | StandalonePropertyExpression
-
-interface TextBasedExpression {
-  serialize(): string
-  serializeNicely(boundVariableLists: string[][]): string
-  textForHtml(boundVariableLists: string[][]): string
-  setBoundVariableName(newName: string, index: number, path: number[]): Expression
-  replaceAtPath(path: number[], expression: Expression): [Expression, number[][]]
-}
-interface FormatBasedExpression {
-  symbol: String
-  disambiguator: String | null;
-  components: Expression[]
-  serialize(): string
-  serializeNicely(boundVariableLists: string[][]): string
-  formatForHtml(parentRequiresBrackets: boolean): string
-  setBoundVariableName(newName: string, index: number, path: number[]): Expression
-  replaceAtPath(path: number[], expression: Expression): [Expression, number[][]]
+export abstract class Expression {
+  abstract serialize(): string
+  abstract serializeNicely(boundVariableLists: string[][]): string
+  abstract setBoundVariableName(newName: string, index: number, path: number[]): Expression
+  abstract replaceAtPath(path: number[], expression: Expression): [Expression, number[][]]
+  abstract getDisambiguators(): string[]
 }
 
-export class Variable {
-  constructor(public name: string, public components: Expression[]) {}
-  symbol: String = this.name;
-  disambiguator: String | null = null;
+export class Variable extends Expression {
+  constructor(public name: string, public components: Expression[]) { super(); }
+  symbol: string = this.name;
+  disambiguator: string | null = null;
   serialize() {
     return this.components.length == 0 ?
         this.name :
@@ -166,12 +154,18 @@ export class Variable {
       return [new Variable(this.name, newComponents), replacementPaths.map(p => [first, ...p])];
     }
   }
+  getDisambiguators(): string[] {
+    const componentDisambiguators = _.uniq(_.flatMap(this.components, x => x.getDisambiguators()));
+    return this.disambiguator ?
+        _.uniq([this.disambiguator, ...componentDisambiguators]) :
+        componentDisambiguators;
+  }
 }
 
-export class DefinedExpression {
-  constructor(public definition: ExpressionDefinition, public boundVariableNames: string[], public components: Expression[]) {}
-  symbol: String = this.definition.symbol.baseSymbol;
-  disambiguator: String | null = this.definition.symbol.disambiguator;
+export class DefinedExpression extends Expression {
+  constructor(public definition: ExpressionDefinition, public boundVariableNames: string[], public components: Expression[]) { super(); }
+  symbol: string = this.definition.symbol.baseSymbol;
+  disambiguator: string | null = this.definition.symbol.disambiguator;
   serialize() {
     return [this.definition.symbol.serialized, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
   }
@@ -201,10 +195,16 @@ export class DefinedExpression {
       return [new DefinedExpression(this.definition, this.boundVariableNames, newComponents), replacedPaths.map(p => [first, ...p])];
     }
   }
+  getDisambiguators(): string[] {
+    const componentDisambiguators = _.uniq(_.flatMap(this.components, x => x.getDisambiguators()));
+    return this.disambiguator ?
+      _.uniq([this.disambiguator, ...componentDisambiguators]) :
+      componentDisambiguators;
+  }
 }
 
-export class TypeExpression {
-  constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[], public properties: PropertyDefinition[], public conjunctionDefinition: ExpressionDefinition | undefined) {}
+export class TypeExpression extends Expression {
+  constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[], public properties: PropertyDefinition[], public conjunctionDefinition: ExpressionDefinition | undefined) { super(); }
   serialize(): string {
     const termAndComponentsWords = [this.term.serialize(), ...this.otherComponents.map(c => c.serialize())];
     const baseWords = [this.definition.symbol, ...termAndComponentsWords];
@@ -258,10 +258,13 @@ export class TypeExpression {
       return [replacedExpression, [...replacedTermPaths, ...replacedPropertyPaths]];
     }
   }
+  getDisambiguators(): string[] {
+    return _.uniq(_.flatMap([this.term, ...this.otherComponents], x => x.getDisambiguators()));
+  }
 }
 
-export class PropertyExpression {
-  constructor(public typeDefinition: TypeDefinition, public definition: PropertyDefinition, public term: Expression, public otherComponents: Expression[]) {}
+export class PropertyExpression extends Expression {
+  constructor(public typeDefinition: TypeDefinition, public definition: PropertyDefinition, public term: Expression, public otherComponents: Expression[]) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
   }
@@ -274,10 +277,13 @@ export class PropertyExpression {
   replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
     throw "Cannot replace in property expression"
   }
+  getDisambiguators(): string[] {
+    return _.uniq(_.flatMap([this.term, ...this.otherComponents], x => x.getDisambiguators()));
+  }
 }
 
-export class StandalonePropertyExpression {
-  constructor(public definition: StandalonePropertyDefinition, public term: Expression, public otherComponents: Expression[]) {}
+export class StandalonePropertyExpression extends Expression {
+  constructor(public definition: StandalonePropertyDefinition, public term: Expression, public otherComponents: Expression[]) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
   }
@@ -290,10 +296,14 @@ export class StandalonePropertyExpression {
   replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
     throw "Cannot replace in property expression"
   }
+  getDisambiguators(): string[] {
+    return _.uniq(_.flatMap([this.term, ...this.otherComponents], x => x.getDisambiguators()));
+  }
 }
 
-export class FunctionParameter {
+export class FunctionParameter extends Expression {
   constructor(public level: number, public index: number) {
+    super();
     this.level = level;
     this.index = index;
   }
@@ -320,5 +330,8 @@ export class FunctionParameter {
     } else {
       throw "Cannot replace subexpression of function parameter"
     }
+  }
+  getDisambiguators(): string[] {
+    return [];
   }
 }
