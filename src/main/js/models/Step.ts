@@ -68,6 +68,7 @@ abstract class StepWithSubsteps extends Step {
     get referencedLines(): Reference[] {
         return _.flatMap(this.substeps, s => s.referencedLines)
     }
+    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     updateStep(path: number[], newStep: Step): Step {
         if (path.length == 0) {
             newStep.updateIds(this);
@@ -113,7 +114,6 @@ export class DeductionStep extends StepWithSubsteps {
     constructor(public id: number, public assumption: Expression, substeps: Step[], public deductionDefinition: ExpressionDefinition) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
-    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = (this.substeps.length && this.substeps[this.substeps.length - 1].provenStatement) ? new DefinedExpression(this.deductionDefinition, [], [this.assumption, this.substeps[this.substeps.length - 1].provenStatement!]) : null;
     replaceSubsteps(newSubsteps: Step[]): Step {
         return new DeductionStep(this.id, this.assumption, newSubsteps, this.deductionDefinition);
@@ -125,7 +125,6 @@ export class GeneralizationStep extends StepWithSubsteps {
     constructor(public id: number, public variableName: string, substeps: Step[], public generalizationDefinition: ExpressionDefinition) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
-    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = (this.substeps.length && this.substeps[this.substeps.length - 1].provenStatement) ? new DefinedExpression(this.generalizationDefinition, [this.variableName], [this.substeps[this.substeps.length - 1].provenStatement!]) : null;
     replaceSubsteps(newSubsteps: Step[]): Step {
         return new GeneralizationStep(this.id, this.variableName, newSubsteps, this.generalizationDefinition);
@@ -137,7 +136,6 @@ export class NamingStep extends StepWithSubsteps {
     constructor(public id: number, public variableName: String, public assumption: Expression, public statement: Expression, substeps: Step[], public inference: any, public referencedLinesForExtraction: Reference[]) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = [..._.flatMap(this.substeps, s => s.inferencesUsed), this.inference];
-    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = this.statement;
     replaceSubsteps(newSubsteps: Step[]): Step {
         return new NamingStep(this.id, this.variableName, this.assumption, this.statement, newSubsteps, this.inference, this.referencedLinesForExtraction);
@@ -152,7 +150,6 @@ export class ElidedStep extends StepWithSubsteps {
     constructor(public id: number, substeps: Step[], public highlightedInference: any, public description: string | null) { super(substeps); }
     isComplete: boolean = (this.highlightedInference || this.description) && _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
-    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = this.substeps.length > 0 ? this.substeps[this.substeps.length - 1].provenStatement : null;
     filterReferences(path: number[]): Reference[] {
         return this.referencedLines.filter(r => ("stepPath" in r) ? !_.isEqual(path, _.take(r.stepPath, path.length)) : true)
@@ -167,7 +164,6 @@ export class TargetStep extends StepWithoutSubsteps {
     constructor(public id: number, public statement: Expression) { super(); }
     isComplete: boolean = false;
     inferencesUsed: any[] = [];
-    getAllSubsteps(): Step[] { return []; }
     provenStatement: Expression | null = this.statement;
     get referencedLines(): Reference[] { return []; }
 }
@@ -177,7 +173,6 @@ export class SubproofStep extends StepWithSubsteps {
     constructor(public id: number, public name: String, substeps: Step[]) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
-    getAllSubsteps(): Step[] { return _.flatMap(this.substeps, s => [s, ...s.getAllSubsteps()]); }
     provenStatement: Expression | null = this.substeps.length > 0 ? this.substeps[this.substeps.length - 1].provenStatement : null;
     replaceSubsteps(newSubsteps: Step[]): Step {
         return new SubproofStep(this.id, this.name, newSubsteps);

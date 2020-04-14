@@ -1,6 +1,8 @@
 import _ from "lodash";
+import {useContext} from "react";
 import * as React from "react";
 import {matchTemplate} from "../models/Expression";
+import EntryContext from "./EntryContext";
 
 const DisplayContext = React.createContext();
 
@@ -56,7 +58,7 @@ DisplayContext.fromDisambiguators = function(disambiguators) {
 };
 
 DisplayContext.forExpressionDefinition = function(definition, entryContext) {
-  const relevantStatements = [definition.definingStatement, ...(definition.premises || [])];
+  const relevantStatements = _.filter([definition.definingStatement, ...(definition.premises || [])]);
 
   const statementDisambiguators = getDisambiguatorsForExpressions(relevantStatements, entryContext);
   const disambiguators = definition.disambiguator ?
@@ -70,10 +72,24 @@ DisplayContext.forTypeDefinition = function(definition, entryContext) {
   return DisplayContext.fromDisambiguators(disambiguators);
 };
 
-DisplayContext.forInferenceSummary = function(inference, entryContext) {
+DisplayContext.disambiguatorsForInferenceSummary = function(inference, entryContext) {
   const expressions = [...inference.premises, inference.conclusion];
-  const disambiguators = getDisambiguatorsForExpressions(expressions, entryContext);
+  return getDisambiguatorsForExpressions(expressions, entryContext);
+};
+
+DisplayContext.forInferenceSummary = function(inference, entryContext) {
+  const disambiguators = DisplayContext.disambiguatorsForInferenceSummary(inference, entryContext);
   return DisplayContext.fromDisambiguators(disambiguators);
+};
+
+DisplayContext.AddSteps = function({steps, children}) {
+  const entryContext = useContext(EntryContext);
+  const existingDisplayContext = useContext(DisplayContext);
+  const statements = _.chain(steps).map(s => s.provenStatement).filter().value();
+  const newDisambiguators = getDisambiguatorsForExpressions(statements, entryContext);
+  return <DisplayContext.Provider value={{...existingDisplayContext, disambiguators: mergeDisambiguators([existingDisplayContext.disambiguators, newDisambiguators])}}>
+    {children}
+  </DisplayContext.Provider>;
 };
 
 export default DisplayContext;

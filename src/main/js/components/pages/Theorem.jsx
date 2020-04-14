@@ -22,9 +22,9 @@ export class Theorem extends React.Component {
     super(props);
     this.parser = new Parser(props.definitions, props.typeDefinitions, props.standalonePropertyDefinitions);
     this.entryContext = EntryContext.create(this.parser, props.definitions, props.typeDefinitions, props.definitionShorthands, props.displayShorthands, props.inferences, props.binaryRelations);
-
+    const theorem = this.parser.parseTheorem(props.theorem, props.inferences);
     this.state = {
-      theorem: this.parser.parseTheorem(props.theorem, props.inferences),
+      theorem,
       inferences: props.inferences,
       highlighting: {
         actionHighlights: [],
@@ -34,17 +34,19 @@ export class Theorem extends React.Component {
       disableChaining: false,
       disableAssumptionCollapse: false,
       disableShorthands: false,
+      disambiguators: DisplayContext.disambiguatorsForInferenceSummary(theorem, this.entryContext)
     }
   }
 
   render() {
     const self = this;
     const {url} = this.props;
-    const {theorem, inferences, highlighting, disableChaining, disableShorthands, disableAssumptionCollapse} = this.state;
+    const {theorem, inferences, highlighting, disableChaining, disableShorthands, disableAssumptionCollapse, disambiguators} = this.state;
     const displayContext = {
       disableChaining,
       disableShorthands,
-      disableAssumptionCollapse
+      disableAssumptionCollapse,
+      disambiguators
     };
     const theoremContext = {
       entryContext: this.entryContext,
@@ -56,9 +58,11 @@ export class Theorem extends React.Component {
       updateTheorem(newTheoremJson) {
         return new Promise((resolve) => {
           const newInferences = {...inferences, ...newTheoremJson.newInferences};
+          const newTheorem = self.parser.parseTheorem(newTheoremJson.theorem, newInferences)
           self.setState({
-            theorem: self.parser.parseTheorem(newTheoremJson.theorem, newInferences),
-            inferences: newInferences
+            theorem: newTheorem,
+            inferences: newInferences,
+            disambiguators: DisplayContext.disambiguatorsForInferenceSummary(newTheorem, this.entryContext)
           }, () => resolve());
         })
       },

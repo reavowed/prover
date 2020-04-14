@@ -11,6 +11,7 @@ import {
   NamingStep as NamingStepModel,
   StepReference
 } from "../../../../models/Step";
+import DisplayContext from "../../../DisplayContext";
 import DraggableList from "../../../DraggableList";
 import {HighlightableExpression} from "../../../ExpressionComponent";
 import ProofContext from "../ProofContext";
@@ -350,7 +351,7 @@ export class Steps extends React.Component {
         key: step.id,
         element: React.createElement(Steps.getElementName(step), props)
       }
-    }
+    };
 
 
     while (stepsWithIndexes.length) {
@@ -368,9 +369,11 @@ export class Steps extends React.Component {
   render() {
     const {steps, className, path, propsForLastStep} = this.props;
     return <TheoremContext.Consumer>{theoremContext =>
-      <div className={className}>
-        <DraggableList.Entries entries={Steps.renderSteps(steps, path, propsForLastStep, theoremContext)}/>
-      </div>
+      <DisplayContext.AddSteps steps={steps}>
+        <div className={className}>
+          <DraggableList.Entries entries={Steps.renderSteps(steps, path, propsForLastStep, theoremContext)}/>
+        </div>
+      </DisplayContext.AddSteps>
     }</TheoremContext.Consumer>;
   }
 }
