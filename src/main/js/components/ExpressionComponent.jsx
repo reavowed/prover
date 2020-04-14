@@ -97,7 +97,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         const newMatchResult = matchDisambiguatorAdder(expression) || {};
         match = newMatchResult.match;
       }
-      if (expression.formatForHtml && expression.disambiguator) {
+      if (expression.formatForHtml && expression.disambiguator && expression.components.length === 0) {
         return renderFormattableExpressionWithDisambiguator(disambiguatorAdder.disambiguator);
       } else {
         const renderedInner = renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, true);
