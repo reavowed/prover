@@ -3,11 +3,11 @@ import _ from "lodash";
 import React, {useContext, useRef, useState} from "react";
 import {DefinedExpression} from "../../../../models/Expression";
 import {ElidedStep, NamingStep as NamingStepModel, StepReference} from "../../../../models/Step";
+import DisplayContext from "../../../DisplayContext";
 import {HighlightableExpression} from "../../../ExpressionComponent";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import {joinAsList} from "../../../helpers/reactFunctions";
 import ProofContext from "../ProofContext";
-import TheoremContext from "../TheoremContext";
 import BoundVariableLists from "./BoundVariableLists";
 import {InferenceLink} from "./components/InferenceLink";
 import ProofLine from "./components/ProofLine";
@@ -18,7 +18,7 @@ import {Steps} from "./Steps";
 export default function NamingStep({step: namingStep, assertionStep, path, additionalReferences}) {
   additionalReferences = additionalReferences || [];
   const context = useContext(ProofContext);
-  const theoremContext = useContext(TheoremContext);
+  const displayContext = useContext(DisplayContext);
   const [showingProofCard, setShowingProofCard] = useState(false);
   const proofLineRef = useRef(null);
   const updateBoundVariable = (namingStepPath) => (newName) => {
@@ -48,7 +48,7 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
     }
   }
   addNamingStep(namingStep, currentNamingStepPath);
-  while (!theoremContext.disableAssumptionCollapse &&
+  while (!displayContext.disableAssumptionCollapse &&
     namingStep.substeps.length === 1 &&
     namingStep.substeps[0] instanceof NamingStepModel &&
     _.some(namingStep.substeps[0].referencedLinesForExtraction, r => _.isEqual(r.stepPath, currentNamingStepPath) && r.suffix === "a"))

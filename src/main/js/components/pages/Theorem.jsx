@@ -4,6 +4,7 @@ import Toggle from "react-bootstrap-toggle";
 import Dropdown from "react-bootstrap/Dropdown";
 import {PremiseReference} from "../../models/Step";
 import {Parser} from "../../Parser";
+import DisplayContext from "../DisplayContext";
 import EntryContext from "../EntryContext";
 import {HighlightableExpression} from "../ExpressionComponent";
 import HashParamsContext from "../HashParamsContext";
@@ -40,13 +41,15 @@ export class Theorem extends React.Component {
     const self = this;
     const {url} = this.props;
     const {theorem, inferences, highlighting, disableChaining, disableShorthands, disableAssumptionCollapse} = this.state;
-
+    const displayContext = {
+      disableChaining,
+      disableShorthands,
+      disableAssumptionCollapse
+    };
     const theoremContext = {
       entryContext: this.entryContext,
       parser: this.parser,
-      disableChaining,
-      disableShorthands,
-      disableAssumptionCollapse,
+      displayContext,
       fetchJson(subpath,  options) {
         return window.fetchJson(path.join(url, subpath), options);
       },
@@ -206,9 +209,11 @@ export class Theorem extends React.Component {
     return <HashParamsContext.Provider value={hashParams}>
       <EntryContext.Provider value={this.entryContext}>
         <TheoremContext.Provider value={theoremContext}>
-          <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" buttons={settingsDropdown} {...this.props}>
-            <Proofs proofs={theorem.proofs} />
-          </Inference>
+          <DisplayContext.Provider value={displayContext}>
+            <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" buttons={settingsDropdown} {...this.props}>
+              <Proofs proofs={theorem.proofs} />
+            </Inference>
+          </DisplayContext.Provider>
         </TheoremContext.Provider>
       </EntryContext.Provider>
     </HashParamsContext.Provider>;

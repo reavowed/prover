@@ -301,7 +301,7 @@ export class Steps extends React.Component {
     const renderNextStep = (stepsWithIndexes, path, propsForLastStep, theoremContext) => {
       const {step, index} = stepsWithIndexes.shift();
       const stepPath = [...path, index];
-      if (!theoremContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.provenStatement && step.provenStatement.definition) {
+      if (!theoremContext.displayContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.provenStatement && step.provenStatement.definition) {
         const binaryRelation = findBinaryRelation(step.provenStatement, theoremContext.entryContext);
         if (binaryRelation && isChainable(binaryRelation)) {
           const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, theoremContext.entryContext);
@@ -321,7 +321,7 @@ export class Steps extends React.Component {
       };
       let elidableVariableDescription;
 
-      if (!theoremContext.disableAssumptionCollapse &&
+      if (!theoremContext.displayContext.disableAssumptionCollapse &&
         step instanceof GeneralizationStepModel &&
         step.substeps.length === 1 &&
         step.substeps[0] instanceof DeductionStepModel &&
@@ -332,7 +332,7 @@ export class Steps extends React.Component {
         };
       }
 
-      if (!theoremContext.disableAssumptionCollapse && (step instanceof AssertionStepModel || step instanceof ElidedStepModel) &&
+      if (!theoremContext.displayContext.disableAssumptionCollapse && (step instanceof AssertionStepModel || step instanceof ElidedStepModel) &&
         step.provenStatement &&
         stepsWithIndexes.length &&
         stepsWithIndexes[0].step instanceof NamingStepModel &&

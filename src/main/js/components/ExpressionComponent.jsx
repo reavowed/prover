@@ -2,6 +2,7 @@ import _ from "lodash";
 import React, {useContext} from "react";
 import styled from "styled-components";
 import {matchTemplate, PropertyExpression, StandalonePropertyExpression, TypeExpression} from "../models/Expression";
+import DisplayContext from "./DisplayContext";
 import EntryContext from "./EntryContext";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
 import BoundVariableLists from "./pages/theorem/steps/BoundVariableLists";
@@ -37,7 +38,7 @@ function filterPathsMultiple(actions, initialPaths) {
 
 export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, entryContext}) {
   entryContext = entryContext || useContext(EntryContext);
-  const theoremContext = useContext(TheoremContext);
+  const displayContext = useContext(DisplayContext);
   wrapBoundVariable = wrapBoundVariable || ((name) => formatHtml(name));
 
   function matchDisplayShorthand(expression) {
@@ -76,7 +77,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
   }
 
   function renderChildrenOfTag(expression, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable, parentRequiresBrackets) {
-    if (!(theoremContext && theoremContext.disableShorthands)) {
+    if (!(displayContext && displayContext.disableShorthands)) {
       const {displayShorthand, matches} = matchDisplayShorthand(expression) || {};
       if (matches) {
         let renderedMatches = matches.map(m => renderMatch(m, path, actionHighlights, staticHighlights, boundVariableLists, wrapBoundVariable));
@@ -85,23 +86,23 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
           displayShorthand.baseFormatString;
         return formatHtmlWithoutWrapping(formatString, s => replacePlaceholders(s, renderedMatches));
       }
-    }
 
-    let {disambiguatorAdder, match} = matchDisambiguatorAdder(expression) || {};
-    if (disambiguatorAdder) {
-      while (match) {
-        expression = match.expression;
-        path = [...path, ...match.pathWithinMatch];
-        actionHighlights = filterPaths(actionHighlights, path);
-        staticHighlights = filterPaths(staticHighlights, path);
-        const newMatchResult = matchDisambiguatorAdder(expression) || {};
-        match = newMatchResult.match;
-      }
-      if (expression.formatForHtml && expression.disambiguator && expression.components.length === 0) {
-        return renderFormattableExpressionWithDisambiguator(disambiguatorAdder.disambiguator);
-      } else {
-        const renderedInner = renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, true);
-        return [renderedInner, <sub>{disambiguatorAdder.disambiguator}</sub>];
+      let {disambiguatorAdder, match} = matchDisambiguatorAdder(expression) || {};
+      if (disambiguatorAdder) {
+        while (match) {
+          expression = match.expression;
+          path = [...path, ...match.pathWithinMatch];
+          actionHighlights = filterPaths(actionHighlights, path);
+          staticHighlights = filterPaths(staticHighlights, path);
+          const newMatchResult = matchDisambiguatorAdder(expression) || {};
+          match = newMatchResult.match;
+        }
+        if (expression.formatForHtml && expression.disambiguator && expression.components.length === 0) {
+          return renderFormattableExpressionWithDisambiguator(disambiguatorAdder.disambiguator);
+        } else {
+          const renderedInner = renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, true);
+          return [renderedInner, <sub>{disambiguatorAdder.disambiguator}</sub>];
+        }
       }
     }
     return renderNormally();
