@@ -135,14 +135,12 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, entry) => {
       entry match {
         case definition: ExpressionDefinition =>
-          val componentNames = definition.boundVariableNames ++ definition.componentTypes.map(_.name)
           for {
-            format <- Format.parser(componentNames).parseFromString(newFormatText, "format").recoverWithBadRequest
+            format <- Format.parserForExpressionDefinition(definition.baseSymbol, definition.boundVariableNames, definition.componentTypes).parseFromString(newFormatText, "format").recoverWithBadRequest
           } yield definition.withFormat(format)
         case definition: TypeDefinition =>
-          val componentNames = definition.otherComponentTypes.map(_.name)
           for {
-            format <- Format.parser(componentNames).parseFromString(newFormatText, "format").recoverWithBadRequest
+            format <- Format.parserForTypeDefinition(definition.otherComponentTypes).parseFromString(newFormatText, "format").recoverWithBadRequest
           } yield definition.withFormat(format)
 
         case _ =>

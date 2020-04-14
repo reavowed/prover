@@ -456,7 +456,7 @@ object Definitions {
   def getDefinedBinaryStatements(statementDefinitions: Seq[StatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[TermDefinition]): Seq[BinaryJoiner[_ <: Expression]] = {
     def fromDefinitions = for {
       definition <- statementDefinitions
-      if definition.format.baseFormatString == s"%0 %2 %1"
+      if definition.format.baseFormatString == s"%1 %0 %2"
       constructor <- definition.componentTypes match {
         case Seq(_: StatementComponent, _: StatementComponent) => Some(BinaryConnective.apply _)
         case Seq(_: TermComponent, _: TermComponent) => Some(BinaryRelation.apply _)

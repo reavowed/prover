@@ -726,7 +726,7 @@ conclusion ∃! c ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 
 term gcd (a b)
   disambiguator ℤ
   name (Greatest Common Divisor)
-  format (%2(a, b)) no-component-brackets
+  format (%0(a, b)) no-component-brackets
   premises (∈ a ℤ, ∈ b ℤ, ∨ ¬ = a apply ⍳_ℤ 0ℕ ¬ = b apply ⍳_ℤ 0ℕ)
   (∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 a |ℤ ∧ ∈ orderedPair $0 b |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 a |ℤ ∈ orderedPair $0 b |ℤ ∈ orderedPair $0 $$0 ≤ℤ)
 

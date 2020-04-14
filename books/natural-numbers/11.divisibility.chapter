@@ -608,7 +608,7 @@ conclusion ∃! c ∧ ∈ $0 ℕ ∧ ∈ orderedPair 0ℕ $0 <ℕ ∧ ∈ ordere
 term gcd (a b)
   disambiguator ℕ
   name (Greatest Common Divisor of Naturals)
-  format (%2(a, b)) no-component-brackets
+  format (%0(a, b)) no-component-brackets
   premises (∈ a ℕ, ∈ b ℕ, ∨ ∈ orderedPair 0ℕ a <ℕ ∈ orderedPair 0ℕ b <ℕ)
   (∧ ∈ $0 ℕ ∧ ∈ orderedPair 0ℕ $0 <ℕ ∧ ∈ orderedPair $0 a |ℕ ∧ ∈ orderedPair $0 b |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 a |ℕ ∈ orderedPair $0 b |ℕ ∈ orderedPair $0 $$0 ≤ℕ)
   shorthand (gcdN)

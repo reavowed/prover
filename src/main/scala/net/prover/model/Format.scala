@@ -3,6 +3,7 @@ package net.prover.model
 import java.util.regex.{Matcher, Pattern}
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover.model.entries.ExpressionDefinition.ComponentType
 
 import scala.collection.mutable.ListBuffer
 import scala.xml.{Elem, Node, NodeSeq, Text}
@@ -48,18 +49,36 @@ object Format {
     }
   }
 
-  def default(replacementNames: Seq[String]): Format = {
-    val (formatString, requiresBrackets) = replacementNames match {
+  def default(boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Format = {
+    if (boundVariableNames.nonEmpty) {
+      throw new Exception("Explicit format must be supplied for definition with bound variables")
+    }
+    val (formatString, requiresBrackets) = componentTypes match {
       case Nil =>
         ("%0", false)
-      case Seq(a) =>
-        (s"%1%0", false)
-      case Seq(a, b) =>
-        (s"%0 %2 %1", true)
+      case Seq(_) =>
+        (s"%0%1", false)
+      case Seq(_, _) =>
+        (s"%1 %0 %2", true)
       case _ =>
-        throw new Exception("Explicit format must be supplied with more than two components")
+        throw new Exception("Explicit format must be supplied for definition with more than two components")
     }
     Format.Default(formatString, requiresBrackets)
+  }
+
+  def optionalParserForExpressionDefinition(symbol: String, boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Parser[Format] = {
+    Parser.optional(
+      "format",
+      parserForExpressionDefinition(symbol, boundVariableNames, componentTypes),
+      default(boundVariableNames, componentTypes))
+  }
+
+  def parserForExpressionDefinition(symbol: String, boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Parser[Format.Explicit] = {
+    parser((symbol +: boundVariableNames) ++ componentTypes.map(_.name))
+  }
+
+  def parserForTypeDefinition(componentTypes: Seq[ComponentType]): Parser[Format.Explicit] = {
+    parser(componentTypes.map(_.name))
   }
 
   def parser(replacementNames: Seq[String]): Parser[Format.Explicit] = {
@@ -70,12 +89,5 @@ object Format {
     } yield {
       Format.Explicit(originalString, replacementNames, requiresBrackets, !noComponentBrackets)
     }
-  }
-
-  def optionalParser(replacementNames: Seq[String]): Parser[Format] = {
-    Parser.optional(
-      "format",
-      parser(replacementNames),
-      default(replacementNames))
   }
 }

@@ -125,7 +125,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       const renderedSymbol = disambiguator ?
         <>{formatHtml(expression.symbol)}<sub>{disambiguator}</sub></> :
         formatHtml(expression.symbol);
-      return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [...renderedBoundVariables, ...renderedComponents, renderedSymbol]));
+      return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [renderedSymbol, ...renderedBoundVariables, ...renderedComponents]));
     }
 
     function renderNormally() {

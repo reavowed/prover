@@ -7,6 +7,7 @@ import net.prover.model._
 trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition] with ChapterEntry.Standalone
 
 trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry.Standalone { self: ExpressionDefinition =>
+  def baseSymbol: String
   def symbol: String = disambiguatedSymbol.serialized
   def disambiguatedSymbol: DisambiguatedSymbol
   def boundVariableNames: Seq[String]

@@ -2,6 +2,7 @@ package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
+import net.prover.model.entries.ExpressionDefinition.ComponentType
 
 import scala.util.{Failure, Success, Try}
 
@@ -27,10 +28,10 @@ trait ParameterValidation {
   def getMandatoryString(source: String, name: String): Try[String] = {
     getOptionalString(source).orBadRequest(s"$name must be given")
   }
-  def getFormat(source: String, symbol: String, componentNames: Seq[String]): Try[Format] = {
+  def getFormat(source: String, symbol: String, boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Try[Format] = {
     getOptionalString(source)
-      .map(f => Format.parser(componentNames).parseFromString(f, "format"))
-      .getOrElse(Format.default(componentNames))
+      .map(f => Format.parserForExpressionDefinition(symbol, boundVariableNames, componentTypes).parseFromString(f, "format"))
+      .getOrElse(Format.default(boundVariableNames, componentTypes))
       .recoverWithBadRequest
   }
 }

@@ -122,7 +122,7 @@ object TermDefinition extends ChapterEntryParser {
       componentTypes = boundVariablesAndComponentTypes._2
       disambiguatorOption <- Parser.optional("disambiguator", Parser.singleWord)
       name <- nameParser
-      format <- Format.optionalParser(boundVariables ++ componentTypes.map(_.name))
+      format <- Format.optionalParserForExpressionDefinition(baseSymbol, boundVariables, componentTypes)
       premises <- premisesParser
       definitionPredicate <- Statement.parser(expressionParsingContext.addInitialParameter("_")).inParens
       shorthand <- ExpressionDefinition.shorthandParser

@@ -115,7 +115,7 @@ object StatementDefinition extends ChapterEntryParser {
       boundVariables = boundVariablesAndComponentTypes._1
       componentTypes = boundVariablesAndComponentTypes._2
       name <- nameParser
-      format <- Format.optionalParser(boundVariables ++ componentTypes.map(_.name))
+      format <- Format.optionalParserForExpressionDefinition(symbol, boundVariables, componentTypes)
       optionalDefiningStatement <- definingStatementParser(ExpressionParsingContext.outsideProof(entryContext))
       shorthand <- ExpressionDefinition.shorthandParser
       attributes <- ExpressionDefinition.attributesParser

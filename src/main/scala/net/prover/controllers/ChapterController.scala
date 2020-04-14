@@ -189,15 +189,14 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       val attributes = getWords(newStatementDefinition.attributes)
       for {
         symbol <- getMandatoryString(newStatementDefinition.symbol, "Symbol")
-        boundVariablesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newStatementDefinition.components, "components").recoverWithBadRequest
-        boundVariables = boundVariablesAndComponentTypes._1
-        componentTypes = boundVariablesAndComponentTypes._2
-        componentNames = boundVariables ++ componentTypes.map(_.name)
+        boundVariableNamesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newStatementDefinition.components, "components").recoverWithBadRequest
+        boundVariableNames = boundVariableNamesAndComponentTypes._1
+        componentTypes = boundVariableNamesAndComponentTypes._2
         definition <- newStatementDefinition.definition.filter(_.nonEmpty).map(d => Statement.parser(expressionParsingContext.addInitialParameter("_")).parseFromString(d, "definition").recoverWithBadRequest).swap
-        format <- getFormat(newStatementDefinition.format, symbol, componentNames)
+        format <- getFormat(newStatementDefinition.format, symbol, boundVariableNames, componentTypes)
         newStatementDefinition = StatementDefinition(
           symbol,
-          boundVariables,
+          boundVariableNames,
           componentTypes,
           name,
           format,
@@ -223,16 +222,15 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       for {
         symbol <- getMandatoryString(newTermDefinition.symbol, "Symbol")
         disambiguator <- getOptionalSingleWord(newTermDefinition.disambiguator, "Disambiguator")
-        boundVariablesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefinition.components, "components").recoverWithBadRequest
-        boundVariables = boundVariablesAndComponentTypes._1
-        componentTypes = boundVariablesAndComponentTypes._2
-        componentNames = boundVariables ++ componentTypes.map(_.name)
+        boundVariableNamesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefinition.components, "components").recoverWithBadRequest
+        boundVariableNames = boundVariableNamesAndComponentTypes._1
+        componentTypes = boundVariableNamesAndComponentTypes._2
         definition <- Statement.parser(expressionParsingContext.addInitialParameter("_")).parseFromString(newTermDefinition.definition, "definition").recoverWithBadRequest
-        format <- getFormat(newTermDefinition.format, symbol, componentNames)
+        format <- getFormat(newTermDefinition.format, symbol, boundVariableNames, componentTypes)
         premises <- newTermDefinition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}")).recoverWithBadRequest
         newTerm = TermDefinition(
           symbol,
-          boundVariables,
+          boundVariableNames,
           componentTypes,
           disambiguator,
           name,
@@ -260,7 +258,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         symbol <- getMandatoryString(newTypeDefininition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newTypeDefininition.defaultTermName, "Default term name")
         otherComponentTypes <- ComponentType.listWithoutBoundVariablesParser.parseFromString(newTypeDefininition.otherComponents, "component types").recoverWithBadRequest
-        format <- Format.parser(otherComponentTypes.map(_.name)).parseFromString(newTypeDefininition.format, "format").recoverWithBadRequest
+        format <- Format.parserForTypeDefinition(otherComponentTypes).parseFromString(newTypeDefininition.format, "format").recoverWithBadRequest
         definition <- Statement.parser.parseFromString(newTypeDefininition.definition, "definition").recoverWithBadRequest
         newTypeDefinition = TypeDefinition(
           symbol,
@@ -314,7 +312,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         symbol <- getMandatoryString(newPropertyDefininition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newPropertyDefininition.defaultTermName, "Default term name")
         otherComponentTypes <- ComponentType.listWithoutBoundVariablesParser.parseFromString(newPropertyDefininition.otherComponents, "component types").recoverWithBadRequest
-        format <- Format.parser(otherComponentTypes.map(_.name)).parseFromString(newPropertyDefininition.format, "format").recoverWithBadRequest
+        format <- Format.parserForTypeDefinition(otherComponentTypes).parseFromString(newPropertyDefininition.format, "format").recoverWithBadRequest
         definition <- Statement.parser.parseFromString(newPropertyDefininition.definition, "definition").recoverWithBadRequest
         newPropertyDefinition = StandalonePropertyDefinition(
           symbol,

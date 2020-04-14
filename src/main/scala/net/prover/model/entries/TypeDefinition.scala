@@ -75,7 +75,7 @@ object TypeDefinition extends ChapterEntryParser {
       symbol <- Parser.singleWord
       defaultTermName <- Parser.singleWord
       otherComponentTypes <- ComponentType.listWithoutBoundVariablesParser.inParens
-      componentFormat <- Parser.required("format", Format.parser(otherComponentTypes.map(_.name)))
+      componentFormat <- Parser.required("format", Format.parserForTypeDefinition(otherComponentTypes))
       explicitName <- Parser.optional("name", Parser.allInParens)
       definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultTermName +: otherComponentTypes.ofType[TermComponent].map(_.name))).inParens)
     } yield TypeDefinition(symbol, defaultTermName, otherComponentTypes, componentFormat, explicitName, definingStatement)
