@@ -185,20 +185,19 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
     const matchingActionHighlight = _.find(actionHighlights, p => p.path.length === 0);
     const shouldStaticHighlight = _.some(staticHighlights, p => p.path.length === 0);
 
-    const highlightingProps = {
+    const props = {
       isConclusion: !!shouldStaticHighlight,
       isPremise: !shouldStaticHighlight && !!matchingActionHighlight,
       isClickable: !!(matchingActionHighlight && matchingActionHighlight.action)
     };
 
-    const props = {};
     if (!shouldStaticHighlight && matchingActionHighlight && matchingActionHighlight.action) {
       props.onClick = (e) => {
         matchingActionHighlight.action(expression.serialize());
         e.stopPropagation();
       }
     }
-    return <HighlightingStyle {...highlightingProps}>
+    return <HighlightingStyle {...props}>
       {renderChildrenOfTag(expression, path, actionHighlights || [], staticHighlights || [], boundVariableLists || [], wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)}
     </HighlightingStyle>;
   }
