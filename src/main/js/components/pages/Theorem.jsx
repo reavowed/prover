@@ -62,7 +62,7 @@ export class Theorem extends React.Component {
           self.setState({
             theorem: newTheorem,
             inferences: newInferences,
-            disambiguators: DisplayContext.disambiguatorsForInferenceSummary(newTheorem, this.entryContext)
+            disambiguators: DisplayContext.disambiguatorsForInferenceSummary(newTheorem, self.entryContext)
           }, () => resolve());
         })
       },
