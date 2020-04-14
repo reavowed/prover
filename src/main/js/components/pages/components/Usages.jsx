@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import {formatHtml} from "../../helpers/Formatter";
 import {Monospace} from "../../Monospace";
 
 const UsageList = styled.p`
@@ -14,7 +15,7 @@ export class Usages extends React.Component {
     return usages.map(([bookTitle, chapterTitle, theoremLinks]) =>
       <div key={bookTitle + "-" + chapterTitle}>
         <h6>{bookTitle} - {chapterTitle}</h6>
-        <UsageList>{theoremLinks.map(link => <Monospace.Text key={link.url}><Monospace.Link className="usageLink" href={link.url}>{link.title}</Monospace.Link></Monospace.Text>)}</UsageList>
+        <UsageList>{theoremLinks.map(link => <Monospace.Text key={link.url}><Monospace.Link className="usageLink" href={link.url}>{formatHtml(link.title)}</Monospace.Link></Monospace.Text>)}</UsageList>
       </div>
     );
 }
