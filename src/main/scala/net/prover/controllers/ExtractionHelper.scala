@@ -4,12 +4,12 @@ import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.{ExtractionOption, VariableTracker}
-import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof.{Premise, PremiseStep, Step, StepProvingContext}
 
 import scala.util.{Failure, Success, Try}
 
 object ExtractionHelper {
-  case class ExtractionApplication(result: Statement, mainPremise: Statement, extractionSteps: Seq[Step.Assertion], premiseSteps: Seq[Step], targetSteps: Seq[Step.Target])
+  case class ExtractionApplication(result: Statement, mainPremise: Statement, extractionSteps: Seq[Step.Assertion], premiseSteps: Seq[PremiseStep], targetSteps: Seq[Step.Target])
 
   private def applySpecification(
     currentStatement: Statement,
@@ -22,7 +22,7 @@ object ExtractionHelper {
     mainSubstitutions: Substitutions,
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
-    findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
+    findPremiseStepsOrTargets: Seq[Statement] => (Seq[PremiseStep], Seq[Step.Target]))(
     implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     for {
@@ -52,7 +52,7 @@ object ExtractionHelper {
     mainSubstitutions: Substitutions,
     intendedPremisesOption: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
-    findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
+    findPremiseStepsOrTargets: Seq[Statement] => (Seq[PremiseStep], Seq[Step.Target]))(
     implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     for {
@@ -97,7 +97,7 @@ object ExtractionHelper {
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
     variableTracker: VariableTracker,
-    findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
+    findPremiseStepsOrTargets: Seq[Statement] => (Seq[PremiseStep], Seq[Step.Target]))(
     implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     inferencesRemaining match {
@@ -151,7 +151,7 @@ object ExtractionHelper {
     substitutions: Substitutions,
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
-    findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
+    findPremiseStepsOrTargets: Seq[Statement] => (Seq[PremiseStep], Seq[Step.Target]))(
     implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     applyExtractions(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromInference(baseInference), findPremiseStepsOrTargets).map(removeNonEndStructuralSimplifications)
@@ -162,7 +162,7 @@ object ExtractionHelper {
     substitutions: Substitutions,
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement],
-    findPremiseStepsOrTargets: Seq[Statement] => (Seq[Step], Seq[Step.Target]))(
+    findPremiseStepsOrTargets: Seq[Statement] => (Seq[PremiseStep], Seq[Step.Target]))(
     implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     applyExtractions(premise.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext, findPremiseStepsOrTargets).map(removeNonEndStructuralSimplifications)

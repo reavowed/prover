@@ -161,9 +161,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val premiseRelationSimplificationInferences: Seq[PremiseRelationSimplificationInference] = filter(definitions.premiseRelationSimplificationInferences)
   lazy val premiseRelationRewriteInferences: Seq[PremiseRelationRewriteInference] = filter(definitions.premiseRelationRewriteInferences)
   lazy val conclusionRelationSimplificationInferences: Seq[ConclusionRelationSimplificationInference] = filter(definitions.conclusionRelationSimplificationInferences)
-  lazy val conclusionSimplificationInferences: Seq[Inference] = {
-    filter(definitions.conclusionSimplificationInferences)
-  }
+  lazy val conclusionSimplificationInferences: Seq[Inference] = filter(definitions.conclusionSimplificationInferences)
+  lazy val termDefinitionRemovals: Map[TermDefinition, Seq[ExtractionOption]] = filter(definitions.termDefinitionRemovals)
 
   lazy val rewriteInferences: Seq[(Inference, Statement)] = {
     filter(definitions.rewriteInferences)

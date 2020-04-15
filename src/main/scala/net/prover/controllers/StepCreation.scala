@@ -41,7 +41,7 @@ trait StepCreation extends BookModification {
         ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, newTargetStatementsForExtractionOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)(wrappedStepProvingContext)
       mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise)
       extractionStep = Step.Elided.ifNecessary(mainAssertionWithCorrectConclusion +: extractionSteps, inference).get
-      assertionWithExtractionStep = Step.Elided.ifNecessary(mainPremises ++ extractionPremises :+ extractionStep, inference).get
+      assertionWithExtractionStep = Step.Elided.ifNecessary((mainPremises ++ extractionPremises).deduplicate.steps :+ extractionStep, inference).get
       (wrappedResult, wrappedStep, wrappedTargets) = if (unwrappers.nonEmpty)
         unwrappers
           .addNecessaryExtractions(result, assertionWithExtractionStep, mainTargets ++ extractionTargets)

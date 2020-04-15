@@ -31,7 +31,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         ExtractionApplication(_, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, finalSubstitutions, None, None, _ => (Nil, Nil)).toOption
         elidedExtractionStep = Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference).get
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
-      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premiseSteps :+ elidedExtractionStep) ++ expansionStep.toSeq, inference.summary), inference.summary)
+      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premiseSteps.steps :+ elidedExtractionStep) ++ expansionStep.toSeq, inference.summary), inference.summary)
     }
 
     def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
@@ -76,9 +76,9 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
       def findDirectly = {
         for {
-          (_, steps, inferences) <- PremiseFinder.findPremiseStepsWithInferencesForStatement(equality(premiseTerm, targetTerm)).map(_.split)
+          premiseSteps <- PremiseFinder.findPremiseStepsForStatement(equality(premiseTerm, targetTerm))
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
-          inference = inferences.singleMatch match {
+          inference = premiseSteps.inferences.singleMatch match {
             case PossibleSingleMatch.NoMatches =>
               Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)
             case PossibleSingleMatch.SingleMatch(inference) =>
@@ -86,7 +86,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
             case PossibleSingleMatch.MultipleMatches =>
               None
           }
-        } yield Seq(RearrangementStepWithInference(RearrangementStep(wrapper(targetTerm), steps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
+        } yield Seq(RearrangementStepWithInference(RearrangementStep(wrapper(targetTerm), premiseSteps.steps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
       }
       findExactly orElse findDirectly
     }

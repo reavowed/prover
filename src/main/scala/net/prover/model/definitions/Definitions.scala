@@ -368,6 +368,17 @@ case class Definitions(rootEntryContext: EntryContext) {
       false
   }
 
+  lazy val termDefinitionRemovals: Map[TermDefinition, Seq[ExtractionOption]] = {
+    rootEntryContext.termDefinitions.map { termDefinition =>
+      termDefinition -> (for {
+        extractionOption <- extractionOptionsByInferenceId(termDefinition.definitionInference.id)
+        if extractionOption.conclusion.referencedDefinitions.contains(termDefinition) &&
+          !extractionOption.premises.exists(_.referencedDefinitions.contains(termDefinition)) &&
+          extractionOption.conclusion.requiredSubstitutions.contains(extractionOption.requiredSubstitutions)
+      } yield extractionOption)
+    }.toMap
+  }
+
   lazy val rewriteInferences: Seq[(Inference, Statement)] = {
     inferenceEntries.collect {
       case inference @ Inference(_, Seq(singlePremise), conclusion)

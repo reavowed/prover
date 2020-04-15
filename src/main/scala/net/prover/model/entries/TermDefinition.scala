@@ -50,7 +50,8 @@ case class TermDefinition(
   override def withFormat(newFormat: Format): TermDefinition = copy(format = newFormat)
   def withDisambiguatorAdders(newDisambiguatorAdders: Seq[DisambiguatorAdder]): TermDefinition = copy(disambiguatorAdders = newDisambiguatorAdders)
 
-  override def inferences: Seq[Inference.FromEntry] = Seq(Inference.Definition(name, premises, definingStatement))
+  val definitionInference = Inference.Definition(name, premises, definingStatement)
+  override def inferences: Seq[Inference.FromEntry] = Seq(definitionInference)
 
   override def serializedLines: Seq[String] = Seq(s"term $baseSymbol $serializedComponents") ++
     (disambiguator.map(d => s"disambiguator $d").toSeq ++

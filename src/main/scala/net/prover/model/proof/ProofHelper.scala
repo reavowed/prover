@@ -7,16 +7,16 @@ import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions._
 
 object ProofHelper {
-  def findFact(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[(Statement, Step, Inference)] = {
+  def findFact(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PremiseStep] = {
     for {
       (_, inference, extractionOption) <- stepProvingContext.provingContext.facts.find(_._1 == target)
       assertionStep <- Step.Assertion.forInference(inference, Substitutions.empty)
       ExtractionApplication(extractionResult, _, extractionSteps, premiseSteps, targetSteps) <- ExtractionHelper.applyExtractions(inference.conclusion, extractionOption.extractionInferences, inference, Substitutions.empty, None, Some(target), _ => (Nil, Nil)).toOption
       if premiseSteps.isEmpty && targetSteps.isEmpty
       finalStep <- Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference)
-    } yield (extractionResult, finalStep, inference)
+    } yield PremiseStep(extractionResult, inference, finalStep)
   }
-  def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Option[(Step, Statement, Inference, Substitutions.Possible)] = {
+  def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Option[(PremiseStep, Substitutions.Possible)] = {
     stepProvingContext.provingContext.facts.mapFind { case (fact, inference, extractionOption) =>
       for {
         substitutions <- target.calculateSubstitutions(fact, substitutionsSoFar)
@@ -24,7 +24,7 @@ object ProofHelper {
         ExtractionApplication(extractionResult, _, extractionSteps, premiseSteps, targetSteps) <- ExtractionHelper.applyExtractions(inference.conclusion, extractionOption.extractionInferences, inference, Substitutions.empty, None, None, _ => (Nil, Nil)).toOption
         if premiseSteps.isEmpty && targetSteps.isEmpty
         finalStep <- Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference)
-      } yield (finalStep, extractionResult, inference, substitutions)
+      } yield (PremiseStep(extractionResult, inference, finalStep), substitutions)
     }
   }
 
@@ -63,7 +63,7 @@ object ProofHelper {
     inference: Inference,
     substitutions: Substitutions)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[(Step.Assertion, Seq[Step], Seq[Step.Target])] = {
+  ): Option[(Step.Assertion, Seq[PremiseStep], Seq[Step.Target])] = {
     for {
       premiseStatements <- inference.substitutePremises(substitutions)
       conclusion <- inference.substituteConclusion(substitutions)
@@ -85,7 +85,7 @@ object ProofHelper {
   ): Option[(Step, Seq[Step.Target])] = {
     for {
       (assertionStep, premiseSteps, targetSteps) <- getAssertionWithPremises(inference, substitutions)
-      elidedStep <- Step.Elided.ifNecessary(premiseSteps :+ assertionStep, inference)
+      elidedStep <- Step.Elided.ifNecessary(premiseSteps.steps :+ assertionStep, inference)
     } yield (elidedStep, targetSteps)
   }
 }

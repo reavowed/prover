@@ -175,7 +175,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       assertionStep <- Step.Assertion.forInference(inference, finalSubstitutions)(unwrappedStepContext).orBadRequest("Could not apply substitutions to inference")
       extractionSteps <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, finalSubstitutions, None, None, _ => (Nil, Nil))(unwrappedStepProvingContext).map(_.extractionSteps)
       elidedExtractionStep = Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference).get
-      elidedStep = Step.Elided.ifNecessary(premiseSteps :+ elidedExtractionStep, inference).get
+      elidedStep = Step.Elided.ifNecessary(premiseSteps.steps :+ elidedExtractionStep, inference).get
     } yield (removedSource, rewrittenTerm, Some(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
   }
 
