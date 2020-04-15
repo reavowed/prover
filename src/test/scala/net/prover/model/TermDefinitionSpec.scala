@@ -78,7 +78,7 @@ class TermDefinitionSpec extends Specification {
           Equals($, EmptySet),
           None,
           Nil,
-          Seq(DisambiguatorAdder(Apply.template(Seq($.template, a.template)), "ℤ"))))
+          Seq(DisambiguatorAdder(Apply.template($.template, a.template), "ℤ"))))
     }
   }
 }

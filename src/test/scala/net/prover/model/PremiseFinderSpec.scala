@@ -91,21 +91,8 @@ class PremiseFinderSpec extends Specification {
     }
 
     "find a premise by a conclusion simplification from extracting a term definition with multiple premises" in {
-      val IntegerDefinition = TermDefinition(
-        "ℤ",
-        Nil,
-        Nil,
-        None,
-        None,
-        Format.default(Nil, Nil),
-        Nil,
-        BlankDefinition,
-        None,
-        Nil,
-        Nil)
-      val Integers = IntegerDefinition()
       val PairIsInteger = Axiom("Pair Is Integer", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(Pair(a, b), Integers))
-      val entryContextWithDefinitions = defaultEntryContext.addEntry(IntegerDefinition).addEntry(PairIsInteger)
+      val entryContextWithDefinitions = defaultEntryContext.addEntry(IntegersDefinition).addEntry(PairIsInteger)
 
       checkFindPremise(
         ElementOf(Pair(a, b), Integers),
@@ -140,18 +127,6 @@ class PremiseFinderSpec extends Specification {
     }
 
     "simplify a conclusion by converting a complex defined term into a simpler one" in {
-      val Comprehension = TermDefinition(
-        "comprehension",
-        Seq("a"),
-        Seq(ComponentType.TermComponent("A", Nil), ComponentType.StatementComponent("φ", Seq(ComponentArgument("a", 0)))),
-        None,
-        None,
-        Format.Explicit("{ a ∈ A | φ }", Seq("a", "A", "φ"), false, true),
-        Nil,
-        ForAll("a")(Equivalence(ElementOf($), Conjunction(ElementOf($, A), φ($)))),
-        None,
-        Nil,
-        Nil)
       val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
@@ -167,18 +142,6 @@ class PremiseFinderSpec extends Specification {
     }
 
     "rewrite a premise using a fact" in {
-      val Comprehension = TermDefinition(
-        "comprehension",
-        Seq("a"),
-        Seq(ComponentType.TermComponent("A", Nil), ComponentType.StatementComponent("φ", Seq(ComponentArgument("a", 0)))),
-        None,
-        None,
-        Format.Explicit("{ a ∈ A | φ }", Seq("a", "A", "φ"), false, true),
-        Nil,
-        ForAll("a")(Equivalence(ElementOf($), Conjunction(ElementOf($, A), φ($)))),
-        None,
-        Nil,
-        Nil)
       val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val PositiveNaturalsAreASubsetOfTheNaturals = Axiom("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
@@ -195,6 +158,47 @@ class PremiseFinderSpec extends Specification {
 
     "find a premise using an or condition" in {
       checkFindPremise(Disjunction(φ, ψ), φ)
+    }
+
+    "find a premise using chained simplifications requiring other premises" in {
+      val SetDifference = TermDefinition(
+        "diff",
+        Nil,
+        Seq(ComponentType.TermComponent("A", Nil), ComponentType.TermComponent("B", Nil)),
+        None,
+        Some("Set Difference"),
+        Format.Explicit("%1/%2", "A/B", false, true),
+        Nil,
+        ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, A), Negation(ElementOf($, B))))),
+        None,
+        Nil,
+        Nil)
+      val ToInteger = TermDefinition(
+        "toZ",
+        Nil,
+        Seq(ComponentType.TermComponent("a", Nil)),
+        None,
+        None,
+        Format.Explicit("%1_ℤ", "a_ℤ", false, true),
+        Nil,
+        BlankDefinition,
+        None,
+        Nil,
+        Nil)
+      val EqualityConditionForEmbeddedNaturals = Axiom("Equality Condition for Embedded Naturals", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(a, b), Equals(ToInteger(a), ToInteger(b))))
+      val EmbeddedNaturalIsInteger = Axiom("Embedded Natural Is Integer", Seq(ElementOf(a, Naturals)), ElementOf(ToInteger(a), Integers))
+      val OneIsNotZero = Axiom("One Is Not Zero", Nil, Negation(Equals(Zero, One)))
+
+      val entryContextWithDefinitions = defaultEntryContext
+        .addEntry(SetDifference)
+        .addEntry(ToInteger)
+        .addEntry(EqualityConditionForEmbeddedNaturals)
+        .addEntry(EmbeddedNaturalIsInteger)
+        .addEntry(OneIsNotZero)
+
+      checkFindPremise(
+        ElementOf(ToInteger(One), SetDifference(Integers, Singleton(ToInteger(Zero)))))(
+        entryContextWithDefinitions)
     }
   }
 }

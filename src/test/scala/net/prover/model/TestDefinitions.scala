@@ -1,7 +1,8 @@
 package net.prover.model
 
+import net.prover.model.TestDefinitions.{A, BlankDefinition, Conjunction, ElementOf, Equivalence, ForAll, φ}
 import net.prover.model.definitions.Definitions
-import net.prover.model.entries.ExpressionDefinition.ComponentType
+import net.prover.model.entries.ExpressionDefinition.{ComponentArgument, ComponentType}
 import net.prover.model.entries.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries._
 import net.prover.model.expressions._
@@ -45,8 +46,11 @@ trait VariableDefinitions {
   implicit def $ToFunctionParameter(x: $.type): FunctionParameter = FunctionParameter(0, 0)
 
 
+  implicit class StatementDefinitionOps(statementDefinition: StatementDefinition) {
+    def template(components: Template*): Template = DefinedStatementTemplate(statementDefinition, Nil, components)
+  }
   implicit class TermDefinitionOps(termDefinition: TermDefinition) {
-    def template(components: Seq[Template]): Template = DefinedTermTemplate(termDefinition, Nil, components)
+    def template(components: Template*): Template = DefinedTermTemplate(termDefinition, Nil, components)
   }
   implicit class FunctionParameterOps(functionParameter: FunctionParameter) {
     def template: Template = FunctionParameterTemplate(functionParameter)
@@ -227,19 +231,19 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     Nil)
 
-  val ZeroDefinition = TermDefinition(
-    "0",
-    Nil,
-    Nil,
-    Some("ℕ"),
+  val Comprehension = TermDefinition(
+    "comprehension",
+    Seq("a"),
+    Seq(ComponentType.TermComponent("A", Nil), ComponentType.StatementComponent("φ", Seq(ComponentArgument("a", 0)))),
     None,
-    Format.default(Nil, Nil),
+    None,
+    Format.Explicit("{ a ∈ A | φ }", Seq("a", "A", "φ"), false, true),
     Nil,
-    BlankDefinition,
+    ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, A), φ($)))),
     None,
     Nil,
     Nil)
-  val Zero = DefinedTerm(Nil, ZeroDefinition)(Nil)
+
   val NaturalsDefinition = TermDefinition(
     "ℕ",
     Nil,
@@ -265,6 +269,32 @@ trait ExpressionDefinitions extends VariableDefinitions {
     None,
     Nil,
     Nil)
+  val ZeroDefinition = TermDefinition(
+    "0",
+    Nil,
+    Nil,
+    Some("ℕ"),
+    None,
+    Format.default(Nil, Nil),
+    Nil,
+    BlankDefinition,
+    None,
+    Nil,
+    Nil)
+  val Zero = DefinedTerm(Nil, ZeroDefinition)(Nil)
+  val OneDefinition = TermDefinition(
+    "1",
+    Nil,
+    Nil,
+    Some("ℕ"),
+    None,
+    Format.default(Nil, Nil),
+    Nil,
+    Equals($, Successor(Zero)),
+    None,
+    Nil,
+    Nil)
+  val One = DefinedTerm(Nil, OneDefinition)(Nil)
   val AdditionDefinition = TermDefinition(
     "+",
     Nil,
@@ -305,10 +335,33 @@ trait ExpressionDefinitions extends VariableDefinitions {
   val LessThan = DefinedTerm(Nil, LessThanDefinition)(Nil)
   def lessThan(a: Term, b: Term): Statement = ElementOf(Pair(a, b), LessThan)
 
+  val IntegersDefinition = TermDefinition(
+    "ℤ",
+    Nil,
+    Nil,
+    None,
+    None,
+    Format.default(Nil, Nil),
+    Nil,
+    BlankDefinition,
+    None,
+    Nil,
+    Nil)
+  val Integers = IntegersDefinition()
+
   val InfixRelationShorthand = DisplayShorthand(
-    DefinedStatementTemplate(ElementOf, Nil, Seq(DefinedTermTemplate(Pair, Nil, Seq(TermVariableTemplate("a"), TermVariableTemplate("b"))), TermVariableTemplate("<"))),
+    ElementOf.template(Pair.template(a.template, b.template), TermVariableTemplate("<")),
     Format.Explicit("a < b", Seq("a", "b", "<"), false, false),
     Seq(("<", "infix-relation")))
+
+  val NotElementOfShorthand = DisplayShorthand(
+    Negation.template(ElementOf.template(a.template, b.template)),
+    Format.Explicit("a ∉ b", Seq("a", "b"), false, false),
+    Nil)
+  val NotEqualShorthand = DisplayShorthand(
+    Negation.template(Equals.template(a.template, b.template)),
+    Format.Explicit("a ≠ b", Seq("a", "b"), false, false),
+    Nil)
 
   def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
 }
@@ -338,6 +391,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val distributeUniversalQuantifierOverEquivalence = Axiom("Distribute Universal Quantifier over Equivalence", Seq(ForAll("x")(Equivalence(φ($), ψ($)))), Equivalence(ForAll("x")(φ($)), ForAll("x")(ψ($))))
 
   val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
+  val reverseNegatedEquality = Axiom("Reverse Negated Equality", Seq(Negation(Equals(a, b))), Negation(Equals(b, a)))
   val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
   val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
   val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
@@ -352,6 +406,7 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val firstElement = Axiom("First Element", Nil, Equals(First(Pair(a, b)), a))
 
   val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
+  val oneIsANaturalNumber = Axiom("1 Is a Natural Number", Nil, ElementOf(One, Naturals))
   val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
   val additionIsClosed = Axiom("Addition Is Closed", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(add(a, b), Naturals))
   val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
@@ -371,8 +426,9 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       ForAllDefinition, ExistsDefinition, ExistsUnique,
       ElementOf, Equals, Subset) ++
     Seq(
-      EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second,
-      ZeroDefinition, NaturalsDefinition, Successor, AdditionDefinition, Apply, LessThanDefinition) ++
+      EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Comprehension,
+      NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, Apply, LessThanDefinition,
+      IntegersDefinition) ++
     Seq(
       specification, existence, modusPonens, modusTollens,
       addDoubleNegation, removeDoubleNegation,
@@ -380,10 +436,10 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       addLeftDisjunct, addRightDisjunct,
       reverseEquivalence, equivalenceIsTransitive, forwardImplicationFromEquivalence, reverseImplicationFromEquivalence,
       distributeImplicationOverEquivalence, distributeUniversalQuantifierOverEquivalence,
-      reverseEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
+      reverseEquality, reverseNegatedEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfOrderedPairInCartesianProduct, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, orderedPairIsElementOfCartesianProduct, firstElement,
-      zeroIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, addingZeroIsSame, orderingIsTransitive) ++
-    Seq(InfixRelationShorthand))
+      zeroIsANaturalNumber, oneIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, addingZeroIsSame, orderingIsTransitive) ++
+    Seq(InfixRelationShorthand, NotElementOfShorthand, NotEqualShorthand))
 
   implicit class ParserOps[T](parser: Parser[T]) {
     def parseAndDiscard(text: String): T = {

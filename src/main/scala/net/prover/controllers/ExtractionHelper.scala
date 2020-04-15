@@ -3,7 +3,7 @@ package net.prover.controllers
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
-import net.prover.model.proof.SubstatementExtractor.VariableTracker
+import net.prover.model.proof.SubstatementExtractor.{ExtractionOption, VariableTracker}
 import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext, SubstitutionContext}
 
 import scala.util.{Failure, Success, Try}
@@ -166,5 +166,18 @@ object ExtractionHelper {
     implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     applyExtractions(premise.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext, findPremiseStepsOrTargets).map(removeNonEndStructuralSimplifications)
+  }
+
+  def getExtractedAssertionStep(
+    inference: Inference,
+    substitutions: Substitutions,
+    extractionOption: ExtractionOption)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[(Statement, Step)] = {
+    for {
+      assertionStep <- Step.Assertion.forInference(inference, substitutions)
+      ExtractionApplication(extractionResult, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, substitutions, None, None, _ => (Nil, Nil)).toOption
+      extractionStep <- Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference)
+    } yield (extractionResult, extractionStep)
   }
 }

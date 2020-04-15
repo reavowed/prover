@@ -11,7 +11,7 @@ object PremiseFinder {
     findPremiseStepsWithInferencesForStatement(targetStatement).map(_.map(_._1))
   }
 
-  def findPremiseStepsWithInferencesForStatement(
+  def findPremiseStepsWithInferencesForStatementDirectly(
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
   ): Option[Seq[(Step, Inference)]] = {
@@ -20,6 +20,15 @@ object PremiseFinder {
     def fromPremises = allPremiseExtractions.find(_._1 == targetStatement).map(_._2)
     def fromFact = ProofHelper.findFact(targetStatement).map(Seq(_))
     def fromSimplification = allPremiseSimplifications.find(_._1 == targetStatement).map(_._2)
+
+    fromPremises orElse fromFact orElse fromSimplification
+  }
+
+  def findPremiseStepsWithInferencesForStatement(
+    targetStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[Seq[(Step, Inference)]] = {
+    import stepProvingContext._
 
     def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>
       for {
@@ -31,12 +40,12 @@ object PremiseFinder {
     }
     def bySimplifyingTargetRelation = provingContext.conclusionRelationSimplificationInferences.iterator.findFirst { conclusionRelationSimplificationInference =>
       for {
-        (simplifiedTargets, step) <- conclusionRelationSimplificationInference.getConclusionSimplification(targetStatement)
+        (simplifiedTargets, stepsForInference) <- conclusionRelationSimplificationInference.getConclusionSimplification(targetStatement)
         stepsForSimplifiedTarget <- findPremiseStepsWithInferencesForStatements(simplifiedTargets)
-      } yield stepsForSimplifiedTarget :+ (step, conclusionRelationSimplificationInference.inference)
+      } yield stepsForSimplifiedTarget ++ stepsForInference
     }
 
-    fromPremises orElse fromFact orElse fromSimplification orElse bySimplifyingTarget orElse bySimplifyingTargetRelation
+    findPremiseStepsWithInferencesForStatementDirectly(targetStatement) orElse bySimplifyingTarget orElse bySimplifyingTargetRelation
   }
 
   def findPremiseStepsForStatements(

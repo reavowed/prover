@@ -48,6 +48,11 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
     implicit val allowableExtractionOption: Allowable[ExtractionOption] = allowableGeneric(Generic[ExtractionOption])
+    implicit def allowableDesimplifiedPremise: Allowable[DesimplifiedPremise] = allowableGeneric(Generic[DesimplifiedPremise])
+    implicit def allowablePremiseDesimplification: Allowable[PremiseDesimplification] = allowable {
+      case DirectPremise(_) => true
+      case desimplifiedPremise: DesimplifiedPremise => allowableDesimplifiedPremise.isAllowed(desimplifiedPremise)
+    }
 
     implicit val alwaysAllowableOperator: Allowable[BinaryOperator] = alwaysAllowable
     implicit val allowableEquality: Allowable[Equality] = allowableGeneric(Generic[Equality])
