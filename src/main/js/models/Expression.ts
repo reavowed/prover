@@ -213,7 +213,7 @@ export class TypeExpression extends Expression {
         // @ts-ignore
           (wordsSoFar: string[], propertyDefinition: PropertyDefinition) => {
             if (this.conjunctionDefinition) {
-              return [this.conjunctionDefinition.symbol, ...wordsSoFar, propertyDefinition.qualifiedSymbol, ...termAndComponentsWords]
+              return [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, propertyDefinition.qualifiedSymbol, ...termAndComponentsWords]
             } else throw "Cannot serialize type with property without conjunction";
           },
           baseWords);
