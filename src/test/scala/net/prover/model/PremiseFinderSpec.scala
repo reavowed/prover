@@ -18,7 +18,7 @@ class PremiseFinderSpec extends Specification {
 
     def findPremise(target: Statement, premises: Statement*)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, premises.map(_.requiredSubstitutions).foldTogether.terms.map(_._1))
-      PremiseFinder.findPremiseStepsForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, stepContext))
+      PremiseFinder.findPremiseStepsForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, stepContext)).map(_.split._2)
     }
 
     "find premise using rewrite" in {

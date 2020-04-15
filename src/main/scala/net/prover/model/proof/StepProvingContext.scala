@@ -5,6 +5,8 @@ import net.prover.model.definitions.PremiseSimplificationInference
 import net.prover.model.{Inference, ProvingContext, Substitutions}
 import net.prover.model.expressions.Statement
 
+import scala.collection.mutable
+
 case class StepProvingContext(stepContext: StepContext, provingContext: ProvingContext) {
   lazy val premisesAndSimplifications: Seq[(Premise.Given, Seq[Premise.Simplification])] = {
     stepContext.premises.reverse.map(p => p -> SimplificationFinder.getSimplifications(p)(this))
@@ -14,27 +16,27 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
     premisesAndSimplifications.flatMap { case (premise, simplifications) => simplifications.reverse :+ premise }
   }
 
-  lazy val allPremiseExtractions: Seq[(Statement, Seq[(Step, Inference)])] = {
+  lazy val allPremiseExtractions: Seq[(Statement, Seq[(Statement, Step, Inference)])] = {
     for {
       premise <- stepContext.premises
       extractionOption <- SubstatementExtractor.getExtractionOptions(premise.statement)(this)
       if extractionOption.premises.isEmpty
       extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionOption.extractionInferences, Substitutions.empty, None, None, s => (Nil, s.map(Step.Target(_))))(this).toOption.toSeq
         .map(ExtractionHelper.removeAllStructuralSimplifications(_)(provingContext))
-    } yield (extractionApplication.result, extractionApplication.extractionSteps.map(s => (s, s.inference)))
+    } yield (extractionApplication.result, extractionApplication.extractionSteps.map(s => (s.statement, s, s.inference)))
   }
 
-  lazy val allPremiseSimplifications: Seq[(Statement, Seq[(Step, Inference)])] = {
-    def simplifyAll(previous: Seq[(Statement, Seq[(Step, Inference)])], current: Seq[(Statement, Seq[(Step, Inference)])], simplifiers: Seq[PremiseSimplificationInference]): Seq[(Statement, Seq[(Step, Inference)])] = {
+  lazy val allPremiseSimplifications: Seq[(Statement, Seq[(Statement, Step, Inference)])] = {
+    def simplifyAll(previous: Seq[(Statement, Seq[(Statement, Step, Inference)])], current: Seq[(Statement, Seq[(Statement, Step, Inference)])], simplifiers: Seq[PremiseSimplificationInference]): Seq[(Statement, Seq[(Statement, Step, Inference)])] = {
       if (current.isEmpty)
         previous
       else {
         val existing = previous ++ current
-        val newSimplifications = current.flatMap { case (statement, stepsAndInferences) =>
+        val newSimplifications = current.flatMap { case (statement, currentStepsAndInferences) =>
           simplifiers.mapCollect { simplifier =>
             simplifier.getPremiseSimplification(statement, existing)(this)
               .filter { case (statement, _) => !existing.exists(_._1 == statement)}
-              .map { case (statement, step) => (statement, stepsAndInferences ++ step) }
+              .map { case (statement, newStepsAndInferences) => (statement, currentStepsAndInferences ++ newStepsAndInferences) }
           }
         }
         simplifyAll(existing, newSimplifications, simplifiers)
@@ -60,6 +62,8 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
     else
       this
   }
+
+  val cachedPremises: mutable.Map[String, Option[Seq[(Statement, Step, Inference)]]] = mutable.Map.empty
 }
 
 object StepProvingContext {

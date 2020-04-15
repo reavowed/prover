@@ -7,12 +7,12 @@ import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 import net.prover.model.proof.{Step, StepProvingContext}
 
 case class ConclusionRelationSimplificationInference(inference: Inference, extractionOption: ExtractionOption, premiseDesimplifications: Seq[PremiseDesimplification]) {
-  def getConclusionSimplification(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[(Seq[Statement], Seq[(Step, Inference)])] = {
+  def getConclusionSimplification(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[(Seq[Statement], Seq[(Statement, Step, Inference)])] = {
     for {
       substitutions <- extractionOption.conclusion.calculateSubstitutions(target).flatMap(_.confirmTotality)
       (extractionResult, extractionStep) <- ExtractionHelper.getExtractedAssertionStep(inference, substitutions, extractionOption)
       if extractionResult == target
       (simplifiedTargets, premiseSteps) <- premiseDesimplifications.getSubstitutedPremises(substitutions)
-    } yield (simplifiedTargets, premiseSteps :+ (extractionStep, inference))
+    } yield (simplifiedTargets, premiseSteps :+ (extractionResult, extractionStep, inference))
   }
 }

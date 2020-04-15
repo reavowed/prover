@@ -335,9 +335,15 @@ package object model {
     }
   }
 
-  implicit class SeqTupleOps[S, T](seq: Seq[(S, T)]) {
+  implicit class Seq2TupleOps[S, T](seq: Seq[(S, T)]) {
     def split: (Seq[S], Seq[T]) = {
       (seq.map(_._1), seq.map(_._2))
+    }
+  }
+
+  implicit class Seq3TupleOps[S, T, R](seq: Seq[(S, T, R)]) {
+    def split: (Seq[S], Seq[T], Seq[R]) = {
+      (seq.map(_._1), seq.map(_._2), seq.map(_._3))
     }
   }
 

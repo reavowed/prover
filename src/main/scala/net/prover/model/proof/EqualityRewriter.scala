@@ -76,7 +76,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
       def findDirectly = {
         for {
-          (steps, inferences) <- PremiseFinder.findPremiseStepsWithInferencesForStatement(equality(premiseTerm, targetTerm)).map(_.split)
+          (_, steps, inferences) <- PremiseFinder.findPremiseStepsWithInferencesForStatement(equality(premiseTerm, targetTerm)).map(_.split)
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
           inference = inferences.singleMatch match {
             case PossibleSingleMatch.NoMatches =>

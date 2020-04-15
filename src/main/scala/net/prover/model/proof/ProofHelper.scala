@@ -7,14 +7,14 @@ import net.prover.model.entries.StatementDefinition
 import net.prover.model.expressions._
 
 object ProofHelper {
-  def findFact(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[(Step, Inference)] = {
+  def findFact(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[(Statement, Step, Inference)] = {
     for {
       (_, inference, extractionOption) <- stepProvingContext.provingContext.facts.find(_._1 == target)
       assertionStep <- Step.Assertion.forInference(inference, Substitutions.empty)
-      ExtractionApplication(_, _, extractionSteps, premiseSteps, targetSteps) <- ExtractionHelper.applyExtractions(inference.conclusion, extractionOption.extractionInferences, inference, Substitutions.empty, None, Some(target), _ => (Nil, Nil)).toOption
+      ExtractionApplication(extractionResult, _, extractionSteps, premiseSteps, targetSteps) <- ExtractionHelper.applyExtractions(inference.conclusion, extractionOption.extractionInferences, inference, Substitutions.empty, None, Some(target), _ => (Nil, Nil)).toOption
       if premiseSteps.isEmpty && targetSteps.isEmpty
       finalStep <- Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference)
-    } yield (finalStep, inference)
+    } yield (extractionResult, finalStep, inference)
   }
   def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Option[(Step, Statement, Inference, Substitutions.Possible)] = {
     stepProvingContext.provingContext.facts.mapFind { case (fact, inference, extractionOption) =>
