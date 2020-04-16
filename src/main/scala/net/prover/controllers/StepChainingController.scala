@@ -240,7 +240,8 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                 stepProvingContext.stepContext.boundVariableLists.map(_.zipWithIndex))
               intendedConclusionOption <- getIntendedConclusion(epc)
               intendedPremiseStatementsOption <- definition.parseIntendedPremiseStatements(epc)
-              extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, intendedPremiseStatementsOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets)
+              substitutedIntendedPremiseStatementsOption <- intendedPremiseStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to extraction premises")).swap
+              extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, substitutedIntendedPremiseStatementsOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets)
             } yield (extractionApplication, Nil, Nil, Nil, Step.Elided.forDescription("Extracted"))
           }
         }
