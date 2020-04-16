@@ -39,13 +39,6 @@ term ∅ ()
   (∀ x ¬ ∈ $0 $$0)
   shorthand (empty)
 
-theorem No Set Is an Element of the Empty Set
-conclusion ¬ ∈ a ∅
-{
-  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
-  prove ¬ ∈ a ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $0 ∅) (a) 0
-}
-
 theorem A Set with No Elements Is the Empty Set
 premise ∀ x ¬ ∈ $0 a
 conclusion = a ∅
@@ -66,7 +59,10 @@ theorem A Set with an Element Is Not the Empty Set
 premise ∈ b a
 conclusion ¬ = a ∅
 {
-  prove ¬ ∈ b ∅ 2a07c3469d7b9f30a2e73a8615d711278aff1a423ddcf01c763a30443d9de3aa () (b)
+  elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+    prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+    prove ¬ ∈ b ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $0 ∅) (b) 0.0
+  }
   assume = a ∅ {
     prove ∈ b ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ b $0) (a, ∅) 1a p0
   }

@@ -994,7 +994,10 @@ theorem No Natural Number Is Less than Zero
 premise ∈ n ℕ
 conclusion ¬ ∈ orderedPair n 0ℕ <ℕ
 {
-  prove ¬ ∈ n ∅ 2a07c3469d7b9f30a2e73a8615d711278aff1a423ddcf01c763a30443d9de3aa () (n)
+  elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+    prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+    prove ¬ ∈ n ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $0 ∅) (n) 0.0
+  }
   elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
     prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
     prove = ∅ 0ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (0ℕ, ∅) 1.0
@@ -1152,7 +1155,10 @@ conclusion ∀ n → ∈ $0 ℕ with ($0) φ
     prove = $0 ∅ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (= $0 ∅) () 0.0
     take n {
       assume ∈ $0 ℕ {
-        prove ¬ ∈ $0 ∅ 2a07c3469d7b9f30a2e73a8615d711278aff1a423ddcf01c763a30443d9de3aa () ($0)
+        elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+          prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+          prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$$0 ∅) ($0) 0.2.0.0.0
+        }
         elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
           prove = ∅ $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$0, ∅) 0.1
           prove ¬ ∈ $0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ ∈ $0 $$$0) (∅, $$0) 0.2.0.1.0 0.2.0.0

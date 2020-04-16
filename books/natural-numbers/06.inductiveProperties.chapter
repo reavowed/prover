@@ -185,7 +185,10 @@ conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ successor $$0 succe
   subproof (Base case) {
     take n {
       assume ∈ $0 ℕ {
-        prove ¬ ∈ $0 ∅ 2a07c3469d7b9f30a2e73a8615d711278aff1a423ddcf01c763a30443d9de3aa () ($0)
+        elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+          prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+          prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$0 ∅) ($0) 0.0.0.0.0
+        }
         elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
           elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
             prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
@@ -262,7 +265,10 @@ conclusion ∀ n → ∈ $0 ℕ ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = 
 {
   take m {
     elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
-      prove ¬ ∈ $0 ∅ 2a07c3469d7b9f30a2e73a8615d711278aff1a423ddcf01c763a30443d9de3aa () ($0)
+      elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+        prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+        prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$0 ∅) ($0) 0.0.0.0
+      }
       elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
         elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
           prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
@@ -272,7 +278,10 @@ conclusion ∀ n → ∈ $0 ℕ ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = 
       }
     }
     elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
-      prove ¬ ∈ successor $0 ∅ 2a07c3469d7b9f30a2e73a8615d711278aff1a423ddcf01c763a30443d9de3aa () (successor $0)
+      elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+        prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+        prove ¬ ∈ successor $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$0 ∅) (successor $0) 0.1.0.0
+      }
       elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
         elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
           prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
@@ -381,7 +390,10 @@ conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 $$0 ⊆ $0 $$0
 {
   subproof (Base case) {
     take m {
-      prove ¬ ∈ $0 ∅ 2a07c3469d7b9f30a2e73a8615d711278aff1a423ddcf01c763a30443d9de3aa () ($0)
+      elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+        prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+        prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$0 ∅) ($0) 0.0.0.0
+      }
       elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
         prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
         prove = ∅ 0ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (0ℕ, ∅) 0.0.1.0

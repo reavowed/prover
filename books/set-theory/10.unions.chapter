@@ -151,7 +151,10 @@ conclusion = ∪ ∅ a a
 {
   prove ∀ x ↔ ∈ $0 ∪ ∅ a ∨ ∈ $0 ∅ ∈ $0 a 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (∅, a)
   take x {
-    prove ¬ ∈ $0 ∅ 2a07c3469d7b9f30a2e73a8615d711278aff1a423ddcf01c763a30443d9de3aa () ($0)
+    elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+      prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+      prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$0 ∅) ($0) 1.0.0
+    }
     prove → ∈ $0 ∅ ∈ $0 a bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∅, ∈ $0 a) () 1.0
     prove ↔ ∨ ∈ $0 ∅ ∈ $0 a ∈ $0 a fea847b6ac71dacbccf8815bf45a965c0039d8080b07292713e6b9c3f94899e8 (∈ $0 ∅, ∈ $0 a) () 1.1
   }
