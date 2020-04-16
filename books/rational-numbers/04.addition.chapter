@@ -6,6 +6,8 @@ term + ()
   shorthand (+Q)
   attributes (infix-function)
 
+write apply +ℚ orderedPair a b as addQ
+
 theorem Rational Addition Function Properties
 conclusion ∧ function +ℚ product ℚ ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ
 {

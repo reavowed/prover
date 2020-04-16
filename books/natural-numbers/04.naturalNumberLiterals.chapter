@@ -111,3 +111,19 @@ conclusion ¬ = 2ℕ 0ℕ
     prove ¬ = 2ℕ 0ℕ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ = $0 0ℕ) (successor 1ℕ, 2ℕ) 1.0 0
   }
 }
+
+theorem 2 Is Not 1
+conclusion ¬ = 2ℕ 1ℕ
+{
+  elided 6ff13322140f909bb042825d80570210d8879fcb9b56ac2ffbf65b9542d4d74c {
+    prove ¬ = 1ℕ successor 1ℕ 6ff13322140f909bb042825d80570210d8879fcb9b56ac2ffbf65b9542d4d74c () (1ℕ)
+    prove ¬ = successor 1ℕ 1ℕ 35c4b3bdb5afef55d4ceaab6eddde750bce304bc30ca1a61c5d38cc997fb0d65 () (1ℕ, successor 1ℕ) 0.0
+  }
+  elided ca6ddf17f586559162c970c8829856ab0feafece89fefe5e8bb557bdaf4304d1 {
+    elided ca6ddf17f586559162c970c8829856ab0feafece89fefe5e8bb557bdaf4304d1 {
+      prove = 2ℕ successor 1ℕ ca6ddf17f586559162c970c8829856ab0feafece89fefe5e8bb557bdaf4304d1 () ()
+      prove = successor 1ℕ 2ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (2ℕ, successor 1ℕ) 1.0.0
+    }
+    prove ¬ = 2ℕ 1ℕ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ = $0 1ℕ) (successor 1ℕ, 2ℕ) 1.0 0
+  }
+}
