@@ -12,10 +12,6 @@ import DeleteEntryButton from "./DeleteEntryButton";
 import InferenceEntry from "./InferenceEntry";
 import ChapterEntryWrapper from "./ChapterEntryWrapper";
 
-const Capitalized = styled.span`
-  text-transform: capitalize;
-`;
-
 export default function ChapterEntry({entry}) {
   const entryContext = useContext(EntryContext);
   switch (entry.type) {
@@ -47,7 +43,7 @@ export default function ChapterEntry({entry}) {
     case "typeDefinition":
       const definition = entryContext.typeDefinitions[entry.symbol];
       return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
-        <ChapterEntryWrapper title={<>Definition: <Capitalized>{definition.name}</Capitalized></>}
+        <ChapterEntryWrapper title={<>Definition: {definition.name.capitalize()}</>}
                              url={entry.url}
                              key={entry.url}>
           {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.components))} if <CopiableExpression expression={entry.definingStatement}/>.
@@ -59,7 +55,7 @@ export default function ChapterEntry({entry}) {
         <ChapterEntryWrapper title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name} {typeDefinition.name}</span></>}
                              url={entry.url}
                              key={entry.url}>
-          <Capitalized>{typeDefinition.article}</Capitalized> {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
+          {typeDefinition.article.capitalize()} {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     case "standalonePropertyDefinition":
