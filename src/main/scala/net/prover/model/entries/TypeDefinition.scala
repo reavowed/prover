@@ -28,7 +28,7 @@ case class TypeDefinition(
   val article: String = if (name.headOption.exists("aeiou".contains(_))) "an" else "a"
   def fullFormat: Format.Explicit = Format.Explicit(
     s"$defaultTermName is $article $name ${componentFormat.originalValue}",
-    defaultTermName +: otherComponentTypes.map(_.name),
+    symbol +: defaultTermName +: otherComponentTypes.map(_.name),
     componentFormat.requiresBrackets,
     componentFormat.requiresComponentBrackets)
 

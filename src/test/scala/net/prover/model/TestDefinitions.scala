@@ -263,7 +263,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Seq(a),
     None,
     None,
-    Format.Explicit("a^+", Seq("a"), requiresBrackets = false, requiresComponentBrackets = true),
+    Format.Explicit("a^+", Seq("successor", "a"), requiresBrackets = false, requiresComponentBrackets = true),
     Nil,
     BlankDefinition,
     None,

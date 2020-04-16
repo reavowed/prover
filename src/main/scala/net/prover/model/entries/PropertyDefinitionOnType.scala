@@ -21,7 +21,7 @@ case class PropertyDefinitionOnType(
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry] + parentType
 
-  def fullFormat: Format = Format.Explicit(s"$defaultTermName is $name", Seq(defaultTermName), requiresBrackets = false, requiresComponentBrackets = true)
+  def fullFormat: Format = Format.Explicit(s"$defaultTermName is $name ${parentType.componentFormat.originalValue}", symbol +: defaultTermName +: parentComponentTypes.map(_.name), requiresBrackets = false, requiresComponentBrackets = true)
   val statementDefinition: StatementDefinition = StatementDefinition(
     qualifiedSymbol,
     Nil,

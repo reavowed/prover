@@ -16,7 +16,7 @@ case class StatementDefinition(
   extends ExpressionDefinition with TypedExpressionDefinition[StatementDefinition]
 {
   override def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(baseSymbol, None)
-  override def name: String = explicitName.getOrElse(baseSymbol)
+  override def name: String = explicitName.getOrElse(disambiguatedSymbol.forDisplay)
   override def typeName: String = "Statement"
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.map(_.referencedDefinitions).getOrElse(Set.empty).toType[ChapterEntry] - this
   override val complexity: Int = definingStatement.map(_.definitionalComplexity).getOrElse(1)

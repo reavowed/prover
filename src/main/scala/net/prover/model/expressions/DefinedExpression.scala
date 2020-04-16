@@ -126,7 +126,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
 
   override def toString: String = {
-    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.disambiguatedSymbol.serialized, parentRequiresBrackets = false)
+    definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.name, parentRequiresBrackets = false)
   }
   override def safeToString: String = {
     definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.disambiguatedSymbol.serialized, parentRequiresBrackets = true)
