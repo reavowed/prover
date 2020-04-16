@@ -36,6 +36,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowableString: AlwaysAllowable[String] = alwaysAllowable
     implicit val alwaysAllowableInt: AlwaysAllowable[Int] = alwaysAllowable
     implicit val alwaysAllowableDirection: AlwaysAllowable[Direction] = alwaysAllowable
+    implicit val alwaysAllowablePossibleSubstitutions: AlwaysAllowable[Substitutions.Possible] = alwaysAllowable
     implicit def allowableSeq[T](implicit inner: Allowable[T]): Allowable[Seq[T]] = allowable { x => x.forall(isAllowed) }
 
     implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.allInferences.exists(_.id == i.id))
@@ -180,12 +181,6 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   }
   lazy val termDesimplificationInferences: Seq[TermRewriteInference] = {
     filter(definitions.termDesimplificationInferences)
-  }
-  lazy val statementDefinitionSimplifications: Map[StatementDefinition, Seq[(Inference, Statement, Expression)]] = {
-    filter(definitions.statementDefinitionSimplifications)
-  }
-  def getStatementDefinitionSimplifications(statementDefinition: StatementDefinition): Seq[(Inference, Statement, Expression)] = {
-    statementDefinitionSimplifications.getOrElse(statementDefinition, Nil)
   }
   lazy val statementDefinitionDeconstructions: Seq[Inference] = {
     filter(definitions.statementDefinitionDeconstructions)

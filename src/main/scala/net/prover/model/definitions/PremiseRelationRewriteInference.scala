@@ -1,20 +1,24 @@
 package net.prover.model.definitions
 
 import net.prover.controllers.ExtractionHelper
-import net.prover.model.Inference
+import net.prover.model.{Inference, Substitutions}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
-import net.prover.model.proof.{PremiseStep, ProofHelper, StepProvingContext}
+import net.prover.model.proof.{PremiseFinder, PremiseStep, ProofHelper, StepProvingContext}
 
-case class PremiseRelationRewriteInference(inference: Inference, initialPremise: Statement, mainPremise: Statement, conclusion: Statement, extractionOption: ExtractionOption) extends PremiseSimplificationInference {
+case class PremiseRelationRewriteInference(inference: Inference, initialPremiseOption: Option[Statement], mainPremise: Statement, conclusion: Statement, extractionOption: ExtractionOption, initialSubstitutions: Substitutions.Possible) extends PremiseSimplificationInference {
+
   def getPremiseSimplification(premiseToMatch: Statement, existingPremises: Seq[(Statement, Seq[PremiseStep])])(implicit stepProvingContext: StepProvingContext): Option[(Statement, Seq[PremiseStep])] = {
     for {
-      substitutionsAfterMainPremise <- mainPremise.calculateSubstitutions(premiseToMatch).flatMap(_.confirmTotality)
-      (premiseStepsAndInferences, substitutionsAfterInitialPremise) <- existingPremises.mapFind { case (premiseStatement, stepsAndInferences) =>
-        initialPremise.calculateSubstitutions(premiseStatement, substitutionsAfterMainPremise).map { s => stepsAndInferences -> s }
-      } orElse ProofHelper.findFactBySubstituting(initialPremise, substitutionsAfterMainPremise).map(_.mapLeft(Seq(_)))
+      substitutionsAfterMainPremise <- mainPremise.calculateSubstitutions(premiseToMatch, initialSubstitutions)
+      (premiseSteps, _, substitutionsAfterInitialPremise) <- initialPremiseOption match {
+        case Some(initialPremise) =>
+          PremiseFinder.findPremiseStepsForStatementBySubstituting(initialPremise, substitutionsAfterMainPremise, existingPremises).headOption
+        case None =>
+          Some((Nil, (), substitutionsAfterMainPremise))
+      }
       substitutions <- substitutionsAfterInitialPremise.confirmTotality
       (extractionResult, extractionStep) <- ExtractionHelper.getExtractedAssertionStep(inference, substitutions, extractionOption)
-    } yield (extractionResult, premiseStepsAndInferences :+ PremiseStep(extractionResult, inference, extractionStep))
+    } yield (extractionResult, premiseSteps :+ PremiseStep(extractionResult, inference, extractionStep))
   }
 }

@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.ExpressionDefinition.{ComponentArgument, ComponentType}
-import net.prover.model.entries.{Axiom, StatementDefinition, TermDefinition}
+import net.prover.model.entries.{Axiom, PropertyDefinitionOnType, StandalonePropertyDefinition, StatementDefinition, TermDefinition, TypeDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{PremiseFinder, Step, StepContext}
 import org.specs2.matcher.MatchResult
@@ -198,6 +198,33 @@ class PremiseFinderSpec extends Specification {
 
       checkFindPremise(
         ElementOf(ToInteger(One), SetDifference(Integers, Singleton(ToInteger(Zero)))))(
+        entryContextWithDefinitions)
+    }
+
+    "find a premise using a rewrite that needs to substitute a term definition to get a valid relation" in {
+      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
+      val PositiveNaturals = PositiveNaturalsDefinition()
+      val Inject = TermDefinition("⍳", Nil, Seq(ComponentType.TermComponent("a", Nil)), None, None, Format.Explicit("%0(%1)", "⍳(a)", false, false), Nil, BlankDefinition, None, Nil, Nil)
+      val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Inject(Zero), $)))))
+      val Relation = TypeDefinition("relation", "R", Seq(ComponentType.TermComponent("A", Nil)), Format.Explicit("on %1", "on A", true, false), None, BlankDefinition)
+      val Irreflexive = PropertyDefinitionOnType("irreflexive", Relation, "R", Seq(ComponentType.TermComponent("A", Nil)), None, BlankDefinition)
+      val elementsRelatedByIrreflexiveNotEqual = Axiom("Elements Related by an Irreflexive Relation Are Not Equal", Seq(Irreflexive.statementDefinition(A, B), ElementOf(Pair(a, b), A)), Negation(Equals(a, b)))
+      val lessThanIsIrreflexive = Axiom("< Is Irreflexive", Nil, Irreflexive.statementDefinition(LessThan, Naturals))
+      val injectedNaturalIsNatural = Axiom("Injected Natural Is Natural", Seq(ElementOf(a, Naturals)), ElementOf(Inject(a), Naturals))
+
+      val entryContextWithDefinitions = defaultEntryContext
+        .addEntry(PositiveNaturalsDefinition)
+        .addEntry(Inject)
+        .addEntry(DefinitionOfPositiveNatural)
+        .addEntry(Relation)
+        .addEntry(Irreflexive)
+        .addEntry(elementsRelatedByIrreflexiveNotEqual)
+        .addEntry(lessThanIsIrreflexive)
+        .addEntry(injectedNaturalIsNatural)
+
+      checkFindPremise(
+        Negation(Equals(a, Inject(Zero))),
+        ElementOf(a, PositiveNaturals))(
         entryContextWithDefinitions)
     }
   }

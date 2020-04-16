@@ -144,7 +144,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val equalityOption: Option[Equality] = {
     for {
       definition <- rootEntryContext.statementDefinitions.find(_.attributes.contains("equality"))
-      relation = BinaryRelation(definition.symbol, definition.defaultValue, definition.attributes)
+      relation = BinaryRelationFromDefinition(definition)
       expansion <- expansions.ofType[RelationExpansion].find(e => e.sourceJoiner == relation && e.resultJoiner == relation)
       substitution <- substitutions.find(_.relation == relation)
       reversal <- reversals.ofType[Reversal[Term]].find(_.joiner == relation)
@@ -244,7 +244,7 @@ case class Definitions(rootEntryContext: EntryContext) {
       //   ℤ+ -> ℤ
       premiseRhs.complexity > conclusionRhs.complexity &&
         (getSimpleTermVariable(conclusionRhs).exists(premiseRhs.requiredSubstitutions.terms.map(_._1).contains) ||
-          (isSimpleTermDefinition(conclusionRhs) && premiseRhs.requiredSubstitutions.isEmpty))
+          getSimpleTermDefinition(conclusionRhs).exists(conclusionDefinition => getSimpleTermDefinition(premiseRhs).exists(premiseDefinition => premiseDefinition.definingStatement.referencedDefinitions.contains(conclusionDefinition))))
     }
     def getSubstitutionTermNames(t: Term): Set[String] = t.requiredSubstitutions.terms.map(_._1).toSet
     def checkNoSubstitutionOverlap(premiseLhs: Term, conclusionRhs: Term): Boolean = {
@@ -266,21 +266,53 @@ case class Definitions(rootEntryContext: EntryContext) {
 
   lazy val premiseRelationRewriteInferences: Seq[PremiseRelationRewriteInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
+
+    def findPremiseRelation(lastPremise: Statement): Seq[(BinaryRelation, Term, Term, Substitutions.Possible)] = {
+      val relationsFromTemplate = definedBinaryRelations.ofType[BinaryRelationFromGeneralShorthand].mapCollect { relation =>
+        val generalTemplate = relation.shorthand.template.expand(
+          Map.empty,
+          Map(
+            relation.lhsVariableName -> TermVariable(relation.lhsVariableName),
+            relation.rhsVariableName -> TermVariable(relation.rhsVariableName),
+            relation.symbolVariableName -> TermVariable(relation.symbolVariableName))
+        ).asInstanceOf[Statement]
+        for {
+          substitutions <- generalTemplate.calculateSubstitutions(lastPremise)
+          lhsVariableName <- getSimpleTermVariable(substitutions.terms(relation.lhsVariableName)._2)
+          rhsVariableName <- getSimpleTermVariable(substitutions.terms(relation.rhsVariableName)._2)
+          symbolVariableName <- getSimpleTermVariable(substitutions.terms(relation.symbolVariableName)._2)
+        } yield (relation, TermVariable(lhsVariableName), TermVariable(rhsVariableName), Substitutions.Possible(terms = Map(symbolVariableName -> (0, relation.definition()))))
+      }
+      if (relationsFromTemplate.nonEmpty)
+        relationsFromTemplate
+      else
+        findRelation(lastPremise).toSeq.map { case (relation, lhs, rhs) => (relation, lhs, rhs, Substitutions.Possible.empty) }
+    }
+    def areValidSecondaryComponents(premiseComponent: Term, conclusionComponent: Term): Boolean = {
+      (isSimpleTermVariable(premiseComponent) && isSimpleTermVariable(conclusionComponent)) ||
+        (premiseComponent.requiredSubstitutions.isEmpty && conclusionComponent.requiredSubstitutions.isEmpty)
+    }
+    def componentsAreValid(premiseLhs: Term, premiseRhs: Term, conclusionLhs: Term, conclusionRhs: Term): Boolean = {
+      isSimpleTermVariable(premiseLhs) &&
+        ((conclusionLhs == premiseLhs && areValidSecondaryComponents(premiseRhs, conclusionRhs)) ||
+        (conclusionRhs == premiseLhs && areValidSecondaryComponents(premiseRhs, conclusionLhs)))
+    }
+
     for {
       inference <- allInferences
       extractionOption <- extractionOptionsByInferenceId(inference.id)
-      (initialPremise, lastPremise) <- extractionOption.premises match {
-        case Seq(a, b) => Seq((a, b))
+      (initialPremiseOption, lastPremise) <- extractionOption.premises match {
+        case Seq(a) => Seq((None, a))
+        case Seq(a, b) => Seq((Some(a), b))
         case _ => Nil
       }
-      if extractionOption.premises.map(_.requiredSubstitutions).foldTogether.contains(extractionOption.conclusion.requiredSubstitutions) && !lastPremise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
+      if extractionOption.premises.map(_.requiredSubstitutions).foldTogether.contains(extractionOption.conclusion.requiredSubstitutions)
       (conclusionRelation, conclusionLhs, conclusionRhs) <- findRelation(extractionOption.conclusion).toSeq
-      (_, premiseLhs, premiseRhs) <- findRelation(lastPremise).toSeq
-      if isSimpleTermVariable(premiseLhs) && premiseLhs == conclusionLhs &&
-        isSimpleTermVariable(premiseRhs) &&
-        isSimpleTermVariable(conclusionRhs) &&
-        conclusionRelation.unapply(initialPremise).isEmpty
-    } yield PremiseRelationRewriteInference(inference, initialPremise, lastPremise, extractionOption.conclusion, extractionOption)
+      (premiseRelation, premiseLhs, premiseRhs, initialSubstitutions) <- findPremiseRelation(lastPremise)
+      if componentsAreValid(premiseLhs, premiseRhs, conclusionLhs, conclusionRhs) &&
+        !initialPremiseOption.exists(initialPremise => premiseRelation.unapply(initialPremise).nonEmpty || conclusionRelation.unapply(initialPremise).nonEmpty) &&
+        (initialPremiseOption.isDefined || premiseRelation != conclusionRelation)
+    } yield PremiseRelationRewriteInference(inference, initialPremiseOption, lastPremise, extractionOption.conclusion, extractionOption, initialSubstitutions)
   }
 
   def getPossiblePremiseDesimplifications(premise: Statement): Seq[PremiseDesimplification] = {
@@ -441,36 +473,6 @@ case class Definitions(rootEntryContext: EntryContext) {
       left.complexity < right.complexity && right.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
     }
   }
-  lazy val statementDefinitionSimplifications: Map[StatementDefinition, Seq[(Inference, Statement, Expression)]] = {
-    implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
-    @scala.annotation.tailrec
-    def helper(
-      remainingInferences: Seq[Inference],
-      acc: Map[StatementDefinition, Seq[(Inference, Statement, Expression)]]
-    ): Map[StatementDefinition, Seq[(Inference, Statement, Expression)]] = {
-      remainingInferences match {
-        case Nil =>
-          acc
-        case inference +: tailInferences =>
-          val updated = (for {
-            statementDefinition <- rootEntryContext.statementDefinitions.find(_.unapplySeq(inference.conclusion).nonEmpty)
-            (singlePremise, firstConclusionComponent) <- inference match {
-              case Inference(_, Seq(singlePremise @ statementDefinition(firstPremiseComponent, _*)), statementDefinition(firstConclusionComponent, _*))
-                if firstConclusionComponent.complexity > firstPremiseComponent.complexity &&
-                  firstConclusionComponent.requiredSubstitutions.contains(firstPremiseComponent.requiredSubstitutions) &&
-                  singlePremise.requiredSubstitutions.contains(inference.requiredSubstitutions)
-              =>
-                Some((singlePremise, firstConclusionComponent))
-              case _ =>
-                None
-            }
-            result = acc.updated(statementDefinition, acc.getOrElse(statementDefinition, Nil) :+ (inference, singlePremise, firstConclusionComponent))
-          } yield result).getOrElse(acc)
-          helper(tailInferences, updated)
-      }
-    }
-    helper(inferenceEntries, Map.empty)
-  }
 
   lazy val statementDefinitionDeconstructions: Seq[Inference] = {
     @scala.annotation.tailrec
@@ -559,12 +561,12 @@ object Definitions {
     def fromDefinitions = for {
       definition <- statementDefinitions
       if definition.format.baseFormatString == s"%1 %0 %2"
-      constructor <- definition.componentTypes match {
-        case Seq(_: StatementComponent, _: StatementComponent) => Some(BinaryConnective.apply _)
-        case Seq(_: TermComponent, _: TermComponent) => Some(BinaryRelation.apply _)
+      result <- definition.componentTypes match {
+        case Seq(_: StatementComponent, _: StatementComponent) => Some(BinaryConnective(definition))
+        case Seq(_: TermComponent, _: TermComponent) => Some(BinaryRelationFromDefinition(definition))
         case _ => None
       }
-    } yield constructor(definition.symbol, definition.defaultValue, definition.attributes)
+    } yield result
 
     def fromGeneralShorthands = for {
       shorthand <- shorthands
@@ -580,17 +582,7 @@ object Definitions {
       definition <- termDefinitions
       if definition.componentTypes.isEmpty
       if shorthand.conditions.map(_._2).forall(definition.attributes.contains)
-      relation = BinaryRelation(
-        definition.symbol,
-        shorthand.template.expand(
-          Map.empty,
-          Map(
-            lhsVariable.name -> TermVariable(lhsVariable.name),
-            rhsVariable.name -> TermVariable(rhsVariable.name),
-            symbolVariable.name -> definition.defaultValue)
-        ).asInstanceOf[Statement],
-        Nil)
-    } yield relation
+    } yield BinaryRelationFromGeneralShorthand(definition, shorthand, lhsVariable.name, rhsVariable.name, symbolVariable.name)
 
     def fromSpecificShorthands = for {
       shorthand <- shorthands
@@ -604,16 +596,7 @@ object Definitions {
       rhsVariable = shorthand.template.variables(rhsIndex)
       if lhsVariable.isInstanceOf[TermVariableTemplate] && rhsVariable.isInstanceOf[TermVariableTemplate]
       if shorthand.conditions.isEmpty
-      relation = BinaryRelation(
-        symbol,
-        shorthand.template.expand(
-          Map.empty,
-          Map(
-            lhsVariable.name -> TermVariable(lhsVariable.name),
-            rhsVariable.name -> TermVariable(rhsVariable.name))
-        ).asInstanceOf[Statement],
-        Nil)
-    } yield relation
+    } yield BinaryRelationFromSpecificShorthand(symbol, shorthand, lhsVariable.name, rhsVariable.name)
 
     (fromDefinitions ++ fromGeneralShorthands ++ fromSpecificShorthands).reverse
   }
