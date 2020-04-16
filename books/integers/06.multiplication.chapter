@@ -3977,6 +3977,38 @@ theorem Multiplication of Two Positive Integers Is Positive
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ orderedPair apply ⍳_ℤ 0ℕ a <ℤ
+conclusion ∧ ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair b a <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ
+{
+  elided 544cafc53411ece71b8b97f836e3d1d50ec0cd6fbb9cb519d46d086e304cc9c6 {
+    elided 544cafc53411ece71b8b97f836e3d1d50ec0cd6fbb9cb519d46d086e304cc9c6 {
+      prove ∧ = apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ a apply ⍳_ℤ 0ℕ 544cafc53411ece71b8b97f836e3d1d50ec0cd6fbb9cb519d46d086e304cc9c6 () (a) p0
+      prove = apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ, apply ⍳_ℤ 0ℕ) 0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+    }
+    prove ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ ∈ orderedPair apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ fdc63ea4bba256874a2511a985e1ee1580f52fc9863143c31dcabb6a8efc1f5d (∈ orderedPair $0 apply ×ℤ orderedPair a b <ℤ) (apply ⍳_ℤ 0ℕ, apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ) 0.0
+  }
+  elided d9499b20d95740f3794af56f977424aaf43497312d8ad4554503d15306599e15 {
+    prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+    prove ∈ apply ⍳_ℤ 0ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0ℕ) 1.0
+    elided d9499b20d95740f3794af56f977424aaf43497312d8ad4554503d15306599e15 {
+      prove ∧ ↔ ∈ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ a apply ×ℤ orderedPair b a <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ ↔ ∈ orderedPair apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ d9499b20d95740f3794af56f977424aaf43497312d8ad4554503d15306599e15 () (apply ⍳_ℤ 0ℕ, b, a) 1.1 p1 p0 p2
+      prove ↔ ∈ orderedPair apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (↔ ∈ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ a apply ×ℤ orderedPair b a <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ, ↔ ∈ orderedPair apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ) () 1.2.0
+    }
+  }
+  prove ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ, ∈ orderedPair apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ) () 0 1
+  elided f558d82b29ac6423697b5c517db9c7ad9833fb1928e1da3f92fceb52617c5758 {
+    elided f558d82b29ac6423697b5c517db9c7ad9833fb1928e1da3f92fceb52617c5758 {
+      prove = apply ×ℤ orderedPair b a apply ×ℤ orderedPair a b f558d82b29ac6423697b5c517db9c7ad9833fb1928e1da3f92fceb52617c5758 () (b, a) p1 p0
+      prove = apply ×ℤ orderedPair a b apply ×ℤ orderedPair b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ×ℤ orderedPair b a, apply ×ℤ orderedPair a b) 3.0.0
+    }
+    prove ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair b a <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (↔ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ) (apply ×ℤ orderedPair a b, apply ×ℤ orderedPair b a) 3.0 2
+  }
+  prove ∧ ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair b a <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (↔ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ, ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair b a <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ) () 2 3
+}
+
+theorem Multiplication of Two Positive Integers Is Positive
+premise ∈ a ℤ
+premise ∈ b ℤ
+premise ∈ orderedPair apply ⍳_ℤ 0ℕ a <ℤ
 premise ∈ orderedPair apply ⍳_ℤ 0ℕ b <ℤ
 conclusion ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ
 {
