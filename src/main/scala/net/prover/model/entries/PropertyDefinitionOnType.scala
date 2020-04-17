@@ -23,16 +23,7 @@ case class PropertyDefinitionOnType(
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry] + parentType
 
   def fullFormat: Format = Format.Explicit(s"$defaultTermName is $name ${parentType.componentFormat.originalValue}", symbol +: defaultTermName +: parentTermNames, requiresBrackets = false, requiresComponentBrackets = true)
-  val oldStatementDefinition: StatementDefinition = StatementDefinition(
-    qualifiedSymbol,
-    Nil,
-    TermComponent(defaultTermName, Nil) +: parentTermNames.map(ComponentType.TermComponent(_, Nil)),
-    Some(explicitName.getOrElse(symbol) + " OLD"),
-    fullFormat,
-    Some(definingStatement),
-    None,
-    Nil)
-  val newStatementDefinition: StatementDefinition = StatementDefinition(
+  val statementDefinition: StatementDefinition = StatementDefinition(
     qualifiedSymbol,
     Nil,
     TermComponent(defaultTermName, Nil) +: parentTermNames.map(ComponentType.TermComponent(_, Nil)),
@@ -41,7 +32,7 @@ case class PropertyDefinitionOnType(
     Some(conjunctionDefinition(parentType.statementDefinition((defaultTermName +: parentTermNames).map(TermVariable(_, Nil)): _*), definingStatement)),
     None,
     Nil)
-  override val inferences: Seq[Inference.FromEntry] = oldStatementDefinition.inferences ++ newStatementDefinition.inferences
+  override val inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 
   override def serializedLines: Seq[String] = (Seq("property", symbol, "on", parentType.name, defaultTermName) ++ parentTermNames).mkString(" ") +:
     (explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++

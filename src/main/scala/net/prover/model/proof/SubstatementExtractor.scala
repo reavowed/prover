@@ -92,7 +92,7 @@ object SubstatementExtractor {
       definition = definedStatement.definition
       if (
         implicitly[EntryContext].typeDefinitions.map(_.statementDefinition) ++
-        implicitly[EntryContext].propertyDefinitionsByType.values.flatten.map(_.newStatementDefinition)
+        implicitly[EntryContext].propertyDefinitionsByType.values.flatten.map(_.statementDefinition)
       ).contains(definition)
       deconstructionInference <- definedStatement.definition.deconstructionInference.toSeq
       extractionPremise <- deconstructionInference.premises.single.toSeq

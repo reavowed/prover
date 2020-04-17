@@ -23,10 +23,8 @@ export function PropertyDefinitionOnType({definition: definitionJson, definition
         <NavLinks previous={previous} next={next} />
         <h3>{definition.title.capitalize()}</h3>
         {definition.parentType.article.capitalize()} {definition.parentType.name} {definition.defaultTermName} {formatHtml(definition.parentType.componentFormat.baseFormatString, s => replacePlaceholders(s, definition.parentTermNames))} is {definition.name} if <CopiableExpression expression={definition.definingStatement}/>.
-        <Usages.ForInference usages={usages} inferenceId={definition.oldStatementDefinition.constructionInference.id} title="Old Construction" />
-        <Usages.ForInference usages={usages} inferenceId={definition.oldStatementDefinition.deconstructionInference.id} title="Old Deconstruction" />
-        <Usages.ForInference usages={usages} inferenceId={definition.newStatementDefinition.constructionInference.id} title="New Construction" />
-        <Usages.ForInference usages={usages} inferenceId={definition.newStatementDefinition.deconstructionInference.id} title="New Deconstruction" />
+        <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.constructionInference.id} title="Construction" />
+        <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.deconstructionInference.id} title="Deconstruction" />
       </Page>
     </EntryContext.Provider>
   </DisplayContext.Provider>;
