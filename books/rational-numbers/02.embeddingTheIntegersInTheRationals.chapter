@@ -81,14 +81,10 @@ conclusion ∧ ∧ function ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ℤ ℚ �
                 prove ∈ apply ⍳_ℤ 1ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (1ℕ) 2.0.0.0.0.0.1.0
                 prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
                 prove ¬ = 1ℕ 0ℕ bdaf6427cfd0b36642272a980ebfbca98f289fa9b1a02f7cacacf5cd2789af03 () ()
-                elided 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b {
-                  prove ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b () ()
-                  prove ∀ x → ∈ $0 ℕ ∀ y → ∈ $0 ℕ → = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 = $$0 $0 525b4ace6543f96748a3911c8783983fce6a0628c1947bd6fb63e8b624e9cfc5 () (⍳_ℤ, ℕ, ℤ) 2.0.0.0.0.0.1.4.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                  prove → ∈ 1ℕ ℕ ∀ y → ∈ $0 ℕ → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ $0 = 1ℕ $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℕ ∀ y → ∈ $0 ℕ → = apply ⍳_ℤ $$$$0 apply ⍳_ℤ $0 = $$$$0 $0) (1ℕ) 2.0.0.0.0.0.1.4.1
-                  prove ∀ y → ∈ $0 ℕ → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ $0 = 1ℕ $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 1ℕ ℕ, ∀ y → ∈ $0 ℕ → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ $0 = 1ℕ $0) () 2.0.0.0.0.0.1.4.2 2.0.0.0.0.0.1.0
-                  prove → ∈ 0ℕ ℕ → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℕ → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ $$$0 = 1ℕ $$$0) (0ℕ) 2.0.0.0.0.0.1.4.3
-                  prove → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0ℕ ℕ, → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ) () 2.0.0.0.0.0.1.4.4 2.0.0.0.0.0.1.2
-                  prove ¬ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 2.0.0.0.0.0.1.4.5 2.0.0.0.0.0.1.3
+                elided 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba {
+                  prove ↔ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba () (1ℕ, 0ℕ) 2.0.0.0.0.0.1.0 2.0.0.0.0.0.1.2
+                  prove → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 2.0.0.0.0.0.1.4.0
+                  prove ¬ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 2.0.0.0.0.0.1.4.1 2.0.0.0.0.0.1.3
                 }
                 elided 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 {
                   prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (apply ⍳_ℤ 0ℕ)
@@ -130,7 +126,10 @@ conclusion ∧ ∧ function ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ℤ ℚ �
         }
       }
     }
-    prove injectiveFunction ⍳_ℚ ℤ ℚ c2afafe0e25ec2cbcc5e858cda4206b5eb6c7297eac08a5746e0c6a3971f1c71 () (ℤ, ⍳_ℚ, ℚ) 2.0
+    elided ce18716db14480f033671b1e6344a6a9e7ba52fa794c2424f641247501f0c0e6 {
+      prove ∧ function ⍳_ℚ ℤ ℚ ∀ x → ∈ $0 ℤ ∀ y → ∈ $0 ℤ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function ⍳_ℚ ℤ ℚ, ∀ x → ∈ $0 ℤ ∀ y → ∈ $0 ℤ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) () 1 2.0
+      prove injectiveFunction ⍳_ℚ ℤ ℚ ce18716db14480f033671b1e6344a6a9e7ba52fa794c2424f641247501f0c0e6 () (⍳_ℚ, ℤ, ℚ) 2.1.0
+    }
   }
   subproof (Function value) {
     take a {

@@ -314,7 +314,10 @@ conclusion equivalenceRelation ~_ℤ product ℕ ℕ
         prove ∈ orderedPair $0 $0 ~_ℤ 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ orderedPair $$0 $$0 ~_ℤ) ($0, orderedPair first $0 second $0) 1.0.0.0 1.0.0.2
       }
     }
-    prove reflexiveRelation ~_ℤ product ℕ ℕ ef4ce46ab9c772b8e879fb1bb19f2b0ec2e28da2c516df28247407caf637b5a5 () (product ℕ ℕ, ~_ℤ) 1.0
+    elided 0e7b7aa3db1874eba1c71f505ecf264da231dc7063f23f956ab3ffaf812cc0ae {
+      prove ∧ relation ~_ℤ product ℕ ℕ ∀ a → ∈ $0 product ℕ ℕ ∈ orderedPair $0 $0 ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation ~_ℤ product ℕ ℕ, ∀ a → ∈ $0 product ℕ ℕ ∈ orderedPair $0 $0 ~_ℤ) () 0 1.0
+      prove reflexiveRelation ~_ℤ product ℕ ℕ 0e7b7aa3db1874eba1c71f505ecf264da231dc7063f23f956ab3ffaf812cc0ae () (~_ℤ, product ℕ ℕ) 1.1.0
+    }
   }
   subproof (Symmetric) {
     take a {
@@ -406,7 +409,10 @@ conclusion equivalenceRelation ~_ℤ product ℕ ℕ
         }
       }
     }
-    prove symmetricRelation ~_ℤ product ℕ ℕ 09acb72df102e612614cdc16aeef07cbf439c5ca055c1df071fa0a8f4ccdcaf4 () (product ℕ ℕ, ~_ℤ) 2.0
+    elided eccd158cad860479a716f90b40ec248a805ef17bedd70a926baf3904863d2d01 {
+      prove ∧ relation ~_ℤ product ℕ ℕ ∀ a → ∈ $0 product ℕ ℕ ∀ b → ∈ $0 product ℕ ℕ → ∈ orderedPair $$0 $0 ~_ℤ ∈ orderedPair $0 $$0 ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation ~_ℤ product ℕ ℕ, ∀ a → ∈ $0 product ℕ ℕ ∀ b → ∈ $0 product ℕ ℕ → ∈ orderedPair $$0 $0 ~_ℤ ∈ orderedPair $0 $$0 ~_ℤ) () 0 2.0
+      prove symmetricRelation ~_ℤ product ℕ ℕ eccd158cad860479a716f90b40ec248a805ef17bedd70a926baf3904863d2d01 () (~_ℤ, product ℕ ℕ) 2.1.0
+    }
   }
   subproof (Transitive) {
     take a {
@@ -652,7 +658,10 @@ conclusion equivalenceRelation ~_ℤ product ℕ ℕ
         }
       }
     }
-    prove transitiveRelation ~_ℤ product ℕ ℕ d26cf74d7674a38fc658458585b11aae531a4be9159ca9cfdc8c14bd5eae58fc () (product ℕ ℕ, ~_ℤ) 3.0
+    elided 124edd7d89bd6b65ab31b0109d3ffdc8c3a0426fc15c32b718d490417693915d {
+      prove ∧ relation ~_ℤ product ℕ ℕ ∀ a → ∈ $0 product ℕ ℕ ∀ b → ∈ $0 product ℕ ℕ ∀ c → ∈ $0 product ℕ ℕ → ∧ ∈ orderedPair $$$0 $$0 ~_ℤ ∈ orderedPair $$0 $0 ~_ℤ ∈ orderedPair $$$0 $0 ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation ~_ℤ product ℕ ℕ, ∀ a → ∈ $0 product ℕ ℕ ∀ b → ∈ $0 product ℕ ℕ ∀ c → ∈ $0 product ℕ ℕ → ∧ ∈ orderedPair $$$0 $$0 ~_ℤ ∈ orderedPair $$0 $0 ~_ℤ ∈ orderedPair $$$0 $0 ~_ℤ) () 0 3.0
+      prove transitiveRelation ~_ℤ product ℕ ℕ 124edd7d89bd6b65ab31b0109d3ffdc8c3a0426fc15c32b718d490417693915d () (~_ℤ, product ℕ ℕ) 3.1.0
+    }
   }
   elided 1e51ab5b58ae08ce5d2499d681d198d5c03e9f381f3241c2c9f8e9147a1e791c {
     prove ∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation ~_ℤ product ℕ ℕ, reflexiveRelation ~_ℤ product ℕ ℕ) () 0 1

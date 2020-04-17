@@ -81,7 +81,10 @@ conclusion ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ �
         }
       }
     }
-    prove injectiveFunction ⍳_ℤ ℕ ℤ c2afafe0e25ec2cbcc5e858cda4206b5eb6c7297eac08a5746e0c6a3971f1c71 () (ℕ, ⍳_ℤ, ℤ) 3.0
+    elided ce18716db14480f033671b1e6344a6a9e7ba52fa794c2424f641247501f0c0e6 {
+      prove ∧ function ⍳_ℤ ℕ ℤ ∀ x → ∈ $0 ℕ ∀ y → ∈ $0 ℕ → = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function ⍳_ℤ ℕ ℤ, ∀ x → ∈ $0 ℕ ∀ y → ∈ $0 ℕ → = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 = $$0 $0) () 1 3.0
+      prove injectiveFunction ⍳_ℤ ℕ ℤ ce18716db14480f033671b1e6344a6a9e7ba52fa794c2424f641247501f0c0e6 () (⍳_ℤ, ℕ, ℤ) 3.1.0
+    }
   }
   elided bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d {
     prove ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function ⍳_ℤ ℕ ℤ, injectiveFunction ⍳_ℤ ℕ ℤ) () 1 3

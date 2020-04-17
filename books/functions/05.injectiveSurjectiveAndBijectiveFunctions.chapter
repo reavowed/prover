@@ -16,9 +16,9 @@ premise ∈ a_2 A
 conclusion ↔ = apply f a_1 apply f a_2 = a_1 a_2
 {
   assume = apply f a_1 apply f a_2 {
-    elided 525b4ace6543f96748a3911c8783983fce6a0628c1947bd6fb63e8b624e9cfc5 {
-      prove ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0 525b4ace6543f96748a3911c8783983fce6a0628c1947bd6fb63e8b624e9cfc5 () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove → ∈ a_1 A ∀ y → ∈ $0 A → = apply f a_1 apply f $0 = a_1 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0) (a_1) 0.0.0
+    elided 9c7df910e1c6a5126122a94b46e895d184330b2ab6f83695d75884e50897695a {
+      prove ∧ function f A B ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0 9c7df910e1c6a5126122a94b46e895d184330b2ab6f83695d75884e50897695a () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove → ∈ a_1 A ∀ y → ∈ $0 A → = apply f a_1 apply f $0 = a_1 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0) (a_1) 0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
       prove ∀ y → ∈ $0 A → = apply f a_1 apply f $0 = a_1 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a_1 A, ∀ y → ∈ $0 A → = apply f a_1 apply f $0 = a_1 $0) () 0.0.1 p1
       prove → ∈ a_2 A → = apply f a_1 apply f a_2 = a_1 a_2 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A → = apply f a_1 apply f $0 = a_1 $0) (a_2) 0.0.2
       prove → = apply f a_1 apply f a_2 = a_1 a_2 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a_2 A, → = apply f a_1 apply f a_2 = a_1 a_2) () 0.0.3 p2
@@ -46,7 +46,10 @@ conclusion ∧ function f A image f surjectiveFunction f A image f
       }
     }
   }
-  prove surjectiveFunction f A image f 7c202e0e261248e7fe3c97a6699d4a6ec9234110498e3dc481784b41e4aa5767 () (image f, A, f) 1
+  elided 54608951867be5b7f099e3fabce63846fd109fc118a13f1b7c322015fd65fd76 {
+    prove ∧ function f A image f ∀ b → ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f A image f, ∀ b → ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 0 1
+    prove surjectiveFunction f A image f 54608951867be5b7f099e3fabce63846fd109fc118a13f1b7c322015fd65fd76 () (f, A, image f) 2.0
+  }
   prove ∧ function f A image f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f A image f, surjectiveFunction f A image f) () 0 2
 }
 
@@ -55,17 +58,22 @@ premise ∧ function f A B injectiveFunction f A B
 conclusion ∧ function f A image f bijectiveFunction f A image f
 {
   prove function f A image f 1ca520de2b3109525e7f28033acacb944c84cffc60fef4c0aa2e69140860969d () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-  elided c2afafe0e25ec2cbcc5e858cda4206b5eb6c7297eac08a5746e0c6a3971f1c71 {
-    prove ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0 525b4ace6543f96748a3911c8783983fce6a0628c1947bd6fb63e8b624e9cfc5 () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-    prove injectiveFunction f A image f c2afafe0e25ec2cbcc5e858cda4206b5eb6c7297eac08a5746e0c6a3971f1c71 () (A, f, image f) 1.0
+  elided ce18716db14480f033671b1e6344a6a9e7ba52fa794c2424f641247501f0c0e6 {
+    elided 9c7df910e1c6a5126122a94b46e895d184330b2ab6f83695d75884e50897695a {
+      prove ∧ function f A B ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0 9c7df910e1c6a5126122a94b46e895d184330b2ab6f83695d75884e50897695a () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f A B, ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0) () 1.0.0
+    }
+    prove ∧ function f A image f ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f A image f, ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0) () 0 1.0
+    prove injectiveFunction f A image f ce18716db14480f033671b1e6344a6a9e7ba52fa794c2424f641247501f0c0e6 () (f, A, image f) 1.1
   }
   elided ab3fc9ebc41d3de64a82d88963f2ed29020ce07b0a1993dfab2d3c73ecd4055b {
     prove ∧ function f A image f surjectiveFunction f A image f ab3fc9ebc41d3de64a82d88963f2ed29020ce07b0a1993dfab2d3c73ecd4055b () (f, A, image f) 0
     prove surjectiveFunction f A image f 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f A image f, surjectiveFunction f A image f) () 2.0
   }
-  elided 9ea96c5162cbc7a17da30c25cccfd1de28bfa6e45672f2eb2f0a0d1b5b37d00a {
+  elided 01dba05f5c50826a39c061ae2f6f2ffe08f8e09ea9a714fb509e0ce88d1801c2 {
     prove ∧ injectiveFunction f A image f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (injectiveFunction f A image f, surjectiveFunction f A image f) () 1 2
-    prove bijectiveFunction f A image f 9ea96c5162cbc7a17da30c25cccfd1de28bfa6e45672f2eb2f0a0d1b5b37d00a () (f, A, image f) 3.0
+    prove ∧ function f A image f ∧ injectiveFunction f A image f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f A image f, ∧ injectiveFunction f A image f surjectiveFunction f A image f) () 0 3.0
+    prove bijectiveFunction f A image f 01dba05f5c50826a39c061ae2f6f2ffe08f8e09ea9a714fb509e0ce88d1801c2 () (f, A, image f) 3.1
   }
   prove ∧ function f A image f bijectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f A image f, bijectiveFunction f A image f) () 0 3
 }
@@ -95,10 +103,10 @@ conclusion ∃! g ∧ ∧ function $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 
       }
       take b {
         assume ∈ $0 B {
-          elided 890a0ae74f1fa1dad2ca612d964fb243c3b5b272c9ad0dd471accd86c70958f0 {
-            prove ∧ injectiveFunction f A B surjectiveFunction f A B 890a0ae74f1fa1dad2ca612d964fb243c3b5b272c9ad0dd471accd86c70958f0 () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            prove ∀ b → ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0 2a0a23b0902d3a71076ed73f9244ab8e48f3a2b8d6f04612378ba59ca499b1a1 () (f, A, B) 0.0.2.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            prove → ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 B ∃ a ∧ ∈ $0 A = $$$$0 apply f $0) ($0) 0.0.2.0.0.1
+          elided 25e01d4d0e89820e695ab9d79d3842b1d6efb672412c3343f68147b53bd5733a {
+            prove ∧ function f A B ∧ injectiveFunction f A B surjectiveFunction f A B 25e01d4d0e89820e695ab9d79d3842b1d6efb672412c3343f68147b53bd5733a () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∧ function f A B ∀ b → ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0 8ac1f558075ba74c57d1774ba938ef31cf283c4d51a273b76356e49d186f77ad () (f, A, B) 0.0.2.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove → ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 B ∃ a ∧ ∈ $0 A = $$$$0 apply f $0) ($0) 0.0.2.0.0.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove ∃ a ∧ ∈ $0 A = $$0 apply f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 B, ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 0.0.2.0.0.2 0.0.2.0a
           }
           let a ∧ ∈ $0 A = $$0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 A = $0 apply f $$$0, ∃! a ∈ orderedPair $$0 $0 $$$0) () {
@@ -143,10 +151,10 @@ conclusion ∃! g ∧ ∧ function $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 
                     }
                     prove = apply f $$$0 $$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$$$$0, apply f $$$0) 0.0.2.0.1.2.0.1.0.5
                     prove = apply f $$$0 apply f $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply f $$$0 $$$$$$$0) ($$$$$0, apply f $$$$0) 0.0.2.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.0.2.0.1.2.0.1.0.7
-                    elided 890a0ae74f1fa1dad2ca612d964fb243c3b5b272c9ad0dd471accd86c70958f0 {
-                      prove ∧ injectiveFunction f A B surjectiveFunction f A B 890a0ae74f1fa1dad2ca612d964fb243c3b5b272c9ad0dd471accd86c70958f0 () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0 525b4ace6543f96748a3911c8783983fce6a0628c1947bd6fb63e8b624e9cfc5 () (f, A, B) 0.0.2.0.1.2.0.1.0.9.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                      prove → ∈ $$$0 A ∀ y → ∈ $0 A → = apply f $$$$0 apply f $0 = $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 A ∀ y → ∈ $0 A → = apply f $$$$$$$$0 apply f $0 = $$$$$$$$0 $0) ($$$0) 0.0.2.0.1.2.0.1.0.9.1
+                    elided 25e01d4d0e89820e695ab9d79d3842b1d6efb672412c3343f68147b53bd5733a {
+                      prove ∧ function f A B ∧ injectiveFunction f A B surjectiveFunction f A B 25e01d4d0e89820e695ab9d79d3842b1d6efb672412c3343f68147b53bd5733a () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∧ function f A B ∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0 9c7df910e1c6a5126122a94b46e895d184330b2ab6f83695d75884e50897695a () (f, A, B) 0.0.2.0.1.2.0.1.0.9.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove → ∈ $$$0 A ∀ y → ∈ $0 A → = apply f $$$$0 apply f $0 = $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 A ∀ y → ∈ $0 A → = apply f $$$$$$$$0 apply f $0 = $$$$$$$$0 $0) ($$$0) 0.0.2.0.1.2.0.1.0.9.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                       prove ∀ y → ∈ $0 A → = apply f $$$$0 apply f $0 = $$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∀ y → ∈ $0 A → = apply f $$$$0 apply f $0 = $$$$0 $0) () 0.0.2.0.1.2.0.1.0.9.2 0.0.2.0.1.2.0.1.0.6
                       prove → ∈ $$$$0 A → = apply f $$$0 apply f $$$$0 = $$$0 $$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 A → = apply f $$$0 apply f $$$$$$$0 = $$$0 $$$$$$$0) ($$$$0) 0.0.2.0.1.2.0.1.0.9.3
                       prove → = apply f $$$0 apply f $$$$0 = $$$0 $$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 A, → = apply f $$$0 apply f $$$$0 = $$$0 $$$$0) () 0.0.2.0.1.2.0.1.0.9.4 0.0.2.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
@@ -298,7 +306,10 @@ conclusion ∃! g ∧ ∧ function $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 
           }
         }
       }
-      prove injectiveFunction $0 B A c2afafe0e25ec2cbcc5e858cda4206b5eb6c7297eac08a5746e0c6a3971f1c71 () (B, $0, A) 0.3.0
+      elided ce18716db14480f033671b1e6344a6a9e7ba52fa794c2424f641247501f0c0e6 {
+        prove ∧ function $0 B A ∀ x → ∈ $0 B ∀ y → ∈ $0 B → = apply $$$0 $$0 apply $$$0 $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 B A, ∀ x → ∈ $0 B ∀ y → ∈ $0 B → = apply $$$0 $$0 apply $$$0 $0 = $$0 $0) () 0.0 0.3.0
+        prove injectiveFunction $0 B A ce18716db14480f033671b1e6344a6a9e7ba52fa794c2424f641247501f0c0e6 () ($0, B, A) 0.3.1.0
+      }
       take a {
         assume ∈ $0 A {
           prove ∈ apply f $0 B 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (f, A, B, $0) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.3.2.0a
@@ -319,10 +330,14 @@ conclusion ∃! g ∧ ∧ function $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 
           }
         }
       }
-      prove surjectiveFunction $0 B A 7c202e0e261248e7fe3c97a6699d4a6ec9234110498e3dc481784b41e4aa5767 () (A, B, $0) 0.3.2
-      elided 9ea96c5162cbc7a17da30c25cccfd1de28bfa6e45672f2eb2f0a0d1b5b37d00a {
+      elided 54608951867be5b7f099e3fabce63846fd109fc118a13f1b7c322015fd65fd76 {
+        prove ∧ function $0 B A ∀ b → ∈ $0 A ∃ a ∧ ∈ $0 B = $$0 apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 B A, ∀ b → ∈ $0 A ∃ a ∧ ∈ $0 B = $$0 apply $$$0 $0) () 0.0 0.3.2
+        prove surjectiveFunction $0 B A 54608951867be5b7f099e3fabce63846fd109fc118a13f1b7c322015fd65fd76 () ($0, B, A) 0.3.3.0
+      }
+      elided 01dba05f5c50826a39c061ae2f6f2ffe08f8e09ea9a714fb509e0ce88d1801c2 {
         prove ∧ injectiveFunction $0 B A surjectiveFunction $0 B A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (injectiveFunction $0 B A, surjectiveFunction $0 B A) () 0.3.1 0.3.3
-        prove bijectiveFunction $0 B A 9ea96c5162cbc7a17da30c25cccfd1de28bfa6e45672f2eb2f0a0d1b5b37d00a () ($0, B, A) 0.3.4.0
+        prove ∧ function $0 B A ∧ injectiveFunction $0 B A surjectiveFunction $0 B A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 B A, ∧ injectiveFunction $0 B A surjectiveFunction $0 B A) () 0.0 0.3.4.0
+        prove bijectiveFunction $0 B A 01dba05f5c50826a39c061ae2f6f2ffe08f8e09ea9a714fb509e0ce88d1801c2 () ($0, B, A) 0.3.4.1
       }
     }
     subproof (Uniqueness) {

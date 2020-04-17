@@ -763,22 +763,23 @@ conclusion ∃! c ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 
               }
             }
             elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
-              prove ⊆ $$$0 ℤ 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a (∧ ∈ orderedPair $$$$0 a |ℤ ∈ orderedPair $$$$0 b |ℤ) ($$$0, ℤ) 0a
-              elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
-                prove ∀ x → ∈ $0 $$$$0 ∈ $0 ℤ f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () ($$$0, ℤ) 0.4.3.0.0.3.0
-                prove → ∈ $$0 $$$0 ∈ $$0 ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 $$$0 ∈ $$$$0 ℤ) ($$0) 0.4.3.0.0.3.1.0
-                prove ∈ $$0 ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 $$$0, ∈ $$0 ℤ) () 0.4.3.0.0.3.1.1 0.4a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+              elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+                prove ∀ y ↔ ∈ $0 $$$$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 a |ℤ ∈ orderedPair $0 b |ℤ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∧ ∈ orderedPair $$$$0 a |ℤ ∈ orderedPair $$$$0 b |ℤ) ($$$0, ℤ) 0a
+                prove ↔ ∈ $$0 $$$0 ∧ ∈ $$0 ℤ ∧ ∈ orderedPair $$0 a |ℤ ∈ orderedPair $$0 b |ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$0 $$$0 ∧ ∈ $$$$0 ℤ ∧ ∈ orderedPair $$$$0 a |ℤ ∈ orderedPair $$$$0 b |ℤ) ($$0) 0.4.3.0.0.3.0.0
+                prove → ∈ $$0 $$$0 ∧ ∈ $$0 ℤ ∧ ∈ orderedPair $$0 a |ℤ ∈ orderedPair $$0 b |ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $$0 $$$0, ∧ ∈ $$0 ℤ ∧ ∈ orderedPair $$0 a |ℤ ∈ orderedPair $$0 b |ℤ) () 0.4.3.0.0.3.0.1
+                prove ∧ ∈ $$0 ℤ ∧ ∈ orderedPair $$0 a |ℤ ∈ orderedPair $$0 b |ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 $$$0, ∧ ∈ $$0 ℤ ∧ ∈ orderedPair $$0 a |ℤ ∈ orderedPair $$0 b |ℤ) () 0.4.3.0.0.3.0.2 0.4a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                prove ∈ $$0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 ℤ, ∧ ∈ orderedPair $$0 a |ℤ ∈ orderedPair $$0 b |ℤ) () 0.4.3.0.0.3.0.3
               }
               prove ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair $0 $$0 ≤ℤ, ∈ orderedPair $$0 $0 ≤ℤ) () 0.4.3.0.0.1 0.4.3.0.0.2
               elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
                 prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
-                prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ d1cd115e49451183e6ece9205dc051456ac09661ba6cd9acef14582ee680a902 () (≤ℤ, ℤ) 0.4.3.0.0.3.3.0
-                prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 86c86ff7999dfe867abb69aac822635bedbd1528c6ca17470ad42323f4e44b42 () (≤ℤ, ℤ) 0.4.3.0.0.3.3.1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                prove → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$$$$0 $0 ≤ℤ ∈ orderedPair $0 $$$$$0 ≤ℤ = $$$$$0 $0) ($0) 0.4.3.0.0.3.3.2
-                prove ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℤ, ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0) () 0.4.3.0.0.3.3.3 0.4.3.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                prove → ∈ $$0 ℤ → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 ℤ → ∧ ∈ orderedPair $0 $$$$0 ≤ℤ ∈ orderedPair $$$$0 $0 ≤ℤ = $0 $$$$0) ($$0) 0.4.3.0.0.3.3.4
-                prove → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℤ, → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0) () 0.4.3.0.0.3.3.5 0.4.3.0.0.3.1
-                prove = $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ, = $0 $$0) () 0.4.3.0.0.3.3.6 0.4.3.0.0.3.2
+                prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ d1cd115e49451183e6ece9205dc051456ac09661ba6cd9acef14582ee680a902 () (≤ℤ, ℤ) 0.4.3.0.0.3.2.0
+                prove ∧ relation ≤ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 8a604cd0163f9a7b6f5806621ddde3051fed4b1ff55ec3d28d7edeab9174025c () (≤ℤ, ℤ) 0.4.3.0.0.3.2.1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                prove → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$$$$0 $0 ≤ℤ ∈ orderedPair $0 $$$$$0 ≤ℤ = $$$$$0 $0) ($0) 0.4.3.0.0.3.2.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                prove ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℤ, ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0) () 0.4.3.0.0.3.2.3 0.4.3.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                prove → ∈ $$0 ℤ → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 ℤ → ∧ ∈ orderedPair $0 $$$$0 ≤ℤ ∈ orderedPair $$$$0 $0 ≤ℤ = $0 $$$$0) ($$0) 0.4.3.0.0.3.2.4
+                prove → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℤ, → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0) () 0.4.3.0.0.3.2.5 0.4.3.0.0.3.0
+                prove = $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ, = $0 $$0) () 0.4.3.0.0.3.2.6 0.4.3.0.0.3.1
               }
             }
           }
@@ -1236,8 +1237,8 @@ conclusion ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = a apply +ℤ orderedP
                       prove ∈ apply ⍳_ℤ 0ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0ℕ) 1.0.0.0.0.0.4.0.2.7.0
                       elided 6578ec30209db85378efd09cbf2575bb3058f5095838da843c42f6c7a10dcab9 {
                         prove reflexiveRelation ≤ℤ ℤ 6578ec30209db85378efd09cbf2575bb3058f5095838da843c42f6c7a10dcab9 () ()
-                        prove ∀ a → ∈ $0 ℤ ∈ orderedPair $0 $0 ≤ℤ 6908755e7b9f9be1cc79793d486d2f8322b14b89d88bd2a34e407b675465508e () (≤ℤ, ℤ) 1.0.0.0.0.0.4.0.2.7.2.0
-                        prove → ∈ apply ⍳_ℤ 0ℕ ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ ≤ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$0 ℤ ∈ orderedPair $$$$$0 $$$$$0 ≤ℤ) (apply ⍳_ℤ 0ℕ) 1.0.0.0.0.0.4.0.2.7.2.1
+                        prove ∧ relation ≤ℤ ℤ ∀ a → ∈ $0 ℤ ∈ orderedPair $0 $0 ≤ℤ ea96c6630b83679384eab305be09d5bc01e7245212a3f591000ad5078837e524 () (≤ℤ, ℤ) 1.0.0.0.0.0.4.0.2.7.2.0
+                        prove → ∈ apply ⍳_ℤ 0ℕ ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ ≤ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$0 ℤ ∈ orderedPair $$$$$0 $$$$$0 ≤ℤ) (apply ⍳_ℤ 0ℕ) 1.0.0.0.0.0.4.0.2.7.2.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                         prove ∈ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ ≤ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ⍳_ℤ 0ℕ ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ ≤ℤ) () 1.0.0.0.0.0.4.0.2.7.2.2 1.0.0.0.0.0.4.0.2.7.1
                       }
                     }
@@ -1400,8 +1401,8 @@ conclusion ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = a apply +ℤ orderedP
                   elided f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 {
                     prove strictTotalOrder <ℤ ℤ f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 () ()
                     prove ∧ ∧ ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ transitiveRelation <ℤ ℤ semicompleteRelation <ℤ ℤ 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (<ℤ, ℤ) 4.0.0.0.0.0.0.0.2.0
-                    prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ 6596120a8125c4b2314a404d884610db765932f20e9814c935427e19a5e94bf4 () (<ℤ, ℤ) 4.0.0.0.0.0.0.0.2.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                    prove → ∈ apply ⍳_ℤ 0ℕ ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$$$0 $0 <ℤ ∨ = $$$$0 $0 ∈ orderedPair $0 $$$$0 <ℤ) (apply ⍳_ℤ 0ℕ) 4.0.0.0.0.0.0.0.2.2
+                    prove ∧ relation <ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ e1b8f9158b33b38b0e785bd663d6131dbb4609a6281d4e0cf66c856d0fd7764d () (<ℤ, ℤ) 4.0.0.0.0.0.0.0.2.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove → ∈ apply ⍳_ℤ 0ℕ ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$$$0 $0 <ℤ ∨ = $$$$0 $0 ∈ orderedPair $0 $$$$0 <ℤ) (apply ⍳_ℤ 0ℕ) 4.0.0.0.0.0.0.0.2.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                     prove ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ⍳_ℤ 0ℕ ℤ, ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ) () 4.0.0.0.0.0.0.0.2.3 4.0.0.0.0.0.0.0.1
                     prove → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $$$0 ∈ orderedPair $$$0 apply ⍳_ℤ 0ℕ <ℤ) ($0) 4.0.0.0.0.0.0.0.2.4
                     prove ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℤ, ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ) () 4.0.0.0.0.0.0.0.2.5 4.0.0.0.0a
@@ -3606,9 +3607,9 @@ conclusion ↔ ∈ orderedPair apply ⍳_ℤ p apply ×ℤ orderedPair a b |ℤ 
               }
               elided 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 {
                 prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-                prove ∧ injectiveFunction ⍳_ℤ ℕ ℤ^≥ surjectiveFunction ⍳_ℤ ℕ ℤ^≥ 890a0ae74f1fa1dad2ca612d964fb243c3b5b272c9ad0dd471accd86c70958f0 () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                prove ∀ b → ∈ $0 ℤ^≥ ∃ z' ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 2a0a23b0902d3a71076ed73f9244ab8e48f3a2b8d6f04612378ba59ca499b1a1 () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                prove → ∈ $$0 ℤ^≥ ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℤ^≥ ∃ z' ∧ ∈ $0 ℕ = $$$$0 apply ⍳_ℤ $0) ($$0) 0.0.0.0.0.0.1.2
+                prove ∧ function ⍳_ℤ ℕ ℤ^≥ ∧ injectiveFunction ⍳_ℤ ℕ ℤ^≥ surjectiveFunction ⍳_ℤ ℕ ℤ^≥ 25e01d4d0e89820e695ab9d79d3842b1d6efb672412c3343f68147b53bd5733a () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                prove ∧ function ⍳_ℤ ℕ ℤ^≥ ∀ b → ∈ $0 ℤ^≥ ∃ z' ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 8ac1f558075ba74c57d1774ba938ef31cf283c4d51a273b76356e49d186f77ad () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                prove → ∈ $$0 ℤ^≥ ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℤ^≥ ∃ z' ∧ ∈ $0 ℕ = $$$$0 apply ⍳_ℤ $0) ($$0) 0.0.0.0.0.0.1.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                 prove ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℤ^≥, ∃ a ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0) () 0.0.0.0.0.0.1.3 0.0.0.0.0.0.0
               }
             }
@@ -3625,9 +3626,9 @@ conclusion ↔ ∈ orderedPair apply ⍳_ℤ p apply ×ℤ orderedPair a b |ℤ 
                 }
                 elided 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 {
                   prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-                  prove ∧ injectiveFunction ⍳_ℤ ℕ ℤ^≥ surjectiveFunction ⍳_ℤ ℕ ℤ^≥ 890a0ae74f1fa1dad2ca612d964fb243c3b5b272c9ad0dd471accd86c70958f0 () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.1.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                  prove ∀ b → ∈ $0 ℤ^≥ ∃ y' ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 2a0a23b0902d3a71076ed73f9244ab8e48f3a2b8d6f04612378ba59ca499b1a1 () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                  prove → ∈ $$0 ℤ^≥ ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 ℤ^≥ ∃ y' ∧ ∈ $0 ℕ = $$$$$0 apply ⍳_ℤ $0) ($$0) 0.0.0.0.0.1.0.1.2
+                  prove ∧ function ⍳_ℤ ℕ ℤ^≥ ∧ injectiveFunction ⍳_ℤ ℕ ℤ^≥ surjectiveFunction ⍳_ℤ ℕ ℤ^≥ 25e01d4d0e89820e695ab9d79d3842b1d6efb672412c3343f68147b53bd5733a () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.1.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                  prove ∧ function ⍳_ℤ ℕ ℤ^≥ ∀ b → ∈ $0 ℤ^≥ ∃ y' ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 8ac1f558075ba74c57d1774ba938ef31cf283c4d51a273b76356e49d186f77ad () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                  prove → ∈ $$0 ℤ^≥ ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 ℤ^≥ ∃ y' ∧ ∈ $0 ℕ = $$$$$0 apply ⍳_ℤ $0) ($$0) 0.0.0.0.0.1.0.1.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                   prove ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℤ^≥, ∃ a ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0) () 0.0.0.0.0.1.0.1.3 0.0.0.0.0.1.0.0
                 }
               }

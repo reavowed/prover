@@ -83,18 +83,16 @@ conclusion ∃! ~ ∧ relation $0 ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ^
                                 }
                               }
                               elided f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 {
-                                elided 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f {
-                                  prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-                                  prove ∈ apply ⍳_ℤ 0ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0ℕ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.0
-                                }
+                                prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+                                prove ∈ apply ⍳_ℤ 0ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0ℕ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0
                                 elided f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 {
                                   prove strictTotalOrder <ℤ ℤ f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 () ()
-                                  prove ∧ ∧ ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ transitiveRelation <ℤ ℤ semicompleteRelation <ℤ ℤ 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (<ℤ, ℤ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1.0
-                                  prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ 6596120a8125c4b2314a404d884610db765932f20e9814c935427e19a5e94bf4 () (<ℤ, ℤ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                                  prove → ∈ apply ⍳_ℤ 0ℕ ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$$$$$$$0 $0 <ℤ ∨ = $$$$$$$$0 $0 ∈ orderedPair $0 $$$$$$$$0 <ℤ) (apply ⍳_ℤ 0ℕ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1.2
-                                  prove ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ⍳_ℤ 0ℕ ℤ, ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1.3 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0
-                                  prove → ∈ $$$$$$0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $$$$$$0 ∈ orderedPair $$$$$$0 apply ⍳_ℤ 0ℕ <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$$0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $$$$$$$0 ∈ orderedPair $$$$$$$0 apply ⍳_ℤ 0ℕ <ℤ) ($$$$$$0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1.4
-                                  prove ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $$$$$$0 ∈ orderedPair $$$$$$0 apply ⍳_ℤ 0ℕ <ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$$$0 ℤ, ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $$$$$$0 ∈ orderedPair $$$$$$0 apply ⍳_ℤ 0ℕ <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1.5 1.0.0a
+                                  prove ∧ ∧ ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ transitiveRelation <ℤ ℤ semicompleteRelation <ℤ ℤ 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (<ℤ, ℤ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.0
+                                  prove ∧ relation <ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ e1b8f9158b33b38b0e785bd663d6131dbb4609a6281d4e0cf66c856d0fd7764d () (<ℤ, ℤ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                                  prove → ∈ apply ⍳_ℤ 0ℕ ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$$$$$$$0 $0 <ℤ ∨ = $$$$$$$$0 $0 ∈ orderedPair $0 $$$$$$$$0 <ℤ) (apply ⍳_ℤ 0ℕ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                                  prove ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ⍳_ℤ 0ℕ ℤ, ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.3 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1
+                                  prove → ∈ $$$$$$0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $$$$$$0 ∈ orderedPair $$$$$$0 apply ⍳_ℤ 0ℕ <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$$0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $$$$$$$0 ∈ orderedPair $$$$$$$0 apply ⍳_ℤ 0ℕ <ℤ) ($$$$$$0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.4
+                                  prove ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $$$$$$0 ∈ orderedPair $$$$$$0 apply ⍳_ℤ 0ℕ <ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$$$0 ℤ, ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $$$$$$0 ∈ orderedPair $$$$$$0 apply ⍳_ℤ 0ℕ <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.5 1.0.0a
                                 }
                               }
                               assume ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$0 <ℤ {
@@ -1020,8 +1018,8 @@ conclusion strictTotalOrder <ℚ ℚ
                         elided f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 {
                           prove strictTotalOrder <ℤ ℤ f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 () ()
                           prove ∧ ∧ ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ transitiveRelation <ℤ ℤ semicompleteRelation <ℤ ℤ 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (<ℤ, ℤ) 1.0.0.0.0.0.1.0.1.0.3.4.0
-                          prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∈ orderedPair $$0 $0 <ℤ ¬ ∈ orderedPair $0 $$0 <ℤ f2b5332e6fcb25bc466d15f27e25b5f29d17bc1f7dd5eca57631c85ed3e5fea3 () (<ℤ, ℤ) 1.0.0.0.0.0.1.0.1.0.3.4.1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                          prove → ∈ apply ×ℤ orderedPair $0 $$$$0 ℤ ∀ b → ∈ $0 ℤ → ∈ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 <ℤ ¬ ∈ orderedPair $0 apply ×ℤ orderedPair $$0 $$$$$0 <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 ℤ ∀ b → ∈ $0 ℤ → ∈ orderedPair $$$$$$$$0 $0 <ℤ ¬ ∈ orderedPair $0 $$$$$$$$0 <ℤ) (apply ×ℤ orderedPair $0 $$$$0) 1.0.0.0.0.0.1.0.1.0.3.4.2
+                          prove ∧ relation <ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∈ orderedPair $$0 $0 <ℤ ¬ ∈ orderedPair $0 $$0 <ℤ 558881dd55c0cd9e2a9e52af1d9006ebb3f17785151f81f7921dc294fb3bcd05 () (<ℤ, ℤ) 1.0.0.0.0.0.1.0.1.0.3.4.1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                          prove → ∈ apply ×ℤ orderedPair $0 $$$$0 ℤ ∀ b → ∈ $0 ℤ → ∈ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 <ℤ ¬ ∈ orderedPair $0 apply ×ℤ orderedPair $$0 $$$$$0 <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 ℤ ∀ b → ∈ $0 ℤ → ∈ orderedPair $$$$$$$$0 $0 <ℤ ¬ ∈ orderedPair $0 $$$$$$$$0 <ℤ) (apply ×ℤ orderedPair $0 $$$$0) 1.0.0.0.0.0.1.0.1.0.3.4.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                           prove ∀ b → ∈ $0 ℤ → ∈ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 <ℤ ¬ ∈ orderedPair $0 apply ×ℤ orderedPair $$0 $$$$$0 <ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ×ℤ orderedPair $0 $$$$0 ℤ, ∀ b → ∈ $0 ℤ → ∈ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 <ℤ ¬ ∈ orderedPair $0 apply ×ℤ orderedPair $$0 $$$$$0 <ℤ) () 1.0.0.0.0.0.1.0.1.0.3.4.3 1.0.0.0.0.0.1.0.1.0.3.1
                           prove → ∈ apply ×ℤ orderedPair $$0 $$$0 ℤ → ∈ orderedPair apply ×ℤ orderedPair $0 $$$$0 apply ×ℤ orderedPair $$0 $$$0 <ℤ ¬ ∈ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 ℤ → ∈ orderedPair apply ×ℤ orderedPair $0 $$$$0 $$$$$$$0 <ℤ ¬ ∈ orderedPair $$$$$$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ) (apply ×ℤ orderedPair $$0 $$$0) 1.0.0.0.0.0.1.0.1.0.3.4.4
                           prove → ∈ orderedPair apply ×ℤ orderedPair $0 $$$$0 apply ×ℤ orderedPair $$0 $$$0 <ℤ ¬ ∈ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ×ℤ orderedPair $$0 $$$0 ℤ, → ∈ orderedPair apply ×ℤ orderedPair $0 $$$$0 apply ×ℤ orderedPair $$0 $$$0 <ℤ ¬ ∈ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ) () 1.0.0.0.0.0.1.0.1.0.3.4.5 1.0.0.0.0.0.1.0.1.0.3.3
@@ -1060,7 +1058,10 @@ conclusion strictTotalOrder <ℚ ℚ
         }
       }
     }
-    prove asymmetricRelation <ℚ ℚ a8e1219757b81f608e2c8e04f71b3c54cbcbdcba07e94dcacc79933c4a09e3bb () (ℚ, <ℚ) 1.0
+    elided e352b6dda4cbc30faed381f2f815f3826ccab3efc4b05600b1b7877d37e020dc {
+      prove ∧ relation <ℚ ℚ ∀ a → ∈ $0 ℚ ∀ b → ∈ $0 ℚ → ∈ orderedPair $$0 $0 <ℚ ¬ ∈ orderedPair $0 $$0 <ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation <ℚ ℚ, ∀ a → ∈ $0 ℚ ∀ b → ∈ $0 ℚ → ∈ orderedPair $$0 $0 <ℚ ¬ ∈ orderedPair $0 $$0 <ℚ) () 0 1.0
+      prove asymmetricRelation <ℚ ℚ e352b6dda4cbc30faed381f2f815f3826ccab3efc4b05600b1b7877d37e020dc () (<ℚ, ℚ) 1.1.0
+    }
   }
   subproof (Transitive) {
     take a {
@@ -1381,7 +1382,10 @@ conclusion strictTotalOrder <ℚ ℚ
         }
       }
     }
-    prove transitiveRelation <ℚ ℚ d26cf74d7674a38fc658458585b11aae531a4be9159ca9cfdc8c14bd5eae58fc () (ℚ, <ℚ) 2.0
+    elided 124edd7d89bd6b65ab31b0109d3ffdc8c3a0426fc15c32b718d490417693915d {
+      prove ∧ relation <ℚ ℚ ∀ a → ∈ $0 ℚ ∀ b → ∈ $0 ℚ ∀ c → ∈ $0 ℚ → ∧ ∈ orderedPair $$$0 $$0 <ℚ ∈ orderedPair $$0 $0 <ℚ ∈ orderedPair $$$0 $0 <ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation <ℚ ℚ, ∀ a → ∈ $0 ℚ ∀ b → ∈ $0 ℚ ∀ c → ∈ $0 ℚ → ∧ ∈ orderedPair $$$0 $$0 <ℚ ∈ orderedPair $$0 $0 <ℚ ∈ orderedPair $$$0 $0 <ℚ) () 0 2.0
+      prove transitiveRelation <ℚ ℚ 124edd7d89bd6b65ab31b0109d3ffdc8c3a0426fc15c32b718d490417693915d () (<ℚ, ℚ) 2.1.0
+    }
   }
   subproof (Semi-complete) {
     take a {
@@ -1414,8 +1418,8 @@ conclusion strictTotalOrder <ℚ ℚ
                       elided f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 {
                         prove strictTotalOrder <ℤ ℤ f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 () ()
                         prove ∧ ∧ ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ transitiveRelation <ℤ ℤ semicompleteRelation <ℤ ℤ 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (<ℤ, ℤ) 3.0.0.0.0.1.0.1.0.0.4.0
-                        prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ 6596120a8125c4b2314a404d884610db765932f20e9814c935427e19a5e94bf4 () (<ℤ, ℤ) 3.0.0.0.0.1.0.1.0.0.4.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                        prove → ∈ apply ×ℤ orderedPair $$$$0 $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $0 <ℤ ∨ = apply ×ℤ orderedPair $$$$$0 $$0 $0 ∈ orderedPair $0 apply ×ℤ orderedPair $$$$$0 $$0 <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$$$$$$$0 $0 <ℤ ∨ = $$$$$$$$0 $0 ∈ orderedPair $0 $$$$$$$$0 <ℤ) (apply ×ℤ orderedPair $$$$0 $0) 3.0.0.0.0.1.0.1.0.0.4.2
+                        prove ∧ relation <ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ e1b8f9158b33b38b0e785bd663d6131dbb4609a6281d4e0cf66c856d0fd7764d () (<ℤ, ℤ) 3.0.0.0.0.1.0.1.0.0.4.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                        prove → ∈ apply ×ℤ orderedPair $$$$0 $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $0 <ℤ ∨ = apply ×ℤ orderedPair $$$$$0 $$0 $0 ∈ orderedPair $0 apply ×ℤ orderedPair $$$$$0 $$0 <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$$$$$$$0 $0 <ℤ ∨ = $$$$$$$$0 $0 ∈ orderedPair $0 $$$$$$$$0 <ℤ) (apply ×ℤ orderedPair $$$$0 $0) 3.0.0.0.0.1.0.1.0.0.4.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                         prove ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $0 <ℤ ∨ = apply ×ℤ orderedPair $$$$$0 $$0 $0 ∈ orderedPair $0 apply ×ℤ orderedPair $$$$$0 $$0 <ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ×ℤ orderedPair $$$$0 $0 ℤ, ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $0 <ℤ ∨ = apply ×ℤ orderedPair $$$$$0 $$0 $0 ∈ orderedPair $0 apply ×ℤ orderedPair $$$$$0 $$0 <ℤ) () 3.0.0.0.0.1.0.1.0.0.4.3 3.0.0.0.0.1.0.1.0.0.1
                         prove → ∈ apply ×ℤ orderedPair $$$0 $$0 ℤ ∨ ∈ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 <ℤ ∨ = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 ∈ orderedPair apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$$0 $0 <ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 ℤ ∨ ∈ orderedPair apply ×ℤ orderedPair $$$$0 $0 $$$$$$$0 <ℤ ∨ = apply ×ℤ orderedPair $$$$0 $0 $$$$$$$0 ∈ orderedPair $$$$$$$0 apply ×ℤ orderedPair $$$$0 $0 <ℤ) (apply ×ℤ orderedPair $$$0 $$0) 3.0.0.0.0.1.0.1.0.0.4.4
                         prove ∨ ∈ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 <ℤ ∨ = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 ∈ orderedPair apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$$0 $0 <ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ×ℤ orderedPair $$$0 $$0 ℤ, ∨ ∈ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 <ℤ ∨ = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 ∈ orderedPair apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$$0 $0 <ℤ) () 3.0.0.0.0.1.0.1.0.0.4.5 3.0.0.0.0.1.0.1.0.0.3
@@ -1548,7 +1552,10 @@ conclusion strictTotalOrder <ℚ ℚ
         }
       }
     }
-    prove semicompleteRelation <ℚ ℚ 04924e63b487e6ad063d8faea98f4f85012a2e4775cbe7343827621ef7cb6354 () (ℚ, <ℚ) 3.0
+    elided 18b0c3ff616f4d2ab28da12021968bd4abe4a69dcb3ca5af140a6e6ba50a4679 {
+      prove ∧ relation <ℚ ℚ ∀ a → ∈ $0 ℚ ∀ b → ∈ $0 ℚ ∨ ∈ orderedPair $$0 $0 <ℚ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation <ℚ ℚ, ∀ a → ∈ $0 ℚ ∀ b → ∈ $0 ℚ ∨ ∈ orderedPair $$0 $0 <ℚ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℚ) () 0 3.0
+      prove semicompleteRelation <ℚ ℚ 18b0c3ff616f4d2ab28da12021968bd4abe4a69dcb3ca5af140a6e6ba50a4679 () (<ℚ, ℚ) 3.1.0
+    }
   }
   elided b3266dc481e1b3e83b5124f058e80789a3e7c1c96f5a0bc57a04e927e9456cd6 {
     prove ∧ relation <ℚ ℚ asymmetricRelation <ℚ ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation <ℚ ℚ, asymmetricRelation <ℚ ℚ) () 0 1
