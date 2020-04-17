@@ -5,6 +5,7 @@ import {DefinedExpression} from "../../../../models/Expression";
 import {ElidedStep, NamingStep as NamingStepModel, StepReference} from "../../../../models/Step";
 import DisplayContext from "../../../DisplayContext";
 import {HighlightableExpression} from "../../../ExpressionComponent";
+import HashParamsContext from "../../../HashParamsContext";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import {joinAsList} from "../../../helpers/reactFunctions";
 import ProofContext from "../ProofContext";
@@ -19,7 +20,10 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
   additionalReferences = additionalReferences || [];
   const context = useContext(ProofContext);
   const displayContext = useContext(DisplayContext);
-  const [showingProofCard, setShowingProofCard] = useState(false);
+  const hashParamsContext = useContext(HashParamsContext);
+  const containsHighlightedInference = assertionStep && _.intersection(_.map(assertionStep.inferencesUsed, "id"), hashParamsContext.inferencesToHighlight).length > 0;
+  const isHighlightedInference = hashParamsContext.inferencesToHighlight.includes(assertionStep?.inference?.id || assertionStep?.highlightedInference?.id);
+  const [showingProofCard, setShowingProofCard] = useState(containsHighlightedInference && !isHighlightedInference);
   const proofLineRef = useRef(null);
   const updateBoundVariable = (namingStepPath) => (newName) => {
     return context.fetchJsonForStepAndReplace(namingStepPath, "boundVariable", {method: "PUT", body: newName});
