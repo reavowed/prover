@@ -56,8 +56,8 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
       <EditableProperty label="Format" initialValue={serializedFormat} onSave={saveFormat} />
       <EditableProperty label="Attributes" initialValue={definition.attributes.join(" ")} onSave={saveAttributes} />
       {hasDisambiguator && <EditableProperty label="Disambiguator Adders" as="textarea" initialValue={definition.disambiguatorAdders.map(d => d.template.serializeNicely([["_"]]) + " " + d.disambiguator).join("\n")} onSave={saveDisambiguatorAdders} />}
-
-      {usages.length > 0 && <><hr/><Usages usages={usages}/></>}
+      {definition.constructionInference && <Usages.ForInference usages={usages} inferenceId={definition.constructionInference.id} title="Construction" />}
+      {definition.deconstructionInference && <Usages.ForInference usages={usages} inferenceId={definition.deconstructionInference.id} title="Deconstruction" />}
     </Page>
   </EntryContext.Provider>;
 }

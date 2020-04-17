@@ -23,7 +23,8 @@ export function StandalonePropertyDefinition({definition: definitionJson, defini
         <NavLinks previous={previous} next={next} />
         <h3>{definition.title.capitalize()}</h3>
         {definition.defaultTermName} is {definition.name} {definition.otherComponentTypes.length > 0 && formatHtml(definition.componentFormat.baseFormatString, s => replacePlaceholders(s, definition.otherComponentTypes.map(x => x.name)))} if <CopiableExpression expression={definition.definingStatement}/>.
-        {usages.length > 0 && <><hr/><Usages usages={usages}/></>}
+        <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.constructionInference.id} title="Construction" />
+        <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.deconstructionInference.id} title="Deconstruction" />
       </Page>
     </EntryContext.Provider>
   </DisplayContext.Provider>;

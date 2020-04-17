@@ -47,7 +47,8 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
         <EditableProperty label="Name" initialValue={definition.explicitName} onSave={saveName} />
         <EditableProperty label="Components" initialValue={definition.otherComponentTypes.map(x => x.name).join(" ")} onSave={saveComponents} />
         <EditableProperty label="Component Format" initialValue={serializedFormat} onSave={saveFormat} />
-        {usages.length > 0 && <><hr/><Usages usages={usages}/></>}
+        <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.constructionInference.id} title="Construction" />
+        <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.deconstructionInference.id} title="Deconstruction" />
       </Page>
     </EntryContext.Provider>
   </DisplayContext.Provider>;

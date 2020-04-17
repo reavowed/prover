@@ -131,16 +131,22 @@ trait BookModification {
     stepProvingContext.provingContext.entryContext.allInferences.find(_.id == inferenceId).map(_.summary).orBadRequest(s"Invalid inference $inferenceId")
   }
 
-  def getInferenceUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[LinkSummary])] = {
-    val inferenceIds = entry.inferences.map(_.id).toSet
+  def getInferenceUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[(LinkSummary, Set[String])])] = {
+    val allInferenceIds = entry.inferences.map(_.id).toSet
+    def getInferenceLinks(bookKey: String, chapterKey: String, entries: Seq[(ChapterEntry, String)]): Seq[(LinkSummary, Set[String])] = {
+      for {
+        (entry, key) <- entries
+        theorem <- entry.asOptionalInstanceOf[Theorem].toSeq
+        usedInferenceIds = theorem.referencedInferenceIds.intersect(allInferenceIds)
+        if usedInferenceIds.nonEmpty
+      } yield (LinkSummary(theorem.name, BookService.getEntryUrl(bookKey, chapterKey, key)), usedInferenceIds)
+    }
     for {
       (book, bookKey) <- bookService.getBooksWithKeys
       (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
-      theoremsWithKeys = BookService.getEntriesWithKeys(chapter)
-        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-        .filter(_._1.referencedInferenceIds.intersect(inferenceIds).nonEmpty)
-      if theoremsWithKeys.nonEmpty
-    } yield (book.title, chapter.title, theoremsWithKeys.map { case (theorem, key) => LinkSummary(theorem.name, BookService.getEntryUrl(bookKey, chapterKey, key) + "#inferencesToHighlight=" + entry.inferences.map(_.id).mkString(","))})
+      inferenceLinks = getInferenceLinks(bookKey, chapterKey, BookService.getEntriesWithKeys(chapter))
+      if inferenceLinks.nonEmpty
+    } yield (book.title, chapter.title, inferenceLinks)
   }
 
   def findUsage(entriesPotentiallyUsing: Seq[ChapterEntry], entriesPotentiallyBeingUsed: Seq[ChapterEntry]): Option[(ChapterEntry, ChapterEntry)] = {

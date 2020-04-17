@@ -24,7 +24,7 @@ export class Inference extends React.Component {
       <Monospace className="text-center mb-1">{inference.id}</Monospace>
       <InferenceSummary createPremiseElement={createPremiseElement} inference={inference}/>
       {children}
-      {usages.length > 0 && <><hr/><Usages usages={usages}/></>}
+      <Usages usages={usages}/>
     </Page>;
   }
 }
