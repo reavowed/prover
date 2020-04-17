@@ -45,7 +45,7 @@ object Statement {
       val baseStatement = DefinedStatement(term +: otherComponents, typeDefinition.statementDefinition)(Nil)
       properties.foldLeft(baseStatement) { (statement, property) =>
         val conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add properties to a type without a conjunction definition"))
-        val propertyStatement = DefinedStatement(term +: otherComponents, property.statementDefinition)(Nil)
+        val propertyStatement = DefinedStatement(term +: otherComponents, property.newStatementDefinition)(Nil)
         DefinedStatement(Seq(statement, propertyStatement), conjunctionDefinition)(Nil)
       }
     }

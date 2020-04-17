@@ -291,13 +291,15 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefininition.parentType).orBadRequest(s"Unknown type '${newPropertyDefininition.parentType}'")
         parentTermNames <- parentType.childTermNamesParser.parseFromString(newPropertyDefininition.parentComponents, "parent component types").recoverWithBadRequest
         definingStatement <- Statement.parser.parseFromString(newPropertyDefininition.definingStatement, "definition").recoverWithBadRequest
+        conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newPropertyDefinition = PropertyDefinitionOnType(
           symbol,
           parentType,
           defaultTermName,
           parentTermNames,
           name,
-          definition)
+          definingStatement,
+          conjunctionDefinition)
       } yield newPropertyDefinition
     }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }

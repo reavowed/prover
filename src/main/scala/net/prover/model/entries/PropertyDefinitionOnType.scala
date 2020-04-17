@@ -11,7 +11,8 @@ case class PropertyDefinitionOnType(
     defaultTermName: String,
     parentTermNames: Seq[String],
     explicitName: Option[String],
-    definingStatement: Statement)
+    definingStatement: Statement,
+    conjunctionDefinition: StatementDefinition)
   extends ChapterEntry.Standalone
 {
   override def name: String = explicitName.getOrElse(symbol)
@@ -22,16 +23,25 @@ case class PropertyDefinitionOnType(
   override def referencedDefinitions: Set[ChapterEntry] = definingStatement.referencedDefinitions.toType[ChapterEntry] + parentType
 
   def fullFormat: Format = Format.Explicit(s"$defaultTermName is $name ${parentType.componentFormat.originalValue}", symbol +: defaultTermName +: parentTermNames, requiresBrackets = false, requiresComponentBrackets = true)
-  val statementDefinition: StatementDefinition = StatementDefinition(
+  val oldStatementDefinition: StatementDefinition = StatementDefinition(
     qualifiedSymbol,
     Nil,
     TermComponent(defaultTermName, Nil) +: parentTermNames.map(ComponentType.TermComponent(_, Nil)),
-    explicitName.orElse(Some(symbol)),
+    Some(explicitName.getOrElse(symbol) + " OLD"),
     fullFormat,
     Some(definingStatement),
     None,
     Nil)
-  override val inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
+  val newStatementDefinition: StatementDefinition = StatementDefinition(
+    qualifiedSymbol,
+    Nil,
+    TermComponent(defaultTermName, Nil) +: parentTermNames.map(ComponentType.TermComponent(_, Nil)),
+    Some(explicitName.getOrElse(symbol)),
+    fullFormat,
+    Some(conjunctionDefinition(parentType.statementDefinition((defaultTermName +: parentTermNames).map(TermVariable(_, Nil)): _*), definingStatement)),
+    None,
+    Nil)
+  override val inferences: Seq[Inference.FromEntry] = oldStatementDefinition.inferences ++ newStatementDefinition.inferences
 
   override def serializedLines: Seq[String] = (Seq("property", symbol, "on", parentType.name, defaultTermName) ++ parentTermNames).mkString(" ") +:
     (explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
@@ -49,7 +59,8 @@ case class PropertyDefinitionOnType(
       defaultTermName,
       parentTermNames,
       explicitName,
-      definingStatement.replaceDefinition(oldDefinition, newDefinition))
+      definingStatement.replaceDefinition(oldDefinition, newDefinition),
+      conjunctionDefinition)
   }
 }
 
@@ -63,7 +74,8 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
       defaultTermName <- Parser.singleWord
       parentTermNames <- parentType.childTermNamesParser
       explicitName <- Parser.optional("name", Parser.allInParens)
-      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultTermName +: parentComponentTypes.ofType[TermComponent].map(_.name))).inParens)
-    } yield PropertyDefinitionOnType(symbol, parentType, defaultTermName, parentTermNames, explicitName, definingStatement)
+      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultTermName +: parentTermNames)).inParens)
+      conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create property definition without conjunction"))
+    } yield PropertyDefinitionOnType(symbol, parentType, defaultTermName, parentTermNames, explicitName, definingStatement, conjunctionDefinition)
   }
 }

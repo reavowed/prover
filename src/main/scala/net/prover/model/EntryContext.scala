@@ -68,7 +68,7 @@ object EntryContext {
   def getStatementDefinitionFromEntry(entry: ChapterEntry): Option[StatementDefinition] = entry match {
     case statementDefinition: StatementDefinition => Some(statementDefinition)
     case typeDefinition: TypeDefinition => Some(typeDefinition.statementDefinition)
-    case propertyDefinition: PropertyDefinitionOnType => Some(propertyDefinition.statementDefinition)
+    case propertyDefinition: PropertyDefinitionOnType => Some(propertyDefinition.newStatementDefinition)
     case standalonePropertyDefinition: StandalonePropertyDefinition => Some(standalonePropertyDefinition.statementDefinition)
     case _ => None
   }

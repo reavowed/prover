@@ -208,8 +208,8 @@ class PremiseFinderSpec extends Specification {
       val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Inject(Zero), $)))))
       val Relation = TypeDefinition("relation", "R", Seq("A"), Format.Explicit("on %1", "on A", true, false), None, BlankDefinition)
       val Irreflexive = PropertyDefinitionOnType("irreflexive", Relation, "R", Seq("A"), None, BlankDefinition, Conjunction)
-      val elementsRelatedByIrreflexiveNotEqual = Axiom("Elements Related by an Irreflexive Relation Are Not Equal", Seq(Irreflexive.statementDefinition(A, B), ElementOf(Pair(a, b), A)), Negation(Equals(a, b)))
-      val lessThanIsIrreflexive = Axiom("< Is Irreflexive", Nil, Irreflexive.statementDefinition(LessThan, Naturals))
+      val elementsRelatedByIrreflexiveNotEqual = Axiom("Elements Related by an Irreflexive Relation Are Not Equal", Seq(Irreflexive.oldStatementDefinition(A, B), ElementOf(Pair(a, b), A)), Negation(Equals(a, b)))
+      val lessThanIsIrreflexive = Axiom("< Is Irreflexive", Nil, Irreflexive.oldStatementDefinition(LessThan, Naturals))
       val injectedNaturalIsNatural = Axiom("Injected Natural Is Natural", Seq(ElementOf(a, Naturals)), ElementOf(Inject(a), Naturals))
 
       val entryContextWithDefinitions = defaultEntryContext

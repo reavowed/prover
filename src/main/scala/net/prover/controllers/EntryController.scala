@@ -178,7 +178,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
       modifyDefinitions(
         books,
         ((oldDefinition -> newDefinition) +: propertyDefinitions.map(p => p -> p.copy(parentType = newDefinition))).toMap,
-        ((oldDefinition.statementDefinition -> newDefinition.statementDefinition) +: propertyDefinitions.map(p => p.statementDefinition -> p.copy(parentType = newDefinition).statementDefinition)).toMap)
+        ((oldDefinition.statementDefinition -> newDefinition.statementDefinition) +: propertyDefinitions.map(p => p.oldStatementDefinition -> p.copy(parentType = newDefinition).oldStatementDefinition)).toMap)
     })
   }
 }
