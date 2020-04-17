@@ -45,13 +45,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
             Some(TermDefinitionPropsForChapter(defaultValue, url, shorthand, definingStatement, premises))
           case typeDefinition: entries.TypeDefinition =>
             import typeDefinition._
-            Some(TypeDefinitionPropsForChapter(symbol, url, defaultTermName, otherComponentTypes.map(_.name), definingStatement))
+            Some(TypeDefinitionPropsForChapter(symbol, url, defaultTermName, otherTermNames, definingStatement))
           case propertyDefinition: entries.PropertyDefinitionOnType =>
             import propertyDefinition._
-            Some(PropertyDefinitionPropsForChapter(name, url, defaultTermName, parentType.symbol, parentComponentTypes.map(_.name), definingStatement))
+            Some(PropertyDefinitionPropsForChapter(name, url, defaultTermName, parentType.symbol, parentTermNames, definingStatement))
           case standalonePropertyDefinition: entries.StandalonePropertyDefinition =>
             import standalonePropertyDefinition._
-            Some(StandalonePropertyDefinitionPropsForChapter(name, url, defaultTermName, otherComponentTypes.map(_.name), definingStatement))
+            Some(StandalonePropertyDefinitionPropsForChapter(name, url, defaultTermName, otherTermNames, definingStatement))
           case comment: entries.Comment =>
             import comment._
             Some(CommentPropsForChapter(text, url))
@@ -261,13 +261,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       for {
         symbol <- getMandatoryString(newTypeDefininition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newTypeDefininition.defaultTermName, "Default term name")
-        otherComponentTypes <- ComponentType.listWithoutBoundVariablesParser.parseFromString(newTypeDefininition.otherComponents, "component types").recoverWithBadRequest
-        format <- Format.parserForTypeDefinition(otherComponentTypes).parseFromString(newTypeDefininition.format, "format").recoverWithBadRequest
+        otherTermNames <- Parser.singleWordIfAny.whileDefined.parseFromString(newTypeDefininition.otherTermNames, "component types").recoverWithBadRequest
+        format <- Format.parser(otherTermNames).parseFromString(newTypeDefininition.format, "format").recoverWithBadRequest
         definition <- Statement.parser.parseFromString(newTypeDefininition.definition, "definition").recoverWithBadRequest
         newTypeDefinition = TypeDefinition(
           symbol,
           defaultTermName,
-          otherComponentTypes,
+          otherTermNames,
           format,
           name,
           definition)
@@ -289,13 +289,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         symbol <- getMandatoryString(newPropertyDefininition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newPropertyDefininition.defaultTermName, "Default term name")
         parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefininition.parentType).orBadRequest(s"Unknown type '${newPropertyDefininition.parentType}'")
-        parentComponentTypes <- parentType.childComponentTypesParser.parseFromString(newPropertyDefininition.parentComponents, "parent component types").recoverWithBadRequest
-        definition <- Statement.parser.parseFromString(newPropertyDefininition.definition, "definition").recoverWithBadRequest
+        parentTermNames <- parentType.childTermNamesParser.parseFromString(newPropertyDefininition.parentComponents, "parent component types").recoverWithBadRequest
+        definingStatement <- Statement.parser.parseFromString(newPropertyDefininition.definingStatement, "definition").recoverWithBadRequest
         newPropertyDefinition = PropertyDefinitionOnType(
           symbol,
           parentType,
           defaultTermName,
-          parentComponentTypes,
+          parentTermNames,
           name,
           definition)
       } yield newPropertyDefinition
@@ -315,13 +315,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       for {
         symbol <- getMandatoryString(newPropertyDefininition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newPropertyDefininition.defaultTermName, "Default term name")
-        otherComponentTypes <- ComponentType.listWithoutBoundVariablesParser.parseFromString(newPropertyDefininition.otherComponents, "component types").recoverWithBadRequest
-        format <- Format.parserForTypeDefinition(otherComponentTypes).parseFromString(newPropertyDefininition.format, "format").recoverWithBadRequest
-        definition <- Statement.parser.parseFromString(newPropertyDefininition.definition, "definition").recoverWithBadRequest
+        otherTermNames <- Parser.singleWordIfAny.whileDefined.parseFromString(newPropertyDefininition.otherTermNames, "component types").recoverWithBadRequest
+        format <- Format.parser(otherTermNames).parseFromString(newPropertyDefininition.format, "format").recoverWithBadRequest
+        definition <- Statement.parser.parseFromString(newPropertyDefininition.definingStatement, "definition").recoverWithBadRequest
         newPropertyDefinition = StandalonePropertyDefinition(
           symbol,
           defaultTermName,
-          otherComponentTypes,
+          otherTermNames,
           format,
           name,
           definition)
@@ -441,7 +441,7 @@ object ChapterController {
   case class NewTypeDefinitionModel(
     symbol: String,
     defaultTermName: String,
-    otherComponents: String,
+    otherTermNames: String,
     format: String,
     name: String,
     definition: String)
@@ -451,12 +451,12 @@ object ChapterController {
     defaultTermName: String,
     parentComponents: String,
     name: String,
-    definition: String)
+    definingStatement: String)
   case class NewStandalonePropertyDefinitionModel(
     symbol: String,
     defaultTermName: String,
-    otherComponents: String,
+    otherTermNames: String,
     format: String,
     name: String,
-    definition: String)
+    definingStatement: String)
 }

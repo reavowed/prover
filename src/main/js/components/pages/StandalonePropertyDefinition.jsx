@@ -22,7 +22,7 @@ export function StandalonePropertyDefinition({definition: definitionJson, defini
       <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
         <NavLinks previous={previous} next={next} />
         <h3>{definition.title.capitalize()}</h3>
-        {definition.defaultTermName} is {definition.name} {definition.otherComponentTypes.length > 0 && formatHtml(definition.componentFormat.baseFormatString, s => replacePlaceholders(s, definition.otherComponentTypes.map(x => x.name)))} if <CopiableExpression expression={definition.definingStatement}/>.
+        {definition.defaultTermName} is {definition.name} {definition.otherTermNames.length > 0 && formatHtml(definition.componentFormat.baseFormatString, s => replacePlaceholders(s, definition.otherTermNames))} if <CopiableExpression expression={definition.definingStatement}/>.
         <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.constructionInference.id} title="Construction" />
         <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.deconstructionInference.id} title="Deconstruction" />
       </Page>

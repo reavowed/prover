@@ -77,10 +77,6 @@ object Format {
     parser((symbol +: boundVariableNames) ++ componentTypes.map(_.name))
   }
 
-  def parserForTypeDefinition(componentTypes: Seq[ComponentType]): Parser[Format.Explicit] = {
-    parser(componentTypes.map(_.name))
-  }
-
   def parser(replacementNames: Seq[String]): Parser[Format.Explicit] = {
     for {
       originalString <- Parser.allInParens

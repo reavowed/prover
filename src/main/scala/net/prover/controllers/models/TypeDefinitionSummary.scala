@@ -12,7 +12,7 @@ object TypeDefinitionSummary {
       .map(d => d.symbol -> TypeDefinitionSummary(
         d.symbol,
         d.name,
-        d.otherComponentTypes.length,
+        d.otherTermNames.length,
         d.componentFormat.baseFormatString,
         d.article,
         entryContext.propertyDefinitionsByType.getOrElse(d.symbol, Nil).map(pd => PropertyDefinitionSummary(pd.symbol, pd.qualifiedSymbol, pd.name))))
@@ -27,7 +27,7 @@ object StandalonePropertyDefinitionSummary {
         d.symbol,
         d.qualifiedSymbol,
         d.name,
-        d.otherComponentTypes.length,
+        d.otherTermNames.length,
         d.componentFormat.baseFormatString))
       .toMap
   }

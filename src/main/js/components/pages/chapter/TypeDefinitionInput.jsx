@@ -7,7 +7,7 @@ import ChapterContext from "./ChapterContext";
 const values = [
   {key: "symbol", title: "Symbol"},
   {key: "defaultTermName", title: "Default term name"},
-  {key: "otherComponents", title: "Other components"},
+  {key: "otherTermNames", title: "Other term names"},
   {key: "format", title: "Format (in parens)"},
   {key: "name", title: "Explicit name (if different from symbol)"},
   {key: "definition", title: "Definition", inputType: InputWithShorthandReplacement}

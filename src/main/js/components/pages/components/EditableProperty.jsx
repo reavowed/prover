@@ -6,8 +6,8 @@ export default class EditableProperty extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      savedValue: props.initialValue,
-      currentValue: props.initialValue,
+      savedValue: props.initialValue || "",
+      currentValue: props.initialValue || "",
       saving: false
     }
   }

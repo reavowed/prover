@@ -8,7 +8,7 @@ import net.prover.model.expressions.Statement
 case class StandalonePropertyDefinition(
     symbol: String,
     defaultTermName: String,
-    otherComponentTypes: Seq[ComponentType],
+    otherTermNames: Seq[String],
     componentFormat: Format.Explicit,
     explicitName: Option[String],
     definingStatement: Statement)
@@ -25,7 +25,7 @@ case class StandalonePropertyDefinition(
   val statementDefinition: StatementDefinition = StatementDefinition(
     qualifiedSymbol,
     Nil,
-    TermComponent(defaultTermName, Nil) +: otherComponentTypes,
+    TermComponent(defaultTermName, Nil) +: otherTermNames.map(ComponentType.TermComponent(_, Nil)),
     explicitName.orElse(Some(symbol)),
     fullFormat,
     Some(definingStatement),
@@ -33,7 +33,7 @@ case class StandalonePropertyDefinition(
     Nil)
   override val inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 
-  override def serializedLines: Seq[String] = (Seq(StandalonePropertyDefinition.name, symbol, defaultTermName) :+ otherComponentTypes.map(_.serialized).mkString(" ").inParens).mkString(" ") +:
+  override def serializedLines: Seq[String] = (Seq(StandalonePropertyDefinition.name, symbol, defaultTermName) :+ otherTermNames.mkString(" ").inParens).mkString(" ") +:
     (Seq(componentFormat.serialized.value) ++
       explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
       Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
@@ -47,7 +47,7 @@ case class StandalonePropertyDefinition(
     StandalonePropertyDefinition(
       symbol,
       defaultTermName,
-      otherComponentTypes,
+      otherTermNames,
       componentFormat,
       explicitName,
       definingStatement.replaceDefinition(oldDefinition, newDefinition))
@@ -60,11 +60,11 @@ object StandalonePropertyDefinition extends ChapterEntryParser {
     for {
       symbol <- Parser.singleWord
       defaultTermName <- Parser.singleWord
-      otherComponentTypes <- ComponentType.listWithoutBoundVariablesParser.inParens
-      componentFormat <- Parser.required("format", Format.parserForTypeDefinition(otherComponentTypes))
+      otherTermNames <- Parser.singleWord.listInParens(None)
+      componentFormat <- Parser.required("format", Format.parser(otherTermNames))
       explicitName <- Parser.optional("name", Parser.allInParens)
-      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultTermName +: otherComponentTypes.ofType[TermComponent].map(_.name))).inParens)
-    } yield StandalonePropertyDefinition(symbol, defaultTermName, otherComponentTypes, componentFormat, explicitName, definingStatement)
+      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultTermName +: otherTermNames)).inParens)
+    } yield StandalonePropertyDefinition(symbol, defaultTermName, otherTermNames, componentFormat, explicitName, definingStatement)
   }
 }
 

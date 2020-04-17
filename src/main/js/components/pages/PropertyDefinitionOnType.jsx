@@ -22,7 +22,7 @@ export function PropertyDefinitionOnType({definition: definitionJson, definition
       <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
         <NavLinks previous={previous} next={next} />
         <h3>{definition.title.capitalize()}</h3>
-        {definition.parentType.article.capitalize()} {definition.parentType.name} {definition.defaultTermName} {formatHtml(definition.parentType.componentFormat.baseFormatString, s => replacePlaceholders(s, definition.parentComponentTypes.map(t => t.name)))} is {definition.name} if <CopiableExpression expression={definition.definingStatement}/>.
+        {definition.parentType.article.capitalize()} {definition.parentType.name} {definition.defaultTermName} {formatHtml(definition.parentType.componentFormat.baseFormatString, s => replacePlaceholders(s, definition.parentTermNames))} is {definition.name} if <CopiableExpression expression={definition.definingStatement}/>.
         <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.constructionInference.id} title="Construction" />
         <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.deconstructionInference.id} title="Deconstruction" />
       </Page>

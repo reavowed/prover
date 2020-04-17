@@ -140,7 +140,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
           } yield definition.withFormat(format)
         case definition: TypeDefinition =>
           for {
-            format <- Format.parserForTypeDefinition(definition.otherComponentTypes).parseFromString(newFormatText, "format").recoverWithBadRequest
+            format <- Format.parser(definition.otherTermNames).parseFromString(newFormatText, "format").recoverWithBadRequest
           } yield definition.withFormat(format)
 
         case _ =>

@@ -9,7 +9,7 @@ import net.prover.model.expressions.Statement
 case class TypeDefinition(
     symbol: String,
     defaultTermName: String,
-    otherComponentTypes: Seq[ComponentType],
+    otherTermNames: Seq[String],
     componentFormat: Format.Explicit,
     explicitName: Option[String],
     definingStatement: Statement)
@@ -28,14 +28,14 @@ case class TypeDefinition(
   val article: String = if (name.headOption.exists("aeiou".contains(_))) "an" else "a"
   def fullFormat: Format.Explicit = Format.Explicit(
     s"$defaultTermName is $article $name ${componentFormat.originalValue}",
-    symbol +: defaultTermName +: otherComponentTypes.map(_.name),
+    symbol +: defaultTermName +: otherTermNames,
     componentFormat.requiresBrackets,
     componentFormat.requiresComponentBrackets)
 
   val statementDefinition: StatementDefinition = StatementDefinition(
     symbol,
     Nil,
-    TermComponent(defaultTermName, Nil) +: otherComponentTypes,
+    TermComponent(defaultTermName, Nil) +: otherTermNames.map(ComponentType.TermComponent(_, Nil)),
     explicitName,
     fullFormat,
     Some(definingStatement),
@@ -43,7 +43,7 @@ case class TypeDefinition(
     Nil)
   override def inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 
-  override def serializedLines: Seq[String] = Seq("type", symbol, defaultTermName, otherComponentTypes.map(_.serialized).mkString(" ").inParens).mkString(" ") +:
+  override def serializedLines: Seq[String] = Seq("type", symbol, defaultTermName, otherTermNames.mkString(" ").inParens).mkString(" ") +:
     (Seq(componentFormat.serialized.value) ++
       explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
       Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
@@ -57,14 +57,14 @@ case class TypeDefinition(
     TypeDefinition(
       symbol,
       defaultTermName,
-      otherComponentTypes,
+      otherTermNames,
       componentFormat,
       explicitName,
       definingStatement.replaceDefinition(oldDefinition, newDefinition))
   }
 
-  def childComponentTypesParser: Parser[Seq[ComponentType]] = {
-    otherComponentTypes.map(t => Parser.singleWord.map(t.withName)).traverseParser
+  def childTermNamesParser: Parser[Seq[String]] = {
+    otherTermNames.map(_ => Parser.singleWord).traverseParser
   }
 }
 
@@ -74,10 +74,10 @@ object TypeDefinition extends ChapterEntryParser {
     for {
       symbol <- Parser.singleWord
       defaultTermName <- Parser.singleWord
-      otherComponentTypes <- ComponentType.listWithoutBoundVariablesParser.inParens
-      componentFormat <- Parser.required("format", Format.parserForTypeDefinition(otherComponentTypes))
+      otherComponentNames <- Parser.singleWord.listInParens(None)
+      componentFormat <- Parser.required("format", Format.parser(otherComponentNames))
       explicitName <- Parser.optional("name", Parser.allInParens)
-      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultTermName +: otherComponentTypes.ofType[TermComponent].map(_.name))).inParens)
-    } yield TypeDefinition(symbol, defaultTermName, otherComponentTypes, componentFormat, explicitName, definingStatement)
+      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultTermName +: otherComponentNames)).inParens)
+    } yield TypeDefinition(symbol, defaultTermName, otherComponentNames, componentFormat, explicitName, definingStatement)
   }
 }

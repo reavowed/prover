@@ -38,7 +38,7 @@ object Statement {
 
   def typeStatementParser(term: Term, typeDefinition: TypeDefinition)(implicit context: ExpressionParsingContext): Parser[Statement] = {
     for {
-      otherComponents <- typeDefinition.otherComponentTypes.map(_.expressionParser).traverseParser
+      otherComponents <- typeDefinition.otherTermNames.map(_ => Term.parser).traverseParser
       availableProperties = context.entryContext.propertyDefinitionsByType.get(typeDefinition.symbol).toSeq.flatten
       properties <- Parser.optional("with", Parser.allInParens.map(_.splitByWhitespace().map(s => availableProperties.find(_.symbol == s).getOrElse(throw new Exception(s"Unrecognised property '$s' for '${typeDefinition.symbol}'")))), Nil)
     } yield {
@@ -53,7 +53,7 @@ object Statement {
 
   def propertyStatementParser(term: Term, standalonePropertyDefinition: StandalonePropertyDefinition)(implicit context: ExpressionParsingContext): Parser[Statement] = {
     for {
-      otherComponents <- standalonePropertyDefinition.otherComponentTypes.map(_.expressionParser).traverseParser
+      otherComponents <- standalonePropertyDefinition.otherTermNames.map(_ => Term.parser).traverseParser
     } yield {
       DefinedStatement(term +: otherComponents, standalonePropertyDefinition.statementDefinition)(Nil)
     }

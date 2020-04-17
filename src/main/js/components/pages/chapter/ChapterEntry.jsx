@@ -46,7 +46,7 @@ export default function ChapterEntry({entry}) {
         <ChapterEntryWrapper title={<>Definition: {definition.name.capitalize()}</>}
                              url={entry.url}
                              key={entry.url}>
-          {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.components))} if <CopiableExpression expression={entry.definingStatement}/>.
+          {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.otherTermNames))} if <CopiableExpression expression={entry.definingStatement}/>.
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     case "propertyDefinition":
