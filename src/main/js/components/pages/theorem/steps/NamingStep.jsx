@@ -22,7 +22,7 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
   const displayContext = useContext(DisplayContext);
   const hashParamsContext = useContext(HashParamsContext);
   const containsHighlightedInference = assertionStep && _.intersection(_.map(assertionStep.inferencesUsed, "id"), hashParamsContext.inferencesToHighlight).length > 0;
-  const isHighlightedInference = hashParamsContext.inferencesToHighlight.includes(assertionStep?.inference?.id || assertionStep?.highlightedInference?.id);
+  const isHighlightedInference = hashParamsContext.inferencesToHighlight?.includes(assertionStep?.inference?.id || assertionStep?.highlightedInference?.id);
   const [showingProofCard, setShowingProofCard] = useState(containsHighlightedInference && !isHighlightedInference);
   const proofLineRef = useRef(null);
   const updateBoundVariable = (namingStepPath) => (newName) => {
