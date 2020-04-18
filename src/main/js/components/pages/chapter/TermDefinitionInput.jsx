@@ -6,6 +6,7 @@ import ChapterContext from "./ChapterContext";
 
 const values = [
   {key: "symbol", title: "Symbol"},
+  {key: "disambiguator", title: "Disambiguator"},
   {key: "components", title: "Components"},
   {key: "name", title: "Name"},
   {key: "format", title: "Format (in parens)"},
