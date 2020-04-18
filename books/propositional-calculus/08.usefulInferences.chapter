@@ -40,7 +40,7 @@ conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ω
 
 comment Some tricks to simplify redundant statements.
 
-theorem Redundant And
+theorem Remove Redundant Left Conjunct from Equivalence
 premise → φ ψ
 conclusion ↔ ∧ φ ψ φ
 {
@@ -54,7 +54,7 @@ conclusion ↔ ∧ φ ψ φ
   prove ↔ ∧ φ ψ φ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ φ ψ, φ) () 0 1
 }
 
-theorem Redundant And
+theorem Remove Redundant Right Conjunct from Equivalence
 premise → φ ψ
 conclusion ↔ ∧ ψ φ φ
 {

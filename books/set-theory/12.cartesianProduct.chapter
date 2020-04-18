@@ -779,64 +779,6 @@ conclusion ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → �
   }
 }
 
-comment Show that double unions contain both elements of any of their members that are ordered pairs.
-
-theorem Double Union Contains First Element of Ordered Pair
-premise ∈ orderedPair a b X
-conclusion ∈ a union union X
-{
-  prove ∈ singleton a orderedPair a b d92b71337c8692a5cd350a01fdfcaf921a5cf5b9bfdcb0eeb3976647b04edcb3 () (a, b)
-  elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-    prove ∧ ∈ singleton a orderedPair a b ∈ orderedPair a b X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ singleton a orderedPair a b, ∈ orderedPair a b X) () 0 p0
-    prove ∃ y ∧ ∈ singleton a $0 ∈ $0 X c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ singleton a $0 ∈ $0 X) (orderedPair a b) 1.0
-  }
-  elided f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c {
-    prove ∀ x ↔ ∈ $0 union X ∃ y ∧ ∈ $$0 $0 ∈ $0 X f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (X)
-    prove ↔ ∈ singleton a union X ∃ y ∧ ∈ singleton a $0 ∈ $0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 union X ∃ y ∧ ∈ $$0 $0 ∈ $0 X) (singleton a) 2.0
-    prove → ∃ y ∧ ∈ singleton a $0 ∈ $0 X ∈ singleton a union X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ singleton a union X, ∃ y ∧ ∈ singleton a $0 ∈ $0 X) () 2.1
-    prove ∈ singleton a union X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ y ∧ ∈ singleton a $0 ∈ $0 X, ∈ singleton a union X) () 2.2 1
-  }
-  prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a)
-  elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-    prove ∧ ∈ a singleton a ∈ singleton a union X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a singleton a, ∈ singleton a union X) () 3 2
-    prove ∃ y ∧ ∈ a $0 ∈ $0 union X c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ a $0 ∈ $0 union X) (singleton a) 4.0
-  }
-  elided f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c {
-    prove ∀ x ↔ ∈ $0 union union X ∃ y ∧ ∈ $$0 $0 ∈ $0 union X f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (union X)
-    prove ↔ ∈ a union union X ∃ y ∧ ∈ a $0 ∈ $0 union X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 union union X ∃ y ∧ ∈ $$0 $0 ∈ $0 union X) (a) 5.0
-    prove → ∃ y ∧ ∈ a $0 ∈ $0 union X ∈ a union union X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ a union union X, ∃ y ∧ ∈ a $0 ∈ $0 union X) () 5.1
-    prove ∈ a union union X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ y ∧ ∈ a $0 ∈ $0 union X, ∈ a union union X) () 5.2 4
-  }
-}
-
-theorem Double Union Contains Second Element of Ordered Pair
-premise ∈ orderedPair a b X
-conclusion ∈ b union union X
-{
-  prove ∈ pair a b orderedPair a b ecb0a831f5c8e2151e676d37cb898297bd72fff21fb89e3505d44fba8bda77eb () (a, b)
-  elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-    prove ∧ ∈ pair a b orderedPair a b ∈ orderedPair a b X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ pair a b orderedPair a b, ∈ orderedPair a b X) () 0 p0
-    prove ∃ y ∧ ∈ pair a b $0 ∈ $0 X c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ pair a b $0 ∈ $0 X) (orderedPair a b) 1.0
-  }
-  elided f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c {
-    prove ∀ x ↔ ∈ $0 union X ∃ y ∧ ∈ $$0 $0 ∈ $0 X f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (X)
-    prove ↔ ∈ pair a b union X ∃ y ∧ ∈ pair a b $0 ∈ $0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 union X ∃ y ∧ ∈ $$0 $0 ∈ $0 X) (pair a b) 2.0
-    prove → ∃ y ∧ ∈ pair a b $0 ∈ $0 X ∈ pair a b union X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ pair a b union X, ∃ y ∧ ∈ pair a b $0 ∈ $0 X) () 2.1
-    prove ∈ pair a b union X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ y ∧ ∈ pair a b $0 ∈ $0 X, ∈ pair a b union X) () 2.2 1
-  }
-  prove ∈ b pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a)
-  elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-    prove ∧ ∈ b pair a b ∈ pair a b union X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ b pair a b, ∈ pair a b union X) () 3 2
-    prove ∃ y ∧ ∈ b $0 ∈ $0 union X c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ b $0 ∈ $0 union X) (pair a b) 4.0
-  }
-  elided f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c {
-    prove ∀ x ↔ ∈ $0 union union X ∃ y ∧ ∈ $$0 $0 ∈ $0 union X f474fd89d9035729bcccaa0f61a87387ba186e9f395b141c6a42dc47d439323c () (union X)
-    prove ↔ ∈ b union union X ∃ y ∧ ∈ b $0 ∈ $0 union X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 union union X ∃ y ∧ ∈ $$0 $0 ∈ $0 union X) (b) 5.0
-    prove → ∃ y ∧ ∈ b $0 ∈ $0 union X ∈ b union union X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b union union X, ∃ y ∧ ∈ b $0 ∈ $0 union X) () 5.1
-    prove ∈ b union union X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ y ∧ ∈ b $0 ∈ $0 union X, ∈ b union union X) () 5.2 4
-  }
-}
-
 theorem Quadruple Comprehension Is Subset of Its Domain
 premise = S quadrupleComprehension a b c d X with ($0 $1 $2 $3) φ
 conclusion ⊆ S X
