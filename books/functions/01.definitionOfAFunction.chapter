@@ -21,10 +21,7 @@ premise function f A B
 premise ∈ orderedPair a b f
 conclusion ∈ a A
 {
-  elided 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 {
-    prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
-    prove ⊆ f product A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f product A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 0.0
-  }
+  target ⊆ f product A B
   prove ∈ orderedPair a b product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, orderedPair a b) 0 p1
   prove ∈ a A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () (a, b, A, B) 1
 }
@@ -34,10 +31,7 @@ premise function f A B
 premise ∈ orderedPair a b f
 conclusion ∈ b B
 {
-  elided 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 {
-    prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
-    prove ⊆ f product A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f product A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 0.0
-  }
+  target ⊆ f product A B
   prove ∈ orderedPair a b product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, orderedPair a b) 0 p1
   prove ∈ b B fd9eacaeda58b006596b2a50422b6bc2841496d77f4db1e4196a7e9759de2d78 () (a, b, A, B) 1
 }
@@ -56,15 +50,12 @@ premise function f A B
 premise ⊆ B C
 conclusion function f A C
 {
-  prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
+  target ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
   elided a56ef8aba50fbf515e3ca63d354f5ae8b08157b98df96492ee0a4ab9bcb7390b {
     prove ⊆ product A B product A C a56ef8aba50fbf515e3ca63d354f5ae8b08157b98df96492ee0a4ab9bcb7390b () (B, C, A) p1
     prove ⊆ f product A C 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, product A B, product A C) 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0
   }
-  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-    prove ∧ ⊆ f product A C ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ f product A C, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 1 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-    prove function f A C 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (f, A, C) 2.0
-  }
+  target function f A C
 }
 
 theorem Function Element Condition
@@ -73,11 +64,7 @@ conclusion ↔ ∈ orderedPair a b f ∧ ∈ a A = b apply f a
 {
   assume ∈ orderedPair a b f {
     prove ∈ a A 0e03209c288439a9f051ad3a4fc6f6fd1a07e8e67829a169ca034fce6259c62b () (f, A, B, a, b) p0 0a
-    elided 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 {
-      prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
-      prove → ∈ a A ∃! y ∈ orderedPair a $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) (a) 0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove ∃! y ∈ orderedPair a $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∃! y ∈ orderedPair a $0 f) () 0.1.1 0.0
-    }
+    target ∃! y ∈ orderedPair a $0 f
     prove ∈ orderedPair a apply f a f 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () (f, A, B, a) p0 0.0
     prove = b apply f a 361f1150a27a554e24965716cc1901ca29fbbf94859ead72334b42d86d7a8938 (∈ orderedPair a $0 f) (b, apply f a) 0.1 0a 0.2
     prove ∧ ∈ a A = b apply f a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, = b apply f a) () 0.0 0.3
@@ -96,10 +83,7 @@ theorem Membership Condition for Function
 premise function f A B
 conclusion ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
 {
-  elided 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 {
-    prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
-    prove ⊆ f product A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f product A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 0.0
-  }
+  target ⊆ f product A B
   take x {
     assume ∈ $0 f {
       prove ∈ $0 product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, $0) 0 1.0a
@@ -334,10 +318,7 @@ conclusion ∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B
   let S = $0 comprehension f powerSet product A B function $0 A B cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! S ∀ f ↔ ∈ $0 $$0 function $0 A B) (comprehension f powerSet product A B function $0 A B) {
     take f {
       assume function $0 A B {
-        elided 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 {
-          prove ∧ ⊆ $0 product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 $$$0 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () ($0, A, B) 0.0.0a
-          prove ⊆ $0 product A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ $0 product A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 $$$0) () 0.0.0.0.0
-        }
+        target ⊆ $0 product A B
         prove ∈ $0 powerSet product A B 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () ($0, product A B) 0.0.0.0
         elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
           prove ∧ ∈ $0 powerSet product A B function $0 A B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 powerSet product A B, function $0 A B) () 0.0.0.1 0.0.0a

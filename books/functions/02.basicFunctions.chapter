@@ -11,10 +11,7 @@ conclusion function ∅ ∅ A
       prove → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∅, ∃! y ∈ orderedPair $$0 $0 ∅) () 2.0.0
     }
   }
-  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-    prove ∧ ⊆ ∅ product ∅ A ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ ∅ product ∅ A, ∀ x → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅) () 0 2
-    prove function ∅ ∅ A 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (∅, ∅, A) 3.0
-  }
+  target function ∅ ∅ A
 }
 
 theorem Function with a Singleton Domain
@@ -40,10 +37,7 @@ conclusion function singleton orderedPair a b singleton a singleton b
       prove ∃! x ∈ orderedPair $$0 $0 singleton orderedPair a b ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∈ orderedPair $0 $$0 singleton orderedPair a b) (b) 4.0.1 4.0.2
     }
   }
-  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-    prove ∧ ⊆ singleton orderedPair a b product singleton a singleton b ∀ x → ∈ $0 singleton a ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ singleton orderedPair a b product singleton a singleton b, ∀ x → ∈ $0 singleton a ∃! y ∈ orderedPair $$0 $0 singleton orderedPair a b) () 3 4
-    prove function singleton orderedPair a b singleton a singleton b 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (singleton orderedPair a b, singleton a, singleton b) 5.0
-  }
+  target function singleton orderedPair a b singleton a singleton b
 }
 
 theorem Combine Functions
@@ -52,10 +46,7 @@ premise function g C D
 premise ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0
 conclusion function ∪ f g ∪ A C ∪ B D
 {
-  elided 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 {
-    prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
-    prove ⊆ f product A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f product A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 0.0
-  }
+  target ⊆ f product A B
   elided 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 {
     prove ⊆ A ∪ A C f88abe209e6272968fc9bb3ae9ca6ba370523be70556c8083580bb7527ea3e33 () (A, C)
     prove ⊆ product A B product ∪ A C B 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 () (A, ∪ A C, B) 1.0
@@ -66,10 +57,7 @@ conclusion function ∪ f g ∪ A C ∪ B D
     prove ⊆ product ∪ A C B product ∪ A C ∪ B D a56ef8aba50fbf515e3ca63d354f5ae8b08157b98df96492ee0a4ab9bcb7390b () (B, ∪ B D, ∪ A C) 3.0
   }
   prove ⊆ f product ∪ A C ∪ B D 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, product ∪ A C B, product ∪ A C ∪ B D) 2 3
-  elided 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 {
-    prove ∧ ⊆ g product C D ∀ x → ∈ $0 C ∃! y ∈ orderedPair $$0 $0 g 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (g, C, D) p1
-    prove ⊆ g product C D 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ g product C D, ∀ x → ∈ $0 C ∃! y ∈ orderedPair $$0 $0 g) () 5.0
-  }
+  target ⊆ g product C D
   elided 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 {
     prove ⊆ C ∪ A C fabd15b89589c3bb4285a85675ac82a6d858eefc540651426a23b14961dc1da8 () (C, A)
     prove ⊆ product C D product ∪ A C D 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 () (C, ∪ A C, D) 6.0
@@ -162,10 +150,7 @@ conclusion function ∪ f g ∪ A C ∪ B D
       }
     }
   }
-  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-    prove ∧ ⊆ ∪ f g product ∪ A C ∪ B D ∀ x → ∈ $0 ∪ A C ∃! y ∈ orderedPair $$0 $0 ∪ f g bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ ∪ f g product ∪ A C ∪ B D, ∀ x → ∈ $0 ∪ A C ∃! y ∈ orderedPair $$0 $0 ∪ f g) () 10 11
-    prove function ∪ f g ∪ A C ∪ B D 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (∪ f g, ∪ A C, ∪ B D) 12.0
-  }
+  target function ∪ f g ∪ A C ∪ B D
 }
 
 theorem Combine Disjoint Functions
@@ -296,10 +281,7 @@ conclusion ∃! f ∧ function $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) 
           prove ∃! b ∈ orderedPair $$0 $0 $$$0 2990d85d4ee52472194a7ae53589f3f257b4493424bdd996a411322c70e5e4c6 (∧ ∈ $$$0 B with ($0 $$$0) φ, ∈ orderedPair $0 $$$0 $$0) () 0.0.1.0.0 0.0.1.0.1
         }
       }
-      elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-        prove ∧ ⊆ $0 product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 product A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 $$$0) () 0.0.0 0.0.1
-        prove function $0 A B 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () ($0, A, B) 0.0.2.0
-      }
+      target function $0 A B
     }
     subproof (f_φ satisfies φ) {
       take a {
@@ -423,10 +405,7 @@ conclusion function f A B
       }
     }
   }
-  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-    prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ f product A B, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 1 2
-    prove function f A B 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (f, A, B) 3.0
-  }
+  target function f A B
 }
 
 theorem Function Map Application

@@ -98,7 +98,7 @@ conclusion ∃! g ∧ ∧ function $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 
         }
       }
       elided fe474c3f9eabf0ed0e5114186008aab8fab862ad49756d52de93e123fa8e6e9f {
-        prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        target ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
         prove ⊆ $0 product B A fe474c3f9eabf0ed0e5114186008aab8fab862ad49756d52de93e123fa8e6e9f () ($0, f, orderedPair $$1 $$0, A, B, product B A) 0a 0.0.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0
       }
       take b {
@@ -121,7 +121,7 @@ conclusion ∃! g ∧ ∧ function $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 
             take x {
               assume ∈ orderedPair $$$0 $0 $$$$0 {
                 elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
-                  prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  target ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
                   elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
                     prove ∀ s ↔ ∈ $0 $$$$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$0 orderedPair $0 $$0 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a () ($$$$0, f, orderedPair $$$$$1 $$$$$0, A, B) 0a 0.0.2.0.1.2.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                     prove ↔ ∈ orderedPair $$$0 $0 $$$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 $$$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$$$$$0 orderedPair $0 $$0) (orderedPair $$$0 $0) 0.0.2.0.1.2.0.0.1.0
@@ -168,10 +168,7 @@ conclusion ∃! g ∧ ∧ function $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 
           } 0.0.2.0.0
         }
       }
-      elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-        prove ∧ ⊆ $0 product B A ∀ b → ∈ $0 B ∃! a ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 product B A, ∀ x → ∈ $0 B ∃! y ∈ orderedPair $$0 $0 $$$0) () 0.0.1 0.0.2
-        prove function $0 B A 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () ($0, B, A) 0.0.3.0
-      }
+      target function $0 B A
     }
     subproof (g is right-inverse) {
       prove function ∘ $0 f A A c419d535e7fc0e17bf00d2c1313d085f6e027d5ab28e3af2684b29d94161a44f () (f, A, B, $0, A) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0
@@ -191,7 +188,7 @@ conclusion ∃! g ∧ ∧ function $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 
             prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair apply f $$$0 $$$0 orderedPair $0 $$0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$$$0 $0 f = orderedPair apply f $$0 $$0 orderedPair $0 $$$$0) ($0) 0.1.2.0.4.0
           }
           elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
-            prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            target ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
             elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
               prove ∀ s ↔ ∈ $0 $$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$0 orderedPair $0 $$0 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a () ($$0, f, orderedPair $$$1 $$$0, A, B) 0a 0.1.2.0.5.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
               prove ↔ ∈ orderedPair apply f $0 $0 $$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair apply f $$$0 $$$0 orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 $$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$$$0 orderedPair $0 $$0) (orderedPair apply f $0 $0) 0.1.2.0.5.1.0
@@ -223,7 +220,7 @@ conclusion ∃! g ∧ ∧ function $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 
         assume ∈ $0 B {
           prove ∈ orderedPair $0 apply $$0 $0 $$0 0d0971a1038746083254d8ab616abffc8cce7f74ca2d70b87b5c5296118ee352 () ($$0, B, A, $0) 0.0 0.2.2.0a
           elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
-            prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            target ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
             elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
               prove ∀ s ↔ ∈ $0 $$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$0 orderedPair $0 $$0 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a () ($$0, f, orderedPair $$$1 $$$0, A, B) 0a 0.2.2.0.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
               prove ↔ ∈ orderedPair $0 apply $$0 $0 $$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$0 apply $$$$0 $$$0 orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 $$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$$$0 orderedPair $0 $$0) (orderedPair $0 apply $$0 $0) 0.2.2.0.1.1.0

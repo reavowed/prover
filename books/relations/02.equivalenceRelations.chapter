@@ -277,10 +277,7 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
           } 0.0.2.0.0
         }
       }
-      elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-        prove ∧ ⊆ $0 product equivalenceQuotient A ≈ B ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! y ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 product equivalenceQuotient A ≈ B, ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! y ∈ orderedPair $$0 $0 $$$0) () 0.0.1 0.0.2
-        prove function $0 equivalenceQuotient A ≈ B 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () ($0, equivalenceQuotient A ≈, B) 0.0.3.0
-      }
+      target function $0 equivalenceQuotient A ≈ B
     }
     subproof (f_≈ satisfies condition) {
       take a {

@@ -36,7 +36,7 @@ conclusion function f A image f
   take x {
     assume ∈ $0 f {
       elided 2c5898a93d503f67864a5f7946c9db3d7c9c578a1ccb09f54d947eb150789919 {
-        prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
+        target ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
         elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
           prove ∀ x → ∈ $0 f ∈ $0 product A B f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (f, product A B) 0.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
           prove → ∈ $0 f ∈ $0 product A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 f ∈ $$0 product A B) ($0) 0.0.0.1.0
@@ -73,9 +73,5 @@ conclusion function f A image f
     }
   }
   prove ⊆ f product A image f 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (f, product A image f) 0
-  elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-    prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, A, B) p0
-    prove ∧ ⊆ f product A image f ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ f product A image f, ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f) () 1 2.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-    prove function f A image f 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (f, A, image f) 2.1
-  }
+  target function f A image f
 }

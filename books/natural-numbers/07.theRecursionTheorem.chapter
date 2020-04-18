@@ -43,10 +43,7 @@ premise function f n A
 conclusion ∈ f powerSet product ℕ A
 {
   prove ⊆ n ℕ c660722cbf1cd12662afceb43da350b308473e86467cf5d9f72cd22c5e8cfcf6 () (n) p0
-  elided 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 {
-    prove ∧ ⊆ f product n A ∀ x → ∈ $0 n ∃! y ∈ orderedPair $$0 $0 f 572af30587ad992136d5d5c82bca4a3ddde2677a20ebf6a486908ac80912c671 () (f, n, A) p1
-    prove ⊆ f product n A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f product n A, ∀ x → ∈ $0 n ∃! y ∈ orderedPair $$0 $0 f) () 1.0
-  }
+  target ⊆ f product n A
   prove ⊆ product n A product ℕ A 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 () (n, ℕ, A) 0
   prove ⊆ f product ℕ A 8248cfff9ad834b0d56577a2f79f2432cb595965787f616e281951e1ba93afd5 () (f, product n A, product ℕ A) 1 2
   prove ∈ f powerSet product ℕ A 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (f, product ℕ A) 3
@@ -474,10 +471,7 @@ conclusion ∃! g ∧ function $0 ℕ X ∧ = apply $0 0ℕ g_0 ∀ n → ∈ $0
       }
     }
     prove ∀ n → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0 8ef91a868114eafe7b81e973f96bd05c2769a5d4b301567d760e4673d82d6a46 (∃! y ∈ orderedPair $$$0 $0 union $$0) () 0.4 0.5
-    elided 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 {
-      prove ∧ ⊆ union $0 product ℕ X ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ union $0 product ℕ X, ∀ x → ∈ $0 ℕ ∃! y ∈ orderedPair $$0 $0 union $$$0) () 0.1 0.6
-      prove function union $0 ℕ X 38a6ec6439b15f72fa928d4c70216df81ebba418bf97d5f622f4982501d0bc93 () (union $0, ℕ, X) 0.7.0
-    }
+    target function union $0 ℕ X
     subproof (Function value - base case) {
       elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
         elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
