@@ -28,8 +28,8 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
     return window.fetchJson(path.join(url, "format"), {method: "PUT", body: newFormat});
   };
 
-  const serializedFormat = definition.componentFormat.originalValue ?
-    "(" + definition.componentFormat.originalValue + ")" + (definition.componentFormat.requiresBrackets ? " requires-brackets" : "") + (definition.componentFormat.requiresComponentBrackets ? "" : " no-component-brackets") :
+  const serializedFormat = definition.qualifier.format.originalValue ?
+    "(" + definition.qualifier.format.originalValue + ")" + (definition.qualifier.format.requiresBrackets ? " requires-brackets" : "") + (definition.qualifier.format.requiresComponentBrackets ? "" : " no-component-brackets") :
     "";
 
   return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(definition, entryContext)}>
@@ -37,13 +37,13 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
       <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
         <NavLinks previous={previous} next={next} />
         <h3>{definition.title.capitalize()}</h3>
-        {definition.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormat.baseFormatString, s => replacePlaceholders(s, definition.otherTermNames))} if <CopiableExpression expression={definition.definingStatement}/>.
+        {definition.defaultTermName} is {definition.article} {definition.name} {definition.qualifier && formatHtml(definition.qualifier.format.baseFormatString, s => replacePlaceholders(s, definition.qualifier.termNames))} if <CopiableExpression expression={definition.definingStatement}/>.
         <hr/>
         <EditableProperty label="Symbol" initialValue={definition.symbol} onSave={saveSymbol} />
         <EditableProperty label="Explicit Name" initialValue={definition.explicitName} onSave={saveName} />
         <EditableProperty label="Main Term Name" initialValue={definition.defaultTermName} />
-        <EditableProperty label="Other Term Names" initialValue={definition.otherTermNames.join(" ")} />
-        <EditableProperty label="Component Format" initialValue={serializedFormat} onSave={saveFormat} />
+        <EditableProperty label="Qualifier Term Names" initialValue={definition.qualifier.termNames.join(" ")} />
+        <EditableProperty label="Qualifier Format" initialValue={serializedFormat} onSave={saveFormat} />
         <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.constructionInference.id} title="Construction" />
         <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.deconstructionInference.id} title="Deconstruction" />
       </Page>

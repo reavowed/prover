@@ -2,24 +2,17 @@ package net.prover.model
 
 import java.util.regex.{Matcher, Pattern}
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import net.prover.model.entries.ExpressionDefinition.ComponentType
-
-import scala.collection.mutable.ListBuffer
-import scala.xml.{Elem, Node, NodeSeq, Text}
+import net.prover.model.definitions.ExpressionDefinition.ComponentType
 
 trait Format {
-  def baseFormatString: String
   def requiresBrackets: Boolean
-  def requiresComponentBrackets: Boolean
-  def serialized: Option[String]
-
+  def baseFormatString: String
+  def numberOfReplacements: Int
   def formatText(components: Seq[String], symbol: String, parentRequiresBrackets: Boolean = false): String = {
     (symbol +: components).zipWithIndex.foldLeft(getSafeFormatString(parentRequiresBrackets)) { case (textSoFar, (component, index)) =>
       textSoFar.replaceFirst(s"%$index", Matcher.quoteReplacement(component))
     }
   }
-
   private def getSafeFormatString(parentRequiresBrackets: Boolean) = {
     if (parentRequiresBrackets && requiresBrackets)
       "(" + baseFormatString + ")"
@@ -29,13 +22,18 @@ trait Format {
 }
 
 object Format {
-  case class Default(baseFormatString: String, requiresBrackets: Boolean) extends Format {
-    override def requiresComponentBrackets = true
-    override def serialized = None
+  trait Basic extends Format {
+    def requiresComponentBrackets: Boolean
+    def serialized: Option[String]
   }
-  case class Explicit(baseFormatString: String, originalValue: String, requiresBrackets: Boolean, requiresComponentBrackets: Boolean) extends Format {
-    override def serialized = Some(s"format $serializedWithoutPrefix")
-    def serializedWithoutPrefix = (originalValue.inParens +: (
+
+  case class Default(baseFormatString: String, numberOfReplacements: Int, requiresBrackets: Boolean) extends Format.Basic {
+    override def requiresComponentBrackets = true
+    override def serialized: Option[String] = None
+  }
+  case class Explicit(baseFormatString: String, originalValue: String, numberOfReplacements: Int, requiresBrackets: Boolean, requiresComponentBrackets: Boolean) extends Format.Basic {
+    override def serialized: Some[String] = Some(s"format $serializedWithoutPrefix")
+    def serializedWithoutPrefix: String = (originalValue.inParens +: (
         Some("requires-brackets").filter(_ => requiresBrackets).toSeq ++
         Some("no-component-brackets").filter(_ => !requiresComponentBrackets).toSeq)
     ).mkString(" ")
@@ -45,11 +43,16 @@ object Format {
       val baseFormatString = replacementNames.zipWithIndex.foldLeft(originalValue) { case (str, (name, index)) =>
         str.replaceAll(s"(?<!\\[a-zA-Z])${Pattern.quote(name)}(?![a-zA-Z])", s"%$index")
       }
-      Format.Explicit(baseFormatString, originalValue, requiresBrackets, requiresComponentBrackets)
+      Format.Explicit(baseFormatString, originalValue, replacementNames.length, requiresBrackets, requiresComponentBrackets)
     }
   }
+  case class Concatenated(first: Format, second: Format) extends Format {
+    override val baseFormatString: String = first.baseFormatString + " " + second.formatText((first.numberOfReplacements to first.numberOfReplacements + second.numberOfReplacements).map(i => s"%$i"), "")
+    override def requiresBrackets: Boolean = true
+    override def numberOfReplacements: Int = first.numberOfReplacements + second.numberOfReplacements
+  }
 
-  def default(boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Format = {
+  def default(boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Format.Default = {
     if (boundVariableNames.nonEmpty) {
       throw new Exception("Explicit format must be supplied for definition with bound variables")
     }
@@ -63,10 +66,10 @@ object Format {
       case _ =>
         throw new Exception("Explicit format must be supplied for definition with more than two components")
     }
-    Format.Default(formatString, requiresBrackets)
+    Format.Default(formatString, componentTypes.length + 1, requiresBrackets)
   }
 
-  def optionalParserForExpressionDefinition(symbol: String, boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Parser[Format] = {
+  def optionalParserForExpressionDefinition(symbol: String, boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Parser[Format.Basic] = {
     Parser.optional(
       "format",
       parserForExpressionDefinition(symbol, boundVariableNames, componentTypes),

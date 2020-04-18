@@ -1,8 +1,9 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.ExpressionDefinition.{ComponentArgument, ComponentType}
-import net.prover.model.entries.{Axiom, PropertyDefinitionOnType, StandalonePropertyDefinition, StatementDefinition, TermDefinition, TypeDefinition}
+import net.prover.model.definitions.ExpressionDefinition.ComponentType
+import net.prover.model.definitions.Qualifier
+import net.prover.model.entries.{Axiom, PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{PremiseFinder, Step, StepContext}
 import org.specs2.matcher.MatchResult
@@ -70,7 +71,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "find a premise by a conclusion simplification from extracting a term definition" in {
-      val Negated = TermDefinition(
+      val Negated = TermDefinitionEntry(
         "negatedZ",
         Nil,
         Seq(ComponentType.TermComponent("a", Nil)),
@@ -127,7 +128,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "simplify a conclusion by converting a complex defined term into a simpler one" in {
-      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
+      val PositiveNaturalsDefinition = TermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
 
@@ -142,7 +143,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "rewrite a premise using a fact" in {
-      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
+      val PositiveNaturalsDefinition = TermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val PositiveNaturalsAreASubsetOfTheNaturals = Axiom("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
 
@@ -161,25 +162,25 @@ class PremiseFinderSpec extends Specification {
     }
 
     "find a premise using chained simplifications requiring other premises" in {
-      val SetDifference = TermDefinition(
+      val SetDifference = TermDefinitionEntry(
         "diff",
         Nil,
         Seq(ComponentType.TermComponent("A", Nil), ComponentType.TermComponent("B", Nil)),
         None,
         Some("Set Difference"),
-        Format.Explicit("%1/%2", "A/B", false, true),
+        Format.Explicit("%1/%2", "A/B", 3, false, true),
         Nil,
         ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, A), Negation(ElementOf($, B))))),
         None,
         Nil,
         Nil)
-      val ToInteger = TermDefinition(
+      val ToInteger = TermDefinitionEntry(
         "toZ",
         Nil,
         Seq(ComponentType.TermComponent("a", Nil)),
         None,
         None,
-        Format.Explicit("%1_ℤ", "a_ℤ", false, true),
+        Format.Explicit("%1_ℤ", "a_ℤ", 2, false, true),
         Nil,
         BlankDefinition,
         None,
@@ -202,12 +203,12 @@ class PremiseFinderSpec extends Specification {
     }
 
     "find a premise using a rewrite that needs to substitute a term definition to get a valid relation" in {
-      val PositiveNaturalsDefinition = TermDefinition("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
+      val PositiveNaturalsDefinition = TermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
-      val Inject = TermDefinition("⍳", Nil, Seq(ComponentType.TermComponent("a", Nil)), None, None, Format.Explicit("%0(%1)", "⍳(a)", false, false), Nil, BlankDefinition, None, Nil, Nil)
+      val Inject = TermDefinitionEntry("⍳", Nil, Seq(ComponentType.TermComponent("a", Nil)), None, None, Format.Explicit("%0(%1)", "⍳(a)", 2, false, false), Nil, BlankDefinition, None, Nil, Nil)
       val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Inject(Zero), $)))))
-      val Relation = TypeDefinition("relation", "R", Seq("A"), Format.Explicit("on %1", "on A", true, false), None, BlankDefinition)
-      val Irreflexive = PropertyDefinitionOnType("irreflexive", Relation, "R", Seq("A"), None, BlankDefinition, Conjunction)
+      val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, false))), None, BlankDefinition)
+      val Irreflexive = PropertyDefinitionOnType("irreflexive", Relation, None, BlankDefinition, Conjunction)
       val elementsRelatedByIrreflexiveNotEqual = Axiom("Elements Related by an Irreflexive Relation Are Not Equal", Seq(Irreflexive.statementDefinition(A, B), ElementOf(Pair(a, b), A)), Negation(Equals(a, b)))
       val lessThanIsIrreflexive = Axiom("< Is Irreflexive", Nil, Irreflexive.statementDefinition(LessThan, Naturals))
       val injectedNaturalIsNatural = Axiom("Injected Natural Is Natural", Seq(ElementOf(a, Naturals)), ElementOf(Inject(a), Naturals))

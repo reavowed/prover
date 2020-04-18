@@ -3,7 +3,7 @@ package net.prover.controllers
 import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, InsertionAndReplacementProps, MultipleStepReplacementProps, ProofUpdateProps, RewriteRequest, SerializedSubstitutions, StepDefinition, StepInsertionProps, StepReplacementProps}
 import net.prover.model.{EntryContext, Inference, ProvingContext}
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.StatementDefinition
+import net.prover.model.definitions.StatementDefinition
 import net.prover.model.expressions.{Statement, StatementVariable, Term}
 import net.prover.model.proof.{Step, StepContext, StepProvingContext, SubstatementExtractor, SubstitutionContext}
 import org.mockito.Mockito

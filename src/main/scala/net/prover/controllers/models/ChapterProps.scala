@@ -2,6 +2,7 @@ package net.prover.controllers.models
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.DisambiguatedSymbol
+import net.prover.model.definitions.Qualifier
 import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions.{Statement, Term}
 
@@ -38,13 +39,13 @@ object ChapterProps {
   case class TermDefinitionPropsForChapter(defaultValue: Term, url: String, shorthand: Option[String], definingStatement: Statement, premises: Seq[Statement]) extends EntryProps {
     override val `type`: String = "termDefinition"
   }
-  case class TypeDefinitionPropsForChapter(symbol: String, url: String, defaultTermName: String, otherTermNames: Seq[String], definingStatement: Statement) extends EntryProps {
+  case class TypeDefinitionPropsForChapter(symbol: String, url: String, defaultTermName: String, defaultQualifierTermNames: Option[Seq[String]], definingStatement: Statement) extends EntryProps {
     override val `type`: String = "typeDefinition"
   }
-  case class PropertyDefinitionPropsForChapter(name: String, url: String, defaultTermName: String, parentTypeSymbol: String, parentTypeComponents: Seq[String], definingStatement: Statement) extends EntryProps {
+  case class PropertyDefinitionPropsForChapter(name: String, url: String, parentTypeSymbol: String, defaultTermName: String, defaultQualifierTermNames: Option[Seq[String]], definingStatement: Statement) extends EntryProps {
     override val `type`: String = "propertyDefinition"
   }
-  case class StandalonePropertyDefinitionPropsForChapter(name: String, url: String, defaultTermName: String, components: Seq[String], definingStatement: Statement) extends EntryProps {
+  case class StandalonePropertyDefinitionPropsForChapter(name: String, url: String, defaultTermName: String, definingStatement: Statement) extends EntryProps {
     override val `type`: String = "standalonePropertyDefinition"
   }
   case class CommentPropsForChapter(text: String, url: String) extends EntryProps {

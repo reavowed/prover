@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
-import net.prover.model.entries.{ExpressionDefinition, StatementDefinition, TermDefinition}
+import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition, TermDefinition}
 import net.prover.model.expressions.Template.Match
 
 @JsonSerialize(using = classOf[TemplateSerializer])

@@ -1,5 +1,6 @@
 package net.prover.model.entries
 
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.{EntryContext, Parser}
 import net.prover.model.expressions.Template
 
@@ -7,7 +8,7 @@ case class WritingShorthand(template: Template, symbol: String) extends ChapterE
   override def name: String = symbol
   override def serializedLines: Seq[String] = Seq(Seq("write", template.serialized, "as", symbol).mkString(" "))
   override def referencedInferenceIds: Set[String] = Set.empty
-  override def referencedDefinitions: Set[ChapterEntry] = template.referencedDefinitions.toType[ChapterEntry]
+  override def referencedEntries: Set[ChapterEntry] = template.referencedDefinitions.map(_.associatedChapterEntry)
   override def replaceDefinition(
     oldDefinition: ExpressionDefinition,
     newDefinition: ExpressionDefinition,

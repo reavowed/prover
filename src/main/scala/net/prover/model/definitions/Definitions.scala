@@ -1,8 +1,8 @@
 package net.prover.model.definitions
 
 import net.prover.model._
-import net.prover.model.entries.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
-import net.prover.model.entries.{DisplayShorthand, StatementDefinition, TermDefinition}
+import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
+import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 import net.prover.model.proof.{SubstatementExtractor, SubstitutionContext}

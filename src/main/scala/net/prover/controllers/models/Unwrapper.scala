@@ -1,7 +1,6 @@
 package net.prover.controllers.models
 
-import net.prover.model.definitions.{BinaryJoiner, Wrapper}
-import net.prover.model.entries.StatementDefinition
+import net.prover.model.definitions.{BinaryJoiner, StatementDefinition, Wrapper}
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import net.prover.model.{Inference, Substitutions}

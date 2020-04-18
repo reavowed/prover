@@ -73,7 +73,7 @@ export class Parser {
           if (_.includes(expressionDefinition.attributes, "conjunction")) {
             const [firstComponent, secondComponent] = components;
             if (firstComponent instanceof TypeExpression && secondComponent instanceof PropertyExpression && _.includes(firstComponent.definition.properties, secondComponent.definition)) {
-              if (secondComponent.term.serialize() === firstComponent.term.serialize() && secondComponent.otherComponents.map(c => c.serialize()).join(" ") === firstComponent.otherComponents.map(c => c.serialize()).join(" ")) {
+              if (secondComponent.term.serialize() === firstComponent.term.serialize() && secondComponent.qualifierComponents.map(c => c.serialize()).join(" ") === firstComponent.qualifierComponents.map(c => c.serialize()).join(" ")) {
                 firstComponent.addProperty(secondComponent.definition, expressionDefinition);
                 return [firstComponent, tokensAfterComponents];
               }

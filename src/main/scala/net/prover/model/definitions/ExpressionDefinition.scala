@@ -1,32 +1,35 @@
-package net.prover.model.entries
+package net.prover.model.definitions
 
-import net.prover.model.entries.ExpressionDefinition.ComponentType
+import com.fasterxml.jackson.annotation.JsonIgnore
+import net.prover.model.definitions.ExpressionDefinition.ComponentType
+import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions._
-import net.prover.model._
+import net.prover.model.{DisambiguatedSymbol, ExpressionParsingContext, Format, Inference, Parser, ParsingContextWithParameters, TemplateParsingContext}
 
-trait ExpressionDefinition extends TypedExpressionDefinition[ExpressionDefinition] with ChapterEntry.Standalone
-
-trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinition] extends ChapterEntry.Standalone { self: ExpressionDefinition =>
+trait ExpressionDefinition {
   def baseSymbol: String
+  def disambiguator: Option[String]
+  def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(baseSymbol, disambiguator)
   def symbol: String = disambiguatedSymbol.serialized
-  def disambiguatedSymbol: DisambiguatedSymbol
+  def explicitName: Option[String]
+  def name: String = explicitName.getOrElse(disambiguatedSymbol.forDisplay)
   def boundVariableNames: Seq[String]
   def componentTypes: Seq[ComponentType]
   def format: Format
   def shorthand: Option[String]
   def defaultValue: Expression
-  def typeName: String
   def attributes: Seq[String]
   def complexity: Int
 
-  def withSymbol(newSymbol: String): ExpressionDefinitionType
-  def withName(newName: Option[String]): ExpressionDefinitionType
-  def withShorthand(newShorthand: Option[String]): ExpressionDefinitionType
-  def withAttributes(newAttributes: Seq[String]): ExpressionDefinitionType
-  def withFormat(newFormat: Format): ExpressionDefinitionType
+  @JsonIgnore
+  def associatedChapterEntry: ChapterEntry
 
-  override def title: String = s"$typeName Definition: $name"
-  override def referencedInferenceIds: Set[String] = Set.empty
+  def increaseDepth(internalDepth: Int): Int = {
+    if (boundVariableNames.nonEmpty)
+      internalDepth + 1
+    else
+      internalDepth
+  }
 
   protected def componentExpressionParser(implicit context: ExpressionParsingContext): Parser[(Seq[String], Seq[Expression])] = {
     for {
@@ -45,16 +48,10 @@ trait TypedExpressionDefinition[+ExpressionDefinitionType <: ExpressionDefinitio
       }.traverseParser
     } yield (newBoundVariableNames, components)
   }
-
-  def increaseDepth(internalDepth: Int) = if (boundVariableNames.nonEmpty) internalDepth + 1 else internalDepth
-
-  protected def serializedComponents = "(" + (boundVariableNames.map("$" + _) ++ componentTypes.map(_.serialized)).mkString(" ") + ")"
 }
 
 object ExpressionDefinition {
-
   case class ComponentArgument(name: String, index: Int)
-
   sealed trait ComponentType {
     def name: String
     def withName(newName: String): ComponentType
@@ -128,28 +125,100 @@ object ExpressionDefinition {
       }
     }
   }
+}
 
-  private def boundVariablesParser: Parser[Seq[String]] = {
-    val boundVariablePattern = "\\$(.*)".r
-    Parser.selectOptionalWord {
-      case boundVariablePattern(variableName) => variableName
-    }.whileDefined
+trait StatementDefinition extends ExpressionDefinition {
+  def definingStatement: Option[Statement]
+  val disambiguator: Option[String] = None
+  val defaultValue: DefinedStatement = DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)
+  val constructionInference: Option[Inference.Definition] = definingStatement.map(s => Inference.Definition(name, Seq(s), defaultValue))
+  val deconstructionInference: Option[Inference.Definition] = definingStatement.map(s => Inference.Definition(name, Seq(defaultValue), s))
+  def inferences: Seq[Inference.FromEntry] = constructionInference.toSeq ++ deconstructionInference.toSeq
+
+  override val complexity: Int = definingStatement.map(_.definitionalComplexity).getOrElse(1)
+
+  def statementParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
+    componentExpressionParser.map { case (newBoundVariableNames, components) =>
+      DefinedStatement(components, this)(newBoundVariableNames)
+    }
+  }
+  def templateParser(implicit templateParsingContext: TemplateParsingContext): Parser[Template] = {
+    componentTemplateParser.map { case (newBoundVariableNames, components) =>
+      DefinedStatementTemplate(this, newBoundVariableNames, components)
+    }
   }
 
-  def rawBoundVariablesAndComponentTypesParser: Parser[(Seq[String], Seq[ComponentType])] = {
-    for {
-      boundVariables <- boundVariablesParser
-      componentTypes <- ComponentType.listParser(boundVariables)
-    } yield (boundVariables, componentTypes)
+  def apply(components: Expression*): DefinedStatement = {
+    DefinedStatement(components, this)(boundVariableNames)
+  }
+  def bind(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
+    DefinedStatement(components, this)(boundVariableNames)
+  }
+  def unapplySeq(expression: Expression): Option[Seq[Expression]] = expression match {
+    case DefinedStatement(components, definition) if definition == this =>
+      Some(components)
+    case _ =>
+      None
   }
 
-  def boundVariablesAndComponentTypesParser: Parser[(Seq[String], Seq[ComponentType])] = {
-    rawBoundVariablesAndComponentTypesParser.inParens
+  def canEqual(other: Any): Boolean = other.isInstanceOf[StatementDefinition]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: StatementDefinition =>
+      (that canEqual this) &&
+        symbol == that.symbol
+    case _ => false
   }
 
-  def shorthandParser: Parser[Option[String]] = Parser.optional("shorthand", Parser.allInParens)
-
-  def attributesParser: Parser[Seq[String]] = {
-    Parser.optional("attributes", Parser.allInParens.map(_.splitByWhitespace()), Nil)
+  override val hashCode: Int = symbol.hashCode
+}
+object StatementDefinition {
+  case class Derived(baseSymbol: String, componentTypes: Seq[ComponentType], explicitName: Option[String], format: Format, definingStatement: Option[Statement], associatedChapterEntry: ChapterEntry) extends StatementDefinition {
+    override def boundVariableNames: Seq[String] = Nil
+    override def shorthand: Option[String] = None
+    override def attributes: Seq[String] = Nil
   }
 }
+
+trait TermDefinition extends ExpressionDefinition {
+  def premises: Seq[Statement]
+  def definitionPredicate: Statement
+  val defaultValue: DefinedTerm = DefinedTerm(componentTypes.map(_.expression), this)(boundVariableNames)
+  val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0).get
+  val definitionInference: Inference.Definition = Inference.Definition(name, premises, definingStatement)
+  def inferences: Seq[Inference.FromEntry] = Seq(definitionInference)
+
+  override val complexity: Int = definitionPredicate.definitionalComplexity
+
+  def termParser(implicit context: ExpressionParsingContext): Parser[Term] = {
+    componentExpressionParser.map { case (newBoundVariableNames, components) =>
+      DefinedTerm(components, this)(newBoundVariableNames)
+    }
+  }
+
+  def templateParser(implicit context: TemplateParsingContext): Parser[Template] = {
+    componentTemplateParser.map { case (newBoundVariableNames, components) =>
+      DefinedTermTemplate(this, newBoundVariableNames, components)
+    }
+  }
+
+  def apply(components: Expression*): DefinedTerm = {
+    DefinedTerm(components, this)(boundVariableNames)
+  }
+  def bind(boundVariableNames: String*)(components: Expression*): DefinedTerm = {
+    DefinedTerm(components, this)(boundVariableNames)
+  }
+
+  def canEqual(other: Any): Boolean = other.isInstanceOf[TermDefinition]
+
+  override def equals(other: Any): Boolean = other match {
+    case that: TermDefinition =>
+      (that canEqual this) &&
+        symbol == that.symbol
+    case _ => false
+  }
+
+  override val hashCode: Int = symbol.hashCode
+}
+
+case class DerivedStatementDefinition()

@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.entries.ExpressionDefinition
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.{Template, Term}
 
 case class DisambiguatorAdder(template: Template, disambiguator: String) {

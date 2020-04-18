@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model._
-import net.prover.model.entries.ExpressionDefinition
+import net.prover.model.definitions.ExpressionDefinition
 
 import scala.reflect.ClassTag
 

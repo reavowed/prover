@@ -1,12 +1,12 @@
 Define partial and total orders on a set
 
-type strictTotalOrder < (A)
-  format (on A)
+type strictTotalOrder <
+  qualifier (A) (on A)
   name (strict total order)
   definition (∧ ∧ ∧ relation < A asymmetricRelation < A transitiveRelation < A semicompleteRelation < A)
 
-type totalOrder < (A)
-  format (on A)
+type totalOrder <
+  qualifier (A) (on A)
   name (total order)
   definition (∧ ∧ ∧ relation < A antisymmetricRelation < A transitiveRelation < A completeRelation < A)
 
@@ -51,7 +51,7 @@ conclusion totalOrder S A
   }
 }
 
-type wellOrder ≤ (A)
-  format (on A)
+type wellOrder ≤
+  qualifier (A) (on A)
   name (well-order)
   definition (∧ totalOrder ≤ A ∀ S → ⊆ $0 A → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤)

@@ -2,11 +2,10 @@ package net.prover.controllers
 
 import net.prover.controllers.ChapterController._
 import net.prover.controllers.models.ChapterProps._
-import net.prover.controllers.models.{ChapterProps, DefinitionSummary, LinkSummary, StandalonePropertyDefinitionSummary, TypeDefinitionSummary}
+import net.prover.controllers.models._
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.Definitions
-import net.prover.model.entries.ExpressionDefinition.ComponentType
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step
@@ -31,28 +30,28 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       .map(_.mapRight(key => BookService.getEntryUrl(bookKey, chapterKey, key)))
       .mapCollect { case (entry, url) =>
         entry match {
-          case axiom: entries.Axiom =>
+          case axiom: Axiom =>
             import axiom._
             Some(AxiomPropsForChapter(name, url, premises, conclusion))
-          case theorem: entries.Theorem =>
+          case theorem: Theorem =>
             import theorem._
             Some(TheoremPropsForChapter(name, url, premises, conclusion, definitions.isInferenceComplete(theorem)))
-          case statementDefinition: entries.StatementDefinition =>
+          case statementDefinition: StatementDefinitionEntry =>
             import statementDefinition._
             Some(StatementDefinitionPropsForChapter(defaultValue, url, shorthand, definingStatement))
-          case termDefinition: entries.TermDefinition =>
+          case termDefinition: TermDefinitionEntry =>
             import termDefinition._
             Some(TermDefinitionPropsForChapter(defaultValue, url, shorthand, definingStatement, premises))
-          case typeDefinition: entries.TypeDefinition =>
+          case typeDefinition: TypeDefinition =>
             import typeDefinition._
-            Some(TypeDefinitionPropsForChapter(symbol, url, defaultTermName, otherTermNames, definingStatement))
-          case propertyDefinition: entries.PropertyDefinitionOnType =>
+            Some(TypeDefinitionPropsForChapter(symbol, url, defaultTermName, qualifier.map(_.termNames), definingStatement))
+          case propertyDefinition: PropertyDefinitionOnType =>
             import propertyDefinition._
-            Some(PropertyDefinitionPropsForChapter(name, url, defaultTermName, parentType.symbol, parentTermNames, definingStatement))
-          case standalonePropertyDefinition: entries.StandalonePropertyDefinition =>
+            Some(PropertyDefinitionPropsForChapter(name, url, parentType.symbol, parentType.defaultTermName, parentType.qualifier.map(_.termNames), definingStatement))
+          case standalonePropertyDefinition: StandalonePropertyDefinition =>
             import standalonePropertyDefinition._
-            Some(StandalonePropertyDefinitionPropsForChapter(name, url, defaultTermName, otherTermNames, definingStatement))
-          case comment: entries.Comment =>
+            Some(StandalonePropertyDefinitionPropsForChapter(name, url, defaultTermName, definingStatement))
+          case comment: Comment =>
             import comment._
             Some(CommentPropsForChapter(text, url))
           case _ =>
@@ -114,9 +113,9 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           Success(("Axiom", Map("axiom" -> axiom)))
         case theorem: Theorem =>
           Success(("Theorem", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(theorem.referencedInferenceIds, books, definitions))))
-        case statementDefinition: StatementDefinition =>
+        case statementDefinition: StatementDefinitionEntry =>
           Success(("StatementDefinition", Map("definition" -> statementDefinition)))
-        case termDefinition: TermDefinition =>
+        case termDefinition: TermDefinitionEntry =>
           Success(("TermDefinition", Map("definition" -> termDefinition)))
         case typeDefinition: TypeDefinition =>
           Success(("TypeDefinition", Map("definition" -> typeDefinition)))
@@ -193,12 +192,12 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       val attributes = getWords(newStatementDefinition.attributes)
       for {
         symbol <- getMandatoryString(newStatementDefinition.symbol, "Symbol")
-        boundVariableNamesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newStatementDefinition.components, "components").recoverWithBadRequest
+        boundVariableNamesAndComponentTypes <- ExpressionDefinitionEntry.rawBoundVariablesAndComponentTypesParser.parseFromString(newStatementDefinition.components, "components").recoverWithBadRequest
         boundVariableNames = boundVariableNamesAndComponentTypes._1
         componentTypes = boundVariableNamesAndComponentTypes._2
         definition <- newStatementDefinition.definition.filter(_.nonEmpty).map(d => Statement.parser(expressionParsingContext.addInitialParameter("_")).parseFromString(d, "definition").recoverWithBadRequest).swap
         format <- getFormat(newStatementDefinition.format, symbol, boundVariableNames, componentTypes)
-        newStatementDefinition = StatementDefinition(
+        newStatementDefinition = StatementDefinitionEntry(
           symbol,
           boundVariableNames,
           componentTypes,
@@ -226,13 +225,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       for {
         symbol <- getMandatoryString(newTermDefinition.symbol, "Symbol")
         disambiguator <- getOptionalSingleWord(newTermDefinition.disambiguator, "Disambiguator")
-        boundVariableNamesAndComponentTypes <- ExpressionDefinition.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefinition.components, "components").recoverWithBadRequest
+        boundVariableNamesAndComponentTypes <- ExpressionDefinitionEntry.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefinition.components, "components").recoverWithBadRequest
         boundVariableNames = boundVariableNamesAndComponentTypes._1
         componentTypes = boundVariableNamesAndComponentTypes._2
         definition <- Statement.parser(expressionParsingContext.addInitialParameter("_")).parseFromString(newTermDefinition.definition, "definition").recoverWithBadRequest
         format <- getFormat(newTermDefinition.format, symbol, boundVariableNames, componentTypes)
         premises <- newTermDefinition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}")).recoverWithBadRequest
-        newTerm = TermDefinition(
+        newTerm = TermDefinitionEntry(
           symbol,
           boundVariableNames,
           componentTypes,
@@ -261,14 +260,12 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       for {
         symbol <- getMandatoryString(newTypeDefininition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newTypeDefininition.defaultTermName, "Default term name")
-        otherTermNames <- Parser.singleWordIfAny.whileDefined.parseFromString(newTypeDefininition.otherTermNames, "component types").recoverWithBadRequest
-        format <- Format.parser(otherTermNames).parseFromString(newTypeDefininition.format, "format").recoverWithBadRequest
+        qualifier <- getQualifier(newTypeDefininition.qualifierTermNames, newTypeDefininition.qualifierFormat)
         definition <- Statement.parser.parseFromString(newTypeDefininition.definition, "definition").recoverWithBadRequest
         newTypeDefinition = TypeDefinition(
           symbol,
           defaultTermName,
-          otherTermNames,
-          format,
+          qualifier,
           name,
           definition)
       } yield newTypeDefinition
@@ -287,16 +284,12 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       val name = getOptionalString(newPropertyDefininition.name)
       for {
         symbol <- getMandatoryString(newPropertyDefininition.symbol, "Symbol")
-        defaultTermName <- getMandatoryString(newPropertyDefininition.defaultTermName, "Default term name")
         parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefininition.parentType).orBadRequest(s"Unknown type '${newPropertyDefininition.parentType}'")
-        parentTermNames <- parentType.childTermNamesParser.parseFromString(newPropertyDefininition.parentComponents, "parent component types").recoverWithBadRequest
         definingStatement <- Statement.parser.parseFromString(newPropertyDefininition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newPropertyDefinition = PropertyDefinitionOnType(
           symbol,
           parentType,
-          defaultTermName,
-          parentTermNames,
           name,
           definingStatement,
           conjunctionDefinition)
@@ -317,14 +310,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       for {
         symbol <- getMandatoryString(newPropertyDefininition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newPropertyDefininition.defaultTermName, "Default term name")
-        otherTermNames <- Parser.singleWordIfAny.whileDefined.parseFromString(newPropertyDefininition.otherTermNames, "component types").recoverWithBadRequest
-        format <- Format.parser(otherTermNames).parseFromString(newPropertyDefininition.format, "format").recoverWithBadRequest
         definition <- Statement.parser.parseFromString(newPropertyDefininition.definingStatement, "definition").recoverWithBadRequest
         newPropertyDefinition = StandalonePropertyDefinition(
           symbol,
           defaultTermName,
-          otherTermNames,
-          format,
           name,
           definition)
       } yield newPropertyDefinition
@@ -395,13 +384,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     @PathVariable("entryKey") entryKey: String,
     @RequestBody(required = false) newShorthand: String
   ): ResponseEntity[_] = {
-    bookService.modifyEntry[ExpressionDefinition, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, definition) =>
+    bookService.modifyEntry[ExpressionDefinitionEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, definition) =>
       Success(definition.withShorthand(Option(newShorthand).filter(_.nonEmpty)))
     ).map{ case (books, definitions, book, chapter, _) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
   private def getDefinitionShorthands(entryContext: EntryContext): Map[String, DisambiguatedSymbol] = {
-    val shorthandsFromDefinitions = entryContext.availableEntries.ofType[ExpressionDefinition].mapCollect(d => d.shorthand.map(_ -> d.disambiguatedSymbol)).toMap
+    val shorthandsFromDefinitions = entryContext.availableEntries.ofType[ExpressionDefinitionEntry].mapCollect(d => d.shorthand.map(_ -> d.disambiguatedSymbol)).toMap
     val greekLetterShorthands = 'α'.to('ω')
       .map(c => Character.getName(c).splitByWhitespace().last.toLowerCase -> DisambiguatedSymbol(c.toString, None))
       .toMap
@@ -443,22 +432,18 @@ object ChapterController {
   case class NewTypeDefinitionModel(
     symbol: String,
     defaultTermName: String,
-    otherTermNames: String,
-    format: String,
+    qualifierTermNames: String,
+    qualifierFormat: String,
     name: String,
     definition: String)
   case class NewPropertyDefinitionModel(
     symbol: String,
     parentType: String,
-    defaultTermName: String,
-    parentComponents: String,
     name: String,
     definingStatement: String)
   case class NewStandalonePropertyDefinitionModel(
     symbol: String,
     defaultTermName: String,
-    otherTermNames: String,
-    format: String,
     name: String,
     definingStatement: String)
 }

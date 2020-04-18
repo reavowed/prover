@@ -1,7 +1,7 @@
 Definition of a function.
 
-type function f (A B)
-  format (from A → B)
+type function f
+  qualifier (A B) (from A → B)
   definition (∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f)
 
 display ∀ f → function $0 A B φ as ((∀f: A → B)φ)

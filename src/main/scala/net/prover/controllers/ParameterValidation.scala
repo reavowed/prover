@@ -2,7 +2,8 @@ package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
-import net.prover.model.entries.ExpressionDefinition.ComponentType
+import net.prover.model.definitions.ExpressionDefinition.ComponentType
+import net.prover.model.definitions.Qualifier
 
 import scala.util.{Failure, Success, Try}
 
@@ -28,10 +29,22 @@ trait ParameterValidation {
   def getMandatoryString(source: String, name: String): Try[String] = {
     getOptionalString(source).orBadRequest(s"$name must be given")
   }
-  def getFormat(source: String, symbol: String, boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Try[Format] = {
+  def getFormat(source: String, symbol: String, boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Try[Format.Basic] = {
     getOptionalString(source)
       .map(f => Format.parserForExpressionDefinition(symbol, boundVariableNames, componentTypes).parseFromString(f, "format"))
       .getOrElse(Format.default(boundVariableNames, componentTypes))
       .recoverWithBadRequest
+  }
+  def getQualifier(termNamesText: String, serializedFormat: String): Try[Option[Qualifier]] = {
+    (getWords(termNamesText), getOptionalString(serializedFormat)) match {
+      case (otherTermNames, Some(serializedFormat)) if otherTermNames.nonEmpty =>
+        for {
+          format <- Format.parser(otherTermNames).parseFromString(serializedFormat, "format").recoverWithBadRequest
+        } yield Some(Qualifier(otherTermNames, format))
+      case (Nil, None) =>
+        Success(None)
+      case _ =>
+        Failure(BadRequestException("Both format and term names must be provided for qualifier"))
+    }
   }
 }

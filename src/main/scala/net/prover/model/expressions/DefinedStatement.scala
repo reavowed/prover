@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.entries.{ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 
 case class DefinedStatement(
     components: Seq[Expression],

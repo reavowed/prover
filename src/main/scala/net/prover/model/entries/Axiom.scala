@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import net.prover.model.expressions.Statement
 import net.prover.model._
-import net.prover.model.definitions.Definitions
+import net.prover.model.definitions.{Definitions, ExpressionDefinition}
 
 case class Axiom(
     name: String,
@@ -12,7 +12,7 @@ case class Axiom(
 {
   override def withName(newName: String): Axiom = copy(name = newName)
   override def referencedInferenceIds: Set[String] = Set.empty
-  override def referencedDefinitions: Set[ChapterEntry] = premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions
+  override def referencedEntries: Set[ChapterEntry] = (premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions).map(_.associatedChapterEntry)
   override def isComplete(definitions: Definitions): Boolean = true
   override def inferences: Seq[Inference.FromEntry] = Seq(this)
   override def serializedLines: Seq[String] = {

@@ -42,7 +42,7 @@ export interface TypeDefinition {
   symbol: string;
   name: string;
   numberOfComponents: number;
-  componentFormatString: string;
+  qualifierFormatString: string;
   properties: PropertyDefinition[];
 }
 
@@ -101,8 +101,8 @@ export function matchTemplate(template: Expression, expression: Expression, path
         return checkComponentsMatch([...boundVariableMatches, ...flattenedComponentMatches]);
       }
   } else if (template instanceof TypeExpression && expression instanceof TypeExpression && expression.definition === template.definition) {
-    const componentMatches = _.chain([template.term, ...template.otherComponents])
-        .zip([expression.term, ...expression.otherComponents])
+    const componentMatches = _.chain([template.term, ...template.qualifierComponents])
+        .zip([expression.term, ...expression.qualifierComponents])
         .map(([t, c], i) => t && matchTemplate(t, c!, [...pathWithinMatch, i], boundVariablesWithinMatch))
         .value();
     if (_.every(componentMatches)) {
@@ -204,9 +204,9 @@ export class DefinedExpression extends Expression {
 }
 
 export class TypeExpression extends Expression {
-  constructor(public definition: TypeDefinition, public term: Expression, public otherComponents: Expression[], public properties: PropertyDefinition[], public conjunctionDefinition: ExpressionDefinition | undefined) { super(); }
+  constructor(public definition: TypeDefinition, public term: Expression, public qualifierComponents: Expression[], public properties: PropertyDefinition[], public conjunctionDefinition: ExpressionDefinition | undefined) { super(); }
   serialize(): string {
-    const termAndComponentsWords = [this.term.serialize(), ...this.otherComponents.map(c => c.serialize())];
+    const termAndComponentsWords = [this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())];
     const baseWords = [this.definition.symbol, ...termAndComponentsWords];
     const allWords = _.reduce(
           this.properties,
@@ -220,7 +220,7 @@ export class TypeExpression extends Expression {
     return allWords.join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
-    const baseWords = ["is", this.term.serializeNicely(boundVariableLists), this.definition.symbol, ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))];
+    const baseWords = ["is", this.term.serializeNicely(boundVariableLists), this.definition.symbol, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))];
     const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.map(p => p.symbol).join(" ") + ")"] : baseWords;
     return allWords.join(" ")
   }
@@ -244,11 +244,11 @@ export class TypeExpression extends Expression {
       let replacedExpression: Expression, replacedInnerPaths: number[][];
       if (first == 0) {
         const [replacedTerm, replacedPathsInTerm] = this.term.replaceAtPath(remaining, expression)
-        replacedExpression = new TypeExpression(this.definition, replacedTerm, this.otherComponents, this.properties, this.conjunctionDefinition);
+        replacedExpression = new TypeExpression(this.definition, replacedTerm, this.qualifierComponents, this.properties, this.conjunctionDefinition);
         replacedInnerPaths = replacedPathsInTerm;
       } else {
-        const [replacedComponent, replacedPathsInComponent] = this.otherComponents[first - 1].replaceAtPath(remaining, expression);
-        const replacedComponents = [...this.otherComponents.slice(0, first - 1), replacedComponent, ... this.otherComponents.slice(first)];
+        const [replacedComponent, replacedPathsInComponent] = this.qualifierComponents[first - 1].replaceAtPath(remaining, expression);
+        const replacedComponents = [...this.qualifierComponents.slice(0, first - 1), replacedComponent, ... this.qualifierComponents.slice(first)];
         replacedExpression = new TypeExpression(this.definition, this.term, replacedComponents, this.properties, this.conjunctionDefinition);
         replacedInnerPaths = replacedPathsInComponent;
       }
@@ -259,17 +259,17 @@ export class TypeExpression extends Expression {
     }
   }
   getDisambiguators(): string[] {
-    return _.uniq(_.flatMap([this.term, ...this.otherComponents], x => x.getDisambiguators()));
+    return _.uniq(_.flatMap([this.term, ...this.qualifierComponents], x => x.getDisambiguators()));
   }
 }
 
 export class PropertyExpression extends Expression {
-  constructor(public typeDefinition: TypeDefinition, public definition: PropertyDefinition, public term: Expression, public otherComponents: Expression[]) { super(); }
+  constructor(public typeDefinition: TypeDefinition, public definition: PropertyDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
   serialize(): string {
-    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
+    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
-    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
   }
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in property expression"
@@ -278,17 +278,17 @@ export class PropertyExpression extends Expression {
     throw "Cannot replace in property expression"
   }
   getDisambiguators(): string[] {
-    return _.uniq(_.flatMap([this.term, ...this.otherComponents], x => x.getDisambiguators()));
+    return _.uniq(_.flatMap([this.term, ...this.qualifierComponents], x => x.getDisambiguators()));
   }
 }
 
 export class StandalonePropertyExpression extends Expression {
-  constructor(public definition: StandalonePropertyDefinition, public term: Expression, public otherComponents: Expression[]) { super(); }
+  constructor(public definition: StandalonePropertyDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
   serialize(): string {
-    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serialize())].join(" ")
+    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
-    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.otherComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
   }
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in property expression"
@@ -297,7 +297,7 @@ export class StandalonePropertyExpression extends Expression {
     throw "Cannot replace in property expression"
   }
   getDisambiguators(): string[] {
-    return _.uniq(_.flatMap([this.term, ...this.otherComponents], x => x.getDisambiguators()));
+    return _.uniq(_.flatMap([this.term, ...this.qualifierComponents], x => x.getDisambiguators()));
   }
 }
 

@@ -5,8 +5,8 @@ import java.security.MessageDigest
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.Inference._
-import net.prover.model.definitions.Definitions
-import net.prover.model.entries.{ChapterEntry, ChapterEntryParser, ExpressionDefinition}
+import net.prover.model.definitions.{Definitions, ExpressionDefinition}
+import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
 import net.prover.model.expressions._
 import net.prover.model.proof.{StepContext, SubstitutionContext}
 
@@ -29,18 +29,18 @@ trait Inference {
 
   def substitutionsParser(implicit parsingContext: ExpressionParsingContext): Parser[Substitutions] = {
     for {
-      statements <- requiredSubstitutions.statements.mapWithIndex { case ((name, arity), index) => {
+      statements <- requiredSubstitutions.statements.mapWithIndex { case ((name, arity), index) =>
         for {
           _ <- if (index > 0) Parser.requiredWord(",") else Parser.constant(())
           s <- Statement.parser(parsingContext.addInitialParameters(arity))
         } yield name -> (arity -> s)
-      }}.traverseParser.map(_.toMap).inParens
-      terms <- requiredSubstitutions.terms.mapWithIndex { case ((name, arity), index) => {
+      }.traverseParser.map(_.toMap).inParens
+      terms <- requiredSubstitutions.terms.mapWithIndex { case ((name, arity), index) =>
         for {
           _ <- if (index > 0) Parser.requiredWord(",") else Parser.constant(())
           t <- Term.parser(parsingContext.addInitialParameters(arity))
         } yield name -> (arity -> t)
-      }}.traverseParser.map(_.toMap).inParens
+      }.traverseParser.map(_.toMap).inParens
     } yield {
       Substitutions(statements, terms)
     }

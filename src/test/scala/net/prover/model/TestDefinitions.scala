@@ -1,9 +1,9 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions.{A, BlankDefinition, Conjunction, ElementOf, Equivalence, ForAll, φ}
-import net.prover.model.definitions.Definitions
-import net.prover.model.entries.ExpressionDefinition.{ComponentArgument, ComponentType}
-import net.prover.model.entries.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
+import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
+import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
+import net.prover.model.definitions.{Definitions, ExpressionDefinition, StatementDefinition, TermDefinition}
 import net.prover.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
@@ -78,9 +78,9 @@ trait ExpressionDefinitions extends VariableDefinitions {
     symbol: String,
     size: Int,
     definingStatement: Option[Statement]
-  ): StatementDefinition = {
+  ): StatementDefinitionEntry = {
     val componentTypes = Seq[ComponentType](φ, ψ, χ).take(size)
-    StatementDefinition(
+    StatementDefinitionEntry(
       symbol,
       Nil,
       componentTypes,
@@ -94,9 +94,9 @@ trait ExpressionDefinitions extends VariableDefinitions {
     symbol: String,
     size: Int,
     definingStatement: Option[Statement]
-  ): StatementDefinition = {
+  ): StatementDefinitionEntry = {
     val componentTypes = Seq[ComponentType](a, b, c).take(size)
-    StatementDefinition(
+    StatementDefinitionEntry(
       symbol,
       Nil,
       componentTypes,
@@ -109,13 +109,13 @@ trait ExpressionDefinitions extends VariableDefinitions {
   private def quantifier(
     symbol: String,
     definingStatement: Option[Statement]
-  ): StatementDefinition = {
-    StatementDefinition(
+  ): StatementDefinitionEntry = {
+    StatementDefinitionEntry(
       symbol,
       Seq("x"),
       Seq(StatementComponent("φ", Seq(ExpressionDefinition.ComponentArgument("x", 0)))),
       None,
-      Format.Explicit(s"(%0%1)%2", s"(${symbol}x)φ", requiresBrackets = false, requiresComponentBrackets = true),
+      Format.Explicit(s"(%0%1)%2", s"(${symbol}x)φ", 3, requiresBrackets = false, requiresComponentBrackets = true),
       definingStatement,
       None,
       Nil)
@@ -140,7 +140,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
 
 
   val BlankDefinition = DefinedStatement(Nil, connective("false", 0, None))(Nil)
-  val EmptySetDefinition = TermDefinition(
+  val EmptySetDefinition = TermDefinitionEntry(
     "∅",
     Nil,
     Nil,
@@ -154,13 +154,13 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil)
   val EmptySet = DefinedTerm(Nil, EmptySetDefinition)(Nil)
 
-  val PowerSet = TermDefinition(
+  val PowerSet = TermDefinitionEntry(
     "powerSet",
     Nil,
     Seq(a),
     None,
     Some("Power Set"),
-    Format.Explicit("𝒫%1", "𝒫a", requiresBrackets = false, requiresComponentBrackets = true),
+    Format.Explicit("𝒫%1", "𝒫a", 2, requiresBrackets = false, requiresComponentBrackets = true),
     Nil,
     ForAll("y")(Equivalence(
       ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)),
@@ -169,82 +169,82 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     Nil)
 
-  val Singleton = TermDefinition(
+  val Singleton = TermDefinitionEntry(
     "singleton",
     Nil,
     Seq(a),
     None,
     Some("Singleton"),
-    Format.Explicit("{%1}", "{a}", requiresBrackets = false, requiresComponentBrackets = false),
+    Format.Explicit("{%1}", "{a}", 2, requiresBrackets = false, requiresComponentBrackets = false),
     Nil,
     BlankDefinition,
     None,
     Nil,
     Nil)
 
-  val Pair = TermDefinition(
+  val Pair = TermDefinitionEntry(
     "pair",
     Nil,
     Seq(a, b),
     None,
     Some("Unordered Pair"),
-    Format.Explicit("{%1, %2}", "{a, b}", requiresBrackets = false, requiresComponentBrackets = false),
+    Format.Explicit("{%1, %2}", "{a, b}", 3, requiresBrackets = false, requiresComponentBrackets = false),
     Nil,
     BlankDefinition,
     None,
     Nil,
     Nil)
-  val Product = TermDefinition(
+  val Product = TermDefinitionEntry(
     "product",
     Nil,
     Seq(a, b),
     None,
     Some("Cartesian Product"),
-    Format.Explicit("%1 × %2", "a × b", requiresBrackets = true, requiresComponentBrackets = true),
+    Format.Explicit("%1 × %2", "a × b", 3, requiresBrackets = true, requiresComponentBrackets = true),
     Nil,
     BlankDefinition,
     None,
     Nil,
     Nil)
-  val First = TermDefinition(
+  val First = TermDefinitionEntry(
     "first",
     Nil,
     Seq(a),
     None,
     None,
-    Format.Explicit("%1_0", "a_0", requiresBrackets = false, requiresComponentBrackets = true),
+    Format.Explicit("%1_0", "a_0", 2, requiresBrackets = false, requiresComponentBrackets = true),
     Nil,
     BlankDefinition,
     None,
     Nil,
     Nil)
-  val Second = TermDefinition(
+  val Second = TermDefinitionEntry(
     "second",
     Nil,
     Seq(a),
     None,
     None,
-    Format.Explicit("%1_1", "a_1", requiresBrackets = false, requiresComponentBrackets = true),
+    Format.Explicit("%1_1", "a_1", 2, requiresBrackets = false, requiresComponentBrackets = true),
     Nil,
     BlankDefinition,
     None,
     Nil,
     Nil)
 
-  val Comprehension = TermDefinition(
+  val Comprehension = TermDefinitionEntry(
     "comprehension",
     Seq("a"),
     Seq(ComponentType.TermComponent("A", Nil), ComponentType.StatementComponent("φ", Seq(ComponentArgument("a", 0)))),
     None,
     None,
-    Format.Explicit("{ a ∈ A | φ }", Seq("a", "A", "φ"), false, true),
+    Format.Explicit("{ a ∈ A | φ }", Seq("comprehension", "a", "A", "φ"), false, true),
     Nil,
     ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, A), φ($)))),
     None,
     Nil,
     Nil)
 
-  val NaturalsDefinition = TermDefinition(
+  val NaturalsDefinition = TermDefinitionEntry(
     "ℕ",
     Nil,
     Nil,
@@ -257,7 +257,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     Nil)
   val Naturals = DefinedTerm(Nil, NaturalsDefinition)(Nil)
-  val Successor = TermDefinition(
+  val Successor = TermDefinitionEntry(
     "successor",
     Nil,
     Seq(a),
@@ -269,7 +269,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     None,
     Nil,
     Nil)
-  val ZeroDefinition = TermDefinition(
+  val ZeroDefinition = TermDefinitionEntry(
     "0",
     Nil,
     Nil,
@@ -282,7 +282,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     Nil)
   val Zero = DefinedTerm(Nil, ZeroDefinition)(Nil)
-  val OneDefinition = TermDefinition(
+  val OneDefinition = TermDefinitionEntry(
     "1",
     Nil,
     Nil,
@@ -295,7 +295,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     Nil)
   val One = DefinedTerm(Nil, OneDefinition)(Nil)
-  val AdditionDefinition = TermDefinition(
+  val AdditionDefinition = TermDefinitionEntry(
     "+",
     Nil,
     Nil,
@@ -308,19 +308,19 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     Nil)
   val Addition = DefinedTerm(Nil, AdditionDefinition)(Nil)
-  val Apply = TermDefinition(
+  val Apply = TermDefinitionEntry(
     "apply",
     Nil,
     Seq(a, b),
     None,
     None,
-    Format.Explicit("%1(%2)", "a(b)", requiresBrackets = false, requiresComponentBrackets = true),
+    Format.Explicit("%1(%2)", "a(b)", 3, requiresBrackets = false, requiresComponentBrackets = true),
     Nil,
     BlankDefinition,
     None,
     Nil,
     Nil)
-  val LessThanDefinition = TermDefinition(
+  val LessThanDefinition = TermDefinitionEntry(
     "<",
     Nil,
     Nil,
@@ -335,7 +335,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
   val LessThan = DefinedTerm(Nil, LessThanDefinition)(Nil)
   def lessThan(a: Term, b: Term): Statement = ElementOf(Pair(a, b), LessThan)
 
-  val IntegersDefinition = TermDefinition(
+  val IntegersDefinition = TermDefinitionEntry(
     "ℤ",
     Nil,
     Nil,

@@ -31,8 +31,8 @@ case class Chapter(
 object Chapter {
   val chapterEntryParsers: Seq[ChapterEntryParser] = Seq(
     Comment,
-    StatementDefinition,
-    TermDefinition,
+    StatementDefinitionEntry,
+    TermDefinitionEntry,
     TypeDefinition,
     PropertyDefinitionOnType,
     StandalonePropertyDefinition,

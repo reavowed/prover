@@ -154,7 +154,7 @@ trait BookModification {
       .mapFind { entryUsing =>
         entryUsing.referencedInferenceIds
           .mapFind(referencedInference => entriesPotentiallyBeingUsed.find(_.inferences.exists(_.id == referencedInference)).map(entryUsing -> _)) orElse
-        entryUsing.referencedDefinitions
+        entryUsing.referencedEntries
           .mapFind(referencedDefinition => entriesPotentiallyBeingUsed.find(_ == referencedDefinition).map(entryUsing -> _))
       }
   }
@@ -165,6 +165,6 @@ trait BookModification {
 
   def hasUsages(entriesPotentiallyBeingUsed: Seq[ChapterEntry], entriesPotentiallyUsing: Seq[ChapterEntry]): Boolean = {
     val inferenceIds = entriesPotentiallyBeingUsed.flatMap(_.inferences.map(_.id)).toSet
-    entriesPotentiallyUsing.exists(e => e.referencedInferenceIds.intersect(inferenceIds).nonEmpty || e.referencedDefinitions.exists(entriesPotentiallyBeingUsed.contains))
+    entriesPotentiallyUsing.exists(e => e.referencedInferenceIds.intersect(inferenceIds).nonEmpty || e.referencedEntries.exists(entriesPotentiallyBeingUsed.contains))
   }
 }

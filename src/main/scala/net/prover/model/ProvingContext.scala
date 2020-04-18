@@ -1,7 +1,7 @@
 package net.prover.model
 
 import net.prover.model.definitions._
-import net.prover.model.entries.{ChapterEntry, StatementDefinition, TermDefinition}
+import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.StepProvingContext
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption

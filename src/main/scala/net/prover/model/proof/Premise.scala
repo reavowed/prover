@@ -2,7 +2,7 @@ package net.prover.model.proof
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
-import net.prover.model.entries.ExpressionDefinition
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Premise.Pending
 

@@ -2,7 +2,7 @@ package net.prover.model.proof
 
 import net.prover.controllers.ExtractionHelper
 import net.prover.model.Substitutions
-import net.prover.model.entries.TermDefinition
+import net.prover.model.definitions.TermDefinition
 import net.prover.model.expressions._
 
 object PremiseFinder {

@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.entries.ExpressionDefinition
+import net.prover.model.definitions.ExpressionDefinition
 
 case class DefinitionUsages(map: Map[ExpressionDefinition, Int]) {
   def addUsage(definition: ExpressionDefinition): DefinitionUsages = {

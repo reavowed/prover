@@ -42,8 +42,8 @@ function getDisambiguatorsForExpression(expression, entryContext) {
     } else {
       return componentDisambiguators;
     }
-  } else if (expression.term && expression.otherComponents) {
-    return getDisambiguatorsForExpressions([expression.term, ...expression.otherComponents], entryContext);
+  } else if (expression.term && expression.qualifierComponents) {
+    return getDisambiguatorsForExpressions([expression.term, ...expression.qualifierComponents], entryContext);
   }
   return {};
 }

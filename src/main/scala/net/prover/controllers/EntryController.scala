@@ -1,9 +1,9 @@
 package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
-import net.prover.model.entries.{ChapterEntry, ExpressionDefinition, TermDefinition, TypeDefinition}
 import net.prover.model._
-import net.prover.model.definitions.Definitions
+import net.prover.model.definitions.{Definitions, ExpressionDefinition}
+import net.prover.model.entries.{ChapterEntry, ExpressionDefinitionEntry, TermDefinitionEntry, TypeDefinition}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -24,7 +24,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, entry) => entry match {
       case inference: Inference.Entry =>
         Success(inference.withName(newName))
-      case definition: ExpressionDefinition =>
+      case definition: ExpressionDefinitionEntry =>
         Success(definition.withName(Option(newName).filter(_.nonEmpty)))
       case _ =>
         Failure(BadRequestException(s"Cannot set name of ${entry.getClass.getName}"))
@@ -49,7 +49,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
       chapter <- bookService.findChapter(book, chapterKey)
       entry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
       (newEntry, newBooks) <- entry match {
-        case definition: ExpressionDefinition =>
+        case definition: ExpressionDefinitionEntry =>
           val newDefinition = definition.withSymbol(newSymbol)
           Success((newDefinition, modifyExpressionDefinition(definition, newDefinition)._1))
         case definition: TypeDefinition =>
@@ -77,7 +77,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
       entry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
       disambiguator <- getOptionalSingleWord(newDisambiguator, "Disambiguator")
       (newEntry, newBooks) <- entry match {
-        case definition: TermDefinition =>
+        case definition: TermDefinitionEntry =>
           val newDefinition = definition.withDisambiguator(disambiguator)
           Success((newDefinition, modifyExpressionDefinition(definition, newDefinition)._1))
         case _ =>
@@ -101,7 +101,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
       for {
         newDisambiguatorAdders <- serializedNewDisambiguatorAdders.mapWithIndex((s, i) => DisambiguatorAdder.parser(entryContext).parseFromString(s, s"disambiguator adder ${i + 1}").recoverWithBadRequest).traverseTry
         result <- entry match {
-          case definition: TermDefinition =>
+          case definition: TermDefinitionEntry =>
             Success(definition.withDisambiguatorAdders(newDisambiguatorAdders))
           case _ =>
             Failure(BadRequestException(s"Cannot set disambiguator adders of ${entry.getClass.getName}"))
@@ -118,7 +118,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @RequestBody(required = false) newAttributes: Seq[String]
   ): ResponseEntity[_] = {
     bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, entry) => entry match {
-      case definition: ExpressionDefinition =>
+      case definition: ExpressionDefinitionEntry =>
         Success(definition.withAttributes(newAttributes))
       case _ =>
         Failure(BadRequestException(s"Cannot set attributes of ${entry.getClass.getName}"))
@@ -134,15 +134,15 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
   ): ResponseEntity[_] = {
     bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, entry) => {
       entry match {
-        case definition: ExpressionDefinition =>
+        case definition: ExpressionDefinitionEntry =>
           for {
             format <- Format.parserForExpressionDefinition(definition.baseSymbol, definition.boundVariableNames, definition.componentTypes).parseFromString(newFormatText, "format").recoverWithBadRequest
           } yield definition.withFormat(format)
         case definition: TypeDefinition =>
           for {
-            format <- Format.parser(definition.otherTermNames).parseFromString(newFormatText, "format").recoverWithBadRequest
+            qualifier <- definition.qualifier.orBadRequest("Cannot update format on type with no qualifier")
+            format <- Format.parser(qualifier.termNames).parseFromString(newFormatText, "format").recoverWithBadRequest
           } yield definition.withFormat(format)
-
         case _ =>
           Failure(BadRequestException(s"Cannot set format of ${entry.getClass.getName}"))
       }
@@ -166,7 +166,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     }
   }
 
-  private def modifyExpressionDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): (Seq[Book], Definitions) = {
+  private def modifyExpressionDefinition(oldDefinition: ExpressionDefinitionEntry, newDefinition: ExpressionDefinitionEntry): (Seq[Book], Definitions) = {
     bookService.modifyBooks[Identity]((books, _) => {
       modifyDefinitions(books, Map(oldDefinition -> newDefinition), Map(oldDefinition -> newDefinition))
     })

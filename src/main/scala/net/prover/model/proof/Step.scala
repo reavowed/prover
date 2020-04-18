@@ -9,8 +9,7 @@ import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
-import net.prover.model.definitions.Definitions
-import net.prover.model.entries.{ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.{Definitions, ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import scalaz.Functor
 import scalaz.syntax.functor._

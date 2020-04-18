@@ -354,7 +354,6 @@ package object model {
           case s if implicitly[ClassTag[S]].runtimeClass.isInstance(s) => s.asInstanceOf[S]
         }
     }
-    def toType[S >: T]: Set[S] = set.map(_.asInstanceOf[S])
   }
 
   implicit class TraversableOptionOps[T, Repr](traversable: TraversableLike[Option[T], Repr]) {

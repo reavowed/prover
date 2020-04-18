@@ -513,7 +513,7 @@ conclusion ∈ orderedPair n apply +ℕ orderedPair n m ≤ℕ
 {
   elided 423f2d93b9f08baeecf5438f8b5e334a95d4b4c09050dde282071d0c58ec5f81 {
     prove reflexiveRelation ≤ℕ ℕ 423f2d93b9f08baeecf5438f8b5e334a95d4b4c09050dde282071d0c58ec5f81 () ()
-    prove ∧ relation ≤ℕ ℕ ∀ a → ∈ $0 ℕ ∈ orderedPair $0 $0 ≤ℕ ea96c6630b83679384eab305be09d5bc01e7245212a3f591000ad5078837e524 () (≤ℕ, ℕ) 0.0
+    prove ∧ relation ≤ℕ ℕ ∀ a → ∈ $0 ℕ ∈ orderedPair $0 $0 ≤ℕ 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 () (≤ℕ, ℕ) 0.0
     prove → ∈ n ℕ ∈ orderedPair n n ≤ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ ∈ orderedPair $0 $0 ≤ℕ) (n) 0.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
     prove ∈ orderedPair n n ≤ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∈ orderedPair n n ≤ℕ) () 0.2 p0
   }

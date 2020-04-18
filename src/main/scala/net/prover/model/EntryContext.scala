@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.model.definitions.{StatementDefinition, TermDefinition}
 import net.prover.model.entries._
 import net.prover.model.expressions._
 

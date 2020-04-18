@@ -1,7 +1,7 @@
 Define equivalence relations and their quotients.
 
-type equivalenceRelation ≈ (A)
-  format (on A)
+type equivalenceRelation ≈
+  qualifier (A) (on A)
   name (equivalence relation)
   definition (∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A)
 
@@ -50,7 +50,7 @@ conclusion ∈ a equivalenceClass a ≈
   prove = equivalenceClass a ≈ comprehension x A ∈ orderedPair a $0 ≈ f2e5322bcbc2762c77a7c0c134101ca46410896012aa8739a73a188c900d9b2c () (≈, A, a) p0 p1
   elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
     prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
-    prove ∧ relation ≈ A ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈ ea96c6630b83679384eab305be09d5bc01e7245212a3f591000ad5078837e524 () (≈, A) 1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove ∧ relation ≈ A ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈ 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 () (≈, A) 1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
     prove → ∈ a A ∈ orderedPair a a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∈ orderedPair $0 $0 ≈) (a) 1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
     prove ∈ orderedPair a a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∈ orderedPair a a ≈) () 1.2 p1
   }
@@ -139,7 +139,7 @@ conclusion ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a
         }
         elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
           prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
-          prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $0 $$0 ≈ 52fe4c7a638faa9230db7d53ba0e95955d41d71b4d95b3128259e858011fd90a () (≈, A) 3.0.0.2.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $0 $$0 ≈ 96054ab331ced506a8a72cbcd1b258be5b229dc75f3031d392f2b8f2bc225772 () (≈, A) 3.0.0.2.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           prove → ∈ a A ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A → ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair $0 $$$0 ≈) (a) 3.0.0.2.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           prove ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈) () 3.0.0.2.2 p1
           prove → ∈ b A → ∈ orderedPair a b ≈ ∈ orderedPair b a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A → ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 a ≈) (b) 3.0.0.2.3
@@ -150,7 +150,7 @@ conclusion ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a
           prove ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair b a ≈, ∈ orderedPair a $0 ≈) () 3.0.0.2 3.0.0.1
           elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
             prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
-            prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$0 $0 ≈ a6e958624dbe5e88df8440109f7d14f70c249a787bc589b47858d157365329dc () (≈, A) 3.0.0.3.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$0 $0 ≈ cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f () (≈, A) 3.0.0.3.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove → ∈ b A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$$0 $0 ≈) (b) 3.0.0.3.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈) () 3.0.0.3.1.2 p2
             prove → ∈ a A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$$0 ≈ ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair b $0 ≈) (a) 3.0.0.3.1.3
@@ -189,7 +189,7 @@ conclusion ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a
           prove ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair a b ≈, ∈ orderedPair b $0 ≈) () 3a 3.0.1.1
           elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
             prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
-            prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$0 $0 ≈ a6e958624dbe5e88df8440109f7d14f70c249a787bc589b47858d157365329dc () (≈, A) 3.0.1.2.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$0 $0 ≈ cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f () (≈, A) 3.0.1.2.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove → ∈ a A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$$0 $0 ≈) (a) 3.0.1.2.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈) () 3.0.1.2.1.2 p1
             prove → ∈ b A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$$0 ≈ ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair a $0 ≈) (b) 3.0.1.2.1.3

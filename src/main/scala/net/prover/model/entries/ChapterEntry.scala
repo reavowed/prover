@@ -1,6 +1,7 @@
 package net.prover.model.entries
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.{EntryContext, Inference}
 
 trait ChapterEntry {
@@ -9,7 +10,7 @@ trait ChapterEntry {
   def inferences: Seq[Inference.FromEntry] = Nil
   def serializedLines: Seq[String]
   def referencedInferenceIds: Set[String]
-  def referencedDefinitions: Set[ChapterEntry]
+  def referencedEntries: Set[ChapterEntry]
 
   def replaceDefinition(
     oldDefinition: ExpressionDefinition,

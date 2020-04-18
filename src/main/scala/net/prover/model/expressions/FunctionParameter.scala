@@ -1,10 +1,7 @@
 package net.prover.model.expressions
 
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.Substitutions
-import net.prover.model.entries.ExpressionDefinition
+import net.prover.model.definitions.ExpressionDefinition
 
 case class FunctionParameter(index: Int, level: Int) extends Term {
   override def structuralComplexity: Int = 1

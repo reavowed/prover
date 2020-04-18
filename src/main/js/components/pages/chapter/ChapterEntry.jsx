@@ -1,5 +1,4 @@
 import React, {useContext} from "react";
-import styled from "styled-components";
 import {DefinedExpression} from "../../../models/Expression";
 import DisplayContext from "../../DisplayContext";
 import EntryContext from "../../EntryContext";
@@ -7,10 +6,10 @@ import {CopiableExpression} from "../../ExpressionComponent";
 import {formatHtml, replacePlaceholders} from "../../helpers/Formatter";
 import {ResultWithPremises} from "../../ResultWithPremises";
 import ChapterContext from "./ChapterContext";
+import ChapterEntryWrapper from "./ChapterEntryWrapper";
 import DefinitionEntry from "./DefinitionEntry";
 import DeleteEntryButton from "./DeleteEntryButton";
 import InferenceEntry from "./InferenceEntry";
-import ChapterEntryWrapper from "./ChapterEntryWrapper";
 
 export default function ChapterEntry({entry}) {
   const entryContext = useContext(EntryContext);
@@ -46,7 +45,7 @@ export default function ChapterEntry({entry}) {
         <ChapterEntryWrapper title={<>Definition: {definition.name.capitalize()}</>}
                              url={entry.url}
                              key={entry.url}>
-          {entry.defaultTermName} is {definition.article} {definition.name} {formatHtml(definition.componentFormatString, s => replacePlaceholders(s, entry.otherTermNames))} if <CopiableExpression expression={entry.definingStatement}/>.
+          {entry.defaultTermName} is {definition.article} {definition.name} {definition.qualifierFormatString && formatHtml(definition.qualifierFormatString, s => replacePlaceholders(s, entry.defaultQualifierTermNames))} if <CopiableExpression expression={entry.definingStatement}/>.
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     case "propertyDefinition":
@@ -55,7 +54,7 @@ export default function ChapterEntry({entry}) {
         <ChapterEntryWrapper title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name} {typeDefinition.name}</span></>}
                              url={entry.url}
                              key={entry.url}>
-          {typeDefinition.article.capitalize()} {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.componentFormatString, s => replacePlaceholders(s, entry.parentTypeComponents))} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
+          {typeDefinition.article.capitalize()} {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.qualifierFormatString, s => replacePlaceholders(s, entry.defaultQualifierTermNames))} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     case "standalonePropertyDefinition":
@@ -63,7 +62,7 @@ export default function ChapterEntry({entry}) {
         <ChapterEntryWrapper title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name}</span></>}
                              url={entry.url}
                              key={entry.url}>
-          {entry.defaultTermName} is {entry.name} {entry.components.length > 0 && formatHtml(entry.componentFormatString, s => replacePlaceholders(s, entry.components))} if <CopiableExpression expression={entry.definingStatement}/>.
+          {entry.defaultTermName} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     case "comment":

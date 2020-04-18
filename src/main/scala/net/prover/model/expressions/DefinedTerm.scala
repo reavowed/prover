@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model.Substitutions
-import net.prover.model.entries.{ExpressionDefinition, TermDefinition}
+import net.prover.model.definitions.{ExpressionDefinition, TermDefinition}
 
 case class DefinedTerm(
     components: Seq[Expression],

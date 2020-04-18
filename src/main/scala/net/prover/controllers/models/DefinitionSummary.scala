@@ -1,7 +1,7 @@
 package net.prover.controllers.models
 
 import net.prover.model._
-import net.prover.model.entries.{ExpressionDefinition, TermDefinition}
+import net.prover.model.entries.{ExpressionDefinitionEntry, TermDefinitionEntry}
 import net.prover.model.expressions.{DefinedTermTemplate, Template}
 
 case class DisambiguatorAdderSummary(template: Template, disambiguator: String)
@@ -18,7 +18,7 @@ case class DefinitionSummary(
 
 object DefinitionSummary {
   def getAllFromContext(entryContext: EntryContext): Map[String, DefinitionSummary] = {
-    entryContext.availableEntries.ofType[ExpressionDefinition]
+    entryContext.availableEntries.ofType[ExpressionDefinitionEntry]
       .map(d =>
         d.disambiguatedSymbol.serialized -> DefinitionSummary(
           d.disambiguatedSymbol,
@@ -31,8 +31,8 @@ object DefinitionSummary {
           getDisambiguatorAdderSummaries(d)))
       .toMap
   }
-  def getDisambiguatorAdderSummaries(expressionDefinition: ExpressionDefinition): Seq[DisambiguatorAdderSummary] = expressionDefinition match {
-    case termDefinition: TermDefinition => {
+  def getDisambiguatorAdderSummaries(expressionDefinition: ExpressionDefinitionEntry): Seq[DisambiguatorAdderSummary] = expressionDefinition match {
+    case termDefinition: TermDefinitionEntry => {
       termDefinition.disambiguatorAdders.map { da =>
         DisambiguatorAdderSummary(da.template.specify(Seq(DefinedTermTemplate(termDefinition, Nil, Nil))), da.disambiguator)
       }

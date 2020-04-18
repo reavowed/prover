@@ -2,7 +2,7 @@ package net.prover.model
 
 import monocle.Lens
 import monocle.macros.GenLens
-import net.prover.model.entries.ExpressionDefinition
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions._
 import net.prover.util.PossibleSingleMatch
 import net.prover.util.PossibleSingleMatch._

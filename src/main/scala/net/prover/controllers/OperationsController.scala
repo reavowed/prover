@@ -1,9 +1,8 @@
 package net.prover.controllers
 
-import net.prover.model.definitions.Definitions
-import net.prover.model.entries.{ChapterEntry, TermDefinition, Theorem, WritingShorthand}
+import net.prover.model.definitions.{Definitions, TermDefinition}
+import net.prover.model.entries.{ChapterEntry, Theorem, WritingShorthand}
 import net.prover.model.{Book, Chapter, EntryContext, ProvingContext}
-import net.prover.controllers._
 import net.prover.exceptions.InferenceReplacementException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}

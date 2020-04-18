@@ -252,13 +252,13 @@ conclusion reflexiveRelation productRelation R S product A B
       prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 2c5898a93d503f67864a5f7946c9db3d7c9c578a1ccb09f54d947eb150789919 () ($0, A, B) 0.0a
       let a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0, ∈ orderedPair $0 $0 productRelation R S) () {
         let b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0, ∈ orderedPair $$0 $$0 productRelation R S) () {
-          elided ea96c6630b83679384eab305be09d5bc01e7245212a3f591000ad5078837e524 {
-            prove ∧ relation R A ∀ a → ∈ $0 A ∈ orderedPair $0 $0 R ea96c6630b83679384eab305be09d5bc01e7245212a3f591000ad5078837e524 () (R, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          elided 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 {
+            prove ∧ relation R A ∀ a → ∈ $0 A ∈ orderedPair $0 $0 R 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 () (R, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove → ∈ $$0 A ∈ orderedPair $$0 $$0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∈ orderedPair $$$$0 $$$$0 R) ($$0) 0.0.1.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove ∈ orderedPair $$0 $$0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∈ orderedPair $$0 $$0 R) () 0.0.1.0.0.1 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
           }
-          elided ea96c6630b83679384eab305be09d5bc01e7245212a3f591000ad5078837e524 {
-            prove ∧ relation S B ∀ a → ∈ $0 B ∈ orderedPair $0 $0 S ea96c6630b83679384eab305be09d5bc01e7245212a3f591000ad5078837e524 () (S, B) p1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          elided 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 {
+            prove ∧ relation S B ∀ a → ∈ $0 B ∈ orderedPair $0 $0 S 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 () (S, B) p1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove → ∈ $0 B ∈ orderedPair $0 $0 S 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 B ∈ orderedPair $$$$0 $$$$0 S) ($0) 0.0.1.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove ∈ orderedPair $0 $0 S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 B, ∈ orderedPair $0 $0 S) () 0.0.1.0.1.1 0.0.1.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
           }
@@ -292,10 +292,10 @@ conclusion reflexiveRelation productRelation R S product A B
       } 0.0.0
     }
   }
-  elided 0e7b7aa3db1874eba1c71f505ecf264da231dc7063f23f956ab3ffaf812cc0ae {
+  elided 45bc1d4e870e110e43d236b482a2a44666f30f70131a736b705c9db7eede9822 {
     prove relation productRelation R S product A B b5102ec864228c4447b5c3906de71418c2e9eb9093f4dc59a6ad2c618bbd3756 () (R, A, S, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
     prove ∧ relation productRelation R S product A B ∀ a → ∈ $0 product A B ∈ orderedPair $0 $0 productRelation R S bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation productRelation R S product A B, ∀ a → ∈ $0 product A B ∈ orderedPair $0 $0 productRelation R S) () 1.0 0
-    prove reflexiveRelation productRelation R S product A B 0e7b7aa3db1874eba1c71f505ecf264da231dc7063f23f956ab3ffaf812cc0ae () (productRelation R S, product A B) 1.1
+    prove reflexiveRelation productRelation R S product A B 45bc1d4e870e110e43d236b482a2a44666f30f70131a736b705c9db7eede9822 () (productRelation R S, product A B) 1.1
   }
 }
 
@@ -342,16 +342,16 @@ conclusion symmetricRelation productRelation R S product A B
                       prove → ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 productRelation R S ∧ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 S f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 productRelation R S, ∧ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 S) () 0.0.0.0.0.2.0.0.0.1.8
                       prove ∧ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 productRelation R S, ∧ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 S) () 0.0.0.0.0.2.0.0.0.1.9 0.0.0.0.0.2.0.0.0.0
                     }
-                    elided 52fe4c7a638faa9230db7d53ba0e95955d41d71b4d95b3128259e858011fd90a {
-                      prove ∧ relation R A ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 R ∈ orderedPair $0 $$0 R 52fe4c7a638faa9230db7d53ba0e95955d41d71b4d95b3128259e858011fd90a () (R, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    elided 96054ab331ced506a8a72cbcd1b258be5b229dc75f3031d392f2b8f2bc225772 {
+                      prove ∧ relation R A ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 R ∈ orderedPair $0 $$0 R 96054ab331ced506a8a72cbcd1b258be5b229dc75f3031d392f2b8f2bc225772 () (R, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                       prove → ∈ $$$$0 A ∀ b → ∈ $0 A → ∈ orderedPair $$$$$0 $0 R ∈ orderedPair $0 $$$$$0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 A ∀ b → ∈ $0 A → ∈ orderedPair $$$$$$$$0 $0 R ∈ orderedPair $0 $$$$$$$$0 R) ($$$$0) 0.0.0.0.0.2.0.0.0.2.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                       prove ∀ b → ∈ $0 A → ∈ orderedPair $$$$$0 $0 R ∈ orderedPair $0 $$$$$0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 A, ∀ b → ∈ $0 A → ∈ orderedPair $$$$$0 $0 R ∈ orderedPair $0 $$$$$0 R) () 0.0.0.0.0.2.0.0.0.2.1 0.0.0.0.0.2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                       prove → ∈ $$0 A → ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$0 $$$$0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 A → ∈ orderedPair $$$$0 $$$$$$$0 R ∈ orderedPair $$$$$$$0 $$$$0 R) ($$0) 0.0.0.0.0.2.0.0.0.2.2
                       prove → ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$0 $$$$0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, → ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$0 $$$$0 R) () 0.0.0.0.0.2.0.0.0.2.3 0.0.0.0.0.2.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                       prove ∈ orderedPair $$0 $$$$0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$$$0 $$0 R, ∈ orderedPair $$0 $$$$0 R) () 0.0.0.0.0.2.0.0.0.2.4 0.0.0.0.0.2.0.0.0.1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                     }
-                    elided 52fe4c7a638faa9230db7d53ba0e95955d41d71b4d95b3128259e858011fd90a {
-                      prove ∧ relation S B ∀ a → ∈ $0 B ∀ b → ∈ $0 B → ∈ orderedPair $$0 $0 S ∈ orderedPair $0 $$0 S 52fe4c7a638faa9230db7d53ba0e95955d41d71b4d95b3128259e858011fd90a () (S, B) p1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    elided 96054ab331ced506a8a72cbcd1b258be5b229dc75f3031d392f2b8f2bc225772 {
+                      prove ∧ relation S B ∀ a → ∈ $0 B ∀ b → ∈ $0 B → ∈ orderedPair $$0 $0 S ∈ orderedPair $0 $$0 S 96054ab331ced506a8a72cbcd1b258be5b229dc75f3031d392f2b8f2bc225772 () (S, B) p1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                       prove → ∈ $$$0 B ∀ b → ∈ $0 B → ∈ orderedPair $$$$0 $0 S ∈ orderedPair $0 $$$$0 S 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 B ∀ b → ∈ $0 B → ∈ orderedPair $$$$$$$$0 $0 S ∈ orderedPair $0 $$$$$$$$0 S) ($$$0) 0.0.0.0.0.2.0.0.0.3.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                       prove ∀ b → ∈ $0 B → ∈ orderedPair $$$$0 $0 S ∈ orderedPair $0 $$$$0 S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 B, ∀ b → ∈ $0 B → ∈ orderedPair $$$$0 $0 S ∈ orderedPair $0 $$$$0 S) () 0.0.0.0.0.2.0.0.0.3.1 0.0.0.0.0.2.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                       prove → ∈ $0 B → ∈ orderedPair $$$0 $0 S ∈ orderedPair $0 $$$0 S 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 B → ∈ orderedPair $$$0 $$$$$$$0 S ∈ orderedPair $$$$$$$0 $$$0 S) ($0) 0.0.0.0.0.2.0.0.0.3.2
@@ -393,10 +393,10 @@ conclusion symmetricRelation productRelation R S product A B
       }
     }
   }
-  elided eccd158cad860479a716f90b40ec248a805ef17bedd70a926baf3904863d2d01 {
+  elided 3106e91c905ecd875bcdd964cdbffa8919838d24330aae8757c27ecc37ec5d52 {
     prove relation productRelation R S product A B b5102ec864228c4447b5c3906de71418c2e9eb9093f4dc59a6ad2c618bbd3756 () (R, A, S, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
     prove ∧ relation productRelation R S product A B ∀ a → ∈ $0 product A B ∀ b → ∈ $0 product A B → ∈ orderedPair $$0 $0 productRelation R S ∈ orderedPair $0 $$0 productRelation R S bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation productRelation R S product A B, ∀ a → ∈ $0 product A B ∀ b → ∈ $0 product A B → ∈ orderedPair $$0 $0 productRelation R S ∈ orderedPair $0 $$0 productRelation R S) () 1.0 0
-    prove symmetricRelation productRelation R S product A B eccd158cad860479a716f90b40ec248a805ef17bedd70a926baf3904863d2d01 () (productRelation R S, product A B) 1.1
+    prove symmetricRelation productRelation R S product A B 3106e91c905ecd875bcdd964cdbffa8919838d24330aae8757c27ecc37ec5d52 () (productRelation R S, product A B) 1.1
   }
 }
 
@@ -470,10 +470,10 @@ conclusion transitiveRelation productRelation R S product A B
                               prove → ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 productRelation R S ∧ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 S f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 productRelation R S, ∧ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 S) () 0.0.0.0.0.0.0.3.0.0.0.0.0.3.8
                               prove ∧ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 productRelation R S, ∧ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 S) () 0.0.0.0.0.0.0.3.0.0.0.0.0.3.9 0.0.0.0.0.0.0.3.0.0.0.0.0.1
                             }
-                            elided a6e958624dbe5e88df8440109f7d14f70c249a787bc589b47858d157365329dc {
+                            elided cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f {
                               prove ∧ ∈ orderedPair $$$$$$0 $$$$0 R ∈ orderedPair $$$$0 $$0 R bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair $$$$$$0 $$$$0 R, ∈ orderedPair $$$$0 $$0 R) () 0.0.0.0.0.0.0.3.0.0.0.0.0.2 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0.0.0.0.0.3.0.0.0.0.0.3 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                              elided a6e958624dbe5e88df8440109f7d14f70c249a787bc589b47858d157365329dc {
-                                prove ∧ relation R A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$0 $0 R a6e958624dbe5e88df8440109f7d14f70c249a787bc589b47858d157365329dc () (R, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                              elided cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f {
+                                prove ∧ relation R A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$0 $0 R cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f () (R, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                                 prove → ∈ $$$$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$$$$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$$$$$$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$$$$$$$$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$$$$$$$$$$0 $0 R) ($$$$$$0) 0.0.0.0.0.0.0.3.0.0.0.0.0.4.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                                 prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$$$$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$$$$$$0 $0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$$$0 A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$$$$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$$$$$$0 $0 R) () 0.0.0.0.0.0.0.3.0.0.0.0.0.4.1.1 0.0.0.0.0.0.0.3a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                                 prove → ∈ $$$$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$$$$0 $$$$$0 R ∈ orderedPair $$$$$0 $0 R ∈ orderedPair $$$$$$$0 $0 R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$$$$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$$$$0 $$$$$$$$$$$0 R ∈ orderedPair $$$$$$$$$$$0 $0 R ∈ orderedPair $$$$$$$0 $0 R) ($$$$0) 0.0.0.0.0.0.0.3.0.0.0.0.0.4.1.2
@@ -483,10 +483,10 @@ conclusion transitiveRelation productRelation R S product A B
                                 prove ∈ orderedPair $$$$$$0 $$0 R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair $$$$$$0 $$$$0 R ∈ orderedPair $$$$0 $$0 R, ∈ orderedPair $$$$$$0 $$0 R) () 0.0.0.0.0.0.0.3.0.0.0.0.0.4.1.6 0.0.0.0.0.0.0.3.0.0.0.0.0.4.0
                               }
                             }
-                            elided a6e958624dbe5e88df8440109f7d14f70c249a787bc589b47858d157365329dc {
+                            elided cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f {
                               prove ∧ ∈ orderedPair $$$$$0 $$$0 S ∈ orderedPair $$$0 $0 S bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair $$$$$0 $$$0 S, ∈ orderedPair $$$0 $0 S) () 0.0.0.0.0.0.0.3.0.0.0.0.0.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.0.0.0.0.0.0.3.0.0.0.0.0.3 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                              elided a6e958624dbe5e88df8440109f7d14f70c249a787bc589b47858d157365329dc {
-                                prove ∧ relation S B ∀ a → ∈ $0 B ∀ b → ∈ $0 B ∀ c → ∈ $0 B → ∧ ∈ orderedPair $$$0 $$0 S ∈ orderedPair $$0 $0 S ∈ orderedPair $$$0 $0 S a6e958624dbe5e88df8440109f7d14f70c249a787bc589b47858d157365329dc () (S, B) p1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                              elided cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f {
+                                prove ∧ relation S B ∀ a → ∈ $0 B ∀ b → ∈ $0 B ∀ c → ∈ $0 B → ∧ ∈ orderedPair $$$0 $$0 S ∈ orderedPair $$0 $0 S ∈ orderedPair $$$0 $0 S cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f () (S, B) p1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                                 prove → ∈ $$$$$0 B ∀ b → ∈ $0 B ∀ c → ∈ $0 B → ∧ ∈ orderedPair $$$$$$$0 $$0 S ∈ orderedPair $$0 $0 S ∈ orderedPair $$$$$$$0 $0 S 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$$$$0 B ∀ b → ∈ $0 B ∀ c → ∈ $0 B → ∧ ∈ orderedPair $$$$$$$$$$$$0 $$0 S ∈ orderedPair $$0 $0 S ∈ orderedPair $$$$$$$$$$$$0 $0 S) ($$$$$0) 0.0.0.0.0.0.0.3.0.0.0.0.0.5.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                                 prove ∀ b → ∈ $0 B ∀ c → ∈ $0 B → ∧ ∈ orderedPair $$$$$$$0 $$0 S ∈ orderedPair $$0 $0 S ∈ orderedPair $$$$$$$0 $0 S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$$0 B, ∀ b → ∈ $0 B ∀ c → ∈ $0 B → ∧ ∈ orderedPair $$$$$$$0 $$0 S ∈ orderedPair $$0 $0 S ∈ orderedPair $$$$$$$0 $0 S) () 0.0.0.0.0.0.0.3.0.0.0.0.0.5.1.1 0.0.0.0.0.0.0.3.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                                 prove → ∈ $$$0 B ∀ c → ∈ $0 B → ∧ ∈ orderedPair $$$$$$0 $$$$0 S ∈ orderedPair $$$$0 $0 S ∈ orderedPair $$$$$$0 $0 S 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$$$$0 B ∀ c → ∈ $0 B → ∧ ∈ orderedPair $$$$$$0 $$$$$$$$$$$0 S ∈ orderedPair $$$$$$$$$$$0 $0 S ∈ orderedPair $$$$$$0 $0 S) ($$$0) 0.0.0.0.0.0.0.3.0.0.0.0.0.5.1.2
@@ -535,10 +535,10 @@ conclusion transitiveRelation productRelation R S product A B
       }
     }
   }
-  elided 124edd7d89bd6b65ab31b0109d3ffdc8c3a0426fc15c32b718d490417693915d {
+  elided 8f94bab3ab91e7b11cb545caf73cee4d97f206ae80b418f15838b221b1e5fe21 {
     prove relation productRelation R S product A B b5102ec864228c4447b5c3906de71418c2e9eb9093f4dc59a6ad2c618bbd3756 () (R, A, S, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
     prove ∧ relation productRelation R S product A B ∀ a → ∈ $0 product A B ∀ b → ∈ $0 product A B ∀ c → ∈ $0 product A B → ∧ ∈ orderedPair $$$0 $$0 productRelation R S ∈ orderedPair $$0 $0 productRelation R S ∈ orderedPair $$$0 $0 productRelation R S bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation productRelation R S product A B, ∀ a → ∈ $0 product A B ∀ b → ∈ $0 product A B ∀ c → ∈ $0 product A B → ∧ ∈ orderedPair $$$0 $$0 productRelation R S ∈ orderedPair $$0 $0 productRelation R S ∈ orderedPair $$$0 $0 productRelation R S) () 1.0 0
-    prove transitiveRelation productRelation R S product A B 124edd7d89bd6b65ab31b0109d3ffdc8c3a0426fc15c32b718d490417693915d () (productRelation R S, product A B) 1.1
+    prove transitiveRelation productRelation R S product A B 8f94bab3ab91e7b11cb545caf73cee4d97f206ae80b418f15838b221b1e5fe21 () (productRelation R S, product A B) 1.1
   }
 }
 

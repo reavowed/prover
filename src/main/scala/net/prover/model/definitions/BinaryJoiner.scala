@@ -1,6 +1,6 @@
 package net.prover.model.definitions
 
-import net.prover.model.entries.{DisplayShorthand, StatementDefinition, TermDefinition}
+import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions.{Expression, Statement, Term, TermVariable}
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{Inference, Substitutions}

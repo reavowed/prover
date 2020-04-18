@@ -3,7 +3,7 @@ package net.prover.model.proof
 import net.prover.controllers.ExtractionHelper
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.model._
-import net.prover.model.entries.StatementDefinition
+import net.prover.model.definitions.StatementDefinition
 import net.prover.model.expressions._
 
 object ProofHelper {

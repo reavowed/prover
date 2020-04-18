@@ -1,14 +1,14 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.TermDefinition
-import net.prover.model.expressions.{FunctionParameter, Template}
+import net.prover.model.entries.TermDefinitionEntry
+import net.prover.model.expressions.FunctionParameter
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
 class TermDefinitionSpec extends Specification {
 
-  private def testParsingAndSerialization(termDefinition: TermDefinition): MatchResult[Any] = {
+  private def testParsingAndSerialization(termDefinition: TermDefinitionEntry): MatchResult[Any] = {
     val serializedDefinition = termDefinition.serializedLines.mkString("\n")
     val reparsedDefinition = Chapter.chapterEntryParser(defaultEntryContext).parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(termDefinition)
@@ -17,7 +17,7 @@ class TermDefinitionSpec extends Specification {
   "term definition parser" should {
     "parse a term constant" in {
       testParsingAndSerialization(
-        TermDefinition(
+        TermDefinitionEntry(
           "∅",
           Nil,
           Nil,
@@ -33,13 +33,13 @@ class TermDefinitionSpec extends Specification {
 
     "parse a term with premises" in {
       testParsingAndSerialization(
-        TermDefinition(
+        TermDefinitionEntry(
           "intersection",
           Nil,
           Seq(a),
           None,
           None,
-          Format.Explicit("%0%1", "⋂a", requiresBrackets = false, requiresComponentBrackets = true),
+          Format.Explicit("%0%1", "⋂a", 2, requiresBrackets = false, requiresComponentBrackets = true),
           Seq(Negation(Equals(a, EmptySet))),
           ForAll("x")(Equivalence(
             ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)),
@@ -52,7 +52,7 @@ class TermDefinitionSpec extends Specification {
     }
     "parse a term with a disambiguator" in {
       testParsingAndSerialization(
-        TermDefinition(
+        TermDefinitionEntry(
           "0",
           Nil,
           Nil,
@@ -67,7 +67,7 @@ class TermDefinitionSpec extends Specification {
     }
     "parse a term with a disambiguator adder" in {
       testParsingAndSerialization(
-        TermDefinition(
+        TermDefinitionEntry(
           "⍳",
           Nil,
           Nil,
