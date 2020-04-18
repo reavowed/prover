@@ -83,6 +83,9 @@ case class Theorem(
       }
     }.traverseTry.map(proofs => copy(proofs = proofs))
   }
+  def clearInference(inference: Inference): Theorem = {
+    copy(proofs = proofs.map(_.clearInference(inference)))
+  }
   override def replaceDefinition(
     oldDefinition: ExpressionDefinition,
     newDefinition: ExpressionDefinition,
@@ -172,6 +175,9 @@ object Theorem extends Inference.EntryParser {
       stepProvingContext: StepProvingContext
     ): Try[Proof] = {
       steps.replaceInference(oldInference, newInference, stepProvingContext).map(Proof(_))
+    }
+    def clearInference(inference: Inference): Proof = {
+      Proof(steps.clearInference(inference))
     }
     def replaceDefinition(
       oldDefinition: ExpressionDefinition,

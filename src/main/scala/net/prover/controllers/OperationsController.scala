@@ -83,4 +83,22 @@ class OperationsController @Autowired() (val bookService: BookService) extends B
       }
     })
   }
+
+  @GetMapping(value = Array("clearInference"))
+  def clearInference(
+    @RequestParam("id") inferenceId: String
+  ): Unit = {
+    updateEntries[Unit](Map.empty, definitions => {
+      val inference = definitions.allInferences.find(_.id == inferenceId).get
+      (_, _, chapterEntry, _, _) => {
+        val updated = chapterEntry.asOptionalInstanceOf[Theorem] match {
+          case Some(theorem) =>
+            theorem.clearInference(inference)
+          case _ =>
+            chapterEntry
+        }
+        (updated, ())
+      }
+    })
+  }
 }
