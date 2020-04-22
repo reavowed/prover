@@ -177,7 +177,7 @@ object Step {
     override def provenStatement: Option[Statement] = Some(statement)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = {
-      val newInternalConclusion = substeps.flatMap(_.provenStatement).lastOption.getOrElse(throw new Exception("No conclusion for naming step"))
+      val newInternalConclusion = newSubsteps.flatMap(_.provenStatement).lastOption.getOrElse(throw new Exception("No conclusion for naming step"))
       val newConclusion = newInternalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
       val newInternalPremise = generalizationDefinition.bind(variableName)(deductionDefinition(assumption, newInternalConclusion))
       val newSubstitutions = inference.premises.zip(premises.map(_.statement) :+ newInternalPremise)

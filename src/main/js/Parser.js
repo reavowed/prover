@@ -5,7 +5,7 @@ import {
   FunctionParameter,
   PropertyExpression,
   TypeExpression,
-  tokenize, StandalonePropertyExpression,
+  tokenize, StandalonePropertyExpression, TypeQualifierExpression,
 } from "./models/Expression";
 import {
   AssertionStep,
@@ -65,13 +65,20 @@ export class Parser {
         const [firstToken, ...tokensAfterFirst] = tokens;
         const expressionDefinition = self.definitions[firstToken];
         const typeDefinition = self.typeDefinitions[firstToken];
-        const parentTypeDefinition = _.find(self.typeDefinitions, d => _.some(d.properties, p => p.qualifiedSymbol === firstToken));
+        const qualifierAndParentType = _.chain(self.typeDefinitions).map(d => { return {qualifier: _.find(d.qualifiers, q => q.qualifiedSymbol === firstToken), parentType: d}}).filter("qualifier").find().value();
+        const propertyAndParentType = _.chain(self.typeDefinitions).map(d => { return {property: _.find(d.properties, p => p.qualifiedSymbol === firstToken), parentType: d}}).filter("property").find().value();
         const standalonePropertyDefinition = self.standalonePropertyDefinitions[firstToken];
         if (expressionDefinition) {
           const boundVariables = tokensAfterFirst.slice(0, expressionDefinition.numberOfBoundVariables);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterFirst.slice(expressionDefinition.numberOfBoundVariables), expressionDefinition.numberOfComponents);
           if (_.includes(expressionDefinition.attributes, "conjunction")) {
             const [firstComponent, secondComponent] = components;
+            if (firstComponent instanceof TypeExpression && secondComponent instanceof TypeQualifierExpression && _.includes(firstComponent.definition.qualifiers, secondComponent.definition)) {
+              if (secondComponent.term.serialize() === firstComponent.term.serialize() && !firstComponent.definition.defaultQualifier) {
+                firstComponent.addQualifier(secondComponent.definition, secondComponent.qualifierComponents, expressionDefinition);
+                return [firstComponent, tokensAfterComponents];
+              }
+            }
             if (firstComponent instanceof TypeExpression && secondComponent instanceof PropertyExpression && _.includes(firstComponent.definition.properties, secondComponent.definition)) {
               if (secondComponent.term.serialize() === firstComponent.term.serialize() && secondComponent.qualifierComponents.map(c => c.serialize()).join(" ") === firstComponent.qualifierComponents.map(c => c.serialize()).join(" ")) {
                 firstComponent.addProperty(secondComponent.definition, expressionDefinition);
@@ -82,12 +89,19 @@ export class Parser {
           return [new DefinedExpression(expressionDefinition, boundVariables, components), tokensAfterComponents];
         } else if (typeDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, typeDefinition.numberOfComponents);
-          return [new TypeExpression(typeDefinition, term, components, [], null), tokensAfterComponents];
-        } else if (parentTypeDefinition) {
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, typeDefinition.defaultQualifier?.numberOfComponents ?? 0);
+          return [new TypeExpression(typeDefinition, term, null, components, [], null), tokensAfterComponents];
+        } else if (qualifierAndParentType) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, parentTypeDefinition.numberOfComponents);
-          return [new PropertyExpression(parentTypeDefinition, _.find(parentTypeDefinition.properties, p => p.qualifiedSymbol === firstToken), term, components), tokensAfterComponents];
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifierAndParentType.qualifier.qualifier.numberOfComponents);
+          return [new TypeQualifierExpression(qualifierAndParentType.qualifier, qualifierAndParentType.parentType, term, components), tokensAfterComponents];
+        } else if (propertyAndParentType) {
+          const {property, parentType} = propertyAndParentType;
+          const requiredParentQualifier = property.requiredParentQualifier ? _.find(parentType.qualifiers, q => q.symbol === property.requiredParentQualifier) : null;
+          const qualifier = requiredParentQualifier?.qualifier || parentType.defaultQualifier;
+          const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifier?.numberOfComponents ?? 0);
+          return [new PropertyExpression(property, parentType, term, components), tokensAfterComponents];
         } else if (standalonePropertyDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, standalonePropertyDefinition.numberOfComponents);

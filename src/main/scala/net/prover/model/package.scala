@@ -484,32 +484,6 @@ package object model {
     }
   }
 
-  implicit class SeqParserOps[T](x: Seq[Parser[T]]) {
-    def traverseParser: Parser[Seq[T]] = {
-      x.foldLeft(Parser.constant(Seq.empty[T])) { case (seqParser, tParser) =>
-        for {
-          seq <- seqParser
-          t <- tParser
-        } yield {
-          seq :+ t
-        }
-      }
-    }
-  }
-
-  implicit class SeqParserTupleOps[S, T](x: Seq[(S, Parser[T])]) {
-    def traverseParserMap: Parser[Map[S, T]] = {
-      x.foldLeft(Parser.constant(Map.empty[S, T])) { case (mapParser, (s, tParser)) =>
-        for {
-          map <- mapParser
-          t <- tParser
-        } yield {
-          map + (s -> t)
-        }
-      }
-    }
-  }
-
   implicit class OptionOps[T](x: Option[T]) {
     def toMatch: PossibleSingleMatch[T] = x.map(PossibleSingleMatch.SingleMatch(_)).getOrElse(PossibleSingleMatch.NoMatches)
     def ifDefined(action: => Unit): Option[T] = {

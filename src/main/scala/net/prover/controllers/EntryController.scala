@@ -22,10 +22,10 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @RequestBody(required = false) newName: String
   ): ResponseEntity[_] = {
     bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, entry) => entry match {
-      case inference: Inference.Entry =>
-        Success(inference.withName(newName))
-      case definition: ExpressionDefinitionEntry =>
-        Success(definition.withName(Option(newName).filter(_.nonEmpty)))
+      case entry: ChapterEntry.CanChangeName =>
+        getMandatoryString(newName, "name").map(entry.withName)
+      case entry: ChapterEntry.CanChangeOptionalName =>
+        Success(entry.withName(getOptionalString(newName)))
       case _ =>
         Failure(BadRequestException(s"Cannot set name of ${entry.getClass.getName}"))
     })

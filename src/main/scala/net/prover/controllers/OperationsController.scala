@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.model.definitions.{Definitions, TermDefinition}
 import net.prover.model.entries.{ChapterEntry, Theorem, WritingShorthand}
-import net.prover.model.{Book, Chapter, EntryContext, ProvingContext}
+import net.prover.model.{Book, Chapter, EntryContext, Inference, ProvingContext}
 import net.prover.exceptions.InferenceReplacementException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
@@ -39,19 +39,19 @@ class OperationsController @Autowired() (val bookService: BookService) extends B
     println("Update operation complete")
   }
 
-  @GetMapping(value = Array("replaceZero"))
-  def replaceZero(): Unit = {
-    updateEntries[Map[String, String]](Map.empty, _ => (_, _, chapterEntry, entryContext, changedInferences) => {
-      if (chapterEntry.asOptionalInstanceOf[TermDefinition].exists(_.symbol == "0_ℤ")) {
-        (WritingShorthand.parser(entryContext).parseFromString("apply ⍳_ℤ 0 as 0_ℤ", ""), changedInferences)
-      } else {
-        val serializedEntry = chapterEntry.serializedLines.mkString("\n")
-        val replacedSerializedEntry = changedInferences.foldLeft(serializedEntry) { case (currentSerializedEntry, (oldId, newId)) =>
-          currentSerializedEntry.replace(oldId, newId)
+  @GetMapping(value = Array("clearInferencesUsingOldFunction"))
+  def clearInferencesUsingOldFunction(): Unit = {
+    updateEntries[Seq[Inference]](Nil, definitions => {
+      val oldFunctionDefinition = definitions.rootEntryContext.typeDefinitions.find(_.symbol == "oldFunction").get
+      (_, _, chapterEntry, _, inferencesToClear) => {
+        val updatedInferences = if (chapterEntry.referencedEntries.contains(oldFunctionDefinition)) inferencesToClear ++ chapterEntry.inferences else inferencesToClear
+        val updatedEntry = chapterEntry.asOptionalInstanceOf[Theorem] match {
+          case Some(theorem) =>
+            inferencesToClear.foldLeft(theorem)(_.clearInference(_))
+          case _ =>
+            chapterEntry
         }
-        val newEntry = Chapter.chapterEntryParser(entryContext).parseFromString(replacedSerializedEntry, chapterEntry.name).get
-        val updatedInferences = changedInferences ++ chapterEntry.inferences.map(_.id).zip(newEntry.inferences.map(_.id)).filter { case (o, n) => o != n }.toMap
-        (newEntry, updatedInferences)
+        (updatedEntry, updatedInferences)
       }
     })
   }

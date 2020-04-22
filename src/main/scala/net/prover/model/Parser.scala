@@ -183,7 +183,16 @@ object Parser {
 
   def allInParens: Parser[String] = Parser(_.untilCloseParen()).inParens
 
-  implicit class OptionParserOps[T](parser: Parser[Option[T]]) {
+  implicit class OptionParserOps[T](parser: Option[Parser[T]]) {
+    def traverse: Parser[Option[T]] = parser match {
+      case Some(p) =>
+        p.map(Some(_))
+      case None =>
+        Parser.constant(None)
+    }
+  }
+
+  implicit class ParserOptionOps[T](parser: Parser[Option[T]]) {
     def mapMap[S](f: T => S): Parser[Option[S]] = parser.map(_.map(f))
     def mapFlatMap[S](f: T => Option[S]): Parser[Option[S]] = parser.map(_.flatMap(f))
     def flatMapMap[S](f: T => Parser[S]): Parser[Option[S]] = parser.flatMap {
@@ -227,11 +236,24 @@ object Parser {
     }
   }
 
-  implicit class ParserSeqOps[T](parsers: Seq[Parser[T]]) {
+  implicit class SeqOps[T](parsers: Seq[Parser[T]]) {
     def traverse: Parser[Seq[T]] = Parser { initialTokenStream =>
       parsers.foldLeft((Seq.empty[T], initialTokenStream)) { case ((valuesSoFar, tokenStream), parser) =>
         val (value, newTokenStream) = parser.parse(tokenStream)
         (valuesSoFar :+ value, newTokenStream)
+      }
+    }
+  }
+
+  implicit class SeqParserTupleOps[S, T](x: Seq[(S, Parser[T])]) {
+    def traverseParserMap: Parser[Map[S, T]] = {
+      x.foldLeft(Parser.constant(Map.empty[S, T])) { case (mapParser, (s, tParser)) =>
+        for {
+          map <- mapParser
+          t <- tParser
+        } yield {
+          map + (s -> t)
+        }
       }
     }
   }
@@ -251,6 +273,19 @@ object Parser {
     parser: Parser[T]
   ): Parser[Option[T]] = {
     optional(name, parser.map(Some.apply), None)
+  }
+
+  def optional[T](f: String => Option[T]): Parser[Option[T]] = Parser { tokenStream =>
+    if (tokenStream.isEmpty) {
+      (None, tokenStream)
+    } else {
+      f(tokenStream.currentToken.text) match {
+        case Some(t) =>
+          (Some(t), tokenStream.advance())
+        case None =>
+          (None, tokenStream)
+      }
+    }
   }
 
   def required[T](

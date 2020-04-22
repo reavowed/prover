@@ -29,29 +29,12 @@ case class Chapter(
 }
 
 object Chapter {
-  val chapterEntryParsers: Seq[ChapterEntryParser] = Seq(
-    Comment,
-    StatementDefinitionEntry,
-    TermDefinitionEntry,
-    TypeDefinition,
-    PropertyDefinitionOnType,
-    StandalonePropertyDefinition,
-    Axiom,
-    Theorem,
-    DisplayShorthand,
-    WritingShorthand)
-
-  def chapterEntryParser(context: EntryContext): Parser[Option[ChapterEntry]] = {
-    Parser.singleWordIfAny.flatMapFlatMapReverse { entryType =>
-      chapterEntryParsers.find(_.name == entryType).map(_.parser(context))
-    }
-  }
 
   def parser(title: String)(initialContext: EntryContext): Parser[(Chapter, EntryContext)] = {
     for {
       summary <- Parser.toEndOfLine
       entriesAndContext <- Parser.foldWhileDefined[ChapterEntry, EntryContext](initialContext) { (_, _, currentContext) =>
-        chapterEntryParser(currentContext).mapMap { entry =>
+        ChapterEntry.parser(currentContext).mapMap { entry =>
           (entry, currentContext.addEntry(entry))
         }
       }

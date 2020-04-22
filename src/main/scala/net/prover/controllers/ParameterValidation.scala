@@ -35,7 +35,14 @@ trait ParameterValidation {
       .getOrElse(Format.default(boundVariableNames, componentTypes))
       .recoverWithBadRequest
   }
-  def getQualifier(termNamesText: String, serializedFormat: String): Try[Option[Qualifier]] = {
+  def getQualifier(termNamesText: String, serializedFormat: String): Try[Qualifier] = {
+    val termNames = getWords(termNamesText)
+    for {
+      _ <- termNames.nonEmpty.orBadRequest("At least one term name must be provided")
+      format <- Format.parser(termNames).parseFromString(serializedFormat, "format").recoverWithBadRequest
+    } yield Qualifier(termNames, format)
+  }
+  def getOptionalQualifier(termNamesText: String, serializedFormat: String): Try[Option[Qualifier]] = {
     (getWords(termNamesText), getOptionalString(serializedFormat)) match {
       case (otherTermNames, Some(serializedFormat)) if otherTermNames.nonEmpty =>
         for {

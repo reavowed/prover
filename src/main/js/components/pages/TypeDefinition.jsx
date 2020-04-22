@@ -28,7 +28,7 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
     return window.fetchJson(path.join(url, "format"), {method: "PUT", body: newFormat});
   };
 
-  const serializedFormat = definition.qualifier.format.originalValue ?
+  const serializedFormat = definition.qualifier?.format.originalValue ?
     "(" + definition.qualifier.format.originalValue + ")" + (definition.qualifier.format.requiresBrackets ? " requires-brackets" : "") + (definition.qualifier.format.requiresComponentBrackets ? "" : " no-component-brackets") :
     "";
 
@@ -42,8 +42,8 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
         <EditableProperty label="Symbol" initialValue={definition.symbol} onSave={saveSymbol} />
         <EditableProperty label="Explicit Name" initialValue={definition.explicitName} onSave={saveName} />
         <EditableProperty label="Main Term Name" initialValue={definition.defaultTermName} />
-        <EditableProperty label="Qualifier Term Names" initialValue={definition.qualifier.termNames.join(" ")} />
-        <EditableProperty label="Qualifier Format" initialValue={serializedFormat} onSave={saveFormat} />
+        {definition.qualifier && <EditableProperty label="Qualifier Term Names" initialValue={definition.qualifier.termNames.join(" ")} />}
+        {definition.qualifier && <EditableProperty label="Qualifier Format" initialValue={serializedFormat} onSave={saveFormat} />}
         <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.constructionInference.id} title="Construction" />
         <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.deconstructionInference.id} title="Deconstruction" />
       </Page>

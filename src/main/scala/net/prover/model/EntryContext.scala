@@ -11,6 +11,7 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
   lazy val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
   lazy val typeDefinitions: Seq[TypeDefinition] = availableEntries.ofType[TypeDefinition]
   lazy val propertyDefinitionsByType: Map[String, Seq[PropertyDefinitionOnType]] = availableEntries.ofType[PropertyDefinitionOnType].groupBy(_.parentType.symbol)
+  lazy val qualifiersByType: Map[String, Seq[TypeQualifierDefinition]] = availableEntries.ofType[TypeQualifierDefinition].groupBy(_.parentType.symbol)
   lazy val standalonePropertyDefinitions: Seq[StandalonePropertyDefinition] = availableEntries.ofType[StandalonePropertyDefinition]
   lazy val displayShorthands: Seq[DisplayShorthand] = availableEntries.ofType[DisplayShorthand]
   lazy val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]
@@ -55,6 +56,8 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
     }
   }
 
+  def typeDefinitionParser: Parser[TypeDefinition] = Parser.singleWord.map(typeName => typeDefinitions.find(_.symbol == typeName).getOrElse(throw new Exception(s"Unrecognised type '$typeName'")))
+
   def ++ (other: EntryContext) = {
     EntryContext(
       availableEntries ++ other.availableEntries,
@@ -69,6 +72,7 @@ object EntryContext {
   def getStatementDefinitionFromEntry(entry: ChapterEntry): Option[StatementDefinition] = entry match {
     case statementDefinition: StatementDefinition => Some(statementDefinition)
     case typeDefinition: TypeDefinition => Some(typeDefinition.statementDefinition)
+    case typeQualifierDefinition: TypeQualifierDefinition => Some(typeQualifierDefinition.statementDefinition)
     case propertyDefinition: PropertyDefinitionOnType => Some(propertyDefinition.statementDefinition)
     case standalonePropertyDefinition: StandalonePropertyDefinition => Some(standalonePropertyDefinition.statementDefinition)
     case _ => None

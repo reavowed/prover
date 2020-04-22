@@ -44,10 +44,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
             Some(TermDefinitionPropsForChapter(defaultValue, url, shorthand, definingStatement, premises))
           case typeDefinition: TypeDefinition =>
             import typeDefinition._
-            Some(TypeDefinitionPropsForChapter(symbol, url, defaultTermName, qualifier.map(_.termNames), definingStatement))
+            Some(TypeDefinitionPropsForChapter(symbol, url, defaultTermName, qualifier.termNames, definingStatement))
+          case typeQualfifierDefinition: TypeQualifierDefinition =>
+            import typeQualfifierDefinition._
+            Some(TypeQualifierDefinitionPropsForChapter(symbol, url, parentType.symbol, parentType.defaultTermName, qualifier.termNames, definingStatement))
           case propertyDefinition: PropertyDefinitionOnType =>
             import propertyDefinition._
-            Some(PropertyDefinitionPropsForChapter(name, url, parentType.symbol, parentType.defaultTermName, parentType.qualifier.map(_.termNames), definingStatement))
+            Some(PropertyDefinitionPropsForChapter(symbol, name, url, parentType.symbol, parentType.defaultTermName, parentType.qualifier.map(_.termNames), definingStatement))
           case standalonePropertyDefinition: StandalonePropertyDefinition =>
             import standalonePropertyDefinition._
             Some(StandalonePropertyDefinitionPropsForChapter(name, url, defaultTermName, definingStatement))
@@ -119,6 +122,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           Success(("TermDefinition", Map("definition" -> termDefinition)))
         case typeDefinition: TypeDefinition =>
           Success(("TypeDefinition", Map("definition" -> typeDefinition)))
+        case typeQualifierDefinition: TypeQualifierDefinition =>
+          Success(("TypeQualifierDefinition", Map("definition" -> typeQualifierDefinition)))
         case propertyDefinitionOnType: PropertyDefinitionOnType =>
           Success(("PropertyDefinitionOnType", Map("definition" -> propertyDefinitionOnType)))
         case standalonePropertyDefinition: StandalonePropertyDefinition =>
@@ -153,15 +158,15 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   def createTheorem(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
-    @RequestBody newTheoremDefininition: NewTheoremModel
+    @RequestBody newTheoremDefinition: NewTheoremModel
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       for {
-        name <- getMandatoryString(newTheoremDefininition.name, "Theorem name")
-        premises <- newTheoremDefininition.premises.flatMap(getOptionalString).mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}").recoverWithBadRequest).traverseTry
-        conclusion <- Statement.parser.parseFromString(newTheoremDefininition.conclusion, "conclusion").recoverWithBadRequest
+        name <- getMandatoryString(newTheoremDefinition.name, "Theorem name")
+        premises <- newTheoremDefinition.premises.flatMap(getOptionalString).mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}").recoverWithBadRequest).traverseTry
+        conclusion <- Statement.parser.parseFromString(newTheoremDefinition.conclusion, "conclusion").recoverWithBadRequest
         newTheorem = Theorem(
           name,
           premises,
@@ -251,17 +256,17 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   def createTypeDefinition(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
-    @RequestBody newTypeDefininition: NewTypeDefinitionModel
+    @RequestBody newTypeDefinition: NewTypeDefinitionModel
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
-      val name = getOptionalString(newTypeDefininition.name)
+      val name = getOptionalString(newTypeDefinition.name)
       for {
-        symbol <- getMandatoryString(newTypeDefininition.symbol, "Symbol")
-        defaultTermName <- getMandatoryString(newTypeDefininition.defaultTermName, "Default term name")
-        qualifier <- getQualifier(newTypeDefininition.qualifierTermNames, newTypeDefininition.qualifierFormat)
-        definition <- Statement.parser.parseFromString(newTypeDefininition.definition, "definition").recoverWithBadRequest
+        symbol <- getMandatoryString(newTypeDefinition.symbol, "Symbol")
+        defaultTermName <- getMandatoryString(newTypeDefinition.defaultTermName, "Default term name")
+        qualifier <- getOptionalQualifier(newTypeDefinition.qualifierTermNames, newTypeDefinition.qualifierFormat)
+        definition <- Statement.parser.parseFromString(newTypeDefinition.definition, "definition").recoverWithBadRequest
         newTypeDefinition = TypeDefinition(
           symbol,
           defaultTermName,
@@ -272,24 +277,55 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
 
-  @PostMapping(value = Array("/propertyDefinitions"), produces = Array("application/json;charset=UTF-8"))
-  def createPropertyDefinition(
+  @PostMapping(value = Array("/typeQualifierDefinitions"), produces = Array("application/json;charset=UTF-8"))
+  def createTypeQualifierDefinition(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
-    @RequestBody newPropertyDefininition: NewPropertyDefinitionModel
+    @RequestBody newTypeQualifierDefinition: NewTypeQualifierDefinitionModel
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
-      val name = getOptionalString(newPropertyDefininition.name)
+      val name = getOptionalString(newTypeQualifierDefinition.name)
       for {
-        symbol <- getMandatoryString(newPropertyDefininition.symbol, "Symbol")
-        parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefininition.parentType).orBadRequest(s"Unknown type '${newPropertyDefininition.parentType}'")
-        definingStatement <- Statement.parser.parseFromString(newPropertyDefininition.definingStatement, "definition").recoverWithBadRequest
+        symbol <- getMandatoryString(newTypeQualifierDefinition.symbol, "Symbol")
+        parentType <- entryContext.typeDefinitions.find(_.symbol == newTypeQualifierDefinition.parentType).orBadRequest(s"Unknown type '${newTypeQualifierDefinition.parentType}'")
+        qualifier <- getQualifier(newTypeQualifierDefinition.qualifierTermNames, newTypeQualifierDefinition.qualifierFormat)
+        definition <- Statement.parser.parseFromString(newTypeQualifierDefinition.definition, "definition").recoverWithBadRequest
+        conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
+        newTypeQualifierDefinition = TypeQualifierDefinition(
+          symbol,
+          parentType,
+          qualifier,
+          name,
+          definition,
+          conjunctionDefinition)
+      } yield newTypeQualifierDefinition
+    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/propertyDefinitions"), produces = Array("application/json;charset=UTF-8"))
+  def createPropertyDefinition(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @RequestBody newPropertyDefinition: NewPropertyDefinitionModel
+  ): ResponseEntity[_] = {
+    bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+      val name = getOptionalString(newPropertyDefinition.name)
+      for {
+        symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")
+        parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefinition.parentType).orBadRequest(s"Unknown type '${newPropertyDefinition.parentType}'")
+        requiredParentQualifier <- getOptionalString(newPropertyDefinition.requiredParentQualifier)
+          .map(qualifierSymbol => entryContext.qualifiersByType(parentType.symbol).find(_.symbol == qualifierSymbol).orBadRequest(s"Unknown qualifier '$qualifierSymbol' on type '${parentType.symbol}''"))
+          .swap
+        definingStatement <- Statement.parser.parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newPropertyDefinition = PropertyDefinitionOnType(
           symbol,
           parentType,
+          requiredParentQualifier,
           name,
           definingStatement,
           conjunctionDefinition)
@@ -301,16 +337,16 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   def createStandalonePropertyDefinition(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
-    @RequestBody newPropertyDefininition: NewStandalonePropertyDefinitionModel
+    @RequestBody newPropertyDefinition: NewStandalonePropertyDefinitionModel
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
-      val name = getOptionalString(newPropertyDefininition.name)
+      val name = getOptionalString(newPropertyDefinition.name)
       for {
-        symbol <- getMandatoryString(newPropertyDefininition.symbol, "Symbol")
-        defaultTermName <- getMandatoryString(newPropertyDefininition.defaultTermName, "Default term name")
-        definition <- Statement.parser.parseFromString(newPropertyDefininition.definingStatement, "definition").recoverWithBadRequest
+        symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")
+        defaultTermName <- getMandatoryString(newPropertyDefinition.defaultTermName, "Default term name")
+        definition <- Statement.parser.parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
         newPropertyDefinition = StandalonePropertyDefinition(
           symbol,
           defaultTermName,
@@ -436,11 +472,19 @@ object ChapterController {
     qualifierFormat: String,
     name: String,
     definition: String)
+  case class NewTypeQualifierDefinitionModel(
+    symbol: String,
+    parentType: String,
+    qualifierTermNames: String,
+    qualifierFormat: String,
+    name: String,
+    definition: String)
   case class NewPropertyDefinitionModel(
     symbol: String,
     parentType: String,
     name: String,
-    definingStatement: String)
+    definingStatement: String,
+    requiredParentQualifier: String)
   case class NewStandalonePropertyDefinitionModel(
     symbol: String,
     defaultTermName: String,

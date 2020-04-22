@@ -14,20 +14,6 @@ export interface DisambiguatedSymbol {
   serialized: string;
 }
 
-export interface PropertyDefinition {
-  symbol: string;
-  qualifiedSymbol: string;
-  name: string;
-}
-
-export interface StandalonePropertyDefinition {
-  symbol: string;
-  qualifiedSymbol: string;
-  name: string;
-  numberOfComponents: number;
-  componentFormatString: string;
-}
-
 export interface ExpressionDefinition {
   symbol: DisambiguatedSymbol;
   baseFormatString: string;
@@ -38,12 +24,39 @@ export interface ExpressionDefinition {
   attributes: string[];
 }
 
+export interface QualifierDefinition {
+  numberOfComponents: number;
+  format: string;
+}
+
 export interface TypeDefinition {
   symbol: string;
   name: string;
-  numberOfComponents: number;
-  qualifierFormatString: string;
+  defaultQualifier: QualifierDefinition | null;
   properties: PropertyDefinition[];
+  qualifiers: TypeQualifierDefinition[];
+}
+
+export interface TypeQualifierDefinition {
+  symbol: string;
+  qualifiedSymbol: string;
+  name: string;
+  qualifier: QualifierDefinition;
+}
+
+export interface PropertyDefinition {
+  symbol: string;
+  qualifiedSymbol: string;
+  name: string;
+  requiredParentQualifier: string;
+}
+
+export interface StandalonePropertyDefinition {
+  symbol: string;
+  qualifiedSymbol: string;
+  name: string;
+  numberOfComponents: number;
+  componentFormatString: string;
 }
 
 export class ExpressionMatchResult {
@@ -204,25 +217,46 @@ export class DefinedExpression extends Expression {
 }
 
 export class TypeExpression extends Expression {
-  constructor(public definition: TypeDefinition, public term: Expression, public qualifierComponents: Expression[], public properties: PropertyDefinition[], public conjunctionDefinition: ExpressionDefinition | undefined) { super(); }
+  constructor(public definition: TypeDefinition, public term: Expression, public explicitQualifier: TypeQualifierDefinition | undefined, public qualifierComponents: Expression[],  public properties: PropertyDefinition[], public conjunctionDefinition: ExpressionDefinition | undefined) { super(); }
   serialize(): string {
-    const termAndComponentsWords = [this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())];
-    const baseWords = [this.definition.symbol, ...termAndComponentsWords];
+    const serializedTerm = this.term.serialize();
+    const serializedQualifierComponents = this.qualifierComponents.map(c => c.serialize());
+
+    let serializedBaseComponents: string[], wordsWithQualifier;
+
+    if (this.explicitQualifier) {
+      serializedBaseComponents = [serializedTerm];
+      if (this.conjunctionDefinition) {
+        wordsWithQualifier = [this.conjunctionDefinition.symbol.serialized, this.definition.symbol, serializedTerm, this.explicitQualifier.qualifiedSymbol, serializedTerm, ...serializedQualifierComponents]
+      } else throw "Cannot serialize type with property without conjunction";
+    } else {
+      serializedBaseComponents = [serializedTerm, ...serializedQualifierComponents];
+      wordsWithQualifier = [this.definition.symbol, ...serializedBaseComponents];
+    }
+
     const allWords = _.reduce(
-          this.properties,
+        this.properties,
         // @ts-ignore
-          (wordsSoFar: string[], propertyDefinition: PropertyDefinition) => {
-            if (this.conjunctionDefinition) {
-              return [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, propertyDefinition.qualifiedSymbol, ...termAndComponentsWords]
-            } else throw "Cannot serialize type with property without conjunction";
-          },
-          baseWords);
+        (wordsSoFar: string[], propertyDefinition: PropertyDefinition) => {
+          if (this.conjunctionDefinition) {
+            return [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, propertyDefinition.qualifiedSymbol, ...serializedBaseComponents]
+          } else throw "Cannot serialize type with property without conjunction";
+        },
+        wordsWithQualifier);
     return allWords.join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
-    const baseWords = ["is", this.term.serializeNicely(boundVariableLists), this.definition.symbol, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))];
-    const allWords = this.properties.length ? [...baseWords, "with", "(" + this.properties.map(p => p.symbol).join(" ") + ")"] : baseWords;
+    const baseWords = ["is", this.term.serializeNicely(boundVariableLists), this.definition.symbol]
+    const worldsWithQualifier = this.explicitQualifier ?
+        [...baseWords, this.explicitQualifier.symbol, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))] :
+        [...baseWords, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))];
+    const allWords = this.properties.length ? [...worldsWithQualifier, "with", "(" + this.properties.map(p => p.symbol).join(" ") + ")"] : worldsWithQualifier;
     return allWords.join(" ")
+  }
+  addQualifier(newQualifier: TypeQualifierDefinition, qualifierComponents: Expression[], conjunctionDefinition: ExpressionDefinition) {
+    this.explicitQualifier = newQualifier;
+    this.qualifierComponents = qualifierComponents;
+    this.conjunctionDefinition = conjunctionDefinition;
   }
   addProperty(newProperty: PropertyDefinition, conjunctionDefinition: ExpressionDefinition) {
     this.properties = [...this.properties, newProperty];
@@ -234,28 +268,70 @@ export class TypeExpression extends Expression {
   replaceAtPath(path: number[], expression: Expression): [Expression, number[][]] {
     if (!path.length) {
       return [expression, [path]];
-    } else {
-      // @ts-ignore
-      if (!_.startsWith(path, Array(this.properties.length).fill(0))) {
-        throw "Cannot replace in property expression"
-      }
-      const pathAfterProperties = path.slice(this.properties.length);
-      const [first, ...remaining] = pathAfterProperties;
-      let replacedExpression: Expression, replacedInnerPaths: number[][];
-      if (first == 0) {
-        const [replacedTerm, replacedPathsInTerm] = this.term.replaceAtPath(remaining, expression)
-        replacedExpression = new TypeExpression(this.definition, replacedTerm, this.qualifierComponents, this.properties, this.conjunctionDefinition);
-        replacedInnerPaths = replacedPathsInTerm;
-      } else {
-        const [replacedComponent, replacedPathsInComponent] = this.qualifierComponents[first - 1].replaceAtPath(remaining, expression);
-        const replacedComponents = [...this.qualifierComponents.slice(0, first - 1), replacedComponent, ... this.qualifierComponents.slice(first)];
-        replacedExpression = new TypeExpression(this.definition, this.term, replacedComponents, this.properties, this.conjunctionDefinition);
-        replacedInnerPaths = replacedPathsInComponent;
-      }
-      const replacedTermPaths = replacedInnerPaths.map(p => [...Array(this.properties.length).fill(0), first, ...p]);
-      const replacedPropertyPaths = _.flatMap(_.range(this.properties.length), i => replacedInnerPaths.map(p => [...Array(i).fill(0), 1, first, ...p]));
+    }
 
-      return [replacedExpression, [...replacedTermPaths, ...replacedPropertyPaths]];
+    const hasExplicitQualifier = !!this.explicitQualifier;
+
+    const getMainExpressionPath = () => Array(this.properties.length + (hasExplicitQualifier ? 1 : 0)).fill(0);
+    const getExplicitQualifierExpressionPath = () => [...Array(this.properties.length).fill(0), 1];
+    const getPropertyExpressionPath = (index: number) => [...Array(index).fill(0), 1];
+
+    const replaceInMainExpression = (innerPath: number[]) => {
+      const [first, ...remaining] = innerPath;
+      if (first == 0) {
+        return replaceInTerm(remaining);
+      } else if (!hasExplicitQualifier) {
+        return replaceInQualifierComponent(first - 1, remaining);
+      } else {
+        throw "Invalid replacement of explicit qualifier component"
+      }
+    };
+    const replaceInTerm = (innerPath: number[]) => {
+      const [replacedTerm, replacedPathsInTerm] = this.term.replaceAtPath(innerPath, expression);
+      const replacedExpression = new TypeExpression(this.definition, replacedTerm, this.explicitQualifier, this.qualifierComponents, this.properties, this.conjunctionDefinition);
+      const getReplacementPaths = (outerPath: number[]) => replacedPathsInTerm.map(p => [...outerPath, 0, ...p]);
+      const replacedPathsInMainExpression = getReplacementPaths(getMainExpressionPath());
+      const replacedPathsInQualifierExpression = hasExplicitQualifier ?
+          getReplacementPaths(getExplicitQualifierExpressionPath()) :
+          [];
+      const replacedPathsInPropertyExpressions = _.flatMap(_.range(this.properties.length), i => getReplacementPaths(getPropertyExpressionPath(i)));
+      const result: [Expression, number[][]] = [replacedExpression, [...replacedPathsInMainExpression, ...replacedPathsInQualifierExpression, ...replacedPathsInPropertyExpressions]];
+      return result;
+    };
+    const replaceInQualifierComponent = (componentIndex: number, innerPath: number[]) => {
+      const [replacedComponent, replacedPathsInComponent] = this.qualifierComponents[componentIndex].replaceAtPath(innerPath, expression);
+      const replacedComponents = [...this.qualifierComponents.slice(0, componentIndex), replacedComponent, ... this.qualifierComponents.slice(componentIndex + 1)];
+      const replacedExpression = new TypeExpression(this.definition, this.term, this.explicitQualifier, replacedComponents, this.properties, this.conjunctionDefinition);
+      const getReplacementPaths = (outerPath: number[]) => replacedPathsInComponent.map(p => [...outerPath, componentIndex + 1, ...p]);
+      if (hasExplicitQualifier) {
+        const result: [Expression, number[][]] =  [replacedExpression, getReplacementPaths(getExplicitQualifierExpressionPath())];
+        return result;
+      } else {
+        const replacedPathsInMainExpression = getReplacementPaths(getMainExpressionPath());
+        const replacedPathsInPropertyExpressions = _.flatMap(_.range(this.properties.length), i => getReplacementPaths(getPropertyExpressionPath(i)));
+        const result: [Expression, number[][]] =  [replacedExpression, [...replacedPathsInMainExpression, ...replacedPathsInPropertyExpressions]];
+        return result;
+      }
+    };
+
+    // @ts-ignore
+    if (!_.startsWith(path, Array(this.properties.length).fill(0))) {
+      throw "Cannot replace directly in property expression"
+    }
+    const pathAfterProperties = path.slice(this.properties.length);
+    if (hasExplicitQualifier) {
+      const [first, ...remaining] = pathAfterProperties;
+      if (first == 0) {
+        return replaceInMainExpression(remaining);
+      } else if (first == 1) {
+        const [next, ...moreRemaining] = remaining;
+        if (next > 0) {
+          return replaceInQualifierComponent(next - 1, moreRemaining);
+        }
+      }
+      throw "Invalid replacement path";
+    } else {
+      return replaceInMainExpression(pathAfterProperties);
     }
   }
   getDisambiguators(): string[] {
@@ -263,13 +339,32 @@ export class TypeExpression extends Expression {
   }
 }
 
-export class PropertyExpression extends Expression {
-  constructor(public typeDefinition: TypeDefinition, public definition: PropertyDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
+export class TypeQualifierExpression extends Expression {
+  constructor(public definition: TypeQualifierDefinition, public typeDefinition: TypeDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+  }
+  setBoundVariableName(): Expression {
+    throw "Cannot set bound variable name in qualifier expression"
+  }
+  replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
+    throw "Cannot replace in qualifier expression"
+  }
+  getDisambiguators(): string[] {
+    return _.uniq(_.flatMap([this.term, ...this.qualifierComponents], x => x.getDisambiguators()));
+  }
+}
+
+export class PropertyExpression extends Expression {
+  constructor(public definition: PropertyDefinition, public typeDefinition: TypeDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
+  serialize(): string {
+    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
+  }
+  serializeNicely(boundVariableLists: string[][]): string {
+    return [this.definition.qualifiedSymbol, this.term.serializeNicely(boundVariableLists), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
   }
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in property expression"

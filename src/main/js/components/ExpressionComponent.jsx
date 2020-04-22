@@ -1,7 +1,14 @@
 import _ from "lodash";
 import React, {useContext} from "react";
+import {act} from "react-dom/test-utils";
 import styled from "styled-components";
-import {matchTemplate, PropertyExpression, StandalonePropertyExpression, TypeExpression} from "../models/Expression";
+import {
+  matchTemplate,
+  PropertyExpression,
+  StandalonePropertyExpression,
+  TypeExpression,
+  TypeQualifierExpression
+} from "../models/Expression";
 import DisplayContext from "./DisplayContext";
 import EntryContext from "./EntryContext";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
@@ -27,7 +34,7 @@ function filterPathsMultiple(actions, initialPaths) {
     const action = actions[i];
     for(let j = 0; j < initialPaths.length; ++j) {
       const initialPath = initialPaths[j];
-      if (_.isEqual(action.path, initialPath)) {
+      if (_.startsWith(initialPath, action.path)) {
         result.push({...action, path: []});
         break;
       }
@@ -107,13 +114,16 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
 
     return renderNormally();
 
-
-    function renderQualifier(components, formatString, parentPath, actionHighlights, staticHighlights, sharedActionHighlights, sharedStaticHighlights) {
+    function renderQualifier(qualifier, components, parentPath, actionHighlights, staticHighlights, sharedPaths) {
+      sharedPaths = sharedPaths || [];
       const formattedComponents = _.map(components, (component, i) => {
         const componentPath = [...parentPath, i + 1];
-        return renderExpression(component, componentPath, [...sharedActionHighlights, ...filterPaths(actionHighlights, componentPath)], [...sharedStaticHighlights, ...filterPaths(staticHighlights, componentPath)], boundVariableLists, false);
+        return renderExpression(component, componentPath, filterPaths(actionHighlights, componentPath), filterPaths(staticHighlights, componentPath), boundVariableLists, false);
       });
-      return formatHtmlWithoutWrapping(formatString, s => replacePlaceholders(s, formattedComponents));
+      return highlight(
+        formatHtmlWithoutWrapping(qualifier.format, s => replacePlaceholders(s, formattedComponents)),
+        filterPathsMultiple(actionHighlights, [parentPath, ...sharedPaths]),
+        filterPathsMultiple(staticHighlights, [parentPath, ...sharedPaths]));
     }
 
     function renderFormattableExpressionWithDisambiguator(disambiguator) {
@@ -132,26 +142,34 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
 
     function renderNormally() {
       if (expression instanceof TypeExpression) {
+        const hasExplicitQualifier = !!expression.explicitQualifier;
         function getPropertyPath(propertyIndex) {
-          return [..._.times(expression.properties.length - 1 - propertyIndex, _.constant(0)), 1];
+          const depth = expression.properties.length - 1 - propertyIndex;
+          return [..._.times(depth, _.constant(0)), 1];
         }
 
-        const typePath = _.times(expression.properties.length, _.constant(0));
-        const typeActionHighlights = filterPaths(actionHighlights, typePath);
-        const typeStaticHighlights = filterPaths(staticHighlights, typePath);
+        const typePath = _.times(expression.properties.length + (hasExplicitQualifier ? 1 : 0), _.constant(0));
         const termPath = [...typePath, 0];
-        const componentPaths = _.map(_.range(expression.properties.length), getPropertyPath);
-        const sharedActionHighlights = filterPathsMultiple(actionHighlights, [typePath, ...componentPaths]);
-        const sharedStaticHighlights = filterPathsMultiple(staticHighlights, [typePath, ...componentPaths]);
+        const qualifierPath =  [..._.times(expression.properties.length, _.constant(0)), 1];
+        const propertyPaths = _.map(_.range(expression.properties.length), getPropertyPath);
 
-        const formattedTerm = renderExpression(expression.term, termPath, [...sharedActionHighlights, ...filterPaths(actionHighlights, termPath)], [...sharedStaticHighlights, ...filterPaths(staticHighlights, termPath)], boundVariableLists, false);
-        const formattedIs = renderExpression({textForHtml: () => "is"}, [], sharedActionHighlights, sharedStaticHighlights, boundVariableLists, false);
+        const sharedTermHighlightPaths = [typePath, ...(hasExplicitQualifier ? [qualifierPath] : []), ...propertyPaths];
+        const formattedTerm = renderExpression(
+          expression.term,
+          termPath,
+          [...filterPaths(actionHighlights, termPath), ...filterPathsMultiple(actionHighlights, sharedTermHighlightPaths)],
+          [...filterPaths(staticHighlights, termPath), ...filterPathsMultiple(staticHighlights, sharedTermHighlightPaths)],
+          boundVariableLists,
+          false);
+        const formattedIs = highlight("is", filterPathsMultiple(actionHighlights, sharedTermHighlightPaths), filterPathsMultiple(staticHighlights, sharedTermHighlightPaths));
+
         const articleWord = expression.properties.length ? expression.properties[0].name : expression.definition.name;
         const article = _.includes("aeiou", articleWord[0]) ? "an" : "a";
-        const formattedArticle = renderExpression({textForHtml: () => article}, [], typeActionHighlights, typeStaticHighlights, boundVariableLists, false);
-        const formattedName = renderExpression({textForHtml: () => expression.definition.name}, [], typeActionHighlights, typeStaticHighlights, boundVariableLists, false);
+        const formattedArticle = highlight(article, filterPathsMultiple(actionHighlights, [typePath]), filterPathsMultiple(staticHighlights, [typePath]));
+        const formattedName = highlight(expression.definition.name, filterPathsMultiple(actionHighlights, [typePath]), filterPathsMultiple(staticHighlights, [typePath]));
+
         const formattedProperties = _.flatMap(expression.properties, (p, i) => {
-          const formattedProperty = renderExpression({textForHtml: () => p.name}, [], filterPaths(actionHighlights, getPropertyPath(i)), filterPaths(staticHighlights, getPropertyPath(i)), boundVariableLists, false);
+          const formattedProperty = highlight(p.name, filterPaths(actionHighlights, getPropertyPath(i)), filterPaths(staticHighlights, getPropertyPath(i)));
           if (i === 0)
             return [formattedProperty];
           else
@@ -159,17 +177,32 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         });
 
         const result =  [formattedTerm, <> </>, formattedIs, <> </>, formattedArticle, <> </>, ...formattedProperties, <> </>, formattedName];
-        if (expression.definition.numberOfComponents > 0) {
-          const formattedQualifier = renderQualifier(expression.qualifierComponents, expression.definition.qualifierFormatString, typePath, actionHighlights, staticHighlights, sharedActionHighlights, sharedStaticHighlights);
+        if (expression.explicitQualifier) {
+          const propertyIndexesRequiringQualifier = _.chain(expression.properties).map((p, i) => (p.requiredParentQualifier === expression.explicitQualifier.symbol) ? i : null).filter(x => x !== null).value();
+          const qualifierHighlightPaths = propertyIndexesRequiringQualifier.map(getPropertyPath);
+          const formattedQualifier = renderQualifier(expression.explicitQualifier.qualifier, expression.qualifierComponents, qualifierPath, actionHighlights, staticHighlights, qualifierHighlightPaths);
+          result.push(<> </>);
+          result.push(formattedQualifier);
+        } else if (expression.definition.defaultQualifier) {
+          const qualifierHighlightPaths = [typePath, ...propertyPaths];
+          const formattedQualifier = renderQualifier(expression.definition.defaultQualifier, expression.qualifierComponents, typePath, actionHighlights, staticHighlights, qualifierHighlightPaths);
           result.push(<> </>);
           result.push(formattedQualifier);
         }
+        if (parentRequiresBrackets) {
+          result.unshift("(");
+          result.push(")");
+        }
         return result;
+      } else if (expression instanceof TypeQualifierExpression) {
+        const formattedTerm = renderExpression(expression.term, [...path, 0], filterPaths(actionHighlights, [...path, 0]), filterPaths(staticHighlights, [...path, 0]), boundVariableLists, false);
+        const formattedQualifier = renderQualifier(expression.definition.qualifier, expression.qualifierComponents, path, actionHighlights, staticHighlights);
+        return [formattedTerm, <> is </>, formattedQualifier];
       } else if (expression instanceof PropertyExpression) {
         const formattedTerm = renderExpression(expression.term, [...path, 0], filterPaths(actionHighlights, [...path, 0]), filterPaths(staticHighlights, [...path, 0]), boundVariableLists, false);
         const result = [formattedTerm, <> is </>, expression.definition.name];
-        if (expression.typeDefinition.numberOfComponents > 0) {
-          const formattedQualifier = renderQualifier(expression.qualifierComponents, expression.typeDefinition.qualifierFormatString, path, actionHighlights, staticHighlights, [], []);
+        if (expression.typeDefinition.defaultQualifier) {
+          const formattedQualifier = renderQualifier(expression.typeDefinition.defaultQualifier, expression.qualifierComponents, path, actionHighlights, staticHighlights);
           result.push(<> </>);
           result.push(formattedQualifier);
         }
@@ -187,16 +220,14 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
     }
   }
 
-  function renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets) {
+  function highlight(children, actionHighlights, staticHighlights) {
     const matchingActionHighlight = _.find(actionHighlights, p => p.path.length === 0);
     const shouldStaticHighlight = _.some(staticHighlights, p => p.path.length === 0);
-
     const props = {
       isConclusion: !!shouldStaticHighlight,
       isPremise: !shouldStaticHighlight && !!matchingActionHighlight,
       isClickable: !!(matchingActionHighlight && matchingActionHighlight.action)
     };
-
     if (!shouldStaticHighlight && matchingActionHighlight && matchingActionHighlight.action) {
       props.onClick = (e) => {
         matchingActionHighlight.action(expression.serialize());
@@ -204,8 +235,15 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       }
     }
     return <HighlightingStyle {...props}>
-      {renderChildrenOfTag(expression, path, actionHighlights || [], staticHighlights || [], boundVariableLists || [], wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>)}
+      {children}
     </HighlightingStyle>;
+  }
+
+  function renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets) {
+    return highlight(
+      renderChildrenOfTag(expression, path, actionHighlights || [], staticHighlights || [], boundVariableLists || [], wrapBoundVariable, parentRequiresBrackets).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>),
+      actionHighlights,
+      staticHighlights);
   }
   path = path || [];
 

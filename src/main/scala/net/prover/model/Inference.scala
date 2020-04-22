@@ -34,13 +34,13 @@ trait Inference {
           _ <- if (index > 0) Parser.requiredWord(",") else Parser.constant(())
           s <- Statement.parser(parsingContext.addInitialParameters(arity))
         } yield name -> (arity -> s)
-      }.traverseParser.map(_.toMap).inParens
+      }.traverse.map(_.toMap).inParens
       terms <- requiredSubstitutions.terms.mapWithIndex { case ((name, arity), index) =>
         for {
           _ <- if (index > 0) Parser.requiredWord(",") else Parser.constant(())
           t <- Term.parser(parsingContext.addInitialParameters(arity))
         } yield name -> (arity -> t)
-      }.traverseParser.map(_.toMap).inParens
+      }.traverse.map(_.toMap).inParens
     } yield {
       Substitutions(statements, terms)
     }
@@ -104,7 +104,7 @@ object Inference {
   trait FromEntry extends WithCalculatedId {
     def isComplete(definitions: Definitions): Boolean
   }
-  trait Entry extends Inference.FromEntry with ChapterEntry.Standalone {
+  trait Entry extends Inference.FromEntry with ChapterEntry.Standalone with ChapterEntry.CanChangeName {
     override def title: String = name
     def withName(newName: String): Entry
   }

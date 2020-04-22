@@ -1,7 +1,7 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.TermDefinitionEntry
+import net.prover.model.entries.{ChapterEntry, TermDefinitionEntry}
 import net.prover.model.expressions.FunctionParameter
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
@@ -10,7 +10,7 @@ class TermDefinitionSpec extends Specification {
 
   private def testParsingAndSerialization(termDefinition: TermDefinitionEntry): MatchResult[Any] = {
     val serializedDefinition = termDefinition.serializedLines.mkString("\n")
-    val reparsedDefinition = Chapter.chapterEntryParser(defaultEntryContext).parseAndDiscard(serializedDefinition)
+    val reparsedDefinition = ChapterEntry.parser(defaultEntryContext).parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(termDefinition)
   }
 

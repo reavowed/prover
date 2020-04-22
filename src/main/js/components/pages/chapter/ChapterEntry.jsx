@@ -45,21 +45,39 @@ export default function ChapterEntry({entry}) {
         <ChapterEntryWrapper title={<>Definition: {definition.name.capitalize()}</>}
                              url={entry.url}
                              key={entry.url}>
-          {entry.defaultTermName} is {definition.article} {definition.name} {definition.qualifierFormatString && formatHtml(definition.qualifierFormatString, s => replacePlaceholders(s, entry.defaultQualifierTermNames))} if <CopiableExpression expression={entry.definingStatement}/>.
+          {entry.defaultTermName} is {definition.article} {definition.name} {definition.defaultQualifier && formatHtml(definition.defaultQualifier.format, s => replacePlaceholders(s, entry.defaultQualifierTermNames))} if <CopiableExpression expression={entry.definingStatement}/>.
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
-    case "propertyDefinition":
+    case "typeQualifierDefinition":
       const typeDefinition = entryContext.typeDefinitions[entry.parentTypeSymbol];
+      const qualifierDefinition = _.find(typeDefinition.qualifiers, q => q.symbol === entry.symbol);
       return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
-        <ChapterEntryWrapper title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name} {typeDefinition.name}</span></>}
-                             url={entry.url}
-                             key={entry.url}>
-          {typeDefinition.article.capitalize()} {typeDefinition.name} {entry.defaultTermName} {formatHtml(typeDefinition.qualifierFormatString, s => replacePlaceholders(s, entry.defaultQualifierTermNames))} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
+        <ChapterEntryWrapper
+          title={<>Definition: {typeDefinition.name.capitalize()} {qualifierDefinition.name.capitalize()}</>}
+          url={entry.url}
+          key={entry.url}>
+          {typeDefinition.article.capitalize()} {typeDefinition.name} {formatHtml(qualifierDefinition.qualifier.format, s => replacePlaceholders(s, entry.qualifierTermNames))} is a {typeDefinition.name} {entry.defaultTermName} such that <CopiableExpression expression={entry.definingStatement}/>.
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
+    case "propertyDefinition": {
+      const typeDefinition = entryContext.typeDefinitions[entry.parentTypeSymbol];
+      const propertyDefinition = _.find(typeDefinition.properties, p => p.symbol === entry.symbol);
+      const qualifier = propertyDefinition.requiredParentQualifier ?
+        _.find(typeDefinition.qualifiers, q => q.symbol === propertyDefinition.requiredParentQualifier).qualifier :
+        typeDefinition.defaultQualifier;
+
+      return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
+        <ChapterEntryWrapper
+          title={<>Definition: {entry.name.capitalize()} {typeDefinition.name.capitalize()}</>}
+          url={entry.url}
+          key={entry.url}>
+          {typeDefinition.article.capitalize()} {typeDefinition.name} {typeDefinition.defaultTermName} {qualifier && formatHtml(qualifier.format, s => replacePlaceholders(s, qualifier.defaultTermNames))} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
+        </ChapterEntryWrapper>
+      </DisplayContext.Provider>;
+    }
     case "standalonePropertyDefinition":
       return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
-        <ChapterEntryWrapper title={<>Definition: <span style={{textTransform: "capitalize"}}>{entry.name}</span></>}
+        <ChapterEntryWrapper title={<>Definition: {entry.name.capitalize()}</>}
                              url={entry.url}
                              key={entry.url}>
           {entry.defaultTermName} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.

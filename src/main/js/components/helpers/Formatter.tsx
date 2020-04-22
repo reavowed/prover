@@ -13,7 +13,7 @@ function formatWithReplacement(text: String, getMatches: ((s: String) => Match[]
     indexOfLastMatchEnd = match.index + match[0].length;
   }
   elements.push(handlePlain(text.substr(indexOfLastMatchEnd)));
-  return _.flatten(elements);
+  return _.filter(_.flatten(elements), s => s !== "");
 }
 
 export function formatHtml(text: String, replacementFunction?: ((s: String) => React.ReactNode)) {

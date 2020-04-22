@@ -36,7 +36,7 @@ trait ExpressionDefinition {
       newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
       components <- componentTypes.map { componentType =>
         componentType.expressionParser(componentType.addParametersToContext(context, newBoundVariableNames))
-      }.traverseParser
+      }.traverse
     } yield (newBoundVariableNames, components)
   }
 
@@ -45,7 +45,7 @@ trait ExpressionDefinition {
       newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
       components <- componentTypes.map { componentType =>
         componentType.templateParser(componentType.addParametersToContext(context, newBoundVariableNames))
-      }.traverseParser
+      }.traverse
     } yield (newBoundVariableNames, components)
   }
 }

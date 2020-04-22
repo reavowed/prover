@@ -38,15 +38,23 @@ object Statement {
 
   def typeStatementParser(term: Term, typeDefinition: TypeDefinition)(implicit context: ExpressionParsingContext): Parser[Statement] = {
     for {
-      otherComponents <- typeDefinition.qualifier.map(_.termNames).getOrElse(Nil).map(_ => Term.parser).traverseParser
+      otherComponents <- typeDefinition.qualifier.termNames.map(_ => Term.parser).traverse
+      qualifierOption <- Parser.optional(qualifierSymbol => context.entryContext.qualifiersByType.get(typeDefinition.symbol).flatMap(_.find(_.symbol == qualifierSymbol)))
+      qualifierStatementOption <- qualifierOption.map(q => {
+        q.qualifier.termNames.map(_ => Term.parser).traverse.map(components => q.statementDefinition(term +: components: _*))
+      }).traverse
       availableProperties = context.entryContext.propertyDefinitionsByType.get(typeDefinition.symbol).toSeq.flatten
       properties <- Parser.optional("with", Parser.allInParens.map(_.splitByWhitespace().map(s => availableProperties.find(_.symbol == s).getOrElse(throw new Exception(s"Unrecognised property '$s' for '${typeDefinition.symbol}'")))), Nil)
     } yield {
       val baseStatement = DefinedStatement(term +: otherComponents, typeDefinition.statementDefinition)(Nil)
-      properties.foldLeft(baseStatement) { (statement, property) =>
+      val statementWithQualifier = qualifierStatementOption.map { qualifierStatement =>
         val conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add properties to a type without a conjunction definition"))
-        val propertyStatement = DefinedStatement(term +: otherComponents, property.statementDefinition)(Nil)
-        DefinedStatement(Seq(statement, propertyStatement), conjunctionDefinition)(Nil)
+        conjunctionDefinition(baseStatement, qualifierStatement)
+      }.getOrElse(baseStatement)
+      properties.foldLeft(statementWithQualifier) { (statement, property) =>
+        val conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add properties to a type without a conjunction definition"))
+        val propertyStatement = property.statementDefinition(term +: otherComponents: _*)
+        conjunctionDefinition(statement, propertyStatement)
       }
     }
   }

@@ -7,6 +7,7 @@ import StatementDefinitionInput from "./StatementDefinitionInput";
 import TermDefinitionInput from "./TermDefinitionInput";
 import TheoremInput from "./TheoremInput";
 import TypeDefinitionInput from "./TypeDefinitionInput";
+import TypeQualifierInput from "./TypeQualifierInput";
 
 export default function ChapterEntryAdder() {
   const [entryBeingAdded, setEntryBeingAdded] = useState(null);
@@ -16,6 +17,7 @@ export default function ChapterEntryAdder() {
     {name: "Statement Definition", element: <StatementDefinitionInput onCancel={onCancel}/>},
     {name: "Term Definition", element: <TermDefinitionInput onCancel={onCancel}/>},
     {name: "Type Definition", element: <TypeDefinitionInput onCancel={onCancel}/>},
+    {name: "Type Qualifier", element: <TypeQualifierInput onCancel={onCancel}/>},
     {name: "Property Definition", element: <PropertyDefinitionInput onCancel={onCancel}/>},
     {name: "Standalone Property Definition", element: <StandalonePropertyDefinitionInput onCancel={onCancel}/>},
     {name: "Comment", element: <CommentInput onCancel={onCancel}/>}
