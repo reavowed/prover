@@ -5,6 +5,7 @@ import java.nio.file.{Files, Path, Paths}
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.filefilter.TrueFileFilter
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.stereotype.Service
 import scalaz.Functor
@@ -65,22 +66,36 @@ class BookRepository {
   }
 
   private def writeBooks(books: Seq[Book]): Unit = {
-    FileUtils.cleanDirectory(bookDirectoryPath.toFile)
     writeBooklist(books)
-    books.foreach(writeBook)
+    books.foreach(writeBookAndChapterFiles)
+  }
+
+  case class FilePathAndContents(path: Path, getContents: () => String) {
+    def write(): Unit = {
+      Files.write(path, getContents().getBytes("UTF-8"))
+    }
+  }
+
+  private def deleteUnusedFiles(directoryPath: Path, filePathsAndContents: Seq[FilePathAndContents]): Unit = {
+    FileUtils.listFiles(directoryPath.toFile, TrueFileFilter.INSTANCE, null).asScala.foreach { file =>
+      if (!filePathsAndContents.exists(_.path.toAbsolutePath.toString == file.getAbsolutePath)) {
+        BookRepository.logger.info(s"Deleting file ${file.getAbsolutePath}")
+        file.delete()
+      }
+    }
   }
 
   private def writeBooklist(books: Seq[Book]): Unit = {
-    Files.write(getBookListPath, (books.map(_.title).mkString("\n") + "\n").getBytes("UTF-8"))
+    val file = FilePathAndContents(getBookListPath, () => books.map(_.title).mkString("\n") + "\n")
+    file.write()
+    deleteUnusedFiles(bookDirectoryPath, Seq(file))
   }
 
-  private def writeBook(book: Book): Unit = {
-    val bookPath = getBookPath(book.title)
-    Files.createDirectories(bookPath.getParent)
-    Files.write(bookPath, book.serialized.getBytes("UTF-8"))
-    book.chapters.foreachWithIndex((chapter, index) =>
-      Files.write(getChapterPath(book.title, chapter.title, index), chapter.serialized.getBytes("UTF-8"))
-    )
+  private def writeBookAndChapterFiles(book: Book): Unit = {
+    val files = FilePathAndContents(getBookPath(book.title), () => book.serialized) +:
+      book.chapters.mapWithIndex((chapter, index) => FilePathAndContents(getChapterPath(book.title, chapter.title, index), () => chapter.serialized ))
+    files.foreach(_.write())
+    deleteUnusedFiles(bookDirectoryPath.resolve(book.title.formatAsKey), files)
   }
 
   private def getBookListPath: Path = {
