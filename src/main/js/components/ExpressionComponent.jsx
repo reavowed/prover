@@ -1,6 +1,5 @@
 import _ from "lodash";
 import React, {useContext} from "react";
-import {act} from "react-dom/test-utils";
 import styled from "styled-components";
 import {
   DefinedExpression,
@@ -203,8 +202,9 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       } else if (expression instanceof PropertyExpression) {
         const formattedTerm = renderExpression(expression.term, [...path, 0], filterPaths(actionHighlights, [...path, 0]), filterPaths(staticHighlights, [...path, 0]), boundVariableLists, false);
         const result = [formattedTerm, <> is </>, expression.definition.name];
-        if (expression.typeDefinition.defaultQualifier) {
-          const formattedQualifier = renderQualifier(expression.typeDefinition.defaultQualifier, expression.qualifierComponents, path, actionHighlights, staticHighlights);
+        const qualifier = _.find(expression.typeDefinition.qualifiers, q => q.symbol === expression.definition.requiredParentQualifier)?.qualifier || expression.typeDefinition.defaultQualifier;
+        if (qualifier) {
+          const formattedQualifier = renderQualifier(qualifier, expression.qualifierComponents, path, actionHighlights, staticHighlights);
           result.push(<> </>);
           result.push(formattedQualifier);
         }
