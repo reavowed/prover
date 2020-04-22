@@ -2,16 +2,18 @@ import update from "immutability-helper";
 import _ from "lodash";
 import React, {useContext, useRef, useState} from "react";
 import {DefinedExpression} from "../../../../models/Expression";
-import {ElidedStep, NamingStep as NamingStepModel, StepReference} from "../../../../models/Step";
+import {AssertionStep, ElidedStep, NamingStep as NamingStepModel, StepReference} from "../../../../models/Step";
 import DisplayContext from "../../../DisplayContext";
 import {HighlightableExpression} from "../../../ExpressionComponent";
 import HashParamsContext from "../../../HashParamsContext";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import {joinAsList} from "../../../helpers/reactFunctions";
 import ProofContext from "../ProofContext";
+import {AssertionStepProofLine} from "./AssertionStep";
 import BoundVariableLists from "./BoundVariableLists";
 import {InferenceLink} from "./components/InferenceLink";
 import ProofLine from "./components/ProofLine";
+import {ElidedStepProofLine} from "./ElidedStep";
 import Step from "./Step";
 import {matchElidableVariableDescription} from "./stepDisplayFunctions";
 import {Steps} from "./Steps";
@@ -20,10 +22,6 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
   additionalReferences = additionalReferences || [];
   const context = useContext(ProofContext);
   const displayContext = useContext(DisplayContext);
-  const hashParamsContext = useContext(HashParamsContext);
-  const containsHighlightedInference = assertionStep && _.intersection(_.map(assertionStep.inferencesUsed, "id"), hashParamsContext.inferencesToHighlight).length > 0;
-  const isHighlightedInference = hashParamsContext.inferencesToHighlight?.includes(assertionStep?.inference?.id || assertionStep?.highlightedInference?.id);
-  const [showingProofCard, setShowingProofCard] = useState(containsHighlightedInference && !isHighlightedInference);
   const proofLineRef = useRef(null);
   const updateBoundVariable = (namingStepPath) => (newName) => {
     return context.fetchJsonForStepAndReplace(namingStepPath, "boundVariable", {method: "PUT", body: newName});
@@ -102,32 +100,7 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
     return <InlineTextEditor text={name} callback={callback} />;
   }
 
-  function toggleProofCard() {
-    setShowingProofCard(!showingProofCard);
-  }
-  const onProofLineKeyDown = (event) => {
-    if (event.key === "x") {
-      toggleProofCard();
-    }
-  };
-
-  const inference = assertionStep ?
-    assertionStep.inference || assertionStep.highlightedInference :
-    innermostNamingStep.step.inference;
-  const description = assertionStep && assertionStep.description;
-
-  const buttons = <>
-    {inference && <span className="mr-2"><InferenceLink inference={inference}/></span>}
-    {description && <span className="text-muted text-uppercase mr-2" style={{"fontFamily": "monospace"}}>{description}</span>}
-    {assertionStep && assertionStep instanceof ElidedStep && <span className="fas fa-ellipsis-v text-muted mr-2" onClick={toggleProofCard} style={{cursor: "pointer"}}/>}
-  </>;
-
-  const proofLine = <ProofLine path={path}
-                               suffix="a"
-                               premiseReferences={[...innermostNamingStep.step.referencedLinesForExtraction, ...(assertionStep ? _.filter(assertionStep.referencedLines, r => !_.startsWith(r.stepPath, path)) : [])]}
-                               ref={proofLineRef}
-                               onKeyDown={onProofLineKeyDown}
-                               buttons={buttons}>
+  const proofLineContent = <>
     Let
     {' '}
     <BoundVariableLists.Consumer>{boundVariableLists =>
@@ -143,23 +116,30 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
                                wrapBoundVariable={wrapEditableBoundVariableInAssumption}/>
     </BoundVariableLists.AddMultiple>
     {'.'}
-  </ProofLine>;
+  </>;
 
-  return <>
-    {assertionStep && assertionStep instanceof ElidedStep && showingProofCard && <Step.WithSubsteps path={path}>
-        <Step.Antecedent>{proofLine}</Step.Antecedent>
-        <div className="card" style={{margin: ".5rem -0.75rem .5rem 2rem", padding: ".5rem .75rem"}}>
-          <Steps.Children steps={assertionStep.substeps}
-                          path={path} />
-        </div>
-      </Step.WithSubsteps>}
-    <Step.WithSubsteps path={innermostNamingPath}>
-      {!(assertionStep && assertionStep instanceof ElidedStep && showingProofCard) && <Step.Antecedent>{proofLine}</Step.Antecedent>}
+  const proofLine = (assertionStep instanceof ElidedStep) ?
+    <ElidedStepProofLine step={assertionStep} path={path}>
+      {proofLineContent}
+    </ElidedStepProofLine> :
+    assertionStep instanceof AssertionStep ?
+    <AssertionStepProofLine step={assertionStep} path={path}>
+      {proofLineContent}
+    </AssertionStepProofLine> :
+    <ProofLine path={path}
+               suffix="a"
+               premiseReferences={[...innermostNamingStep.step.referencedLinesForExtraction, ...(assertionStep ? _.filter(assertionStep.referencedLines, r => !_.startsWith(r.stepPath, path)) : [])]}
+               buttons={<span className="mr-2"><InferenceLink inference={innermostNamingStep.step.inference}/></span>}
+               ref={proofLineRef}>
+      {proofLineContent}
+    </ProofLine>;
+
+  return <Step.WithSubsteps path={innermostNamingPath}>
+      {proofLine}
       <BoundVariableLists.AddMultiple variables={namingSteps.map(({step}) => [step.variableName])}>
         <Steps steps={innermostNamingStep.step.substeps}
                path={innermostNamingPath}
                propsForLastStep={{additionalReferences: [...additionalReferences, outerNamingStepReference]}} />
       </BoundVariableLists.AddMultiple>
-    </Step.WithSubsteps>
-  </>;
+    </Step.WithSubsteps>;
 }
