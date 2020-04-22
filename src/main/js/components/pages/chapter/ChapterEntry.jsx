@@ -32,7 +32,7 @@ export default function ChapterEntry({entry}) {
       const equality = _.find(entryContext.definitions, d => _.includes(d.attributes, "equality"));
       const result = (equality && entry.definingStatement instanceof DefinedExpression && entry.definingStatement.definition === equality && entry.definingStatement.components[0].serialize() === entry.defaultValue.serialize()) ?
         <><CopiableExpression expression={entry.defaultValue}/> is defined to be equal to <CopiableExpression expression={entry.definingStatement.components[1]}/></> :
-        <><CopiableExpression expression={entry.defaultValue}/> is defined such that <CopiableExpression expression={entry.definingStatement}/></>;
+        <><CopiableExpression expression={entry.defaultValue}/> is defined such that <CopiableExpression expression={entry.definingStatement} splitConjunction /></>;
       return <DisplayContext.Provider value={DisplayContext.forExpressionDefinition(entry, entryContext)}>
         <DefinitionEntry key={entry.url} title="Term Definition" entry={entry}>
           <ResultWithPremises premises={entry.premises}
@@ -45,7 +45,7 @@ export default function ChapterEntry({entry}) {
         <ChapterEntryWrapper title={<>Definition: {definition.name.capitalize()}</>}
                              url={entry.url}
                              key={entry.url}>
-          {entry.defaultTermName} is {definition.article} {definition.name} {definition.defaultQualifier && formatHtml(definition.defaultQualifier.format, s => replacePlaceholders(s, entry.defaultQualifierTermNames))} if <CopiableExpression expression={entry.definingStatement}/>.
+          {entry.defaultTermName} is {definition.article} {definition.name} {definition.defaultQualifier && formatHtml(definition.defaultQualifier.format, s => replacePlaceholders(s, entry.defaultQualifierTermNames))} if <CopiableExpression expression={entry.definingStatement} splitConjunction/>.
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     case "typeQualifierDefinition":
@@ -56,7 +56,7 @@ export default function ChapterEntry({entry}) {
           title={<>Definition: {typeDefinition.name.capitalize()} {qualifierDefinition.name.capitalize()}</>}
           url={entry.url}
           key={entry.url}>
-          {typeDefinition.article.capitalize()} {typeDefinition.name} {formatHtml(qualifierDefinition.qualifier.format, s => replacePlaceholders(s, entry.qualifierTermNames))} is a {typeDefinition.name} {entry.defaultTermName} such that <CopiableExpression expression={entry.definingStatement}/>.
+          {typeDefinition.article.capitalize()} {typeDefinition.name} {formatHtml(qualifierDefinition.qualifier.format, s => replacePlaceholders(s, entry.qualifierTermNames))} is a {typeDefinition.name} {entry.defaultTermName} such that <CopiableExpression expression={entry.definingStatement} splitConjunction/>.
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     case "propertyDefinition": {
@@ -71,7 +71,7 @@ export default function ChapterEntry({entry}) {
           title={<>Definition: {entry.name.capitalize()} {typeDefinition.name.capitalize()}</>}
           url={entry.url}
           key={entry.url}>
-          {typeDefinition.article.capitalize()} {typeDefinition.name} {typeDefinition.defaultTermName} {qualifier && formatHtml(qualifier.format, s => replacePlaceholders(s, qualifier.defaultTermNames))} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
+          {typeDefinition.article.capitalize()} {typeDefinition.name} {typeDefinition.defaultTermName} {qualifier && formatHtml(qualifier.format, s => replacePlaceholders(s, qualifier.defaultTermNames))} is {entry.name} if <CopiableExpression expression={entry.definingStatement} splitConjunction/>.
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     }

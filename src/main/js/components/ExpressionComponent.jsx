@@ -3,6 +3,7 @@ import React, {useContext} from "react";
 import {act} from "react-dom/test-utils";
 import styled from "styled-components";
 import {
+  DefinedExpression,
   matchTemplate,
   PropertyExpression,
   StandalonePropertyExpression,
@@ -12,6 +13,7 @@ import {
 import DisplayContext from "./DisplayContext";
 import EntryContext from "./EntryContext";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
+import {joinAsList} from "./helpers/reactFunctions";
 import BoundVariableLists from "./pages/theorem/steps/BoundVariableLists";
 import ProofContext from "./pages/theorem/ProofContext";
 import TheoremContext from "./pages/theorem/TheoremContext";
@@ -251,11 +253,29 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
 }
 
 export const CopiableExpression = (props) => {
+  const displayContext = useContext(DisplayContext);
   const expressionToCopy = props.expressionToCopy || props.expression;
   const boundVariableLists = props.boundVariableLists || useContext(BoundVariableLists) || [];
+  const {expression, ...otherProps} = props;
+
+  function splitConjunctions(expression) {
+    if (expression instanceof DefinedExpression && _.includes(expression.definition.attributes, "conjunction")) {
+      return _.flatMap(expression.components, splitConjunctions);
+    } else {
+      return [expression];
+    }
+  }
+  function toComponent(expression) {
+    return <ExpressionComponent expression={expression} {...otherProps} boundVariableLists={boundVariableLists}/>
+  }
+
+  const component = (props.splitConjunction && !(displayContext && displayContext.disableShorthands)) ?
+    joinAsList(splitConjunctions(expression).map(toComponent)) :
+    toComponent(expression);
+
   return <span onContextMenu={() => navigator.clipboard.writeText(expressionToCopy.serializeNicely(boundVariableLists))}>
-      <ExpressionComponent {...props} boundVariableLists={boundVariableLists}/>
-    </span>
+    {component}
+  </span>;
 };
 
 export class HighlightableExpression extends React.Component {
