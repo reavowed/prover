@@ -1211,18 +1211,18 @@ conclusion = image ⍳_ℤ ℤ^≥
 }
 
 theorem ⍳_ℤ Bijects ℕ with ℤ^≥
-conclusion ∧ oldFunction ⍳_ℤ ℕ ℤ^≥ bijectiveOldFunction ⍳_ℤ ℕ ℤ^≥
+conclusion ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥
 {
-  target ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ
-  target ∧ oldFunction ⍳_ℤ ℕ image ⍳_ℤ bijectiveOldFunction ⍳_ℤ ℕ image ⍳_ℤ
+  target ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ
+  target ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ image ⍳_ℤ bijectiveFunction ⍳_ℤ ℕ image ⍳_ℤ
   elided 353c85544b987ce3664da75768cbaa68bb4a565c1c744dd095f187790fcb0815 {
     elided 353c85544b987ce3664da75768cbaa68bb4a565c1c744dd095f187790fcb0815 {
       prove = image ⍳_ℤ ℤ^≥ 353c85544b987ce3664da75768cbaa68bb4a565c1c744dd095f187790fcb0815 () ()
-      prove ∧ oldFunction ⍳_ℤ ℕ ℤ^≥ bijectiveOldFunction ⍳_ℤ ℕ image ⍳_ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ oldFunction ⍳_ℤ ℕ $0 bijectiveOldFunction ⍳_ℤ ℕ image ⍳_ℤ) (image ⍳_ℤ, ℤ^≥) 2.0.0 1
+      prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ image ⍳_ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ $0 bijectiveFunction ⍳_ℤ ℕ image ⍳_ℤ) (image ⍳_ℤ, ℤ^≥) 2.0.0 1
     }
     elided 353c85544b987ce3664da75768cbaa68bb4a565c1c744dd095f187790fcb0815 {
       prove = image ⍳_ℤ ℤ^≥ 353c85544b987ce3664da75768cbaa68bb4a565c1c744dd095f187790fcb0815 () ()
-      prove ∧ oldFunction ⍳_ℤ ℕ ℤ^≥ bijectiveOldFunction ⍳_ℤ ℕ ℤ^≥ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ oldFunction ⍳_ℤ ℕ ℤ^≥ bijectiveOldFunction ⍳_ℤ ℕ $0) (image ⍳_ℤ, ℤ^≥) 2.1.0 2.0
+      prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ $0) (image ⍳_ℤ, ℤ^≥) 2.1.0 2.0
     }
   }
 }
@@ -1232,8 +1232,8 @@ premise ∈ a ℤ
 premise ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ
 conclusion ∃! n ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0
 {
-  target ∧ oldFunction ⍳_ℤ ℕ ℤ^≥ bijectiveOldFunction ⍳_ℤ ℕ ℤ^≥
-  target ∧ oldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveOldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ
+  target ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥
+  target ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ
   elided 99b727acaf069613e8c7db29ddab5d61b6e66d7de8435982a16ed1a8e835d125 {
     prove ∧ ∈ a ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ) () p0 p1
     elided 99b727acaf069613e8c7db29ddab5d61b6e66d7de8435982a16ed1a8e835d125 {

@@ -664,31 +664,31 @@ conclusion ∀ a_1 → ∈ $0 ℕ ∀ b_1 → ∈ $0 ℕ ∀ a_2 → ∈ $0 ℕ 
 }
 
 theorem ×_ℤ is a Function
-conclusion oldFunction ×ℤ product ℤ ℤ ℤ
+conclusion ∧ function ×ℤ functionFrom ×ℤ product ℤ ℤ ℤ
 {
-  let f = $0 functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (oldFunction ×ℤ product ℤ ℤ ℤ) (functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ) {
+  let f = $0 functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∧ function ×ℤ functionFrom ×ℤ product ℤ ℤ ℤ) (functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ) {
     prove = ×ℤ quadrupleQuotientFunction functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ 2f34d417831bd88251666bab3692f3b65154ecd179c5209c3abc7741796f8042 () ()
     elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
       prove = functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($0, functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ) 0a
       prove = ×ℤ quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= ×ℤ quadrupleQuotientFunction $$0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ) (functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ, $0) 0.1.0 0.0
     }
-    target oldFunction $0 product product ℕ ℕ product ℕ ℕ ℤ
+    target ∧ function $0 functionFrom $0 product product ℕ ℕ product ℕ ℕ ℤ
     prove ∀ a_1 → ∈ $0 ℕ ∀ b_1 → ∈ $0 ℕ ∀ a_2 → ∈ $0 ℕ ∀ b_2 → ∈ $0 ℕ ∀ c_1 → ∈ $0 ℕ ∀ d_1 → ∈ $0 ℕ ∀ c_2 → ∈ $0 ℕ ∀ d_2 → ∈ $0 ℕ → ∧ ∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$$$0 $$$$$0 ~_ℤ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply $$$$$$$$$0 orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 apply $$$$$$$$$0 orderedPair orderedPair $$$$$$0 $$$$$0 orderedPair $$0 $0 305681ad37d7bb11c152cac03dcbd92f8164a23ff18dc60968be5eb21dec774a () ($0) 0a
-    target oldFunction quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ product equivalenceQuotient product ℕ ℕ ~_ℤ equivalenceQuotient product ℕ ℕ ~_ℤ ℤ
+    target ∧ function quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ functionFrom quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ product equivalenceQuotient product ℕ ℕ ~_ℤ equivalenceQuotient product ℕ ℕ ~_ℤ ℤ
     elided (Rewritten) {
       elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
         prove = quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ ×ℤ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (×ℤ, quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ) 0.1
-        prove oldFunction ×ℤ product equivalenceQuotient product ℕ ℕ ~_ℤ equivalenceQuotient product ℕ ℕ ~_ℤ ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (oldFunction $$0 product equivalenceQuotient product ℕ ℕ ~_ℤ equivalenceQuotient product ℕ ℕ ~_ℤ ℤ) (quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ, ×ℤ) 0.5.0.0 0.4
+        prove ∧ function ×ℤ functionFrom ×ℤ product equivalenceQuotient product ℕ ℕ ~_ℤ equivalenceQuotient product ℕ ℕ ~_ℤ ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ function $$0 functionFrom $$0 product equivalenceQuotient product ℕ ℕ ~_ℤ equivalenceQuotient product ℕ ℕ ~_ℤ ℤ) (quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ, ×ℤ) 0.5.0.0 0.4
       }
       elided 990bffb51c839c8157c4cb5f80607cb7cd0b0c6c8450ab39b5659dc0279ef4b8 {
         prove = ℤ equivalenceQuotient product ℕ ℕ ~_ℤ 990bffb51c839c8157c4cb5f80607cb7cd0b0c6c8450ab39b5659dc0279ef4b8 () ()
         prove = equivalenceQuotient product ℕ ℕ ~_ℤ ℤ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (ℤ, equivalenceQuotient product ℕ ℕ ~_ℤ) 0.5.1.0
-        prove oldFunction ×ℤ product ℤ equivalenceQuotient product ℕ ℕ ~_ℤ ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (oldFunction ×ℤ product $$0 equivalenceQuotient product ℕ ℕ ~_ℤ ℤ) (equivalenceQuotient product ℕ ℕ ~_ℤ, ℤ) 0.5.1.1 0.5.0
+        prove ∧ function ×ℤ functionFrom ×ℤ product ℤ equivalenceQuotient product ℕ ℕ ~_ℤ ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ function ×ℤ functionFrom ×ℤ product $$0 equivalenceQuotient product ℕ ℕ ~_ℤ ℤ) (equivalenceQuotient product ℕ ℕ ~_ℤ, ℤ) 0.5.1.1 0.5.0
       }
       elided 990bffb51c839c8157c4cb5f80607cb7cd0b0c6c8450ab39b5659dc0279ef4b8 {
         prove = ℤ equivalenceQuotient product ℕ ℕ ~_ℤ 990bffb51c839c8157c4cb5f80607cb7cd0b0c6c8450ab39b5659dc0279ef4b8 () ()
         prove = equivalenceQuotient product ℕ ℕ ~_ℤ ℤ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (ℤ, equivalenceQuotient product ℕ ℕ ~_ℤ) 0.5.2.0
-        prove oldFunction ×ℤ product ℤ ℤ ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (oldFunction ×ℤ product ℤ $$0 ℤ) (equivalenceQuotient product ℕ ℕ ~_ℤ, ℤ) 0.5.2.1 0.5.1
+        prove ∧ function ×ℤ functionFrom ×ℤ product ℤ ℤ ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ function ×ℤ functionFrom ×ℤ product ℤ $$0 ℤ) (equivalenceQuotient product ℕ ℕ ~_ℤ, ℤ) 0.5.2.1 0.5.1
       }
     }
   }
@@ -699,7 +699,7 @@ premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion ∈ apply ×ℤ orderedPair a b ℤ
 {
-  target oldFunction ×ℤ product ℤ ℤ ℤ
+  target ∧ function ×ℤ functionFrom ×ℤ product ℤ ℤ ℤ
   target ∈ apply ×ℤ orderedPair a b ℤ
 }
 
@@ -717,7 +717,7 @@ conclusion = apply ×ℤ orderedPair equivalenceClass orderedPair a b ~_ℤ equi
       prove = ×ℤ quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= ×ℤ quadrupleQuotientFunction $$0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ) (functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ, $0) 0.1.0 0.0
     }
     prove ∀ a_1 → ∈ $0 ℕ ∀ b_1 → ∈ $0 ℕ ∀ a_2 → ∈ $0 ℕ ∀ b_2 → ∈ $0 ℕ ∀ c_1 → ∈ $0 ℕ ∀ d_1 → ∈ $0 ℕ ∀ c_2 → ∈ $0 ℕ ∀ d_2 → ∈ $0 ℕ → ∧ ∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$$$0 $$$$$0 ~_ℤ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply $$$$$$$$$0 orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 apply $$$$$$$$$0 orderedPair orderedPair $$$$$$0 $$$$$0 orderedPair $$0 $0 305681ad37d7bb11c152cac03dcbd92f8164a23ff18dc60968be5eb21dec774a () ($0) 0a
-    target oldFunction $0 product product ℕ ℕ product ℕ ℕ ℤ
+    target ∧ function $0 functionFrom $0 product product ℕ ℕ product ℕ ℕ ℤ
     target ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ = apply quadrupleQuotientFunction $$$$$0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ apply $$$$$0 orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0
     elided (Extracted) {
       prove → ∈ a ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ = apply quadrupleQuotientFunction $$$$0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ orderedPair equivalenceClass orderedPair a $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ apply $$$$0 orderedPair orderedPair a $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ = apply quadrupleQuotientFunction $$$$0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ orderedPair equivalenceClass orderedPair $$$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ apply $$$$0 orderedPair orderedPair $$$$$0 $$$0 orderedPair $$0 $0) (a) 0.4

@@ -595,7 +595,7 @@ conclusion ∈ apply -ℤ orderedPair a b ℤ
       }
     }
   }
-  target oldFunction -ℤ product ℤ ℤ ℤ
+  target ∧ function -ℤ functionFrom -ℤ product ℤ ℤ ℤ
   target ∈ apply -ℤ orderedPair a b ℤ
 }
 
@@ -1598,7 +1598,7 @@ conclusion ∃ b ∧ ∈ $0 S ∀ s → ∈ $0 S ∈ orderedPair $$0 $0 ≤ℤ
         }
         prove ⊆ $0 ℤ^≥ 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () ($0, ℤ^≥) 0.0.0.0
       }
-      target oldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ
+      target ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥ ℕ
       target ⊆ applySet inverseFunction ⍳_ℤ $0 ℕ
       subproof (Inverse image of S^+ is non-empty) {
         prove ∃ s ∈ $0 S 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (S) p1

@@ -7,8 +7,8 @@ display apply x orderedPair a b as (a x b) requires-brackets if x infix-function
 write apply f orderedPair a b as apply2
 
 theorem Binary Functions with Same Values are Equal
-premise oldFunction f product A B C
-premise oldFunction g product A B C
+premise ∧ function f functionFrom f product A B C
+premise ∧ function g functionFrom g product A B C
 premise ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 apply g orderedPair $$0 $0
 conclusion = f g
 {
@@ -32,16 +32,16 @@ conclusion = f g
 }
 
 theorem Uncurry Function
-premise oldFunction f A functionSpace B C
-conclusion ∃! g ∧ oldFunction $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0
+premise ∧ function f functionFrom f A functionSpace B C
+conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0
 {
-  let g_f = $0 comprehension x product product A B C = second $0 apply apply f first first $0 second first $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ oldFunction $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0) (comprehension x product product A B C = second $0 apply apply f first first $0 second first $0) {
+  let g_f = $0 comprehension x product product A B C = second $0 apply apply f first first $0 second first $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0) (comprehension x product product A B C = second $0 apply apply f first first $0 second first $0) {
     subproof (Function) {
       prove ⊆ $0 product product A B C 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a (= second $$0 apply apply f first first $$0 second first $$0) ($0, product product A B C) 0a
       take x {
         assume ∈ $0 product A B {
           target ∈ apply f first $0 functionSpace B C
-          target oldFunction apply f first $0 B C
+          target ∧ function apply f first $0 functionFrom apply f first $0 B C
           target ∈ apply apply f first $0 second $0 C
           prove ∈ orderedPair $0 apply apply f first $0 second $0 product product A B C 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($0, product A B, apply apply f first $0 second $0, C) 0.0.1.0a 0.0.1.0.2
           prove = second orderedPair $0 apply apply f first $0 second $0 apply apply f first $0 second $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($0, apply apply f first $0 second $0)
@@ -81,7 +81,7 @@ conclusion ∃! g ∧ oldFunction $0 product A B C ∀ a → ∈ $0 A ∀ b → 
           prove ∃! y ∈ orderedPair $$0 $0 $$$0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∈ orderedPair $0 $$$0 $$0) (apply apply f first $0 second $0) 0.0.1.0.7 0.0.1.0.8
         }
       }
-      target oldFunction $0 product A B C
+      target ∧ function $0 functionFrom $0 product A B C
     }
     subproof (Function has same values) {
       take a {
@@ -123,7 +123,7 @@ conclusion ∃! g ∧ oldFunction $0 product A B C ∀ a → ∈ $0 A ∀ b → 
     }
     subproof (Uniqueness) {
       take g {
-        assume ∧ oldFunction $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 {
+        assume ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 {
           take a {
             assume ∈ $0 A {
               take b {
@@ -151,8 +151,8 @@ conclusion ∃! g ∧ oldFunction $0 product A B C ∀ a → ∈ $0 A ∀ b → 
       }
     }
     elided ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d {
-      prove ∧ oldFunction $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (oldFunction $0 product A B C, ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0) () 0.0 0.1
-      prove ∃! g ∧ oldFunction $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∧ oldFunction $$0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$0 $0 apply apply f $$0 $0) ($0) 0.3.0 0.2
+      prove ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function $0 functionFrom $0 product A B C, ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0) () 0.0 0.1
+      prove ∃! g ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∧ ∧ function $$0 functionFrom $$0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$$0 orderedPair $$0 $0 apply apply f $$0 $0) ($0) 0.3.0 0.2
     }
   }
 }

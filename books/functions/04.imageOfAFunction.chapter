@@ -2,11 +2,11 @@ Define the image of a function.
 
 term image (f)
   format (Im(f)) no-component-brackets
-  premises (oldFunction f A B)
+  premises (∧ function f functionFrom f A B)
   (= $0 comprehension b B ∃ a ∧ ∈ $0 A = $$0 apply f $0)
 
 theorem Membership Condition for Function Image
-premise oldFunction f A B
+premise ∧ function f functionFrom f A B
 conclusion ∀ b ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0
 {
   target = image f comprehension b B ∃ a ∧ ∈ $0 A = $$0 apply f $0
@@ -30,8 +30,8 @@ conclusion ∀ b ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0
 }
 
 theorem A Function Can Be Restricted to Its Image
-premise oldFunction f A B
-conclusion oldFunction f A image f
+premise ∧ function f functionFrom f A B
+conclusion ∧ function f functionFrom f A image f
 {
   take x {
     assume ∈ $0 f {
@@ -63,5 +63,5 @@ conclusion oldFunction f A image f
     }
   }
   prove ⊆ f product A image f 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (f, product A image f) 0
-  target oldFunction f A image f
+  target ∧ function f functionFrom f A image f
 }

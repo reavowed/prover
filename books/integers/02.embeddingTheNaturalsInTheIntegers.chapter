@@ -8,7 +8,7 @@ term ⍳_ℤ ()
 write apply ⍳_ℤ a as toZ
 
 theorem Function Properties of ⍳_ℤ
-conclusion ∧ ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ
+conclusion ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ
 {
   prove = ⍳_ℤ functionMap n ℕ equivalenceClass orderedPair $0 0ℕ ~_ℤ 5da5eaf4066ad42c4d6c27ee8ac823e9fec383bed2815da89db65e79c1955b4f () ()
   subproof (Function) {
@@ -20,7 +20,7 @@ conclusion ∧ ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ 
         }
       }
     }
-    target oldFunction ⍳_ℤ ℕ ℤ
+    target ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ
   }
   subproof (Function value) {
     take n {
@@ -81,11 +81,11 @@ conclusion ∧ ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ 
         }
       }
     }
-    target injectiveOldFunction ⍳_ℤ ℕ ℤ
+    target injectiveFunction ⍳_ℤ
   }
   elided bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d {
-    prove ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (oldFunction ⍳_ℤ ℕ ℤ, injectiveOldFunction ⍳_ℤ ℕ ℤ) () 1 3
-    prove ∧ ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 4.0 2
+    prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ, injectiveFunction ⍳_ℤ) () 1 3
+    prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 4.0 2
   }
 }
 
@@ -93,7 +93,7 @@ theorem Injected Natural Is Integer
 premise ∈ a ℕ
 conclusion ∈ apply ⍳_ℤ a ℤ
 {
-  target oldFunction ⍳_ℤ ℕ ℤ
+  target ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ
   target ∈ apply ⍳_ℤ a ℤ
 }
 
@@ -120,6 +120,6 @@ premise ∈ a ℕ
 premise ∈ b ℕ
 conclusion ↔ = apply ⍳_ℤ a apply ⍳_ℤ b = a b
 {
-  target ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ
+  target ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ
   target ↔ = apply ⍳_ℤ a apply ⍳_ℤ b = a b
 }

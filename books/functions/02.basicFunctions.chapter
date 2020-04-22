@@ -1,7 +1,7 @@
 Define some basic functions.
 
 theorem The Empty Set Is a Function with Empty Domain
-conclusion oldFunction ∅ ∅ A
+conclusion ∧ function ∅ functionFrom ∅ ∅ A
 {
   prove ⊆ ∅ product ∅ A 1bde69fc8b90a9ca85033f763d7edeaa761c9b52a26ea2e64796515496237aa9 () (product ∅ A)
   prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
@@ -11,11 +11,11 @@ conclusion oldFunction ∅ ∅ A
       prove → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅ bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∅, ∃! y ∈ orderedPair $$0 $0 ∅) () 2.0.0
     }
   }
-  target oldFunction ∅ ∅ A
+  target ∧ function ∅ functionFrom ∅ ∅ A
 }
 
 theorem Function with a Singleton Domain
-conclusion oldFunction singleton orderedPair a b singleton a singleton b
+conclusion ∧ function singleton orderedPair a b functionFrom singleton orderedPair a b singleton a singleton b
 {
   prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a)
   prove ∈ b singleton b e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (b)
@@ -37,14 +37,14 @@ conclusion oldFunction singleton orderedPair a b singleton a singleton b
       prove ∃! x ∈ orderedPair $$0 $0 singleton orderedPair a b ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∈ orderedPair $0 $$0 singleton orderedPair a b) (b) 4.0.1 4.0.2
     }
   }
-  target oldFunction singleton orderedPair a b singleton a singleton b
+  target ∧ function singleton orderedPair a b functionFrom singleton orderedPair a b singleton a singleton b
 }
 
 theorem Combine Functions
-premise oldFunction f A B
-premise oldFunction g C D
+premise ∧ function f functionFrom f A B
+premise ∧ function g functionFrom g C D
 premise ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0
-conclusion oldFunction ∪ f g ∪ A C ∪ B D
+conclusion ∧ function ∪ f g functionFrom ∪ f g ∪ A C ∪ B D
 {
   target ⊆ f product A B
   elided 6b6e91a6b41a0ee718825d6b9baaae0c82d31cd1a6325c1c7d3ccb001d9a02f5 {
@@ -130,14 +130,14 @@ conclusion oldFunction ∪ f g ∪ A C ∪ B D
       }
     }
   }
-  target oldFunction ∪ f g ∪ A C ∪ B D
+  target ∧ function ∪ f g functionFrom ∪ f g ∪ A C ∪ B D
 }
 
 theorem Combine Disjoint Functions
-premise oldFunction f A B
-premise oldFunction g C D
+premise ∧ function f functionFrom f A B
+premise ∧ function g functionFrom g C D
 premise = ∩ A C ∅
-conclusion oldFunction ∪ f g ∪ A C ∪ B D
+conclusion ∧ function ∪ f g functionFrom ∪ f g ∪ A C ∪ B D
 {
   elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
     prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
@@ -149,14 +149,14 @@ conclusion oldFunction ∪ f g ∪ A C ∪ B D
       prove → ∈ $0 ∩ A C = apply f $0 apply g $0 bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 ∩ A C, = apply f $0 apply g $0) () 1.0.0
     }
   }
-  target oldFunction ∪ f g ∪ A C ∪ B D
+  target ∧ function ∪ f g functionFrom ∪ f g ∪ A C ∪ B D
 }
 
 theorem Extending a Function by One Value
-premise oldFunction f A B
+premise ∧ function f functionFrom f A B
 premise ¬ ∈ a A
 premise ∈ b B
-conclusion oldFunction ∪ f singleton orderedPair a b ∪ A singleton a B
+conclusion ∧ function ∪ f singleton orderedPair a b functionFrom ∪ f singleton orderedPair a b ∪ A singleton a B
 {
   take x {
     assume ∈ $0 A {
@@ -168,13 +168,13 @@ conclusion oldFunction ∪ f singleton orderedPair a b ∪ A singleton a B
     }
   }
   prove = ∩ A singleton a ∅ b80bb75d6dc623394f9f9d5d78b00f112d814f0a5a1aa3c718cc6420f534a673 () (A, singleton a) 0
-  target oldFunction singleton orderedPair a b singleton a singleton b
-  target oldFunction ∪ f singleton orderedPair a b ∪ A singleton a B
+  target ∧ function singleton orderedPair a b functionFrom singleton orderedPair a b singleton a singleton b
+  target ∧ function ∪ f singleton orderedPair a b functionFrom ∪ f singleton orderedPair a b ∪ A singleton a B
 }
 
 theorem Extended Function is Equal to Original on its Domain
-premise oldFunction f A B
-premise oldFunction g C D
+premise ∧ function f functionFrom f A B
+premise ∧ function g functionFrom g C D
 premise ⊆ f g
 conclusion ∀ a → ∈ $0 A = apply f $0 apply g $0
 {
@@ -189,9 +189,9 @@ conclusion ∀ a → ∈ $0 A = apply f $0 apply g $0
 
 theorem Function from Unique Pairing
 premise ∀ a → ∈ $0 A ∃! b ∧ ∈ $0 B with ($$0 $0) φ
-conclusion ∃! f ∧ oldFunction $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ
+conclusion ∃! f ∧ ∧ function $0 functionFrom $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ
 {
-  let f_φ = $0 comprehension x product A B with (first $0 second $0) φ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! f ∧ oldFunction $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ) (comprehension x product A B with (first $0 second $0) φ) {
+  let f_φ = $0 comprehension x product A B with (first $0 second $0) φ cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! f ∧ ∧ function $0 functionFrom $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ) (comprehension x product A B with (first $0 second $0) φ) {
     subproof (f_φ is a function) {
       prove ⊆ $0 product A B 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a (with (first $$0 second $$0) φ) ($0, product A B) 0a
       take a {
@@ -252,7 +252,7 @@ conclusion ∃! f ∧ oldFunction $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $
           prove ∃! b ∈ orderedPair $$0 $0 $$$0 2990d85d4ee52472194a7ae53589f3f257b4493424bdd996a411322c70e5e4c6 (∧ ∈ $$$0 B with ($0 $$$0) φ, ∈ orderedPair $0 $$$0 $$0) () 0.0.1.0.0 0.0.1.0.1
         }
       }
-      target oldFunction $0 A B
+      target ∧ function $0 functionFrom $0 A B
     }
     subproof (f_φ satisfies φ) {
       take a {
@@ -278,7 +278,7 @@ conclusion ∃! f ∧ oldFunction $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $
     }
     subproof (f_φ is unique) {
       take f {
-        assume ∧ oldFunction $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ {
+        assume ∧ ∧ function $0 functionFrom $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ {
           take a {
             assume ∈ $0 A {
               elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
@@ -307,8 +307,8 @@ conclusion ∃! f ∧ oldFunction $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $
       }
     }
     elided ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d {
-      prove ∧ oldFunction $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (oldFunction $0 A B, ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ) () 0.0 0.1
-      prove ∃! f ∧ oldFunction $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∧ oldFunction $$0 A B ∀ a → ∈ $0 A with ($0 apply $$$0 $0) φ) ($0) 0.3.0 0.2
+      prove ∧ ∧ function $0 functionFrom $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function $0 functionFrom $0 A B, ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ) () 0.0 0.1
+      prove ∃! f ∧ ∧ function $0 functionFrom $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∧ ∧ function $$0 functionFrom $$0 A B ∀ a → ∈ $0 A with ($0 apply $$$0 $0) φ) ($0) 0.3.0 0.2
     }
   }
 }
@@ -322,7 +322,7 @@ term functionMap ($a A with a F)
 theorem Function Map Is Function
 premise = f functionMap a A with ($0) F
 premise ∀ a → ∈ $0 A ∈ with ($0) F B
-conclusion oldFunction f A B
+conclusion ∧ function f functionFrom f A B
 {
   elided 3554b7859d22ea016fcc856a0d0c569d8c25cce90a4ba66d3a2f2f3cce5e276e {
     prove = functionMap a A with ($0) F replacementSet a A orderedPair $0 with ($0) F 3554b7859d22ea016fcc856a0d0c569d8c25cce90a4ba66d3a2f2f3cce5e276e () (A, with ($0) F)
@@ -376,7 +376,7 @@ conclusion oldFunction f A B
       }
     }
   }
-  target oldFunction f A B
+  target ∧ function f functionFrom f A B
 }
 
 theorem Function Map Application
@@ -395,7 +395,7 @@ conclusion ∀ a → ∈ $0 A = apply f $0 with ($0) F
         }
       }
     }
-    target oldFunction f A $0
+    target ∧ function f functionFrom f A $0
     take a {
       assume ∈ $0 A {
         prove ∈ orderedPair $0 with ($0) F f d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () (f, A, orderedPair $$$0 with ($$$0) F, $0) 0 1.2.0a
@@ -415,7 +415,7 @@ term functionMap2 ($a $b A B with (a b) F)
 theorem Binary Function Map Is Function
 premise = f functionMap2 a b A B with ($0 $1) F
 premise ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∈ with ($$0 $0) F C
-conclusion oldFunction f product A B C
+conclusion ∧ function f functionFrom f product A B C
 {
   elided 7f1c522e6b2b5efb16c1d7a3d192ed6c17b9ac66f65c085a7235411cf8fb00b5 {
     prove = functionMap2 a b A B with ($0 $1) F functionMap x product A B with (first $0 second $0) F 7f1c522e6b2b5efb16c1d7a3d192ed6c17b9ac66f65c085a7235411cf8fb00b5 () (A, B, with ($0 $1) F)
@@ -433,7 +433,7 @@ conclusion oldFunction f product A B C
       }
     }
   }
-  target oldFunction f product A B C
+  target ∧ function f functionFrom f product A B C
 }
 
 theorem Binary Function Map Application
@@ -476,7 +476,7 @@ term functionMap4 ($a $b $c $d A B C D with (a b c d) F)
 theorem Quadruple Function Map Is Function
 premise = f functionMap4 a b c d A B C D with ($0 $1 $2 $3) F
 premise ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D ∈ with ($$$$0 $$$0 $$0 $0) F E
-conclusion oldFunction f product product A B product C D E
+conclusion ∧ function f functionFrom f product product A B product C D E
 {
   elided 43c300cbc542cb8d0e74ee2747e5fcdfc2f3b243fd0dffa1f28b28d74796e82d {
     prove = functionMap4 a b c d A B C D with ($0 $1 $2 $3) F functionMap2 x y product A B product C D with (first $0 second $0 first $1 second $1) F 43c300cbc542cb8d0e74ee2747e5fcdfc2f3b243fd0dffa1f28b28d74796e82d () (A, B, C, D, with ($0 $1 $2 $3) F)
@@ -506,7 +506,7 @@ conclusion oldFunction f product product A B product C D E
       }
     }
   }
-  target oldFunction f product product A B product C D E
+  target ∧ function f functionFrom f product product A B product C D E
 }
 
 theorem Quadruple Function Map Application
@@ -574,9 +574,9 @@ term ∘ (f g)
   shorthand (comp)
 
 theorem Function Composition Is Function
-premise oldFunction f A B
-premise oldFunction g B C
-conclusion oldFunction ∘ g f A C
+premise ∧ function f functionFrom f A B
+premise ∧ function g functionFrom g B C
+conclusion ∧ function ∘ g f functionFrom ∘ g f A C
 {
   prove = ∘ g f functionMap a A apply g apply f $0 0e549ee78bff96c86354fb97ee3d0a517aa239248a8af90dc1cffdc332957ee2 () (g, f, A)
   take a {
@@ -585,12 +585,12 @@ conclusion oldFunction ∘ g f A C
       target ∈ apply g apply f $0 C
     }
   }
-  target oldFunction ∘ g f A C
+  target ∧ function ∘ g f functionFrom ∘ g f A C
 }
 
 theorem Application of Function Composition
-premise oldFunction f A B
-premise oldFunction g B C
+premise ∧ function f functionFrom f A B
+premise ∧ function g functionFrom g B C
 premise ∈ a A
 conclusion = apply ∘ g f a apply g apply f a
 {
@@ -603,8 +603,8 @@ conclusion = apply ∘ g f a apply g apply f a
 }
 
 theorem Application of Function Composition on Set
-premise oldFunction f A B
-premise oldFunction g B C
+premise ∧ function f functionFrom f A B
+premise ∧ function g functionFrom g B C
 premise ⊆ X A
 conclusion = applySet ∘ g f X applySet g applySet f X
 {
@@ -643,15 +643,15 @@ conclusion = applySet ∘ g f X applySet g applySet f X
 }
 
 theorem Function Composition Is Associative
-premise oldFunction f A B
-premise oldFunction g B C
-premise oldFunction h C D
+premise ∧ function f functionFrom f A B
+premise ∧ function g functionFrom g B C
+premise ∧ function h functionFrom h C D
 conclusion = ∘ h ∘ g f ∘ ∘ h g f
 {
-  target oldFunction ∘ g f A C
-  target oldFunction ∘ h ∘ g f A D
-  target oldFunction ∘ h g B D
-  target oldFunction ∘ ∘ h g f A D
+  target ∧ function ∘ g f functionFrom ∘ g f A C
+  target ∧ function ∘ h ∘ g f functionFrom ∘ h ∘ g f A D
+  target ∧ function ∘ h g functionFrom ∘ h g B D
+  target ∧ function ∘ ∘ h g f functionFrom ∘ ∘ h g f A D
   take a {
     assume ∈ $0 A {
       target ∈ apply f $0 B
@@ -687,7 +687,7 @@ conclusion = apply identityFunction A a a
 }
 
 theorem Identity Function Is a Function
-conclusion oldFunction identityFunction A A A
+conclusion ∧ function identityFunction A functionFrom identityFunction A A A
 {
   prove = identityFunction A functionMap a A $0 7b9df0bef16597c120d668a729681b34f596c78b952ec387d00609a6ba216ad7 () (A)
   elided d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 {
@@ -695,15 +695,15 @@ conclusion oldFunction identityFunction A A A
       prove → ∈ $0 A ∈ $0 A d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (∈ $0 A) ()
     }
   }
-  target oldFunction identityFunction A A A
+  target ∧ function identityFunction A functionFrom identityFunction A A A
 }
 
 theorem Identity Function Is Identity for Function Composition
-premise oldFunction f A B
+premise ∧ function f functionFrom f A B
 conclusion ∧ = ∘ identityFunction B f f = ∘ f identityFunction A f
 {
-  target oldFunction identityFunction B B B
-  target oldFunction ∘ identityFunction B f A B
+  target ∧ function identityFunction B functionFrom identityFunction B B B
+  target ∧ function ∘ identityFunction B f functionFrom ∘ identityFunction B f A B
   take a {
     assume ∈ $0 A {
       target ∈ apply f $0 B
@@ -713,8 +713,8 @@ conclusion ∧ = ∘ identityFunction B f f = ∘ f identityFunction A f
     }
   }
   target = ∘ identityFunction B f f
-  target oldFunction identityFunction A A A
-  target oldFunction ∘ f identityFunction A A B
+  target ∧ function identityFunction A functionFrom identityFunction A A A
+  target ∧ function ∘ f identityFunction A functionFrom ∘ f identityFunction A A B
   take a {
     assume ∈ $0 A {
       target = apply ∘ f identityFunction A $0 apply f apply identityFunction A $0
@@ -733,7 +733,7 @@ theorem Function Application of Identity on Set
 premise ⊆ X A
 conclusion = applySet identityFunction A X X
 {
-  target oldFunction identityFunction A A A
+  target ∧ function identityFunction A functionFrom identityFunction A A A
   take a {
     assume ∈ $0 applySet identityFunction A X {
       target ∃ a' ∧ ∈ $0 X = $$0 apply identityFunction A $0

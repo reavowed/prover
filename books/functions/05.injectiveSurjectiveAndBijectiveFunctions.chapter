@@ -1,16 +1,18 @@
 Define injectivity, surjectivity and bijectivity for functions.
 
-property injective on oldFunction
-  definition (∀ x → ∈ $0 A ∀ y → ∈ $0 A → = apply f $$0 apply f $0 = $$0 $0)
+property injective on function
+  definition (∀ x → ∈ $0 domain f ∀ y → ∈ $0 domain f → = apply f $$0 apply f $0 = $$0 $0)
 
-property surjective on oldFunction
+property surjective on function
+  parentQualifier from
   definition (∀ b → ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0)
 
-property bijective on oldFunction
-  definition (∧ injectiveOldFunction f A B surjectiveOldFunction f A B)
+property bijective on function
+  parentQualifier from
+  definition (∧ injectiveFunction f surjectiveFunction f A B)
 
 theorem Injective Function Value Is Unique
-premise ∧ oldFunction f A B injectiveOldFunction f A B
+premise ∧ ∧ function f functionFrom f A B injectiveFunction f
 premise ∈ a_1 A
 premise ∈ a_2 A
 conclusion ↔ = apply f a_1 apply f a_2 = a_1 a_2
@@ -25,37 +27,37 @@ conclusion ↔ = apply f a_1 apply f a_2 = a_1 a_2
 }
 
 theorem A Function Is Surjective on Its Image
-premise oldFunction f A B
-conclusion ∧ oldFunction f A image f surjectiveOldFunction f A image f
+premise ∧ function f functionFrom f A B
+conclusion ∧ ∧ function f functionFrom f A image f surjectiveFunction f A image f
 {
-  target oldFunction f A image f
+  target ∧ function f functionFrom f A image f
   take b {
     assume ∈ $0 image f {
       target ∃ a ∧ ∈ $0 A = $$0 apply f $0
     }
   }
-  target surjectiveOldFunction f A image f
-  prove ∧ oldFunction f A image f surjectiveOldFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (oldFunction f A image f, surjectiveOldFunction f A image f) () 0 2
+  target surjectiveFunction f A image f
+  prove ∧ ∧ function f functionFrom f A image f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, surjectiveFunction f A image f) () 0 2
 }
 
 theorem Injective Function Is Bijective with Its Image
-premise ∧ oldFunction f A B injectiveOldFunction f A B
-conclusion ∧ oldFunction f A image f bijectiveOldFunction f A image f
+premise ∧ ∧ function f functionFrom f A B injectiveFunction f
+conclusion ∧ ∧ function f functionFrom f A image f bijectiveFunction f A image f
 {
-  target oldFunction f A image f
-  target injectiveOldFunction f A image f
-  target surjectiveOldFunction f A image f
-  target bijectiveOldFunction f A image f
-  prove ∧ oldFunction f A image f bijectiveOldFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (oldFunction f A image f, bijectiveOldFunction f A image f) () 0 3
+  target ∧ function f functionFrom f A image f
+  target injectiveFunction f
+  target surjectiveFunction f A image f
+  target bijectiveFunction f A image f
+  prove ∧ ∧ function f functionFrom f A image f bijectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, bijectiveFunction f A image f) () 0 3
 }
 
 comment Inverses for bijective functions.
 
 theorem Bijective Function Has an Inverse
-premise ∧ oldFunction f A B bijectiveOldFunction f A B
-conclusion ∃! g ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B
+premise ∧ ∧ function f functionFrom f A B bijectiveFunction f A B
+conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B
 {
-  let g = $0 replacementSet2 a b f orderedPair $1 $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B) (replacementSet2 a b f orderedPair $1 $0) {
+  let g = $0 replacementSet2 a b f orderedPair $1 $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B) (replacementSet2 a b f orderedPair $1 $0) {
     subproof (Function) {
       elided 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 {
         take a {
@@ -115,11 +117,11 @@ conclusion ∃! g ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = �
           } 0.0.2.0.0
         }
       }
-      target oldFunction $0 B A
+      target ∧ function $0 functionFrom $0 B A
     }
     subproof (g is right-inverse) {
-      target oldFunction ∘ $0 f A A
-      target oldFunction identityFunction A A A
+      target ∧ function ∘ $0 f functionFrom ∘ $0 f A A
+      target ∧ function identityFunction A functionFrom identityFunction A A A
       take x {
         assume ∈ $0 A {
           target ∈ apply f $0 B
@@ -156,8 +158,8 @@ conclusion ∃! g ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = �
       target = ∘ $0 f identityFunction A
     }
     subproof (g is left-inverse) {
-      target oldFunction ∘ f $0 B B
-      target oldFunction identityFunction B B B
+      target ∧ function ∘ f $0 functionFrom ∘ f $0 B B
+      target ∧ function identityFunction B functionFrom identityFunction B B B
       take x {
         assume ∈ $0 B {
           target ∈ orderedPair $0 apply $$0 $0 $$0
@@ -225,7 +227,7 @@ conclusion ∃! g ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = �
           }
         }
       }
-      target injectiveOldFunction $0 B A
+      target injectiveFunction $0
       take a {
         assume ∈ $0 A {
           target ∈ apply f $0 B
@@ -246,12 +248,12 @@ conclusion ∃! g ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = �
           }
         }
       }
-      target surjectiveOldFunction $0 B A
-      target bijectiveOldFunction $0 B A
+      target surjectiveFunction $0 B A
+      target bijectiveFunction $0 B A
     }
     subproof (Uniqueness) {
       take h {
-        assume ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B {
+        assume ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B {
           target = $0 ∘ identityFunction A $0
           elided 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 {
             prove = identityFunction A ∘ $$0 f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (∘ $$0 f, identityFunction A) 0.1
@@ -268,10 +270,10 @@ conclusion ∃! g ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = �
       }
     }
     elided ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d {
-      prove ∧ oldFunction $0 B A bijectiveOldFunction $0 B A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (oldFunction $0 B A, bijectiveOldFunction $0 B A) () 0.0 0.3
+      prove ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction $0 B A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function $0 functionFrom $0 B A, bijectiveFunction $0 B A) () 0.0 0.3
       prove ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= ∘ $0 f identityFunction A, = ∘ f $0 identityFunction B) () 0.1 0.2
-      prove ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ oldFunction $0 B A bijectiveOldFunction $0 B A, ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B) () 0.5.0 0.5.1
-      prove ∃! g ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∧ ∧ oldFunction $$0 B A bijectiveOldFunction $$0 B A ∧ = ∘ $$0 f identityFunction A = ∘ f $$0 identityFunction B) ($0) 0.5.2 0.4
+      prove ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ ∧ function $0 functionFrom $0 B A bijectiveFunction $0 B A, ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B) () 0.5.0 0.5.1
+      prove ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∧ ∧ ∧ function $$0 functionFrom $$0 B A bijectiveFunction $$0 B A ∧ = ∘ $$0 f identityFunction A = ∘ f $$0 identityFunction B) ($0) 0.5.2 0.4
     }
   }
 }
@@ -279,15 +281,15 @@ conclusion ∃! g ∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = �
 term inverseFunction (f)
   name (inverse function)
   format (f^-1)
-  premises (∧ oldFunction f A B bijectiveOldFunction f A B)
-  (∧ ∧ oldFunction $0 B A bijectiveOldFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B)
+  premises (∧ ∧ function f functionFrom f A B bijectiveFunction f A B)
+  (∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B)
 
 theorem Cancel Inverse Function on Left
-premise ∧ oldFunction f A B bijectiveOldFunction f A B
+premise ∧ ∧ function f functionFrom f A B bijectiveFunction f A B
 premise ∈ a A
 conclusion = apply inverseFunction f apply f a a
 {
-  target oldFunction inverseFunction f B A
+  target ∧ function inverseFunction f functionFrom inverseFunction f B A
   target = apply inverseFunction f apply f a apply ∘ inverseFunction f f a
   target = apply ∘ inverseFunction f f a apply identityFunction A a
   prove = apply inverseFunction f apply f a apply identityFunction A a 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply inverseFunction f apply f a, apply ∘ inverseFunction f f a, apply identityFunction A a) 1 2
@@ -296,11 +298,11 @@ conclusion = apply inverseFunction f apply f a a
 }
 
 theorem Cancel Inverse Function on Right
-premise ∧ oldFunction f A B bijectiveOldFunction f A B
+premise ∧ ∧ function f functionFrom f A B bijectiveFunction f A B
 premise ∈ b B
 conclusion = apply f apply inverseFunction f b b
 {
-  target ∧ oldFunction inverseFunction f B A bijectiveOldFunction inverseFunction f B A
+  target ∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A
   target = apply f apply inverseFunction f b apply ∘ f inverseFunction f b
   target = apply ∘ f inverseFunction f b apply identityFunction B b
   prove = apply f apply inverseFunction f b apply identityFunction B b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply f apply inverseFunction f b, apply ∘ f inverseFunction f b, apply identityFunction B b) 1 2

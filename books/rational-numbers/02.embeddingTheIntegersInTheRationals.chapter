@@ -10,7 +10,7 @@ write apply ⍳_ℚ a as toQ
 write apply ⍳_ℚ apply ⍳_ℤ a as toZQ
 
 theorem Function Properties of ⍳_ℚ
-conclusion ∧ ∧ oldFunction ⍳_ℚ ℤ ℚ injectiveOldFunction ⍳_ℚ ℤ ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ
+conclusion ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ
 {
   prove = ⍳_ℚ functionMap a ℤ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 39a26647ae69a195dd1fd19ea59ebbb658c55805d5fb87cbeb2697ab6d6c708d () ()
   subproof (Function) {
@@ -50,7 +50,7 @@ conclusion ∧ ∧ oldFunction ⍳_ℚ ℤ ℚ injectiveOldFunction ⍳_ℚ ℤ 
         }
       }
     }
-    target oldFunction ⍳_ℚ ℤ ℚ
+    target ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ
   }
   subproof (Injective) {
     take a {
@@ -126,7 +126,7 @@ conclusion ∧ ∧ oldFunction ⍳_ℚ ℤ ℚ injectiveOldFunction ⍳_ℚ ℤ 
         }
       }
     }
-    target injectiveOldFunction ⍳_ℚ ℤ ℚ
+    target injectiveFunction ⍳_ℚ
   }
   subproof (Function value) {
     take a {
@@ -140,7 +140,7 @@ conclusion ∧ ∧ oldFunction ⍳_ℚ ℤ ℚ injectiveOldFunction ⍳_ℚ ℤ 
     }
   }
   elided bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d {
-    prove ∧ oldFunction ⍳_ℚ ℤ ℚ injectiveOldFunction ⍳_ℚ ℤ ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (oldFunction ⍳_ℚ ℤ ℚ, injectiveOldFunction ⍳_ℚ ℤ ℚ) () 1 2
-    prove ∧ ∧ oldFunction ⍳_ℚ ℤ ℚ injectiveOldFunction ⍳_ℚ ℤ ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ oldFunction ⍳_ℚ ℤ ℚ injectiveOldFunction ⍳_ℚ ℤ ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 4.0 3
+    prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ, injectiveFunction ⍳_ℚ) () 1 2
+    prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 4.0 3
   }
 }
