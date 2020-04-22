@@ -9,7 +9,10 @@ trait Format {
   def baseFormatString: String
   def numberOfReplacements: Int
   def formatText(components: Seq[String], symbol: String, parentRequiresBrackets: Boolean = false): String = {
-    (symbol +: components).zipWithIndex.foldLeft(getSafeFormatString(parentRequiresBrackets)) { case (textSoFar, (component, index)) =>
+    formatText(symbol +: components, parentRequiresBrackets)
+  }
+  private def formatText(replacementStrings: Seq[String], parentRequiresBrackets: Boolean): String = {
+    replacementStrings.zipWithIndex.foldLeft(getSafeFormatString(parentRequiresBrackets)) { case (textSoFar, (component, index)) =>
       textSoFar.replaceFirst(s"%$index", Matcher.quoteReplacement(component))
     }
   }
@@ -47,7 +50,7 @@ object Format {
     }
   }
   case class Concatenated(first: Format, second: Format) extends Format {
-    override val baseFormatString: String = first.baseFormatString + " " + second.formatText((first.numberOfReplacements to first.numberOfReplacements + second.numberOfReplacements).map(i => s"%$i"), "")
+    override val baseFormatString: String = first.baseFormatString + " " + second.formatText((first.numberOfReplacements until first.numberOfReplacements + second.numberOfReplacements).map(i => s"%$i"), false)
     override def requiresBrackets: Boolean = true
     override def numberOfReplacements: Int = first.numberOfReplacements + second.numberOfReplacements
   }

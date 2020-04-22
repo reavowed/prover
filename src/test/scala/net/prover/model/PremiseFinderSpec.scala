@@ -5,7 +5,7 @@ import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
 import net.prover.model.entries.{Axiom, PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{PremiseFinder, Step, StepContext}
+import net.prover.model.proof.{PremiseFinder, PremiseReference, Step, StepContext, StepReference}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
@@ -13,61 +13,66 @@ class PremiseFinderSpec extends Specification {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
 
   "premise finder" should {
-    def checkFindPremise(target: Statement, premises: Statement*)(implicit entryContext: EntryContext): MatchResult[Any] = {
-      findPremise(target, premises: _*)(entryContext) must beSome(beStepsThatMakeValidTheorem(premises, target)(entryContext))
+    def checkFindPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): MatchResult[Any] = {
+      findPremise(target, premises, depth)(entryContext) must beSome(beStepsThatMakeValidTheorem(premises, target, depth)(entryContext))
     }
 
-    def findPremise(target: Statement, premises: Statement*)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
-      implicit val stepContext = StepContext.withPremisesAndTerms(premises, premises.map(_.requiredSubstitutions).foldTogether.terms.map(_._1))
+    def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
+      val emptyContext = StepContext(StepReference(Nil), premises.map(_.requiredSubstitutions).foldTogether.terms.map(_._1), Nil, Nil)
+      val contextWithDepth = (0 until depth).foldLeft(emptyContext){ (stepContext, i) => stepContext.addBoundVariable(s"$$$i")}
+      implicit val stepContext =  premises.zipWithIndex.foldLeft(contextWithDepth) { case (context, (premise, index)) =>
+        context.addStatement(premise, PremiseReference(index))
+      }
+
       PremiseFinder.findPremiseStepsForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, stepContext)).map(_.steps)
     }
 
     "find premise using rewrite" in {
       checkFindPremise(
         Equals(a, b),
-        Equals(b, a))
+        Seq(Equals(b, a)))
     }
 
     "find premise using relation simplification" in {
       checkFindPremise(
         ElementOf(First(a), b),
-        ElementOf(a, Product(b, c)))
+        Seq(ElementOf(a, Product(b, c))))
     }
 
     "find premise using extracted relation simplification" in {
       checkFindPremise(
         Equals(a, b),
-        ElementOf(a, Singleton(b)))
+        Seq(ElementOf(a, Singleton(b))))
     }
 
     "find premise using multiple relation simplifications" in {
       checkFindPremise(
         Equals(First(a), b),
-        ElementOf(a, Product(Singleton(b), c)))
+        Seq(ElementOf(a, Product(Singleton(b), c))))
     }
 
     "find premise using relation simplification in structural simplification" in {
       checkFindPremise(
         ElementOf(First(a), b),
-        Conjunction(ElementOf(a, Product(b, c)), φ))
+        Seq(Conjunction(ElementOf(a, Product(b, c)), φ)))
     }
 
     "find premise by simplifying target" in {
       checkFindPremise(
         ElementOf(add(First(a), Second(a)), Naturals),
-        ElementOf(a, Product(Naturals, Naturals)))
+        Seq(ElementOf(a, Product(Naturals, Naturals))))
     }
 
     "find premise by simplification" in {
       checkFindPremise(
         ElementOf(a, A),
-        ElementOf(Pair(a, b), Product(A, B)))
+        Seq(ElementOf(Pair(a, b), Product(A, B))))
     }
 
     "find premise by double simplification" in {
       checkFindPremise(
         ElementOf(a, A),
-        ElementOf(Pair(Pair(a, b), Pair(c, d)), Product(Product(A, B), Product(C, D))))
+        Seq(ElementOf(Pair(Pair(a, b), Pair(c, d)), Product(Product(A, B), Product(C, D)))))
     }
 
     "find a premise by a conclusion simplification from extracting a term definition" in {
@@ -87,7 +92,7 @@ class PremiseFinderSpec extends Specification {
 
       checkFindPremise(
         ElementOf(Negated(a), Naturals),
-        ElementOf(a, Naturals))(
+        Seq(ElementOf(a, Naturals)))(
         entryContextWithDefinition)
     }
 
@@ -97,34 +102,34 @@ class PremiseFinderSpec extends Specification {
 
       checkFindPremise(
         ElementOf(Pair(a, b), Integers),
-        ElementOf(a, Naturals), ElementOf(b, Naturals))(
+        Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)))(
         entryContextWithDefinitions)
     }
 
     "chain conclusion relation simplification definitions using premise substitutions" in {
       checkFindPremise(
         ElementOf(Pair(a, b), Product(A, B)),
-        ElementOf(a, A), ElementOf(b, C), Subset(C, B))
+        Seq(ElementOf(a, A), ElementOf(b, C), Subset(C, B)))
     }
 
     "chain conclusion relation simplification definitions using premise substitutions first" in {
       checkFindPremise(
         ElementOf(First(a), C),
-        Subset(A, C), ElementOf(a, Product(A, B)))
+        Seq(Subset(A, C), ElementOf(a, Product(A, B))))
     }
 
     "avoid infinite loop with complexity increases" in {
       val ElementOfSuccessorIsElementOfSet = Axiom("Element of Successor Is Element of Set", Seq(ElementOf(a, Successor(b))), ElementOf(a, b))
       val entryContextWithDefinition = defaultEntryContext.addEntry(ElementOfSuccessorIsElementOfSet)
 
-      findPremise(ElementOf(a, b))(entryContextWithDefinition) must beNone
+      findPremise(ElementOf(a, b), Nil)(entryContextWithDefinition) must beNone
     }
 
     "avoid infinite loop by passing from complex relation to simpler one" in {
       val LessThanIsElementRelation = Axiom("Less Than Is Element Relation", Seq(lessThan(a, b)), ElementOf(a, b)) // if naively implemented, the premise finder will treat "a < b" as "(a, b) ∈ <" and recurse
       val entryContextWithDefinition = defaultEntryContext.addEntry(LessThanIsElementRelation)
 
-      findPremise(ElementOf(a, b))(entryContextWithDefinition) must beNone
+      findPremise(ElementOf(a, b), Nil)(entryContextWithDefinition) must beNone
     }
 
     "simplify a conclusion by converting a complex defined term into a simpler one" in {
@@ -138,7 +143,7 @@ class PremiseFinderSpec extends Specification {
 
       checkFindPremise(
         ElementOf(add(a, b), Naturals),
-        ElementOf(a, Naturals), ElementOf(b, PositiveNaturals))(
+        Seq(ElementOf(a, Naturals), ElementOf(b, PositiveNaturals)))(
         entryContextWithDefinitions)
     }
 
@@ -153,12 +158,12 @@ class PremiseFinderSpec extends Specification {
 
       checkFindPremise(
         ElementOf(Pair(a, b), Product(Naturals, Naturals)),
-        ElementOf(a, Naturals), ElementOf(b, PositiveNaturals))(
+        Seq(ElementOf(a, Naturals), ElementOf(b, PositiveNaturals)))(
         entryContextWithDefinitions)
     }
 
     "find a premise using an or condition" in {
-      checkFindPremise(Disjunction(φ, ψ), φ)
+      checkFindPremise(Disjunction(φ, ψ), Seq(φ))
     }
 
     "find a premise using chained simplifications requiring other premises" in {
@@ -198,7 +203,8 @@ class PremiseFinderSpec extends Specification {
         .addEntry(OneIsNotZero)
 
       checkFindPremise(
-        ElementOf(ToInteger(One), SetDifference(Integers, Singleton(ToInteger(Zero)))))(
+        ElementOf(ToInteger(One), SetDifference(Integers, Singleton(ToInteger(Zero)))),
+        Nil)(
         entryContextWithDefinitions)
     }
 
@@ -225,8 +231,25 @@ class PremiseFinderSpec extends Specification {
 
       checkFindPremise(
         Negation(Equals(a, Inject(Zero))),
-        ElementOf(a, PositiveNaturals))(
+        Seq(ElementOf(a, PositiveNaturals)))(
         entryContextWithDefinitions)
+    }
+
+    "find premise by equality substitution for variable" in {
+      checkFindPremise(
+        φ(a),
+        Seq(φ(b), Equals(a, b)))
+      checkFindPremise(
+        φ(a),
+        Seq(φ(b), Equals(b, a)))
+      checkFindPremise(
+        φ($),
+        Seq(φ($.^), Equals($, $.^)),
+        2)
+      checkFindPremise(
+        φ($),
+        Seq(φ($.^), Equals($.^, $)),
+        2)
     }
   }
 }

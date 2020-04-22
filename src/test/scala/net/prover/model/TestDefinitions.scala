@@ -473,9 +473,9 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
     beStepsThatMakeValidTheorem(premises, conclusion, depth) ^^ { step: Step => Seq(step) }
   }
 
-  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit stepContext: StepContext): Matcher[Seq[Step]] = {
+  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit entryContext: EntryContext): Matcher[Seq[Step]] = {
     if (depth == 0)
-      beStepsThatMakeValidTheorem(premises, conclusion)
+      beStepsThatMakeValidTheorem(premises, conclusion)(entryContext)
     else {
       def generalizeOnce(statement: Statement, i: Int): Statement = ForAll(s"x_$i")(statement)
       def generalizeToDepth(statement: Statement, parameterDepth: Int): Statement = (0 until parameterDepth).foldLeft(statement)(generalizeOnce)
@@ -486,7 +486,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
           Seq(Premise.Pending(generalizeOnce(statement, parameterDepth).insertExternalParameters(1))),
           Substitutions(statements = Map(φ -> (1, statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get)), terms = Map(a -> (0, FunctionParameter(0, 0)))))
       }
-      beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>
+      beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth))(entryContext) ^^ { steps: Seq[Step] =>
         (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.Generalization(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, ForAllDefinition))}
       }
     }

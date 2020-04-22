@@ -24,7 +24,7 @@ case class TypeQualifierDefinition(
 
   def withName(newName: Option[String]): TypeQualifierDefinition = copy(explicitName = newName)
 
-  def fullFormat = qualifier.prependFormat(parentType.baseFormat)
+  def fullFormat = qualifier.prependFormat(Format.Explicit(s"%1 is", s"${parentType.defaultTermName} is", 2, true, true))
   def allTermNames = parentType.defaultTermName +: qualifier.termNames
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
     qualifiedSymbol,

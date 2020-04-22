@@ -19,7 +19,7 @@ case class StepContext private(
   private def addPremise(givenPremise: Premise.Given): StepContext = {
     copy(premises = premises :+ givenPremise)
   }
-  private def addStatement(statement: Statement, reference: PreviousLineReference): StepContext = {
+  def addStatement(statement: Statement, reference: PreviousLineReference): StepContext = {
     addPremise(Premise.Given(statement, reference))
   }
   def addStatement(statement: Statement, suffix: String): StepContext = {
