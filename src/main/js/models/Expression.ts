@@ -222,25 +222,27 @@ export class TypeExpression extends Expression {
     const serializedTerm = this.term.serialize();
     const serializedQualifierComponents = this.qualifierComponents.map(c => c.serialize());
 
-    let serializedBaseComponents: string[], wordsWithQualifier;
+    let wordsWithQualifier;
 
     if (this.explicitQualifier) {
-      serializedBaseComponents = [serializedTerm];
       if (this.conjunctionDefinition) {
         wordsWithQualifier = [this.conjunctionDefinition.symbol.serialized, this.definition.symbol, serializedTerm, this.explicitQualifier.qualifiedSymbol, serializedTerm, ...serializedQualifierComponents]
       } else throw "Cannot serialize type with property without conjunction";
     } else {
-      serializedBaseComponents = [serializedTerm, ...serializedQualifierComponents];
-      wordsWithQualifier = [this.definition.symbol, ...serializedBaseComponents];
+      wordsWithQualifier = [this.definition.symbol, serializedTerm, ...serializedQualifierComponents];
     }
 
     const allWords = _.reduce(
         this.properties,
         // @ts-ignore
         (wordsSoFar: string[], propertyDefinition: PropertyDefinition) => {
-          if (this.conjunctionDefinition) {
-            return [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, propertyDefinition.qualifiedSymbol, ...serializedBaseComponents]
-          } else throw "Cannot serialize type with property without conjunction";
+          if (!this.conjunctionDefinition) throw "Cannot serialize type with property without conjunction";
+          if (propertyDefinition.requiredParentQualifier || this.definition.defaultQualifier) {
+            return [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, propertyDefinition.qualifiedSymbol, serializedTerm, ...serializedQualifierComponents];
+
+          } else {
+            return [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, propertyDefinition.qualifiedSymbol, serializedTerm];
+          }
         },
         wordsWithQualifier);
     return allWords.join(" ")

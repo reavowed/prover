@@ -1,4 +1,4 @@
-import {Variable} from "../../../main/js/models/Expression";
+import {DisambiguatedSymbol, Variable} from "../../../main/js/models/Expression";
 
 export const injectiveDefinition = {
   symbol: "injective",
@@ -29,6 +29,19 @@ export const functionDefinition = {
 };
 export const relationDefinition = {
   defaultQualifier: {}
+};
+export const conjunctionDefinition = {
+  symbol: {
+    baseSymbol: "∧",
+    disambiguator: null,
+    serialized: "∧"
+  },
+  baseFormatString: "%1 %0 %2",
+  requiresBrackets: true,
+  requiresComponentBrackets: true,
+  numberOfBoundVariables: 0,
+  numberOfComponents: 2,
+  attributes: ["conjunction"]
 };
 export const f = new Variable("f", []);
 export const g = new Variable("g", []);

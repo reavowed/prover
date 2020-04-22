@@ -1,6 +1,13 @@
 import {TypeExpression, Variable} from "../../../main/js/models/Expression";
 
-import {functionDefinition, functionFromDefinition, relationDefinition} from "./testDefinitions";
+import {
+  conjunctionDefinition,
+  functionDefinition,
+  functionFromDefinition,
+  injectiveDefinition,
+  relationDefinition,
+  surjectiveDefinition
+} from "./testDefinitions";
 import {f, g, R, S, A, B, C} from "./testDefinitions";
 
 test('replace term in type with no qualifier or properties', function() {
@@ -32,4 +39,10 @@ test('replace qualifier component in type with explicit qualifier but no propert
   const [newExpression, replacementPaths] = expression.replaceAtPath([1, 2], C);
   expect(newExpression).toEqual(new TypeExpression(functionDefinition, f, functionFromDefinition, [A, C], [], undefined));
   expect(replacementPaths).toEqual([[1, 2]]);
+});
+
+
+test('serialize properties with appropriate components from required explicit qualifier', function() {
+  const expression = new TypeExpression(functionDefinition, f, functionFromDefinition, [A, B], [injectiveDefinition, surjectiveDefinition], conjunctionDefinition);
+  expect(expression.serialize()).toBe("∧ ∧ ∧ function f functionFrom f A B injectiveFunction f surjectiveFunction f A B")
 });
