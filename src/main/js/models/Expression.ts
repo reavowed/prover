@@ -48,7 +48,7 @@ export interface PropertyDefinition {
   symbol: string;
   qualifiedSymbol: string;
   name: string;
-  requiredParentQualifier: string;
+  requiredParentQualifier: string | undefined;
 }
 
 export interface StandalonePropertyDefinition {

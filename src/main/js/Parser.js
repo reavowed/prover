@@ -80,7 +80,16 @@ export class Parser {
               }
             }
             if (firstComponent instanceof TypeExpression && secondComponent instanceof PropertyExpression && _.includes(firstComponent.definition.properties, secondComponent.definition)) {
-              if (secondComponent.term.serialize() === firstComponent.term.serialize() && secondComponent.qualifierComponents.map(c => c.serialize()).join(" ") === firstComponent.qualifierComponents.map(c => c.serialize()).join(" ")) {
+              function matchQualifiers() {
+                if (!firstComponent.definition.defaultQualifier && !secondComponent.definition.requiredParentQualifier) {
+                  return true
+                } else if (firstComponent.definition.defaultQualifier || (secondComponent.definition.requiredParentQualifier && firstComponent.explicitQualifier && firstComponent.explicitQualifier.symbol === secondComponent.definition.requiredParentQualifier)) {
+                  return secondComponent.qualifierComponents.map(c => c.serialize()).join(" ") === firstComponent.qualifierComponents.map(c => c.serialize()).join(" ")
+                } else {
+                  return false;
+                }
+              }
+              if (secondComponent.term.serialize() === firstComponent.term.serialize() && matchQualifiers()) {
                 firstComponent.addProperty(secondComponent.definition, expressionDefinition);
                 return [firstComponent, tokensAfterComponents];
               }
