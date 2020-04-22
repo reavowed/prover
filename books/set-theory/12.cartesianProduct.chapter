@@ -137,6 +137,26 @@ conclusion ∈ b B
   prove ∈ b B 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 B) (second orderedPair a b, b) 0 1
 }
 
+theorem Subset of Cartesian Product Is Pair-Set
+premise ⊆ X product A B
+conclusion pairSet X
+{
+  take x {
+    assume ∈ $0 X {
+      elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+        prove ∀ x → ∈ $0 X ∈ $0 product A B f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (X, product A B) p0
+        prove → ∈ $0 X ∈ $0 product A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 X ∈ $$0 product A B) ($0) 0.0.0.0
+        prove ∈ $0 product A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 X, ∈ $0 product A B) () 0.0.0.1 0.0a
+      }
+      elided 2c5898a93d503f67864a5f7946c9db3d7c9c578a1ccb09f54d947eb150789919 {
+        prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 2c5898a93d503f67864a5f7946c9db3d7c9c578a1ccb09f54d947eb150789919 () ($0, A, B) 0.0.0
+        prove ∃ a ∃ b = $$$0 orderedPair $$0 $0 5e69e56604bf32ad206851cf5900da0450ffb3ab6632698486f03fb4281f29e2 (∈ $$0 A, ∈ $$0 B, = $0 orderedPair $$0 $$1) () 0.0.1.0
+      }
+    }
+  }
+  prove pairSet X 3f07b5fa7e00d9e06d245be6b4c66f6ae8acdadb0c1b7acd70bcdedf695875df () (X) 0
+}
+
 theorem Product of Subsets Is Subset of Product
 premise ⊆ A C
 premise ⊆ B D

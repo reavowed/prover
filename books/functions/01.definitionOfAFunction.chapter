@@ -6,6 +6,169 @@ type function f
 qualifier from on function (A B) (from A → B)
   definition (∧ = domain f A ⊆ range f B)
 
+theorem Subset Condition for Function From
+conclusion ↔ ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f
+{
+  assume ∧ function f functionFrom f A B {
+    subproof (Subset) {
+      take x {
+        assume ∈ $0 f {
+          elided ed33aed521a5780085926c99a16ff0e6bd204310348dcef58b231798e016a4d3 {
+            prove ∧ pairSet f ∀ x → ∈ $0 domain f ∃! b ∈ orderedPair $$0 $0 f ed33aed521a5780085926c99a16ff0e6bd204310348dcef58b231798e016a4d3 () (f) 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            prove ∀ x → ∈ $0 f ∃ a ∃ b = $$$0 orderedPair $$0 $0 a43ff788bcd1f46edf6e5b6bef12f68c3e6408ae9d3bf445a437a8fe2aca285d () (f) 0.0.0.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            prove → ∈ $0 f ∃ a ∃ b = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 f ∃ a ∃ b = $$$$0 orderedPair $$0 $0) ($0) 0.0.0.0.0.1
+            prove ∃ a ∃ b = $$$0 orderedPair $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 f, ∃ a ∃ b = $$$0 orderedPair $$0 $0) () 0.0.0.0.0.2 0.0.0.0a
+          }
+          let a ∃ b = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ b = $$0 orderedPair $$$0 $0, ∈ $0 product A B) () {
+            let b = $$$0 orderedPair $$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (= $$0 orderedPair $0 $$$0, ∈ $$0 product A B) () {
+              elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
+                prove ∈ orderedPair $$0 $0 f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$0 f) ($$$0, orderedPair $$0 $0) 0.0.0.0.1.0a 0.0.0.0a
+                prove ∧ ∈ $$0 domain f ∈ $0 range f be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () ($$0, $0, f) 0.0.0.0.1.0.0.0
+              }
+              elided ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da {
+                prove ∧ function f ∧ = domain f A ⊆ range f B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, A, B) 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                prove ∧ = domain f A ⊆ range f B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f, ∧ = domain f A ⊆ range f B) () 0.0.0.0.1.0.1.0
+              }
+              prove ∈ $$0 A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$0 $$$$0) (domain f, A) 0.0.0.0.1.0.1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0.0.1.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+              elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+                prove ∀ x → ∈ $0 range f ∈ $0 B f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (range f, B) 0.0.0.0.1.0.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                prove → ∈ $0 range f ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 range f ∈ $$$$0 B) ($0) 0.0.0.0.1.0.3.0
+                prove ∈ $0 B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 range f, ∈ $0 B) () 0.0.0.0.1.0.3.1 0.0.0.0.1.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              }
+              elided 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 {
+                prove ∈ orderedPair $$0 $0 product A B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, B) 0.0.0.0.1.0.2 0.0.0.0.1.0.3
+                elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                  prove = orderedPair $$0 $0 $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$$0, orderedPair $$0 $0) 0.0.0.0.1.0a
+                  prove ∈ $$$0 product A B 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$0 product A B) (orderedPair $$0 $0, $$$0) 0.0.0.0.1.0.4.1.0 0.0.0.0.1.0.4.0
+                }
+              }
+            } 0.0.0.0.1a
+          } 0.0.0.0.0
+        }
+      }
+      prove ⊆ f product A B 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (f, product A B) 0.0.0
+    }
+    subproof (Uniqueness) {
+      take x {
+        assume ∈ $0 A {
+          elided ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da {
+            prove ∧ function f ∧ = domain f A ⊆ range f B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, A, B) 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove = A domain f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain f, A) 0.1.0.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            prove ∈ $0 domain f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$0) (A, domain f) 0.1.0.0.0.1 0.1.0.0a
+          }
+          elided ed33aed521a5780085926c99a16ff0e6bd204310348dcef58b231798e016a4d3 {
+            prove ∧ pairSet f ∀ x → ∈ $0 domain f ∃! b ∈ orderedPair $$0 $0 f ed33aed521a5780085926c99a16ff0e6bd204310348dcef58b231798e016a4d3 () (f) 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            prove → ∈ $0 domain f ∃! b ∈ orderedPair $$0 $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 domain f ∃! b ∈ orderedPair $$$0 $0 f) ($0) 0.1.0.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∃! b ∈ orderedPair $$0 $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 domain f, ∃! b ∈ orderedPair $$0 $0 f) () 0.1.0.0.1.1 0.1.0.0.0
+          }
+        }
+      }
+    }
+    prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ f product A B, ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f) () 0.0 0.1
+  }
+  assume ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f {
+    subproof (Function) {
+      prove pairSet f 8bf714130d4a719446decdf60d02bb2cc305563b9531689ecb7ba9f70e4ced7e () (f, A, B) 1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+      take a {
+        assume ∈ $0 domain f {
+          elided 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 {
+            prove ∀ a ↔ ∈ $0 domain f ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 () (f)
+            prove ↔ ∈ $0 domain f ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 domain f ∃ b ∧ ∈ $0 range f ∈ orderedPair $$$0 $0 f) ($0) 1.0.1.0.0.0
+            prove → ∈ $0 domain f ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 domain f, ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f) () 1.0.1.0.0.1
+            prove ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 domain f, ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f) () 1.0.1.0.0.2 1.0.1.0a
+          }
+          let b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 range f ∈ orderedPair $0 $$0 f, ∈ $0 A) () {
+            elided 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 {
+              elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+                prove ∀ x → ∈ $0 f ∈ $0 product A B f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (f, product A B) 1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                prove → ∈ orderedPair $$0 $0 f ∈ orderedPair $$0 $0 product A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 f ∈ $$$0 product A B) (orderedPair $$0 $0) 1.0.1.0.1.0.0.0
+                prove ∈ orderedPair $$0 $0 product A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 f, ∈ orderedPair $$0 $0 product A B) () 1.0.1.0.1.0.0.1 1.0.1.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              }
+              prove ∈ $$0 A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () ($$0, $0, A, B) 1.0.1.0.1.0.0
+            }
+          } 1.0.1.0.0
+          elided (Extracted) {
+            prove → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∃! b ∈ orderedPair $$$0 $0 f) ($0) 1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∃! b ∈ orderedPair $$0 $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∃! b ∈ orderedPair $$0 $0 f) () 1.0.1.0.2.0 1.0.1.0.1
+          }
+        }
+      }
+      elided cb8288db2484db64877537ff0a80d93ae7cf75d94774d03bd79cc54f68b0cc41 {
+        prove ∧ pairSet f ∀ x → ∈ $0 domain f ∃! b ∈ orderedPair $$0 $0 f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (pairSet f, ∀ x → ∈ $0 domain f ∃! b ∈ orderedPair $$0 $0 f) () 1.0.0 1.0.1
+        prove function f cb8288db2484db64877537ff0a80d93ae7cf75d94774d03bd79cc54f68b0cc41 () (f) 1.0.2.0
+      }
+    }
+    subproof (From) {
+      subproof (Domain) {
+        take a {
+          assume ∈ $0 domain f {
+            elided 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 {
+              prove ∀ a ↔ ∈ $0 domain f ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 () (f)
+              prove ↔ ∈ $0 domain f ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 domain f ∃ b ∧ ∈ $0 range f ∈ orderedPair $$$0 $0 f) ($0) 1.1.0.0.0.0.0
+              prove → ∈ $0 domain f ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 domain f, ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f) () 1.1.0.0.0.0.1
+              prove ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 domain f, ∃ b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f) () 1.1.0.0.0.0.2 1.1.0.0.0a
+            }
+            let b ∧ ∈ $0 range f ∈ orderedPair $$0 $0 f 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 range f ∈ orderedPair $0 $$0 f, ∈ $0 A) () {
+              elided 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 {
+                elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+                  prove ∀ x → ∈ $0 f ∈ $0 product A B f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (f, product A B) 1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  prove → ∈ orderedPair $$0 $0 f ∈ orderedPair $$0 $0 product A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 f ∈ $$$0 product A B) (orderedPair $$0 $0) 1.1.0.0.0.1.0.0.0
+                  prove ∈ orderedPair $$0 $0 product A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 f, ∈ orderedPair $$0 $0 product A B) () 1.1.0.0.0.1.0.0.1 1.1.0.0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                }
+                prove ∈ $$0 A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () ($$0, $0, A, B) 1.1.0.0.0.1.0.0
+              }
+            } 1.1.0.0.0.0
+          }
+          assume ∈ $0 A {
+            elided (Extracted) {
+              prove → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∃! b ∈ orderedPair $$$0 $0 f) ($0) 1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              prove ∃! b ∈ orderedPair $$0 $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∃! b ∈ orderedPair $$0 $0 f) () 1.1.0.0.1.0.0 1.1.0.0.1a
+            }
+            let b ∈ orderedPair $$0 $0 f 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (∈ orderedPair $0 $$0 f, ∈ $0 domain f) () {
+              elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
+                prove ∧ ∈ $$0 domain f ∈ $0 range f be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () ($$0, $0, f) 1.1.0.0.1.1a
+                prove ∈ $$0 domain f 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 domain f, ∈ $0 range f) () 1.1.0.0.1.1.0.0
+              }
+            } 1.1.0.0.1.0
+          }
+          prove ↔ ∈ $0 domain f ∈ $0 A 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 domain f, ∈ $0 A) () 1.1.0.0.0 1.1.0.0.1
+        }
+        prove = domain f A 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (domain f, A) 1.1.0.0
+      }
+      subproof (Range) {
+        take b {
+          assume ∈ $0 range f {
+            elided 96889df0a515c7b8bf78788a2a667062e68d83fc8ccb0e792a720ad240e1e680 {
+              prove ∀ b ↔ ∈ $0 range f ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f 96889df0a515c7b8bf78788a2a667062e68d83fc8ccb0e792a720ad240e1e680 () (f)
+              prove ↔ ∈ $0 range f ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 range f ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$$0 f) ($0) 1.1.1.0.0.0.0
+              prove → ∈ $0 range f ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 range f, ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f) () 1.1.1.0.0.0.1
+              prove ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 range f, ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f) () 1.1.1.0.0.0.2 1.1.1.0.0a
+            }
+            let a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 domain f ∈ orderedPair $$0 $0 f, ∈ $0 B) () {
+              elided fd9eacaeda58b006596b2a50422b6bc2841496d77f4db1e4196a7e9759de2d78 {
+                elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+                  prove ∀ x → ∈ $0 f ∈ $0 product A B f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (f, product A B) 1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  prove → ∈ orderedPair $0 $$0 f ∈ orderedPair $0 $$0 product A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 f ∈ $$$0 product A B) (orderedPair $0 $$0) 1.1.1.0.0.1.0.0.0
+                  prove ∈ orderedPair $0 $$0 product A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $0 $$0 f, ∈ orderedPair $0 $$0 product A B) () 1.1.1.0.0.1.0.0.1 1.1.1.0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                }
+                prove ∈ $$0 B fd9eacaeda58b006596b2a50422b6bc2841496d77f4db1e4196a7e9759de2d78 () ($0, $$0, A, B) 1.1.1.0.0.1.0.0
+              }
+            } 1.1.1.0.0.0
+          }
+        }
+        prove ⊆ range f B 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (range f, B) 1.1.1.0
+      }
+      elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+        prove ∧ = domain f A ⊆ range f B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= domain f A, ⊆ range f B) () 1.1.0 1.1.1
+        prove ∧ function f ∧ = domain f A ⊆ range f B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f, ∧ = domain f A ⊆ range f B) () 1.0 1.1.2.0
+        prove functionFrom f A B df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () (f, A, B) 1.1.2.1
+      }
+    }
+    prove ∧ function f functionFrom f A B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f, functionFrom f A B) () 1.0 1.1
+  }
+  prove ↔ ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ function f functionFrom f A B, ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f) () 0 1
+}
+
 term apply (f a)
   name (Function Application)
   format (f(a))
