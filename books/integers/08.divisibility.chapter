@@ -3099,34 +3099,17 @@ conclusion ↔ ∈ orderedPair a b |ℕ ∈ orderedPair apply ⍳_ℤ a apply �
           }
         }
         elided 959858574325679f09cc2c4b2ae7d6f4e69a5052a0b1683f25d901da50e1ab0c {
-          prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-          elided 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c {
-            prove ∧ ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥ 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c () (⍳_ℤ, ℕ, ℤ^≥) 1.0.3.8.0
-            prove ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ, ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥) () 1.0.3.8.1.0
-            prove function inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function inverseFunction ⍳_ℤ ℤ^≥ ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ) () 1.0.3.8.1.1
-          }
-          prove ∈ apply inverseFunction ⍳_ℤ $0 ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (inverseFunction ⍳_ℤ, ℤ^≥, ℕ, $0) 1.0.3.8.1 1.0.3.7
+          target ∧ oldFunction ⍳_ℤ ℕ ℤ^≥ bijectiveOldFunction ⍳_ℤ ℕ ℤ^≥
+          target oldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ
+          target ∈ apply inverseFunction ⍳_ℤ $0 ℕ
           prove = apply ⍳_ℤ apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0 apply ×ℤ orderedPair apply ⍳_ℤ a apply ⍳_ℤ apply inverseFunction ⍳_ℤ $0 959858574325679f09cc2c4b2ae7d6f4e69a5052a0b1683f25d901da50e1ab0c () (a, apply inverseFunction ⍳_ℤ $0) p0 1.0.3.8.2
         }
-        elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
-          prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-          elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
-            prove = apply ⍳_ℤ apply inverseFunction ⍳_ℤ $0 $0 edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 () (⍳_ℤ, ℕ, ℤ^≥, $0) 1.0.3.9.0 1.0.3.7
-            prove = apply ×ℤ orderedPair apply ⍳_ℤ a apply ⍳_ℤ apply inverseFunction ⍳_ℤ $0 apply ×ℤ orderedPair apply ⍳_ℤ a $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply ⍳_ℤ apply inverseFunction ⍳_ℤ $0, $0, apply ×ℤ orderedPair apply ⍳_ℤ a $$0) 1.0.3.9.1.0
-          }
-        }
+        target = apply ×ℤ orderedPair apply ⍳_ℤ a apply ⍳_ℤ apply inverseFunction ⍳_ℤ $0 apply ×ℤ orderedPair apply ⍳_ℤ a $0
         prove = apply ⍳_ℤ apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0 apply ×ℤ orderedPair apply ⍳_ℤ a $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ⍳_ℤ apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0, apply ×ℤ orderedPair apply ⍳_ℤ a apply ⍳_ℤ apply inverseFunction ⍳_ℤ $0, apply ×ℤ orderedPair apply ⍳_ℤ a $0) 1.0.3.8 1.0.3.9
         prove = apply ⍳_ℤ apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0 apply ⍳_ℤ b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ⍳_ℤ apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0, apply ×ℤ orderedPair apply ⍳_ℤ a $0, apply ⍳_ℤ b) 1.0.3.10 1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
         elided 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba {
-          elided 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c {
-            prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-            elided 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c {
-              prove ∧ ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥ 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c () (⍳_ℤ, ℕ, ℤ^≥) 1.0.3.12.0.0
-              prove ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ, ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥) () 1.0.3.12.0.1.0
-              prove function inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function inverseFunction ⍳_ℤ ℤ^≥ ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ) () 1.0.3.12.0.1.1
-            }
-          }
-          prove ∈ apply inverseFunction ⍳_ℤ $0 ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (inverseFunction ⍳_ℤ, ℤ^≥, ℕ, $0) 1.0.3.12.0 1.0.3.7
+          target oldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ
+          target ∈ apply inverseFunction ⍳_ℤ $0 ℕ
           prove ∈ apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0 ℕ 486795b7d91a1cb97aafc96adc2a7f5144ffc6b4bd93dc9511c425b921c513fe () (a, apply inverseFunction ⍳_ℤ $0) p0 1.0.3.12.1
           elided 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba {
             prove ↔ = apply ⍳_ℤ apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0 apply ⍳_ℤ b = apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0 b 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba () (apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0, b) 1.0.3.12.2 p1
@@ -3135,15 +3118,8 @@ conclusion ↔ ∈ orderedPair a b |ℕ ∈ orderedPair apply ⍳_ℤ a apply �
           }
         }
         elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-          elided 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c {
-            prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-            elided 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c {
-              prove ∧ ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥ 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c () (⍳_ℤ, ℕ, ℤ^≥) 1.0.3.13.0.0
-              prove ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ, ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥) () 1.0.3.13.0.1.0
-              prove function inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function inverseFunction ⍳_ℤ ℤ^≥ ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ) () 1.0.3.13.0.1.1
-            }
-          }
-          prove ∈ apply inverseFunction ⍳_ℤ $0 ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (inverseFunction ⍳_ℤ, ℤ^≥, ℕ, $0) 1.0.3.13.0 1.0.3.7
+          target oldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ
+          target ∈ apply inverseFunction ⍳_ℤ $0 ℕ
           prove ∧ ∈ apply inverseFunction ⍳_ℤ $0 ℕ = apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0 b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply inverseFunction ⍳_ℤ $0 ℕ, = apply ×ℕ orderedPair a apply inverseFunction ⍳_ℤ $0 b) () 1.0.3.13.1 1.0.3.12
           prove ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair a $0 b c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$0 ℕ = apply ×ℕ orderedPair a $$0 b) (apply inverseFunction ⍳_ℤ $0) 1.0.3.13.2
         }
@@ -3269,26 +3245,10 @@ conclusion = apply ⍳_ℤ gcdℕ a b gcdℤ apply ⍳_ℤ a apply ⍳_ℤ b
           }
         }
         elided 87c2e59783c02b77be12bdec412426e312d559e31df972265de2efb81b552b65 {
-          elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
-            elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
-              prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-              elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
-                prove = apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 absZ $0 edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 () (⍳_ℤ, ℕ, ℤ^≥, absZ $0) 5.0.0.4.0.0.0 5.0.0.1
-                prove = absZ $0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0, absZ $0) 5.0.0.4.0.0.1.0
-              }
-            }
-            prove ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ a |ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair $$0 apply ⍳_ℤ a |ℤ) (absZ $0, apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0) 5.0.0.4.0.0 5.0.0.2
-          }
+          target ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ a |ℤ
           elided 87c2e59783c02b77be12bdec412426e312d559e31df972265de2efb81b552b65 {
-            elided 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c {
-              prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-              elided 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c {
-                prove ∧ ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥ 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c () (⍳_ℤ, ℕ, ℤ^≥) 5.0.0.4.1.0.0
-                prove ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ, ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥) () 5.0.0.4.1.0.1.0
-                prove function inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function inverseFunction ⍳_ℤ ℤ^≥ ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ) () 5.0.0.4.1.0.1.1
-              }
-            }
-            prove ∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (inverseFunction ⍳_ℤ, ℤ^≥, ℕ, absZ $0) 5.0.0.4.1.0 5.0.0.1
+            target oldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ
+            target ∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ
             elided 87c2e59783c02b77be12bdec412426e312d559e31df972265de2efb81b552b65 {
               prove ↔ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 a |ℕ ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ a |ℤ 87c2e59783c02b77be12bdec412426e312d559e31df972265de2efb81b552b65 () (apply inverseFunction ⍳_ℤ absZ $0, a) 5.0.0.4.1.1 p0
               prove → ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ a |ℤ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 a |ℕ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 a |ℕ, ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ a |ℤ) () 5.0.0.4.1.2.0
@@ -3297,24 +3257,11 @@ conclusion = apply ⍳_ℤ gcdℕ a b gcdℤ apply ⍳_ℤ a apply ⍳_ℤ b
           }
         }
         elided 87c2e59783c02b77be12bdec412426e312d559e31df972265de2efb81b552b65 {
-          elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
-            elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
-              prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-              elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
-                prove = apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 absZ $0 edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 () (⍳_ℤ, ℕ, ℤ^≥, absZ $0) 5.0.0.5.0.0.0 5.0.0.1
-                prove = absZ $0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0, absZ $0) 5.0.0.5.0.0.1.0
-              }
-            }
-            prove ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ b |ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair $$0 apply ⍳_ℤ b |ℤ) (absZ $0, apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0) 5.0.0.5.0.0 5.0.0.3
-          }
+          target ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ b |ℤ
           elided 87c2e59783c02b77be12bdec412426e312d559e31df972265de2efb81b552b65 {
-            prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-            elided 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c {
-              prove ∧ ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥ 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c () (⍳_ℤ, ℕ, ℤ^≥) 5.0.0.5.1.0
-              prove ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ, ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥) () 5.0.0.5.1.1.0
-              prove function inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function inverseFunction ⍳_ℤ ℤ^≥ ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ) () 5.0.0.5.1.1.1
-            }
-            prove ∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (inverseFunction ⍳_ℤ, ℤ^≥, ℕ, absZ $0) 5.0.0.5.1.1 5.0.0.1
+            target ∧ oldFunction ⍳_ℤ ℕ ℤ^≥ bijectiveOldFunction ⍳_ℤ ℕ ℤ^≥
+            target oldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ
+            target ∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ
             elided 87c2e59783c02b77be12bdec412426e312d559e31df972265de2efb81b552b65 {
               prove ↔ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 b |ℕ ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ b |ℤ 87c2e59783c02b77be12bdec412426e312d559e31df972265de2efb81b552b65 () (apply inverseFunction ⍳_ℤ absZ $0, b) 5.0.0.5.1.2 p1
               prove → ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ b |ℤ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 b |ℕ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 b |ℕ, ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ b |ℤ) () 5.0.0.5.1.3.0
@@ -3323,13 +3270,9 @@ conclusion = apply ⍳_ℤ gcdℕ a b gcdℤ apply ⍳_ℤ a apply ⍳_ℤ b
           }
         }
         elided 5a1c41dd9e85ea36722681089a2c0ff6133f0635e97b59e7aeaa4af610d3785c {
-          prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-          elided 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c {
-            prove ∧ ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥ 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c () (⍳_ℤ, ℕ, ℤ^≥) 5.0.0.6.0
-            prove ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ, ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥) () 5.0.0.6.1.0
-            prove function inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function inverseFunction ⍳_ℤ ℤ^≥ ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ) () 5.0.0.6.1.1
-          }
-          prove ∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (inverseFunction ⍳_ℤ, ℤ^≥, ℕ, absZ $0) 5.0.0.6.1 5.0.0.1
+          target ∧ oldFunction ⍳_ℤ ℕ ℤ^≥ bijectiveOldFunction ⍳_ℤ ℕ ℤ^≥
+          target oldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ
+          target ∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ
           prove ∧ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 a |ℕ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 b |ℕ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 a |ℕ, ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 b |ℕ) () 5.0.0.4 5.0.0.5
           elided 5a1c41dd9e85ea36722681089a2c0ff6133f0635e97b59e7aeaa4af610d3785c {
             prove ∧ ∈ gcdℕ a b ℕ ∧ ∈ orderedPair 0ℕ gcdℕ a b <ℕ ∧ ∈ orderedPair gcdℕ a b a |ℕ ∧ ∈ orderedPair gcdℕ a b b |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 a |ℕ ∈ orderedPair $0 b |ℕ ∈ orderedPair $0 gcdℕ a b ≤ℕ 5a1c41dd9e85ea36722681089a2c0ff6133f0635e97b59e7aeaa4af610d3785c () (a, b) p0 p1 p2
@@ -3339,18 +3282,12 @@ conclusion = apply ⍳_ℤ gcdℕ a b gcdℤ apply ⍳_ℤ a apply ⍳_ℤ b
           }
         }
         prove ∈ orderedPair $0 absZ $0 ≤ℤ 2926fc0c6a4fb4b94d9b2b6570c1aa61814d015eeea58dba2b154fb2efff6283 () ($0) 5.0a
-        elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
-          prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-          elided edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 {
-            prove = apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 absZ $0 edda5b13d5f54681b799ba7457c6fd1ca0de89abf1397b4593fecf7185c5e448 () (⍳_ℤ, ℕ, ℤ^≥, absZ $0) 5.0.0.8.0 5.0.0.1
-            prove = absZ $0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0, absZ $0) 5.0.0.8.1.0
-          }
-        }
+        target = absZ $0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0
         prove ∈ orderedPair $0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 ≤ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair $0 $$0 ≤ℤ) (absZ $0, apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0) 5.0.0.8 5.0.0.7
         elided a14209a1ac66e079d47a33d872675affcc24f7de5f5cedc107b8267399ce613a {
-          prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-          prove ∧ ∧ function inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥ 62e86dc52fcfc705e75c45282445ff90d03d1e5c3a8674e7e8284dba3909c05c () (⍳_ℤ, ℕ, ℤ^≥) 5.0.0.10.0
-          prove ∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (inverseFunction ⍳_ℤ, ℤ^≥, ℕ, absZ $0) 5.0.0.10.1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 5.0.0.1
+          target ∧ oldFunction ⍳_ℤ ℕ ℤ^≥ bijectiveOldFunction ⍳_ℤ ℕ ℤ^≥
+          target ∧ ∧ oldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveOldFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥
+          target ∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ
           elided a14209a1ac66e079d47a33d872675affcc24f7de5f5cedc107b8267399ce613a {
             prove ↔ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 gcdℕ a b ≤ℕ ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ gcdℕ a b ≤ℤ a14209a1ac66e079d47a33d872675affcc24f7de5f5cedc107b8267399ce613a () (apply inverseFunction ⍳_ℤ absZ $0, gcdℕ a b) 5.0.0.10.2 1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
             prove → ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 gcdℕ a b ≤ℕ ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ gcdℕ a b ≤ℤ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 gcdℕ a b ≤ℕ, ∈ orderedPair apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 apply ⍳_ℤ gcdℕ a b ≤ℤ) () 5.0.0.10.3.0
@@ -3595,43 +3532,9 @@ conclusion ↔ ∈ orderedPair apply ⍳_ℤ p apply ×ℤ orderedPair a b |ℤ 
       take y {
         assume ∈ $0 ℤ {
           assume ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ {
-            elided 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 {
-              elided 99b727acaf069613e8c7db29ddab5d61b6e66d7de8435982a16ed1a8e835d125 {
-                prove ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ) () 0.0a 0.0.0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                elided 99b727acaf069613e8c7db29ddab5d61b6e66d7de8435982a16ed1a8e835d125 {
-                  prove ∀ a ↔ ∈ $0 ℤ^≥ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ 99b727acaf069613e8c7db29ddab5d61b6e66d7de8435982a16ed1a8e835d125 () ()
-                  prove ↔ ∈ $$0 ℤ^≥ ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 ℤ^≥ ∧ ∈ $$$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 ≤ℤ) ($$0) 0.0.0.0.0.0.0.1.0
-                  prove → ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ ∈ $$0 ℤ^≥ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $$0 ℤ^≥, ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ) () 0.0.0.0.0.0.0.1.1
-                  prove ∈ $$0 ℤ^≥ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ, ∈ $$0 ℤ^≥) () 0.0.0.0.0.0.0.1.2 0.0.0.0.0.0.0.0
-                }
-              }
-              elided 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 {
-                prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-                prove ∧ function ⍳_ℤ ℕ ℤ^≥ ∧ injectiveFunction ⍳_ℤ ℕ ℤ^≥ surjectiveFunction ⍳_ℤ ℕ ℤ^≥ 25e01d4d0e89820e695ab9d79d3842b1d6efb672412c3343f68147b53bd5733a () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                prove ∧ function ⍳_ℤ ℕ ℤ^≥ ∀ b → ∈ $0 ℤ^≥ ∃ z' ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 8ac1f558075ba74c57d1774ba938ef31cf283c4d51a273b76356e49d186f77ad () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                prove → ∈ $$0 ℤ^≥ ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℤ^≥ ∃ z' ∧ ∈ $0 ℕ = $$$$0 apply ⍳_ℤ $0) ($$0) 0.0.0.0.0.0.1.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                prove ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℤ^≥, ∃ a ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0) () 0.0.0.0.0.0.1.3 0.0.0.0.0.0.0
-              }
-            }
+            target ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0
             let z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 ℕ = $$0 apply ⍳_ℤ $$$0, ↔ ∈ orderedPair apply ⍳_ℤ p apply ×ℤ orderedPair $$0 $0 |ℤ ∨ ∈ orderedPair apply ⍳_ℤ p $$0 |ℤ ∈ orderedPair apply ⍳_ℤ p $0 |ℤ) () {
-              elided 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 {
-                elided 99b727acaf069613e8c7db29ddab5d61b6e66d7de8435982a16ed1a8e835d125 {
-                  prove ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ) () 0.0.0.0a 0.0.0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                  elided 99b727acaf069613e8c7db29ddab5d61b6e66d7de8435982a16ed1a8e835d125 {
-                    prove ∀ a ↔ ∈ $0 ℤ^≥ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ 99b727acaf069613e8c7db29ddab5d61b6e66d7de8435982a16ed1a8e835d125 () ()
-                    prove ↔ ∈ $$0 ℤ^≥ ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$0 ℤ^≥ ∧ ∈ $$$$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 ≤ℤ) ($$0) 0.0.0.0.0.1.0.0.1.0
-                    prove → ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ ∈ $$0 ℤ^≥ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $$0 ℤ^≥, ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ) () 0.0.0.0.0.1.0.0.1.1
-                    prove ∈ $$0 ℤ^≥ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ, ∈ $$0 ℤ^≥) () 0.0.0.0.0.1.0.0.1.2 0.0.0.0.0.1.0.0.0
-                  }
-                }
-                elided 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 {
-                  prove ∧ function ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 1449de27951dd73f7c513ae38b535c9b70ed4771493d25cae1f1fdf585fadf83 () ()
-                  prove ∧ function ⍳_ℤ ℕ ℤ^≥ ∧ injectiveFunction ⍳_ℤ ℕ ℤ^≥ surjectiveFunction ⍳_ℤ ℕ ℤ^≥ 25e01d4d0e89820e695ab9d79d3842b1d6efb672412c3343f68147b53bd5733a () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.1.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                  prove ∧ function ⍳_ℤ ℕ ℤ^≥ ∀ b → ∈ $0 ℤ^≥ ∃ y' ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 8ac1f558075ba74c57d1774ba938ef31cf283c4d51a273b76356e49d186f77ad () (⍳_ℤ, ℕ, ℤ^≥) 0.0.0.0.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                  prove → ∈ $$0 ℤ^≥ ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 ℤ^≥ ∃ y' ∧ ∈ $0 ℕ = $$$$$0 apply ⍳_ℤ $0) ($$0) 0.0.0.0.0.1.0.1.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                  prove ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℤ^≥, ∃ a ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0) () 0.0.0.0.0.1.0.1.3 0.0.0.0.0.1.0.0
-                }
-              }
+              target ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0
               let y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$0 ℕ = $$0 apply ⍳_ℤ $$$$0, ↔ ∈ orderedPair apply ⍳_ℤ p apply ×ℤ orderedPair $$$0 $$0 |ℤ ∨ ∈ orderedPair apply ⍳_ℤ p $$$0 |ℤ ∈ orderedPair apply ⍳_ℤ p $$0 |ℤ) () {
                 elided fdc63ea4bba256874a2511a985e1ee1580f52fc9863143c31dcabb6a8efc1f5d {
                   prove ↔ ∈ orderedPair apply ⍳_ℤ p apply ×ℤ orderedPair $$$$0 $$$0 |ℤ ∈ orderedPair apply ⍳_ℤ p apply ×ℤ orderedPair apply ⍳_ℤ $$0 $$$0 |ℤ fdc63ea4bba256874a2511a985e1ee1580f52fc9863143c31dcabb6a8efc1f5d (∈ orderedPair apply ⍳_ℤ p apply ×ℤ orderedPair $$$$$0 $$$0 |ℤ) ($$$$0, apply ⍳_ℤ $$0) 0.0.0.0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c

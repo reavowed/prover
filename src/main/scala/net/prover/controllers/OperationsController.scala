@@ -44,7 +44,13 @@ class OperationsController @Autowired() (val bookService: BookService) extends B
     updateEntries[Seq[Inference]](Nil, definitions => {
       val oldFunctionDefinition = definitions.rootEntryContext.typeDefinitions.find(_.symbol == "oldFunction").get
       (_, _, chapterEntry, _, inferencesToClear) => {
-        val updatedInferences = if (chapterEntry.referencedEntries.contains(oldFunctionDefinition)) inferencesToClear ++ chapterEntry.inferences else inferencesToClear
+        val referencedEntries = chapterEntry match {
+          case theorem: Theorem =>
+            (theorem.premises :+ theorem.conclusion).flatMap(_.referencedDefinitions).map(_.associatedChapterEntry).toSet
+          case other =>
+            other.referencedEntries
+        }
+        val updatedInferences = if (referencedEntries.contains(oldFunctionDefinition)) inferencesToClear ++ chapterEntry.inferences else inferencesToClear
         val updatedEntry = chapterEntry.asOptionalInstanceOf[Theorem] match {
           case Some(theorem) =>
             inferencesToClear.foldLeft(theorem)(_.clearInference(_))

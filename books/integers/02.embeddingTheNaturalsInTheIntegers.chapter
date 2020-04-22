@@ -8,7 +8,7 @@ term ⍳_ℤ ()
 write apply ⍳_ℤ a as toZ
 
 theorem Function Properties of ⍳_ℤ
-conclusion ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ
+conclusion ∧ ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ
 {
   prove = ⍳_ℤ functionMap n ℕ equivalenceClass orderedPair $0 0ℕ ~_ℤ 5da5eaf4066ad42c4d6c27ee8ac823e9fec383bed2815da89db65e79c1955b4f () ()
   subproof (Function) {
@@ -20,7 +20,7 @@ conclusion ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ �
         }
       }
     }
-    prove function ⍳_ℤ ℕ ℤ ca3465bfac5bc8294749b6861f05413cbf73fb1facc9bb123d883da7ae3773c2 () (⍳_ℤ, ℕ, equivalenceClass orderedPair $0 0ℕ ~_ℤ, ℤ) 0 1.0
+    target oldFunction ⍳_ℤ ℕ ℤ
   }
   subproof (Function value) {
     take n {
@@ -81,14 +81,11 @@ conclusion ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ �
         }
       }
     }
-    elided ce18716db14480f033671b1e6344a6a9e7ba52fa794c2424f641247501f0c0e6 {
-      prove ∧ function ⍳_ℤ ℕ ℤ ∀ x → ∈ $0 ℕ ∀ y → ∈ $0 ℕ → = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function ⍳_ℤ ℕ ℤ, ∀ x → ∈ $0 ℕ ∀ y → ∈ $0 ℕ → = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 = $$0 $0) () 1 3.0
-      prove injectiveFunction ⍳_ℤ ℕ ℤ ce18716db14480f033671b1e6344a6a9e7ba52fa794c2424f641247501f0c0e6 () (⍳_ℤ, ℕ, ℤ) 3.1.0
-    }
+    target injectiveOldFunction ⍳_ℤ ℕ ℤ
   }
   elided bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d {
-    prove ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function ⍳_ℤ ℕ ℤ, injectiveFunction ⍳_ℤ ℕ ℤ) () 1 3
-    prove ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 4.0 2
+    prove ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (oldFunction ⍳_ℤ ℕ ℤ, injectiveOldFunction ⍳_ℤ ℕ ℤ) () 1 3
+    prove ∧ ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 4.0 2
   }
 }
 
@@ -96,12 +93,8 @@ theorem Injected Natural Is Integer
 premise ∈ a ℕ
 conclusion ∈ apply ⍳_ℤ a ℤ
 {
-  elided 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b {
-    prove ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b () ()
-    prove ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0
-    prove function ⍳_ℤ ℕ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (function ⍳_ℤ ℕ ℤ, injectiveFunction ⍳_ℤ ℕ ℤ) () 0.1
-  }
-  prove ∈ apply ⍳_ℤ a ℤ 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (⍳_ℤ, ℕ, ℤ, a) 0 p0
+  target oldFunction ⍳_ℤ ℕ ℤ
+  target ∈ apply ⍳_ℤ a ℤ
 }
 
 theorem 0_ℤ as Equivalence Class of Same Naturals
@@ -109,14 +102,7 @@ premise ∈ a ℕ
 conclusion = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair a a ~_ℤ
 {
   prove = apply +ℕ orderedPair 0ℕ a apply +ℕ orderedPair 0ℕ a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (apply +ℕ orderedPair 0ℕ a)
-  elided 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b {
-    prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-    elided 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b {
-      prove ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b () ()
-      prove → ∈ 0ℕ ℕ = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) (0ℕ) 1.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0ℕ ℕ, = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) () 1.1.1 1.0
-    }
-  }
+  target = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ
   elided 4e74e12573a95df343b6be8f979045d0ca74560a0b686a77013f8c46981d2bd1 {
     prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
     prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
@@ -134,9 +120,6 @@ premise ∈ a ℕ
 premise ∈ b ℕ
 conclusion ↔ = apply ⍳_ℤ a apply ⍳_ℤ b = a b
 {
-  elided 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b {
-    prove ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b () ()
-    prove ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0
-  }
-  prove ↔ = apply ⍳_ℤ a apply ⍳_ℤ b = a b bb2e1af527f3c9e208745e84541d1f6ef89acf139f9175e969ef1550a5eda849 () (⍳_ℤ, ℕ, ℤ, a, b) 0 p0 p1
+  target ∧ oldFunction ⍳_ℤ ℕ ℤ injectiveOldFunction ⍳_ℤ ℕ ℤ
+  target ↔ = apply ⍳_ℤ a apply ⍳_ℤ b = a b
 }

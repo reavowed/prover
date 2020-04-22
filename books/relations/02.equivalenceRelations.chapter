@@ -220,16 +220,16 @@ comment If a function on a set is constant on the equivalence classes of a relat
 
 theorem Lift Function to Quotient
 premise equivalenceRelation ≈ A
-premise function f A B
+premise oldFunction f A B
 premise ∀ x → ∈ $0 A ∀ y → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ = apply f $$0 apply f $0
-conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0
+conclusion ∃! g ∧ oldFunction $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0
 {
-  let f_≈ = $0 replacementSet a A orderedPair equivalenceClass $0 ≈ apply f $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0) (replacementSet a A orderedPair equivalenceClass $0 ≈ apply f $0) {
+  let f_≈ = $0 replacementSet a A orderedPair equivalenceClass $0 ≈ apply f $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ oldFunction $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0) (replacementSet a A orderedPair equivalenceClass $0 ≈ apply f $0) {
     subproof (f_≈ is a function) {
       take a {
         assume ∈ $0 A {
           prove ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 () (≈, A, $0) p0 0.0.0.0a
-          prove ∈ apply f $0 B 5418757b32322c6310e92248d72ac41541d2ee5f15bbd1fc29c582bcf888e8c4 () (f, A, B, $0) p1 0.0.0.0a
+          target ∈ apply f $0 B
           prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 product equivalenceQuotient A ≈ B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (equivalenceClass $0 ≈, equivalenceQuotient A ≈, apply f $0, B) 0.0.0.0.0 0.0.0.0.1
         }
       }
@@ -277,27 +277,19 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
           } 0.0.2.0.0
         }
       }
-      target function $0 equivalenceQuotient A ≈ B
+      target oldFunction $0 equivalenceQuotient A ≈ B
     }
     subproof (f_≈ satisfies condition) {
       take a {
         assume ∈ $0 A {
           prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0 d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () ($$0, A, orderedPair equivalenceClass $$$0 ≈ apply f $$$0, $0) 0a 0.1.0.0a
-          elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
-            elided a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 {
-              prove ↔ ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0 ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈ a269bceecf710e937736862d3839e71c8e210fea7f2054c77835082e6735d7e3 () ($$0, equivalenceQuotient A ≈, B, equivalenceClass $0 ≈, apply f $0) 0.0
-              prove → ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0 ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0, ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈) () 0.1.0.0.1.0.0
-              prove ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0, ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈) () 0.1.0.0.1.0.1 0.1.0.0.0
-              prove = apply f $0 apply $$0 equivalenceClass $0 ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈, = apply f $0 apply $$0 equivalenceClass $0 ≈) () 0.1.0.0.1.0.2
-            }
-            prove = apply $$0 equivalenceClass $0 ≈ apply f $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f $0, apply $$0 equivalenceClass $0 ≈) 0.1.0.0.1.0
-          }
+          target = apply $$0 equivalenceClass $0 ≈ apply f $0
         }
       }
     }
     subproof (f_≈ is unique) {
       take g {
-        assume ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 {
+        assume ∧ oldFunction $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 {
           take x {
             assume ∈ $0 equivalenceQuotient A ≈ {
               prove ∃ a ∧ ∈ $0 A = $$0 equivalenceClass $0 ≈ c653a37ffa1d81361e01187938eb89b605b5c113f11179c00e19ede4f26a7090 () (≈, A, $0) p0 0.2.0.0.0.0a
@@ -319,13 +311,13 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
               } 0.2.0.0.0.0.0
             }
           }
-          prove = $0 $$0 8234ff437f74d30aa4677bdf254e87776edd6a690d3f8a9d251fc2a16be2d537 () ($0, equivalenceQuotient A ≈, B, $$0) 0.2.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0 0.2.0.0.0
+          target = $0 $$0
         }
       }
     }
     elided ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d {
-      prove ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0 equivalenceQuotient A ≈ B, ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0) () 0.0 0.1
-      prove ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∧ function $$0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$$0 equivalenceClass $0 ≈ apply f $0) ($0) 0.3.0 0.2
+      prove ∧ oldFunction $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (oldFunction $0 equivalenceQuotient A ≈ B, ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0) () 0.0 0.1
+      prove ∃! g ∧ oldFunction $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∧ oldFunction $$0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$$0 equivalenceClass $0 ≈ apply f $0) ($0) 0.3.0 0.2
     }
   }
 }
@@ -333,8 +325,8 @@ conclusion ∃! g ∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A
 term quotientFunction (f A B ≈)
   name (quotient function)
   format (f/≈) requires-brackets
-  premises (equivalenceRelation ≈ A, function f A B, ∀ x → ∈ $0 A ∀ y → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ = apply f $$0 apply f $0)
-  (∧ function $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0)
+  premises (equivalenceRelation ≈ A, oldFunction f A B, ∀ x → ∈ $0 A ∀ y → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ = apply f $$0 apply f $0)
+  (∧ oldFunction $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0)
 
 theorem Existence of Relation on Product Quotient
 premise equivalenceRelation ≈ product A B
