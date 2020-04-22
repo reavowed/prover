@@ -4,6 +4,12 @@ type oldFunction f
   qualifier (A B) (from A → B)
   definition (∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f)
 
+type function f
+  definition (∧ pairSet f ∀ x → ∈ $0 domain f ∃! y ∈ orderedPair $$0 $0 f)
+
+qualifier from on function (A B) (from A → B)
+  definition (∧ = domain f A ⊆ range f B)
+
 display ∀ f → oldFunction $0 A B φ as ((∀f: A → B)φ)
 
 display ∃ f ∧ oldFunction $0 A B φ as ((∃f: A → B)φ)
@@ -13,36 +19,19 @@ display ∃! f ∧ oldFunction $0 A B φ as ((∃!f: A → B)φ)
 term apply (f a)
   name (Function Application)
   format (f(a))
-  premises (oldFunction f A B, ∈ a A)
+  premises (function f, ∈ a domain f)
   (∈ orderedPair a $0 f)
 
-theorem First Coordinate of Element of Function Is Element of Domain
-premise oldFunction f A B
-premise ∈ orderedPair a b f
-conclusion ∈ a A
-{
-  target ⊆ f product A B
-  prove ∈ orderedPair a b product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, orderedPair a b) 0 p1
-  prove ∈ a A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () (a, b, A, B) 1
-}
-
-theorem Second Coordinate of Element of Function Is Element of Range
-premise oldFunction f A B
-premise ∈ orderedPair a b f
-conclusion ∈ b B
-{
-  target ⊆ f product A B
-  prove ∈ orderedPair a b product A B ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (f, product A B, orderedPair a b) 0 p1
-  prove ∈ b B fd9eacaeda58b006596b2a50422b6bc2841496d77f4db1e4196a7e9759de2d78 () (a, b, A, B) 1
-}
-
 theorem Function Application Is Element of Range
-premise oldFunction f A B
-premise ∈ a A
-conclusion ∈ apply f a B
+premise function f
+premise ∈ a domain f
+conclusion ∈ apply f a range f
 {
-  target ∈ orderedPair a apply f a f
-  target ∈ apply f a B
+  prove ∈ orderedPair a apply f a f 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 () (f, a) p0 p1
+  elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
+    prove ∧ ∈ a domain f ∈ apply f a range f be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () (a, apply f a, f) 0
+    prove ∈ apply f a range f 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ a domain f, ∈ apply f a range f) () 1.0
+  }
 }
 
 theorem Extend Function Range to Superset
