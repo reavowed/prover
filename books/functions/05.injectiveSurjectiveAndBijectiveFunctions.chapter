@@ -12,13 +12,20 @@ property bijective on function
   definition (∧ injectiveFunction f surjectiveFunction f A B)
 
 theorem Injective Function Value Is Unique
-premise ∧ ∧ function f functionFrom f A B injectiveFunction f
-premise ∈ a_1 A
-premise ∈ a_2 A
+premise ∧ function f injectiveFunction f
+premise ∈ a_1 domain f
+premise ∈ a_2 domain f
 conclusion ↔ = apply f a_1 apply f a_2 = a_1 a_2
 {
   assume = apply f a_1 apply f a_2 {
-    target = a_1 a_2
+    elided 787b1809d736da2aa022b933fbbcd66d4bb0889b6376f259efc15ab047ab2480 {
+      prove ∧ function f ∀ x → ∈ $0 domain f ∀ y → ∈ $0 domain f → = apply f $$0 apply f $0 = $$0 $0 787b1809d736da2aa022b933fbbcd66d4bb0889b6376f259efc15ab047ab2480 () (f) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove → ∈ a_1 domain f ∀ y → ∈ $0 domain f → = apply f a_1 apply f $0 = a_1 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 domain f ∀ y → ∈ $0 domain f → = apply f $$0 apply f $0 = $$0 $0) (a_1) 0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove ∀ y → ∈ $0 domain f → = apply f a_1 apply f $0 = a_1 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a_1 domain f, ∀ y → ∈ $0 domain f → = apply f a_1 apply f $0 = a_1 $0) () 0.0.1 p1
+      prove → ∈ a_2 domain f → = apply f a_1 apply f a_2 = a_1 a_2 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 domain f → = apply f a_1 apply f $0 = a_1 $0) (a_2) 0.0.2
+      prove → = apply f a_1 apply f a_2 = a_1 a_2 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a_2 domain f, → = apply f a_1 apply f a_2 = a_1 a_2) () 0.0.3 p2
+      prove = a_1 a_2 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply f a_1 apply f a_2, = a_1 a_2) () 0.0.4 0a
+    }
   }
   assume = a_1 a_2 {
     prove = apply f a_1 apply f a_2 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (a_1, a_2, apply f $0) 1a
@@ -30,13 +37,21 @@ theorem A Function Is Surjective on Its Image
 premise ∧ function f functionFrom f A B
 conclusion ∧ ∧ function f functionFrom f A image f surjectiveFunction f A image f
 {
-  target ∧ function f functionFrom f A image f
+  prove ∧ function f functionFrom f A image f 5f781145c04d59ca5d5c859acc61c92429ad0e615c3b4d89d63ce713ec00b8f5 () (f, A, B) p0
   take b {
     assume ∈ $0 image f {
-      target ∃ a ∧ ∈ $0 A = $$0 apply f $0
+      elided 7d288036ed2a37e18951a0a380c8a0b688a56d1ec51e2bcba9035657ace638e9 {
+        prove ∀ b ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 7d288036ed2a37e18951a0a380c8a0b688a56d1ec51e2bcba9035657ace638e9 () (f, A, B) p0
+        prove ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 image f ∃ a ∧ ∈ $0 A = $$$0 apply f $0) ($0) 1.0.0.0
+        prove → ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 image f, ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 1.0.0.1
+        prove ∃ a ∧ ∈ $0 A = $$0 apply f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 image f, ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 1.0.0.2 1.0a
+      }
     }
   }
-  target surjectiveFunction f A image f
+  elided 082a6d62f87b04d2e8a4c2b5c14e4850934a4c385873c6f12368e3bfd2d5f854 {
+    prove ∧ ∧ function f functionFrom f A image f ∀ b → ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, ∀ b → ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 0 1
+    prove surjectiveFunction f A image f 082a6d62f87b04d2e8a4c2b5c14e4850934a4c385873c6f12368e3bfd2d5f854 () (f, A, image f) 2.0
+  }
   prove ∧ ∧ function f functionFrom f A image f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, surjectiveFunction f A image f) () 0 2
 }
 
@@ -44,11 +59,17 @@ theorem Injective Function Is Bijective with Its Image
 premise ∧ ∧ function f functionFrom f A B injectiveFunction f
 conclusion ∧ ∧ function f functionFrom f A image f bijectiveFunction f A image f
 {
-  target ∧ function f functionFrom f A image f
-  target injectiveFunction f
-  target surjectiveFunction f A image f
-  target bijectiveFunction f A image f
-  prove ∧ ∧ function f functionFrom f A image f bijectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, bijectiveFunction f A image f) () 0 3
+  prove ∧ function f functionFrom f A image f 5f781145c04d59ca5d5c859acc61c92429ad0e615c3b4d89d63ce713ec00b8f5 () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+  elided 6a55ebe7e39e8577498fc7a0c55a6ffa83691aeaf5db1cc96788297eb1b16a18 {
+    prove ∧ ∧ function f functionFrom f A image f surjectiveFunction f A image f 6a55ebe7e39e8577498fc7a0c55a6ffa83691aeaf5db1cc96788297eb1b16a18 () (f, A, image f) 0
+    prove surjectiveFunction f A image f 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∧ function f functionFrom f A image f, surjectiveFunction f A image f) () 1.0
+  }
+  elided ff881cd1f2dbb9807f49ac6b86efc883777c3e395df5a2af2aa4717b16a07b32 {
+    prove ∧ injectiveFunction f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (injectiveFunction f, surjectiveFunction f A image f) () p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 1
+    prove ∧ ∧ function f functionFrom f A image f ∧ injectiveFunction f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, ∧ injectiveFunction f surjectiveFunction f A image f) () 0 2.0
+    prove bijectiveFunction f A image f ff881cd1f2dbb9807f49ac6b86efc883777c3e395df5a2af2aa4717b16a07b32 () (f, A, image f) 2.1
+  }
+  prove ∧ ∧ function f functionFrom f A image f bijectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, bijectiveFunction f A image f) () 0 2
 }
 
 comment Inverses for bijective functions.
@@ -71,29 +92,53 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
         }
       }
       elided fe474c3f9eabf0ed0e5114186008aab8fab862ad49756d52de93e123fa8e6e9f {
-        target ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
+        elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+          prove ↔ ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b () (f, A, B)
+          prove → ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∧ function f functionFrom f A B, ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f) () 0.0.1.0.0
+          prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ function f functionFrom f A B, ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f) () 0.0.1.0.1 p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        }
         prove ⊆ $0 product B A fe474c3f9eabf0ed0e5114186008aab8fab862ad49756d52de93e123fa8e6e9f () ($0, f, orderedPair $$1 $$0, A, B, product B A) 0a 0.0.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0
       }
       take b {
         assume ∈ $0 B {
-          target ∃ a ∧ ∈ $0 A = $$0 apply f $0
+          elided fe400f229d314cfe72131f33786659292e52558857b0e0a9c8c914d5e15ee733 {
+            prove ∧ ∧ function f functionFrom f A B ∧ injectiveFunction f surjectiveFunction f A B 2e2d096331fcc31a9981442b06e8d16f6995ea226ccd1afbe2062ed91aba6f0b () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            elided fe400f229d314cfe72131f33786659292e52558857b0e0a9c8c914d5e15ee733 {
+              prove ∧ ∧ function f functionFrom f A B ∀ b → ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0 fe400f229d314cfe72131f33786659292e52558857b0e0a9c8c914d5e15ee733 () (f, A, B) 0.0.2.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              prove → ∈ $0 B ∃ a ∧ ∈ $0 A = $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 B ∃ a ∧ ∈ $0 A = $$$$0 apply f $0) ($0) 0.0.2.0.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              prove ∃ a ∧ ∈ $0 A = $$0 apply f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 B, ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 0.0.2.0.0.1.1 0.0.2.0a
+            }
+          }
           let a ∧ ∈ $0 A = $$0 apply f $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 A = $0 apply f $$$0, ∃! a ∈ orderedPair $$0 $0 $$$0) () {
-            target ∈ orderedPair $0 $$0 f
+            elided f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 {
+              prove ↔ ∈ orderedPair $0 $$0 f ∧ ∈ $0 A = $$0 apply f $0 f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 () (f, A, B, $0, $$0) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+              prove → ∧ ∈ $0 A = $$0 apply f $0 ∈ orderedPair $0 $$0 f 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair $0 $$0 f, ∧ ∈ $0 A = $$0 apply f $0) () 0.0.2.0.1.0.0
+              prove ∈ orderedPair $0 $$0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 A = $$0 apply f $0, ∈ orderedPair $0 $$0 f) () 0.0.2.0.1.0.1 0.0.2.0.1a
+            }
             prove ∈ orderedPair $$0 $0 $$$0 08c8d4f6238c2cfcad5ee9a5717dadf21257e0215396b276badb4e7d82ec8920 () ($$$0, f, orderedPair $$$$1 $$$$0, $0, A, $$0, B) 0a 0.0.2.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.2.0a 0.0.2.0.1.0
             take x {
               assume ∈ orderedPair $$$0 $0 $$$$0 {
                 elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
-                  target ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
+                  elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+                    prove ↔ ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b () (f, A, B)
+                    prove → ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∧ function f functionFrom f A B, ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f) () 0.0.2.0.1.2.0.0.0.0
+                    prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ function f functionFrom f A B, ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f) () 0.0.2.0.1.2.0.0.0.1 p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  }
                   elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
-                    prove ∀ s ↔ ∈ $0 $$$$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$0 orderedPair $0 $$0 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a () ($$$$0, f, orderedPair $$$$$1 $$$$$0, A, B) 0a 0.0.2.0.1.2.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                    prove ↔ ∈ orderedPair $$$0 $0 $$$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 $$$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$$$$$0 orderedPair $0 $$0) (orderedPair $$$0 $0) 0.0.2.0.1.2.0.0.1.0
-                    prove → ∈ orderedPair $$$0 $0 $$$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$$0 $0 $$$$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0) () 0.0.2.0.1.2.0.0.1.1
-                    prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$$0 $0 $$$$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0) () 0.0.2.0.1.2.0.0.1.2 0.0.2.0.1.2.0a
+                    prove ∀ s ↔ ∈ $0 $$$$$0 ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$0 orderedPair $0 $$0 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a () ($$$$0, f, orderedPair $$$$$1 $$$$$0, A, B) 0a 0.0.2.0.1.2.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    prove ↔ ∈ orderedPair $$$0 $0 $$$$0 ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$0 $$$$0 ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$$$$$0 orderedPair $0 $$0) (orderedPair $$$0 $0) 0.0.2.0.1.2.0.0.1.0
+                    prove → ∈ orderedPair $$$0 $0 $$$$0 ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$$0 $0 $$$$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0) () 0.0.2.0.1.2.0.0.1.1
+                    prove ∃ a' ∧ ∈ $0 A ∃ b' ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$$0 $0 $$$$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0) () 0.0.2.0.1.2.0.0.1.2 0.0.2.0.1.2.0a
                   }
                 }
                 let a' ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$$$$$0 $0 f = orderedPair $$$$0 $$0 orderedPair $0 $$$$$$0, = $0 $$0) () {
                   let b' ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$$$0 $$$0 orderedPair $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$$0 B ∧ ∈ orderedPair $0 $$$$$$0 f = orderedPair $$$$0 $$0 orderedPair $$$$$$0 $0, = $$0 $$$0) () {
-                    target = $0 apply f $$0
+                    elided f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 {
+                      prove ↔ ∈ orderedPair $$0 $0 f ∧ ∈ $$0 A = $0 apply f $$0 f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 () (f, A, B, $$0, $0) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove → ∈ orderedPair $$0 $0 f ∧ ∈ $$0 A = $0 apply f $$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $$0 $0 f, ∧ ∈ $$0 A = $0 apply f $$0) () 0.0.2.0.1.2.0.1.0.0.0
+                      prove ∧ ∈ $$0 A = $0 apply f $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 f, ∧ ∈ $$0 A = $0 apply f $$0) () 0.0.2.0.1.2.0.1.0.0.1 0.0.2.0.1.2.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove = $0 apply f $$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 A, = $0 apply f $$0) () 0.0.2.0.1.2.0.1.0.0.2
+                    }
                     prove = $$$$$0 $0 3145acb045787b4bbda64115e9f238b3f63a172ef76cfdeb022b4532fdc250a8 () ($$$$$0, $$$0, $0, $$0) 0.0.2.0.1.2.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                     prove = $$$0 $$0 59b82be807de878f362cab07c532b0000054999345bb170c1fb8325c58268da0 () ($$$$$0, $$$0, $0, $$0) 0.0.2.0.1.2.0.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                     prove = $$$$$0 apply f $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$$$0, $0, apply f $$0) 0.0.2.0.1.2.0.1.0.1 0.0.2.0.1.2.0.1.0.0
@@ -108,7 +153,21 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
                     }
                     prove = apply f $$$0 $$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$$$$0, apply f $$$0) 0.0.2.0.1.2.0.1.0.5
                     prove = apply f $$$0 apply f $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply f $$$0 $$$$$$$0) ($$$$$0, apply f $$$$0) 0.0.2.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.0.2.0.1.2.0.1.0.7
-                    target = $$$0 $$$$0
+                    elided 787b1809d736da2aa022b933fbbcd66d4bb0889b6376f259efc15ab047ab2480 {
+                      prove ∧ ∧ function f functionFrom f A B ∧ injectiveFunction f surjectiveFunction f A B 2e2d096331fcc31a9981442b06e8d16f6995ea226ccd1afbe2062ed91aba6f0b () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∧ function f ∧ = domain f A ⊆ range f B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, A, B) 0.0.2.0.1.2.0.1.0.9.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove = A domain f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain f, A) 0.0.2.0.1.2.0.1.0.9.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove ∈ $$$0 domain f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$0 $$$$$$$0) (A, domain f) 0.0.2.0.1.2.0.1.0.9.2 0.0.2.0.1.2.0.1.0.6
+                      prove ∈ $$$$0 domain f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$0 $$$$$$$0) (A, domain f) 0.0.2.0.1.2.0.1.0.9.2 0.0.2.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      elided 787b1809d736da2aa022b933fbbcd66d4bb0889b6376f259efc15ab047ab2480 {
+                        prove ∧ function f ∀ x → ∈ $0 domain f ∀ y → ∈ $0 domain f → = apply f $$0 apply f $0 = $$0 $0 787b1809d736da2aa022b933fbbcd66d4bb0889b6376f259efc15ab047ab2480 () (f) 0.0.2.0.1.2.0.1.0.9.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                        prove → ∈ $$$0 domain f ∀ y → ∈ $0 domain f → = apply f $$$$0 apply f $0 = $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 domain f ∀ y → ∈ $0 domain f → = apply f $$$$$$$$0 apply f $0 = $$$$$$$$0 $0) ($$$0) 0.0.2.0.1.2.0.1.0.9.5.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                        prove ∀ y → ∈ $0 domain f → = apply f $$$$0 apply f $0 = $$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 domain f, ∀ y → ∈ $0 domain f → = apply f $$$$0 apply f $0 = $$$$0 $0) () 0.0.2.0.1.2.0.1.0.9.5.1 0.0.2.0.1.2.0.1.0.9.3
+                        prove → ∈ $$$$0 domain f → = apply f $$$0 apply f $$$$0 = $$$0 $$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$$0 domain f → = apply f $$$0 apply f $$$$$$$0 = $$$0 $$$$$$$0) ($$$$0) 0.0.2.0.1.2.0.1.0.9.5.2
+                        prove → = apply f $$$0 apply f $$$$0 = $$$0 $$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 domain f, → = apply f $$$0 apply f $$$$0 = $$$0 $$$$0) () 0.0.2.0.1.2.0.1.0.9.5.3 0.0.2.0.1.2.0.1.0.9.4
+                        prove = $$$0 $$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply f $$$0 apply f $$$$0, = $$$0 $$$$0) () 0.0.2.0.1.2.0.1.0.9.5.4 0.0.2.0.1.2.0.1.0.8
+                      }
+                    }
                   } 0.0.2.0.1.2.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                 } 0.0.2.0.1.2.0.0
               }
@@ -117,15 +176,27 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
           } 0.0.2.0.0
         }
       }
-      target ∧ function $0 functionFrom $0 B A
+      elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+        prove ∧ ⊆ $0 product B A ∀ x → ∈ $0 B ∃! b ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 product B A, ∀ x → ∈ $0 B ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.1 0.0.2
+        elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+          prove ↔ ∧ function $0 functionFrom $0 B A ∧ ⊆ $0 product B A ∀ x → ∈ $0 B ∃! b ∈ orderedPair $$0 $0 $$$0 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b () ($0, B, A)
+          prove → ∧ ⊆ $0 product B A ∀ x → ∈ $0 B ∃! b ∈ orderedPair $$0 $0 $$$0 ∧ function $0 functionFrom $0 B A 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∧ function $0 functionFrom $0 B A, ∧ ⊆ $0 product B A ∀ x → ∈ $0 B ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.3.1.0
+          prove ∧ function $0 functionFrom $0 B A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ⊆ $0 product B A ∀ x → ∈ $0 B ∃! b ∈ orderedPair $$0 $0 $$$0, ∧ function $0 functionFrom $0 B A) () 0.0.3.1.1 0.0.3.0
+        }
+      }
     }
     subproof (g is right-inverse) {
-      target ∧ function ∘ $0 f functionFrom ∘ $0 f A A
-      target ∧ function identityFunction A functionFrom identityFunction A A A
+      prove ∧ function ∘ $0 f functionFrom ∘ $0 f A A 86f85ac9c237a316476660ce03509ccb407b17e39e316b40b301906a5d1c46fe () (f, A, B, $0, A) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0
+      prove ∧ function identityFunction A functionFrom identityFunction A A A ca49c0156b18e7d4a9840cf47b7e77d3e7ccc3a990307f32abc72a9efbb0ad63 () (A)
       take x {
         assume ∈ $0 A {
-          target ∈ apply f $0 B
-          target ∈ orderedPair $0 apply f $0 f
+          prove ∈ apply f $0 B bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f () (f, A, B, $0) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.1.2.0a
+          elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
+            prove ∧ function f ∧ = domain f A ⊆ range f B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove = A domain f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain f, A) 0.1.2.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            prove ∈ $0 domain f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$$0) (A, domain f) 0.1.2.0.1.1 0.1.2.0a
+            prove ∈ orderedPair $0 apply f $0 f 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 () (f, $0) 0.1.2.0.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.1.2.0.1.2
+          }
           prove = orderedPair apply f $0 $0 orderedPair apply f $0 $0 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (orderedPair apply f $0 $0)
           elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
             prove ∧ ∈ orderedPair $0 apply f $0 f = orderedPair apply f $0 $0 orderedPair apply f $0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair $0 apply f $0 f, = orderedPair apply f $0 $0 orderedPair apply f $0 $0) () 0.1.2.0.1 0.1.2.0.2
@@ -136,17 +207,14 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
             prove ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair apply f $$0 $$0 orderedPair $0 $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 A, ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair apply f $$0 $$0 orderedPair $0 $$0) () 0.1.2.0a 0.1.2.0.3
             prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair apply f $$$0 $$$0 orderedPair $0 $$0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$$$0 $0 f = orderedPair apply f $$0 $$0 orderedPair $0 $$$$0) ($0) 0.1.2.0.4.0
           }
-          elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
-            target ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
-            elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
-              prove ∀ s ↔ ∈ $0 $$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$0 orderedPair $0 $$0 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a () ($$0, f, orderedPair $$$1 $$$0, A, B) 0a 0.1.2.0.5.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-              prove ↔ ∈ orderedPair apply f $0 $0 $$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair apply f $$$0 $$$0 orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 $$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$$$0 orderedPair $0 $$0) (orderedPair apply f $0 $0) 0.1.2.0.5.1.0
-              prove → ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair apply f $$$0 $$$0 orderedPair $0 $$0 ∈ orderedPair apply f $0 $0 $$0 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair apply f $0 $0 $$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair apply f $$$0 $$$0 orderedPair $0 $$0) () 0.1.2.0.5.1.1
-              prove ∈ orderedPair apply f $0 $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair apply f $$$0 $$$0 orderedPair $0 $$0, ∈ orderedPair apply f $0 $0 $$0) () 0.1.2.0.5.1.2 0.1.2.0.4
-            }
+          prove ∈ orderedPair apply f $0 $0 $$0 08c8d4f6238c2cfcad5ee9a5717dadf21257e0215396b276badb4e7d82ec8920 () ($$0, f, orderedPair $$$1 $$$0, $0, A, apply f $0, B) 0a 0.1.2.0a 0.1.2.0.0 0.1.2.0.1
+          prove = apply ∘ $$0 f $0 apply $$0 apply f $0 ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f () (f, A, B, $$0, A, $0) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0 0.1.2.0a
+          elided f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 {
+            prove ↔ ∈ orderedPair apply f $0 $0 $$0 ∧ ∈ apply f $0 B = $0 apply $$0 apply f $0 f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 () ($$0, B, A, apply f $0, $0) 0.0
+            prove → ∈ orderedPair apply f $0 $0 $$0 ∧ ∈ apply f $0 B = $0 apply $$0 apply f $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair apply f $0 $0 $$0, ∧ ∈ apply f $0 B = $0 apply $$0 apply f $0) () 0.1.2.0.7.0
+            prove ∧ ∈ apply f $0 B = $0 apply $$0 apply f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair apply f $0 $0 $$0, ∧ ∈ apply f $0 B = $0 apply $$0 apply f $0) () 0.1.2.0.7.1 0.1.2.0.5
+            prove = apply $$0 apply f $0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($0, apply $$0 apply f $0) 0.1.2.0.7.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           }
-          target = apply ∘ $$0 f $0 apply $$0 apply f $0
-          target = apply $$0 apply f $0 $0
           prove = apply ∘ $$0 f $0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ∘ $$0 f $0, apply $$0 apply f $0, $0) 0.1.2.0.6 0.1.2.0.7
           elided cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad {
             prove = apply identityFunction A $0 $0 cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad () ($0, A) 0.1.2.0a
@@ -155,18 +223,28 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
           prove = apply ∘ $$0 f $0 apply identityFunction A $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ∘ $$0 f $0, $0, apply identityFunction A $0) 0.1.2.0.8 0.1.2.0.9
         }
       }
-      target = ∘ $0 f identityFunction A
+      prove = ∘ $0 f identityFunction A 21a5e7500bcdfc2ce3f68a9fd8046cfd8faeaf4691ec3c48c11087835d0cd6f9 () (∘ $0 f, A, A, identityFunction A) 0.1.0 0.1.1 0.1.2
     }
     subproof (g is left-inverse) {
-      target ∧ function ∘ f $0 functionFrom ∘ f $0 B B
-      target ∧ function identityFunction B functionFrom identityFunction B B B
+      prove ∧ function ∘ f $0 functionFrom ∘ f $0 B B 86f85ac9c237a316476660ce03509ccb407b17e39e316b40b301906a5d1c46fe () ($0, B, A, f, B) 0.0 p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+      prove ∧ function identityFunction B functionFrom identityFunction B B B ca49c0156b18e7d4a9840cf47b7e77d3e7ccc3a990307f32abc72a9efbb0ad63 () (B)
       take x {
         assume ∈ $0 B {
-          target ∈ orderedPair $0 apply $$0 $0 $$0
+          elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
+            prove ∧ function $$0 ∧ = domain $$0 B ⊆ range $$0 A ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, B, A) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove = B domain $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain $$0, B) 0.2.2.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            prove ∈ $0 domain $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$$0) (B, domain $$0) 0.2.2.0.0.1 0.2.2.0a
+            prove ∈ orderedPair $0 apply $$0 $0 $$0 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 () ($$0, $0) 0.2.2.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.2.2.0.0.2
+          }
           elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
-            target ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! y ∈ orderedPair $$0 $0 f
+            elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+              prove ↔ ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b () (f, A, B)
+              prove → ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∧ function f functionFrom f A B, ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f) () 0.2.2.0.1.0.0
+              prove ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ function f functionFrom f A B, ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f) () 0.2.2.0.1.0.1 p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+              prove ⊆ f product A B 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (⊆ f product A B, ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f) () 0.2.2.0.1.0.2
+            }
             elided 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a {
-              prove ∀ s ↔ ∈ $0 $$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$0 orderedPair $0 $$0 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a () ($$0, f, orderedPair $$$1 $$$0, A, B) 0a 0.2.2.0.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+              prove ∀ s ↔ ∈ $0 $$$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$0 orderedPair $0 $$0 864d33be3e71225b778a2d96105da7932e5270b81b60db26dc473b47b5c8419a () ($$0, f, orderedPair $$$1 $$$0, A, B) 0a 0.2.2.0.1.0
               prove ↔ ∈ orderedPair $0 apply $$0 $0 $$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$0 apply $$$$0 $$$0 orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 $$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = $$$$$0 orderedPair $0 $$0) (orderedPair $0 apply $$0 $0) 0.2.2.0.1.1.0
               prove → ∈ orderedPair $0 apply $$0 $0 $$0 ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$0 apply $$$$0 $$$0 orderedPair $0 $$0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $0 apply $$0 $0 $$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$0 apply $$$$0 $$$0 orderedPair $0 $$0) () 0.2.2.0.1.1.1
               prove ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$0 apply $$$$0 $$$0 orderedPair $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $0 apply $$0 $0 $$0, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 f = orderedPair $$$0 apply $$$$0 $$$0 orderedPair $0 $$0) () 0.2.2.0.1.1.2 0.2.2.0.0
@@ -188,8 +266,13 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
               }
             } 0.2.2.0.2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           } 0.2.2.0.1
-          target = apply ∘ f $$0 $0 apply f apply $$0 $0
-          target = apply f apply $$0 $0 $0
+          prove = apply ∘ f $$0 $0 apply f apply $$0 $0 ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f () ($$0, B, A, f, B, $0) 0.0 p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.2.2.0a
+          elided f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 {
+            prove ↔ ∈ orderedPair apply $$0 $0 $0 f ∧ ∈ apply $$0 $0 A = $0 apply f apply $$0 $0 f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 () (f, A, B, apply $$0 $0, $0) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            prove → ∈ orderedPair apply $$0 $0 $0 f ∧ ∈ apply $$0 $0 A = $0 apply f apply $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair apply $$0 $0 $0 f, ∧ ∈ apply $$0 $0 A = $0 apply f apply $$0 $0) () 0.2.2.0.4.0
+            prove ∧ ∈ apply $$0 $0 A = $0 apply f apply $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair apply $$0 $0 $0 f, ∧ ∈ apply $$0 $0 A = $0 apply f apply $$0 $0) () 0.2.2.0.4.1 0.2.2.0.2
+            prove = apply f apply $$0 $0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($0, apply f apply $$0 $0) 0.2.2.0.4.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          }
           prove = apply ∘ f $$0 $0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ∘ f $$0 $0, apply f apply $$0 $0, $0) 0.2.2.0.3 0.2.2.0.4
           elided cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad {
             prove = apply identityFunction B $0 $0 cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad () ($0, B) 0.2.2.0a
@@ -198,7 +281,7 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
           prove = apply ∘ f $$0 $0 apply identityFunction B $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ∘ f $$0 $0, $0, apply identityFunction B $0) 0.2.2.0.5 0.2.2.0.6
         }
       }
-      target = ∘ f $0 identityFunction B
+      prove = ∘ f $0 identityFunction B 21a5e7500bcdfc2ce3f68a9fd8046cfd8faeaf4691ec3c48c11087835d0cd6f9 () (∘ f $0, B, B, identityFunction B) 0.2.0 0.2.1 0.2.2
     }
     subproof (Bijective) {
       take b_1 {
@@ -207,7 +290,22 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
             assume ∈ $0 B {
               assume = apply $$$0 $$0 apply $$$0 $0 {
                 prove = apply f apply $$$0 $$0 apply f apply $$$0 $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply $$$0 $$0, apply $$$0 $0, apply f $$$$0) 0.3.0.0.0.0.0a
-                target = apply ∘ f $$$0 $$0 apply ∘ f $$$0 $0
+                elided ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f {
+                  elided ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f {
+                    elided ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f {
+                      prove = apply ∘ f $$$0 $$0 apply f apply $$$0 $$0 ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f () ($$$0, B, A, f, B, $$0) 0.0 p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.3.0.0a
+                      prove = apply f apply $$$0 $$0 apply ∘ f $$$0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ∘ f $$$0 $$0, apply f apply $$$0 $$0) 0.3.0.0.0.0.0.1.0.0.0
+                    }
+                    prove = apply ∘ f $$$0 $$0 apply f apply $$$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$$$0 apply f apply $$$0 $0) (apply f apply $$$0 $$0, apply ∘ f $$$0 $$0) 0.3.0.0.0.0.0.1.0.0 0.3.0.0.0.0.0.0
+                  }
+                  elided ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f {
+                    elided ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f {
+                      prove = apply ∘ f $$$0 $0 apply f apply $$$0 $0 ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f () ($$$0, B, A, f, B, $0) 0.0 p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.3.0.0.0.0a
+                      prove = apply f apply $$$0 $0 apply ∘ f $$$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ∘ f $$$0 $0, apply f apply $$$0 $0) 0.3.0.0.0.0.0.1.1.0.0
+                    }
+                    prove = apply ∘ f $$$0 $$0 apply ∘ f $$$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply ∘ f $$$0 $$0 $$$$0) (apply f apply $$$0 $0, apply ∘ f $$$0 $0) 0.3.0.0.0.0.0.1.1.0 0.3.0.0.0.0.0.1.0
+                  }
+                }
                 elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
                   prove = apply identityFunction B $$0 apply ∘ f $$$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply $$$$0 $$0 apply ∘ f $$$0 $0) (∘ f $$$0, identityFunction B) 0.2 0.3.0.0.0.0.0.1
                   prove = apply identityFunction B $$0 apply identityFunction B $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply identityFunction B $$0 apply $$$$0 $0) (∘ f $$$0, identityFunction B) 0.2 0.3.0.0.0.0.0.2.0
@@ -227,10 +325,19 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
           }
         }
       }
-      target injectiveFunction $0
+      elided b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 {
+        prove ∧ function $0 ∧ = domain $0 B ⊆ range $0 A ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($0, B, A) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove = B domain $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain $0, B) 0.3.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+          prove ∀ b_1 → ∈ $0 domain $$0 ∀ b_2 → ∈ $0 B → = apply $$$0 $$0 apply $$$0 $0 = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ b_1 → ∈ $0 $$$0 ∀ b_2 → ∈ $0 B → = apply $$$0 $$0 apply $$$0 $0 = $$0 $0) (B, domain $0) 0.3.1.1 0.3.0
+          prove ∀ b_1 → ∈ $0 domain $$0 ∀ b_2 → ∈ $0 domain $$$0 → = apply $$$0 $$0 apply $$$0 $0 = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ b_1 → ∈ $0 domain $$0 ∀ b_2 → ∈ $0 $$$$0 → = apply $$$0 $$0 apply $$$0 $0 = $$0 $0) (B, domain $0) 0.3.1.1 0.3.1.2.0
+        }
+        prove ∧ function $0 ∀ x → ∈ $0 domain $$0 ∀ y → ∈ $0 domain $$$0 → = apply $$$0 $$0 apply $$$0 $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function $0, ∀ x → ∈ $0 domain $$0 ∀ y → ∈ $0 domain $$$0 → = apply $$$0 $$0 apply $$$0 $0 = $$0 $0) () 0.3.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.3.1.2
+        prove injectiveFunction $0 b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 () ($0) 0.3.1.3
+      }
       take a {
         assume ∈ $0 A {
-          target ∈ apply f $0 B
+          prove ∈ apply f $0 B bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f () (f, A, B, $0) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.3.2.0a
           elided cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad {
             prove = apply identityFunction A $0 $0 cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad () ($0, A) 0.3.2.0a
             prove = $0 apply identityFunction A $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply identityFunction A $0, $0) 0.3.2.0.1.0
@@ -240,7 +347,7 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
             prove = apply identityFunction A $0 apply ∘ $$0 f $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (identityFunction A, ∘ $$0 f, apply $$$0 $0) 0.3.2.0.2.0
           }
           prove = $0 apply ∘ $$0 f $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($0, apply identityFunction A $0, apply ∘ $$0 f $0) 0.3.2.0.1 0.3.2.0.2
-          target = apply ∘ $$0 f $0 apply $$0 apply f $0
+          prove = apply ∘ $$0 f $0 apply $$0 apply f $0 ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f () (f, A, B, $$0, A, $0) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0 0.3.2.0a
           prove = $0 apply $$0 apply f $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($0, apply ∘ $$0 f $0, apply $$0 apply f $0) 0.3.2.0.3 0.3.2.0.4
           elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
             prove ∧ ∈ apply f $0 B = $0 apply $$0 apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply f $0 B, = $0 apply $$0 apply f $0) () 0.3.2.0.0 0.3.2.0.5
@@ -248,23 +355,39 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
           }
         }
       }
-      target surjectiveFunction $0 B A
-      target bijectiveFunction $0 B A
+      elided 082a6d62f87b04d2e8a4c2b5c14e4850934a4c385873c6f12368e3bfd2d5f854 {
+        prove ∧ ∧ function $0 functionFrom $0 B A ∀ b → ∈ $0 A ∃ a ∧ ∈ $0 B = $$0 apply $$$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function $0 functionFrom $0 B A, ∀ b → ∈ $0 A ∃ a ∧ ∈ $0 B = $$0 apply $$$0 $0) () 0.0 0.3.2
+        prove surjectiveFunction $0 B A 082a6d62f87b04d2e8a4c2b5c14e4850934a4c385873c6f12368e3bfd2d5f854 () ($0, B, A) 0.3.3.0
+      }
+      elided ff881cd1f2dbb9807f49ac6b86efc883777c3e395df5a2af2aa4717b16a07b32 {
+        prove ∧ injectiveFunction $0 surjectiveFunction $0 B A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (injectiveFunction $0, surjectiveFunction $0 B A) () 0.3.1 0.3.3
+        prove ∧ ∧ function $0 functionFrom $0 B A ∧ injectiveFunction $0 surjectiveFunction $0 B A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function $0 functionFrom $0 B A, ∧ injectiveFunction $0 surjectiveFunction $0 B A) () 0.0 0.3.4.0
+        prove bijectiveFunction $0 B A ff881cd1f2dbb9807f49ac6b86efc883777c3e395df5a2af2aa4717b16a07b32 () ($0, B, A) 0.3.4.1
+      }
     }
     subproof (Uniqueness) {
       take h {
         assume ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction $0 B A ∧ = ∘ $0 f identityFunction A = ∘ f $0 identityFunction B {
-          target = $0 ∘ identityFunction A $0
+          elided ae390788abc687335d11771208eee1f540d1c0a9bae1dfb0f0e84cfbf7193ea4 {
+            prove ∧ = ∘ identityFunction A $0 $0 = ∘ $0 identityFunction B $0 ae390788abc687335d11771208eee1f540d1c0a9bae1dfb0f0e84cfbf7193ea4 () ($0, B, A) 0.4.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            prove = $0 ∘ identityFunction A $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (∘ identityFunction A $0, $0) 0.4.0.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+          }
           elided 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 {
             prove = identityFunction A ∘ $$0 f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (∘ $$0 f, identityFunction A) 0.1
             prove = ∘ identityFunction A $0 ∘ ∘ $$0 f $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (identityFunction A, ∘ $$0 f, ∘ $$$0 $0) 0.4.0.0.1.0
           }
           prove = $0 ∘ ∘ $$0 f $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($0, ∘ identityFunction A $0, ∘ ∘ $$0 f $0) 0.4.0.0.0 0.4.0.0.1
-          target = ∘ ∘ $$0 f $0 ∘ $$0 ∘ f $0
+          elided e9a8b678fc48aa995793b49254f14c4f253cdcfdb8cfeff4b3a97285d4cd8d5a {
+            prove = ∘ $$0 ∘ f $0 ∘ ∘ $$0 f $0 e9a8b678fc48aa995793b49254f14c4f253cdcfdb8cfeff4b3a97285d4cd8d5a () ($0, B, A, f, B, $$0, A) 0.4.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0
+            prove = ∘ ∘ $$0 f $0 ∘ $$0 ∘ f $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (∘ $$0 ∘ f $0, ∘ ∘ $$0 f $0) 0.4.0.0.3.0
+          }
           prove = $0 ∘ $$0 ∘ f $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($0, ∘ ∘ $$0 f $0, ∘ $$0 ∘ f $0) 0.4.0.0.2 0.4.0.0.3
           prove = ∘ $$0 ∘ f $0 ∘ $$0 identityFunction B 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (∘ f $0, identityFunction B, ∘ $$0 $$$0) 0.4.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           prove = $0 ∘ $$0 identityFunction B 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($0, ∘ $$0 ∘ f $0, ∘ $$0 identityFunction B) 0.4.0.0.4 0.4.0.0.5
-          target = ∘ $$0 identityFunction B $$0
+          elided ae390788abc687335d11771208eee1f540d1c0a9bae1dfb0f0e84cfbf7193ea4 {
+            prove ∧ = ∘ identityFunction A $$0 $$0 = ∘ $$0 identityFunction B $$0 ae390788abc687335d11771208eee1f540d1c0a9bae1dfb0f0e84cfbf7193ea4 () ($$0, B, A) 0.0
+            prove = ∘ $$0 identityFunction B $$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= ∘ identityFunction A $$0 $$0, = ∘ $$0 identityFunction B $$0) () 0.4.0.0.7.0
+          }
           prove = $0 $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($0, ∘ $$0 identityFunction B, $$0) 0.4.0.0.6 0.4.0.0.7
         }
       }
@@ -289,9 +412,23 @@ premise ∧ ∧ function f functionFrom f A B bijectiveFunction f A B
 premise ∈ a A
 conclusion = apply inverseFunction f apply f a a
 {
-  target ∧ function inverseFunction f functionFrom inverseFunction f B A
-  target = apply inverseFunction f apply f a apply ∘ inverseFunction f f a
-  target = apply ∘ inverseFunction f f a apply identityFunction A a
+  elided e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d {
+    prove ∧ ∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d () (f, A, B) p0
+    prove ∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A, ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B) () 0.0
+    prove ∧ function inverseFunction f functionFrom inverseFunction f B A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function inverseFunction f functionFrom inverseFunction f B A, bijectiveFunction inverseFunction f B A) () 0.1
+  }
+  elided ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f {
+    prove = apply ∘ inverseFunction f f a apply inverseFunction f apply f a ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f () (f, A, B, inverseFunction f, A, a) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0 p1
+    prove = apply inverseFunction f apply f a apply ∘ inverseFunction f f a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ∘ inverseFunction f f a, apply inverseFunction f apply f a) 1.0
+  }
+  elided e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d {
+    elided e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d {
+      prove ∧ ∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d () (f, A, B) p0
+      prove ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A, ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B) () 2.0.0
+      prove = ∘ inverseFunction f f identityFunction A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= ∘ inverseFunction f f identityFunction A, = ∘ f inverseFunction f identityFunction B) () 2.0.1
+    }
+    prove = apply ∘ inverseFunction f f a apply identityFunction A a 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (∘ inverseFunction f f, identityFunction A, apply $0 a) 2.0
+  }
   prove = apply inverseFunction f apply f a apply identityFunction A a 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply inverseFunction f apply f a, apply ∘ inverseFunction f f a, apply identityFunction A a) 1 2
   prove = apply identityFunction A a a cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad () (a, A) p1
   prove = apply inverseFunction f apply f a a 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply inverseFunction f apply f a, apply identityFunction A a, a) 3 4
@@ -302,9 +439,22 @@ premise ∧ ∧ function f functionFrom f A B bijectiveFunction f A B
 premise ∈ b B
 conclusion = apply f apply inverseFunction f b b
 {
-  target ∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A
-  target = apply f apply inverseFunction f b apply ∘ f inverseFunction f b
-  target = apply ∘ f inverseFunction f b apply identityFunction B b
+  elided e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d {
+    prove ∧ ∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d () (f, A, B) p0
+    prove ∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A, ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B) () 0.0
+  }
+  elided ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f {
+    prove = apply ∘ f inverseFunction f b apply f apply inverseFunction f b ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f () (inverseFunction f, B, A, f, B, b) 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d p1
+    prove = apply f apply inverseFunction f b apply ∘ f inverseFunction f b 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ∘ f inverseFunction f b, apply f apply inverseFunction f b) 1.0
+  }
+  elided e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d {
+    elided e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d {
+      prove ∧ ∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d () (f, A, B) p0
+      prove ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A, ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B) () 2.0.0
+      prove = ∘ f inverseFunction f identityFunction B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= ∘ inverseFunction f f identityFunction A, = ∘ f inverseFunction f identityFunction B) () 2.0.1
+    }
+    prove = apply ∘ f inverseFunction f b apply identityFunction B b 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (∘ f inverseFunction f, identityFunction B, apply $0 b) 2.0
+  }
   prove = apply f apply inverseFunction f b apply identityFunction B b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply f apply inverseFunction f b, apply ∘ f inverseFunction f b, apply identityFunction B b) 1 2
   prove = apply identityFunction B b b cfeb10d65614f9bbfd29f0d42f005f2a344e3a1cd5d1ba91a9eda9e26dda5dad () (b, B) p1
   prove = apply f apply inverseFunction f b b 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply f apply inverseFunction f b, apply identityFunction B b, b) 3 4

@@ -28,7 +28,7 @@ conclusion = f g
       }
     }
   }
-  target = f g
+  prove = f g 21a5e7500bcdfc2ce3f68a9fd8046cfd8faeaf4691ec3c48c11087835d0cd6f9 () (f, product A B, C, g) p0 p1 0
 }
 
 theorem Uncurry Function
@@ -40,9 +40,20 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → �
       prove ⊆ $0 product product A B C 1d335bf2331cb9d9c352ddf52b6b5c8f3a3725dd931809ffcfe524e3c977286a (= second $$0 apply apply f first first $$0 second first $$0) ($0, product product A B C) 0a
       take x {
         assume ∈ $0 product A B {
-          target ∈ apply f first $0 functionSpace B C
-          target ∧ function apply f first $0 functionFrom apply f first $0 B C
-          target ∈ apply apply f first $0 second $0 C
+          elided bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f {
+            prove ∈ first $0 A 680c0e8e2adbe95e3a5c5674de474e5006ce154342b98fb00c3c3a417685c73a () ($0, A, B) 0.0.1.0a
+            prove ∈ apply f first $0 functionSpace B C bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f () (f, A, functionSpace B C, first $0) p0 0.0.1.0.0.0
+          }
+          elided ec9df6b9fc713fdd077c384db4b1eeeb9ef1c3b1956e6adbb48710f12d2f9f2a {
+            prove ∀ f ↔ ∈ $0 functionSpace B C ∧ function $0 functionFrom $0 B C ec9df6b9fc713fdd077c384db4b1eeeb9ef1c3b1956e6adbb48710f12d2f9f2a () (B, C)
+            prove ↔ ∈ apply f first $0 functionSpace B C ∧ function apply f first $0 functionFrom apply f first $0 B C 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 functionSpace B C ∧ function $$$0 functionFrom $$$0 B C) (apply f first $0) 0.0.1.0.1.0
+            prove → ∈ apply f first $0 functionSpace B C ∧ function apply f first $0 functionFrom apply f first $0 B C f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ apply f first $0 functionSpace B C, ∧ function apply f first $0 functionFrom apply f first $0 B C) () 0.0.1.0.1.1
+            prove ∧ function apply f first $0 functionFrom apply f first $0 B C fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply f first $0 functionSpace B C, ∧ function apply f first $0 functionFrom apply f first $0 B C) () 0.0.1.0.1.2 0.0.1.0.0
+          }
+          elided bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f {
+            prove ∈ second $0 B 5d63038423db3295a77b50d036a380b80e533a76e1ff94cae2200a89167b7171 () ($0, A, B) 0.0.1.0a
+            prove ∈ apply apply f first $0 second $0 C bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f () (apply f first $0, B, C, second $0) 0.0.1.0.1 0.0.1.0.2.0
+          }
           prove ∈ orderedPair $0 apply apply f first $0 second $0 product product A B C 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($0, product A B, apply apply f first $0 second $0, C) 0.0.1.0a 0.0.1.0.2
           prove = second orderedPair $0 apply apply f first $0 second $0 apply apply f first $0 second $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () ($0, apply apply f first $0 second $0)
           elided 73cc85cbef2ac714cb4869efdfdafe7abc733e1b893ebbb8eaa3444eab4ed8f5 {
@@ -81,14 +92,35 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → �
           prove ∃! y ∈ orderedPair $$0 $0 $$$0 ab5aa63c6bd35830942330395ffbe0d17cf62944ad8130b337b0f287378ed99d (∈ orderedPair $0 $$$0 $$0) (apply apply f first $0 second $0) 0.0.1.0.7 0.0.1.0.8
         }
       }
-      target ∧ function $0 functionFrom $0 product A B C
+      elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+        prove ∧ ⊆ $0 product product A B C ∀ x → ∈ $0 product A B ∃! b ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 product product A B C, ∀ x → ∈ $0 product A B ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.0 0.0.1
+        elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+          prove ↔ ∧ function $0 functionFrom $0 product A B C ∧ ⊆ $0 product product A B C ∀ x → ∈ $0 product A B ∃! b ∈ orderedPair $$0 $0 $$$0 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b () ($0, product A B, C)
+          prove → ∧ ⊆ $0 product product A B C ∀ x → ∈ $0 product A B ∃! b ∈ orderedPair $$0 $0 $$$0 ∧ function $0 functionFrom $0 product A B C 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∧ function $0 functionFrom $0 product A B C, ∧ ⊆ $0 product product A B C ∀ x → ∈ $0 product A B ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.2.1.0
+          prove ∧ function $0 functionFrom $0 product A B C fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ⊆ $0 product product A B C ∀ x → ∈ $0 product A B ∃! b ∈ orderedPair $$0 $0 $$$0, ∧ function $0 functionFrom $0 product A B C) () 0.0.2.1.1 0.0.2.0
+        }
+      }
     }
     subproof (Function has same values) {
       take a {
         assume ∈ $0 A {
           take b {
             assume ∈ $0 B {
-              target ∈ orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 $$$0
+              elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
+                prove ∈ orderedPair $$0 $0 product A B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, B) 0.1.0.0a 0.1.0.0.0.0a
+                elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+                  elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+                    prove ∧ function $$$0 ∧ = domain $$$0 product A B ⊆ range $$$0 C ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$$0, product A B, C) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+                      prove functionFrom $$$0 product A B C df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () ($$$0, product A B, C) 0.1.0.0.0.0.0.1.0.0
+                      prove ∧ function $$$0 ∧ = domain $$$0 product A B ⊆ range $$$0 C ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$$0, product A B, C) 0.1.0.0.0.0.0.1.0.1.0
+                      prove = product A B domain $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain $$$0, product A B) 0.1.0.0.0.0.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    }
+                  }
+                  prove ∈ orderedPair $$0 $0 domain $$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair $$0 $0 $$$$0) (product A B, domain $$$0) 0.1.0.0.0.0.0.1.0 0.1.0.0.0.0.0.0
+                }
+                prove ∈ orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 $$$0 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 () ($$$0, orderedPair $$0 $0) 0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.1.0.0.0.0.0.1
+              }
               elided 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 {
                 prove = second orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 1fe4b81bac2623292694265bc84b9471a1524c4b96355c4dfb3b3a0e5e1c94a2 () (orderedPair $$0 $0, apply $$$0 orderedPair $$0 $0)
                 prove = apply $$$0 orderedPair $$0 $0 second orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (second orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0, apply $$$0 orderedPair $$0 $0) 0.1.0.0.0.0.1.0
@@ -146,7 +178,7 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → �
               }
             }
           }
-          target = $0 $$0
+          prove = $0 $$0 0162df7cab2810e4a56e7ab54b639fcdcaa286aef0c6e1c0613c900e08b52251 () ($0, A, B, C, $$0) 0.2.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0 0.2.0.0.0
         }
       }
     }
