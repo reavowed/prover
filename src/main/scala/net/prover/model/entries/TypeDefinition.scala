@@ -47,9 +47,9 @@ case class TypeDefinition(
         Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
       ).indent
 
-  override def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): TypeDefinition = {
     TypeDefinition(
@@ -57,7 +57,7 @@ case class TypeDefinition(
       defaultTermName,
       qualifier,
       explicitName,
-      definingStatement.replaceDefinition(oldDefinition, newDefinition))
+      definingStatement.replaceDefinitions(expressionDefinitionReplacements))
   }
 }
 

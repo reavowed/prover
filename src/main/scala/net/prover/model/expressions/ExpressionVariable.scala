@@ -23,8 +23,8 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType] = {
     arguments.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption.map(update)
   }
-  override def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): ExpressionType = {
-    update(arguments.map(_.replaceDefinition(oldDefinition, newDefinition)))
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): ExpressionType = {
+    update(arguments.map(_.replaceDefinitions(expressionDefinitionReplacements)))
   }
 
   override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, ExpressionType, Int, Seq[Int])] = {

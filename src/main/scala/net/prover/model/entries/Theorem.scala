@@ -86,16 +86,16 @@ case class Theorem(
   def clearInference(inference: Inference): Theorem = {
     copy(proofs = proofs.map(_.clearInference(inference)))
   }
-  override def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): Theorem = {
     Theorem(
       name,
-      premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
-      conclusion.replaceDefinition(oldDefinition, newDefinition),
-      proofs.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)))
+      premises.map(_.replaceDefinitions(expressionDefinitionReplacements)),
+      conclusion.replaceDefinitions(expressionDefinitionReplacements),
+      proofs.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
   }
 }
 
@@ -179,12 +179,11 @@ object Theorem extends Inference.EntryParser {
     def clearInference(inference: Inference): Proof = {
       Proof(steps.clearInference(inference))
     }
-    def replaceDefinition(
-      oldDefinition: ExpressionDefinition,
-      newDefinition: ExpressionDefinition,
+    def replaceDefinitions(
+      expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
       entryContext: EntryContext
     ): Proof = {
-      Proof(steps.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)))
+      Proof(steps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
     }
 
     def serializedLines: Seq[String] = Seq("{") ++ steps.flatMap(_.serializedLines).indent ++ Seq("}")

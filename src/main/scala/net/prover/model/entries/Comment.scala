@@ -9,9 +9,9 @@ case class Comment(text: String) extends ChapterEntry {
 
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = Set.empty
-  override def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): Comment = this
 }

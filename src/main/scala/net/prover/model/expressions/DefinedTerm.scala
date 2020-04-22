@@ -21,10 +21,10 @@ case class DefinedTerm(
   override def updateBoundVariableNames(newBoundVariableNames: Seq[String]): DefinedTerm = {
     DefinedTerm(components, definition)(newBoundVariableNames)
   }
-  override def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): DefinedTerm = {
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): DefinedTerm = {
     DefinedTerm(
-      components.map(_.replaceDefinition(oldDefinition, newDefinition)),
-      if (definition == oldDefinition) newDefinition.asInstanceOf[TermDefinition] else definition
+      components.map(_.replaceDefinitions(expressionDefinitionReplacements)),
+      expressionDefinitionReplacements(definition).asInstanceOf[TermDefinition]
     )(boundVariableNames)
   }
 

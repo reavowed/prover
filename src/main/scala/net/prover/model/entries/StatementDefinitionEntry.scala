@@ -34,9 +34,9 @@ case class StatementDefinitionEntry(
       Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq
     ).indent
 
-  override def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): StatementDefinitionEntry = {
     StatementDefinitionEntry(
@@ -45,7 +45,7 @@ case class StatementDefinitionEntry(
       componentTypes,
       explicitName,
       format,
-      definingStatement.map(_.replaceDefinition(oldDefinition, newDefinition)),
+      definingStatement.map(_.replaceDefinitions(expressionDefinitionReplacements)),
       shorthand,
       attributes)
   }

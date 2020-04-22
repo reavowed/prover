@@ -21,15 +21,15 @@ case class Axiom(
       Seq(s"conclusion ${conclusion.serialized}")
   }
 
-  override def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): Axiom = {
     Axiom(
       name,
-      premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
-      conclusion.replaceDefinition(oldDefinition, newDefinition))
+      premises.map(_.replaceDefinitions(expressionDefinitionReplacements)),
+      conclusion.replaceDefinitions(expressionDefinitionReplacements))
   }
 }
 

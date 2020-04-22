@@ -51,10 +51,10 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
       (newEntry, newBooks) <- entry match {
         case definition: ExpressionDefinitionEntry =>
           val newDefinition = definition.withSymbol(newSymbol)
-          Success((newDefinition, modifyExpressionDefinition(definition, newDefinition)._1))
+          Success((newDefinition, modifyEntryWithReplacement(definition, newDefinition)))
         case definition: TypeDefinition =>
           val newDefinition = definition.withSymbol(newSymbol)
-          Success((newDefinition, modifyTypeDefinition(definition, newDefinition)._1))
+          Success((newDefinition, modifyEntryWithReplacement(definition, newDefinition)))
         case _ =>
           Failure(BadRequestException(s"Cannot edit symbol of ${entry.getClass.getName}"))
       }
@@ -79,7 +79,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
       (newEntry, newBooks) <- entry match {
         case definition: TermDefinitionEntry =>
           val newDefinition = definition.withDisambiguator(disambiguator)
-          Success((newDefinition, modifyExpressionDefinition(definition, newDefinition)._1))
+          Success((newDefinition, modifyEntryWithReplacement(definition, newDefinition)))
         case _ =>
           Failure(BadRequestException(s"Cannot edit disambiguator of ${entry.getClass.getName}"))
       }
@@ -149,36 +149,29 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     }).toEmptyResponseEntity
   }
 
-  private def modifyDefinitions(
-    books: Seq[Book],
-    entriesToReplace: Map[ChapterEntry, ChapterEntry],
-    definitionsToReplace: Map[ExpressionDefinition, ExpressionDefinition]
-  ): Seq[Book] = {
-    books.mapReduceWithPrevious[Book] { (previousBooks, bookToModify) =>
-      bookToModify.chapters.mapFold(EntryContext.forBookExclusive(previousBooks, bookToModify)) { (entryContextForChapter, chapterToModify) =>
-        chapterToModify.entries.mapFold(entryContextForChapter) { (entryContext, entryToModify) =>
-          val modifiedEntry = entriesToReplace.getOrElse(entryToModify, definitionsToReplace.foldLeft(entryToModify) { case (entry, (oldDefinition, newDefinition)) =>
-            entry.replaceDefinition(oldDefinition, newDefinition, entryContext)
-          })
-          (entryContext.addEntry(modifiedEntry), modifiedEntry)
-        }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
-      }.mapRight(newChapters => bookToModify.copy(chapters = newChapters))._2
-    }
-  }
-
-  private def modifyExpressionDefinition(oldDefinition: ExpressionDefinitionEntry, newDefinition: ExpressionDefinitionEntry): (Seq[Book], Definitions) = {
+  private def modifyEntryWithReplacement(oldEntry: ChapterEntry, newEntry: ChapterEntry): Seq[Book] = {
     bookService.modifyBooks[Identity]((books, _) => {
-      modifyDefinitions(books, Map(oldDefinition -> newDefinition), Map(oldDefinition -> newDefinition))
-    })
-  }
-
-  private def modifyTypeDefinition(oldDefinition: TypeDefinition, newDefinition: TypeDefinition): (Seq[Book], Definitions) = {
-    bookService.modifyBooks[Identity]((books, definitions) => {
-      val propertyDefinitions = definitions.rootEntryContext.propertyDefinitionsByType(oldDefinition.symbol)
-      modifyDefinitions(
-        books,
-        ((oldDefinition -> newDefinition) +: propertyDefinitions.map(p => p -> p.copy(parentType = newDefinition))).toMap,
-        ((oldDefinition.statementDefinition -> newDefinition.statementDefinition) +: propertyDefinitions.map(p => p.statementDefinition -> p.copy(parentType = newDefinition).statementDefinition)).toMap)
-    })
+      books.mapFoldWithPrevious[(Map[ChapterEntry, ChapterEntry], Map[ExpressionDefinition, ExpressionDefinition]), Book]((Map.empty, Map.empty)) { case ((chapterEntries, expressionDefinitions), previousBooks, bookToModify) =>
+        bookToModify.chapters.mapFold((EntryContext.forBookExclusive(previousBooks, bookToModify), chapterEntries, expressionDefinitions)) { case ((entryContextForChapter, chapterEntries, expressionDefinitions), chapterToModify) =>
+          chapterToModify.entries.mapFold((entryContextForChapter, chapterEntries, expressionDefinitions)) { case ((entryContext, chapterEntries, expressionDefinitions), entryToModify) =>
+            val modifiedEntry = if (entryToModify == oldEntry) newEntry else entryToModify.replaceDefinitions(chapterEntries, expressionDefinitions, entryContext)
+            val newEntryContext = entryContext.addEntry(modifiedEntry)
+            val newChapterEntries = chapterEntries + (entryToModify -> modifiedEntry)
+            val newExpressionDefinitions = EntryContext.getStatementDefinitionFromEntry(entryToModify) match {
+              case Some(old) =>
+                expressionDefinitions + (old -> EntryContext.getStatementDefinitionFromEntry(modifiedEntry).get)
+              case None =>
+                entryToModify.asOptionalInstanceOf[TermDefinitionEntry] match {
+                  case Some(old) =>
+                    expressionDefinitions + (old -> modifiedEntry.asInstanceOf[TermDefinitionEntry])
+                  case None =>
+                    expressionDefinitions
+                }
+            }
+            ((newEntryContext, newChapterEntries, newExpressionDefinitions), modifiedEntry)
+          }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
+        }.mapRight(newChapters => bookToModify.copy(chapters = newChapters)).mapLeft { case (_, a, b) => (a, b)}
+      }._2
+    })._1
   }
 }

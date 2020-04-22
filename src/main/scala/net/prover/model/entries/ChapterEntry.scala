@@ -12,9 +12,9 @@ trait ChapterEntry {
   def referencedInferenceIds: Set[String]
   def referencedEntries: Set[ChapterEntry]
 
-  def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
+  def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): ChapterEntry
 }

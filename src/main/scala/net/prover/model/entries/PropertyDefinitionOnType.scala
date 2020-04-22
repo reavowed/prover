@@ -49,17 +49,17 @@ case class PropertyDefinitionOnType(
       Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
     ).indent
 
-  override def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): PropertyDefinitionOnType = {
     PropertyDefinitionOnType(
       symbol,
-      entryContext.typeDefinitions.find(_.symbol == parentType.symbol).get,
-      requiredParentQualifier.map(q => entryContext.qualifiersByType(parentType.symbol).find(_.symbol == q.symbol)).get,
+      entryReplacements(parentType).asInstanceOf[TypeDefinition],
+      requiredParentQualifier.map(q => entryReplacements(q).asInstanceOf[TypeQualifierDefinition]),
       explicitName,
-      definingStatement.replaceDefinition(oldDefinition, newDefinition),
+      definingStatement.replaceDefinitions(expressionDefinitionReplacements),
       entryContext.conjunctionDefinitionOption.get)
   }
 }

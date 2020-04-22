@@ -23,11 +23,7 @@ sealed trait Step {
   def modifySubsteps[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]]
   def insertExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step]
-  def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
-    entryContext: EntryContext
-  ): Step
+  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Step
   def replaceInference(
     oldInference: Inference,
     newInference: Inference,
@@ -125,14 +121,10 @@ object Step {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
       } yield Deduction(newAssumption, newSubsteps, deductionStatement)
     }
-    override def replaceDefinition(
-      oldDefinition: ExpressionDefinition,
-      newDefinition: ExpressionDefinition,
-      entryContext: EntryContext
-    ): Deduction = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Deduction = {
       Deduction(
-        assumption.replaceDefinition(oldDefinition, newDefinition),
-        substeps.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)),
+        assumption.replaceDefinitions(expressionDefinitionReplacements),
+        substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)),
         entryContext.deductionDefinitionOption.get)
     }
     override def clearInference(inferenceToClear: Inference): Step = {
@@ -216,21 +208,17 @@ object Step {
         newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove, internalDepth)
       } yield Naming(variableName, newAssumption, newStatement, newSubsteps, inference, newPremises, newSubstitutions, generalizationDefinition, deductionDefinition)
     }
-    override def replaceDefinition(
-      oldDefinition: ExpressionDefinition,
-      newDefinition: ExpressionDefinition,
-      entryContext: EntryContext
-    ): Naming = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Naming = {
       Naming(
         variableName,
-        assumption.replaceDefinition(oldDefinition, newDefinition),
-        statement.replaceDefinition(oldDefinition, newDefinition),
-        substeps.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)),
-        inference.replaceDefinition(oldDefinition, newDefinition),
-        premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
-        substitutions.replaceDefinition(oldDefinition, newDefinition),
-        if (generalizationDefinition == oldDefinition) newDefinition.asInstanceOf[StatementDefinition] else generalizationDefinition,
-        if (deductionDefinition == oldDefinition) newDefinition.asInstanceOf[StatementDefinition] else deductionDefinition)
+        assumption.replaceDefinitions(expressionDefinitionReplacements),
+        statement.replaceDefinitions(expressionDefinitionReplacements),
+        substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)),
+        inference.replaceDefinitions(expressionDefinitionReplacements),
+        premises.map(_.replaceDefinitions(expressionDefinitionReplacements)),
+        substitutions.replaceDefinitions(expressionDefinitionReplacements),
+        entryContext.generalizationDefinitionOption.get,
+        entryContext.deductionDefinitionOption.get)
     }
     override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = {
       if (inference == oldInference) {
@@ -322,14 +310,10 @@ object Step {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth + 1)).traverseOption
       } yield Generalization(variableName, newSubsteps, generalizationStatement)
     }
-    override def replaceDefinition(
-      oldDefinition: ExpressionDefinition,
-      newDefinition: ExpressionDefinition,
-      entryContext: EntryContext
-    ): Generalization = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Generalization = {
       Generalization(
         variableName,
-        substeps.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)),
+        substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)),
         entryContext.generalizationDefinitionOption.get)
     }
     override def clearInference(inferenceToClear: Inference): Step = {
@@ -367,11 +351,7 @@ object Step {
       } yield copy(statement = s)
     }
     override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = Success(this)
-    override def replaceDefinition(
-      oldDefinition: ExpressionDefinition,
-      newDefinition: ExpressionDefinition,
-      entryContext: EntryContext
-    ): Target = Target(statement.replaceDefinition(oldDefinition, newDefinition))
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Target = Target(statement.replaceDefinitions(expressionDefinitionReplacements))
     override def clearInference(inferenceToClear: Inference): Step = {
       this
     }
@@ -416,14 +396,10 @@ object Step {
         super.replaceInference(oldInference, newInference, stepProvingContext)
       }
     }
-    override def replaceDefinition(
-      oldDefinition: ExpressionDefinition,
-      newDefinition: ExpressionDefinition,
-      entryContext: EntryContext
-    ): Elided = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Elided = {
       Elided(
-        substeps.map(_.replaceDefinition(oldDefinition, newDefinition,entryContext)),
-        highlightedInference.map(_.replaceDefinition(oldDefinition, newDefinition)),
+        substeps.map(_.replaceDefinitions(expressionDefinitionReplacements,entryContext)),
+        highlightedInference.map(_.replaceDefinitions(expressionDefinitionReplacements)),
         description)
     }
     override def clearInference(inferenceToClear: Inference): Step = {
@@ -530,16 +506,12 @@ object Step {
         this
       }
     }
-    override def replaceDefinition(
-      oldDefinition: ExpressionDefinition,
-      newDefinition: ExpressionDefinition,
-      entryContext: EntryContext
-    ): Assertion = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Assertion = {
       Assertion(
-        statement.replaceDefinition(oldDefinition, newDefinition),
-        inference.replaceDefinition(oldDefinition, newDefinition),
-        premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
-        substitutions.replaceDefinition(oldDefinition, newDefinition))
+        statement.replaceDefinitions(expressionDefinitionReplacements),
+        inference.replaceDefinitions(expressionDefinitionReplacements),
+        premises.map(_.replaceDefinitions(expressionDefinitionReplacements)),
+        substitutions.replaceDefinitions(expressionDefinitionReplacements))
     }
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
       val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
@@ -596,14 +568,10 @@ object Step {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
       } yield SubProof(name, newSubsteps)
     }
-    override def replaceDefinition(
-      oldDefinition: ExpressionDefinition,
-      newDefinition: ExpressionDefinition,
-      entryContext: EntryContext
-    ): SubProof = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): SubProof = {
       SubProof(
         name,
-        substeps.map(_.replaceDefinition(oldDefinition, newDefinition, entryContext)))
+        substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
     }
     override def clearInference(inferenceToClear: Inference): Step = {
       copy(substeps = substeps.clearInference(inferenceToClear))

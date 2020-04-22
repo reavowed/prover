@@ -18,13 +18,13 @@ case class DisplayShorthand(template: Template, format: Format.Explicit, conditi
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = template.referencedDefinitions.map(_.associatedChapterEntry)
 
-  override def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): DisplayShorthand = {
     DisplayShorthand(
-      template.replaceDefinition(oldDefinition, newDefinition),
+      template.replaceDefinitions(expressionDefinitionReplacements),
       format,
       conditions)
   }

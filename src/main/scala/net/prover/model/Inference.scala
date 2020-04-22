@@ -118,12 +118,9 @@ object Inference {
   }
 
   case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement, additionalVariableNames: Seq[String]) extends Inference {
-    def replaceDefinition(
-      oldDefinition: ExpressionDefinition,
-      newDefinition: ExpressionDefinition
-    ): Summary = {
-      val newPremises = premises.map(_.replaceDefinition(oldDefinition, newDefinition))
-      val newConclusion = conclusion.replaceDefinition(oldDefinition, newDefinition)
+    def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Summary = {
+      val newPremises = premises.map(_.replaceDefinitions(expressionDefinitionReplacements))
+      val newConclusion = conclusion.replaceDefinitions(expressionDefinitionReplacements)
       Summary(
         name,
         Inference.calculateHash(newPremises, newConclusion),

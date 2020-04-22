@@ -42,9 +42,9 @@ case class TermDefinitionEntry(
       (if (disambiguatorAdders.nonEmpty) Seq("disambiguatorAdders " + disambiguatorAdders.serialized) else Nil)
     ).indent
 
-  override def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): TermDefinitionEntry = {
     TermDefinitionEntry(
@@ -54,11 +54,11 @@ case class TermDefinitionEntry(
       disambiguator,
       explicitName,
       format,
-      premises.map(_.replaceDefinition(oldDefinition, newDefinition)),
-      definitionPredicate.replaceDefinition(oldDefinition, newDefinition),
+      premises.map(_.replaceDefinitions(expressionDefinitionReplacements)),
+      definitionPredicate.replaceDefinitions(expressionDefinitionReplacements),
       shorthand,
       attributes,
-      disambiguatorAdders.map(_.replaceDefinition(oldDefinition, newDefinition)))
+      disambiguatorAdders.map(_.replaceDefinitions(expressionDefinitionReplacements)))
   }
 }
 

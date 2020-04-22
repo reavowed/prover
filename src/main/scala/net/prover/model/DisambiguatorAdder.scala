@@ -4,11 +4,8 @@ import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.{Template, Term}
 
 case class DisambiguatorAdder(template: Template, disambiguator: String) {
-  def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition
-  ): DisambiguatorAdder = {
-    DisambiguatorAdder(template.replaceDefinition(oldDefinition, newDefinition), disambiguator)
+  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): DisambiguatorAdder = {
+    DisambiguatorAdder(template.replaceDefinitions(expressionDefinitionReplacements), disambiguator)
   }
   def serialized: String = template.serialized + " " + disambiguator
 }

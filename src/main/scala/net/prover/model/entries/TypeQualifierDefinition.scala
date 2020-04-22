@@ -41,17 +41,17 @@ case class TypeQualifierDefinition(
       Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
     ).indent
 
-  override def replaceDefinition(
-    oldDefinition: ExpressionDefinition,
-    newDefinition: ExpressionDefinition,
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): TypeQualifierDefinition = {
     TypeQualifierDefinition(
       symbol,
-      entryContext.typeDefinitions.find(_.symbol == parentType.symbol).get,
+      entryReplacements(parentType).asInstanceOf[TypeDefinition],
       qualifier,
       explicitName,
-      definingStatement.replaceDefinition(oldDefinition, newDefinition),
+      definingStatement.replaceDefinitions(expressionDefinitionReplacements),
       entryContext.conjunctionDefinitionOption.get)
   }
 }

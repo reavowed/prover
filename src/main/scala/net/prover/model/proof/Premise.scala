@@ -15,7 +15,7 @@ sealed trait Premise {
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Premise] = {
     statement.removeExternalParameters(numberOfParametersToRemove, internalDepth).map(Pending)
   }
-  def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Premise
+  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Premise
   def toPending: Pending = Pending(statement)
   def isComplete: Boolean
 }
@@ -70,8 +70,8 @@ object Premise {
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Pending = {
       copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
     }
-    def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Pending = {
-      Pending(statement.replaceDefinition(oldDefinition, newDefinition))
+    def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Pending = {
+      Pending(statement.replaceDefinitions(expressionDefinitionReplacements))
     }
     override def isComplete: Boolean = false
   }
@@ -83,9 +83,9 @@ object Premise {
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Given = {
       copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
     }
-    def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Given = {
+    def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Given = {
       Given(
-        statement.replaceDefinition(oldDefinition, newDefinition),
+        statement.replaceDefinitions(expressionDefinitionReplacements),
         referencedLine)
     }
     override def isComplete: Boolean = true
@@ -101,12 +101,12 @@ object Premise {
         statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth),
         substitutions = substitutions.insertExternalParameters(numberOfParametersToInsert, internalDepth))
     }
-    def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Simplification = {
+    def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Simplification = {
       Simplification(
-        statement.replaceDefinition(oldDefinition, newDefinition),
-        premise.replaceDefinition(oldDefinition, newDefinition).asInstanceOf[Premise.SingleLinePremise],
-        inference.replaceDefinition(oldDefinition, newDefinition),
-        substitutions.replaceDefinition(oldDefinition, newDefinition),
+        statement.replaceDefinitions(expressionDefinitionReplacements),
+        premise.replaceDefinitions(expressionDefinitionReplacements).asInstanceOf[Premise.SingleLinePremise],
+        inference.replaceDefinitions(expressionDefinitionReplacements),
+        substitutions.replaceDefinitions(expressionDefinitionReplacements),
         path)
     }
     override def isComplete: Boolean = premise.isComplete

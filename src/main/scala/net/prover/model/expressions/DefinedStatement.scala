@@ -20,10 +20,10 @@ case class DefinedStatement(
   override def updateBoundVariableNames(newBoundVariableNames: Seq[String]): DefinedStatement = {
     DefinedStatement(components, definition)(newBoundVariableNames)
   }
-  override def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): DefinedStatement = {
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): DefinedStatement = {
     DefinedStatement(
-      components.map(_.replaceDefinition(oldDefinition, newDefinition)),
-      if (definition == oldDefinition) newDefinition.asInstanceOf[StatementDefinition] else definition
+      components.map(_.replaceDefinitions(expressionDefinitionReplacements)),
+      expressionDefinitionReplacements(definition).asInstanceOf[StatementDefinition]
     )(boundVariableNames)
   }
 }

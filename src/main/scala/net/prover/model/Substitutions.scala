@@ -24,10 +24,10 @@ case class Substitutions(
       newTerms <- terms.mapValues(_.optionMapRight(_.removeExternalParameters(numberOfParametersToRemove, internalDepth))).traverseOption
     } yield Substitutions(newStatements, newTerms)
   }
-  def replaceDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Substitutions = {
+  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Substitutions = {
     Substitutions(
-      statements.mapValues(_.mapRight(_.replaceDefinition(oldDefinition, newDefinition))),
-      terms.mapValues(_.mapRight(_.replaceDefinition(oldDefinition, newDefinition))))
+      statements.mapValues(_.mapRight(_.replaceDefinitions(expressionDefinitionReplacements))),
+      terms.mapValues(_.mapRight(_.replaceDefinitions(expressionDefinitionReplacements))))
   }
 }
 
