@@ -92,6 +92,7 @@ class BookRepository {
   }
 
   private def writeBookAndChapterFiles(book: Book): Unit = {
+    Files.createDirectories(getBookPath(book.title).getParent)
     val files = FilePathAndContents(getBookPath(book.title), () => book.serialized) +:
       book.chapters.mapWithIndex((chapter, index) => FilePathAndContents(getChapterPath(book.title, chapter.title, index), () => chapter.serialized ))
     files.foreach(_.write())
