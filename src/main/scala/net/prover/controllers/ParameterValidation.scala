@@ -3,7 +3,9 @@ package net.prover.controllers
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.Qualifier
+import net.prover.model.definitions.{Qualifier, TermListAdapter}
+import net.prover.model.entries.TypeDefinition
+import net.prover.model.expressions.Term
 
 import scala.util.{Failure, Success, Try}
 
@@ -52,6 +54,18 @@ trait ParameterValidation {
         Success(None)
       case _ =>
         Failure(BadRequestException("Both format and term names must be provided for qualifier"))
+    }
+  }
+  def getOptionalAdapter(termNamesText: String, possibleSerializedTemplates: String, qualifierTermNames: Seq[String])(implicit entryContext: EntryContext): Try[Option[TermListAdapter]] = {
+    getOptionalString(possibleSerializedTemplates) match {
+      case Some(serializedTemplates) =>
+        val termNames = getWords(termNamesText)
+        implicit val epc = ExpressionParsingContext.outsideProof(entryContext, Nil).addInitialParameters(termNames)
+        for {
+          templates <- (0 until qualifierTermNames.length).map(_ => Term.parser).traverse.parseFromString(serializedTemplates, "templates").recoverWithBadRequest
+        } yield Some(TermListAdapter(termNames, templates))
+      case None =>
+        Success(None)
     }
   }
 }

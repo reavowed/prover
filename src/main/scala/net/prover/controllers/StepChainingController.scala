@@ -287,7 +287,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     }
     def forRelation(relation: BinaryRelation)(implicit stepProvingContext: StepProvingContext): Try[Seq[(String, String)]] = {
       Success(
-        stepProvingContext.provingContext.equalityOption.map { e => Seq((e.relation.symbol, relation.symbol), (relation.symbol, e.relation.symbol))}.getOrElse(Nil) ++
+        stepProvingContext.provingContext.equalityOption.filter(_.relation != relation).map { e => Seq((e.relation.symbol, relation.symbol), (relation.symbol, e.relation.symbol))}.getOrElse(Nil) ++
           stepProvingContext.provingContext.transitivities.filter(_.resultJoiner == relation).map(t => (t.firstPremiseJoiner.symbol, t.secondPremiseJoiner.symbol)))
     }
 

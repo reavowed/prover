@@ -16,6 +16,12 @@ case class ExpressionParsingContext(
     else
       this
   }
+  def addInitialParameters(parameterNames: Seq[String]): ExpressionParsingContext = {
+    if (parameterNames.nonEmpty)
+      copy(parameterLists = parameterNames.zipWithIndex +: parameterLists)
+    else
+      this
+  }
   def addInitialParameter(parameter: String): ExpressionParsingContext = {
     copy(parameterLists = Seq((parameter, 0)) +: parameterLists)
   }

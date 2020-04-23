@@ -320,12 +320,14 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         requiredParentQualifier <- getOptionalString(newPropertyDefinition.requiredParentQualifier)
           .map(qualifierSymbol => entryContext.qualifiersByType(parentType.symbol).find(_.symbol == qualifierSymbol).orBadRequest(s"Unknown qualifier '$qualifierSymbol' on type '${parentType.symbol}''"))
           .swap
+        adapter <- getOptionalAdapter(newPropertyDefinition.ownTermNames, newPropertyDefinition.parentTerms, (requiredParentQualifier.map(_.qualifier) orElse parentType.qualifier).termNames)
         definingStatement <- Statement.parser.parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newPropertyDefinition = PropertyDefinitionOnType(
           symbol,
           parentType,
           requiredParentQualifier,
+          adapter,
           name,
           definingStatement,
           conjunctionDefinition)
@@ -484,7 +486,9 @@ object ChapterController {
     parentType: String,
     name: String,
     definingStatement: String,
-    requiredParentQualifier: String)
+    requiredParentQualifier: String,
+    ownTermNames: String,
+    parentTerms: String)
   case class NewStandalonePropertyDefinitionModel(
     symbol: String,
     defaultTermName: String,
