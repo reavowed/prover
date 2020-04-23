@@ -15,7 +15,7 @@ export function TermDefinition({definition: definitionJson, definitions, typeDef
   const equality = _.find(entryContext.definitions, d => _.includes(d.attributes, "equality"));
   const result = (equality && definition.definingStatement instanceof DefinedExpression && definition.definingStatement.definition === equality && definition.definingStatement.components[0].serialize() === definition.defaultValue.serialize()) ?
     <><CopiableExpression expression={definition.defaultValue}/> is defined to be equal to <CopiableExpression expression={definition.definingStatement.components[1]}/></> :
-    <><CopiableExpression expression={definition.defaultValue}/> is defined such that <CopiableExpression expression={definition.definingStatement}/></>;
+    <><CopiableExpression expression={definition.defaultValue}/> is defined such that <CopiableExpression expression={definition.definingStatement} splitConjunction /></>;
 
   return <DisplayContext.Provider value={DisplayContext.forExpressionDefinition(definition, entryContext)}>
     <ExpressionDefinition title="Term Definition" definition={definition} entryContext={entryContext} parser={parser} hasDisambiguator {...otherProps}>

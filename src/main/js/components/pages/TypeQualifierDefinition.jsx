@@ -19,7 +19,7 @@ export function TypeQualifierDefinition({definition: definitionJson, definitions
       <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
         <NavLinks previous={previous} next={next} />
         <h3>{definition.title.capitalize()}</h3>
-        {definition.parentType.article.capitalize()} {definition.parentType.name} {formatHtml(definition.qualifier.format.baseFormatString, s => replacePlaceholders(s, definition.qualifier.termNames))} is a {definition.parentType.name} {definition.defaultTermName} such that <CopiableExpression expression={definition.definingStatement}/>.
+        {definition.parentType.article.capitalize()} {definition.parentType.name} {formatHtml(definition.qualifier.format.baseFormatString, s => replacePlaceholders(s, definition.qualifier.termNames))} is a {definition.parentType.name} {definition.parentType.defaultTermName} such that <CopiableExpression expression={definition.definingStatement} splitConjunction />.
 
         <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.constructionInference.id} title="Construction" />
         <Usages.ForInference usages={usages} inferenceId={definition.statementDefinition.deconstructionInference.id} title="Deconstruction" />

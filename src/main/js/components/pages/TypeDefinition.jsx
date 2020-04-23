@@ -37,7 +37,7 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
       <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
         <NavLinks previous={previous} next={next} />
         <h3>{definition.title.capitalize()}</h3>
-        {definition.defaultTermName} is {definition.article} {definition.name} {definition.qualifier && formatHtml(definition.qualifier.format.baseFormatString, s => replacePlaceholders(s, definition.qualifier.termNames))} if <CopiableExpression expression={definition.definingStatement}/>.
+        {definition.defaultTermName} is {definition.article} {definition.name} {definition.qualifier && formatHtml(definition.qualifier.format.baseFormatString, s => replacePlaceholders(s, definition.qualifier.termNames))} if <CopiableExpression expression={definition.definingStatement} splitConjunction />.
         <hr/>
         <EditableProperty label="Symbol" initialValue={definition.symbol} onSave={saveSymbol} />
         <EditableProperty label="Explicit Name" initialValue={definition.explicitName} onSave={saveName} />
