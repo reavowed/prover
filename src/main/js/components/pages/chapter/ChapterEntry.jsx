@@ -87,7 +87,7 @@ export default function ChapterEntry({entry}) {
       const chapterContext = useContext(ChapterContext);
       return <p key={entry.url}>
         {chapterContext.editing && <span className="float-right" style={{marginRight: "11px"}}><DeleteEntryButton url={entry.url} /></span>}
-        {entry.text}
+        {formatHtml(entry.text)}
       </p>;
     case "placeholder":
       return <React.Fragment key={entry.url}/>;
