@@ -701,7 +701,14 @@ conclusion ∧ ∧ function f functionFrom f product equivalenceQuotient A R equ
         }
       }
     }
-    target ∧ function f functionFrom f product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S
+    elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+      prove ∧ ⊆ f product product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S ∀ x → ∈ $0 product equivalenceQuotient A R equivalenceQuotient B S ∃! b ∈ orderedPair $$0 $0 f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ f product product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S, ∀ x → ∈ $0 product equivalenceQuotient A R equivalenceQuotient B S ∃! b ∈ orderedPair $$0 $0 f) () 0.0 0.1
+      elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+        prove ↔ ∧ function f functionFrom f product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S ∧ ⊆ f product product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S ∀ x → ∈ $0 product equivalenceQuotient A R equivalenceQuotient B S ∃! b ∈ orderedPair $$0 $0 f 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b () (f, product equivalenceQuotient A R equivalenceQuotient B S, equivalenceQuotient product A B productRelation R S)
+        prove → ∧ ⊆ f product product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S ∀ x → ∈ $0 product equivalenceQuotient A R equivalenceQuotient B S ∃! b ∈ orderedPair $$0 $0 f ∧ function f functionFrom f product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∧ function f functionFrom f product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S, ∧ ⊆ f product product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S ∀ x → ∈ $0 product equivalenceQuotient A R equivalenceQuotient B S ∃! b ∈ orderedPair $$0 $0 f) () 0.2.1.0
+        prove ∧ function f functionFrom f product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ⊆ f product product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S ∀ x → ∈ $0 product equivalenceQuotient A R equivalenceQuotient B S ∃! b ∈ orderedPair $$0 $0 f, ∧ function f functionFrom f product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S) () 0.2.1.1 0.2.0
+      }
+    }
   }
   subproof (Value) {
     take a {
@@ -709,7 +716,12 @@ conclusion ∧ ∧ function f functionFrom f product equivalenceQuotient A R equ
         take b {
           assume ∈ $0 B {
             prove ∈ orderedPair orderedPair equivalenceClass $$0 R equivalenceClass $0 S equivalenceClass orderedPair $$0 $0 productRelation R S f cbf2541059df01c1bf172d18f9ee8e19b1e2e6c38a6617fb5d8b3f3e1a30d86d () (f, A, B, orderedPair orderedPair equivalenceClass $$$0 R equivalenceClass $$$1 S equivalenceClass orderedPair $$$0 $$$1 productRelation R S, $$0, $0) p2 1.0.0a 1.0.0.0.0a
-            target = apply f orderedPair equivalenceClass $$0 R equivalenceClass $0 S equivalenceClass orderedPair $$0 $0 productRelation R S
+            elided f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 {
+              prove ↔ ∈ orderedPair orderedPair equivalenceClass $$0 R equivalenceClass $0 S equivalenceClass orderedPair $$0 $0 productRelation R S f ∧ ∈ orderedPair equivalenceClass $$0 R equivalenceClass $0 S product equivalenceQuotient A R equivalenceQuotient B S = equivalenceClass orderedPair $$0 $0 productRelation R S apply f orderedPair equivalenceClass $$0 R equivalenceClass $0 S f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 () (f, product equivalenceQuotient A R equivalenceQuotient B S, equivalenceQuotient product A B productRelation R S, orderedPair equivalenceClass $$0 R equivalenceClass $0 S, equivalenceClass orderedPair $$0 $0 productRelation R S) 0
+              prove → ∈ orderedPair orderedPair equivalenceClass $$0 R equivalenceClass $0 S equivalenceClass orderedPair $$0 $0 productRelation R S f ∧ ∈ orderedPair equivalenceClass $$0 R equivalenceClass $0 S product equivalenceQuotient A R equivalenceQuotient B S = equivalenceClass orderedPair $$0 $0 productRelation R S apply f orderedPair equivalenceClass $$0 R equivalenceClass $0 S f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair orderedPair equivalenceClass $$0 R equivalenceClass $0 S equivalenceClass orderedPair $$0 $0 productRelation R S f, ∧ ∈ orderedPair equivalenceClass $$0 R equivalenceClass $0 S product equivalenceQuotient A R equivalenceQuotient B S = equivalenceClass orderedPair $$0 $0 productRelation R S apply f orderedPair equivalenceClass $$0 R equivalenceClass $0 S) () 1.0.0.0.0.1.0
+              prove ∧ ∈ orderedPair equivalenceClass $$0 R equivalenceClass $0 S product equivalenceQuotient A R equivalenceQuotient B S = equivalenceClass orderedPair $$0 $0 productRelation R S apply f orderedPair equivalenceClass $$0 R equivalenceClass $0 S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair orderedPair equivalenceClass $$0 R equivalenceClass $0 S equivalenceClass orderedPair $$0 $0 productRelation R S f, ∧ ∈ orderedPair equivalenceClass $$0 R equivalenceClass $0 S product equivalenceQuotient A R equivalenceQuotient B S = equivalenceClass orderedPair $$0 $0 productRelation R S apply f orderedPair equivalenceClass $$0 R equivalenceClass $0 S) () 1.0.0.0.0.1.1 1.0.0.0.0.0
+              prove = apply f orderedPair equivalenceClass $$0 R equivalenceClass $0 S equivalenceClass orderedPair $$0 $0 productRelation R S 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (equivalenceClass orderedPair $$0 $0 productRelation R S, apply f orderedPair equivalenceClass $$0 R equivalenceClass $0 S) 1.0.0.0.0.1.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            }
           }
         }
       }
@@ -808,16 +820,21 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product equivalenceQuotien
       }
     }
   }
-  target ∧ ∧ function quotientFunction f product A B C productRelation R S functionFrom quotientFunction f product A B C productRelation R S equivalenceQuotient product A B productRelation R S C ∀ x → ∈ $0 product A B = apply quotientFunction f product A B C productRelation R S equivalenceClass $0 productRelation R S apply f $0
+  prove ∧ ∧ function quotientFunction f product A B C productRelation R S functionFrom quotientFunction f product A B C productRelation R S equivalenceQuotient product A B productRelation R S C ∀ x → ∈ $0 product A B = apply quotientFunction f product A B C productRelation R S equivalenceClass $0 productRelation R S apply f $0 66ac34052d338fe20b5c28f66cabe8aa7ffbcadce310ae7bd7e25f18e668bb7b () (productRelation R S, product A B, f, C) 2 p2 3
   let i = $0 replacementSet2 a b product A B orderedPair orderedPair equivalenceClass $0 R equivalenceClass $1 S equivalenceClass orderedPair $0 $1 productRelation R S cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! g ∧ ∧ function $0 functionFrom $0 product equivalenceQuotient A R equivalenceQuotient B S C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S apply f orderedPair $$0 $0) (replacementSet2 a b product A B orderedPair orderedPair equivalenceClass $0 R equivalenceClass $1 S equivalenceClass orderedPair $0 $1 productRelation R S) {
-    target ∧ ∧ function $0 functionFrom $0 product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S equivalenceClass orderedPair $$0 $0 productRelation R S
-    target ∧ function ∘ quotientFunction f product A B C productRelation R S $0 functionFrom ∘ quotientFunction f product A B C productRelation R S $0 product equivalenceQuotient A R equivalenceQuotient B S C
+    prove ∧ ∧ function $0 functionFrom $0 product equivalenceQuotient A R equivalenceQuotient B S equivalenceQuotient product A B productRelation R S ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S equivalenceClass orderedPair $$0 $0 productRelation R S 7db0a53dc34487220e8b95f321e4d07caaac4666578d1db70e647c0cb24c9769 () (R, A, S, B, $0) p0 p1 5a
+    prove ∧ function ∘ quotientFunction f product A B C productRelation R S $0 functionFrom ∘ quotientFunction f product A B C productRelation R S $0 product equivalenceQuotient A R equivalenceQuotient B S C 86f85ac9c237a316476660ce03509ccb407b17e39e316b40b301906a5d1c46fe () ($0, product equivalenceQuotient A R equivalenceQuotient B S, equivalenceQuotient product A B productRelation R S, quotientFunction f product A B C productRelation R S, C) 5.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 4 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
     subproof (Existence) {
       take a {
         assume ∈ $0 A {
           take b {
             assume ∈ $0 B {
-              target = apply ∘ quotientFunction f product A B C productRelation R S $$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S apply quotientFunction f product A B C productRelation R S apply $$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S
+              elided ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f {
+                prove ∈ equivalenceClass $$0 R equivalenceQuotient A R 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 () (R, A, $$0) p0 5.2.0.0a
+                prove ∈ equivalenceClass $0 S equivalenceQuotient B S 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 () (S, B, $0) p1 5.2.0.0.0.0a
+                prove ∈ orderedPair equivalenceClass $$0 R equivalenceClass $0 S product equivalenceQuotient A R equivalenceQuotient B S 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (equivalenceClass $$0 R, equivalenceQuotient A R, equivalenceClass $0 S, equivalenceQuotient B S) 5.2.0.0.0.0.0.0 5.2.0.0.0.0.0.1
+                prove = apply ∘ quotientFunction f product A B C productRelation R S $$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S apply quotientFunction f product A B C productRelation R S apply $$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f () ($$$0, product equivalenceQuotient A R equivalenceQuotient B S, equivalenceQuotient product A B productRelation R S, quotientFunction f product A B C productRelation R S, C, orderedPair equivalenceClass $$0 R equivalenceClass $0 S) 5.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 4 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 5.2.0.0.0.0.0.2
+              }
               elided (Extracted) {
                 elided (Extracted) {
                   prove → ∈ $$0 A ∀ b → ∈ $0 B = apply $$$$0 orderedPair equivalenceClass $$$0 R equivalenceClass $0 S equivalenceClass orderedPair $$$0 $0 productRelation R S 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ b → ∈ $0 B = apply $$$$0 orderedPair equivalenceClass $$$$$0 R equivalenceClass $0 S equivalenceClass orderedPair $$$$$0 $0 productRelation R S) ($$0) 5.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
@@ -896,7 +913,13 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product equivalenceQuotien
                         prove = apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair $$$$0 $$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S, apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair $$$$0 equivalenceClass $0 S, apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair $$$$0 $$$0) 5.3.0.0.0.0.0.0.2.0.7.0 5.3.0.0.0.0.0.0.2.0.7.1
                       }
                       prove = apply $$$$$0 orderedPair $$$$0 $$$0 apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair $$$$0 $$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$$$0 orderedPair $$$$0 $$$0, apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S, apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair $$$$0 $$$0) 5.3.0.0.0.0.0.0.2.0.6 5.3.0.0.0.0.0.0.2.0.7
-                      target = apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair $$$$0 $$$0 apply ∘ quotientFunction f product A B C productRelation R S $$$$$$0 orderedPair $$$$0 $$$0
+                      elided ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f {
+                        prove ∈ orderedPair $$$$0 $$$0 product equivalenceQuotient A R equivalenceQuotient B S 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$$$0, equivalenceQuotient A R, $$$0, equivalenceQuotient B S) 5.3.0.0.0.0a 5.3.0.0.0.0.0.0a
+                        elided ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f {
+                          prove = apply ∘ quotientFunction f product A B C productRelation R S $$$$$$0 orderedPair $$$$0 $$$0 apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair $$$$0 $$$0 ea1872eb3d6175ce28ea9f255c8152ddd48e6333bcfc1f198c55a8432ba7af6f () ($$$$$$0, product equivalenceQuotient A R equivalenceQuotient B S, equivalenceQuotient product A B productRelation R S, quotientFunction f product A B C productRelation R S, C, orderedPair $$$$0 $$$0) 5.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 4 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 5.3.0.0.0.0.0.0.2.0.9.0
+                          prove = apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair $$$$0 $$$0 apply ∘ quotientFunction f product A B C productRelation R S $$$$$$0 orderedPair $$$$0 $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ∘ quotientFunction f product A B C productRelation R S $$$$$$0 orderedPair $$$$0 $$$0, apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair $$$$0 $$$0) 5.3.0.0.0.0.0.0.2.0.9.1.0
+                        }
+                      }
                       prove = apply $$$$$0 orderedPair $$$$0 $$$0 apply ∘ quotientFunction f product A B C productRelation R S $$$$$$0 orderedPair $$$$0 $$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply $$$$$0 orderedPair $$$$0 $$$0, apply quotientFunction f product A B C productRelation R S apply $$$$$$0 orderedPair $$$$0 $$$0, apply ∘ quotientFunction f product A B C productRelation R S $$$$$$0 orderedPair $$$$0 $$$0) 5.3.0.0.0.0.0.0.2.0.8 5.3.0.0.0.0.0.0.2.0.9
                     } 5.3.0.0.0.0.0.0.1
                   } 5.3.0.0.0.0.0.0.0
@@ -904,7 +927,7 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product equivalenceQuotien
               }
             }
           }
-          target = $0 ∘ quotientFunction f product A B C productRelation R S $$0
+          prove = $0 ∘ quotientFunction f product A B C productRelation R S $$0 0162df7cab2810e4a56e7ab54b639fcdcaa286aef0c6e1c0613c900e08b52251 () ($0, equivalenceQuotient A R, equivalenceQuotient B S, C, ∘ quotientFunction f product A B C productRelation R S $$0) 5.3.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 5.1 5.3.0.0.0
         }
       }
     }
@@ -1228,7 +1251,7 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product equivalenceQuotien
       }
     }
   }
-  target ∃! g ∧ ∧ function $0 functionFrom $0 product equivalenceQuotient product A B R equivalenceQuotient product C D S E ∀ x → ∈ $0 product A B ∀ y → ∈ $0 product C D = apply $$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S apply f orderedPair $$0 $0
+  prove ∃! g ∧ ∧ function $0 functionFrom $0 product equivalenceQuotient product A B R equivalenceQuotient product C D S E ∀ x → ∈ $0 product A B ∀ y → ∈ $0 product C D = apply $$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S apply f orderedPair $$0 $0 acbe3e38d6a3f5ec3ae999738c5ec48ca8a734fc973caac76ff323e13c7c8a28 () (R, product A B, S, product C D, f, E) p0 p1 p2 0
   subproof (Conditions are equivalent) {
     take g {
       assume ∧ function $0 functionFrom $0 product equivalenceQuotient product A B R equivalenceQuotient product C D S E {

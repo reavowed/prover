@@ -50,7 +50,7 @@ conclusion ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFu
         }
       }
     }
-    target ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ
+    prove ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ 85ce16d136ee19597f2883b235610673f4951cc0c051d363caafda809339b3bb () (⍳_ℚ, ℤ, equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ, ℚ) 0 1.0
   }
   subproof (Injective) {
     take a {
@@ -126,7 +126,36 @@ conclusion ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFu
         }
       }
     }
-    target injectiveFunction ⍳_ℚ
+    elided b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 {
+      elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+        elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+          elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+              prove functionFrom ⍳_ℚ ℤ ℚ df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () (⍳_ℚ, ℤ, ℚ) 2.1.0.0.0.0
+              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 2.1.0.0.0.1.0
+              prove = ℤ domain ⍳_ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℚ, ℤ) 2.1.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            }
+          }
+          prove ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 ℤ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ x → ∈ $0 $$0 ∀ y → ∈ $0 ℤ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) (ℤ, domain ⍳_ℚ) 2.1.0.0.0 2.0
+        }
+        elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+          elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
+              prove functionFrom ⍳_ℚ ℤ ℚ df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () (⍳_ℚ, ℤ, ℚ) 2.1.0.1.0.0
+              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 2.1.0.1.0.1.0
+              prove = ℤ domain ⍳_ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℚ, ℤ) 2.1.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+            }
+          }
+          prove ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 $$$0 → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) (ℤ, domain ⍳_ℚ) 2.1.0.1.0 2.1.0.0
+        }
+      }
+      elided b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 {
+        prove ∧ function ⍳_ℚ ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function ⍳_ℚ, ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) () 1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 2.1.0
+        prove injectiveFunction ⍳_ℚ b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 () (⍳_ℚ) 2.1.1.0
+      }
+    }
   }
   subproof (Function value) {
     take a {

@@ -29,16 +29,6 @@ conclusion ¬ = successor n 0ℕ
   }
 }
 
-theorem 0 Is Not the Successor of Any Natural Number
-conclusion ¬ = 0ℕ successor n
-{
-  assume = 0ℕ successor n {
-    prove = successor n 0ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (0ℕ, successor n) 0a
-  }
-  prove ¬ = successor n 0ℕ 81298c598153fc39f440fa028d1163b63c24affc60d82e220f385b6b0bc1da6d () (n)
-  prove ¬ = 0ℕ successor n 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= 0ℕ successor n, = successor n 0ℕ) () 0 1
-}
-
 term 1 ()
   disambiguator ℕ
   (= $0 successor 0ℕ)

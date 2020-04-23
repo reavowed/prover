@@ -17,7 +17,48 @@ conclusion ∧ ∧ function +ℚ functionFrom +ℚ product ℚ ℚ ℚ ∀ a →
       prove = functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $0 $3 apply ×ℤ orderedPair $1 $2 apply ×ℤ orderedPair $1 $3 ~_ℚ $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($0, functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $0 $3 apply ×ℤ orderedPair $1 $2 apply ×ℤ orderedPair $1 $3 ~_ℚ) 0a
       prove = +ℚ quadrupleQuotientFunction $0 ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= +ℚ quadrupleQuotientFunction $$0 ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ) (functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $0 $3 apply ×ℤ orderedPair $1 $2 apply ×ℤ orderedPair $1 $3 ~_ℚ, $0) 0.1.0 0.0
     }
-    target ∧ function $0 functionFrom $0 product product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ
+    elided 64c83c0e6b6a054deb43bf36fef47f6711a2be19649f45911745f93525645063 {
+      elided dc9f819c99c206921f90a3ce2cf0c91e1c6992e394200bcbf791c8519db369fa {
+        take a {
+          assume ∈ $0 ℤ {
+            take b {
+              assume ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ {
+                take c {
+                  assume ∈ $0 ℤ {
+                    take d {
+                      assume ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ {
+                        elided dc9f819c99c206921f90a3ce2cf0c91e1c6992e394200bcbf791c8519db369fa {
+                          elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+                            prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
+                            prove ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$0 ℤ ¬ ∈ $$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($0) 0.2.0.0.0.0.0.0.0.0.0.0.0.0
+                            prove → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.2.0.0.0.0.0.0.0.0.0.0.0.1
+                            prove ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.2.0.0.0.0.0.0.0.0.0.0.0.2 0.2.0.0.0.0.0.0.0.0.0a
+                            prove ∈ $0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 ℤ, ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.2.0.0.0.0.0.0.0.0.0.0.0.3
+                          }
+                          prove ∈ apply ×ℤ orderedPair $$$$0 $0 ℤ 9f3fe6beb4788498d913f6cdc096e37e5e20bba5189f0d002030437924504a09 () ($$$$0, $0) 0.2.0.0.0a 0.2.0.0.0.0.0.0.0.0.0.0.0
+                          elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+                            prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
+                            prove ↔ ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$0 ℤ ¬ ∈ $$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($$$0) 0.2.0.0.0.0.0.0.0.0.0.0.2.0
+                            prove → ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ) () 0.2.0.0.0.0.0.0.0.0.0.0.2.1
+                            prove ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ) () 0.2.0.0.0.0.0.0.0.0.0.0.2.2 0.2.0.0.0.0.0a
+                            prove ∈ $$$0 ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$0 ℤ, ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ) () 0.2.0.0.0.0.0.0.0.0.0.0.2.3
+                          }
+                          prove ∈ apply ×ℤ orderedPair $$$0 $$0 ℤ 9f3fe6beb4788498d913f6cdc096e37e5e20bba5189f0d002030437924504a09 () ($$$0, $$0) 0.2.0.0.0.0.0.0.0.0.0.0.2 0.2.0.0.0.0.0.0.0a
+                          prove ∈ apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 ℤ 5512daa31516b2aa12f8c3bbb20fc5ea9c9feb1136d62438490244a013a1be54 () (apply ×ℤ orderedPair $$$$0 $0, apply ×ℤ orderedPair $$$0 $$0) 0.2.0.0.0.0.0.0.0.0.0.0.1 0.2.0.0.0.0.0.0.0.0.0.0.3
+                          prove ∈ apply ×ℤ orderedPair $$$0 $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ae3b4505799f21b10bc38a135ca86e6978740d718d02ffc0ad5cc29588fa8b25 () ($$$0, $0) 0.2.0.0.0.0.0a 0.2.0.0.0.0.0.0.0.0.0a
+                          prove ∈ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ ℚ dc9f819c99c206921f90a3ce2cf0c91e1c6992e394200bcbf791c8519db369fa () (apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0, apply ×ℤ orderedPair $$$0 $0) 0.2.0.0.0.0.0.0.0.0.0.0.4 0.2.0.0.0.0.0.0.0.0.0.0.5
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      prove ∧ function $0 functionFrom $0 product product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ 64c83c0e6b6a054deb43bf36fef47f6711a2be19649f45911745f93525645063 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ, equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$3 apply ×ℤ orderedPair $$1 $$2 apply ×ℤ orderedPair $$1 $$3 ~_ℚ, ℚ) 0a 0.2.0
+    }
     subproof (+_ℚ Is Well-Defined) {
       take a_1 {
         assume ∈ $0 ℤ {
@@ -719,7 +760,10 @@ conclusion ∧ ∧ function +ℚ functionFrom +ℚ product ℚ ℚ ℚ ∀ a →
         }
       }
     }
-    target ∧ ∧ function quadrupleQuotientFunction $0 ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ functionFrom quadrupleQuotientFunction $0 ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ product equivalenceQuotient product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ~_ℚ equivalenceQuotient product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ~_ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply quadrupleQuotientFunction $$$$$0 ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ apply $$$$$0 orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0
+    elided 79a2426e1e2caf50315ec5beaf0057bb573f16749fec7b3d8a0c5252e51cb44e {
+      prove equivalenceRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ c0bc32c877360e5315af8a448d415d129cf44fa28fa06e859a1fdc3b5663fd66 () ()
+      prove ∧ ∧ function quadrupleQuotientFunction $0 ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ functionFrom quadrupleQuotientFunction $0 ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ product equivalenceQuotient product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ~_ℚ equivalenceQuotient product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ~_ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply quadrupleQuotientFunction $$$$$0 ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ apply $$$$$0 orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 79a2426e1e2caf50315ec5beaf0057bb573f16749fec7b3d8a0c5252e51cb44e () (~_ℚ, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ, ~_ℚ, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ, $0, ℚ) 0.4.0 0.4.0 0.2 0.3
+    }
     elided (Rewritten) {
       elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
         prove = quadrupleQuotientFunction $0 ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ +ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (+ℚ, quadrupleQuotientFunction $0 ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ) 0.1

@@ -229,7 +229,7 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 equivalenceQuotient A ≈ 
       take a {
         assume ∈ $0 A {
           prove ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ 162970f5205391da77cbba8f8ae8166ee6353578788592b7ff208f6e815e5844 () (≈, A, $0) p0 0.0.0.0a
-          target ∈ apply f $0 B
+          prove ∈ apply f $0 B bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f () (f, A, B, $0) p1 0.0.0.0a
           prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 product equivalenceQuotient A ≈ B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (equivalenceClass $0 ≈, equivalenceQuotient A ≈, apply f $0, B) 0.0.0.0.0 0.0.0.0.1
         }
       }
@@ -277,13 +277,25 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 equivalenceQuotient A ≈ 
           } 0.0.2.0.0
         }
       }
-      target ∧ function $0 functionFrom $0 equivalenceQuotient A ≈ B
+      elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+        prove ∧ ⊆ $0 product equivalenceQuotient A ≈ B ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! b ∈ orderedPair $$0 $0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (⊆ $0 product equivalenceQuotient A ≈ B, ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.1 0.0.2
+        elided 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b {
+          prove ↔ ∧ function $0 functionFrom $0 equivalenceQuotient A ≈ B ∧ ⊆ $0 product equivalenceQuotient A ≈ B ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! b ∈ orderedPair $$0 $0 $$$0 589fa78b93020335fe2d27061fc8e8aab24f522fd8e992c0cd3601649119cf8b () ($0, equivalenceQuotient A ≈, B)
+          prove → ∧ ⊆ $0 product equivalenceQuotient A ≈ B ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! b ∈ orderedPair $$0 $0 $$$0 ∧ function $0 functionFrom $0 equivalenceQuotient A ≈ B 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∧ function $0 functionFrom $0 equivalenceQuotient A ≈ B, ∧ ⊆ $0 product equivalenceQuotient A ≈ B ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.3.1.0
+          prove ∧ function $0 functionFrom $0 equivalenceQuotient A ≈ B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ⊆ $0 product equivalenceQuotient A ≈ B ∀ x → ∈ $0 equivalenceQuotient A ≈ ∃! b ∈ orderedPair $$0 $0 $$$0, ∧ function $0 functionFrom $0 equivalenceQuotient A ≈ B) () 0.0.3.1.1 0.0.3.0
+        }
+      }
     }
     subproof (f_≈ satisfies condition) {
       take a {
         assume ∈ $0 A {
           prove ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0 d42cfebeb1022fa5238842f456e23dc6d24efd2c1d6cf408fb0b485cd416fa2b () ($$0, A, orderedPair equivalenceClass $$$0 ≈ apply f $$$0, $0) 0a 0.1.0.0a
-          target = apply $$0 equivalenceClass $0 ≈ apply f $0
+          elided f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 {
+            prove ↔ ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0 ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈ f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 () ($$0, equivalenceQuotient A ≈, B, equivalenceClass $0 ≈, apply f $0) 0.0
+            prove → ∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0 ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0, ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈) () 0.1.0.0.1.0
+            prove ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair equivalenceClass $0 ≈ apply f $0 $$0, ∧ ∈ equivalenceClass $0 ≈ equivalenceQuotient A ≈ = apply f $0 apply $$0 equivalenceClass $0 ≈) () 0.1.0.0.1.1 0.1.0.0.0
+            prove = apply $$0 equivalenceClass $0 ≈ apply f $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f $0, apply $$0 equivalenceClass $0 ≈) 0.1.0.0.1.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          }
         }
       }
     }
@@ -311,7 +323,7 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 equivalenceQuotient A ≈ 
               } 0.2.0.0.0.0.0
             }
           }
-          target = $0 $$0
+          prove = $0 $$0 21a5e7500bcdfc2ce3f68a9fd8046cfd8faeaf4691ec3c48c11087835d0cd6f9 () ($0, equivalenceQuotient A ≈, B, $$0) 0.2.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0 0.2.0.0.0
         }
       }
     }

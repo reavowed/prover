@@ -6,13 +6,25 @@ conclusion ∃! f ∧ ∧ function $0 functionFrom $0 product ℕ ℕ ℕ ∧ �
   take n {
     assume ∈ $0 ℕ {
       let f_n = $0 functionMap m ℕ apply +ℕ orderedPair $0 $$$0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃! x ∧ ∧ function $0 functionFrom $0 ℕ ℕ ∧ = apply $0 0ℕ 0ℕ ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply +ℕ orderedPair apply $$0 $0 $$$0) (functionMap m ℕ apply +ℕ orderedPair $0 $$0) {
-        target ∧ function $0 functionFrom $0 ℕ ℕ
-        target ∃! f ∧ ∧ function $0 functionFrom $0 ℕ ℕ ∧ = apply $0 0ℕ 0ℕ ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply $$$0 apply $$0 $0
+        elided 85ce16d136ee19597f2883b235610673f4951cc0c051d363caafda809339b3bb {
+          elided ffaa9112b15be990c70a4f2bd28b83133aa6d4814b345838993220a00ce6ed06 {
+            take a {
+              assume ∈ $0 ℕ {
+                prove ∈ apply +ℕ orderedPair $0 $$$0 ℕ ffaa9112b15be990c70a4f2bd28b83133aa6d4814b345838993220a00ce6ed06 () ($0, $$$0) 0.0.0.0.0.0.0a 0.0a
+              }
+            }
+          }
+          prove ∧ function $0 functionFrom $0 ℕ ℕ 85ce16d136ee19597f2883b235610673f4951cc0c051d363caafda809339b3bb () ($0, ℕ, apply +ℕ orderedPair $$$0 $$0, ℕ) 0.0.0a 0.0.0.0.0
+        }
+        elided ba552356e8f73078771a2db834b5e13396adeac1250ce1ee0e593a23ecd06b72 {
+          prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+          prove ∃! f ∧ ∧ function $0 functionFrom $0 ℕ ℕ ∧ = apply $0 0ℕ 0ℕ ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply $$$0 apply $$0 $0 ba552356e8f73078771a2db834b5e13396adeac1250ce1ee0e593a23ecd06b72 () ($0, ℕ, 0ℕ) 0.0.0.0 0.0.0.1.0
+        }
         take f {
           assume ∧ function $0 functionFrom $0 ℕ ℕ {
             take m {
               assume ∈ $0 ℕ {
-                target ∈ apply $$0 $0 ℕ
+                prove ∈ apply $$0 $0 ℕ bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f () ($$0, ℕ, ℕ, $0) 0.0.0.2.0a 0.0.0.2.0.0.0a
                 elided 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 {
                   prove ∀ a → ∈ $0 ℕ = apply $$$$0 $0 apply +ℕ orderedPair $0 $$$$$0 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 () ($$$0, ℕ, apply +ℕ orderedPair $$$$$0 $$$$0) 0.0.0a
                   prove → ∈ apply $$0 $0 ℕ = apply $$$0 apply $$0 $0 apply +ℕ orderedPair apply $$0 $0 $$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$0 ℕ = apply $$$0 $$$$$0 apply +ℕ orderedPair $$$$$0 $$$$0) (apply $$0 $0) 0.0.0.2.0.0.0.1.0
@@ -28,7 +40,7 @@ conclusion ∃! f ∧ ∧ function $0 functionFrom $0 product ℕ ℕ ℕ ∧ �
       }
     }
   }
-  target ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 apply +ℕ orderedPair apply $$$0 orderedPair $$0 $0 $$0
+  prove ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 apply +ℕ orderedPair apply $$$0 orderedPair $$0 $0 $$0 e900428b0db408c7bc4aaf91ead38169792d5c770c1ff6b8b1b06ee3c689d93b () (ℕ, 0ℕ, apply +ℕ orderedPair $1 $0) 0
 }
 
 term × ()
@@ -42,21 +54,17 @@ display apply ×ℕ orderedPair a b as (%0%1) requires-brackets
 
 write apply ×ℕ orderedPair a b as mulN
 
-theorem Natural Multiplication Is a Function
-conclusion ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ
-{
-  target ∧ ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0
-  prove ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ, ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0) () 0
-}
-
 theorem Multiplication Is Closed on the Natural Numbers
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∈ apply ×ℕ orderedPair n m ℕ
 {
-  target ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ
+  elided ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b {
+    prove ∧ ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0 ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b () ()
+    prove ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ, ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0) () 0.0
+  }
   prove ∈ orderedPair n m product ℕ ℕ 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () (n, ℕ, m, ℕ) p0 p1
-  target ∈ apply ×ℕ orderedPair n m ℕ
+  prove ∈ apply ×ℕ orderedPair n m ℕ bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f () (×ℕ, product ℕ ℕ, ℕ, orderedPair n m) 0 1
 }
 
 theorem Successor of Natural Multiplication (Right)
@@ -64,9 +72,13 @@ premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion = apply ×ℕ orderedPair n successor m apply +ℕ orderedPair apply ×ℕ orderedPair n m n
 {
-  target ∧ ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0
-  elided (Simplified) {
-    prove → ∈ n ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair n successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair n $0 n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0) (n) 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+  elided ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b {
+    prove ∧ ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0 ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b () ()
+    prove ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ, ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0) () 0.0
+    prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ, ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0) () 0.1
+  }
+  elided (Extracted) {
+    prove → ∈ n ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair n successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair n $0 n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0) (n) 0
     prove ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair n successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair n $0 n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair n successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair n $0 n) () 1.0 p0
     prove → ∈ m ℕ = apply ×ℕ orderedPair n successor m apply +ℕ orderedPair apply ×ℕ orderedPair n m n 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ = apply ×ℕ orderedPair n successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair n $0 n) (m) 1.1
     prove = apply ×ℕ orderedPair n successor m apply +ℕ orderedPair apply ×ℕ orderedPair n m n fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ m ℕ, = apply ×ℕ orderedPair n successor m apply +ℕ orderedPair apply ×ℕ orderedPair n m n) () 1.2 p1
@@ -77,8 +89,19 @@ theorem Absorber for Natural Multiplication
 premise ∈ n ℕ
 conclusion ∧ = apply ×ℕ orderedPair n 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ n 0ℕ
 {
-  target = apply ×ℕ orderedPair n 0ℕ 0ℕ
-  target = apply ×ℕ orderedPair 0ℕ 0ℕ 0ℕ
+  elided ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b {
+    prove ∧ ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0 ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b () ()
+    prove → ∈ n ℕ = apply ×ℕ orderedPair n 0ℕ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ) (n) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+    prove = apply ×ℕ orderedPair n 0ℕ 0ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ n ℕ, = apply ×ℕ orderedPair n 0ℕ 0ℕ) () 0.1 p0
+  }
+  elided ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b {
+    prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+    elided ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b {
+      prove ∧ ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0 ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b () ()
+      prove → ∈ 0ℕ ℕ = apply ×ℕ orderedPair 0ℕ 0ℕ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ) (0ℕ) 1.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+      prove = apply ×ℕ orderedPair 0ℕ 0ℕ 0ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0ℕ ℕ, = apply ×ℕ orderedPair 0ℕ 0ℕ 0ℕ) () 1.1.1 1.0
+    }
+  }
   take n {
     assume ∈ $0 ℕ {
       assume = apply ×ℕ orderedPair 0ℕ $0 0ℕ {

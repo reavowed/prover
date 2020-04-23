@@ -720,7 +720,27 @@ conclusion ↔ ∈ orderedPair a b <ℕ ∈ orderedPair apply ⍳_ℤ a apply �
     }
   }
   prove ↔ ∈ orderedPair a b <ℕ ∈ orderedPair equivalenceClass orderedPair a 0ℕ ~_ℤ equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair a b <ℕ, ∈ orderedPair apply +ℕ orderedPair a 0ℕ apply +ℕ orderedPair 0ℕ b <ℕ, ∈ orderedPair equivalenceClass orderedPair a 0ℕ ~_ℤ equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ) () 0 1
-  target ↔ ∈ orderedPair equivalenceClass orderedPair a 0ℕ ~_ℤ equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ ∈ orderedPair apply ⍳_ℤ a apply ⍳_ℤ b <ℤ
+  elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+    elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+      elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+        prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
+        prove → ∈ a ℕ = apply ⍳_ℤ a equivalenceClass orderedPair a 0ℕ ~_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) (a) 3.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove = apply ⍳_ℤ a equivalenceClass orderedPair a 0ℕ ~_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a ℕ, = apply ⍳_ℤ a equivalenceClass orderedPair a 0ℕ ~_ℤ) () 3.0.0.1 p0
+        prove = equivalenceClass orderedPair a 0ℕ ~_ℤ apply ⍳_ℤ a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℤ a, equivalenceClass orderedPair a 0ℕ ~_ℤ) 3.0.0.2
+      }
+      prove ↔ ∈ orderedPair equivalenceClass orderedPair a 0ℕ ~_ℤ equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ ∈ orderedPair apply ⍳_ℤ a equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ fdc63ea4bba256874a2511a985e1ee1580f52fc9863143c31dcabb6a8efc1f5d (∈ orderedPair $0 equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ) (equivalenceClass orderedPair a 0ℕ ~_ℤ, apply ⍳_ℤ a) 3.0.0
+    }
+    elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+      elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+        prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
+        prove → ∈ b ℕ = apply ⍳_ℤ b equivalenceClass orderedPair b 0ℕ ~_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) (b) 3.1.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove = apply ⍳_ℤ b equivalenceClass orderedPair b 0ℕ ~_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b ℕ, = apply ⍳_ℤ b equivalenceClass orderedPair b 0ℕ ~_ℤ) () 3.1.0.1 p1
+        prove = equivalenceClass orderedPair b 0ℕ ~_ℤ apply ⍳_ℤ b 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℤ b, equivalenceClass orderedPair b 0ℕ ~_ℤ) 3.1.0.2
+      }
+      prove ↔ ∈ orderedPair apply ⍳_ℤ a equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ ∈ orderedPair apply ⍳_ℤ a apply ⍳_ℤ b <ℤ fdc63ea4bba256874a2511a985e1ee1580f52fc9863143c31dcabb6a8efc1f5d (∈ orderedPair apply ⍳_ℤ a $0 <ℤ) (equivalenceClass orderedPair b 0ℕ ~_ℤ, apply ⍳_ℤ b) 3.1.0
+    }
+    prove ↔ ∈ orderedPair equivalenceClass orderedPair a 0ℕ ~_ℤ equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ ∈ orderedPair apply ⍳_ℤ a apply ⍳_ℤ b <ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair equivalenceClass orderedPair a 0ℕ ~_ℤ equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ, ∈ orderedPair apply ⍳_ℤ a equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ, ∈ orderedPair apply ⍳_ℤ a apply ⍳_ℤ b <ℤ) () 3.0 3.1
+  }
   prove ↔ ∈ orderedPair a b <ℕ ∈ orderedPair apply ⍳_ℤ a apply ⍳_ℤ b <ℤ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ orderedPair a b <ℕ, ∈ orderedPair equivalenceClass orderedPair a 0ℕ ~_ℤ equivalenceClass orderedPair b 0ℕ ~_ℤ <ℤ, ∈ orderedPair apply ⍳_ℤ a apply ⍳_ℤ b <ℤ) () 2 3
 }
 
@@ -1097,9 +1117,21 @@ conclusion = image ⍳_ℤ ℤ^≥
 {
   take x {
     assume ∈ $0 image ⍳_ℤ {
-      target ∃ a ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0
+      elided 7d288036ed2a37e18951a0a380c8a0b688a56d1ec51e2bcba9035657ace638e9 {
+        elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+          prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
+          prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0.0.0.0
+          prove ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ, injectiveFunction ⍳_ℤ) () 0.0.0.0.1
+        }
+        elided 7d288036ed2a37e18951a0a380c8a0b688a56d1ec51e2bcba9035657ace638e9 {
+          prove ∀ b ↔ ∈ $0 image ⍳_ℤ ∃ a ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 7d288036ed2a37e18951a0a380c8a0b688a56d1ec51e2bcba9035657ace638e9 () (⍳_ℤ, ℕ, ℤ) 0.0.0.0
+          prove ↔ ∈ $0 image ⍳_ℤ ∃ a ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 image ⍳_ℤ ∃ a ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0) ($0) 0.0.0.1.0
+          prove → ∈ $0 image ⍳_ℤ ∃ a ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 image ⍳_ℤ, ∃ a ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0) () 0.0.0.1.1
+          prove ∃ a ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 image ⍳_ℤ, ∃ a ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0) () 0.0.0.1.2 0.0a
+        }
+      }
       let a ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ = $0 apply ⍳_ℤ $$0, ∈ $0 ℤ^≥) () {
-        target ∈ apply ⍳_ℤ $0 ℤ
+        prove ∈ apply ⍳_ℤ $0 ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () ($0) 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
           prove = apply ⍳_ℤ $0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () ($$0, apply ⍳_ℤ $0) 0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           prove ∈ $$0 ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$0 ℤ) (apply ⍳_ℤ $0, $$0) 0.0.1.1.0 0.0.1.0
@@ -1138,7 +1170,17 @@ conclusion = image ⍳_ℤ ℤ^≥
       prove ∃ x_1 ∧ ∈ $0 ℕ ∃ x_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ c6fcab51674da7fb8782ea49ba5ffd64422e9c0678281be9e1d8499fe02d34b5 () ($0) 0.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
       let x_1 ∧ ∈ $0 ℕ ∃ x_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 ℕ ∃ x_2 ∧ ∈ $0 ℕ = $$0 equivalenceClass orderedPair $$$0 $0 ~_ℤ, ∈ $0 image ⍳_ℤ) () {
         let x_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$0 ℕ = $$0 equivalenceClass orderedPair $0 $$$0 ~_ℤ, ∈ $$0 image ⍳_ℤ) () {
-          target ∈ orderedPair equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ $$$0 ≤ℤ
+          elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+            elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+              prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+              elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+                prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
+                prove → ∈ 0ℕ ℕ = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 ℕ = apply ⍳_ℤ $$$$0 equivalenceClass orderedPair $$$$0 0ℕ ~_ℤ) (0ℕ) 0.1.2.0.0.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                prove = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ 0ℕ ℕ, = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) () 0.1.2.0.0.0.1.1 0.1.2.0.0.0.0
+              }
+            }
+            prove ∈ orderedPair equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ $$$0 ≤ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair $$$$0 $$$0 ≤ℤ) (apply ⍳_ℤ 0ℕ, equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) 0.1.2.0.0.0 0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          }
           prove ∈ orderedPair equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ orderedPair equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ $$$$0 ≤ℤ) ($$$0, equivalenceClass orderedPair $$0 $0 ~_ℤ) 0.1.2.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.1.2.0.0
           elided 4f9767ec7dfdc9be6987d2a3eece88c25b9d856458a5431500b36a422973d554 {
             prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
@@ -1194,14 +1236,31 @@ conclusion = image ⍳_ℤ ℤ^≥
               }
             }
             prove = $$$$0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$$0, equivalenceClass orderedPair $$$0 $$0 ~_ℤ, equivalenceClass orderedPair $0 0ℕ ~_ℤ) 0.1.2.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.1.2.0.5.3
-            target = equivalenceClass orderedPair $0 0ℕ ~_ℤ apply ⍳_ℤ $0
+            elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+              prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
+              prove → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$0 ℕ = apply ⍳_ℤ $$$$$0 equivalenceClass orderedPair $$$$$0 0ℕ ~_ℤ) ($0) 0.1.2.0.5.5.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              prove = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℕ, = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.1.2.0.5.5.1 0.1.2.0.5a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+              prove = equivalenceClass orderedPair $0 0ℕ ~_ℤ apply ⍳_ℤ $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℤ $0, equivalenceClass orderedPair $0 0ℕ ~_ℤ) 0.1.2.0.5.5.2
+            }
             prove = $$$$0 apply ⍳_ℤ $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$$0, equivalenceClass orderedPair $0 0ℕ ~_ℤ, apply ⍳_ℤ $0) 0.1.2.0.5.4 0.1.2.0.5.5
             elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
               prove ∧ ∈ $0 ℕ = $$$$0 apply ⍳_ℤ $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 ℕ, = $$$$0 apply ⍳_ℤ $0) () 0.1.2.0.5a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.1.2.0.5.6
               prove ∃ a ∧ ∈ $0 ℕ = $$$$$0 apply ⍳_ℤ $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$$$0 ℕ = $$$$0 apply ⍳_ℤ $$$$$0) ($0) 0.1.2.0.5.7.0
             }
           } 0.1.2.0.4
-          target ∈ $$$0 image ⍳_ℤ
+          elided 7d288036ed2a37e18951a0a380c8a0b688a56d1ec51e2bcba9035657ace638e9 {
+            elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+              prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
+              prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.1.2.0.6.0.0
+              prove ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ, injectiveFunction ⍳_ℤ) () 0.1.2.0.6.0.1
+            }
+            elided 7d288036ed2a37e18951a0a380c8a0b688a56d1ec51e2bcba9035657ace638e9 {
+              prove ∀ b ↔ ∈ $0 image ⍳_ℤ ∃ a ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 7d288036ed2a37e18951a0a380c8a0b688a56d1ec51e2bcba9035657ace638e9 () (⍳_ℤ, ℕ, ℤ) 0.1.2.0.6.0
+              prove ↔ ∈ $$$0 image ⍳_ℤ ∃ a ∧ ∈ $0 ℕ = $$$$0 apply ⍳_ℤ $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$0 image ⍳_ℤ ∃ a ∧ ∈ $0 ℕ = $$$$$0 apply ⍳_ℤ $0) ($$$0) 0.1.2.0.6.1.0
+              prove → ∃ a ∧ ∈ $0 ℕ = $$$$0 apply ⍳_ℤ $0 ∈ $$$0 image ⍳_ℤ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $$$0 image ⍳_ℤ, ∃ a ∧ ∈ $0 ℕ = $$$$0 apply ⍳_ℤ $0) () 0.1.2.0.6.1.1
+              prove ∈ $$$0 image ⍳_ℤ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a ∧ ∈ $0 ℕ = $$$$0 apply ⍳_ℤ $0, ∈ $$$0 image ⍳_ℤ) () 0.1.2.0.6.1.2 0.1.2.0.5
+            }
+          }
         } 0.1.2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
       } 0.1.1
     }
@@ -1213,8 +1272,11 @@ conclusion = image ⍳_ℤ ℤ^≥
 theorem ⍳_ℤ Bijects ℕ with ℤ^≥
 conclusion ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥
 {
-  target ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ
-  target ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ image ⍳_ℤ bijectiveFunction ⍳_ℤ ℕ image ⍳_ℤ
+  elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+    prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
+    prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0
+  }
+  prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ image ⍳_ℤ bijectiveFunction ⍳_ℤ ℕ image ⍳_ℤ 73217a3cda108ac48031b3c1b8fa48ca3a7e335cc5d38f91c36c885f3ec886f5 () (⍳_ℤ, ℕ, ℤ) 0
   elided 353c85544b987ce3664da75768cbaa68bb4a565c1c744dd095f187790fcb0815 {
     elided 353c85544b987ce3664da75768cbaa68bb4a565c1c744dd095f187790fcb0815 {
       prove = image ⍳_ℤ ℤ^≥ 353c85544b987ce3664da75768cbaa68bb4a565c1c744dd095f187790fcb0815 () ()
@@ -1232,8 +1294,11 @@ premise ∈ a ℤ
 premise ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ
 conclusion ∃! n ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0
 {
-  target ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥
-  target ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ
+  prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥ bijectiveFunction ⍳_ℤ ℕ ℤ^≥ 529c71c4476664f389b29924b83f7d5075a88ca4662a6036fedbc8c0f01cc9be () ()
+  elided e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d {
+    prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥ e51b0764117492bf52f01ea3bc895c16e10e56c5eb5a72eaac427c085291601d () (⍳_ℤ, ℕ, ℤ^≥) 0
+    prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥ ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥ ℕ, ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥) () 1.0
+  }
   elided 99b727acaf069613e8c7db29ddab5d61b6e66d7de8435982a16ed1a8e835d125 {
     prove ∧ ∈ a ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ) () p0 p1
     elided 99b727acaf069613e8c7db29ddab5d61b6e66d7de8435982a16ed1a8e835d125 {
@@ -1243,8 +1308,11 @@ conclusion ∃! n ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0
       prove ∈ a ℤ^≥ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ a ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ, ∈ a ℤ^≥) () 2.1.2 2.0
     }
   }
-  target ∈ apply inverseFunction ⍳_ℤ a ℕ
-  target = a apply ⍳_ℤ apply inverseFunction ⍳_ℤ a
+  prove ∈ apply inverseFunction ⍳_ℤ a ℕ bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f () (inverseFunction ⍳_ℤ, ℤ^≥, ℕ, a) 1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 2
+  elided 3e4280faa34df9e2a9472c87b10dcd5ff4041946e6ea348f61a6aa66896557bd {
+    prove = apply ⍳_ℤ apply inverseFunction ⍳_ℤ a a 3e4280faa34df9e2a9472c87b10dcd5ff4041946e6ea348f61a6aa66896557bd () (⍳_ℤ, ℕ, ℤ^≥, a) 0 2
+    prove = a apply ⍳_ℤ apply inverseFunction ⍳_ℤ a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℤ apply inverseFunction ⍳_ℤ a, a) 4.0
+  }
   elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
     prove ∧ ∈ apply inverseFunction ⍳_ℤ a ℕ = a apply ⍳_ℤ apply inverseFunction ⍳_ℤ a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply inverseFunction ⍳_ℤ a ℕ, = a apply ⍳_ℤ apply inverseFunction ⍳_ℤ a) () 3 4
     prove ∃ n ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $0 ℕ = a apply ⍳_ℤ $0) (apply inverseFunction ⍳_ℤ a) 5.0
