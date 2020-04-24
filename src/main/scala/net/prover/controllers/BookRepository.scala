@@ -1,7 +1,9 @@
 package net.prover.controllers
 
 import java.nio.file.{Files, Path, Paths}
+import java.util.concurrent.locks.{Lock, ReentrantLock, ReentrantReadWriteLock}
 
+import com.googlecode.concurentlocks.ReentrantReadWriteUpdateLock
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import org.apache.commons.io.FileUtils
@@ -12,45 +14,69 @@ import scalaz.Functor
 import scalaz.syntax.functor._
 
 import scala.collection.JavaConverters._
+import scala.concurrent.ExecutionContext
 import scala.util.Try
 
 @Service
 class BookRepository {
   private val bookDirectoryPath = Paths.get("books")
 
-  private var _booksAndDefinitions: (Seq[Book], Definitions) = this.synchronized {
-    val books = parseBooks
-    val definitions = getDefinitions(books)
-    writeBooks(books)
-    (books, definitions)
-  }
-  def booksAndDefinitions: (Seq[Book], Definitions) = this.synchronized {
+  private val bookLock = new ReentrantReadWriteUpdateLock()
+  private var _booksAndDefinitions: (Seq[Book], Definitions) = (Nil, Definitions(EntryContext(Nil)))
+
+  ExecutionContext.global.execute(() => parseBooksInitially())
+
+  def booksAndDefinitions: (Seq[Book], Definitions) = withLock(bookLock.readLock()) {
     _booksAndDefinitions
   }
   def books: Seq[Book] = booksAndDefinitions._1
 
-  def modifyBooks[F[_] : Functor](f: (Seq[Book], Definitions) => F[Seq[Book]]): F[(Seq[Book], Definitions)] = this.synchronized {
-    val (books, definitions) = booksAndDefinitions
-    for {
-      newBooks <- f(books, definitions)
-    } yield {
-      val newDefinitions = getDefinitions(newBooks)
-      writeBooks(newBooks)
-      _booksAndDefinitions = (newBooks, newDefinitions)
-      (newBooks, newDefinitions)
+  private def withLock[T](lock: Lock)(t: => T): T = {
+    lock.lock()
+    try {
+      t
+    } finally {
+      lock.unlock()
+    }
+  }
+
+  def parseBooksInitially(): Unit = {
+    withLock(bookLock.updateLock()) {
+      val books = getBookList.mapReduceWithPrevious[Book] { case (booksSoFar, bookTitle) =>
+        val newBook = parseBook(bookTitle, booksSoFar)
+        val definitions = getDefinitions(booksSoFar :+ newBook)
+        withLock(bookLock.writeLock()) {
+          _booksAndDefinitions = (booksSoFar :+ newBook, definitions)
+        }
+        newBook
+      }
+      BookRepository.logger.info(s"Parsed ${books.length} books")
+    }
+  }
+
+  def modifyBooks[F[_] : Functor](f: (Seq[Book], Definitions) => F[Seq[Book]]): F[(Seq[Book], Definitions)] = {
+    withLock(bookLock.updateLock()) {
+      val (books, definitions) = _booksAndDefinitions
+      for {
+        newBooks <- f(books, definitions)
+      } yield {
+        val newDefinitions = getDefinitions(newBooks)
+        withLock(bookLock.writeLock()) {
+          _booksAndDefinitions = (newBooks, newDefinitions)
+        }
+        writeBooks(newBooks)
+        (newBooks, newDefinitions)
+      }
     }
   }
 
   def reload(): Try[Any] = {
-    modifyBooks((_, _) => Try(parseBooks))
-  }
-
-  private def parseBooks: Seq[Book] = {
-    val books = getBookList.mapReduceWithPrevious[Book] { case (booksSoFar, bookTitle) =>
-      parseBook(bookTitle, booksSoFar)
+    withLock(bookLock.updateLock()) {
+      withLock(bookLock.writeLock()) {
+        _booksAndDefinitions = (Nil, Definitions(EntryContext(Nil)))
+      }
+      Try(parseBooksInitially())
     }
-    BookRepository.logger.info(s"Parsed ${books.length} books")
-    books
   }
 
   private def parseBook(title: String, previousBooks: Seq[Book]): Book = {

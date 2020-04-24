@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   "org.springframework.boot" % "spring-boot-starter-web" % "1.4.2.RELEASE",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.8.4",
   "commons-io" % "commons-io" % "2.5",
+  "com.googlecode.concurrent-locks" % "concurrent-locks" % "1.0.0",
   "org.scala-lang.modules" %% "scala-xml" % "1.1.0",
   "com.github.julien-truffaut" %% "monocle-core" % monocleVersion,
   "com.github.julien-truffaut" %% "monocle-macro" % monocleVersion)
