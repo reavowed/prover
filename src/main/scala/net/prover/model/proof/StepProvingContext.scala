@@ -83,6 +83,10 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
     replaceEqualities(afterRewrites)
   }
 
+  lazy val premiseSimplificationsBySerializedStatement: Map[String, Seq[PremiseStep]] = {
+    allPremiseSimplifications.map(_.mapLeft(_.serialized)).toMap
+  }
+
   def findPremise(statement: Statement): Option[Premise.SingleLinePremise] = {
     allPremises.find(_.statement == statement)
   }

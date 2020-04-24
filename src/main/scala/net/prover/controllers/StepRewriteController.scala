@@ -1,12 +1,13 @@
 package net.prover.controllers
 
 import net.prover.controllers.StepRewriteController._
-import net.prover.controllers.models.{DeductionUnwrapper, GeneralizationUnwrapper, PathData, PremiseRewrite, RewriteRequest, Unwrapper}
+import net.prover.controllers.models._
 import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import net.prover.util.Direction
+import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -28,7 +29,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
         getReplacementPossibilities(statement)
       case term: Term =>
         getReplacementPossibilities(term)
-    }) filter { case ReplacementPossibility(_, _,  _, path, _) =>
+    }) filter { case ReplacementPossibility(_, _,  _, path, _, _) =>
       !pathsAlreadyRewritten.exists(path.startsWith(_))
     }
   }
@@ -85,7 +86,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       }
 
       val filter = inferenceFilter(searchText)
-      stepProvingContext.provingContext.termRewriteInferences
+      stepProvingContext.provingContext.prospectiveTermRewriteInferences
         .filter { case TermRewriteInference(i, _, _, _) => filter(i) }
         .groupBy(_.lhs.structuralComplexity).toSeq
         .sortBy(_._1)(Ordering[Int].reverse)
@@ -161,19 +162,17 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == extractionInferenceIds).orBadRequest(s"Could not find extraction for inference ${inference.id}")
       (lhs, rhs) <- equality.unapply(extractionOption.conclusion).orBadRequest("Rewrite conclusion was not equality")
       (sourceTemplate, targetTemplate) = direction.swapSourceAndResult(lhs, rhs)
-      unwrappedStepContext = unwrappers.enhanceContext(implicitly)
-      unwrappedStepProvingContext = StepProvingContext.withStepContext(unwrappedStepContext)
-      substitutions <- sourceTemplate.calculateSubstitutions(baseTerm)(unwrappedStepContext).orBadRequest("Could not find substitutions")
-      (premiseSteps, premises, _) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, substitutions)(unwrappedStepProvingContext)
+      substitutions <- sourceTemplate.calculateSubstitutions(baseTerm).orBadRequest("Could not find substitutions")
+      (premiseSteps, premises, _) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, substitutions)
         .orBadRequest("Could not find premises")
       (removedUnwrappers, removedSource, removedPremises, removedWrapperExpression) = ReplacementMethods[TExpression].removeUnwrappers(baseTerm, premises, wrapperExpression, unwrappers)
       removedUnwrappedStepContext = removedUnwrappers.enhanceContext(implicitly)
       finalSubstitutionsAfterSource <- sourceTemplate.calculateSubstitutions(removedSource)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions")
       finalSubstitutionsAfterPremises <- inference.premises.zip(removedPremises).foldLeft(Try(finalSubstitutionsAfterSource)) { case (s, (ip, p)) => s.flatMap(ip.calculateSubstitutions(p, _)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions"))}
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality.orBadRequest("Substitutions were not complete")
-      rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions)(unwrappedStepContext).orBadRequest("Could not apply substitutions to target")
-      assertionStep <- Step.Assertion.forInference(inference, finalSubstitutions)(unwrappedStepContext).orBadRequest("Could not apply substitutions to inference")
-      extractionSteps <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, finalSubstitutions, None, None, _ => (Nil, Nil))(unwrappedStepProvingContext).map(_.extractionSteps)
+      rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
+      assertionStep <- Step.Assertion.forInference(inference, finalSubstitutions).orBadRequest("Could not apply substitutions to inference")
+      extractionSteps <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, finalSubstitutions, None, None, _ => (Nil, Nil)).map(_.extractionSteps)
       elidedExtractionStep = Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference).get
       elidedStep = Step.Elided.ifNecessary(premiseSteps.steps :+ elidedExtractionStep, inference).get
     } yield (removedSource, rewrittenTerm, Some(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
@@ -195,7 +194,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       (sourceTerm, rewrittenTerm) = if (!rewrite.reverse) (premiseLhs, premiseRhs) else (premiseRhs, premiseLhs)
       _ <- (sourceTerm == baseTerm).orBadRequest("Premise did not match term at path")
       reverse = rewrite.reverse != direction.isReversed
-      reversalStepOption = if (reverse) Some(equality.reversal.assertionStep(premiseRhs, premiseLhs)(unwrappers.enhanceContext(implicitly))) else None
+      reversalStepOption = if (reverse) Some(equality.reversal.assertionStep(premiseRhs, premiseLhs)) else None
     } yield (baseTerm, rewrittenTerm, reversalStepOption, None, Some(equality.reversal.inference.summary).filter(_ => reverse), unwrappers, wrapperExpression)
   }
 
@@ -217,9 +216,9 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
             for {
               (currentInnerExpression, stepsSoFar, inferencesSoFar) <- trySoFar
               replacementPossibilities = getReplacementPossibilities(currentInnerExpression)
-              ReplacementPossibility(baseTerm, function, _, _, baseUnwrappers) <- replacementPossibilities.find(_.path == rewrite.path).orBadRequest(s"No term at path ${rewrite.path.mkString(".")}")
-              (term, rewrittenTerm, rewriteStepOption, inferenceOption, fallbackInferenceOption, unwrappers, wrapperExpression) <- ((rewrite.inferenceId.map(getRewriteStepForInference(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality)) orElse
-                rewrite.serializedPremiseStatement.map(getRewriteStepForPremise(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality))) orBadRequest
+              ReplacementPossibility(baseTerm, function, _, _, baseUnwrappers, replacementStepProvingContext) <- replacementPossibilities.find(_.path == rewrite.path).orBadRequest(s"No term at path ${rewrite.path.mkString(".")}")
+              (term, rewrittenTerm, rewriteStepOption, inferenceOption, fallbackInferenceOption, unwrappers, wrapperExpression) <- ((rewrite.inferenceId.map(getRewriteStepForInference(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality)(implicitly, replacementStepProvingContext)) orElse
+                rewrite.serializedPremiseStatement.map(getRewriteStepForPremise(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality)(replacementStepProvingContext))) orBadRequest
                 "Neither inference nor premise supplied").flatten
               wrapper = Wrapper.fromExpression(wrapperExpression)
               (source, result) = direction.swapSourceAndResult(term, rewrittenTerm)
@@ -459,12 +458,14 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
 }
 
 object StepRewriteController {
+  val logger: Logger = LoggerFactory.getLogger(StepRewriteController.getClass)
+
   case class InferenceRewriteSuggestion(inference: Inference.Summary, extractionInferenceIds: Seq[String], source: Term, result: Term, rewriteSuggestions: Seq[InferenceRewritePath])
   case class InferenceRewritePath(path: Seq[Int], result: Term)
   case class PremiseSuggestion(reference: PreviousLineReference, statement: Statement, rewriteSuggestions: Seq[PremiseRewritePath])
   case class PremiseRewritePath(path: Seq[Int], reverse: Boolean, result: Term)
 
-  case class ReplacementPossibility[T <: Expression](term: Term, function: T, depth: Int, path: Seq[Int], unwrappers: Seq[Unwrapper])
+  case class ReplacementPossibility[T <: Expression](term: Term, function: T, depth: Int, path: Seq[Int], unwrappers: Seq[Unwrapper], stepProvingContext: StepProvingContext)
 
   trait ReplacementMethods[T <: Expression] {
     def getReplacementPossibilitiesFromOuterExpression(t: T, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[T]]
@@ -487,7 +488,7 @@ object StepRewriteController {
     object StatementReplacementMethods extends ReplacementMethods[Statement] {
       def getReplacementPossibilitiesFromExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[Unwrapper], wrapper: Statement => Statement)(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[Statement]] = {
         statement.getTerms() map { case (term, predicate, depth, innerPath) =>
-          ReplacementPossibility[Statement](term, wrapper(predicate), depth, path ++ innerPath, unwrappers)
+          ReplacementPossibility[Statement](term, wrapper(predicate), depth, path ++ innerPath, unwrappers, stepProvingContext)
         }
       }
       override def getReplacementPossibilitiesFromOuterExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[Statement]] = {
@@ -516,7 +517,7 @@ object StepRewriteController {
     object TermReplacementMethods extends ReplacementMethods[Term] {
       override def getReplacementPossibilitiesFromOuterExpression(term: Term, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[Term]] = {
         term.getTerms() map { case (innerTerm, function, depth, innerPath) =>
-          ReplacementPossibility[Term](innerTerm, function, depth, path ++ innerPath, unwrappers)
+          ReplacementPossibility[Term](innerTerm, function, depth, path ++ innerPath, unwrappers, stepProvingContext)
         }
       }
       override def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[Term], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Term], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Term])] = {

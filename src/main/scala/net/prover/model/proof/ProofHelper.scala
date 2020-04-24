@@ -9,7 +9,7 @@ import net.prover.model.expressions._
 object ProofHelper {
   def findFact(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PremiseStep] = {
     for {
-      (_, inference, extractionOption) <- stepProvingContext.provingContext.facts.find(_._1 == target)
+      (inference, extractionOption) <- stepProvingContext.provingContext.factsBySerializedStatement.get(target.serialized)
       assertionStep <- Step.Assertion.forInference(inference, Substitutions.empty)
       ExtractionApplication(extractionResult, _, extractionSteps, premiseSteps, targetSteps) <- ExtractionHelper.applyExtractions(inference.conclusion, extractionOption.extractionInferences, inference, Substitutions.empty, None, Some(target), _ => (Nil, Nil)).toOption
       if premiseSteps.isEmpty && targetSteps.isEmpty

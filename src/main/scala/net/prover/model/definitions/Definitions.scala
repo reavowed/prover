@@ -463,6 +463,11 @@ case class Definitions(rootEntryContext: EntryContext) {
       (lhs, rhs) <- equality.unapply(extractionOption.conclusion)
     } yield TermRewriteInference(inference, extractionOption, lhs, rhs)
   }
+  lazy val prospectiveTermRewriteInferences: Seq[TermRewriteInference] = {
+    termRewriteInferences.filter { case TermRewriteInference(_, extractionOption, left, right) =>
+      left.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
+    }
+  }
   lazy val termSimplificationInferences: Seq[TermRewriteInference] = {
     termRewriteInferences.filter { case TermRewriteInference(_, extractionOption, left, right) =>
       left.complexity > right.complexity && left.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)

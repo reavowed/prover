@@ -3,7 +3,7 @@ package net.prover.model
 import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.StepProvingContext
+import net.prover.model.proof.{PremiseStep, StepProvingContext}
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
@@ -173,8 +173,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     filter(definitions.statementExtractionInferences)
   }
 
-  lazy val termRewriteInferences: Seq[TermRewriteInference] = {
-    filter(definitions.termRewriteInferences)
+  lazy val prospectiveTermRewriteInferences: Seq[TermRewriteInference] = {
+    filter(definitions.prospectiveTermRewriteInferences)
   }
   lazy val termSimplificationInferences: Seq[TermRewriteInference] = {
     filter(definitions.termSimplificationInferences)
@@ -190,6 +190,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   }
   lazy val facts: Seq[(Statement, Inference, ExtractionOption)] = {
     filter(definitions.facts)
+  }
+  lazy val factsBySerializedStatement: Map[String, (Inference, ExtractionOption)] = {
+    facts.map { case (s, i, e) => (s.serialized, (i, e)) }.toMap
   }
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {
     filter(definitions.statementDeductionInferences)

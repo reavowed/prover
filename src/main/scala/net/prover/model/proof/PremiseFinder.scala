@@ -22,9 +22,8 @@ object PremiseFinder {
   ): Option[Seq[PremiseStep]] = {
     import stepProvingContext._
 
-    def fromPremises = allPremiseExtractions.find(_._1 == targetStatement).map(_._2)
+    def fromPremises = premiseSimplificationsBySerializedStatement.get(targetStatement.serialized)
     def fromFact = ProofHelper.findFact(targetStatement).map(Seq(_))
-    def fromSimplification = allPremiseSimplifications.find(_._1 == targetStatement).map(_._2)
 
     def byRemovingTermDefinition = (for {
       termDefinition <- targetStatement.referencedDefinitions.ofType[TermDefinition].iterator
@@ -50,7 +49,7 @@ object PremiseFinder {
       } yield stepsForSimplifiedTarget ++ stepsForInference
     }
 
-    (fromPremises orElse fromFact orElse fromSimplification orElse byRemovingTermDefinition orElse bySimplifyingTarget orElse bySimplifyingTargetRelation).map(_.deduplicate)
+    (fromPremises orElse fromFact orElse byRemovingTermDefinition orElse bySimplifyingTarget orElse bySimplifyingTargetRelation).map(_.deduplicate)
   }
 
   def findPremiseStepsForStatements(
