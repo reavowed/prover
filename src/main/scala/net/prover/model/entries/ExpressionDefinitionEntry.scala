@@ -7,7 +7,7 @@ import net.prover.model.expressions._
 
 trait ExpressionDefinitionEntry extends TypedExpressionDefinitionEntry[ExpressionDefinitionEntry] with ChapterEntry.Standalone
 
-trait TypedExpressionDefinitionEntry[+ExpressionDefinitionType <: ExpressionDefinitionEntry] extends ChapterEntry.Standalone with ExpressionDefinition { self: ExpressionDefinitionEntry =>
+trait TypedExpressionDefinitionEntry[+ExpressionDefinitionType <: ExpressionDefinitionEntry] extends ChapterEntry.Standalone with ChapterEntry.CanChangeOptionalName with ExpressionDefinition { self: ExpressionDefinitionEntry =>
   def typeName: String
   override def format: Format.Basic
   override def title: String = s"$typeName Definition: $name"
