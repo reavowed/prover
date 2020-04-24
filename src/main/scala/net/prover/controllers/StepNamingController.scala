@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, PossibleInference, PossibleInferenceWithConclusions, StepDefinition}
+import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, PossibleInferenceWithConclusions, StepDefinition}
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof.{Premise, ProofHelper, SimplificationFinder, Step, SubstitutionContext}
 import net.prover.model._
@@ -26,6 +26,7 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
     } yield {
       implicit val spc = stepProvingContext
       filterInferences(stepProvingContext.provingContext.entryContext.allInferences, searchText)
+          .iterator
           .mapCollect { inference =>
             val conclusions = for {
               extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id)
@@ -39,6 +40,8 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
               None
             }
           }
+          .take(NumberOfSuggestionsToReturn)
+          .toList
     }).toResponseEntity
   }
 
