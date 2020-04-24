@@ -32,7 +32,7 @@ export default class ProveByPremise extends React.Component {
     const {availablePremises, entryContext} = this.props;
     const {selectedPremise, possibleConclusions, saving} = this.state;
     return <BoundVariableLists.Consumer>{boundVariableLists => <>
-      <PremiseChooser premise={selectedPremise} setPremise={this.setPremise} availablePremises={availablePremises} entryContext={entryContext}/>
+      <PremiseChooser premise={selectedPremise} setPremise={this.setPremise} availablePremises={availablePremises} entryContext={entryContext} autoFocus />
       {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
                                                  defaultConclusionStatement={selectedPremise.statement}
                                                  submit={this.submit}

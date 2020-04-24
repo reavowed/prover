@@ -13,7 +13,7 @@ export default function RewritePremise({path, availablePremises, entryContext, o
       .then(onCancel);
   };
   return <>
-    <PremiseChooser premise={premiseToRewrite} setPremise={setPremiseToRewrite} availablePremises={availablePremises} entryContext={entryContext}/>
+    <PremiseChooser premise={premiseToRewrite} setPremise={setPremiseToRewrite} availablePremises={availablePremises} entryContext={entryContext} autoFocus />
     {premiseToRewrite && <Rewriter title="Rewriting Premise"
                                    expression={premiseToRewrite.statement}
                                    path={path}
