@@ -4,6 +4,8 @@ import net.prover.controllers.ExtractionHelper
 import net.prover.model.definitions.{Equality, PremiseSimplificationInference, Wrapper}
 import net.prover.model.expressions.{FunctionParameter, Statement, Term, TermVariable}
 import net.prover.model._
+import net.prover.util.Timer
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.mutable
 
@@ -17,13 +19,15 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
   }
 
   lazy val allPremiseExtractions: Seq[(Statement, Seq[PremiseStep])] = {
-    for {
-      premise <- stepContext.premises
-      extractionOption <- SubstatementExtractor.getExtractionOptions(premise.statement)(this)
-      if extractionOption.premises.isEmpty
-      extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionOption.extractionInferences, Substitutions.empty, None, None, s => (Nil, s.map(Step.Target(_))))(this).toOption.toSeq
-        .map(ExtractionHelper.removeAllStructuralSimplifications(_)(provingContext))
-    } yield (extractionApplication.result, extractionApplication.extractionSteps.map(PremiseStep.fromAssertion))
+    Timer.timeAction(s"Calculating premise extractions for step ${stepContext.stepReference.serialize}", StepProvingContext.logger.info) {
+      for {
+        premise <- stepContext.premises
+        extractionOption <- SubstatementExtractor.getExtractionOptions(premise.statement)(this)
+        if extractionOption.premises.isEmpty
+        extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionOption.extractionInferences, Substitutions.empty, None, None, s => (Nil, s.map(Step.Target(_))))(this).toOption.toSeq
+          .map(ExtractionHelper.removeAllStructuralSimplifications(_)(provingContext))
+      } yield (extractionApplication.result, extractionApplication.extractionSteps.map(PremiseStep.fromAssertion))
+    }
   }
 
   lazy val allPremiseSimplifications: Seq[(Statement, Seq[PremiseStep])] = {
@@ -78,9 +82,12 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
       current ++ equalityPremises
     }
 
-    val afterSimplifications = simplifyAll(Nil, allPremiseExtractions, provingContext.premiseRelationSimplificationInferences)
-    val afterRewrites = simplifyAll(Nil, afterSimplifications, provingContext.premiseRelationRewriteInferences)
-    replaceEqualities(afterRewrites)
+    val extractions = allPremiseExtractions
+    Timer.timeAction(s"Calculating premise simplifications for step ${stepContext.stepReference.serialize}", StepProvingContext.logger.info) {
+      val afterSimplifications = simplifyAll(Nil, extractions, provingContext.premiseRelationSimplificationInferences)
+      val afterRewrites = simplifyAll(Nil, afterSimplifications, provingContext.premiseRelationRewriteInferences)
+      replaceEqualities(afterRewrites)
+    }
   }
 
   lazy val premiseSimplificationsBySerializedStatement: Map[String, Seq[PremiseStep]] = {
@@ -108,6 +115,7 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
 }
 
 object StepProvingContext {
+  val logger: Logger = LoggerFactory.getLogger(StepProvingContext.getClass)
   def updateStepContext(f: StepContext => StepContext)(implicit stepProvingContext: StepProvingContext): StepProvingContext = {
     stepProvingContext.updateStepContext(f)
   }

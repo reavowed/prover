@@ -6,7 +6,7 @@ import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.proof._
-import net.prover.util.Direction
+import net.prover.util.{Direction, Timer}
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -59,23 +59,27 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
         import replacementPossibility._
         for {
           substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
-          (_, _, substitutionsAfterPremises) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
+          (_, _, substitutionsAfterPremises) <- Timer.timeAction(s"Finding premises (${termRewriteInference.extractionOption.premises.map(_.toString).mkString(", ")})", StepRewriteController.logger.info)  {
+            PremiseFinder.findPremiseStepsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutionsAfterLhs)(replacementPossibility.stepProvingContext)
+          }
           result <- termRewriteInference.rhs.applySubstitutions(substitutionsAfterPremises.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
         } yield InferenceRewritePath(path, result)
       }
 
       def getSuggestionsForInference(termRewriteInference: TermRewriteInference): Option[InferenceRewriteSuggestionWithMaximumMatchingComplexity] = {
-        val suggestions = replacementPossibilities.mapCollect(p => getRewritePath(termRewriteInference, p).map(_ -> p.term.structuralComplexity))
-        if (suggestions.nonEmpty) {
-          val suggestion = InferenceRewriteSuggestion(
-            termRewriteInference.inferenceSummary,
-            termRewriteInference.extractionOption.extractionInferences.map(_.id),
-            termRewriteInference.lhs,
-            termRewriteInference.rhs,
-            suggestions.map(_._1))
-          Some(InferenceRewriteSuggestionWithMaximumMatchingComplexity(suggestion, suggestions.map(_._2).max))
-        } else
-          None
+        Timer.timeAction(s"Calculating rewrite suggestions for inference ${termRewriteInference.inference.name} (${termRewriteInference.lhs.toString} = ${termRewriteInference.rhs.toString})", StepRewriteController.logger.info) {
+          val suggestions = replacementPossibilities.mapCollect(p => getRewritePath(termRewriteInference, p).map(_ -> p.term.structuralComplexity))
+          if (suggestions.nonEmpty) {
+            val suggestion = InferenceRewriteSuggestion(
+              termRewriteInference.inferenceSummary,
+              termRewriteInference.extractionOption.extractionInferences.map(_.id),
+              termRewriteInference.lhs,
+              termRewriteInference.rhs,
+              suggestions.map(_._1))
+            Some(InferenceRewriteSuggestionWithMaximumMatchingComplexity(suggestion, suggestions.map(_._2).max))
+          } else
+            None
+        }
       }
 
       def getSuggestionsForInferenceBatch(rewriteInferences: Seq[TermRewriteInference]): Seq[InferenceRewriteSuggestion] = {
