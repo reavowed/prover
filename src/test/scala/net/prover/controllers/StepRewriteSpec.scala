@@ -27,7 +27,7 @@ class StepRewriteSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        Seq(Seq(rewrite(equalityPremise, Seq(0), false))))
+        Seq(Seq(rewrite(equalityPremise, Seq(0)))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -52,7 +52,7 @@ class StepRewriteSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        Seq(Seq(rewrite(equalityPremise, Seq(0), true))))
+        Seq(Seq(rewrite(Equals(b, a), Seq(0)))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -78,7 +78,7 @@ class StepRewriteSpec extends ControllerSpec {
         PathData(stepPath),
         PremiseRewrite(
           premiseToRewrite.serialized,
-          Seq(Seq(rewrite(equalityPremise, Seq(0), false)))))
+          Seq(Seq(rewrite(equalityPremise, Seq(0))))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -104,7 +104,7 @@ class StepRewriteSpec extends ControllerSpec {
         PathData(stepPath),
         PremiseRewrite(
           premiseToRewrite.serialized,
-          Seq(Seq(rewrite(equalityPremise, Seq(0), true)))))
+          Seq(Seq(rewrite(Equals(b, a), Seq(0))))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -129,7 +129,7 @@ class StepRewriteSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        Seq(Seq(rewrite(equalityPremise, Seq(1, 1), false))))
+        Seq(Seq(rewrite(equalityPremise, Seq(1, 1)))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -158,7 +158,7 @@ class StepRewriteSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        Seq(Seq(rewrite(equalityPremise, Seq(1, 1), true))))
+        Seq(Seq(rewrite(Equals(b, Zero), Seq(1, 1)))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -189,7 +189,7 @@ class StepRewriteSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        Seq(Seq(rewrite(equalityPremise, Seq(1, 1), false))))
+        Seq(Seq(rewrite(equalityPremise, Seq(1, 1)))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -218,7 +218,7 @@ class StepRewriteSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        Seq(Seq(rewrite(equalityPremise, Seq(1, 1), true))))
+        Seq(Seq(rewrite(Equals(c, Zero), Seq(1, 1)))))
 
       checkModifyStepsWithoutProps(
         service,

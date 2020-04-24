@@ -108,14 +108,13 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     path: Seq[Int],
     extractionInferences: Seq[Inference]
   ): RewriteRequest = {
-    RewriteRequest(path, Some(inference.id), None, extractionInferences.map(_.id), false)
+    RewriteRequest(path, Some(inference.id), None, extractionInferences.map(_.id))
   }
   def rewrite(
     premise: Statement,
-    path: Seq[Int],
-    reverse: Boolean
+    path: Seq[Int]
   ): RewriteRequest = {
-    RewriteRequest(path, None, Some(premise.serialized), Nil, reverse)
+    RewriteRequest(path, None, Some(premise.serialized), Nil)
   }
 
   def createService = {

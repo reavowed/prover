@@ -307,7 +307,7 @@ export class Parser {
       const suggestion = _.cloneDeep(suggestionJson);
       _.forEach(suggestion.rewriteSuggestions, s => s.result = this.parseExpression(s.result));
       suggestion.statement = this.parseExpression(suggestion.statement);
-      suggestion.reference = this.parseReference(suggestion.reference);
+      suggestion.reference && (suggestion.reference = this.parseReference(suggestion.reference));
       return suggestion;
     })
   };

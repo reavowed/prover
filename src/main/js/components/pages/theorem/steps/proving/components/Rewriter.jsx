@@ -4,6 +4,7 @@ import {Button} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import {CopiableExpression} from "../../../../../ExpressionComponent";
 import InferenceAutosuggest from "./InferenceAutosuggest";
+import PremiseChooser from "./PremiseChooser";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
 import ProofContext from "../../../ProofContext";
 
@@ -19,7 +20,7 @@ export default class Rewriter extends React.Component {
     };
   }
   componentDidMount() {
-    this.loadPremiseSuggestions(this.state.currentExpression, this.getCurrentPaths(), this.onPremiseSelected);
+    this.loadPremiseSuggestions(this.state.currentExpression, this.getCurrentPaths());
   }
   componentWillUnmount() {
     this.cancelPremiseSuggestions();
@@ -36,21 +37,21 @@ export default class Rewriter extends React.Component {
     ).then(this.context.parser.parseInferenceRewriteSuggestions)
   };
 
-  loadPremiseSuggestions = (expression, pathsAlreadyRewritten, onPremiseSuggestionSelected) => {
+  loadPremiseSuggestions = (expression, pathsAlreadyRewritten) => {
     this.context.fetchJsonForStep(this.props.path, `rewritePremiseSuggestions?expression=${encodeURIComponent(expression.serialize())}&pathsAlreadyRewritten=${_.map(pathsAlreadyRewritten, p => p.join(".")).join(",")}`)
       .then((suggestions) => {
-        this.setState({premiseSuggestions: this.context.parser.parsePremiseRewriteSuggestions(suggestions), onPremiseSuggestionSelected}, () => this.resetPremiseSuggestions());
+        this.setState({premiseSuggestions: this.context.parser.parsePremiseRewriteSuggestions(suggestions)}, () => this.resetPremiseSuggestions());
       });
   };
   resetPremiseSuggestions = () => {
     const highlightingActions = _.map(this.state.premiseSuggestions, s => { return {reference: s.reference, action: () => {
-        this.state.onPremiseSuggestionSelected(s);
+        this.onPremiseSelected(s);
         this.context.setHighlightingAction(highlightingActions, [s.reference]);
       }}});
     this.context.setHighlightingAction(highlightingActions);
   };
   cancelPremiseSuggestions = () => {
-    this.setState({premiseSuggestions: [], onPremiseSuggestionSelected: () => {}});
+    this.setState({premiseSuggestions: []});
     this.context.clearHighlightingAction();
   };
 
@@ -69,7 +70,7 @@ export default class Rewriter extends React.Component {
       .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
       .map(s => { return { path: s.path, replacementExpression: s.result, rewrite: {path: s.path, serializedPremiseStatement: selectedPremiseSuggestion.statement.serialize(), reverse: s.reverse }}})
       .value();
-    this.setState({availableRewrites});
+    this.setState({availableRewrites, selectedPremiseSuggestion});
   };
 
   onExpressionClickedForRewrite = (path, replacementExpression, rewrite) => {
@@ -99,8 +100,8 @@ export default class Rewriter extends React.Component {
   };
 
   render() {
-    const {title} = this.props;
-    const {currentExpression, availableRewrites, chosenRewrites, saving} = this.state;
+    const {title, entryContext} = this.props;
+    const {currentExpression, availableRewrites, chosenRewrites, saving, premiseSuggestions, selectedPremiseSuggestion} = this.state;
     const currentPaths = this.getCurrentPaths();
 
     const actionHighlights = availableRewrites.map(({path, replacementExpression, rewrite}) => { return { path, action: () => this.onExpressionClickedForRewrite(path, replacementExpression, rewrite)}})
@@ -131,6 +132,7 @@ export default class Rewriter extends React.Component {
           renderSuggestion={renderSuggestion}
           readOnly={saving} />
       </Form.Group>
+      <PremiseChooser availablePremises={premiseSuggestions || []} premise={selectedPremiseSuggestion} setPremise={this.onPremiseSelected} entryContext={entryContext} title="Premise" />
       <Form.Group>
         <Button variant="success" onClick={this.save} disabled={saveDisabled}>{saving ? <span className="fas fa-spin fa-spinner"/>  : "Save"}</Button>
         <Button variant="primary" className="ml-1" onClick={this.again} disabled={saveDisabled}>Again</Button>

@@ -18,6 +18,7 @@ export default function RewritePremise({path, availablePremises, entryContext, o
                                    expression={premiseToRewrite.statement}
                                    path={path}
                                    onSave={rewrites => rewrite({serializedPremise: premiseToRewrite.statement.serialize(), rewrites})}
+                                   entryContext={entryContext}
     />}
   </>;
 }
