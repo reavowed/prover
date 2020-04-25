@@ -1564,3 +1564,27 @@ conclusion strictTotalOrder <ℚ ℚ
     prove strictTotalOrder <ℚ ℚ b3266dc481e1b3e83b5124f058e80789a3e7c1c96f5a0bc57a04e927e9456cd6 () (<ℚ, ℚ) 4.2
   }
 }
+
+comment Define the set of positive rationals ℚ^+.
+
+term ℚ^+ ()
+  (= $0 comprehension a ℚ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 <ℚ)
+  shorthand (Q+)
+
+comment Extend the strict ordering on ℚ to the non-strict ordering.
+
+term ≤ ()
+  disambiguator ℚ
+  (= $0 productComprehension a b product ℚ ℚ ∨ ∈ orderedPair $0 $1 <ℚ = $0 $1)
+  shorthand (leQ)
+  attributes (infix-relation)
+
+theorem ≤_ℚ Is a Total Order on ℚ
+conclusion totalOrder ≤ℚ ℚ
+{
+  prove = ≤ℚ productComprehension a b product ℚ ℚ ∨ ∈ orderedPair $0 $1 <ℚ = $0 $1 b4c03562270ef5c24421d6348256b77791cc78d535325ba4e8f20c79a35ef936 () ()
+  elided ce36ad0016e927f8ca4cd1776f92dc544d131087d4730af7f0f02d40f91a0a0a {
+    prove strictTotalOrder <ℚ ℚ b9bb4ee12a705f9dac5730b07c5c26b77e61e4bed2727a04c4584c0995c649ef () ()
+    prove totalOrder ≤ℚ ℚ ce36ad0016e927f8ca4cd1776f92dc544d131087d4730af7f0f02d40f91a0a0a () (<ℚ, ℚ, ≤ℚ) 1.0 0
+  }
+}

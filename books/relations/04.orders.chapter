@@ -55,3 +55,86 @@ type wellOrder ≤
   qualifier (A) (on A)
   name (well-order)
   definition (∧ totalOrder ≤ A ∀ S → ⊆ $0 A → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤)
+
+theorem Two Elements are Related by Strict or Non-Strict Total Order
+premise strictTotalOrder R A
+premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
+premise ∈ a A
+premise ∈ b A
+conclusion ⊕ ∈ orderedPair a b R ∈ orderedPair b a S
+{
+  elided 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 {
+    prove ∧ ∧ ∧ relation R A asymmetricRelation R A transitiveRelation R A semicompleteRelation R A 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (R, A) p0
+    prove ∧ relation R A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 R ∨ = $$0 $0 ∈ orderedPair $0 $$0 R 4be776d1bfd0ba802e4067c6fb42761bc08f8046f3282d60d77e57206ac1d787 () (R, A) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove → ∈ a A ∀ b → ∈ $0 A ∨ ∈ orderedPair a $0 R ∨ = a $0 ∈ orderedPair $0 a R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 R ∨ = $$0 $0 ∈ orderedPair $0 $$0 R) (a) 0.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove ∀ b → ∈ $0 A ∨ ∈ orderedPair a $0 R ∨ = a $0 ∈ orderedPair $0 a R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ b → ∈ $0 A ∨ ∈ orderedPair a $0 R ∨ = a $0 ∈ orderedPair $0 a R) () 0.2 p2
+    prove → ∈ b A ∨ ∈ orderedPair a b R ∨ = a b ∈ orderedPair b a R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∨ ∈ orderedPair a $0 R ∨ = a $0 ∈ orderedPair $0 a R) (b) 0.3
+    prove ∨ ∈ orderedPair a b R ∨ = a b ∈ orderedPair b a R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, ∨ ∈ orderedPair a b R ∨ = a b ∈ orderedPair b a R) () 0.4 p3
+  }
+  assume ∨ = a b ∈ orderedPair b a R {
+    elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+      elided 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 {
+        assume = a b {
+          prove = b a 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (a, b) 1.0.0.0a
+        }
+      }
+      prove ∨ = b a ∈ orderedPair b a R 2fef1e6f547d23b9aa52e58e574fab87dbf5de6cf4c4dc35820bbae4723c7c09 (= a b, ∈ orderedPair b a R, = b a) () 1a 1.0.0
+      prove ∨ ∈ orderedPair b a R = b a 7e3651c820e1f41df1d2e5a80ff9e1c8bc55f236a482bf9ee54c7c4188e2ee93 (= b a, ∈ orderedPair b a R) () 1.0.1
+      elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+        prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, A, A) p1
+        prove → ∈ b A ∀ b → ∈ $0 A ↔ ∈ orderedPair b $0 S ∨ ∈ orderedPair b $0 R = b $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) (b) 1.0.3.0
+        prove ∀ b → ∈ $0 A ↔ ∈ orderedPair b $0 S ∨ ∈ orderedPair b $0 R = b $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, ∀ b → ∈ $0 A ↔ ∈ orderedPair b $0 S ∨ ∈ orderedPair b $0 R = b $0) () 1.0.3.1 p3
+        prove → ∈ a A ↔ ∈ orderedPair b a S ∨ ∈ orderedPair b a R = b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ↔ ∈ orderedPair b $0 S ∨ ∈ orderedPair b $0 R = b $0) (a) 1.0.3.2
+        prove ↔ ∈ orderedPair b a S ∨ ∈ orderedPair b a R = b a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ↔ ∈ orderedPair b a S ∨ ∈ orderedPair b a R = b a) () 1.0.3.3 p2
+        prove → ∨ ∈ orderedPair b a R = b a ∈ orderedPair b a S 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ orderedPair b a S, ∨ ∈ orderedPair b a R = b a) () 1.0.3.4
+        prove ∈ orderedPair b a S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ ∈ orderedPair b a R = b a, ∈ orderedPair b a S) () 1.0.3.5 1.0.2
+      }
+    }
+  }
+  prove ∨ ∈ orderedPair a b R ∈ orderedPair b a S fa95429f653e5cde94e123ab4a6683a012ceab4b2a8c35d1a6b43d900bae6b78 (∈ orderedPair a b R, ∨ = a b ∈ orderedPair b a R, ∈ orderedPair b a S) () 0 1
+  assume ∈ orderedPair a b R {
+    elided 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 {
+      prove ∧ ∧ ∧ relation R A asymmetricRelation R A transitiveRelation R A semicompleteRelation R A 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (R, A) p0
+      prove ∧ relation R A ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 R ¬ ∈ orderedPair $0 $$0 R 196489595d8f7dae7345a06e2c05aa2b22993a30682bcef5b7c717671dc43e61 () (R, A) 3.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove → ∈ a A ∀ b → ∈ $0 A → ∈ orderedPair a $0 R ¬ ∈ orderedPair $0 a R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 R ¬ ∈ orderedPair $0 $$0 R) (a) 3.0.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove ∀ b → ∈ $0 A → ∈ orderedPair a $0 R ¬ ∈ orderedPair $0 a R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ b → ∈ $0 A → ∈ orderedPair a $0 R ¬ ∈ orderedPair $0 a R) () 3.0.2 p2
+      prove → ∈ b A → ∈ orderedPair a b R ¬ ∈ orderedPair b a R 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A → ∈ orderedPair a $0 R ¬ ∈ orderedPair $0 a R) (b) 3.0.3
+      prove → ∈ orderedPair a b R ¬ ∈ orderedPair b a R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, → ∈ orderedPair a b R ¬ ∈ orderedPair b a R) () 3.0.4 p3
+      prove ¬ ∈ orderedPair b a R fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair a b R, ¬ ∈ orderedPair b a R) () 3.0.5 3a
+    }
+    elided ca974034f4ee7669a91a639dc28baaab319a216ecd3ab78c942bc19cd31b8d75 {
+      prove ∧ ∧ ∧ relation R A asymmetricRelation R A transitiveRelation R A semicompleteRelation R A 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (R, A) p0
+      prove irreflexiveRelation R A ca974034f4ee7669a91a639dc28baaab319a216ecd3ab78c942bc19cd31b8d75 () (R, A) 3.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+    }
+    elided d36266d0d00106d6cbd43c082c96ba9cfe11c027625896d5e4a21565e2d79308 {
+      prove ∧ ∧ ∧ relation R A asymmetricRelation R A transitiveRelation R A semicompleteRelation R A 22f78b8184e250a5aae2179777166b858de1501c07f8f9fe24c3e34bbbd04099 () (R, A) p0
+      prove ∧ relation R A irreflexiveRelation R A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (relation R A, irreflexiveRelation R A) () 3.2.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 3.1
+      elided d36266d0d00106d6cbd43c082c96ba9cfe11c027625896d5e4a21565e2d79308 {
+        prove ¬ = a b d36266d0d00106d6cbd43c082c96ba9cfe11c027625896d5e4a21565e2d79308 () (R, A, a, b) 3.2.1 3a
+        prove ¬ = b a 35c4b3bdb5afef55d4ceaab6eddde750bce304bc30ca1a61c5d38cc997fb0d65 () (a, b) 3.2.2.0
+      }
+    }
+    elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+      prove ¬ ∨ ∈ orderedPair b a R = b a 7de09e8a989572b5b5bd3e83a8f59edc959d20e00cfb9290ee3a1926363ceb10 (∈ orderedPair b a R, = b a) () 3.0 3.2
+      elided 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 {
+        prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 2c70d5d735e72c25c93f756316d46087cfdf88c4cae0d9a8c91fb382f70734c4 (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, A, A) p1
+        prove → ∈ b A ∀ b → ∈ $0 A ↔ ∈ orderedPair b $0 S ∨ ∈ orderedPair b $0 R = b $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) (b) 3.3.1.0
+        prove ∀ b → ∈ $0 A ↔ ∈ orderedPair b $0 S ∨ ∈ orderedPair b $0 R = b $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, ∀ b → ∈ $0 A ↔ ∈ orderedPair b $0 S ∨ ∈ orderedPair b $0 R = b $0) () 3.3.1.1 p3
+        prove → ∈ a A ↔ ∈ orderedPair b a S ∨ ∈ orderedPair b a R = b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ↔ ∈ orderedPair b $0 S ∨ ∈ orderedPair b $0 R = b $0) (a) 3.3.1.2
+        prove ↔ ∈ orderedPair b a S ∨ ∈ orderedPair b a R = b a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ↔ ∈ orderedPair b a S ∨ ∈ orderedPair b a R = b a) () 3.3.1.3 p2
+        prove → ∈ orderedPair b a S ∨ ∈ orderedPair b a R = b a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair b a S, ∨ ∈ orderedPair b a R = b a) () 3.3.1.4
+        prove ¬ ∈ orderedPair b a S 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ orderedPair b a S, ∨ ∈ orderedPair b a R = b a) () 3.3.1.5 3.3.0
+      }
+    }
+  }
+  elided (By definition) {
+    prove ¬ ¬ → ∈ orderedPair a b R ¬ ∈ orderedPair b a S 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (→ ∈ orderedPair a b R ¬ ∈ orderedPair b a S) () 3
+    elided e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a {
+      assume ∧ ∈ orderedPair a b R ∈ orderedPair b a S {
+        prove ¬ → ∈ orderedPair a b R ¬ ∈ orderedPair b a S e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (∈ orderedPair a b R, ∈ orderedPair b a S) () 4.1.0a
+      }
+      prove ¬ ∧ ∈ orderedPair a b R ∈ orderedPair b a S 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ orderedPair a b R ∈ orderedPair b a S, ¬ → ∈ orderedPair a b R ¬ ∈ orderedPair b a S) () 4.1.0 4.0
+    }
+  }
+  prove ⊕ ∈ orderedPair a b R ∈ orderedPair b a S 85d9228e116d39e101fccf8102b9ae979459e94efa97bd1f050fb7327031497b (∈ orderedPair a b R, ∈ orderedPair b a S) () 2 4
+}

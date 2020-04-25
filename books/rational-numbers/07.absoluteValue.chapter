@@ -1,0 +1,48 @@
+Define the absolute value of a rational.
+
+theorem Existence of Absolute Value of Rational
+premise ∈ a ℚ
+conclusion ∃! b ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a
+{
+  subproof (Existence) {
+    elided 607a2be6767aa5e6340acdc54fea5db50c46202f180d3766bd2e9400b3920781 {
+      prove strictTotalOrder <ℚ ℚ b9bb4ee12a705f9dac5730b07c5c26b77e61e4bed2727a04c4584c0995c649ef () ()
+      prove = ≤ℚ productComprehension a b product ℚ ℚ ∨ ∈ orderedPair $0 $1 <ℚ = $0 $1 b4c03562270ef5c24421d6348256b77791cc78d535325ba4e8f20c79a35ef936 () ()
+      prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+      prove ∈ apply ⍳_ℤ 0ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0ℕ) 0.0.2
+      prove ∈ apply ⍳_ℚ apply ⍳_ℤ 0ℕ ℚ ca4a08896cc193d8ef2682e375966db2e95a58d105394799cf6457533291dc0e () (apply ⍳_ℤ 0ℕ) 0.0.3
+      elided 607a2be6767aa5e6340acdc54fea5db50c46202f180d3766bd2e9400b3920781 {
+        prove ⊕ ∈ orderedPair a apply ⍳_ℚ apply ⍳_ℤ 0ℕ <ℚ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ a ≤ℚ 607a2be6767aa5e6340acdc54fea5db50c46202f180d3766bd2e9400b3920781 () (<ℚ, ℚ, ≤ℚ, a, apply ⍳_ℚ apply ⍳_ℤ 0ℕ) 0.0.0 0.0.1 p0 0.0.4
+        prove ∨ ∈ orderedPair a apply ⍳_ℚ apply ⍳_ℤ 0ℕ <ℚ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ a ≤ℚ 2fcf85e65b11715f1d1a789ddc4dc1e46b321f9ee5ae372ff0453e54a1f41c65 (∈ orderedPair a apply ⍳_ℚ apply ⍳_ℤ 0ℕ <ℚ, ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ a ≤ℚ) () 0.0.5.0
+      }
+    }
+    assume ∈ orderedPair a apply ⍳_ℚ apply ⍳_ℤ 0ℕ <ℚ {
+      target ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ negatedQ a ≤ℚ
+      target ∨ = negatedQ a a = negatedQ a negatedQ a
+      elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+        elided 3e7eb0bc9cac913b1113c5aa5a430554543057aceda70ca3040d73e8039080f3 {
+          prove ∧ ∈ negatedQ a ℚ ∧ = apply +ℚ orderedPair a negatedQ a apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair negatedQ a a apply ⍳_ℚ apply ⍳_ℤ 0ℕ 3e7eb0bc9cac913b1113c5aa5a430554543057aceda70ca3040d73e8039080f3 () (a) p0
+          prove ∈ negatedQ a ℚ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ negatedQ a ℚ, ∧ = apply +ℚ orderedPair a negatedQ a apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair negatedQ a a apply ⍳_ℚ apply ⍳_ℤ 0ℕ) () 0.1.2.0.0
+        }
+        prove ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ negatedQ a ≤ℚ ∨ = negatedQ a a = negatedQ a negatedQ a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ negatedQ a ≤ℚ, ∨ = negatedQ a a = negatedQ a negatedQ a) () 0.1.0 0.1.1
+        prove ∧ ∈ negatedQ a ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ negatedQ a ≤ℚ ∨ = negatedQ a a = negatedQ a negatedQ a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ negatedQ a ℚ, ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ negatedQ a ≤ℚ ∨ = negatedQ a a = negatedQ a negatedQ a) () 0.1.2.0 0.1.2.1
+        prove ∃ x ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a) (negatedQ a) 0.1.2.2
+      }
+    }
+    assume ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ a ≤ℚ {
+      prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a)
+      elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+        prove ∨ = a a = a negatedQ a 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= a a, = a negatedQ a) () 0.2.0
+        prove ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ a ≤ℚ ∨ = a a = a negatedQ a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ a ≤ℚ, ∨ = a a = a negatedQ a) () 0.2a 0.2.1.0
+        prove ∧ ∈ a ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ a ≤ℚ ∨ = a a = a negatedQ a bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a ℚ, ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ a ≤ℚ ∨ = a a = a negatedQ a) () p0 0.2.1.1
+        prove ∃ x ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a) (a) 0.2.1.2
+      }
+    }
+    prove ∃ x ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (∈ orderedPair a apply ⍳_ℚ apply ⍳_ℤ 0ℕ <ℚ, ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ a ≤ℚ, ∃ x ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a) () 0.0 0.1 0.2
+  }
+  target ∀ x ∀ y → ∧ ∧ ∈ $$0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$0 ≤ℚ ∨ = $$0 a = $$0 negatedQ a ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a = $$0 $0
+  elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
+    prove ∧ ∃ x ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a ∀ x ∀ y → ∧ ∧ ∈ $$0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$0 ≤ℚ ∨ = $$0 a = $$0 negatedQ a ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a, ∀ x ∀ y → ∧ ∧ ∈ $$0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$0 ≤ℚ ∨ = $$0 a = $$0 negatedQ a ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a = $$0 $0) () 0 1
+    prove ∃! b ∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 (∧ ∈ $0 ℚ ∧ ∈ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 ≤ℚ ∨ = $0 a = $0 negatedQ a) () 2.0
+  }
+}

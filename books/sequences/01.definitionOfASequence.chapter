@@ -1,0 +1,7 @@
+Define a sequence as a function on the naturals.
+
+type sequence a
+  definition (∧ function a = domain a ℕ)
+
+qualifier on on sequence (X) (on X)
+  definition (functionFrom a ℕ X)
