@@ -84,7 +84,7 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
   }
 
   lazy val premiseSimplificationsBySerializedStatement: Map[String, Seq[PremiseStep]] = {
-    allPremiseSimplifications.map(_.mapLeft(_.serialized)).toMap
+    allPremiseSimplifications.map(_.mapLeft(_.serialized)).toMapPreservingEarliest
   }
 
   def findPremise(statement: Statement): Option[Premise.SingleLinePremise] = {

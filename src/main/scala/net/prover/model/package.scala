@@ -9,7 +9,7 @@ import org.apache.commons.io.filefilter.TrueFileFilter
 
 import scala.collection.JavaConverters._
 import scala.collection.generic.CanBuildFrom
-import scala.collection.{AbstractIterator, Iterator, TraversableLike, mutable}
+import scala.collection.{AbstractIterator, Iterator, TraversableLike, immutable, mutable}
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
@@ -581,6 +581,15 @@ package object model {
     }
     def ifFalse[S](s: => S): Option[S] = {
       if (!boolean) Some(s) else None
+    }
+  }
+
+  implicit class TraversableOnceOps[A](coll: TraversableOnce[A]) {
+    def toMapPreservingEarliest[T, U](implicit ev: A <:< (T, U)): immutable.Map[T, U] = {
+      val b = immutable.Map.newBuilder[T, U]
+      for (x <- coll)
+        if (!b.result().contains(x._1)) b += x
+      b.result()
     }
   }
 }
