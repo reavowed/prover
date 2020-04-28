@@ -1,23 +1,7 @@
 import React from "react";
 import Autosuggest from "react-autosuggest";
 import styled from "styled-components";
-
-const DropdownContainer = styled.div`
-  .react-autosuggest__suggestions-container--open & {
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
-    border-radius: .25rem;
-    ul {
-      margin: 0;
-      padding: 0;
-    }
-    li {
-      list-style-type: none;
-      overflow: hidden;
-    }
-  }
-`;
+import PrettifiedAutosuggest from "../../../../../helpers/PrettifiedAutosuggest";
 
 export default class InferenceAutosuggest extends React.Component {
   constructor(...args) {
@@ -66,11 +50,7 @@ export default class InferenceAutosuggest extends React.Component {
   render() {
     const {getSuggestionValue, renderSuggestion, readOnly} = this.props;
 
-    function renderSuggestionsContainer ({containerProps, children}) {
-      return <div {...containerProps}><DropdownContainer>{children}</DropdownContainer></div>
-    }
-
-    return <Autosuggest
+    return <PrettifiedAutosuggest
       ref={this.autoSuggestRef}
       suggestions={this.state.suggestions}
       onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -78,8 +58,7 @@ export default class InferenceAutosuggest extends React.Component {
       onSuggestionSelected={this.onSuggestionSelected}
       shouldRenderSuggestions={() => true}
       getSuggestionValue={getSuggestionValue}
-      renderSuggestionsContainer={renderSuggestionsContainer}
-      renderSuggestion={s => <span className="dropdown-item">{(renderSuggestion || getSuggestionValue)(s)}</span>}
+      renderSuggestion={renderSuggestion}
       inputProps={{value: this.state.autosuggestValue, onChange: this.onAutosuggestChange, className:"form-control", readOnly}} />
   }
 }

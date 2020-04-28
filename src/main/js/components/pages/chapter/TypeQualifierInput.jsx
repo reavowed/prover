@@ -2,11 +2,12 @@ import path from "path";
 import React, {useContext} from "react";
 import InputWithShorthandReplacement from "../../helpers/InputWithShorthandReplacement";
 import ObjectInputWithSimpleForm from "../../helpers/ObjectInputWithSimpleForm";
+import TypeAutocomplete from "../components/TypeAutocomplete";
 import ChapterContext from "./ChapterContext";
 
 const values = [
   {key: "symbol", title: "Symbol"},
-  {key: "parentType", title: "Parent Type"},
+  {key: "parentType", title: "Parent Type", inputType: TypeAutocomplete},
   {key: "qualifierTermNames", title: "Term names"},
   {key: "qualifierFormat", title: "Format (in parens)"},
   {key: "name", title: "Explicit name (if different from symbol)"},

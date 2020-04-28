@@ -4,26 +4,7 @@ import Autosuggest from "react-autosuggest";
 import Form from "react-bootstrap/Form";
 import styled from "styled-components";
 import EntryContext from "../EntryContext";
-
-const DropdownContainer = styled.div`
-  .react-autosuggest__suggestions-container--open & {
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
-    border-radius: .25rem;
-    ul {
-      margin: 0;
-      padding: 0;
-    }
-    li {
-      list-style-type: none;
-      overflow: hidden;
-    }
-  }
-`;
-const Suggestion = styled.span`
-  ${props => (props.isHighlighted ? "background-color: #007bff; color: #fff" : "")}
-`;
+import PrettifiedAutosuggest from "./PrettifiedAutosuggest";
 
 export default function InputWithShorthandReplacement({value, onChange, ...otherProps}) {
   const ref = useRef(null);
@@ -142,26 +123,18 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
     event.stopPropagation();
   }
 
-  function renderSuggestionsContainer ({containerProps, children}) {
-    return <div {...containerProps}><DropdownContainer>{children}</DropdownContainer></div>
-  }
-  function renderSuggestion(suggestion, {isHighlighted}) {
-    return <Suggestion className="dropdown-item" isHighlighted={isHighlighted}>{suggestion}</Suggestion>
-  }
   function renderInputComponent(inputProps) {
     return <Form.Control {...inputProps}/>
   }
 
-  return <Autosuggest ref={ref}
-                      suggestions={suggestions}
-                      onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                      onSuggestionsClearRequested={onSuggestionsClearRequested}
-                      onSuggestionSelected={onSuggestionSelected}
-                      renderSuggestionsContainer={renderSuggestionsContainer}
-                      renderSuggestion={renderSuggestion}
-                      renderInputComponent={renderInputComponent}
-                      getSuggestionValue={_ => value}
-                      inputProps={{...otherProps, value: value, onChange: onInnerChange, onBlur}}  />;
+  return <PrettifiedAutosuggest ref={ref}
+                                suggestions={suggestions}
+                                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                                onSuggestionsClearRequested={onSuggestionsClearRequested}
+                                onSuggestionSelected={onSuggestionSelected}
+                                renderInputComponent={renderInputComponent}
+                                getSuggestionValue={_ => value}
+                                inputProps={{...otherProps, value: value, onChange: onInnerChange, onBlur}}  />;
 }
 
 
