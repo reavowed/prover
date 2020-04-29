@@ -3,7 +3,9 @@ import React from "react";
 import EntryContext from "./EntryContext";
 import {CopiableExpression} from "./ExpressionComponent";
 import {Breadcrumbs} from "./pages/components/Breadcrumbs";
+import EditableExplicitName from "./pages/components/EditableExplicitName";
 import EditableProperty from "./pages/components/EditableProperty";
+import EditableSymbol from "./pages/components/EditableSymbol";
 import {NavLinks} from "./pages/components/NavLinks";
 import {Usages} from "./pages/components/Usages";
 import {Page} from "./pages/Page";
@@ -16,10 +18,6 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
   };
   const saveDisambiguator = (newDisambiguator) => {
     return window.fetchJson(path.join(url, "disambiguator"), {method: "PUT", body: newDisambiguator})
-      .then(url => window.location.pathname = url);
-  };
-  const saveName = (newName) => {
-    return window.fetchJson(path.join(url, "name"), {method: "PUT", body: newName})
       .then(url => window.location.pathname = url);
   };
   const saveShorthand = (newName) => {
@@ -48,9 +46,9 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
       <h3>{title}:  <CopiableExpression expression={definition.defaultValue} /></h3>
       {children}
       <hr/>
-      <EditableProperty label="Symbol" initialValue={definition.baseSymbol} onSave={saveSymbol} />
+      <EditableSymbol symbol={definition.baseSymbol} url={url} />
       {hasDisambiguator && <EditableProperty label="Disambiguator" initialValue={definition.disambiguator} onSave={saveDisambiguator} />}
-      <EditableProperty label="Name" initialValue={definition.explicitName} onSave={saveName} />
+      <EditableExplicitName name={definition.explicitName} url={url} />
       <EditableProperty label="Shorthand" initialValue={definition.shorthand} onSave={saveShorthand} />
       <EditableProperty label="Components" initialValue={definition.componentTypes.map(x => x.name).join(" ")} onSave={saveComponents} />
       <EditableProperty label="Format" initialValue={serializedFormat} onSave={saveFormat} />

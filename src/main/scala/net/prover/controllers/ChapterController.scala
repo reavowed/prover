@@ -51,6 +51,9 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           case propertyDefinition: PropertyDefinitionOnType =>
             import propertyDefinition._
             Some(PropertyDefinitionPropsForChapter(symbol, name, url, parentType.symbol, parentType.defaultTermName, parentType.qualifier.map(_.termNames), definingStatement))
+          case relatedObjectDefinition: RelatedObjectDefinition =>
+            import relatedObjectDefinition._
+            Some(RelatedObjectDefinitionPropsForChapter(symbol, name, url, parentType.symbol, defaultTermName, parentType.defaultTermName, parentType.qualifier.map(_.termNames), definingStatement))
           case standalonePropertyDefinition: StandalonePropertyDefinition =>
             import standalonePropertyDefinition._
             Some(StandalonePropertyDefinitionPropsForChapter(name, url, defaultTermName, definingStatement))
@@ -126,6 +129,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           Success(("TypeQualifierDefinition", Map("definition" -> typeQualifierDefinition)))
         case propertyDefinitionOnType: PropertyDefinitionOnType =>
           Success(("PropertyDefinitionOnType", Map("definition" -> propertyDefinitionOnType)))
+        case relatedObjectDefinition: RelatedObjectDefinition =>
+          Success(("RelatedObjectDefinition", Map("definition" -> relatedObjectDefinition)))
         case standalonePropertyDefinition: StandalonePropertyDefinition =>
           Success(("StandalonePropertyDefinition", Map("definition" -> standalonePropertyDefinition)))
         case _ =>
@@ -317,9 +322,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       for {
         symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")
         parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefinition.parentType).orBadRequest(s"Unknown type '${newPropertyDefinition.parentType}'")
-        requiredParentQualifier <- getOptionalString(newPropertyDefinition.requiredParentQualifier)
-          .map(qualifierSymbol => entryContext.qualifiersByType(parentType.symbol).find(_.symbol == qualifierSymbol).orBadRequest(s"Unknown qualifier '$qualifierSymbol' on type '${parentType.symbol}''"))
-          .swap
+        requiredParentQualifier <- getOptionalParentQualifier(parentType, newPropertyDefinition.requiredParentQualifier)
         adapter <- getOptionalAdapter(newPropertyDefinition.ownTermNames, newPropertyDefinition.parentTerms, (requiredParentQualifier.map(_.qualifier) orElse parentType.qualifier).termNames)
         definingStatement <- Statement.parser.parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
@@ -328,6 +331,35 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           parentType,
           requiredParentQualifier,
           adapter,
+          name,
+          definingStatement,
+          conjunctionDefinition)
+      } yield newPropertyDefinition
+    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+  }
+
+  @PostMapping(value = Array("/relatedObjectDefinitions"), produces = Array("application/json;charset=UTF-8"))
+  def createPropertyDefinition(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @RequestBody newRelatedObjectDefinition: NewRelatedObjectDefinitionModel
+  ): ResponseEntity[_] = {
+    bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
+      val name = getOptionalString(newRelatedObjectDefinition.name)
+      for {
+        symbol <- getMandatoryString(newRelatedObjectDefinition.symbol, "Symbol")
+        defaultTermName <- getMandatoryString(newRelatedObjectDefinition.defaultTermName, "Default term name")
+        parentType <- entryContext.typeDefinitions.find(_.symbol == newRelatedObjectDefinition.parentType).orBadRequest(s"Unknown type '${newRelatedObjectDefinition.parentType}'")
+        requiredParentQualifier <- getOptionalParentQualifier(parentType, newRelatedObjectDefinition.requiredParentQualifier)
+        definingStatement <- Statement.parser.parseFromString(newRelatedObjectDefinition.definingStatement, "definition").recoverWithBadRequest
+        conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
+        newPropertyDefinition = RelatedObjectDefinition(
+          symbol,
+          parentType,
+          defaultTermName,
+          requiredParentQualifier,
           name,
           definingStatement,
           conjunctionDefinition)
@@ -484,11 +516,18 @@ object ChapterController {
   case class NewPropertyDefinitionModel(
     symbol: String,
     parentType: String,
+    requiredParentQualifier: String,
     name: String,
     definingStatement: String,
-    requiredParentQualifier: String,
     ownTermNames: String,
     parentTerms: String)
+  case class NewRelatedObjectDefinitionModel(
+    symbol: String,
+    parentType: String,
+    requiredParentQualifier: String,
+    name: String,
+    defaultTermName: String,
+    definingStatement: String)
   case class NewStandalonePropertyDefinitionModel(
     symbol: String,
     defaultTermName: String,

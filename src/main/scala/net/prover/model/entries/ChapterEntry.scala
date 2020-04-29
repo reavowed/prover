@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.{EntryContext, Inference, Parser}
 
 trait ChapterEntry {
@@ -25,11 +25,27 @@ object ChapterEntry {
     def title: String
   }
 
-  trait CanChangeName extends ChapterEntry {
+  trait HasSymbol extends ChapterEntry {
+    def symbol: String
+    def withSymbol(newSymbol: String): ChapterEntry
+  }
+  trait HasParentType extends ChapterEntry {
+    def parentType: TypeDefinition
+  }
+  trait HasChangeableName extends ChapterEntry {
     def withName(newName: String): ChapterEntry
   }
-  trait CanChangeOptionalName extends ChapterEntry {
+  trait HasOptionalExplicitName extends ChapterEntry with HasSymbol {
+    def explicitName: Option[String]
+    override def name: String = explicitName.getOrElse(symbol)
     def withName(newName: Option[String]): ChapterEntry
+  }
+  trait HasStatementDefinition extends ChapterEntry {
+    def statementDefinition: StatementDefinition
+  }
+  trait HasArticle extends ChapterEntry {
+    @JsonSerialize
+    val article: String = if (name.headOption.exists("aeiou".contains(_))) "an" else "a"
   }
 
   val parsers: Seq[ChapterEntryParser] = Seq(
@@ -39,6 +55,7 @@ object ChapterEntry {
     TypeDefinition,
     TypeQualifierDefinition,
     PropertyDefinitionOnType,
+    RelatedObjectDefinition,
     StandalonePropertyDefinition,
     Axiom,
     Theorem,

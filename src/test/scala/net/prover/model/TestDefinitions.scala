@@ -1,6 +1,5 @@
 package net.prover.model
 
-import net.prover.model.TestDefinitions.{A, BlankDefinition, Conjunction, ElementOf, Equivalence, ForAll, φ}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.{Definitions, ExpressionDefinition, StatementDefinition, TermDefinition}
@@ -125,7 +124,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
 
   val Implication = connective("→", 2, None).copy(attributes = Seq("deduction"))
   val Negation = connective("¬", 1, None)
-  val Conjunction = connective("∧", 2, Some(Negation(Implication(φ, Negation(ψ)))))
+  val Conjunction = connective("∧", 2, Some(Negation(Implication(φ, Negation(ψ))))).copy(attributes = Seq("conjunction"))
   val Disjunction = connective("∨", 2, Some(Implication(Negation(φ), ψ)))
   val Equivalence = connective("↔", 2, Some(Conjunction(Implication(φ, ψ), Implication(ψ, φ))))
 

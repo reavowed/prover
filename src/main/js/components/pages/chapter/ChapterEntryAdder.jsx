@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import Button from "react-bootstrap/Button";
 import CommentInput from "./CommentInput";
 import PropertyDefinitionInput from "./PropertyDefinitionInput";
+import RelatedObjectDefinitionInput from "./RelatedObjectDefinitionInput";
 import StandalonePropertyDefinitionInput from "./StandalonePropertyDefinitionInput";
 import StatementDefinitionInput from "./StatementDefinitionInput";
 import TermDefinitionInput from "./TermDefinitionInput";
@@ -19,6 +20,7 @@ export default function ChapterEntryAdder() {
     {name: "Type Definition", element: <TypeDefinitionInput onCancel={onCancel}/>},
     {name: "Type Qualifier", element: <TypeQualifierInput onCancel={onCancel}/>},
     {name: "Property Definition", element: <PropertyDefinitionInput onCancel={onCancel}/>},
+    {name: "Related Object Definition", element: <RelatedObjectDefinitionInput onCancel={onCancel}/>},
     {name: "Standalone Property Definition", element: <StandalonePropertyDefinitionInput onCancel={onCancel}/>},
     {name: "Comment", element: <CommentInput onCancel={onCancel}/>}
   ];

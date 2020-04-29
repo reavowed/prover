@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
-import net.prover.model.definitions.{Definitions, ExpressionDefinition}
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.entries.{ChapterEntry, ExpressionDefinitionEntry, TermDefinitionEntry, TypeDefinition}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -22,9 +22,9 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @RequestBody(required = false) newName: String
   ): ResponseEntity[_] = {
     bookService.modifyEntry[ChapterEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, entry) => entry match {
-      case entry: ChapterEntry.CanChangeName =>
+      case entry: ChapterEntry.HasChangeableName =>
         getMandatoryString(newName, "name").map(entry.withName)
-      case entry: ChapterEntry.CanChangeOptionalName =>
+      case entry: ChapterEntry.HasOptionalExplicitName =>
         Success(entry.withName(getOptionalString(newName)))
       case _ =>
         Failure(BadRequestException(s"Cannot set name of ${entry.getClass.getName}"))
@@ -49,12 +49,9 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
       chapter <- bookService.findChapter(book, chapterKey)
       entry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
       (newEntry, newBooks) <- entry match {
-        case definition: ExpressionDefinitionEntry =>
-          val newDefinition = definition.withSymbol(newSymbol)
-          Success((newDefinition, modifyEntryWithReplacement(definition, newDefinition)))
-        case definition: TypeDefinition =>
-          val newDefinition = definition.withSymbol(newSymbol)
-          Success((newDefinition, modifyEntryWithReplacement(definition, newDefinition)))
+        case entry: ChapterEntry.HasSymbol =>
+          val newEntry = entry.withSymbol(newSymbol)
+          Success((newEntry, modifyEntryWithReplacement(entry, newEntry)))
         case _ =>
           Failure(BadRequestException(s"Cannot edit symbol of ${entry.getClass.getName}"))
       }

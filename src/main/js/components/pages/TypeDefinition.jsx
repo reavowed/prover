@@ -6,7 +6,9 @@ import EntryContext from "../EntryContext";
 import {CopiableExpression} from "../ExpressionComponent";
 import {formatHtml, replacePlaceholders} from "../helpers/Formatter";
 import {Breadcrumbs} from "./components/Breadcrumbs";
+import EditableExplicitName from "./components/EditableExplicitName";
 import EditableProperty from "./components/EditableProperty";
+import EditableSymbol from "./components/EditableSymbol";
 import {NavLinks} from "./components/NavLinks";
 import {Usages} from "./components/Usages";
 import {Page} from "./Page";
@@ -16,14 +18,6 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
   const definition = parser.parseTypeDefinition(definitionJson);
   const entryContext = EntryContext.create(parser, definitions, typeDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 
-  const saveSymbol = (newSymbol) => {
-    return window.fetchJson(path.join(url, "symbol"), {method: "PUT", body: newSymbol})
-      .then(url => window.location.pathname = url);
-  };
-  const saveName = (newName) => {
-    return window.fetchJson(path.join(url, "name"), {method: "PUT", body: newName})
-      .then(url => window.location.pathname = url);
-  };
   const saveFormat = (newFormat) => {
     return window.fetchJson(path.join(url, "format"), {method: "PUT", body: newFormat});
   };
@@ -39,8 +33,8 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
         <h3>{definition.title.capitalize()}</h3>
         {definition.defaultTermName} is {definition.article} {definition.name} {definition.qualifier && formatHtml(definition.qualifier.format.baseFormatString, s => replacePlaceholders(s, definition.qualifier.termNames))} if <CopiableExpression expression={definition.definingStatement} splitConjunction />.
         <hr/>
-        <EditableProperty label="Symbol" initialValue={definition.symbol} onSave={saveSymbol} />
-        <EditableProperty label="Explicit Name" initialValue={definition.explicitName} onSave={saveName} />
+        <EditableSymbol symbol={definition.symbol} url={url} />
+        <EditableExplicitName name={definition.explicitName} url={url} />
         <EditableProperty label="Main Term Name" initialValue={definition.defaultTermName} />
         {definition.qualifier && <EditableProperty label="Qualifier Term Names" initialValue={definition.qualifier.termNames.join(" ")} />}
         {definition.qualifier && <EditableProperty label="Qualifier Format" initialValue={serializedFormat} onSave={saveFormat} />}

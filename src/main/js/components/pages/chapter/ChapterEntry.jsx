@@ -75,6 +75,22 @@ export default function ChapterEntry({entry}) {
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     }
+    case "relatedObjectDefinition": {
+      const typeDefinition = entryContext.typeDefinitions[entry.parentTypeSymbol];
+      const objectDefinition = _.find(typeDefinition.relatedObjects, p => p.symbol === entry.symbol);
+      const qualifier = objectDefinition.requiredParentQualifier ?
+        _.find(typeDefinition.qualifiers, q => q.symbol === objectDefinition.requiredParentQualifier).qualifier :
+        typeDefinition.defaultQualifier;
+
+      return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
+        <ChapterEntryWrapper
+          title={<>Definition: {entry.name.capitalize()} for {typeDefinition.name.capitalize()}</>}
+          url={entry.url}
+          key={entry.url}>
+          {objectDefinition.article.capitalize()} {objectDefinition.name} for {typeDefinition.article} {typeDefinition.name} {typeDefinition.defaultTermName} {qualifier && formatHtml(qualifier.format, s => replacePlaceholders(s, qualifier.defaultTermNames))} is an object {objectDefinition.defaultTermName} such that <CopiableExpression expression={entry.definingStatement} splitConjunction/>.
+        </ChapterEntryWrapper>
+      </DisplayContext.Provider>;
+    }
     case "standalonePropertyDefinition":
       return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
         <ChapterEntryWrapper title={<>Definition: {entry.name.capitalize()}</>}

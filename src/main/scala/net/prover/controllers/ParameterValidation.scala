@@ -4,7 +4,7 @@ import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{Qualifier, TermListAdapter}
-import net.prover.model.entries.TypeDefinition
+import net.prover.model.entries.{TypeDefinition, TypeQualifierDefinition}
 import net.prover.model.expressions.Term
 
 import scala.util.{Failure, Success, Try}
@@ -55,6 +55,11 @@ trait ParameterValidation {
       case _ =>
         Failure(BadRequestException("Both format and term names must be provided for qualifier"))
     }
+  }
+  def getOptionalParentQualifier(parentType: TypeDefinition, qualifierSymbolText: String)(implicit entryContext: EntryContext): Try[Option[TypeQualifierDefinition]] = {
+    getOptionalString(qualifierSymbolText)
+      .map(qualifierSymbol => entryContext.qualifiersByType(parentType.symbol).find(_.symbol == qualifierSymbol).orBadRequest(s"Unknown qualifier '$qualifierSymbol' on type '${parentType.symbol}''"))
+      .swap
   }
   def getOptionalAdapter(termNamesText: String, possibleSerializedTemplates: String, qualifierTermNames: Seq[String])(implicit entryContext: EntryContext): Try[Option[TermListAdapter]] = {
     getOptionalString(possibleSerializedTemplates) match {

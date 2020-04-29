@@ -10,14 +10,16 @@ case class StandalonePropertyDefinition(
     defaultTermName: String,
     explicitName: Option[String],
     definingStatement: Statement)
-  extends ChapterEntry.Standalone
+  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition
 {
-  override def name: String = explicitName.getOrElse(symbol)
   override def title: String = s"Definition: ${name.capitalize}"
   def qualifiedSymbol: String = symbol
 
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry)
+
+  override def withSymbol(newSymbol: String): StandalonePropertyDefinition = copy(symbol = newSymbol)
+  override def withName(newName: Option[String]): ChapterEntry = copy(explicitName = newName)
 
   def fullFormat: Format = Format.Explicit(s"$defaultTermName is $name", Seq(defaultTermName), requiresBrackets = false, requiresComponentBrackets = true)
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(

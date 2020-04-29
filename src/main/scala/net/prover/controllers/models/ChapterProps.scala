@@ -48,6 +48,9 @@ object ChapterProps {
   case class PropertyDefinitionPropsForChapter(symbol: String, name: String, url: String, parentTypeSymbol: String, defaultTermName: String, defaultQualifierTermNames: Option[Seq[String]], definingStatement: Statement) extends EntryProps {
     override val `type`: String = "propertyDefinition"
   }
+  case class RelatedObjectDefinitionPropsForChapter(symbol: String, name: String, url: String, parentTypeSymbol: String, defaultTermName: String, defaultParentTermName: String, defaultQualifierTermNames: Option[Seq[String]], definingStatement: Statement) extends EntryProps {
+    override val `type`: String = "relatedObjectDefinition"
+  }
   case class StandalonePropertyDefinitionPropsForChapter(name: String, url: String, defaultTermName: String, definingStatement: Statement) extends EntryProps {
     override val `type`: String = "standalonePropertyDefinition"
   }

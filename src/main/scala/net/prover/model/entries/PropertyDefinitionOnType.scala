@@ -14,16 +14,16 @@ case class PropertyDefinitionOnType(
     explicitName: Option[String],
     definingStatement: Statement,
     conjunctionDefinition: StatementDefinition)
-  extends ChapterEntry.Standalone with ChapterEntry.CanChangeOptionalName
+  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition
 {
-  override def name: String = explicitName.getOrElse(symbol)
   override def title: String = s"Definition: ${name.capitalize} ${parentType.name.capitalize}"
   def qualifiedSymbol: String = symbol + parentType.symbol.capitalize
 
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry) + conjunctionDefinition.associatedChapterEntry + parentType
 
-  def withName(newName: Option[String]): PropertyDefinitionOnType = copy(explicitName = newName)
+  override def withSymbol(newSymbol: String): PropertyDefinitionOnType = copy(symbol = newSymbol)
+  override def withName(newName: Option[String]): PropertyDefinitionOnType = copy(explicitName = newName)
 
   def baseFormat = Format.Explicit(s"%1 is %0", s"${parentType.defaultTermName} is $name", 2, true, true)
   def fullFormat = parentType.qualifier.prependFormat(baseFormat)
@@ -93,7 +93,7 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
     for {
       symbol <- Parser.singleWord
       parentType <- Parser.required("on", context.typeDefinitionParser)
-      requiredParentQualifier <- Parser.optional("parentQualifier", Parser.singleWord.map(qualifierSymbol => context.qualifiersByType(parentType.symbol).find(_.symbol == qualifierSymbol).getOrElse(throw new Exception(s"Unrecognised qualifier '$qualifierSymbol'"))))
+      requiredParentQualifier <- parentType.parentQualifierParser
       termListAdapter <- Parser.optional("termListAdapter", TermListAdapter.parser)
       explicitName <- Parser.optional("name", Parser.allInParens)
       definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, requiredParentQualifier.map(_.allTermNames).getOrElse(parentType.allTermNames))).inParens)

@@ -104,7 +104,7 @@ object Inference {
   trait FromEntry extends WithCalculatedId {
     def isComplete(definitions: Definitions): Boolean
   }
-  trait Entry extends Inference.FromEntry with ChapterEntry.Standalone with ChapterEntry.CanChangeName {
+  trait Entry extends Inference.FromEntry with ChapterEntry.Standalone with ChapterEntry.HasChangeableName {
     override def title: String = name
     def withName(newName: String): Entry
   }

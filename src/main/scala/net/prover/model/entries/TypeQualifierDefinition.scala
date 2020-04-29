@@ -13,15 +13,15 @@ case class TypeQualifierDefinition(
     explicitName: Option[String],
     definingStatement: Statement,
     conjunctionDefinition: StatementDefinition)
-  extends ChapterEntry.Standalone with ChapterEntry.CanChangeOptionalName
+  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition
 {
-  override def name: String = explicitName.getOrElse(symbol)
   override def title: String = s"Definition: ${parentType.name.capitalize} ${name.capitalize}"
   def qualifiedSymbol: String = parentType.symbol + symbol.capitalize
 
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry) + conjunctionDefinition.associatedChapterEntry + parentType
 
+  override def withSymbol(newSymbol: String): TypeQualifierDefinition = copy(symbol = newSymbol)
   def withName(newName: Option[String]): TypeQualifierDefinition = copy(explicitName = newName)
 
   def fullFormat = qualifier.prependFormat(Format.Explicit(s"%1 is", s"${parentType.defaultTermName} is", 2, true, true))

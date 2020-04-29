@@ -13,9 +13,8 @@ case class TypeDefinition(
     qualifier: Option[Qualifier],
     explicitName: Option[String],
     definingStatement: Statement)
-  extends ChapterEntry.Standalone with ChapterEntry.CanChangeOptionalName
+  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle
 {
-  override val name: String = explicitName.getOrElse(symbol)
   override val title: String = s"Type Definition: ${name.capitalizeWords}"
 
   override def referencedInferenceIds: Set[String] = Set.empty
@@ -25,8 +24,6 @@ case class TypeDefinition(
   override def withName(newName: Option[String]): TypeDefinition = copy(explicitName = newName)
   def withFormat(newFormat: Format.Explicit): TypeDefinition = copy(qualifier = qualifier.map(_.withFormat(newFormat)))
 
-  @JsonSerialize
-  val article: String = if (name.headOption.exists("aeiou".contains(_))) "an" else "a"
   def baseFormat = Format.Explicit(s"%1 is $article %0", s"$defaultTermName is $article $name", 2, true, true)
   def fullFormat = qualifier.prependFormat(baseFormat)
 
@@ -58,6 +55,10 @@ case class TypeDefinition(
       qualifier,
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))
+  }
+
+  def parentQualifierParser(implicit entryContext: EntryContext): Parser[Option[TypeQualifierDefinition]] = {
+    Parser.optional("parentQualifier", Parser.singleWord.map(qualifierSymbol => entryContext.qualifiersByType(symbol).find(_.symbol == qualifierSymbol).getOrElse(throw new Exception(s"Unrecognised qualifier '$qualifierSymbol'"))))
   }
 }
 
