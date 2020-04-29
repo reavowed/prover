@@ -50,7 +50,7 @@ package object model {
       words.headOption.getOrElse("") + words.drop(1).map(_.capitalize).mkString("")
     }
     def formatAsKey: String = splitByWhitespace().map(_.toLowerCase).mkString("-")
-    def capitalizeWords: String = splitByWhitespace().map(_.capitalize).mkString(" ")
+    def capitalizeWords: String = raw"\b((?<!\b')\w+)".r.replaceAllIn(s, _.group(1).capitalize)
     def inParens: String = "(" + s + ")"
   }
 

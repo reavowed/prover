@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition, TermListAdapter}
+import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.{Statement, TermVariable}
 
 case class RelatedObjectDefinition(
@@ -15,7 +15,7 @@ case class RelatedObjectDefinition(
     conjunctionDefinition: StatementDefinition)
   extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle
 {
-  override def title: String = s"Definition: ${name.capitalize} for ${parentType.name.capitalize}"
+  override def title: String = s"Definition: ${name.capitalizeWords} for ${parentType.name.capitalizeWords}"
   def qualifiedSymbol: String = symbol + parentType.symbol.capitalize
 
   override def referencedInferenceIds: Set[String] = Set.empty

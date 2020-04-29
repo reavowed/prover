@@ -25,7 +25,7 @@ export interface ExpressionDefinition {
 }
 
 export interface QualifierDefinition {
-  numberOfComponents: number;
+  defaultTermNames: string[];
   format: string;
 }
 

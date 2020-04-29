@@ -65,7 +65,7 @@ export class Parser {
         const [firstToken, ...tokensAfterFirst] = tokens;
         const expressionDefinition = self.definitions[firstToken];
         const typeDefinition = self.typeDefinitions[firstToken];
-        const qualifierAndParentType = _.chain(self.typeDefinitions).map(d => { return {qualifier: _.find(d.qualifiers, q => q.qualifiedSymbol === firstToken), parentType: d}}).filter("qualifier").find().value();
+        const qualifierAndParentType = _.chain(self.typeDefinitions).map(d => { return {qualifierDefinition: _.find(d.qualifiers, q => q.qualifiedSymbol === firstToken), parentType: d}}).filter("qualifierDefinition").find().value();
         const propertyAndParentType = _.chain(self.typeDefinitions).map(d => { return {property: _.find(d.properties, p => p.qualifiedSymbol === firstToken), parentType: d}}).filter("property").find().value();
         const standalonePropertyDefinition = self.standalonePropertyDefinitions[firstToken];
         if (expressionDefinition) {
@@ -98,18 +98,18 @@ export class Parser {
           return [new DefinedExpression(expressionDefinition, boundVariables, components), tokensAfterComponents];
         } else if (typeDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, typeDefinition.defaultQualifier?.numberOfComponents ?? 0);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, typeDefinition.defaultQualifier?.defaultTermNames.length ?? 0);
           return [new TypeExpression(typeDefinition, term, null, components, [], null), tokensAfterComponents];
         } else if (qualifierAndParentType) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifierAndParentType.qualifier.qualifier.numberOfComponents);
-          return [new TypeQualifierExpression(qualifierAndParentType.qualifier, qualifierAndParentType.parentType, term, components), tokensAfterComponents];
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifierAndParentType.qualifierDefinition.qualifier.defaultTermNames.length);
+          return [new TypeQualifierExpression(qualifierAndParentType.qualifierDefinition, qualifierAndParentType.parentType, term, components), tokensAfterComponents];
         } else if (propertyAndParentType) {
           const {property, parentType} = propertyAndParentType;
           const requiredParentQualifier = property.requiredParentQualifier ? _.find(parentType.qualifiers, q => q.symbol === property.requiredParentQualifier) : null;
           const qualifier = requiredParentQualifier?.qualifier || parentType.defaultQualifier;
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifier?.numberOfComponents ?? 0);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifier?.defaultTermNames.length ?? 0);
           return [new PropertyExpression(property, parentType, term, components), tokensAfterComponents];
         } else if (standalonePropertyDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
@@ -253,14 +253,9 @@ export class Parser {
     _.forEach(definition.disambiguatorAdders, da => da.template = this.parseExpression(da.template));
     return definition;
   };
-  parseTypeDefinition = (definitionJson) => {
+  parseDefinitionWithDefiningStatement = (definitionJson) => {
     const definition = _.cloneDeep(definitionJson);
-    definition.definingStatement && (definition.definingStatement = this.parseExpression(definition.definingStatement));
-    return definition;
-  };
-  parsePropertyDefinition = (definitionJson) => {
-    const definition = _.cloneDeep(definitionJson);
-    definition.definingStatement && (definition.definingStatement = this.parseExpression(definition.definingStatement));
+    definition.definingStatement = this.parseExpression(definition.definingStatement);
     return definition;
   };
   parseSubstitutions = (substitutions) => {

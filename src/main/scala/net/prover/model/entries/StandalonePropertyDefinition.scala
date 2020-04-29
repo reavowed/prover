@@ -12,7 +12,7 @@ case class StandalonePropertyDefinition(
     definingStatement: Statement)
   extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition
 {
-  override def title: String = s"Definition: ${name.capitalize}"
+  override def title: String = s"Definition: ${name.capitalizeWords}"
   def qualifiedSymbol: String = symbol
 
   override def referencedInferenceIds: Set[String] = Set.empty

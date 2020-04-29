@@ -1,11 +1,12 @@
 import * as React from "react";
 
 const EntryContext = React.createContext();
-EntryContext.create = function(parser, definitions, typeDefinitions, definitionShorthands, displayShorthands, inferences = [], binaryRelations = []) {
+EntryContext.create = function(parser, definitions, typeDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands, inferences = [], binaryRelations = []) {
   return {
     parser,
     definitions,
     typeDefinitions,
+    standalonePropertyDefinitions,
     definitionShorthands,
     displayShorthands: displayShorthands.map(parser.parseDisplayShorthand),
     inferences,

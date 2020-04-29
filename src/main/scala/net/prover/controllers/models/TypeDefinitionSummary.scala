@@ -2,37 +2,41 @@ package net.prover.controllers.models
 
 import net.prover.model.EntryContext
 import net.prover.model.definitions.Qualifier
+import net.prover.model.entries.TypeDefinition
 
 case class TypeDefinitionSummary(
   symbol: String,
   name: String,
+  article: String,
   defaultTermName: String,
   defaultQualifier: Option[QualifierSummary],
-  article: String,
   properties: Seq[PropertyDefinitionSummary],
   qualifiers: Seq[TypeQualifierDefinitionSummary],
   relatedObjects: Seq[RelatedObjectDefinitionSummary])
 case class PropertyDefinitionSummary(symbol: String, qualifiedSymbol: String, name: String, requiredParentQualifier: Option[String])
 case class TypeQualifierDefinitionSummary(symbol: String, qualifiedSymbol: String, name: String, qualifier: QualifierSummary)
 case class RelatedObjectDefinitionSummary(symbol: String, qualifiedSymbol: String, name: String, article: String, defaultTermName: String, requiredParentQualifier: Option[String])
-case class StandalonePropertyDefinitionSummary(symbol: String, qualifiedSymbol: String, name: String)
-case class QualifierSummary(format: String, defaultTermNames: Seq[String], numberOfComponents: Int)
+case class StandalonePropertyDefinitionSummary(symbol: String, qualifiedSymbol: String, name: String, defaultTermName: String)
+case class QualifierSummary(format: String, defaultTermNames: Seq[String])
 
 object TypeDefinitionSummary {
+  def getSummary(typeDefinition: TypeDefinition)(implicit entryContext: EntryContext): TypeDefinitionSummary = {
+    TypeDefinitionSummary(
+      typeDefinition.symbol,
+      typeDefinition.name,
+      typeDefinition.article,
+      typeDefinition.defaultTermName,
+      typeDefinition.qualifier.map(getQualifierSummary),
+      entryContext.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).map(pd => PropertyDefinitionSummary(pd.symbol, pd.qualifiedSymbol, pd.name, pd.requiredParentQualifier.map(_.symbol))),
+      entryContext.qualifiersByType.getOrElse(typeDefinition.symbol, Nil).map(qd => TypeQualifierDefinitionSummary(qd.symbol, qd.qualifiedSymbol, qd.name, getQualifierSummary(qd.qualifier))),
+      entryContext.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).map(rod => RelatedObjectDefinitionSummary(rod.symbol, rod.qualifiedSymbol, rod.name, rod.article, rod.defaultTermName, rod.requiredParentQualifier.map(_.symbol))))
+  }
   def getQualifierSummary(qualifier: Qualifier): QualifierSummary = {
-    QualifierSummary(qualifier.format.baseFormatString, qualifier.termNames, qualifier.termNames.length)
+    QualifierSummary(qualifier.format.baseFormatString, qualifier.termNames)
   }
   def getAllFromContext(entryContext: EntryContext): Map[String, TypeDefinitionSummary] = {
     entryContext.typeDefinitions
-      .map(d => d.symbol -> TypeDefinitionSummary(
-        d.symbol,
-        d.name,
-        d.defaultTermName,
-        d.qualifier.map(getQualifierSummary),
-        d.article,
-        entryContext.propertyDefinitionsByType.getOrElse(d.symbol, Nil).map(pd => PropertyDefinitionSummary(pd.symbol, pd.qualifiedSymbol, pd.name, pd.requiredParentQualifier.map(_.symbol))),
-        entryContext.qualifiersByType.getOrElse(d.symbol, Nil).map(qd => TypeQualifierDefinitionSummary(qd.symbol, qd.qualifiedSymbol, qd.name, getQualifierSummary(qd.qualifier))),
-        entryContext.relatedObjectsByType.getOrElse(d.symbol, Nil).map(rod => RelatedObjectDefinitionSummary(rod.symbol, rod.qualifiedSymbol, rod.name, rod.article, rod.defaultTermName, rod.requiredParentQualifier.map(_.symbol)))))
+      .map(d => d.symbol -> getSummary(d)(entryContext))
       .toMap
   }
 }
@@ -43,7 +47,8 @@ object StandalonePropertyDefinitionSummary {
       .map(d => d.symbol -> StandalonePropertyDefinitionSummary(
         d.symbol,
         d.qualifiedSymbol,
-        d.name))
+        d.name,
+        d.defaultTermName))
       .toMap
   }
 }

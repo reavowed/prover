@@ -15,7 +15,7 @@ case class TypeQualifierDefinition(
     conjunctionDefinition: StatementDefinition)
   extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition
 {
-  override def title: String = s"Definition: ${parentType.name.capitalize} ${name.capitalize}"
+  override def title: String = s"Definition: ${parentType.name.capitalizeWords} ${name.capitalizeWords}"
   def qualifiedSymbol: String = parentType.symbol + symbol.capitalize
 
   override def referencedInferenceIds: Set[String] = Set.empty

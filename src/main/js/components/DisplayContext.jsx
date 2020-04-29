@@ -67,7 +67,7 @@ DisplayContext.forExpressionDefinition = function(definition, entryContext) {
   return DisplayContext.fromDisambiguators(disambiguators);
 };
 
-DisplayContext.forTypeDefinition = function(definition, entryContext) {
+DisplayContext.forDefinitionWithDefiningStatement = function(definition, entryContext) {
   const disambiguators = getDisambiguatorsForExpression(definition.definingStatement, entryContext);
   return DisplayContext.fromDisambiguators(disambiguators);
 };

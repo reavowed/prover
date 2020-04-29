@@ -3,8 +3,13 @@ import {DefinedExpression} from "../../../models/Expression";
 import DisplayContext from "../../DisplayContext";
 import EntryContext from "../../EntryContext";
 import {CopiableExpression} from "../../ExpressionComponent";
-import {formatHtml, replacePlaceholders} from "../../helpers/Formatter";
+import {formatHtml, formatQualifier, replacePlaceholders} from "../../helpers/Formatter";
 import {ResultWithPremises} from "../../ResultWithPremises";
+import PropertyOnTypeDefinitionDescription from "../components/PropertyOnTypeDefinitionDescription";
+import RelatedObjectDefinitionDescription from "../components/RelatedObjectDefinitionDescription";
+import StandalonePropertyDescription from "../components/StandalonePropertyDescription";
+import TypeDefinitionDescription from "../components/TypeDefinitionDescription";
+import TypeQualifierDefinitionDescription from "../components/TypeQualifierDefinitionDescription";
 import ChapterContext from "./ChapterContext";
 import ChapterEntryWrapper from "./ChapterEntryWrapper";
 import DefinitionEntry from "./DefinitionEntry";
@@ -24,7 +29,7 @@ export default function ChapterEntry({entry}) {
         </DisplayContext.Provider>;
     case "statementDefinition":
       return <DisplayContext.Provider value={DisplayContext.forExpressionDefinition(entry, entryContext)}>
-        <DefinitionEntry key={entry.url} title="Statement Definition" entry={entry}>
+        <DefinitionEntry key={entry.url} entry={entry}>
           {entry.definingStatement && <><CopiableExpression expression={entry.defaultValue}/> is defined as <CopiableExpression expression={entry.definingStatement}/>.</>}
         </DefinitionEntry>
       </DisplayContext.Provider>;
@@ -34,69 +39,54 @@ export default function ChapterEntry({entry}) {
         <><CopiableExpression expression={entry.defaultValue}/> is defined to be equal to <CopiableExpression expression={entry.definingStatement.components[1]}/></> :
         <><CopiableExpression expression={entry.defaultValue}/> is defined such that <CopiableExpression expression={entry.definingStatement} splitConjunction /></>;
       return <DisplayContext.Provider value={DisplayContext.forExpressionDefinition(entry, entryContext)}>
-        <DefinitionEntry key={entry.url} title="Term Definition" entry={entry}>
+        <DefinitionEntry key={entry.url} entry={entry}>
           <ResultWithPremises premises={entry.premises}
                               result={result}/>
         </DefinitionEntry>
       </DisplayContext.Provider>;
     case "typeDefinition":
-      const definition = entryContext.typeDefinitions[entry.symbol];
-      return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
-        <ChapterEntryWrapper title={<>Definition: {definition.name.capitalize()}</>}
+      return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(entry, entryContext)}>
+        <ChapterEntryWrapper title={entry.title}
                              url={entry.url}
                              key={entry.url}>
-          {entry.defaultTermName} is {definition.article} {definition.name} {definition.defaultQualifier && formatHtml(definition.defaultQualifier.format, s => replacePlaceholders(s, entry.defaultQualifierTermNames))} if <CopiableExpression expression={entry.definingStatement} splitConjunction/>.
+          <TypeDefinitionDescription symbol={entry.symbol} definingStatement={entry.definingStatement} />
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     case "typeQualifierDefinition":
-      const typeDefinition = entryContext.typeDefinitions[entry.parentTypeSymbol];
-      const qualifierDefinition = _.find(typeDefinition.qualifiers, q => q.symbol === entry.symbol);
-      return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
+      return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(entry, entryContext)}>
         <ChapterEntryWrapper
-          title={<>Definition: {typeDefinition.name.capitalize()} {qualifierDefinition.name.capitalize()}</>}
+          title={entry.title}
           url={entry.url}
           key={entry.url}>
-          {typeDefinition.article.capitalize()} {typeDefinition.name} {formatHtml(qualifierDefinition.qualifier.format, s => replacePlaceholders(s, entry.qualifierTermNames))} is a {typeDefinition.name} {entry.defaultTermName} such that <CopiableExpression expression={entry.definingStatement} splitConjunction/>.
+          <TypeQualifierDefinitionDescription symbol={entry.symbol} parentTypeSymbol={entry.parentTypeSymbol} definingStatement={entry.definingStatement} />
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     case "propertyDefinition": {
-      const typeDefinition = entryContext.typeDefinitions[entry.parentTypeSymbol];
-      const propertyDefinition = _.find(typeDefinition.properties, p => p.symbol === entry.symbol);
-      const qualifier = propertyDefinition.requiredParentQualifier ?
-        _.find(typeDefinition.qualifiers, q => q.symbol === propertyDefinition.requiredParentQualifier).qualifier :
-        typeDefinition.defaultQualifier;
-
-      return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
+      return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(entry, entryContext)}>
         <ChapterEntryWrapper
-          title={<>Definition: {entry.name.capitalize()} {typeDefinition.name.capitalize()}</>}
+          title={entry.title}
           url={entry.url}
           key={entry.url}>
-          {typeDefinition.article.capitalize()} {typeDefinition.name} {typeDefinition.defaultTermName} {qualifier && formatHtml(qualifier.format, s => replacePlaceholders(s, qualifier.defaultTermNames))} is {entry.name} if <CopiableExpression expression={entry.definingStatement} splitConjunction/>.
+          <PropertyOnTypeDefinitionDescription symbol={entry.symbol} parentTypeSymbol={entry.parentTypeSymbol} definingStatement={entry.definingStatement} />
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     }
     case "relatedObjectDefinition": {
-      const typeDefinition = entryContext.typeDefinitions[entry.parentTypeSymbol];
-      const objectDefinition = _.find(typeDefinition.relatedObjects, p => p.symbol === entry.symbol);
-      const qualifier = objectDefinition.requiredParentQualifier ?
-        _.find(typeDefinition.qualifiers, q => q.symbol === objectDefinition.requiredParentQualifier).qualifier :
-        typeDefinition.defaultQualifier;
-
-      return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
+      return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(entry, entryContext)}>
         <ChapterEntryWrapper
-          title={<>Definition: {entry.name.capitalize()} for {typeDefinition.name.capitalize()}</>}
+          title={entry.title}
           url={entry.url}
           key={entry.url}>
-          {objectDefinition.article.capitalize()} {objectDefinition.name} for {typeDefinition.article} {typeDefinition.name} {typeDefinition.defaultTermName} {qualifier && formatHtml(qualifier.format, s => replacePlaceholders(s, qualifier.defaultTermNames))} is an object {objectDefinition.defaultTermName} such that <CopiableExpression expression={entry.definingStatement} splitConjunction/>.
+          <RelatedObjectDefinitionDescription symbol={entry.symbol} parentTypeSymbol={entry.parentTypeSymbol} definingStatement={entry.definingStatement} />
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     }
     case "standalonePropertyDefinition":
-      return <DisplayContext.Provider value={DisplayContext.forTypeDefinition(entry, entryContext)}>
-        <ChapterEntryWrapper title={<>Definition: {entry.name.capitalize()}</>}
+      return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(entry, entryContext)}>
+        <ChapterEntryWrapper title={entry.title}
                              url={entry.url}
                              key={entry.url}>
-          {entry.defaultTermName} is {entry.name} if <CopiableExpression expression={entry.definingStatement}/>.
+          <StandalonePropertyDescription symbol={entry.symbol} definingStatement={entry.definingStatement} />
         </ChapterEntryWrapper>
       </DisplayContext.Provider>;
     case "comment":

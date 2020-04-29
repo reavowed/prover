@@ -15,7 +15,7 @@ case class TypeDefinition(
     definingStatement: Statement)
   extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle
 {
-  override val title: String = s"Type Definition: ${name.capitalizeWords}"
+  override val title: String = s"Definition: ${name.capitalizeWords}"
 
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry)

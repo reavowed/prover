@@ -8,7 +8,7 @@ import {ExpressionDefinition} from "../ExpressionDefinition";
 export function StatementDefinition({definition: definitionJson, definitions, typeDefinitions, standalonePropertyDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, ...otherProps}) {
   const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
   const definition = parser.parseStatementDefinition(definitionJson);
-  const entryContext = EntryContext.create(parser, definitions, typeDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
+  const entryContext = EntryContext.create(parser, definitions, typeDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 
   return <DisplayContext.Provider value={DisplayContext.forExpressionDefinition(definition, entryContext)}>
     <ExpressionDefinition title="Statement Definition" definition={definition} entryContext={entryContext} parser={parser} {...otherProps}>

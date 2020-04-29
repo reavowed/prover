@@ -16,7 +16,7 @@ export const functionFromDefinition = {
   qualifiedSymbol: "functionFrom",
   name: "from",
   qualifier: {
-    numberOfComponents: 2,
+    defaultTermNames: ["A", "B"],
     format: "from %0 → %1"
   }
 };

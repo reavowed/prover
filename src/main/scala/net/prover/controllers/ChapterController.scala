@@ -44,19 +44,19 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
             Some(TermDefinitionPropsForChapter(defaultValue, url, shorthand, definingStatement, premises))
           case typeDefinition: TypeDefinition =>
             import typeDefinition._
-            Some(TypeDefinitionPropsForChapter(symbol, url, defaultTermName, qualifier.termNames, definingStatement))
-          case typeQualfifierDefinition: TypeQualifierDefinition =>
-            import typeQualfifierDefinition._
-            Some(TypeQualifierDefinitionPropsForChapter(symbol, url, parentType.symbol, parentType.defaultTermName, qualifier.termNames, definingStatement))
+            Some(TypeDefinitionPropsForChapter(symbol, url, title, definingStatement))
+          case typeQualifierDefinition: TypeQualifierDefinition =>
+            import typeQualifierDefinition._
+            Some(TypeQualifierDefinitionPropsForChapter(symbol, url, parentType.symbol, title, definingStatement))
           case propertyDefinition: PropertyDefinitionOnType =>
             import propertyDefinition._
-            Some(PropertyDefinitionPropsForChapter(symbol, name, url, parentType.symbol, parentType.defaultTermName, parentType.qualifier.map(_.termNames), definingStatement))
+            Some(PropertyDefinitionPropsForChapter(symbol, url, parentType.symbol, title, definingStatement))
           case relatedObjectDefinition: RelatedObjectDefinition =>
             import relatedObjectDefinition._
-            Some(RelatedObjectDefinitionPropsForChapter(symbol, name, url, parentType.symbol, defaultTermName, parentType.defaultTermName, parentType.qualifier.map(_.termNames), definingStatement))
+            Some(RelatedObjectDefinitionPropsForChapter(symbol, url, parentType.symbol, title, definingStatement))
           case standalonePropertyDefinition: StandalonePropertyDefinition =>
             import standalonePropertyDefinition._
-            Some(StandalonePropertyDefinitionPropsForChapter(name, url, defaultTermName, definingStatement))
+            Some(StandalonePropertyDefinitionPropsForChapter(symbol, url, title, definingStatement))
           case comment: Comment =>
             import comment._
             Some(CommentPropsForChapter(text, url))

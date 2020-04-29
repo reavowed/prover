@@ -16,7 +16,7 @@ case class PropertyDefinitionOnType(
     conjunctionDefinition: StatementDefinition)
   extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition
 {
-  override def title: String = s"Definition: ${name.capitalize} ${parentType.name.capitalize}"
+  override def title: String = s"Definition: ${name.capitalizeWords} ${parentType.name.capitalizeWords}"
   def qualifiedSymbol: String = symbol + parentType.symbol.capitalize
 
   override def referencedInferenceIds: Set[String] = Set.empty

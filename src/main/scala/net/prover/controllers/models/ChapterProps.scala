@@ -39,19 +39,19 @@ object ChapterProps {
   case class TermDefinitionPropsForChapter(defaultValue: Term, url: String, shorthand: Option[String], definingStatement: Statement, premises: Seq[Statement]) extends EntryProps {
     override val `type`: String = "termDefinition"
   }
-  case class TypeDefinitionPropsForChapter(symbol: String, url: String, defaultTermName: String, defaultQualifierTermNames: Seq[String], definingStatement: Statement) extends EntryProps {
+  case class TypeDefinitionPropsForChapter(symbol: String, url: String, title: String, definingStatement: Statement) extends EntryProps {
     override val `type`: String = "typeDefinition"
   }
-  case class TypeQualifierDefinitionPropsForChapter(symbol: String, url: String, parentTypeSymbol: String, defaultTermName: String, qualifierTermNames: Seq[String], definingStatement: Statement) extends EntryProps {
+  case class TypeQualifierDefinitionPropsForChapter(symbol: String, url: String, parentTypeSymbol: String, title: String, definingStatement: Statement) extends EntryProps {
     override val `type`: String = "typeQualifierDefinition"
   }
-  case class PropertyDefinitionPropsForChapter(symbol: String, name: String, url: String, parentTypeSymbol: String, defaultTermName: String, defaultQualifierTermNames: Option[Seq[String]], definingStatement: Statement) extends EntryProps {
+  case class PropertyDefinitionPropsForChapter(symbol: String, url: String, parentTypeSymbol: String, title: String, definingStatement: Statement) extends EntryProps {
     override val `type`: String = "propertyDefinition"
   }
-  case class RelatedObjectDefinitionPropsForChapter(symbol: String, name: String, url: String, parentTypeSymbol: String, defaultTermName: String, defaultParentTermName: String, defaultQualifierTermNames: Option[Seq[String]], definingStatement: Statement) extends EntryProps {
+  case class RelatedObjectDefinitionPropsForChapter(symbol: String, url: String, parentTypeSymbol: String, title: String, definingStatement: Statement) extends EntryProps {
     override val `type`: String = "relatedObjectDefinition"
   }
-  case class StandalonePropertyDefinitionPropsForChapter(name: String, url: String, defaultTermName: String, definingStatement: Statement) extends EntryProps {
+  case class StandalonePropertyDefinitionPropsForChapter(symbol: String, url: String, title: String, definingStatement: Statement) extends EntryProps {
     override val `type`: String = "standalonePropertyDefinition"
   }
   case class CommentPropsForChapter(text: String, url: String) extends EntryProps {
