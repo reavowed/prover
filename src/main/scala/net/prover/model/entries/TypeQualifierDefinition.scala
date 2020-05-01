@@ -2,8 +2,7 @@ package net.prover.model.entries
 
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
-import net.prover.model.definitions.{ExpressionDefinition, Qualifier, StatementDefinition}
+import net.prover.model.definitions.{ConjunctionDefinition, ExpressionDefinition, Qualifier, StatementDefinition}
 import net.prover.model.expressions.{Statement, TermVariable}
 
 case class TypeQualifierDefinition(
@@ -12,14 +11,14 @@ case class TypeQualifierDefinition(
     qualifier: Qualifier,
     explicitName: Option[String],
     definingStatement: Statement,
-    conjunctionDefinition: StatementDefinition)
+    conjunctionDefinition: ConjunctionDefinition)
   extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition
 {
   override def title: String = s"Definition: ${parentType.name.capitalizeWords} ${name.capitalizeWords}"
   def qualifiedSymbol: String = parentType.symbol + symbol.capitalize
 
   override def referencedInferenceIds: Set[String] = Set.empty
-  override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry) + conjunctionDefinition.associatedChapterEntry + parentType
+  override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry) + conjunctionDefinition.referencedEntry + parentType
 
   override def withSymbol(newSymbol: String): TypeQualifierDefinition = copy(symbol = newSymbol)
   def withName(newName: Option[String]): TypeQualifierDefinition = copy(explicitName = newName)

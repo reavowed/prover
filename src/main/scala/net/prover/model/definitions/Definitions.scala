@@ -47,7 +47,7 @@ case class Definitions(rootEntryContext: EntryContext) {
       inferenceEntries.iterator.collect {
         case inference @ Inference(
         _,
-        Seq(singlePremise @ generalizationDefinition(StatementVariable(premisePredicateName, Seq(FunctionParameter(0, 0))))),
+        Seq(singlePremise @ generalizationDefinition(_, StatementVariable(premisePredicateName, Seq(FunctionParameter(0, 0))))),
         StatementVariable(conclusionPredicateName, Seq(TermVariable(variableName, Nil)))
         ) if premisePredicateName == conclusionPredicateName =>
           (inference, singlePremise, premisePredicateName, variableName)
@@ -158,8 +158,8 @@ case class Definitions(rootEntryContext: EntryContext) {
       generalizationDefinition <- rootEntryContext.generalizationDefinitionOption.toSeq
       inference <- inferenceEntries
       connective <- definedBinaryConnectives
-      (generalizationDefinition(StatementVariable(a, Seq(FunctionParameter(0, 0)))), generalizationDefinition(StatementVariable(b, Seq(FunctionParameter(0, 0))))) <- connective.unapply(inference.conclusion)
-      if inference.premises == Seq(generalizationDefinition(connective(StatementVariable(a, Seq(FunctionParameter(0, 0))), StatementVariable(b, Seq(FunctionParameter(0, 0))))(SubstitutionContext.withExtraParameters(1))))
+      (generalizationDefinition(_, StatementVariable(a, Seq(FunctionParameter(0, 0)))), generalizationDefinition(_, StatementVariable(b, Seq(FunctionParameter(0, 0))))) <- connective.unapply(inference.conclusion)
+      if inference.premises == Seq(generalizationDefinition("", connective(StatementVariable(a, Seq(FunctionParameter(0, 0))), StatementVariable(b, Seq(FunctionParameter(0, 0))))(SubstitutionContext.withExtraParameters(1))))
     } yield connective -> inference).toMap
   }
   lazy val deductionDistributions: Map[BinaryJoiner[Statement], Inference] = {
@@ -523,10 +523,10 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
-      deduction <- rootEntryContext.deductionDefinitionOption.toSeq
+      deductionDefinition <- rootEntryContext.deductionDefinitionOption.toSeq
       result <- for {
         inference <- allInferences
-        Seq(firstPremise @ deduction(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
+        Seq(firstPremise @ deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
         swapper <- Seq(Direction.Forward, Direction.Reverse)
         (premiseName, conclusionName) = swapper.swapSourceAndResult(a, b)
         if inference.requiredSubstitutions.terms.isEmpty && inference.requiredSubstitutions.hasNoApplications

@@ -1,6 +1,6 @@
 package net.prover.controllers.models
 
-import net.prover.model.definitions.{BinaryJoiner, StatementDefinition, Wrapper}
+import net.prover.model.definitions.{BinaryJoiner, DeductionDefinition, GeneralizationDefinition, StatementDefinition, Wrapper}
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import net.prover.model.{Inference, Substitutions}
@@ -21,8 +21,8 @@ sealed trait Unwrapper {
   def rewrapWithDistribution(steps: Seq[Step], joiner: BinaryJoiner[Statement], source: Statement, result: Statement)(implicit stepProvingContext: StepProvingContext): Try[Seq[Step]]
   def remove(source: Term, premises: Seq[Statement], wrapperStatement: Statement)(implicit stepContext: StepContext): Option[(Term, Seq[Statement], Statement)]
 }
-case class GeneralizationUnwrapper(variableName: String, generalizationDefinition: StatementDefinition, specificationInference: Inference) extends Unwrapper {
-  val definitionSymbol: String = generalizationDefinition.symbol
+case class GeneralizationUnwrapper(variableName: String, generalizationDefinition: GeneralizationDefinition, specificationInference: Inference) extends Unwrapper {
+  val definitionSymbol: String = generalizationDefinition.statementDefinition.symbol
   val depth = 1
   def inference = specificationInference
   def enhanceContext(stepContext: StepContext): StepContext = {
@@ -32,7 +32,7 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
     new Wrapper((t, sc) => addToStatement(wrapper(t)(SubstitutionContext.withExtraParameter(sc))))
   }
   def addToStatement(statement: Statement): Statement = {
-    generalizationDefinition.bind(variableName)(statement)
+    generalizationDefinition(variableName, statement)
   }
   def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     val parameter = FunctionParameter(0, depth)
@@ -61,8 +61,8 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
     } yield (removedSource, removedPremises, addToStatement(wrapperStatement))
   }
 }
-case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: StatementDefinition, deductionEliminationInference: Inference) extends Unwrapper {
-  val definitionSymbol: String = deductionDefinition.symbol
+case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: DeductionDefinition, deductionEliminationInference: Inference) extends Unwrapper {
+  val definitionSymbol: String = deductionDefinition.statementDefinition.symbol
   val depth = 0
   def inference = deductionEliminationInference
   def enhanceContext(stepContext: StepContext): StepContext = {

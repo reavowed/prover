@@ -4,7 +4,7 @@ import styled from "styled-components";
 import {
   DefinedExpression,
   matchTemplate,
-  PropertyExpression,
+  PropertyExpression, RelatedObjectExpression,
   StandalonePropertyExpression,
   TypeExpression,
   TypeQualifierExpression
@@ -141,6 +141,14 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [renderedSymbol, ...renderedBoundVariables, ...renderedComponents]));
     }
 
+    function addBrackets(result) {
+      if (parentRequiresBrackets) {
+        result.unshift("(");
+        result.push(")");
+      }
+      return result;
+    }
+
     function renderNormally() {
       if (expression instanceof TypeExpression) {
         const hasExplicitQualifier = !!expression.explicitQualifier;
@@ -190,15 +198,11 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
           result.push(<> </>);
           result.push(formattedQualifier);
         }
-        if (parentRequiresBrackets) {
-          result.unshift("(");
-          result.push(")");
-        }
-        return result;
+        return addBrackets(result);
       } else if (expression instanceof TypeQualifierExpression) {
         const formattedTerm = renderExpression(expression.term, [...path, 0], filterPaths(actionHighlights, [...path, 0]), filterPaths(staticHighlights, [...path, 0]), boundVariableLists, false);
         const formattedQualifier = renderQualifier(expression.definition.qualifier, expression.qualifierComponents, path, actionHighlights, staticHighlights);
-        return [formattedTerm, <> is </>, formattedQualifier];
+        return addBrackets([formattedTerm, <> is </>, formattedQualifier]);
       } else if (expression instanceof PropertyExpression) {
         const formattedTerm = renderExpression(expression.term, [...path, 0], filterPaths(actionHighlights, [...path, 0]), filterPaths(staticHighlights, [...path, 0]), boundVariableLists, false);
         const result = [formattedTerm, <> is </>, expression.definition.name];
@@ -208,10 +212,21 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
           result.push(<> </>);
           result.push(formattedQualifier);
         }
-        return result;
+        return addBrackets(result);
+      } else if (expression instanceof RelatedObjectExpression) {
+        const formattedTerm = renderExpression(expression.term, [...path, 0], filterPaths(actionHighlights, [...path, 0]), filterPaths(staticHighlights, [...path, 0]), boundVariableLists, false);
+        const formattedParentTerm = renderExpression(expression.parentTerm, [...path, 1], filterPaths(actionHighlights, [...path, 1]), filterPaths(staticHighlights, [...path, 1]), boundVariableLists, false);
+        const result = [formattedTerm, <> is {expression.definition.article} {expression.definition.name} for </>, formattedParentTerm];
+        const qualifier = _.find(expression.typeDefinition.qualifiers, q => q.symbol === expression.definition.requiredParentQualifier)?.qualifier || expression.typeDefinition.defaultQualifier;
+        if (qualifier) {
+          const formattedQualifier = renderQualifier(qualifier, expression.qualifierComponents, path, actionHighlights, staticHighlights);
+          result.push(<> </>);
+          result.push(formattedQualifier);
+        }
+        return addBrackets(result);
       } else if (expression instanceof StandalonePropertyExpression) {
         const formattedTerm = renderExpression(expression.term, [...path, 0], filterPaths(actionHighlights, [...path, 0]), filterPaths(staticHighlights, [...path, 0]), boundVariableLists, false);
-        return [formattedTerm, <> is </>, expression.definition.name];
+        return addBrackets([formattedTerm, <> is </>, expression.definition.name]);
       } else if (expression.formatForHtml) {
         return renderFormattableExpressionWithDisambiguator(expression.disambiguator);
       } else if (expression.textForHtml) {

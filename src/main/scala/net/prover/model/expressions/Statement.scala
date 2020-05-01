@@ -44,7 +44,7 @@ object Statement {
         q.qualifier.termNames.map(_ => Term.parser).traverse.map(components => q.statementDefinition(term +: components: _*))
       }).traverse
       availableProperties = context.entryContext.propertyDefinitionsByType.get(typeDefinition.symbol).toSeq.flatten
-      properties <- Parser.optional("with", Parser.allInParens.map(_.splitByWhitespace().map(s => availableProperties.find(_.symbol == s).getOrElse(throw new Exception(s"Unrecognised property '$s' for '${typeDefinition.symbol}'")))), Nil)
+      properties <- Parser.optional("with", Parser.wordsInParens.map(_.map(s => availableProperties.find(_.symbol == s).getOrElse(throw new Exception(s"Unrecognised property '$s' for '${typeDefinition.symbol}'")))), Nil)
     } yield {
       val baseStatement = DefinedStatement(term +: otherComponents, typeDefinition.statementDefinition)(Nil)
       val statementWithQualifier = qualifierStatementOption.map { qualifierStatement =>

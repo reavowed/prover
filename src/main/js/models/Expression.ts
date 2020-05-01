@@ -35,6 +35,7 @@ export interface TypeDefinition {
   defaultQualifier: QualifierDefinition | null;
   properties: PropertyDefinition[];
   qualifiers: TypeQualifierDefinition[];
+  relatedObjects: RelatedObjectDefinition[];
 }
 
 export interface TypeQualifierDefinition {
@@ -51,12 +52,20 @@ export interface PropertyDefinition {
   requiredParentQualifier: string | undefined;
 }
 
+export interface RelatedObjectDefinition {
+  symbol: string;
+  qualifiedSymbol: string;
+  name: string;
+  article: string;
+  defaultTermName: string;
+  requiredParentQualifier: string | undefined;
+}
+
 export interface StandalonePropertyDefinition {
   symbol: string;
   qualifiedSymbol: string;
   name: string;
-  numberOfComponents: number;
-  componentFormatString: string;
+  defaultTermName: string;
 }
 
 export class ExpressionMatchResult {
@@ -376,6 +385,25 @@ export class PropertyExpression extends Expression {
   }
   getDisambiguators(): string[] {
     return _.uniq(_.flatMap([this.term, ...this.qualifierComponents], x => x.getDisambiguators()));
+  }
+}
+
+export class RelatedObjectExpression extends Expression {
+  constructor(public definition: RelatedObjectDefinition, public typeDefinition: TypeDefinition, public term: Expression, public parentTerm: Expression, public qualifierComponents: Expression[]) { super(); }
+  serialize(): string {
+    return [this.definition.qualifiedSymbol, this.term.serialize(), this.parentTerm.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
+  }
+  serializeNicely(boundVariableLists: string[][]): string {
+    return [this.definition.qualifiedSymbol, this.term.serializeNicely(boundVariableLists), this.parentTerm.serializeNicely(boundVariableLists), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+  }
+  setBoundVariableName(): Expression {
+    throw "Cannot set bound variable name in related object expression"
+  }
+  replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
+    throw "Cannot replace in related object expression"
+  }
+  getDisambiguators(): string[] {
+    return _.uniq(_.flatMap([this.term, this.parentTerm, ...this.qualifierComponents], x => x.getDisambiguators()));
   }
 }
 

@@ -7,6 +7,6 @@ export default function TypeDefinitionDescription({symbol, definingStatement}) {
   const entryContext = useContext(EntryContext);
   const definition = entryContext.typeDefinitions[symbol];
   return <>
-    {definition.defaultTermName} is {definition.article} {definition.name} {formatQualifier(definition.defaultQualifier)} if <CopiableExpression expression={definingStatement} splitConjunction/>.
+    {definition.defaultTermName} is {definition.article} <u>{definition.name}</u> {formatQualifier(definition.defaultQualifier)} if <CopiableExpression expression={definingStatement} splitConjunction/>.
   </>;
 }

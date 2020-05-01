@@ -10,6 +10,6 @@ export default function TypeQualifierDefinitionDescription({symbol, parentTypeSy
   const qualifierDefinition = _.find(typeDefinition.qualifiers, q => q.symbol === symbol);
 
   return <>
-    {typeDefinition.article.capitalize()} {typeDefinition.name} {formatQualifier(qualifierDefinition.qualifier)} is a {typeDefinition.name} {typeDefinition.defaultTermName} such that <CopiableExpression expression={definingStatement} splitConjunction/>.
+    {typeDefinition.article.capitalize()} <u>{typeDefinition.name} {formatQualifier(qualifierDefinition.qualifier)}</u> is a {typeDefinition.name} {typeDefinition.defaultTermName} such that <CopiableExpression expression={definingStatement} splitConjunction/>.
   </>;
 }

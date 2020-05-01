@@ -53,15 +53,26 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
   def getPossibleTargets(statement: Statement)(implicit stepProvingContext: StepProvingContext): Seq[UnwrappedStatement] = {
     val provingContext = stepProvingContext.provingContext
     def helper(currentUnwrappedStatement: UnwrappedStatement, resultsSoFar: Seq[UnwrappedStatement], variableTracker: VariableTracker): Seq[UnwrappedStatement] = {
-      (currentUnwrappedStatement.statement, provingContext.specificationInferenceOption, provingContext.deductionEliminationInferenceOption) match {
-        case (generalizationStatement @ DefinedStatement(Seq(predicate: Statement), definition), Some((specificationInference, _, _, _)), _) if provingContext.generalizationDefinitionOption.contains(definition) =>
-          val (variableName, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(generalizationStatement.boundVariableNames.head)
-          val newUnwrappedStatement = UnwrappedStatement(predicate, currentUnwrappedStatement.unwrappers :+ GeneralizationUnwrapper(variableName, definition, specificationInference))
+
+      def byGeneralization = for {
+        generalizationDefinition <- provingContext.generalizationDefinitionOption
+        (specificationInference, _, _, _) <- provingContext.specificationInferenceOption
+        (variableName, predicate) <- generalizationDefinition.unapply(currentUnwrappedStatement.statement)
+        (uniqueVariableName, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(variableName)
+        newUnwrappedStatement = UnwrappedStatement(predicate, currentUnwrappedStatement.unwrappers :+ GeneralizationUnwrapper(uniqueVariableName, generalizationDefinition, specificationInference))
+      } yield (newUnwrappedStatement, newVariableTracker)
+
+      def byDeduction = for {
+        deductionDefinition <- provingContext.deductionDefinitionOption
+        (deductionEliminationInference, _, _) <- provingContext.deductionEliminationInferenceOption
+        (antecedent, consequent) <- deductionDefinition.unapply(currentUnwrappedStatement.statement)
+        newUnwrappedStatement = UnwrappedStatement(consequent, currentUnwrappedStatement.unwrappers :+ DeductionUnwrapper(antecedent, deductionDefinition, deductionEliminationInference))
+      } yield (newUnwrappedStatement, variableTracker)
+
+      (byGeneralization orElse byDeduction) match {
+        case Some((newUnwrappedStatement, newVariableTracker)) =>
           helper(newUnwrappedStatement, resultsSoFar :+ newUnwrappedStatement, newVariableTracker)
-        case (DefinedStatement(Seq(antecedent: Statement, consequent: Statement), definition), _, Some((deductionEliminationInference, _ , _))) if provingContext.deductionDefinitionOption.contains(definition) =>
-          val newUnwrappedStatement = UnwrappedStatement(consequent, currentUnwrappedStatement.unwrappers :+ DeductionUnwrapper(antecedent, definition, deductionEliminationInference))
-          helper(newUnwrappedStatement, resultsSoFar :+ newUnwrappedStatement, variableTracker)
-        case _ =>
+        case None =>
           resultsSoFar
       }
     }

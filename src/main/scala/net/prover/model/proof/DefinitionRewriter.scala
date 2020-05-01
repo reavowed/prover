@@ -33,13 +33,13 @@ object DefinitionRewriter {
     }
     def insideDeductableStatement: Seq[DefinitionRewriteStep] = {
       for {
-        deduction <- provingContext.deductionDefinitionOption.toSeq
+        deductionDefinition <- provingContext.deductionDefinitionOption.toSeq
         (wrappingInference, deductionPremise, otherPremise, _, _, _) <- provingContext.statementDeductionInferences
         preliminarySubstitutions <- otherPremise.calculateSubstitutions(premise).flatMap(wrappingInference.conclusion.calculateSubstitutions(target, _)).flatMap(_.confirmTotality).toSeq
-        Seq(innerPremise, innerTarget) <- deductionPremise.applySubstitutions(preliminarySubstitutions).flatMap(deduction.unapplySeq).flatMap(_.map(_.asOptionalInstanceOf[Statement]).traverseOption).toSeq
+        (innerPremise, innerTarget) <- deductionPremise.applySubstitutions(preliminarySubstitutions).flatMap(deductionDefinition.unapply).toSeq
         innerRewriteStep <- getRewriteStep(innerPremise, innerTarget)
-        deductionStep = Step.Deduction(innerRewriteStep.source, innerRewriteStep.steps, deduction)
-        deductionResult = deduction(innerRewriteStep.source, innerRewriteStep.result)
+        deductionStep = Step.Deduction(innerRewriteStep.source, innerRewriteStep.steps, deductionDefinition)
+        deductionResult = deductionDefinition(innerRewriteStep.source, innerRewriteStep.result)
         substitutions <- wrappingInference.premises.head.calculateSubstitutions(deductionResult).flatMap(_.confirmTotality).toSeq
         assertionStep <- Step.Assertion.forInference(wrappingInference, substitutions).toSeq
       } yield DefinitionRewriteStep(Seq(deductionStep, assertionStep), innerRewriteStep.inference, assertionStep.premises(1).statement, assertionStep.statement)
@@ -48,9 +48,9 @@ object DefinitionRewriter {
       for {
         deductionDefinition <- provingContext.deductionDefinitionOption.toSeq
         (eliminationInference, eliminationPremise, _) <- provingContext.deductionEliminationInferenceOption.toSeq
-        Seq(antecedent, premiseConsequent) <- deductionDefinition.unapplySeq(premise).flatMap(_.map(_.asOptionalInstanceOf[Statement]).traverseOption).toSeq
-        Seq(targetAntecedent, targetConsequent) <- deductionDefinition.unapplySeq(target).flatMap(_.map(_.asOptionalInstanceOf[Statement]).traverseOption).toSeq
-        if (antecedent == targetAntecedent)
+        (antecedent, premiseConsequent) <- deductionDefinition.unapply(premise).toSeq
+        (targetAntecedent, targetConsequent) <- deductionDefinition.unapply(target).toSeq
+        if antecedent == targetAntecedent
         innerRewriteStep <- getRewriteStep(premiseConsequent, targetConsequent)
         source = deductionDefinition(antecedent, innerRewriteStep.source)
         result = deductionDefinition(antecedent, innerRewriteStep.result)
@@ -63,14 +63,13 @@ object DefinitionRewriter {
       for {
         generalizationDefinition <- provingContext.generalizationDefinitionOption.toSeq
         (specificationInference, specificationPremise, _, _) <- provingContext.specificationInferenceOption.toSeq
-        getPredicate = (s: Statement) => generalizationDefinition.unapplySeq(s).flatMap(_.single).flatMap(_.asOptionalInstanceOf[Statement]).toSeq
-        premisePredicate <- getPredicate(premise)
-        targetPredicate <- getPredicate(target)
+        (_, premisePredicate) <- generalizationDefinition.unapply(premise).toSeq
+        (_, targetPredicate) <- generalizationDefinition.unapply(target).toSeq
         variableName <- premise.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).toSeq
         innerSubstitutionContext = SubstitutionContext.withExtraParameter
         innerRewriteStep <- getRewriteStep(premisePredicate, targetPredicate)(implicitly, innerSubstitutionContext)
-        source = generalizationDefinition(innerRewriteStep.source)
-        result = generalizationDefinition(innerRewriteStep.result)
+        source = generalizationDefinition(variableName, innerRewriteStep.source)
+        result = generalizationDefinition(variableName, innerRewriteStep.result)
         specificationSubstitutions <- specificationPremise.calculateSubstitutions(source.insertExternalParameters(1))(innerSubstitutionContext)
           .flatMap(specificationInference.conclusion.calculateSubstitutions(innerRewriteStep.source, _)(innerSubstitutionContext))
           .flatMap(_.confirmTotality)

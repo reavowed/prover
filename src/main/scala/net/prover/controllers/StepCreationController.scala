@@ -100,16 +100,11 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
         generalizationDefinition <- stepProvingContext.provingContext.generalizationDefinitionOption.orBadRequest("No generalization definition provided")
-        (substatement, variableName) <- (step.statement match {
-          case definedStatement @ DefinedStatement(Seq(substatement: Statement), `generalizationDefinition`) =>
-            definedStatement.boundVariableNames.single.map(substatement -> _)
-          case _ =>
-            None
-        }).orBadRequest("Target statement is not a generalized statement")
+        (variableName, predicate) <- generalizationDefinition.unapply(step.statement).orBadRequest("Target statement is not a generalized statement")
       } yield {
         Step.Generalization(
           variableName,
-          Seq(Step.Target(substatement)),
+          Seq(Step.Target(predicate)),
           generalizationDefinition)
       }
     }.toResponseEntity
@@ -126,12 +121,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
         deductionDefinition <- stepProvingContext.provingContext.deductionDefinitionOption.orBadRequest("No deduction definition provided")
-        (antecedent, consequent) <- (step.statement match {
-          case DefinedStatement(Seq(antecedent: Statement, consequent: Statement), `deductionDefinition`) =>
-            Some((antecedent, consequent))
-          case _ =>
-            None
-        }).orBadRequest("Target statement is not a deduction statement")
+        (antecedent, consequent) <- deductionDefinition.unapply(step.statement).orBadRequest("Target statement is not a deduction statement")
       } yield {
         Step.Deduction(
           antecedent,
@@ -151,16 +141,15 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
   ): ResponseEntity[_] = {
     bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       def getNestedIntroductionStepForStatement(statement: Statement): Step = {
-        statement match {
-          case generalizationStatement @ DefinedStatement(Seq(predicate: Statement), definition) if stepProvingContext.provingContext.generalizationDefinitionOption.contains(definition) =>
-            val innerStep = getNestedIntroductionStepForStatement(predicate)
-            Step.Generalization(generalizationStatement.boundVariableNames.head, Seq(innerStep), definition)
-          case DefinedStatement(Seq(antecedent: Statement, consequent: Statement), definition) if stepProvingContext.provingContext.deductionDefinitionOption.contains(definition) =>
-            val innerStep = getNestedIntroductionStepForStatement(consequent)
-            Step.Deduction(antecedent, Seq(innerStep), definition)
-          case _ =>
-            Step.Target(statement)
-        }
+        def byGeneralization = for {
+          generalizationDefinition <- stepProvingContext.provingContext.generalizationDefinitionOption
+          (variableName, predicate) <- generalizationDefinition.unapply(statement)
+        } yield Step.Generalization(variableName, Seq(getNestedIntroductionStepForStatement(predicate)), generalizationDefinition)
+        def byDeduction = for {
+          deductionDefinition <- stepProvingContext.provingContext.deductionDefinitionOption
+          (antecedent, consequent) <- deductionDefinition.unapply(statement)
+        } yield Step.Deduction(antecedent, Seq(getNestedIntroductionStepForStatement(consequent)), deductionDefinition)
+        byGeneralization orElse byDeduction getOrElse Step.Target(statement)
       }
       Success(getNestedIntroductionStepForStatement(step.statement))
     }.toResponseEntity

@@ -491,20 +491,22 @@ object StepRewriteController {
         }
       }
       override def getReplacementPossibilitiesFromOuterExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepProvingContext: StepProvingContext): Seq[ReplacementPossibility[Statement]] = {
-        (statement, stepProvingContext.provingContext.deductionEliminationInferenceOption, stepProvingContext.provingContext.specificationInferenceOption) match {
-          case (generalizedStatement @ DefinedStatement(Seq(predicate: Statement), definition), _, Some((specificationInference, _, _, _)))
-            if stepProvingContext.provingContext.entryContext.generalizationDefinitionOption.contains(definition)
-          =>
-            val unwrapper = GeneralizationUnwrapper(generalizedStatement.boundVariableNames.head, definition, specificationInference)
-            getReplacementPossibilitiesFromOuterExpression(predicate, path :+ 0, unwrappers :+ unwrapper)(StepProvingContext.updateStepContext(unwrapper.enhanceContext))
-          case (DefinedStatement(Seq(antecedent: Statement, consequent: Statement), definition), Some((deductionEliminationInference, _, _)), _)
-            if stepProvingContext.provingContext.entryContext.deductionDefinitionOption.contains(definition)
-          =>
-            val unwrapper = DeductionUnwrapper(antecedent, definition, deductionEliminationInference)
-            getReplacementPossibilitiesFromExpression(antecedent, path :+ 0, unwrappers, definition(_, consequent)) ++ getReplacementPossibilitiesFromOuterExpression(consequent, path :+ 1, unwrappers :+ unwrapper)(StepProvingContext.updateStepContext(unwrapper.enhanceContext))
-          case _ =>
-            getReplacementPossibilitiesFromExpression(statement, path, unwrappers, identity)
-        }
+
+        def byGeneralization = for {
+          generalizationDefinition <- stepProvingContext.provingContext.entryContext.generalizationDefinitionOption
+          (specificationInference, _, _, _) <- stepProvingContext.provingContext.specificationInferenceOption
+          (variableName, predicate) <- generalizationDefinition.unapply(statement)
+          unwrapper = GeneralizationUnwrapper(variableName, generalizationDefinition, specificationInference)
+        } yield getReplacementPossibilitiesFromOuterExpression(predicate, path :+ 0, unwrappers :+ unwrapper)(StepProvingContext.updateStepContext(unwrapper.enhanceContext))
+
+        def byDeduction = for {
+          deductionDefinition <- stepProvingContext.provingContext.deductionDefinitionOption
+          (deductionEliminationInference, _, _) <- stepProvingContext.provingContext.deductionEliminationInferenceOption
+          (antecedent, consequent) <- deductionDefinition.unapply(statement)
+          unwrapper = DeductionUnwrapper(antecedent, deductionDefinition, deductionEliminationInference)
+        } yield getReplacementPossibilitiesFromExpression(antecedent, path :+ 0, unwrappers, deductionDefinition(_, consequent)) ++ getReplacementPossibilitiesFromOuterExpression(consequent, path :+ 1, unwrappers :+ unwrapper)(StepProvingContext.updateStepContext(unwrapper.enhanceContext))
+
+        byGeneralization orElse byDeduction getOrElse getReplacementPossibilitiesFromExpression(statement, path, unwrappers, identity)
       }
       override def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[Statement], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Statement], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Statement])] = {
         unwrappers.rewrapWithDistribution(joiner, source, result, steps, wrapper, inferenceOption)

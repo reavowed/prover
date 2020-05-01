@@ -182,6 +182,7 @@ object Parser {
   def int: Parser[Int] = Parser.singleWord.map(_.toInt)
 
   def allInParens: Parser[String] = Parser(_.untilCloseParen()).inParens
+  def wordsInParens: Parser[Seq[String]] = allInParens.map(_.splitByWhitespace())
 
   implicit class OptionParserOps[T](parser: Option[Parser[T]]) {
     def traverse: Parser[Option[T]] = parser match {

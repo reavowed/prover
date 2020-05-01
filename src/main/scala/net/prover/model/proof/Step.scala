@@ -9,7 +9,7 @@ import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
-import net.prover.model.definitions.{Definitions, ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.{DeductionDefinition, Definitions, ExpressionDefinition, GeneralizationDefinition, StatementDefinition}
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import scalaz.Functor
 import scalaz.syntax.functor._
@@ -100,12 +100,12 @@ object Step {
   case class Deduction(
       assumption: Statement,
       substeps: Seq[Step],
-      @JsonSerialize(using = classOf[StatementDefinitionSymbolSerializer]) deductionStatement: StatementDefinition)
+      deductionDefinition: DeductionDefinition)
     extends Step.WithSubsteps with WithoutVariable with WithTopLevelStatement with WithAssumption
   {
     val `type` = "deduction"
     override def provenStatement: Option[Statement] = {
-      substeps.lastOption.flatMap(_.provenStatement).map(s => DefinedStatement(Seq(assumption, s), deductionStatement)(Nil))
+      substeps.lastOption.flatMap(_.provenStatement).map(s => deductionDefinition(assumption, s))
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Deduction = copy(substeps = newSubsteps)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
@@ -113,13 +113,13 @@ object Step {
       Deduction(
         assumption.insertExternalParameters(numberOfParametersToInsert, internalDepth),
         substeps.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)),
-        deductionStatement)
+        deductionDefinition)
     }
     override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
       for {
         newAssumption <- assumption.removeExternalParameters(numberOfParametersToRemove, internalDepth)
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
-      } yield Deduction(newAssumption, newSubsteps, deductionStatement)
+      } yield Deduction(newAssumption, newSubsteps, deductionDefinition)
     }
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Deduction = {
       Deduction(
@@ -131,11 +131,11 @@ object Step {
       Deduction(
         assumption,
         substeps.clearInference(inferenceToClear),
-        deductionStatement)
+        deductionDefinition)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
-    override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet + deductionStatement
+    override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet + deductionDefinition.statementDefinition
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"assume ${assumption.serialized} {") ++
       substeps.flatMap(_.serializedLines).indent ++
@@ -160,8 +160,8 @@ object Step {
       inference: Inference.Summary,
       premises: Seq[Premise],
       substitutions: Substitutions,
-      @JsonIgnore generalizationDefinition: StatementDefinition,
-      @JsonIgnore deductionDefinition: StatementDefinition)
+      @JsonIgnore generalizationDefinition: GeneralizationDefinition,
+      @JsonIgnore deductionDefinition: DeductionDefinition)
     extends Step.WithSubsteps with WithTopLevelStatement with WithVariable with WithAssumption
   {
     val `type` = "naming"
@@ -171,7 +171,7 @@ object Step {
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = {
       val newInternalConclusion = newSubsteps.flatMap(_.provenStatement).lastOption.getOrElse(throw new Exception("No conclusion for naming step"))
       val newConclusion = newInternalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
-      val newInternalPremise = generalizationDefinition.bind(variableName)(deductionDefinition(assumption, newInternalConclusion))
+      val newInternalPremise = generalizationDefinition(variableName, deductionDefinition(assumption, newInternalConclusion))
       val newSubstitutions = inference.premises.zip(premises.map(_.statement) :+ newInternalPremise)
         .foldLeft(Substitutions.Possible.empty) { case (substitutions, (inferencePremise, premise)) => inferencePremise.calculateSubstitutions(premise, substitutions)(stepContext).getOrElse(throw new Exception("Could not calculate substitutions from naming premise"))}
         .confirmTotality.getOrElse(throw new Exception("Naming substitutions were not total"))
@@ -279,7 +279,7 @@ object Step {
         premises <- premiseStatements.init.map(Premise.parser).traverse
         generalizationDefinition = entryContext.generalizationDefinitionOption.getOrElse(throw new Exception("Naming step requires a generalization statement"))
         deductionDefinition = entryContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
-        internalPremise = generalizationDefinition.bind(variableName)(deductionDefinition(assumption, internalConclusion))
+        internalPremise = generalizationDefinition(variableName, deductionDefinition(assumption, internalConclusion))
         _ = if (internalPremise != premiseStatements.last) throw new Exception("Invalid naming premise")
       } yield {
         Naming(variableName, assumption, extractedConclusion, substeps, inference, premises, substitutions, generalizationDefinition, deductionDefinition)
@@ -290,12 +290,12 @@ object Step {
   case class Generalization(
       variableName: String,
       substeps: Seq[Step],
-      @JsonSerialize(using = classOf[StatementDefinitionSymbolSerializer]) generalizationStatement: StatementDefinition)
+      generalizationDefinition: GeneralizationDefinition)
     extends Step.WithSubsteps with WithVariable
   {
     val `type` = "generalization"
     override def provenStatement: Option[Statement] = {
-      substeps.lastOption.flatMap(_.provenStatement).map(s => DefinedStatement(Seq(s), generalizationStatement)(Seq(variableName)))
+      substeps.lastOption.flatMap(_.provenStatement).map(s => generalizationDefinition(variableName, s))
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
@@ -303,12 +303,12 @@ object Step {
       Generalization(
         variableName,
         substeps.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth + 1)),
-        generalizationStatement)
+        generalizationDefinition)
     }
     override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
       for {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth + 1)).traverseOption
-      } yield Generalization(variableName, newSubsteps, generalizationStatement)
+      } yield Generalization(variableName, newSubsteps, generalizationDefinition)
     }
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Generalization = {
       Generalization(
@@ -320,7 +320,7 @@ object Step {
       copy(substeps = substeps.clearInference(inferenceToClear))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
-    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + generalizationStatement
+    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + generalizationDefinition.statementDefinition
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"take $variableName {") ++
@@ -633,11 +633,5 @@ object Step {
       parser(entryContext, innerStepContext)
         .mapMap(step => step -> currentStepContext.addStep(step, innerStepContext.stepReference))
     }.map(_._1)
-  }
-}
-
-class StatementDefinitionSymbolSerializer extends JsonSerializer[StatementDefinition] {
-  override def serialize(value: StatementDefinition, gen: JsonGenerator, serializers: SerializerProvider): Unit = {
-    gen.writeString(value.symbol)
   }
 }

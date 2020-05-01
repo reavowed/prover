@@ -3,7 +3,7 @@ package net.prover.model.proof
 import net.prover.controllers.ExtractionHelper
 import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.model._
-import net.prover.model.definitions.StatementDefinition
+import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition, StatementDefinition}
 import net.prover.model.expressions._
 
 object ProofHelper {
@@ -28,26 +28,20 @@ object ProofHelper {
     }
   }
 
-  def findNamingInferences(implicit entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement, StatementDefinition, StatementDefinition)] = {
+  def findNamingInferences(implicit entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement, GeneralizationDefinition, DeductionDefinition)] = {
     entryContext.allInferences.mapCollect(i =>
       getNamingPremisesAndAssumption(i).map {
         case (premises, assumption, generalizationDefinition, deductionDefinition) => (i, premises, assumption, generalizationDefinition, deductionDefinition)
       })
   }
 
-  def getNamingPremisesAndAssumption(inference: Inference)(implicit entryContext: EntryContext): Option[(Seq[Statement], Statement, StatementDefinition, StatementDefinition)] = {
+  def getNamingPremisesAndAssumption(inference: Inference)(implicit entryContext: EntryContext): Option[(Seq[Statement], Statement, GeneralizationDefinition, DeductionDefinition)] = {
     (entryContext.generalizationDefinitionOption, entryContext.deductionDefinitionOption) match {
       case (Some(generalizationDefinition), Some(deductionDefinition)) =>
         inference match {
           case Inference(
             _,
-            initialPremises :+
-              DefinedStatement(
-              Seq(DefinedStatement(
-                Seq(assumption: Statement, StatementVariable(deductionConclusionVariableName, Nil)),
-                `deductionDefinition`
-                )),
-              `generalizationDefinition`),
+            initialPremises :+ generalizationDefinition(_, deductionDefinition(assumption: Statement, StatementVariable(deductionConclusionVariableName, Nil))),
             StatementVariable(conclusionVariableName, Nil)
           ) if deductionConclusionVariableName == conclusionVariableName =>
             Some((initialPremises, assumption, generalizationDefinition, deductionDefinition))

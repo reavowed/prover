@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.{ConjunctionDefinition, ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.{Statement, TermVariable}
 
 case class RelatedObjectDefinition(
@@ -12,28 +12,29 @@ case class RelatedObjectDefinition(
     requiredParentQualifier: Option[TypeQualifierDefinition],
     explicitName: Option[String],
     definingStatement: Statement,
-    conjunctionDefinition: StatementDefinition)
+    conjunctionDefinition: ConjunctionDefinition)
   extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle
 {
   override def title: String = s"Definition: ${name.capitalizeWords} for ${parentType.name.capitalizeWords}"
   def qualifiedSymbol: String = symbol + parentType.symbol.capitalize
 
   override def referencedInferenceIds: Set[String] = Set.empty
-  override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry) + conjunctionDefinition.associatedChapterEntry + parentType
+  override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry) + conjunctionDefinition.referencedEntry + parentType
 
   override def withSymbol(newSymbol: String): RelatedObjectDefinition = copy(symbol = newSymbol)
   override def withName(newName: Option[String]): ChapterEntry = copy(explicitName = newName)
 
-  def baseFormat = Format.Explicit(s"%1 is $article %0 for %2", s"$defaultTermName is $article $name for ${parentType.defaultTermName}", 2, true, true)
+  def baseFormat = Format.Explicit(s"%1 is $article %0 for %2", s"$defaultTermName is $article $name for ${parentType.defaultTermName}", 3, true, true)
   def fullFormat = parentType.qualifier.prependFormat(baseFormat)
-  def allTermNames = defaultTermName +: (requiredParentQualifier.map(_.allTermNames) getOrElse parentType.allTermNames)
+  def parentTermNames = requiredParentQualifier.map(_.allTermNames) getOrElse parentType.allTermNames
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
     qualifiedSymbol,
-    allTermNames.map(ComponentType.TermComponent(_, Nil)),
+    (defaultTermName +: parentTermNames).map(ComponentType.TermComponent(_, Nil)),
     Some(name),
     fullFormat,
     Some(conjunctionDefinition(parentType.statementDefinition(parentType.allTermNames.map(TermVariable(_, Nil)): _*), definingStatement)),
     this)
+  override val inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 
   override def replaceDefinitions(entryReplacements: Map[ChapterEntry, ChapterEntry], expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): ChapterEntry = {
     RelatedObjectDefinition(

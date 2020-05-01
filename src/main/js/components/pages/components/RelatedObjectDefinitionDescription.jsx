@@ -13,6 +13,6 @@ export default function RelatedObjectDefinitionDescription({symbol, parentTypeSy
     typeDefinition.defaultQualifier;
 
   return <>
-    {relatedObjectDefinition.article.capitalize()} {relatedObjectDefinition.name} for {typeDefinition.article} {typeDefinition.name} {typeDefinition.defaultTermName} {formatQualifier(qualifier)} is an object {relatedObjectDefinition.defaultTermName} such that <CopiableExpression expression={definingStatement} splitConjunction/>.
+    {relatedObjectDefinition.article.capitalize()} <u>{relatedObjectDefinition.name}</u> for {typeDefinition.article} {typeDefinition.name} {typeDefinition.defaultTermName} {formatQualifier(qualifier)} is an object {relatedObjectDefinition.defaultTermName} such that <CopiableExpression expression={definingStatement} splitConjunction/>.
   </>;
 }

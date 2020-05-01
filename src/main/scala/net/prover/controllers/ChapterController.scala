@@ -323,6 +323,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")
         parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefinition.parentType).orBadRequest(s"Unknown type '${newPropertyDefinition.parentType}'")
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newPropertyDefinition.requiredParentQualifier)
+        requiredParentObjects <- getParentObjects(parentType, newPropertyDefinition.requiredParentObjects)
         adapter <- getOptionalAdapter(newPropertyDefinition.ownTermNames, newPropertyDefinition.parentTerms, (requiredParentQualifier.map(_.qualifier) orElse parentType.qualifier).termNames)
         definingStatement <- Statement.parser.parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
@@ -330,6 +331,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           symbol,
           parentType,
           requiredParentQualifier,
+          requiredParentObjects,
           adapter,
           name,
           definingStatement,
@@ -517,6 +519,7 @@ object ChapterController {
     symbol: String,
     parentType: String,
     requiredParentQualifier: String,
+    requiredParentObjects: String,
     name: String,
     definingStatement: String,
     ownTermNames: String,

@@ -14,7 +14,7 @@ case class TermListAdapter(termNames: Seq[String], templates: Seq[Term]) {
 object TermListAdapter {
   def parser(implicit entryContext: EntryContext): Parser[TermListAdapter] = {
     for {
-      termNames <- Parser.allInParens.map(_.splitByWhitespace())
+      termNames <- Parser.wordsInParens
       expressionParsingContext = ExpressionParsingContext.outsideProof(entryContext, Nil).addInitialParameters(termNames)
       templates <- Term.parser(expressionParsingContext).listInParens(Some(","))
     } yield TermListAdapter(termNames, templates)

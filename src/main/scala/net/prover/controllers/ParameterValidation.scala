@@ -4,7 +4,7 @@ import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{Qualifier, TermListAdapter}
-import net.prover.model.entries.{TypeDefinition, TypeQualifierDefinition}
+import net.prover.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition}
 import net.prover.model.expressions.Term
 
 import scala.util.{Failure, Success, Try}
@@ -58,8 +58,23 @@ trait ParameterValidation {
   }
   def getOptionalParentQualifier(parentType: TypeDefinition, qualifierSymbolText: String)(implicit entryContext: EntryContext): Try[Option[TypeQualifierDefinition]] = {
     getOptionalString(qualifierSymbolText)
-      .map(qualifierSymbol => entryContext.qualifiersByType(parentType.symbol).find(_.symbol == qualifierSymbol).orBadRequest(s"Unknown qualifier '$qualifierSymbol' on type '${parentType.symbol}''"))
+      .map(qualifierSymbol => entryContext.qualifiersByType(parentType.symbol).find(_.symbol == qualifierSymbol).orBadRequest(s"Unknown qualifier '$qualifierSymbol' on type '${parentType.symbol}'"))
       .swap
+  }
+  def getParentObjects(parentType: TypeDefinition, objectSymbolsText: String)(implicit entryContext: EntryContext): Try[Option[PropertyDefinitionOnType.RequiredParentObjects]] = {
+    getWords(objectSymbolsText) match {
+      case Nil =>
+        Success(None)
+      case objectSymbols =>
+        for {
+          objectDefinitions <- objectSymbols.map(s => entryContext.relatedObjectsByType(parentType.symbol).find(_.symbol == s)
+            .orBadRequest(s"Unknown object '$s' on type '${parentType.symbol}'"))
+            .traverseTry
+          uniquenessDefinition <- entryContext.uniquenessDefinitionOption.orBadRequest("Cannot add related objects to property definition without uniqueness")
+          generalizationDefinition <- entryContext.generalizationDefinitionOption.orBadRequest("Cannot add related objects to property definition without generalization")
+          deductionDefinition <- entryContext.deductionDefinitionOption.orBadRequest("Cannot add related objects to property definition without deduction")
+        } yield Some(PropertyDefinitionOnType.RequiredParentObjects(objectDefinitions, uniquenessDefinition, generalizationDefinition, deductionDefinition))
+    }
   }
   def getOptionalAdapter(termNamesText: String, possibleSerializedTemplates: String, qualifierTermNames: Seq[String])(implicit entryContext: EntryContext): Try[Option[TermListAdapter]] = {
     getOptionalString(possibleSerializedTemplates) match {
@@ -67,7 +82,7 @@ trait ParameterValidation {
         val termNames = getWords(termNamesText)
         implicit val epc = ExpressionParsingContext.outsideProof(entryContext, Nil).addInitialParameters(termNames)
         for {
-          templates <- (0 until qualifierTermNames.length).map(_ => Term.parser).traverse.parseFromString(serializedTemplates, "templates").recoverWithBadRequest
+          templates <- qualifierTermNames.indices.map(_ => Term.parser).traverse.parseFromString(serializedTemplates, "templates").recoverWithBadRequest
         } yield Some(TermListAdapter(termNames, templates))
       case None =>
         Success(None)

@@ -125,12 +125,12 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 
   lazy val extractionOptionsByInferenceId: Map[String, Seq[ExtractionOption]] = filter(definitions.extractionOptionsByInferenceId)
 
-  lazy val deductionDefinitionOption: Option[StatementDefinition] = entryContext.deductionDefinitionOption
+  lazy val deductionDefinitionOption: Option[DeductionDefinition] = entryContext.deductionDefinitionOption
   lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
     filter(definitions.deductionEliminationInferenceOption)
   }
 
-  lazy val generalizationDefinitionOption: Option[StatementDefinition] = entryContext.generalizationDefinitionOption
+  lazy val generalizationDefinitionOption: Option[GeneralizationDefinition] = entryContext.generalizationDefinitionOption
   lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
     filter(definitions.specificationInferenceOption)
   }

@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.definitions.{StatementDefinition, TermDefinition}
+import net.prover.model.definitions.{ConjunctionDefinition, DeductionDefinition, GeneralizationDefinition, StatementDefinition, TermDefinition, UniqueExistenceDefinition}
 import net.prover.model.entries._
 import net.prover.model.expressions._
 
@@ -17,11 +17,17 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
   lazy val displayShorthands: Seq[DisplayShorthand] = availableEntries.ofType[DisplayShorthand]
   lazy val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]
 
-  lazy val deductionDefinitionOption: Option[StatementDefinition] = {
-    statementDefinitions.find(_.attributes.contains("deduction"))
+  lazy val deductionDefinitionOption: Option[DeductionDefinition] = {
+    statementDefinitions.find(_.attributes.contains("deduction")).map(DeductionDefinition)
   }
-  lazy val generalizationDefinitionOption: Option[StatementDefinition] = {
-    statementDefinitions.find(_.attributes.contains("generalization"))
+  lazy val generalizationDefinitionOption: Option[GeneralizationDefinition] = {
+    statementDefinitions.find(_.attributes.contains("generalization")).map(GeneralizationDefinition)
+  }
+  lazy val conjunctionDefinitionOption: Option[ConjunctionDefinition] = {
+    statementDefinitions.find(_.attributes.contains("conjunction")).map(ConjunctionDefinition)
+  }
+  lazy val uniquenessDefinitionOption: Option[UniqueExistenceDefinition] = {
+    statementDefinitions.find(_.attributes.contains("uniqueness")).map(UniqueExistenceDefinition)
   }
 
   def addEntry(entry: ChapterEntry): EntryContext = {
@@ -31,9 +37,6 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
     this ++ EntryContext(entries)
   }
 
-  lazy val conjunctionDefinitionOption: Option[StatementDefinition] = {
-    statementDefinitions.find(_.attributes.contains("conjunction"))
-  }
 
   object RecognisedStatementDefinition {
     def unapply(symbol: String): Option[StatementDefinition] = {

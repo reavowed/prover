@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
-import net.prover.model.definitions.{Definitions, ExpressionDefinition, StatementDefinition, TermDefinition}
+import net.prover.model.definitions.{ConjunctionDefinition, Definitions, ExpressionDefinition, StatementDefinition, TermDefinition}
 import net.prover.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
@@ -123,19 +123,24 @@ trait ExpressionDefinitions extends VariableDefinitions {
   }
 
   val Implication = connective("→", 2, None).copy(attributes = Seq("deduction"))
+  val DeductionDefinition = definitions.DeductionDefinition(Implication)
   val Negation = connective("¬", 1, None)
   val Conjunction = connective("∧", 2, Some(Negation(Implication(φ, Negation(ψ))))).copy(attributes = Seq("conjunction"))
+  val ConjunctionDefinition = definitions.ConjunctionDefinition(Conjunction)
   val Disjunction = connective("∨", 2, Some(Implication(Negation(φ), ψ)))
   val Equivalence = connective("↔", 2, Some(Conjunction(Implication(φ, ψ), Implication(ψ, φ))))
 
   val ForAllDefinition = quantifier("∀", None).copy(attributes = Seq("generalization"))
   def ForAll(name: String)(expression: Statement) = ForAllDefinition.bind(name)(expression)
   def ForAllIn(name: String, term: Term)(expression: Statement) = ForAll(name)(Implication(ElementOf($, term), expression))
+  val GeneralizationDefinition = definitions.GeneralizationDefinition(ForAllDefinition)
   val ExistsDefinition = quantifier("∃", Some(Negation(ForAll("x")(Negation(φ($))))))
   def Exists(name: String)(expression: Statement) = ExistsDefinition.bind(name)(expression)
   def ExistsIn(name: String, term: Term)(expression: Statement) = Exists(name)(Conjunction(ElementOf($, term), expression))
   val Equals = predicate("=", 2, None).copy(attributes = Seq("equality"))
-  val ExistsUnique = quantifier("∃!", Some(Exists("y")(ForAll("x")(Equivalence(φ($), Equals($, $.^))))))
+  val ExistsUniqueDefinition = quantifier("∃!", Some(Exists("y")(ForAll("x")(Equivalence(φ($), Equals($, $.^))))))
+  def ExistsUnique(name: String)(expression: Statement) = ExistsUniqueDefinition.bind(name)(expression)
+  val UniqueExistenceDefinition = definitions.UniqueExistenceDefinition(ExistsUniqueDefinition)
   val ElementOf = predicate("∈", 2, None)
   val Subset = predicate("⊆", 2, Some(ForAll("x")(Implication(ElementOf($, a), ElementOf($, b)))))
 
@@ -424,7 +429,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
   implicit val defaultEntryContext: EntryContext = EntryContext(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
-      ForAllDefinition, ExistsDefinition, ExistsUnique,
+      ForAllDefinition, ExistsDefinition, ExistsUniqueDefinition,
       ElementOf, Equals, Subset) ++
     Seq(
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Comprehension,
@@ -488,7 +493,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
           Substitutions(statements = Map(φ -> (1, statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get)), terms = Map(a -> (0, FunctionParameter(0, 0)))))
       }
       beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth))(entryContext) ^^ { steps: Seq[Step] =>
-        (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.Generalization(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, ForAllDefinition))}
+        (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.Generalization(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, GeneralizationDefinition))}
       }
     }
   }

@@ -26,7 +26,7 @@ class RelatedObjectDefinitionSpec extends Specification {
         None,
         None,
         ForAllIn("a", A)(Conjunction(Equals(Apply(f, Pair($, e)), $), Equals(Apply(f, Pair(e, $)), $))),
-        Conjunction)
+        ConjunctionDefinition)
       testParsingAndSerialization(definition)(defaultEntryContext.addEntry(binaryOperationDefinition))
     }
   }

@@ -5,69 +5,17 @@ import Form from "react-bootstrap/Form";
 import styled from "styled-components";
 import EntryContext from "../EntryContext";
 import PrettifiedAutosuggest from "./PrettifiedAutosuggest";
+import PrettifiedAutosuggestOnIndividualWords from "./PrettifiedAutosuggestOnIndividualWords";
 
 export default function InputWithShorthandReplacement({value, onChange, ...otherProps}) {
-  const ref = useRef(null);
   const context = useContext(EntryContext);
 
-  function replaceShorthands(text, selectionPosition, requireWhitespace) {
-    const initialText = text.substring(0, selectionPosition);
-    const finalText = text.substring(selectionPosition);
-    const replacedInitialText =_.reduce(_.toPairs(context.definitionShorthands), (text, [valueToReplace, symbol]) => {
-      const regex = new RegExp('(^|\\s)' + _.escapeRegExp(valueToReplace) + (requireWhitespace ? '(\\s$)' : '$'));
-      const match = text.match(regex);
-      if (match) {
-        return text.substring(0, match.index + match[1].length) + symbol.serialized + text.substring(match.index + match[1].length + valueToReplace.length)
-      } else {
-        return text;
-      }
-    }, initialText);
-    const replacedText = replacedInitialText + finalText;
-    return [replacedText, replacedInitialText.length];
+  function replaceCompletedWord(word) {
+    return _.has(context.definitionShorthands, word) ?
+      context.definitionShorthands[word].serialized :
+      word;
   }
 
-  function onInnerChange() {
-    const [newText, newSelectionStart] = replaceShorthands(ref.current.input.value, ref.current.input.selectionStart, true);
-    const callback = () => ref.current.input.setSelectionRange(newSelectionStart, newSelectionStart);
-    return onChange(newText, callback);
-  }
-
-  function onBlur() {
-    const [newText, ] = replaceShorthands(ref.current.input.value, ref.current.input.value.length, false);
-    return onChange(newText);
-  }
-
-  const [suggestions, setSuggestions] = useState([]);
-
-  function getInputContents() {
-    const text = ref.current.input.value;
-    const selectionPosition = ref.current.input.selectionStart;
-    const initialText = text.substring(0, selectionPosition);
-    const finalText = text.substring(selectionPosition);
-    return [initialText, finalText];
-  }
-  function splitLastWord(text) {
-    const match = text.match(new RegExp('(^|\\s)(\\w+)$'));
-    if (match) {
-      return [text.substring(0, match.index + match[1].length), match[2]];
-    } else {
-      return [text, null];
-    }
-  }
-  function replaceInputInitialText(f) {
-    const [initialText, finalText] = getInputContents();
-    const newInitialText = f(initialText);
-    const newText = newInitialText + finalText;
-    const newSelectionStart = newInitialText.length;
-    const callback = () => ref.current.input.setSelectionRange(newSelectionStart, newSelectionStart);
-    return onChange(newText, callback);
-  }
-  function replaceLastWord(newWord) {
-    replaceInputInitialText(initialText => {
-      const [preceding,] = splitLastWord(initialText);
-      return preceding + newWord;
-    });
-  }
   function matchWords(words, searchText) {
     if (!searchText.length) {
       return true;
@@ -92,10 +40,8 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
     return matchWords(keyWords, searchText);
   }
 
-  function onSuggestionsFetchRequested() {
-    const [initialText, ] = getInputContents();
-    const [, lastWord] = splitLastWord(initialText);
-    if (lastWord && lastWord.length > 1) {
+  function getSuggestions(lastWord) {
+    if (lastWord.length > 1) {
       const matchingDefinitions = _.chain(context.definitions)
         .filter((value, key) => isMatch(key, lastWord))
         .map((value) => value.symbol.serialized)
@@ -108,33 +54,16 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
         .flatMap((value, key) => [key, ..._.values(value.properties).map(p => p.symbol)])
         .filter(key => isMatch(key, lastWord))
         .value();
-      const matchingValues = _.chain([...matchingDefinitions, ...matchingShorthands, ...matchingTypes]).uniq().sortBy().value().slice(0, 10);
-      setSuggestions(matchingValues);
+      return _.chain([...matchingDefinitions, ...matchingShorthands, ...matchingTypes]).uniq().sortBy().value().slice(0, 10);
     } else {
-      setSuggestions([]);
+      return [];
     }
   }
-  function onSuggestionsClearRequested() {
-    setSuggestions([]);
-  }
-  function onSuggestionSelected(event, {suggestion}) {
-    replaceLastWord(suggestion);
-    event.preventDefault();
-    event.stopPropagation();
-  }
 
-  function renderInputComponent(inputProps) {
-    return <Form.Control {...inputProps}/>
-  }
-
-  return <PrettifiedAutosuggest ref={ref}
-                                suggestions={suggestions}
-                                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                                onSuggestionsClearRequested={onSuggestionsClearRequested}
-                                onSuggestionSelected={onSuggestionSelected}
-                                renderInputComponent={renderInputComponent}
-                                getSuggestionValue={_ => value}
-                                inputProps={{...otherProps, value: value, onChange: onInnerChange, onBlur}}  />;
+  return <PrettifiedAutosuggestOnIndividualWords value={value}
+                                                 onChange={onChange}
+                                                 getSuggestions={getSuggestions}
+                                                 replaceCompletedWord={replaceCompletedWord} />;
 }
 
 

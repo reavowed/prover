@@ -12,9 +12,17 @@ trait Format {
     formatText(symbol +: components, parentRequiresBrackets)
   }
   private def formatText(replacementStrings: Seq[String], parentRequiresBrackets: Boolean): String = {
-    replacementStrings.zipWithIndex.foldLeft(getSafeFormatString(parentRequiresBrackets)) { case (textSoFar, (component, index)) =>
-      textSoFar.replaceFirst(s"%$index", Matcher.quoteReplacement(component))
+    val regex = "%(\\d+)".r
+    @scala.annotation.tailrec
+    def replacePlaceholdersRecursively(prefix: String, remainingText: String): String = {
+      regex.findFirstMatchIn(remainingText) match {
+        case Some(m) =>
+          replacePlaceholdersRecursively(prefix + remainingText.substring(0, m.start) + replacementStrings(m.group(1).toInt), remainingText.substring(m.end))
+        case None =>
+          prefix + remainingText
+      }
     }
+    replacePlaceholdersRecursively("", getSafeFormatString(parentRequiresBrackets))
   }
   private def getSafeFormatString(parentRequiresBrackets: Boolean) = {
     if (parentRequiresBrackets && requiresBrackets)

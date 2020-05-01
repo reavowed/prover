@@ -77,8 +77,8 @@ object Book {
     Parser.optional(
       "variables",
       for {
-        statementVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
-        termVariableNames <- Parser.allInParens.map(_.splitByWhitespace())
+        statementVariableNames <- Parser.wordsInParens
+        termVariableNames <- Parser.wordsInParens
       } yield {
         (statementVariableNames, termVariableNames)
       },
