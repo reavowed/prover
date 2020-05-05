@@ -18,11 +18,9 @@ export default function PropertyOnTypeDefinitionDescription({symbol, parentTypeS
     "";
   const requiredObjectVariableNames = _.map(requiredObjects, o => o.defaultTermName);
 
-  return <>
-    {typeDefinition.article.capitalize()} {typeDefinition.name} {typeDefinition.defaultTermName} {formatQualifier(qualifier)} {requiredObjectsText} is <u>{propertyDefinition.name}</u> if
-    <BoundVariableLists.AddMultiple variables={_.map(requiredObjectVariableNames, n => [n])}>
-      <CopiableExpression expression={definingStatement} splitConjunction/>
-    </BoundVariableLists.AddMultiple>
-    .
-  </>;
+  const definingStatementElement = <BoundVariableLists.AddMultiple variables={_.map(requiredObjectVariableNames, n => [n])}>
+    <CopiableExpression expression={definingStatement} splitConjunction/>
+  </BoundVariableLists.AddMultiple>;
+
+  return <>{typeDefinition.article.capitalize()} {typeDefinition.name} {typeDefinition.defaultTermName} {formatQualifier(qualifier)} {requiredObjectsText} is <u>{propertyDefinition.name}</u> if {definingStatementElement}.</>;
 }
