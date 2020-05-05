@@ -244,3 +244,27 @@ conclusion ↔ ∨ φ χ ∨ ψ ω
   }
   prove ↔ ∨ φ χ ∨ ψ ω 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∨ φ χ, ∨ ψ ω) () 0 1
 }
+
+comment Extend a disjunction to conjunction.
+
+theorem Extend Disjunction of Equivalents to Conjunction
+premise ∨ φ ψ
+premise ↔ φ ψ
+conclusion ∧ φ ψ
+{
+  assume φ {
+    elided (Extracted) {
+      prove → φ ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (φ, ψ) () p1
+      prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () 0.0.0 0a
+    }
+    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () 0a 0.0
+  }
+  assume ψ {
+    elided (Extracted) {
+      prove → ψ φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (φ, ψ) () p1
+      prove φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, φ) () 1.0.0 1a
+    }
+    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () 1.0 1a
+  }
+  prove ∧ φ ψ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, ∧ φ ψ) () p0 0 1
+}
