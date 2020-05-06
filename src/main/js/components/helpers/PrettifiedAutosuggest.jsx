@@ -21,6 +21,15 @@ const DropdownContainer = styled.div`
 const Suggestion = styled.span`
   ${props => (props.isHighlighted ? "background-color: #007bff; color: #fff" : "")}
 `;
+const StyledWrapper = styled.div`
+  .input-group > & {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    width: 1%;
+    margin-bottom: 0;
+  }
+`;
 
 export default React.forwardRef(function PrettifiedAutosuggest({renderSuggestion, ...props}, ref) {
 
@@ -31,9 +40,10 @@ export default React.forwardRef(function PrettifiedAutosuggest({renderSuggestion
     return <Suggestion className="dropdown-item" isHighlighted={isHighlighted}>{(renderSuggestion || props.getSuggestionValue)(suggestion)}</Suggestion>
   }
 
-  return <Autosuggest
-    ref={ref}
-    renderSuggestionsContainer={renderSuggestionsContainer}
-    renderSuggestion={renderSuggestionInner}
-    {...props} />
+  return <StyledWrapper>
+    <Autosuggest ref={ref}
+                 renderSuggestionsContainer={renderSuggestionsContainer}
+                 renderSuggestion={renderSuggestionInner}
+                 {...props} />
+  </StyledWrapper>;
 });

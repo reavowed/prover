@@ -1,30 +1,54 @@
 import * as path from "path";
-import React from "react";
+import React, {useState} from "react";
+import Button from "react-bootstrap/Button";
+import ErrorAlert from "../helpers/ErrorAlert";
+import InputWithShorthandReplacement from "../helpers/InputWithShorthandReplacement";
 import {Breadcrumbs} from "./components/Breadcrumbs";
 import {InferenceSummary} from "../InferenceSummary";
 import {Monospace} from "../Monospace";
+import EditableExplicitName from "./components/EditableExplicitName";
+import EditableProperty from "./components/EditableProperty";
 import {NavLinks} from "./components/NavLinks";
 import {Page} from "./Page";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import {Usages} from "./components/Usages";
 
-export class Inference extends React.Component {
-  updateName = (newName) => {
-    return window.fetchJson(path.join(this.props.url, "name"), {method: "PUT", body: newName})
+export function Inference({inference, title, url, bookLink, chapterLink, previous, next, usages, children, buttons, createPremiseElement, editable}) {
+  const [editing, setEditing] = useState(false);
+  const [error, setError] = useState(null);
+  const updateName = (newName) => {
+    return window.fetchJson(path.join(url, "name"), {method: "PUT", body: newName})
       .then(url => window.location.pathname = url);
   };
-  render() {
-    const {inference, title, url, bookLink, chapterLink, previous, next, usages, children, buttons, createPremiseElement} = this.props;
-    return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: inference.name, url}]}/>}>
-      <NavLinks previous={previous} next={next}/>
-      <h3 className="text-center mb-0">
-        {title}: <InlineTextEditor text={inference.name} callback={this.updateName}/>
-        {buttons && <span className="float-right">{buttons}</span>}
-      </h3>
-      <Monospace className="text-center mb-1">{inference.id}</Monospace>
-      <InferenceSummary createPremiseElement={createPremiseElement} inference={inference}/>
-      {children}
-      <Usages usages={usages}/>
-    </Page>;
-  }
+  const updatePremises = (newPremises) => {
+    return window.fetchJson(path.join(url, "premises"), {method: "PUT", body: _.filter(newPremises.split(/\r?\n/), s => s.length)})
+      .then(() => window.location.reload());
+  };
+  const updateConclusion = (newConclusion) => {
+    return window.fetchJson(path.join(url, "conclusion"), {method: "PUT", body: newConclusion})
+      .then(() => window.location.reload());
+  };
+  return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: inference.name, url}]}/>}>
+    <NavLinks previous={previous} next={next}/>
+    <h3 className="text-center mb-0">
+      {title}: <InlineTextEditor text={inference.name} callback={updateName}/>
+      {buttons && <span className="float-right">{buttons}</span>}
+    </h3>
+    <Monospace className="text-center mb-1">{inference.id}</Monospace>
+    {
+      editing ?
+        <>
+          <Button variant="primary" size="sm" className="float-right ml-1 mb-1" onClick={() => setEditing(false)}>Cancel</Button>
+          <ErrorAlert error={error} setError={setError} />
+          <EditableProperty label="Premises" initialValue={_.map(inference.premises, p => p.serialize()).join("\n")} onSave={updatePremises} onError={setError} inputType={InputWithShorthandReplacement} inputProps={{as: "textarea"}} />
+          <EditableProperty label="Conclusion" initialValue={inference.conclusion.serialize()} onSave={updateConclusion} onError={setError} inputType={InputWithShorthandReplacement} />
+        </> :
+        <>
+          {editable && <Button variant="primary" size="sm" className="float-right ml-1" onClick={() => setEditing(true)}>Edit</Button>}
+          <InferenceSummary createPremiseElement={createPremiseElement} inference={inference}/>
+        </>
+    }
+    {children}
+    <Usages usages={usages}/>
+  </Page>;
 }

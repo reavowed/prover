@@ -1,6 +1,7 @@
+import _ from "lodash";
 import React, {useState} from "react";
 import {Button, InputGroup} from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import SimpleTextControl from "../../helpers/SimpleTextControl";
 
 export default class EditableProperty extends React.Component {
   constructor(props) {
@@ -13,7 +14,7 @@ export default class EditableProperty extends React.Component {
   }
 
   render() {
-    const {label, onSave, as} = this.props;
+    const {label, onSave, onError, inputType, inputProps} = this.props;
     const {currentValue, saving, savedValue} = this.state;
 
     const save = () => {
@@ -21,13 +22,33 @@ export default class EditableProperty extends React.Component {
       return this.setStatePromise({saving: true})
         .then(() => onSave(valueBeingSaved))
         .then(() => this.setStatePromise({savedValue: valueBeingSaved}))
-        .catch(() => this.setStatePromise({currentValue: savedValue}))
+        .catch((error) => {
+          if (onError) {
+            if (_.isObject(error)) {
+              if (error.message)
+                error = error.message;
+              else {
+                error = "Unknown error"
+              }
+            }
+            onError(error);
+          }
+          return this.setStatePromise({currentValue: savedValue});
+        })
         .then(() => this.setStatePromise({saving: false}))
     };
 
+    const input = React.createElement(
+      inputType || SimpleTextControl, {
+        value: currentValue,
+        onChange: (newValue) => this.setState({currentValue: newValue}),
+        readOnly: saving,
+        ...(inputProps || {})
+      });
+
     return <InputGroup className="mb-2">
       <InputGroup.Prepend><InputGroup.Text>{label}</InputGroup.Text></InputGroup.Prepend>
-      <Form.Control type="text" as={as} readOnly={saving} value={currentValue} onChange={e => this.setState({currentValue: e.target.value})}/>
+      {input}
       <InputGroup.Append><Button variant="success" disabled={saving} onClick={save}><span className={saving ? "fas fa-spin fa-spinner" : "fas fa-check"}/></Button></InputGroup.Append>
     </InputGroup>
   }

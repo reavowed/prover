@@ -2,7 +2,7 @@ import React, {useRef, useState} from "react";
 import Form from "react-bootstrap/Form";
 import PrettifiedAutosuggest from "./PrettifiedAutosuggest";
 
-export default function PrettifiedAutosuggestOnIndividualWords({value, onChange, getSuggestions, replaceCompletedWord, inputProps, ...otherProps}) {
+export default function PrettifiedAutosuggestOnIndividualWords({value, onChange, getSuggestions, replaceCompletedWord, inputProps}) {
   const ref = useRef(null);
   const [suggestions, setSuggestions] = useState([]);
 
@@ -82,6 +82,5 @@ export default function PrettifiedAutosuggestOnIndividualWords({value, onChange,
                                 onSuggestionSelected={onSuggestionSelected}
                                 renderInputComponent={renderInputComponent}
                                 getSuggestionValue={x => x}
-                                {...otherProps}
                                 inputProps={{...inputProps, value: value, onChange: onInnerChange, onBlur}}  />;
 };

@@ -99,14 +99,17 @@ class BookService @Autowired() (bookRepository: BookRepository) {
     ).map(_.map  { case ((books, definitions, book, chapter), entry) => (books, definitions, book, chapter, entry) })
   }
 
-  def modifyTheorem[F[_] : Functor](bookKey: String, chapterKey: String, theoremKey: String)(f: (Theorem, ProvingContext) => Try[F[Theorem]]): Try[F[TheoremUpdateProps]] = {
+  def modifyTheorem[F[_] : Functor](bookKey: String, chapterKey: String, theoremKey: String)(getUpdatedTheorem: (Theorem, ProvingContext) => Try[F[Theorem]]): Try[F[TheoremUpdateProps]] = {
     modifyEntry[Theorem, FWithValue[F, TheoremUpdateProps]#Type](bookKey, chapterKey, theoremKey, (books, definitions, book, chapter, theorem) => {
       implicit val provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
-      f(theorem, provingContext).map(_.map(_.recalculateReferences(provingContext))).map(_.map { case (newTheorem, stepsWithReferenceChanges) =>
-        val newInferenceIds = newTheorem.referencedInferenceIds.diff(theorem.referencedInferenceIds)
-        val inferenceLinks = BookService.getInferenceLinks(newInferenceIds, books, definitions)
-        (newTheorem, TheoremUpdateProps(newTheorem, inferenceLinks, stepsWithReferenceChanges))
-      })
+      getUpdatedTheorem(theorem, provingContext).map { fTheorem =>
+        fTheorem.map { newTheoremWithoutReferenceChanges =>
+          val (newTheoremWithReferenceChanges, stepsWithReferenceChanges) = newTheoremWithoutReferenceChanges.recalculateReferences(provingContext)
+          val newInferenceIds = newTheoremWithReferenceChanges.referencedInferenceIds.diff(theorem.referencedInferenceIds)
+          val inferenceLinks = BookService.getInferenceLinks(newInferenceIds, books, definitions)
+          (newTheoremWithReferenceChanges, TheoremUpdateProps(newTheoremWithReferenceChanges, inferenceLinks, stepsWithReferenceChanges))
+        }
+      }
     }).map(_.map(_._2))
   }
 

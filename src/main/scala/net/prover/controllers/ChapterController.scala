@@ -170,7 +170,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       for {
         name <- getMandatoryString(newTheoremDefinition.name, "Theorem name")
-        premises <- newTheoremDefinition.premises.flatMap(getOptionalString).mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}").recoverWithBadRequest).traverseTry
+        premises <- getPremises(newTheoremDefinition.premises)
         conclusion <- Statement.parser.parseFromString(newTheoremDefinition.conclusion, "conclusion").recoverWithBadRequest
         newTheorem = Theorem(
           name,

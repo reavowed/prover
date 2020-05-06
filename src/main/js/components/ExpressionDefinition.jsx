@@ -2,6 +2,7 @@ import * as path from "path";
 import React from "react";
 import EntryContext from "./EntryContext";
 import {CopiableExpression} from "./ExpressionComponent";
+import InputWithShorthandReplacement from "./helpers/InputWithShorthandReplacement";
 import {Breadcrumbs} from "./pages/components/Breadcrumbs";
 import EditableExplicitName from "./pages/components/EditableExplicitName";
 import EditableProperty from "./pages/components/EditableProperty";
@@ -53,7 +54,7 @@ export function ExpressionDefinition({url, title, definition, bookLink, chapterL
       <EditableProperty label="Components" initialValue={definition.componentTypes.map(x => x.name).join(" ")} onSave={saveComponents} />
       <EditableProperty label="Format" initialValue={serializedFormat} onSave={saveFormat} />
       <EditableProperty label="Attributes" initialValue={definition.attributes.join(" ")} onSave={saveAttributes} />
-      {hasDisambiguator && <EditableProperty label="Disambiguator Adders" as="textarea" initialValue={definition.disambiguatorAdders.map(d => d.template.serializeNicely([["_"]]) + " " + d.disambiguator).join("\n")} onSave={saveDisambiguatorAdders} />}
+      {hasDisambiguator && <EditableProperty label="Disambiguator Adders" inputType={InputWithShorthandReplacement} inputProps={{inputProps: {as: "textarea"}}} initialValue={definition.disambiguatorAdders.map(d => d.template.serializeNicely([["_"]]) + " " + d.disambiguator).join("\n")} onSave={saveDisambiguatorAdders} />}
       {definition.definitionInference && <Usages.ForInference usages={usages} inferenceId={definition.definitionInference.id} />}
       {definition.constructionInference && <Usages.ForInference usages={usages} inferenceId={definition.constructionInference.id} title="Construction" />}
       {definition.deconstructionInference && <Usages.ForInference usages={usages} inferenceId={definition.deconstructionInference.id} title="Deconstruction" />}

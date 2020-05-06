@@ -208,13 +208,13 @@ export class Theorem extends React.Component {
                     offstyle="danger"/>
           </span>
         </Dropdown.Menu>
-      </Dropdown>
+      </Dropdown>;
 
     return <HashParamsContext.Provider value={hashParams}>
       <EntryContext.Provider value={this.entryContext}>
         <TheoremContext.Provider value={theoremContext}>
           <DisplayContext.Provider value={displayContext}>
-            <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" buttons={settingsDropdown} {...this.props}>
+            <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" buttons={settingsDropdown} editable {...this.props}>
               <Proofs proofs={theorem.proofs} />
             </Inference>
           </DisplayContext.Provider>

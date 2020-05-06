@@ -5,7 +5,7 @@ import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{Qualifier, TermListAdapter}
 import net.prover.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition}
-import net.prover.model.expressions.Term
+import net.prover.model.expressions.{Statement, Term}
 
 import scala.util.{Failure, Success, Try}
 
@@ -87,5 +87,12 @@ trait ParameterValidation {
       case None =>
         Success(None)
     }
+  }
+
+  def getPremises(serializedPremises: Seq[String])(implicit expressionParsingContext: ExpressionParsingContext): Try[Seq[Statement]] = {
+    serializedPremises.flatMap(getOptionalString).mapWithIndex((str, index) => getStatement(str, s"premise ${index + 1}")).traverseTry
+  }
+  def getStatement(serializedStatement: String, description: String)(implicit expressionParsingContext: ExpressionParsingContext): Try[Statement] = {
+    Statement.parser.parseFromString(serializedStatement, description).recoverWithBadRequest
   }
 }

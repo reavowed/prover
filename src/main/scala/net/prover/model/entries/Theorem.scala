@@ -47,7 +47,7 @@ case class Theorem(
     modifyProof(proofIndex, _.replaceStep(stepIndexes, initialStepContext, f))
   }
   def recalculateReferences(provingContext: ProvingContext): (Theorem, Seq[Seq[StepWithReferenceChange]]) = {
-    proofs.map(_.recalculateReferences(initialStepContext, provingContext)).split.mapLeft(newProofs => copy(proofs = newProofs))
+    proofs.map(_.recalculateReferences(initialStepContext, provingContext, conclusion)).split.mapLeft(newProofs => copy(proofs = newProofs))
   }
 
   def findSteps[T <: Step : ClassTag]: Seq[(T, StepContext)] = {
@@ -148,8 +148,10 @@ object Theorem extends Inference.EntryParser {
           })
       }
     }
-    def recalculateReferences(initialStepContext: StepContext, provingContext: ProvingContext): (Proof, Seq[StepWithReferenceChange]) = {
-      steps.recalculateReferences(initialStepContext, provingContext).mapLeft(Proof(_))
+    def recalculateReferences(initialStepContext: StepContext, provingContext: ProvingContext, expectedConclusion: Statement): (Proof, Seq[StepWithReferenceChange]) = {
+      val (newSteps, changedSteps) = steps.recalculateReferences(initialStepContext, provingContext)
+      val newStepsWithTarget = if (newSteps.mapCollect(_.provenStatement).lastOption.contains(expectedConclusion)) newSteps else newSteps :+ Step.Target(expectedConclusion)
+      (Proof(newStepsWithTarget), changedSteps)
     }
 
     def findAssertions(initialStepContext: StepContext): Seq[(Step.Assertion, StepContext)] = {

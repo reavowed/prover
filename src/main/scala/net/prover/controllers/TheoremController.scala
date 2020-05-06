@@ -1,6 +1,7 @@
 package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
+import net.prover.model.ExpressionParsingContext
 import net.prover.model.entries.Theorem
 import net.prover.model.proof.Step
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +12,36 @@ import scala.util.{Failure, Success}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}"))
-class TheoremController @Autowired() (val bookService: BookService) extends BookModification {
+class TheoremController @Autowired() (val bookService: BookService) extends BookModification with ParameterValidation {
+
+  @PutMapping(value = Array("/premises"))
+  def updatePremises(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @RequestBody serializedNewPremises: Seq[String]
+  ): ResponseEntity[_] = {
+    bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+      implicit val expressionParsingContext = ExpressionParsingContext.outsideProof(provingContext.entryContext)
+      for {
+        newPremises <- getPremises(serializedNewPremises)
+      } yield theorem.copy(premises = newPremises)
+    }.toResponseEntity
+  }
+  @PutMapping(value = Array("/conclusion"))
+  def updateConclusion(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @RequestBody serializedNewConclusion: String
+  ): ResponseEntity[_] = {
+    bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+      implicit val expressionParsingContext = ExpressionParsingContext.outsideProof(provingContext.entryContext)
+      for {
+        newConclusion <- getStatement(serializedNewConclusion, "conclusion")
+      } yield theorem.copy(conclusion = newConclusion)
+    }.toResponseEntity
+  }
 
   @PostMapping(value = Array("/proofs"))
   def createProof(

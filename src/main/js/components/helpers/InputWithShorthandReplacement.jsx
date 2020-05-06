@@ -1,13 +1,9 @@
 import _ from "lodash";
-import React, {useContext, useRef, useState} from "react";
-import Autosuggest from "react-autosuggest";
-import Form from "react-bootstrap/Form";
-import styled from "styled-components";
+import React, {useContext} from "react";
 import EntryContext from "../EntryContext";
-import PrettifiedAutosuggest from "./PrettifiedAutosuggest";
 import PrettifiedAutosuggestOnIndividualWords from "./PrettifiedAutosuggestOnIndividualWords";
 
-export default function InputWithShorthandReplacement({value, onChange, ...otherProps}) {
+export default function InputWithShorthandReplacement({value, onChange, ...inputProps}) {
   const context = useContext(EntryContext);
 
   function replaceCompletedWord(word) {
@@ -63,7 +59,8 @@ export default function InputWithShorthandReplacement({value, onChange, ...other
   return <PrettifiedAutosuggestOnIndividualWords value={value}
                                                  onChange={onChange}
                                                  getSuggestions={getSuggestions}
-                                                 replaceCompletedWord={replaceCompletedWord} />;
+                                                 replaceCompletedWord={replaceCompletedWord}
+                                                 inputProps={inputProps}/>;
 }
 
 
