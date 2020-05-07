@@ -135,15 +135,26 @@ object Inference {
     }
   }
 
-  case class Definition(
-      nameOfDefinition: String,
-      premises: Seq[Statement],
-      conclusion: Statement)
-    extends Inference.FromEntry
-  {
+  trait Definition extends Inference.FromEntry {
+    def nameOfDefinition: String
     override def name: String = s"Definition of ${nameOfDefinition.capitalizeWords}"
     override def isComplete(definitions: Definitions): Boolean = true
   }
+
+  case class StatementDefinition(
+      nameOfDefinition: String,
+      premise: Statement,
+      conclusion: Statement)
+    extends Inference.Definition
+  {
+    override def premises: Seq[Statement] = Seq(premise)
+  }
+
+  case class TermDefinition(
+      nameOfDefinition: String,
+      premises: Seq[Statement],
+      conclusion: Statement)
+    extends Inference.Definition
 
   def unapply(inference: Inference): Option[(String, Seq[Statement], Statement)] = {
     Some(inference.name, inference.premises, inference.conclusion)

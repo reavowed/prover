@@ -131,8 +131,8 @@ trait StatementDefinition extends ExpressionDefinition {
   def definingStatement: Option[Statement]
   val disambiguator: Option[String] = None
   val defaultValue: DefinedStatement = DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)
-  val constructionInference: Option[Inference.Definition] = definingStatement.map(s => Inference.Definition(name, Seq(s), defaultValue))
-  val deconstructionInference: Option[Inference.Definition] = definingStatement.map(s => Inference.Definition(name, Seq(defaultValue), s))
+  val constructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, _, defaultValue))
+  val deconstructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, defaultValue, _))
   def inferences: Seq[Inference.FromEntry] = constructionInference.toSeq ++ deconstructionInference.toSeq
 
   override val complexity: Int = definingStatement.map(_.definitionalComplexity).getOrElse(1)
@@ -185,7 +185,7 @@ trait TermDefinition extends ExpressionDefinition {
   def definitionPredicate: Statement
   val defaultValue: DefinedTerm = DefinedTerm(componentTypes.map(_.expression), this)(boundVariableNames)
   val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0).get
-  val definitionInference: Inference.Definition = Inference.Definition(name, premises, definingStatement)
+  val definitionInference: Inference.Definition = Inference.TermDefinition(name, premises, definingStatement)
   def inferences: Seq[Inference.FromEntry] = Seq(definitionInference)
 
   override val complexity: Int = definitionPredicate.definitionalComplexity

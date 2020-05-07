@@ -1,11 +1,56 @@
 package net.prover.model.proof
 
 import net.prover.model._
+import net.prover.model.definitions.Wrapper
 import net.prover.model.expressions.{DefinedStatement, Statement}
 
 object DefinitionRewriter {
   private case class DefinitionRewriteStep(steps: Seq[Step], inference: Inference, source: Statement, result: Statement) {
-    def toStep: Option[Step] = Step.Elided.ifNecessary(steps, inference)
+    def toStep: Step = steps match {
+      case Seq(singleAssertion: Step.Assertion) =>
+        singleAssertion
+      case _ =>
+        Step.Elided(steps, Some(inference.summary), None)
+    }
+  }
+
+  @scala.annotation.tailrec
+  private def unifyBoundVariables(base: Statement, target: Statement, wrapper: Wrapper[Statement, Statement] = Wrapper.identity): Statement = {
+    @scala.annotation.tailrec
+    def getNextVariable(currentTarget: Statement): Option[(String, Statement)] = {
+      currentTarget match {
+        case definedTarget @ DefinedStatement(Seq(singleComponent: Statement), _) =>
+          definedTarget.boundVariableNames match {
+            case Seq(singleVariableName) =>
+              Some((singleVariableName, singleComponent))
+            case Nil =>
+              getNextVariable(singleComponent)
+            case _ =>
+              None
+          }
+        case _ =>
+          None
+      }
+    }
+
+    base match {
+      case definedBase @ DefinedStatement(Seq(innerBase: Statement), definition) =>
+        definedBase.boundVariableNames match {
+          case Seq(_) =>
+            getNextVariable(target) match {
+              case Some((targetVariableName, innerTarget)) =>
+                unifyBoundVariables(innerBase, innerTarget, wrapper.insert[Statement]((s, _) => definition.bind(targetVariableName)(s)))
+              case None =>
+                wrapper(base)(SubstitutionContext.outsideProof)
+            }
+          case Nil =>
+            unifyBoundVariables(innerBase, target, wrapper.insert[Statement]((s, _) => definition(s)))
+          case _ =>
+            wrapper(base)(SubstitutionContext.outsideProof)
+        }
+      case _ =>
+        wrapper(base)(SubstitutionContext.outsideProof)
+    }
   }
 
   private def getRewriteStep(premise: Statement, target: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Seq[DefinitionRewriteStep] = {
@@ -101,12 +146,14 @@ object DefinitionRewriter {
         (0, innerPremise) <- initialDeductionSubstitutions.statements.get(premiseName)
         definition <- innerPremise.asOptionalInstanceOf[DefinedStatement].map(_.definition)
         deconstructionSubstitutions <- definition.defaultValue.calculateSubstitutions(innerPremise).flatMap(_.confirmTotality)
-        deconstructedInnerPremise <- definition.definingStatement.flatMap(_.applySubstitutions(deconstructionSubstitutions))
+        deconstructedInnerPremise <- definition.definingStatement.flatMap(_.applySubstitutions(deconstructionSubstitutions)).map(unifyBoundVariables(_, innerPremise))
         deductionSubstitutions = initialDeductionSubstitutions.copy(statements = initialDeductionSubstitutions.statements + (conclusionName -> (0, deconstructedInnerPremise)))
         deconstructedSource <- deductionInference.conclusion.applySubstitutions(deductionSubstitutions)
         if provingContext.statementDefinitionEliminationInferences.exists(_._2.calculateSubstitutions(deconstructedSource).nonEmpty)
         deconstructionInference <- wrappingSwapper.getSource(definition.deconstructionInference, definition.constructionInference)
-        deconstructionStep <- Step.Assertion.forInference(deconstructionInference, deconstructionSubstitutions)
+        deconstructionPremise <- deconstructionInference.premise.applySubstitutions(deconstructionSubstitutions).map(unifyBoundVariables(_, innerPremise))
+        deconstructionConclusion <- deconstructionInference.conclusion.applySubstitutions(deconstructionSubstitutions).map(unifyBoundVariables(_, innerPremise))
+        deconstructionStep = Step.Assertion(deconstructionConclusion, deconstructionInference.summary, Seq(Premise.Pending(deconstructionPremise)), deconstructionSubstitutions)
         deductionStep = Step.Deduction(deconstructionStep.premises.head.statement, Seq(deconstructionStep), deductionDefinition)
         assertionStep <- Step.Assertion.forInference(deductionInference, deductionSubstitutions)
       } yield DefinitionRewriteStep(Seq(deductionStep, assertionStep), deconstructionInference, assertionStep.premises(1).statement, assertionStep.statement)
@@ -119,12 +166,14 @@ object DefinitionRewriter {
         (0, innerTarget) <- initialDeductionSubstitutions.statements.get(conclusionName)
         definition <- innerTarget.asOptionalInstanceOf[DefinedStatement].map(_.definition)
         constructionSubstitutions <- definition.defaultValue.calculateSubstitutions(innerTarget).flatMap(_.confirmTotality)
-        deconstructedInnerTarget <- definition.definingStatement.flatMap(_.applySubstitutions(constructionSubstitutions))
+        deconstructedInnerTarget <- definition.definingStatement.flatMap(_.applySubstitutions(constructionSubstitutions)).map(unifyBoundVariables(_, innerTarget))
         deductionSubstitutions = initialDeductionSubstitutions.copy(statements = initialDeductionSubstitutions.statements + (premiseName -> (0, deconstructedInnerTarget)))
         deconstructedTarget <- deductionPremise.applySubstitutions(deductionSubstitutions)
         if provingContext.statementDefinitionIntroductionInferences.exists(_._1.conclusion.calculateSubstitutions(deconstructedTarget).nonEmpty)
         constructionInference <- wrappingSwapper.getSource(definition.constructionInference, definition.deconstructionInference)
-        constructionStep <- Step.Assertion.forInference(constructionInference, constructionSubstitutions)
+        constructionPremise <- constructionInference.premise.applySubstitutions(constructionSubstitutions).map(unifyBoundVariables(_, innerTarget))
+        constructionConclusion <- constructionInference.conclusion.applySubstitutions(constructionSubstitutions).map(unifyBoundVariables(_, innerTarget))
+        constructionStep = Step.Assertion(constructionConclusion, constructionInference.summary, Seq(Premise.Pending(constructionPremise)), constructionSubstitutions)
         deductionStep = Step.Deduction(constructionStep.premises.head.statement, Seq(constructionStep), deductionDefinition)
         assertionStep <- Step.Assertion.forInference(deductionInference, deductionSubstitutions)
       } yield DefinitionRewriteStep(Seq(deductionStep, assertionStep), constructionInference, assertionStep.premises(1).statement, assertionStep.statement)
@@ -151,7 +200,7 @@ object DefinitionRewriter {
   def rewriteDefinitions(source: Statement, target: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[Step] = {
     (for {
       rewriteSteps <- getRewriteSteps(source, target)
-      steps <- rewriteSteps.map(_.toStep).traverseOption
+      steps = rewriteSteps.map(_.toStep)
       step <- Step.Elided.ifNecessary(steps, "By definition")
     } yield step).headOption
   }
