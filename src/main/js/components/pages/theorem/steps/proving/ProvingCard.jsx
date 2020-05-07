@@ -66,7 +66,7 @@ export default class ProvingCard extends React.Component {
   };
 
   render() {
-    const {step, path, availablePremises, chained} = this.props;
+    const {step, path, availablePremises} = this.props;
     const {currentRowLabel, currentProverLabel, errorMessage} = this.state;
 
     const generalizationStatement = _.find(this.context.definitions, d => _.includes(d.attributes, "generalization"));

@@ -23,7 +23,13 @@ class TargetStepProofLineInner extends React.Component {
     this.context.registerStep(this, this.props.path);
   }
   componentWillUnmount() {
-    this.context.unregisterStep(this.props.path);
+    this.context.unregisterStep(this, this.props.path);
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!_.isEqual(prevProps.path, this.props.path)) {
+      this.context.unregisterStep(this, prevProps.path);
+      this.context.registerStep(this, this.props.path);
+    }
   }
   onUpdate() {
     this.context.fetchJsonForStep(this.props.path, "premises")
@@ -45,11 +51,11 @@ class TargetStepProofLineInner extends React.Component {
   };
 
   render() {
-    const {step, path, additionalReferences, children, chained} = this.props;
+    const {step, path, additionalReferences, children} = this.props;
     const {proving} = this.state;
 
     return proving ?
-      <ProvingCard step={step} path={path} availablePremises={this.state.availablePremises} chained={chained} stopProving={this.stopProving} /> :
+      <ProvingCard step={step} path={path} availablePremises={this.state.availablePremises} stopProving={this.stopProving} /> :
       <ProofLine incomplete
                  editableBoundVariable
                  path={path}

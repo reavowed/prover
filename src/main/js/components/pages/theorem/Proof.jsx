@@ -19,8 +19,10 @@ export default class Proof extends React.Component {
     this.steps[path.join(".")] = step;
     if (step.onUpdate) step.onUpdate();
   };
-  unregisterStep = (path) => {
-    delete this.steps[path.join(".")];
+  unregisterStep = (step, path) => {
+    if (this.steps[path.join(".")] === step) {
+      delete this.steps[path.join(".")];
+    }
   };
   callOnStep = (path, action) => {
     this.steps[path.join(".")][action]();
@@ -28,7 +30,9 @@ export default class Proof extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.steps !== this.props.steps) {
       _.forEach(_.values(this.steps), step => {
-        if (step.onUpdate) step.onUpdate();
+        if (step.onUpdate) {
+          step.onUpdate();
+        }
       });
     }
   }

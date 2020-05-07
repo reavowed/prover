@@ -127,7 +127,7 @@ class ChainedSteps extends React.Component {
         case "elided":
           return <ElidedStepProofLine {...props}>{children}</ElidedStepProofLine>;
         case "target":
-          return <TargetStepProofLine {...props} chained>{children}</TargetStepProofLine>;
+          return <TargetStepProofLine {...props}>{children}</TargetStepProofLine>;
       }
     };
 
