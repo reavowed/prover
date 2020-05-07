@@ -270,11 +270,11 @@ type pairSet X
   definition (∀ x → ∈ $0 X ∃ a ∃ b = $$$0 orderedPair $$0 $0)
 
 term domain (X)
-  format (domain(X))
+  format (domain(X)) no-component-brackets
   (= $0 comprehension a union union X ∃ b ∈ orderedPair $$0 $0 X)
 
 term range (X)
-  format (range(X))
+  format (range(X)) no-component-brackets
   (= $0 comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X)
 
 theorem Coordinates of Element Are Elements of Domain and Range
@@ -401,4 +401,52 @@ conclusion ∀ b ↔ ∈ $0 range X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0
     }
     prove ↔ ∈ $0 range X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 range X, ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X) () 1.0 1.1
   }
+}
+
+theorem Domain of Empty Set Is Empty
+conclusion = domain ∅ ∅
+{
+  take x {
+    elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+      take b {
+        assume ∈ $0 range ∅ {
+          elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+            prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+            prove ¬ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$$0 ∅) (orderedPair $$0 $0) 0.0.0.0.0.0
+          }
+        }
+      }
+    }
+    elided (By definition) {
+      elided 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 {
+        take b {
+          prove → ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 range ∅ ¬ ∈ orderedPair $$0 $$$0 ∅) ($0) 0.0
+          prove ¬ ¬ → ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (→ ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅) () 0.1.0.0.0
+        }
+      }
+      elided e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a {
+        take b {
+          prove ¬ ¬ → ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ¬ → ∈ $$$0 range ∅ ¬ ∈ orderedPair $$0 $$$0 ∅) ($0) 0.1.0
+          assume ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ {
+            prove ¬ → ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅ e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (∈ $0 range ∅, ∈ orderedPair $$0 $0 ∅) () 0.1.1.0.1a
+          }
+          prove ¬ ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅, ¬ → ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅) () 0.1.1.0.1 0.1.1.0.0
+        }
+      }
+      prove ¬ ¬ ∀ b ¬ ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (∀ b ¬ ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅) () 0.1.1
+      elided 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 {
+        assume ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ {
+          prove ¬ ∀ b ¬ ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 (∧ ∈ $$0 range ∅ ∈ orderedPair $0 $$0 ∅) () 0.1.3.0a
+        }
+        prove ¬ ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅, ¬ ∀ b ¬ ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅) () 0.1.3.0 0.1.2
+      }
+    }
+    elided 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 {
+      prove ∀ a ↔ ∈ $0 domain ∅ ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 () (∅)
+      prove ↔ ∈ $0 domain ∅ ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 domain ∅ ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$$0 $0 ∅) ($0) 0.2.0
+      prove → ∈ $0 domain ∅ ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 domain ∅, ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅) () 0.2.1
+      prove ¬ ∈ $0 domain ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ $0 domain ∅, ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅) () 0.2.2 0.1
+    }
+  }
+  prove = domain ∅ ∅ 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (domain ∅) 0
 }

@@ -809,3 +809,215 @@ conclusion ⊆ S X
   }
   prove ⊆ S X 5dfca0f7cb6dbc56fdca35e2090132f0896d503c5b92c67a0d47d55484d7aab5 (with (first $0 second $0 first $1 second $1) φ) (S, X) 0
 }
+
+theorem Domain of Cartesian Product
+premise ¬ = B ∅
+conclusion = domain product A B A
+{
+  take a {
+    assume ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B {
+      let b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 range product A B ∈ orderedPair $0 $$0 product A B, ∈ $0 A) () {
+        prove ∈ $$0 A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () ($$0, $0, A, B) 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      } 0.0a
+    }
+    assume ∈ $0 A {
+      prove ∃ b ∈ $0 B 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (B) p0
+      let b ∈ $0 B 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 B, ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B) () {
+        elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
+          prove ∈ orderedPair $$0 $0 product A B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, B) 0.1a 0.1.1a
+          elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
+            prove ∧ ∈ $$0 domain product A B ∈ $0 range product A B be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () ($$0, $0, product A B) 0.1.1.0.0
+            prove ∈ $0 range product A B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 domain product A B, ∈ $0 range product A B) () 0.1.1.0.1.0
+          }
+        }
+        elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+          prove ∈ orderedPair $$0 $0 product A B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, B) 0.1a 0.1.1a
+          prove ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 range product A B, ∈ orderedPair $$0 $0 product A B) () 0.1.1.0 0.1.1.1.0
+          prove ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$$0 $0 product A B c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 range product A B ∈ orderedPair $$0 $$$0 product A B) ($0) 0.1.1.1.1
+        }
+      } 0.1.0
+    }
+    elided 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 {
+      prove ∀ a ↔ ∈ $0 domain product A B ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 () (product A B)
+      prove ↔ ∈ $0 domain product A B ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 domain product A B ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$$0 $0 product A B) ($0) 0.2.0
+    }
+    prove ↔ ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B ∈ $0 A 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B, ∈ $0 A) () 0.0 0.1
+    prove ↔ ∈ $0 domain product A B ∈ $0 A e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 domain product A B, ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B, ∈ $0 A) () 0.2 0.3
+  }
+  prove = domain product A B A 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (domain product A B, A) 0
+}
+
+theorem Cartesian Product Is Empty Iff One of Its Components is Empty
+conclusion ↔ = product A B ∅ ∨ = A ∅ = B ∅
+{
+  prove = product A B comprehension x powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 1e2c83e13a9307acf5b3453fbb4a006828b56c7b7418af8e4243ea700e4535fd () (A, B)
+  assume = product A B ∅ {
+    assume ¬ = A ∅ {
+      prove ∃ a ∈ $0 A 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (A) 1.0a
+      let a ∈ $0 A 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 A, = B ∅) () {
+        take x {
+          assume ∈ $0 B {
+            prove ∈ orderedPair $$0 $0 product A B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, B) 1.0.1a 1.0.1.0.0a
+            elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+              elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+                prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+                prove ¬ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$$0 ∅) (orderedPair $$0 $0) 1.0.1.0.0.1.0.0
+              }
+              elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                prove = ∅ product A B 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (product A B, ∅) 1a
+                prove ¬ ∈ orderedPair $$0 $0 product A B 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ ∈ orderedPair $$0 $0 $$$0) (∅, product A B) 1.0.1.0.0.1.1.0 1.0.1.0.0.1.0
+              }
+            }
+            prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∈ orderedPair $$0 $0 product A B) () 1.0.1.0.0.0 1.0.1.0.0.1
+          }
+          prove ¬ ∈ $0 B adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∈ $0 B) () 1.0.1.0.0
+        }
+        prove = B ∅ 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (B) 1.0.1.0
+      } 1.0.0
+    }
+    prove ∨ = A ∅ = B ∅ 94eabd8c44d2886bcf8b632647ae5882b8e713fa3c14c8b25800ea563dfc1919 (= A ∅, = B ∅) () 1.0
+  }
+  assume ∨ = A ∅ = B ∅ {
+    take x {
+      assume = A ∅ {
+        take a {
+          elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+            elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+              prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+              prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$$0 ∅) ($0) 2.0.0.0.0.0.0
+            }
+            elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+              prove = ∅ A 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (A, ∅) 2.0.0a
+              prove ¬ ∈ $0 A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ ∈ $0 $$$0) (∅, A) 2.0.0.0.0.1.0 2.0.0.0.0.0
+            }
+          }
+          prove → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 A, ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.0.0.0
+        }
+        elided (By definition) {
+          elided 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 {
+            take a {
+              prove → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$$$0 $0) ($0) 2.0.0.0
+              prove ¬ ¬ → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (→ ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.0.1.0.0.0
+            }
+          }
+          elided e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a {
+            take a {
+              prove ¬ ¬ → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ¬ → ∈ $$$0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$$$0 $0) ($0) 2.0.0.1.0
+              assume ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
+                prove ¬ → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (∈ $0 A, ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.0.1.1.0.1a
+              }
+              prove ¬ ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ¬ → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.0.1.1.0.1 2.0.0.1.1.0.0
+            }
+          }
+          prove ¬ ¬ ∀ a ¬ ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (∀ a ¬ ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.0.1.1
+          elided 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 {
+            assume ∃ x ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
+              prove ¬ ∀ x ¬ ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () 2.0.0.1.3.0a
+            }
+            prove ¬ ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ¬ ∀ a ¬ ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.0.1.3.0 2.0.0.1.2
+          }
+        }
+      }
+      assume = B ∅ {
+        take a {
+          assume ∈ $0 A {
+            take b {
+              elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+                elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+                  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+                  prove ¬ ∈ $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$$$0 ∅) ($0) 2.0.1.0.0.0.0.0.0
+                }
+                elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+                  prove = ∅ B 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (B, ∅) 2.0.1a
+                  prove ¬ ∈ $0 B 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (¬ ∈ $0 $$$$0) (∅, B) 2.0.1.0.0.0.0.1.0 2.0.1.0.0.0.0.0
+                }
+              }
+              prove → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0 bc0e42ba9a9d6091d0a65634441e963c4517c5cf7c51a446f53df6968701c144 (∈ $0 B, ¬ = $$$0 orderedPair $$0 $0) () 2.0.1.0.0.0.0
+            }
+          }
+        }
+        elided (By definition) {
+          elided 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 {
+            take a {
+              prove → ∈ $0 A ∀ b → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ∀ b → ∈ $0 B ¬ = $$$0 orderedPair $$$$0 $0) ($0) 2.0.1.0
+              assume ∈ $0 A {
+                prove ∀ b → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0) () 2.0.1.1.0.0.0 2.0.1.1.0.0.1a
+                take b {
+                  prove → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 B ¬ = $$$0 orderedPair $$0 $$$$0) ($0) 2.0.1.1.0.0.1.0
+                  prove ¬ ¬ → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (→ ∈ $0 B ¬ = $$$0 orderedPair $$0 $0) () 2.0.1.1.0.0.1.1.0
+                }
+              }
+            }
+          }
+          elided e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a {
+            take a {
+              prove → ∈ $0 A ∀ b ¬ ¬ → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ∀ b ¬ ¬ → ∈ $0 B ¬ = $$$0 orderedPair $$$$0 $0) ($0) 2.0.1.1.0
+              assume ∈ $0 A {
+                prove ∀ b ¬ ¬ → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b ¬ ¬ → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0) () 2.0.1.1.1.0.0 2.0.1.1.1.0.1a
+                take b {
+                  prove ¬ ¬ → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ¬ → ∈ $$$$0 B ¬ = $$$0 orderedPair $$0 $$$$0) ($0) 2.0.1.1.1.0.1.0
+                  assume ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
+                    prove ¬ → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0 e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (∈ $0 B, = $$$0 orderedPair $$0 $0) () 2.0.1.1.1.0.1.1.1a
+                  }
+                  prove ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ¬ → ∈ $0 B ¬ = $$$0 orderedPair $$0 $0) () 2.0.1.1.1.0.1.1.1 2.0.1.1.1.0.1.1.0
+                }
+              }
+            }
+          }
+          elided 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 {
+            take a {
+              prove → ∈ $0 A ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$$$0 $0) ($0) 2.0.1.1.1
+              assume ∈ $0 A {
+                prove ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.1.1.2.0.0 2.0.1.1.2.0.1a
+                prove ¬ ¬ ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.1.1.2.0.1.0
+              }
+            }
+          }
+          elided 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 {
+            take a {
+              prove → ∈ $0 A ¬ ¬ ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ¬ ¬ ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$$$0 $0) ($0) 2.0.1.1.2
+              assume ∈ $0 A {
+                prove ¬ ¬ ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ¬ ¬ ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.1.1.3.0.0 2.0.1.1.3.0.1a
+                assume ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
+                  prove ¬ ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 (∧ ∈ $$$0 B = $$0 orderedPair $0 $$$0) () 2.0.1.1.3.0.1.1a
+                }
+                prove ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ¬ ∀ b ¬ ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.1.1.3.0.1.1 2.0.1.1.3.0.1.0
+              }
+            }
+          }
+          elided 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 {
+            take a {
+              prove → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$$$0 $0) ($0) 2.0.1.1.3
+              prove ¬ ¬ → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (→ ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.1.1.4.0.0
+            }
+          }
+          elided e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a {
+            take a {
+              prove ¬ ¬ → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ¬ → ∈ $$$0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$$$0 $0) ($0) 2.0.1.1.4
+              assume ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
+                prove ¬ → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (∈ $0 A, ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.1.1.5.0.1a
+              }
+              prove ¬ ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ¬ → ∈ $0 A ¬ ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.1.1.5.0.1 2.0.1.1.5.0.0
+            }
+          }
+          prove ¬ ¬ ∀ a ¬ ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (∀ a ¬ ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.1.1.5
+          elided 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 {
+            assume ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 {
+              prove ¬ ∀ a ¬ ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 (∧ ∈ $$0 A ∃ b ∧ ∈ $0 B = $$0 orderedPair $$$0 $0) () 2.0.1.1.7.0a
+            }
+            prove ¬ ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0, ¬ ∀ a ¬ ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.1.1.7.0 2.0.1.1.6
+          }
+        }
+      }
+      prove ¬ ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= A ∅, = B ∅, ¬ ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2a 2.0.0 2.0.1
+      elided df6b015fa69eee3f1de533c682fb88b8beb6dbe2789ab09fc4cb95eada5e6712 {
+        prove ∀ x ↔ ∈ $0 product A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 df6b015fa69eee3f1de533c682fb88b8beb6dbe2789ab09fc4cb95eada5e6712 () (A, B)
+        prove ↔ ∈ $0 product A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 product A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$$0 orderedPair $$0 $0) ($0) 2.0.3.0
+        prove → ∈ $0 product A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 product A B, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.3.1
+        prove ¬ ∈ $0 product A B 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ $0 product A B, ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0) () 2.0.3.2 2.0.2
+      }
+    }
+    prove = product A B ∅ 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (product A B) 2.0
+  }
+  prove ↔ = product A B ∅ ∨ = A ∅ = B ∅ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= product A B ∅, ∨ = A ∅ = B ∅) () 1 2
+}

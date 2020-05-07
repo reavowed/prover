@@ -1,87 +1,177 @@
 A binary operator is a binary function that acts purely within a single set.
 
+term baseSet (X)
+  name (base set)
+  format (baseSet(X))
+  (= $0 domain domain X)
+
 type binaryOperation f
-  qualifier (A) (on A)
   name (binary operation)
-  definition (∧ function f functionFrom f product A A A)
+  definition (∧ function f functionFrom f product baseSet f baseSet f baseSet f)
+
+qualifier on on binaryOperation (A) (on A)
+  definition (= baseSet f A)
+
+theorem Alternative Definition for Binary Operation on a Set
+conclusion ↔ ∧ binaryOperation f binaryOperationOn f A ∧ function f functionFrom f product A A A
+{
+  assume ∧ binaryOperation f binaryOperationOn f A {
+    prove ∧ function f functionFrom f product baseSet f baseSet f baseSet f a20ed9a4dba8232a01ec06500950d9ef6b3d3b96535ccbdf3274b0589387b3d9 () (f) 0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+    elided 0e668817dda74a672fac354c666125bd9a05ced0beae92f84380970e4b4104db {
+      prove ∧ binaryOperation f = baseSet f A 0e668817dda74a672fac354c666125bd9a05ced0beae92f84380970e4b4104db () (f, A) 0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove = baseSet f A 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (binaryOperation f, = baseSet f A) () 0.1.0
+    }
+    elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+      prove ∧ function f functionFrom f product A baseSet f baseSet f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ function f functionFrom f product $0 baseSet f baseSet f) (baseSet f, A) 0.1 0.0
+      prove ∧ function f functionFrom f product A A baseSet f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ function f functionFrom f product A $0 baseSet f) (baseSet f, A) 0.1 0.2.0
+      prove ∧ function f functionFrom f product A A A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∧ function f functionFrom f product A A $0) (baseSet f, A) 0.1 0.2.1
+    }
+  }
+  assume ∧ function f functionFrom f product A A A {
+    elided ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da {
+      prove ∧ function f ∧ = domain f product A A ⊆ range f A ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, product A A, A) 1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove ∧ = domain f product A A ⊆ range f A 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f, ∧ = domain f product A A ⊆ range f A) () 1.0.0
+      prove = domain f product A A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain f product A A, ⊆ range f A) () 1.0.1
+    }
+    assume = A ∅ {
+      elided be77545baf146bbd805162cf9db6967b03c9667ba730db5d2a239976bc36e720 {
+        prove ∨ = A ∅ = A ∅ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (= A ∅, = A ∅) () 1.1a
+        elided be77545baf146bbd805162cf9db6967b03c9667ba730db5d2a239976bc36e720 {
+          prove ↔ = product A A ∅ ∨ = A ∅ = A ∅ be77545baf146bbd805162cf9db6967b03c9667ba730db5d2a239976bc36e720 () (A, A)
+          prove → ∨ = A ∅ = A ∅ = product A A ∅ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (= product A A ∅, ∨ = A ∅ = A ∅) () 1.1.0.1.0
+          prove = product A A ∅ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∨ = A ∅ = A ∅, = product A A ∅) () 1.1.0.1.1 1.1.0.0
+        }
+      }
+      elided 88c40023a6a3e42e68f2b9ce1d9db23c852b3d38ef4c5a9564940d05501be870 {
+        prove = domain ∅ ∅ 88c40023a6a3e42e68f2b9ce1d9db23c852b3d38ef4c5a9564940d05501be870 () ()
+        elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+          prove = ∅ product A A 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (product A A, ∅) 1.1.0
+          prove = domain product A A ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= domain $0 ∅) (∅, product A A) 1.1.1.1.0 1.1.1.0
+        }
+      }
+      prove = ∅ A 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (A, ∅) 1.1a
+      prove = domain product A A A 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (domain product A A, ∅, A) 1.1.1 1.1.2
+    }
+    assume ¬ = A ∅ {
+      prove = domain product A A A 445645ac1bc21af977fb1b2ae4cddde0bd6b467e0c3225fa1e563bb9ff6c8453 () (A, A) 1.2a
+    }
+    prove = domain product A A A 35f46479d4f3054e0f463194f8ed4dd77e7526b58f2b6157594bf81bccfcf95a (= A ∅, = domain product A A A) () 1.1 1.2
+    elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+      prove ∧ function f ∧ = domain f product A A ⊆ range f A ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, product A A, A) 1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove = product A A domain f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain f, product A A) 1.4.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+      prove = domain domain f A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= domain $0 A) (product A A, domain f) 1.4.1 1.3
+    }
+    elided 64c285e5d97619fb3e0ccf9308da3345a27045cc55d8fff05da0149b2b957683 {
+      elided 64c285e5d97619fb3e0ccf9308da3345a27045cc55d8fff05da0149b2b957683 {
+        prove = baseSet f domain domain f 64c285e5d97619fb3e0ccf9308da3345a27045cc55d8fff05da0149b2b957683 () (f)
+        prove = domain domain f baseSet f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (baseSet f, domain domain f) 1.5.0.0
+      }
+      prove = baseSet f A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $0 A) (domain domain f, baseSet f) 1.5.0 1.4
+    }
+    elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+      elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+        prove = A baseSet f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (baseSet f, A) 1.5
+        prove functionFrom f product baseSet f A A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (functionFrom f product $0 A A) (A, baseSet f) 1.6.0.0 1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      }
+      elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+        prove = A baseSet f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (baseSet f, A) 1.5
+        prove functionFrom f product baseSet f baseSet f A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (functionFrom f product baseSet f $0 A) (A, baseSet f) 1.6.1.0 1.6.0
+      }
+      elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+        prove = A baseSet f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (baseSet f, A) 1.5
+        prove functionFrom f product baseSet f baseSet f baseSet f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (functionFrom f product baseSet f baseSet f $0) (A, baseSet f) 1.6.2.0 1.6.1
+      }
+    }
+    elided 360c288c1e8feac93f636b8ef703c0d40eacf24b9c1c6ba4e1f1d06a5b761f9a {
+      prove ∧ function f functionFrom f product baseSet f baseSet f baseSet f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f, functionFrom f product baseSet f baseSet f baseSet f) () 1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.6
+      prove binaryOperation f 360c288c1e8feac93f636b8ef703c0d40eacf24b9c1c6ba4e1f1d06a5b761f9a () (f) 1.7.0
+    }
+    elided 66439aa9629f4208a2eaaeeec07000a6cfccbc079dd0b679f7ed955678c438e9 {
+      prove ∧ binaryOperation f = baseSet f A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f, = baseSet f A) () 1.7 1.5
+      prove binaryOperationOn f A 66439aa9629f4208a2eaaeeec07000a6cfccbc079dd0b679f7ed955678c438e9 () (f, A) 1.8.0
+    }
+    prove ∧ binaryOperation f binaryOperationOn f A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f, binaryOperationOn f A) () 1.7 1.8
+  }
+  prove ↔ ∧ binaryOperation f binaryOperationOn f A ∧ function f functionFrom f product A A A 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∧ binaryOperation f binaryOperationOn f A, ∧ function f functionFrom f product A A A) () 0 1
+}
 
 property associative on binaryOperation
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0)
+  definition (∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0)
 
 property commutative on binaryOperation
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0)
+  definition (∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0)
 
 comment Identities.
 
 relatedObject identity e for binaryOperation
-  definition (∀ a → ∈ $0 A ∧ = apply f orderedPair $0 e $0 = apply f orderedPair e $0 $0)
+  definition (∧ ∈ e baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e $0 = apply f orderedPair e $0 $0)
 
 comment Cancellable operators.
 
 property leftCancellable on binaryOperation
   name (left-cancellable)
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0)
+  definition (∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0)
 
 property rightCancellable on binaryOperation
   name (right-cancellable)
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0)
+  definition (∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0)
 
 property cancellable on binaryOperation
-  definition (∧ leftCancellableBinaryOperation f A rightCancellableBinaryOperation f A)
+  definition (∧ leftCancellableBinaryOperation f rightCancellableBinaryOperation f)
 
 theorem A Commutative Operator Is Cancellable If It Is Cancellable on One Side
-premise ∧ binaryOperation f A commutativeBinaryOperation f A
-premise ∨ leftCancellableBinaryOperation f A rightCancellableBinaryOperation f A
-conclusion cancellableBinaryOperation f A
+premise ∧ binaryOperation f commutativeBinaryOperation f
+premise ∨ leftCancellableBinaryOperation f rightCancellableBinaryOperation f
+conclusion cancellableBinaryOperation f
 {
-  assume leftCancellableBinaryOperation f A {
+  assume leftCancellableBinaryOperation f {
     take a {
-      assume ∈ $0 A {
+      assume ∈ $0 baseSet f {
         take b {
-          assume ∈ $0 A {
+          assume ∈ $0 baseSet f {
             take c {
-              assume ∈ $0 A {
+              assume ∈ $0 baseSet f {
                 assume = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 {
-                  elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                    elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                      elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                        prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 104665950729c168fb944d4db07ed114757e5e2c611a76dc302cb6573d07eaad () (f, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                        elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                          prove commutativeBinaryOperation f A 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b () (f, A) 0.0.0.0.0.0.0.0.0.0.0.0
-                          prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 104665950729c168fb944d4db07ed114757e5e2c611a76dc302cb6573d07eaad () (f, A) 0.0.0.0.0.0.0.0.0.0.0.1.0
-                          prove → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ b → ∈ $0 A = apply f orderedPair $$$$$0 $0 apply f orderedPair $0 $$$$$0) ($0) 0.0.0.0.0.0.0.0.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                          prove ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0) () 0.0.0.0.0.0.0.0.0.0.0.1.2 0.0.0.0.0.0.0a
-                          prove → ∈ $$$0 A = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A = apply f orderedPair $0 $$$$0 apply f orderedPair $$$$0 $0) ($$$0) 0.0.0.0.0.0.0.0.0.0.0.1.3
-                          prove = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0) () 0.0.0.0.0.0.0.0.0.0.0.1.4 0.0.0a
+                  elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                    elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                      elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                        prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0b17ab17fef838e3c658ca1464458ab9df52ae048672530cc23a5324c7833966 () (f) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                        elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                          prove commutativeBinaryOperation f 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 () (f) 0.0.0.0.0.0.0.0.0.0.0.0
+                          prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0b17ab17fef838e3c658ca1464458ab9df52ae048672530cc23a5324c7833966 () (f) 0.0.0.0.0.0.0.0.0.0.0.1.0
+                          prove → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$$$$0 $0 apply f orderedPair $0 $$$$$0) ($0) 0.0.0.0.0.0.0.0.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                          prove ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 baseSet f, ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0) () 0.0.0.0.0.0.0.0.0.0.0.1.2 0.0.0.0.0.0.0a
+                          prove → ∈ $$$0 baseSet f = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f = apply f orderedPair $0 $$$$0 apply f orderedPair $$$$0 $0) ($$$0) 0.0.0.0.0.0.0.0.0.0.0.1.3
+                          prove = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 baseSet f, = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0) () 0.0.0.0.0.0.0.0.0.0.0.1.4 0.0.0a
                           prove = apply f orderedPair $$$0 $0 apply f orderedPair $0 $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f orderedPair $0 $$$0, apply f orderedPair $$$0 $0) 0.0.0.0.0.0.0.0.0.0.0.1.5
                         }
                       }
                       prove = apply f orderedPair $0 $$$0 apply f orderedPair $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$$$0 apply f orderedPair $$0 $0) (apply f orderedPair $$$0 $0, apply f orderedPair $0 $$$0) 0.0.0.0.0.0.0.0.0.0.0 0.0.0.0.0.0.0.0a
                     }
-                    elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                      elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                        prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 104665950729c168fb944d4db07ed114757e5e2c611a76dc302cb6573d07eaad () (f, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                        elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                          prove commutativeBinaryOperation f A 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b () (f, A) 0.0.0.0.0.0.0.0.0.1.0.0
-                          prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 104665950729c168fb944d4db07ed114757e5e2c611a76dc302cb6573d07eaad () (f, A) 0.0.0.0.0.0.0.0.0.1.0.1.0
-                          prove → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ b → ∈ $0 A = apply f orderedPair $$$$$0 $0 apply f orderedPair $0 $$$$$0) ($0) 0.0.0.0.0.0.0.0.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                          prove ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0) () 0.0.0.0.0.0.0.0.0.1.0.1.2 0.0.0.0.0.0.0a
-                          prove → ∈ $$0 A = apply f orderedPair $0 $$0 apply f orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A = apply f orderedPair $0 $$$$0 apply f orderedPair $$$$0 $0) ($$0) 0.0.0.0.0.0.0.0.0.1.0.1.3
-                          prove = apply f orderedPair $0 $$0 apply f orderedPair $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, = apply f orderedPair $0 $$0 apply f orderedPair $$0 $0) () 0.0.0.0.0.0.0.0.0.1.0.1.4 0.0.0.0.0a
+                    elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                      elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                        prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0b17ab17fef838e3c658ca1464458ab9df52ae048672530cc23a5324c7833966 () (f) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                        elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                          prove commutativeBinaryOperation f 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 () (f) 0.0.0.0.0.0.0.0.0.1.0.0
+                          prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0b17ab17fef838e3c658ca1464458ab9df52ae048672530cc23a5324c7833966 () (f) 0.0.0.0.0.0.0.0.0.1.0.1.0
+                          prove → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$$$$0 $0 apply f orderedPair $0 $$$$$0) ($0) 0.0.0.0.0.0.0.0.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                          prove ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 baseSet f, ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0) () 0.0.0.0.0.0.0.0.0.1.0.1.2 0.0.0.0.0.0.0a
+                          prove → ∈ $$0 baseSet f = apply f orderedPair $0 $$0 apply f orderedPair $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f = apply f orderedPair $0 $$$$0 apply f orderedPair $$$$0 $0) ($$0) 0.0.0.0.0.0.0.0.0.1.0.1.3
+                          prove = apply f orderedPair $0 $$0 apply f orderedPair $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 baseSet f, = apply f orderedPair $0 $$0 apply f orderedPair $$0 $0) () 0.0.0.0.0.0.0.0.0.1.0.1.4 0.0.0.0.0a
                           prove = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f orderedPair $0 $$0, apply f orderedPair $$0 $0) 0.0.0.0.0.0.0.0.0.1.0.1.5
                         }
                       }
                       prove = apply f orderedPair $0 $$$0 apply f orderedPair $0 $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply f orderedPair $0 $$$0 $$$$0) (apply f orderedPair $$0 $0, apply f orderedPair $0 $$0) 0.0.0.0.0.0.0.0.0.1.0 0.0.0.0.0.0.0.0.0.0
                     }
                   }
-                  elided d46891039658cb404e4b52f7db402566d8dd8373e9d4a851ddded1dd968228cb {
-                    prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0 d46891039658cb404e4b52f7db402566d8dd8373e9d4a851ddded1dd968228cb () (f, A) 0a
-                    prove → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$$$$0 $$0 apply f orderedPair $$$$$$0 $0 = $$0 $0) ($0) 0.0.0.0.0.0.0.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                    prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0) () 0.0.0.0.0.0.0.0.1.1 0.0.0.0.0.0.0a
-                    prove → ∈ $$$0 A ∀ c → ∈ $0 A → = apply f orderedPair $$0 $$$$0 apply f orderedPair $$0 $0 = $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ c → ∈ $0 A → = apply f orderedPair $$0 $$$$$0 apply f orderedPair $$0 $0 = $$$$$0 $0) ($$$0) 0.0.0.0.0.0.0.0.1.2
-                    prove ∀ c → ∈ $0 A → = apply f orderedPair $$0 $$$$0 apply f orderedPair $$0 $0 = $$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∀ c → ∈ $0 A → = apply f orderedPair $$0 $$$$0 apply f orderedPair $$0 $0 = $$$$0 $0) () 0.0.0.0.0.0.0.0.1.3 0.0.0a
-                    prove → ∈ $$0 A → = apply f orderedPair $0 $$$0 apply f orderedPair $0 $$0 = $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A → = apply f orderedPair $0 $$$0 apply f orderedPair $0 $$$$0 = $$$0 $$$$0) ($$0) 0.0.0.0.0.0.0.0.1.4
-                    prove → = apply f orderedPair $0 $$$0 apply f orderedPair $0 $$0 = $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, → = apply f orderedPair $0 $$$0 apply f orderedPair $0 $$0 = $$$0 $$0) () 0.0.0.0.0.0.0.0.1.5 0.0.0.0.0a
+                  elided b0db058107819ddc6777b46a707900027ca4ff8c7e8afa1f108620d104f62a6e {
+                    prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0 b0db058107819ddc6777b46a707900027ca4ff8c7e8afa1f108620d104f62a6e () (f) 0a
+                    prove → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$$$$0 $$0 apply f orderedPair $$$$$$0 $0 = $$0 $0) ($0) 0.0.0.0.0.0.0.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 baseSet f, ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0) () 0.0.0.0.0.0.0.0.1.1 0.0.0.0.0.0.0a
+                    prove → ∈ $$$0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$0 $$$$0 apply f orderedPair $$0 $0 = $$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$0 $$$$$0 apply f orderedPair $$0 $0 = $$$$$0 $0) ($$$0) 0.0.0.0.0.0.0.0.1.2
+                    prove ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$0 $$$$0 apply f orderedPair $$0 $0 = $$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 baseSet f, ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$0 $$$$0 apply f orderedPair $$0 $0 = $$$$0 $0) () 0.0.0.0.0.0.0.0.1.3 0.0.0a
+                    prove → ∈ $$0 baseSet f → = apply f orderedPair $0 $$$0 apply f orderedPair $0 $$0 = $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f → = apply f orderedPair $0 $$$0 apply f orderedPair $0 $$$$0 = $$$0 $$$$0) ($$0) 0.0.0.0.0.0.0.0.1.4
+                    prove → = apply f orderedPair $0 $$$0 apply f orderedPair $0 $$0 = $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 baseSet f, → = apply f orderedPair $0 $$$0 apply f orderedPair $0 $$0 = $$$0 $$0) () 0.0.0.0.0.0.0.0.1.5 0.0.0.0.0a
                     prove = $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply f orderedPair $0 $$$0 apply f orderedPair $0 $$0, = $$$0 $$0) () 0.0.0.0.0.0.0.0.1.6 0.0.0.0.0.0.0.0.0
                   }
                 }
@@ -91,59 +181,59 @@ conclusion cancellableBinaryOperation f A
         }
       }
     }
-    elided fca82884e18873aa503d40be6bcce3d679126a6f979aca0259cc47e2251e16be {
-      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f A, ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0
-      prove rightCancellableBinaryOperation f A fca82884e18873aa503d40be6bcce3d679126a6f979aca0259cc47e2251e16be () (f, A) 0.1.0
+    elided aa5e91f06582b2b61e0b99e5574a8e710e50882d136dcbbb574bffabffd6b469 {
+      prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f, ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0
+      prove rightCancellableBinaryOperation f aa5e91f06582b2b61e0b99e5574a8e710e50882d136dcbbb574bffabffd6b469 () (f) 0.1.0
     }
   }
-  assume rightCancellableBinaryOperation f A {
+  assume rightCancellableBinaryOperation f {
     take a {
-      assume ∈ $0 A {
+      assume ∈ $0 baseSet f {
         take b {
-          assume ∈ $0 A {
+          assume ∈ $0 baseSet f {
             take c {
-              assume ∈ $0 A {
+              assume ∈ $0 baseSet f {
                 assume = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 {
-                  elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                    elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                      elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                        prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 104665950729c168fb944d4db07ed114757e5e2c611a76dc302cb6573d07eaad () (f, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                        elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                          prove commutativeBinaryOperation f A 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b () (f, A) 1.0.0.0.0.0.0.0.0.0.0.0
-                          prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 104665950729c168fb944d4db07ed114757e5e2c611a76dc302cb6573d07eaad () (f, A) 1.0.0.0.0.0.0.0.0.0.0.1.0
-                          prove → ∈ $$0 A ∀ b → ∈ $0 A = apply f orderedPair $$$0 $0 apply f orderedPair $0 $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ b → ∈ $0 A = apply f orderedPair $$$$$0 $0 apply f orderedPair $0 $$$$$0) ($$0) 1.0.0.0.0.0.0.0.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                          prove ∀ b → ∈ $0 A = apply f orderedPair $$$0 $0 apply f orderedPair $0 $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ b → ∈ $0 A = apply f orderedPair $$$0 $0 apply f orderedPair $0 $$$0) () 1.0.0.0.0.0.0.0.0.0.0.1.2 1.0.0.0.0a
-                          prove → ∈ $$$0 A = apply f orderedPair $$0 $$$0 apply f orderedPair $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A = apply f orderedPair $$0 $$$$0 apply f orderedPair $$$$0 $$0) ($$$0) 1.0.0.0.0.0.0.0.0.0.0.1.3
-                          prove = apply f orderedPair $$0 $$$0 apply f orderedPair $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, = apply f orderedPair $$0 $$$0 apply f orderedPair $$$0 $$0) () 1.0.0.0.0.0.0.0.0.0.0.1.4 1.0.0a
+                  elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                    elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                      elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                        prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0b17ab17fef838e3c658ca1464458ab9df52ae048672530cc23a5324c7833966 () (f) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                        elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                          prove commutativeBinaryOperation f 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 () (f) 1.0.0.0.0.0.0.0.0.0.0.0
+                          prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0b17ab17fef838e3c658ca1464458ab9df52ae048672530cc23a5324c7833966 () (f) 1.0.0.0.0.0.0.0.0.0.0.1.0
+                          prove → ∈ $$0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$$0 $0 apply f orderedPair $0 $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$$$$0 $0 apply f orderedPair $0 $$$$$0) ($$0) 1.0.0.0.0.0.0.0.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                          prove ∀ b → ∈ $0 baseSet f = apply f orderedPair $$$0 $0 apply f orderedPair $0 $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 baseSet f, ∀ b → ∈ $0 baseSet f = apply f orderedPair $$$0 $0 apply f orderedPair $0 $$$0) () 1.0.0.0.0.0.0.0.0.0.0.1.2 1.0.0.0.0a
+                          prove → ∈ $$$0 baseSet f = apply f orderedPair $$0 $$$0 apply f orderedPair $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f = apply f orderedPair $$0 $$$$0 apply f orderedPair $$$$0 $$0) ($$$0) 1.0.0.0.0.0.0.0.0.0.0.1.3
+                          prove = apply f orderedPair $$0 $$$0 apply f orderedPair $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 baseSet f, = apply f orderedPair $$0 $$$0 apply f orderedPair $$$0 $$0) () 1.0.0.0.0.0.0.0.0.0.0.1.4 1.0.0a
                           prove = apply f orderedPair $$$0 $$0 apply f orderedPair $$0 $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f orderedPair $$0 $$$0, apply f orderedPair $$$0 $$0) 1.0.0.0.0.0.0.0.0.0.0.1.5
                         }
                       }
                       prove = apply f orderedPair $$0 $$$0 apply f orderedPair $$$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$$$0 apply f orderedPair $$$0 $0) (apply f orderedPair $$$0 $$0, apply f orderedPair $$0 $$$0) 1.0.0.0.0.0.0.0.0.0.0 1.0.0.0.0.0.0.0a
                     }
-                    elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                      elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                        prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 104665950729c168fb944d4db07ed114757e5e2c611a76dc302cb6573d07eaad () (f, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                        elided 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b {
-                          prove commutativeBinaryOperation f A 1a8ac364aa8c109a6109881450a3863d84bf93f4f3b4c5ced9c2fd10d7dd528b () (f, A) 1.0.0.0.0.0.0.0.0.1.0.0
-                          prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 104665950729c168fb944d4db07ed114757e5e2c611a76dc302cb6573d07eaad () (f, A) 1.0.0.0.0.0.0.0.0.1.0.1.0
-                          prove → ∈ $0 A ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ b → ∈ $0 A = apply f orderedPair $$$$$0 $0 apply f orderedPair $0 $$$$$0) ($0) 1.0.0.0.0.0.0.0.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                          prove ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0) () 1.0.0.0.0.0.0.0.0.1.0.1.2 1.0.0.0.0.0.0a
-                          prove → ∈ $$$0 A = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A = apply f orderedPair $0 $$$$0 apply f orderedPair $$$$0 $0) ($$$0) 1.0.0.0.0.0.0.0.0.1.0.1.3
-                          prove = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0) () 1.0.0.0.0.0.0.0.0.1.0.1.4 1.0.0a
+                    elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                      elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                        prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0b17ab17fef838e3c658ca1464458ab9df52ae048672530cc23a5324c7833966 () (f) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                        elided 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 {
+                          prove commutativeBinaryOperation f 245314bb6e8d70dfb2c4fb821a5397a4b23f5fd8f518cca4dbc3b7cd79e2f864 () (f) 1.0.0.0.0.0.0.0.0.1.0.0
+                          prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0b17ab17fef838e3c658ca1464458ab9df52ae048672530cc23a5324c7833966 () (f) 1.0.0.0.0.0.0.0.0.1.0.1.0
+                          prove → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f ∀ b → ∈ $0 baseSet f = apply f orderedPair $$$$$0 $0 apply f orderedPair $0 $$$$$0) ($0) 1.0.0.0.0.0.0.0.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                          prove ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 baseSet f, ∀ b → ∈ $0 baseSet f = apply f orderedPair $$0 $0 apply f orderedPair $0 $$0) () 1.0.0.0.0.0.0.0.0.1.0.1.2 1.0.0.0.0.0.0a
+                          prove → ∈ $$$0 baseSet f = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f = apply f orderedPair $0 $$$$0 apply f orderedPair $$$$0 $0) ($$$0) 1.0.0.0.0.0.0.0.0.1.0.1.3
+                          prove = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 baseSet f, = apply f orderedPair $0 $$$0 apply f orderedPair $$$0 $0) () 1.0.0.0.0.0.0.0.0.1.0.1.4 1.0.0a
                           prove = apply f orderedPair $$$0 $0 apply f orderedPair $0 $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f orderedPair $0 $$$0, apply f orderedPair $$$0 $0) 1.0.0.0.0.0.0.0.0.1.0.1.5
                         }
                       }
                       prove = apply f orderedPair $$0 $$$0 apply f orderedPair $0 $$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply f orderedPair $$0 $$$0 $$$$0) (apply f orderedPair $$$0 $0, apply f orderedPair $0 $$$0) 1.0.0.0.0.0.0.0.0.1.0 1.0.0.0.0.0.0.0.0.0
                     }
                   }
-                  elided 40b3d1e4a71341fa1fae4b5ea4c59901c4d1aae251edc196d7a266a68ddc179c {
-                    prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0 40b3d1e4a71341fa1fae4b5ea4c59901c4d1aae251edc196d7a266a68ddc179c () (f, A) 1a
-                    prove → ∈ $$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$$0 $0 apply f orderedPair $$0 $0 = $$$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$$$$0 $0 apply f orderedPair $$0 $0 = $$$$$$0 $$0) ($$0) 1.0.0.0.0.0.0.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                    prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$$0 $0 apply f orderedPair $$0 $0 = $$$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$$0 $0 apply f orderedPair $$0 $0 = $$$$0 $$0) () 1.0.0.0.0.0.0.0.1.1 1.0.0.0.0a
-                    prove → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $0 apply f orderedPair $$$$$0 $0 = $$$0 $$$$$0) ($0) 1.0.0.0.0.0.0.0.1.2
-                    prove ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0) () 1.0.0.0.0.0.0.0.1.3 1.0.0.0.0.0.0a
-                    prove → ∈ $$$0 A → = apply f orderedPair $$0 $$$0 apply f orderedPair $0 $$$0 = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 A → = apply f orderedPair $$0 $$$$0 apply f orderedPair $0 $$$$0 = $$0 $0) ($$$0) 1.0.0.0.0.0.0.0.1.4
-                    prove → = apply f orderedPair $$0 $$$0 apply f orderedPair $0 $$$0 = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, → = apply f orderedPair $$0 $$$0 apply f orderedPair $0 $$$0 = $$0 $0) () 1.0.0.0.0.0.0.0.1.5 1.0.0a
+                  elided 445c920c085bf5ab7a4a11166c310fc2f53395bac731711c1afddce255ee54ca {
+                    prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0 445c920c085bf5ab7a4a11166c310fc2f53395bac731711c1afddce255ee54ca () (f) 1a
+                    prove → ∈ $$0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$$0 $0 apply f orderedPair $$0 $0 = $$$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$$$$0 $0 apply f orderedPair $$0 $0 = $$$$$$0 $$0) ($$0) 1.0.0.0.0.0.0.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$$0 $0 apply f orderedPair $$0 $0 = $$$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 baseSet f, ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$$0 $0 apply f orderedPair $$0 $0 = $$$$0 $$0) () 1.0.0.0.0.0.0.0.1.1 1.0.0.0.0a
+                    prove → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $0 apply f orderedPair $$$$$0 $0 = $$$0 $$$$$0) ($0) 1.0.0.0.0.0.0.0.1.2
+                    prove ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 baseSet f, ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0) () 1.0.0.0.0.0.0.0.1.3 1.0.0.0.0.0.0a
+                    prove → ∈ $$$0 baseSet f → = apply f orderedPair $$0 $$$0 apply f orderedPair $0 $$$0 = $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$0 baseSet f → = apply f orderedPair $$0 $$$$0 apply f orderedPair $0 $$$$0 = $$0 $0) ($$$0) 1.0.0.0.0.0.0.0.1.4
+                    prove → = apply f orderedPair $$0 $$$0 apply f orderedPair $0 $$$0 = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 baseSet f, → = apply f orderedPair $$0 $$$0 apply f orderedPair $0 $$$0 = $$0 $0) () 1.0.0.0.0.0.0.0.1.5 1.0.0a
                     prove = $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply f orderedPair $$0 $$$0 apply f orderedPair $0 $$$0, = $$0 $0) () 1.0.0.0.0.0.0.0.1.6 1.0.0.0.0.0.0.0.0
                   }
                 }
@@ -153,18 +243,18 @@ conclusion cancellableBinaryOperation f A
         }
       }
     }
-    elided 96c9aa6088f2256f12ce5b3ac9f498f2329e4d0798b933a537a4b49683e05218 {
-      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f A, ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0
-      prove leftCancellableBinaryOperation f A 96c9aa6088f2256f12ce5b3ac9f498f2329e4d0798b933a537a4b49683e05218 () (f, A) 1.1.0
+    elided b9d7966394f3311deff7e6f435d60dfbdf137d559c130b70bfdc35e57ce0ff10 {
+      prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f, ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0
+      prove leftCancellableBinaryOperation f b9d7966394f3311deff7e6f435d60dfbdf137d559c130b70bfdc35e57ce0ff10 () (f) 1.1.0
     }
   }
   elided 1c327e17a5edefa101a2e8130224051f3d51b8a76b55b41832915bd615589bab {
-    prove ↔ leftCancellableBinaryOperation f A rightCancellableBinaryOperation f A 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (leftCancellableBinaryOperation f A, rightCancellableBinaryOperation f A) () 0 1
-    prove ∧ leftCancellableBinaryOperation f A rightCancellableBinaryOperation f A 1c327e17a5edefa101a2e8130224051f3d51b8a76b55b41832915bd615589bab (leftCancellableBinaryOperation f A, rightCancellableBinaryOperation f A) () p1 2.0
+    prove ↔ leftCancellableBinaryOperation f rightCancellableBinaryOperation f 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (leftCancellableBinaryOperation f, rightCancellableBinaryOperation f) () 0 1
+    prove ∧ leftCancellableBinaryOperation f rightCancellableBinaryOperation f 1c327e17a5edefa101a2e8130224051f3d51b8a76b55b41832915bd615589bab (leftCancellableBinaryOperation f, rightCancellableBinaryOperation f) () p1 2.0
   }
-  elided cfcad437117937629360dcc100d83b0989543834dabbc4856589066d696b219f {
-    prove ∧ binaryOperation f A ∧ leftCancellableBinaryOperation f A rightCancellableBinaryOperation f A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f A, ∧ leftCancellableBinaryOperation f A rightCancellableBinaryOperation f A) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 2
-    prove cancellableBinaryOperation f A cfcad437117937629360dcc100d83b0989543834dabbc4856589066d696b219f () (f, A) 3.0
+  elided 60ca6c827ab638947c5b70f3980e567673adb4308ac46203644db053b01b6f7f {
+    prove ∧ binaryOperation f ∧ leftCancellableBinaryOperation f rightCancellableBinaryOperation f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f, ∧ leftCancellableBinaryOperation f rightCancellableBinaryOperation f) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 2
+    prove cancellableBinaryOperation f 60ca6c827ab638947c5b70f3980e567673adb4308ac46203644db053b01b6f7f () (f) 3.0
   }
 }
 
@@ -172,37 +262,37 @@ comment Invertible operators.
 
 property invertible on binaryOperation
   parentObjects (identity)
-  definition (∀ a → ∈ $0 A ∃ b ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0)
+  definition (∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0)
 
 theorem An Invertible Binary Operation Is Cancellable
-premise ∧ ∧ binaryOperation f A associativeBinaryOperation f A invertibleBinaryOperation f A
-conclusion cancellableBinaryOperation f A
+premise ∧ ∧ binaryOperation f associativeBinaryOperation f invertibleBinaryOperation f
+conclusion cancellableBinaryOperation f
 {
-  elided c94ae54fe3203090a4662a9057d4409c916f1ffc22c369735ec956fa2da038c5 {
-    prove ∧ binaryOperation f A ∧ ∃! e identityBinaryOperation $0 f A ∀ e → identityBinaryOperation $0 f A ∀ a → ∈ $0 A ∃ b ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 c94ae54fe3203090a4662a9057d4409c916f1ffc22c369735ec956fa2da038c5 () (f, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-    prove ∧ ∃! e identityBinaryOperation $0 f A ∀ e → identityBinaryOperation $0 f A ∀ a → ∈ $0 A ∃ b ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (binaryOperation f A, ∧ ∃! e identityBinaryOperation $0 f A ∀ e → identityBinaryOperation $0 f A ∀ a → ∈ $0 A ∃ b ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0) () 0.0
-    prove ∃! e identityBinaryOperation $0 f A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∃! e identityBinaryOperation $0 f A, ∀ e → identityBinaryOperation $0 f A ∀ a → ∈ $0 A ∃ b ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0) () 0.1
+  elided f6bd6b2bf67d2b96c4cd6baa6d667a9ed079de9ee78366909a37d9fd69fd4c36 {
+    prove ∧ binaryOperation f ∧ ∃! e identityBinaryOperation $0 f ∀ e → identityBinaryOperation $0 f ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 f6bd6b2bf67d2b96c4cd6baa6d667a9ed079de9ee78366909a37d9fd69fd4c36 () (f) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove ∧ ∃! e identityBinaryOperation $0 f ∀ e → identityBinaryOperation $0 f ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (binaryOperation f, ∧ ∃! e identityBinaryOperation $0 f ∀ e → identityBinaryOperation $0 f ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0) () 0.0
+    prove ∃! e identityBinaryOperation $0 f 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∃! e identityBinaryOperation $0 f, ∀ e → identityBinaryOperation $0 f ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0) () 0.1
   }
-  let e identityBinaryOperation $0 f A 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (identityBinaryOperation $0 f A, cancellableBinaryOperation f A) () {
+  let e identityBinaryOperation $0 f 77ce0af366eb5b42b712a7f3a82dd775c5dee8b2df495f70042543a9383cfad3 (identityBinaryOperation $0 f, cancellableBinaryOperation f) () {
     take a {
-      assume ∈ $0 A {
+      assume ∈ $0 baseSet f {
         take b {
-          assume ∈ $0 A {
+          assume ∈ $0 baseSet f {
             take c {
-              assume ∈ $0 A {
+              assume ∈ $0 baseSet f {
                 assume = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 {
-                  elided c94ae54fe3203090a4662a9057d4409c916f1ffc22c369735ec956fa2da038c5 {
-                    prove ∧ binaryOperation f A ∧ ∃! e identityBinaryOperation $0 f A ∀ e → identityBinaryOperation $0 f A ∀ a → ∈ $0 A ∃ a^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 c94ae54fe3203090a4662a9057d4409c916f1ffc22c369735ec956fa2da038c5 () (f, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                    prove → identityBinaryOperation $$$$0 f A ∀ a → ∈ $0 A ∃ a^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ identityBinaryOperation $$$$$0 f A ∀ a → ∈ $0 A ∃ a^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$$$0 = apply f orderedPair $0 $$0 $$$$$$$0) ($$$$0) 1.0.0.0.0.0.0.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                    prove ∀ a → ∈ $0 A ∃ a^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (identityBinaryOperation $$$$0 f A, ∀ a → ∈ $0 A ∃ b ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0) () 1.0.0.0.0.0.0.0.0.1 1a
-                    prove → ∈ $$$0 A ∃ a^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$0 $$$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$0 A ∃ a^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$$$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$$$0 $$$$$0) ($$$0) 1.0.0.0.0.0.0.0.0.2
-                    prove ∃ a^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$0 $$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∃ b ∧ ∈ $0 A ∧ = apply f orderedPair $$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$0 $$$$$0) () 1.0.0.0.0.0.0.0.0.3 1.0.0a
+                  elided f6bd6b2bf67d2b96c4cd6baa6d667a9ed079de9ee78366909a37d9fd69fd4c36 {
+                    prove ∧ binaryOperation f ∧ ∃! e identityBinaryOperation $0 f ∀ e → identityBinaryOperation $0 f ∀ a → ∈ $0 baseSet f ∃ a^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 f6bd6b2bf67d2b96c4cd6baa6d667a9ed079de9ee78366909a37d9fd69fd4c36 () (f) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove → identityBinaryOperation $$$$0 f ∀ a → ∈ $0 baseSet f ∃ a^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ identityBinaryOperation $$$$$0 f ∀ a → ∈ $0 baseSet f ∃ a^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$$$0 = apply f orderedPair $0 $$0 $$$$$$$0) ($$$$0) 1.0.0.0.0.0.0.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove ∀ a → ∈ $0 baseSet f ∃ a^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (identityBinaryOperation $$$$0 f, ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0) () 1.0.0.0.0.0.0.0.0.1 1a
+                    prove → ∈ $$$0 baseSet f ∃ a^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$0 $$$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$0 baseSet f ∃ a^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$$$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$$$0 $$$$$0) ($$$0) 1.0.0.0.0.0.0.0.0.2
+                    prove ∃ a^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$0 $$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 baseSet f, ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$0 $$$$$0) () 1.0.0.0.0.0.0.0.0.3 1.0.0a
                   }
-                  let a^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$0 $$$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 A ∧ = apply f orderedPair $$$0 $$$$$0 $$$$0 = apply f orderedPair $$$$$0 $$$0 $$$$0, = $$0 $0) () {
-                    elided 2b1f64bf7a44b2d5687a2c7dcd59a1ad88bd55cb5d3493429b5b899161289887 {
-                      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∧ = apply f orderedPair $0 $$$$$$0 $0 = apply f orderedPair $$$$$$0 $0 $0 2b1f64bf7a44b2d5687a2c7dcd59a1ad88bd55cb5d3493429b5b899161289887 () ($$$$$0, f, A) 1a
-                      prove → ∈ $$$0 A ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∧ = apply f orderedPair $$$$$$0 $$$$$0 $$$$$$0 = apply f orderedPair $$$$$0 $$$$$$0 $$$$$$0) ($$$0) 1.0.0.0.0.0.0.0.1.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0) () 1.0.0.0.0.0.0.0.1.0.1 1.0.0.0.0a
+                  let a^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$0 $$$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 baseSet f ∧ = apply f orderedPair $$$0 $$$$$0 $$$$0 = apply f orderedPair $$$$$0 $$$0 $$$$0, = $$0 $0) () {
+                    elided 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 {
+                      prove ∧ binaryOperation f ∧ ∈ $$$$$0 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 $$$$$$0 $0 = apply f orderedPair $$$$$$0 $0 $0 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 () ($$$$$0, f) 1a
+                      prove → ∈ $$$0 baseSet f ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∧ = apply f orderedPair $$$$$$0 $$$$$0 $$$$$$0 = apply f orderedPair $$$$$0 $$$$$$0 $$$$$$0) ($$$0) 1.0.0.0.0.0.0.0.1.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 baseSet f, ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0) () 1.0.0.0.0.0.0.0.1.0.1 1.0.0.0.0a
                       prove = $$$0 apply f orderedPair $$$$$0 $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f orderedPair $$$$$0 $$$0, $$$0) 1.0.0.0.0.0.0.0.1.0.2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                     }
                     elided 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 {
@@ -210,35 +300,35 @@ conclusion cancellableBinaryOperation f A
                       prove = apply f orderedPair $$$$$0 $$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () ($$$$$0, apply f orderedPair $0 $$$$0, apply f orderedPair $$$$$$0 $$$0) 1.0.0.0.0.0.0.0.1.1.0
                     }
                     prove = $$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply f orderedPair $$$$$0 $$$0, apply f orderedPair apply f orderedPair $0 $$$$0 $$$0) 1.0.0.0.0.0.0.0.1.0 1.0.0.0.0.0.0.0.1.1
-                    elided 25ed140d4aefc196188a944cf0b4bd458dd8278e5f1e8f9ad712f3f626fe466c {
-                      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 25ed140d4aefc196188a944cf0b4bd458dd8278e5f1e8f9ad712f3f626fe466c () (f, A) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$$$0 $$0 $0) ($0) 1.0.0.0.0.0.0.0.1.3.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0) () 1.0.0.0.0.0.0.0.1.3.1 1.0.0.0.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                      prove → ∈ $$$$0 A ∀ c → ∈ $0 A = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ c → ∈ $0 A = apply f orderedPair $$0 apply f orderedPair $$$$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$$$0 $0) ($$$$0) 1.0.0.0.0.0.0.0.1.3.2
-                      prove ∀ c → ∈ $0 A = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 A, ∀ c → ∈ $0 A = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0) () 1.0.0.0.0.0.0.0.1.3.3 1.0.0a
-                      prove → ∈ $$$0 A = apply f orderedPair $0 apply f orderedPair $$$$0 $$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A = apply f orderedPair $0 apply f orderedPair $$$$0 $$$$$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$$$$0) ($$$0) 1.0.0.0.0.0.0.0.1.3.4
-                      prove = apply f orderedPair $0 apply f orderedPair $$$$0 $$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, = apply f orderedPair $0 apply f orderedPair $$$$0 $$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$0) () 1.0.0.0.0.0.0.0.1.3.5 1.0.0.0.0a
+                    elided a6a690f356dac6872518482e799cc4e1a213e7121c3ef09415fcbfc269a6e024 {
+                      prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 a6a690f356dac6872518482e799cc4e1a213e7121c3ef09415fcbfc269a6e024 () (f) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$$$0 $$0 $0) ($0) 1.0.0.0.0.0.0.0.1.3.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 baseSet f, ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0) () 1.0.0.0.0.0.0.0.1.3.1 1.0.0.0.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove → ∈ $$$$0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$0 apply f orderedPair $$$$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$$$0 $0) ($$$$0) 1.0.0.0.0.0.0.0.1.3.2
+                      prove ∀ c → ∈ $0 baseSet f = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 baseSet f, ∀ c → ∈ $0 baseSet f = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0) () 1.0.0.0.0.0.0.0.1.3.3 1.0.0a
+                      prove → ∈ $$$0 baseSet f = apply f orderedPair $0 apply f orderedPair $$$$0 $$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f = apply f orderedPair $0 apply f orderedPair $$$$0 $$$$$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$$$$0) ($$$0) 1.0.0.0.0.0.0.0.1.3.4
+                      prove = apply f orderedPair $0 apply f orderedPair $$$$0 $$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 baseSet f, = apply f orderedPair $0 apply f orderedPair $$$$0 $$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$0) () 1.0.0.0.0.0.0.0.1.3.5 1.0.0.0.0a
                       prove = apply f orderedPair apply f orderedPair $0 $$$$0 $$$0 apply f orderedPair $0 apply f orderedPair $$$$0 $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f orderedPair $0 apply f orderedPair $$$$0 $$$0, apply f orderedPair apply f orderedPair $0 $$$$0 $$$0) 1.0.0.0.0.0.0.0.1.3.6
                     }
                     prove = $$$0 apply f orderedPair $0 apply f orderedPair $$$$0 $$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply f orderedPair apply f orderedPair $0 $$$$0 $$$0, apply f orderedPair $0 apply f orderedPair $$$$0 $$$0) 1.0.0.0.0.0.0.0.1.2 1.0.0.0.0.0.0.0.1.3
                     prove = apply f orderedPair $0 apply f orderedPair $$$$0 $$$0 apply f orderedPair $0 apply f orderedPair $$$$0 $$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply f orderedPair $$$$0 $$$0, apply f orderedPair $$$$0 $$0, apply f orderedPair $0 $$$$$$0) 1.0.0.0.0.0.0.0a
                     prove = $$$0 apply f orderedPair $0 apply f orderedPair $$$$0 $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply f orderedPair $0 apply f orderedPair $$$$0 $$$0, apply f orderedPair $0 apply f orderedPair $$$$0 $$0) 1.0.0.0.0.0.0.0.1.4 1.0.0.0.0.0.0.0.1.5
-                    elided 25ed140d4aefc196188a944cf0b4bd458dd8278e5f1e8f9ad712f3f626fe466c {
-                      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 25ed140d4aefc196188a944cf0b4bd458dd8278e5f1e8f9ad712f3f626fe466c () (f, A) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$$$0 $$0 $0) ($0) 1.0.0.0.0.0.0.0.1.7.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0) () 1.0.0.0.0.0.0.0.1.7.1 1.0.0.0.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                      prove → ∈ $$$$0 A ∀ c → ∈ $0 A = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ c → ∈ $0 A = apply f orderedPair $$0 apply f orderedPair $$$$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$$$0 $0) ($$$$0) 1.0.0.0.0.0.0.0.1.7.2
-                      prove ∀ c → ∈ $0 A = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 A, ∀ c → ∈ $0 A = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0) () 1.0.0.0.0.0.0.0.1.7.3 1.0.0a
-                      prove → ∈ $$0 A = apply f orderedPair $0 apply f orderedPair $$$$0 $$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A = apply f orderedPair $0 apply f orderedPair $$$$0 $$$$$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$$$$0) ($$0) 1.0.0.0.0.0.0.0.1.7.4
-                      prove = apply f orderedPair $0 apply f orderedPair $$$$0 $$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, = apply f orderedPair $0 apply f orderedPair $$$$0 $$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$0) () 1.0.0.0.0.0.0.0.1.7.5 1.0.0.0.0.0.0a
+                    elided a6a690f356dac6872518482e799cc4e1a213e7121c3ef09415fcbfc269a6e024 {
+                      prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 a6a690f356dac6872518482e799cc4e1a213e7121c3ef09415fcbfc269a6e024 () (f) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$$$0 $$0 $0) ($0) 1.0.0.0.0.0.0.0.1.7.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 baseSet f, ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0) () 1.0.0.0.0.0.0.0.1.7.1 1.0.0.0.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                      prove → ∈ $$$$0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$0 apply f orderedPair $$$$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$$$0 $0) ($$$$0) 1.0.0.0.0.0.0.0.1.7.2
+                      prove ∀ c → ∈ $0 baseSet f = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 baseSet f, ∀ c → ∈ $0 baseSet f = apply f orderedPair $$0 apply f orderedPair $$$$$0 $0 apply f orderedPair apply f orderedPair $$0 $$$$$0 $0) () 1.0.0.0.0.0.0.0.1.7.3 1.0.0a
+                      prove → ∈ $$0 baseSet f = apply f orderedPair $0 apply f orderedPair $$$$0 $$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f = apply f orderedPair $0 apply f orderedPair $$$$0 $$$$$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$$$$$0) ($$0) 1.0.0.0.0.0.0.0.1.7.4
+                      prove = apply f orderedPair $0 apply f orderedPair $$$$0 $$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 baseSet f, = apply f orderedPair $0 apply f orderedPair $$$$0 $$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$0) () 1.0.0.0.0.0.0.0.1.7.5 1.0.0.0.0.0.0a
                     }
                     prove = $$$0 apply f orderedPair apply f orderedPair $0 $$$$0 $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply f orderedPair $0 apply f orderedPair $$$$0 $$0, apply f orderedPair apply f orderedPair $0 $$$$0 $$0) 1.0.0.0.0.0.0.0.1.6 1.0.0.0.0.0.0.0.1.7
                     prove = apply f orderedPair apply f orderedPair $0 $$$$0 $$0 apply f orderedPair $$$$$0 $$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply f orderedPair $0 $$$$0, $$$$$0, apply f orderedPair $$$$$$0 $$0) 1.0.0.0.0.0.0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                     prove = $$$0 apply f orderedPair $$$$$0 $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply f orderedPair apply f orderedPair $0 $$$$0 $$0, apply f orderedPair $$$$$0 $$0) 1.0.0.0.0.0.0.0.1.8 1.0.0.0.0.0.0.0.1.9
-                    elided 2b1f64bf7a44b2d5687a2c7dcd59a1ad88bd55cb5d3493429b5b899161289887 {
-                      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∧ = apply f orderedPair $0 $$$$$$0 $0 = apply f orderedPair $$$$$$0 $0 $0 2b1f64bf7a44b2d5687a2c7dcd59a1ad88bd55cb5d3493429b5b899161289887 () ($$$$$0, f, A) 1a
-                      prove → ∈ $$0 A ∧ = apply f orderedPair $$0 $$$$$0 $$0 = apply f orderedPair $$$$$0 $$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∧ = apply f orderedPair $$$$$$0 $$$$$0 $$$$$$0 = apply f orderedPair $$$$$0 $$$$$$0 $$$$$$0) ($$0) 1.0.0.0.0.0.0.0.1.11.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove ∧ = apply f orderedPair $$0 $$$$$0 $$0 = apply f orderedPair $$$$$0 $$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∧ = apply f orderedPair $$0 $$$$$0 $$0 = apply f orderedPair $$$$$0 $$0 $$0) () 1.0.0.0.0.0.0.0.1.11.1 1.0.0.0.0.0.0a
+                    elided 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 {
+                      prove ∧ binaryOperation f ∧ ∈ $$$$$0 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 $$$$$$0 $0 = apply f orderedPair $$$$$$0 $0 $0 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 () ($$$$$0, f) 1a
+                      prove → ∈ $$0 baseSet f ∧ = apply f orderedPair $$0 $$$$$0 $$0 = apply f orderedPair $$$$$0 $$0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∧ = apply f orderedPair $$$$$$0 $$$$$0 $$$$$$0 = apply f orderedPair $$$$$0 $$$$$$0 $$$$$$0) ($$0) 1.0.0.0.0.0.0.0.1.11.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∧ = apply f orderedPair $$0 $$$$$0 $$0 = apply f orderedPair $$$$$0 $$0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 baseSet f, ∧ = apply f orderedPair $$0 $$$$$0 $$0 = apply f orderedPair $$$$$0 $$0 $$0) () 1.0.0.0.0.0.0.0.1.11.1 1.0.0.0.0.0.0a
                       prove = apply f orderedPair $$$$$0 $$0 $$0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply f orderedPair $$0 $$$$$0 $$0, = apply f orderedPair $$$$$0 $$0 $$0) () 1.0.0.0.0.0.0.0.1.11.2
                     }
                     prove = $$$0 $$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$0, apply f orderedPair $$$$$0 $$0, $$0) 1.0.0.0.0.0.0.0.1.10 1.0.0.0.0.0.0.0.1.11
@@ -250,29 +340,29 @@ conclusion cancellableBinaryOperation f A
         }
       }
     }
-    elided 96c9aa6088f2256f12ce5b3ac9f498f2329e4d0798b933a537a4b49683e05218 {
-      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f A, ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0
-      prove leftCancellableBinaryOperation f A 96c9aa6088f2256f12ce5b3ac9f498f2329e4d0798b933a537a4b49683e05218 () (f, A) 1.1.0
+    elided b9d7966394f3311deff7e6f435d60dfbdf137d559c130b70bfdc35e57ce0ff10 {
+      prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f, ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $$0 apply f orderedPair $$$0 $0 = $$0 $0) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0
+      prove leftCancellableBinaryOperation f b9d7966394f3311deff7e6f435d60dfbdf137d559c130b70bfdc35e57ce0ff10 () (f) 1.1.0
     }
     take a {
-      assume ∈ $0 A {
+      assume ∈ $0 baseSet f {
         take b {
-          assume ∈ $0 A {
+          assume ∈ $0 baseSet f {
             take c {
-              assume ∈ $0 A {
+              assume ∈ $0 baseSet f {
                 assume = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 {
-                  elided c94ae54fe3203090a4662a9057d4409c916f1ffc22c369735ec956fa2da038c5 {
-                    prove ∧ binaryOperation f A ∧ ∃! e identityBinaryOperation $0 f A ∀ e → identityBinaryOperation $0 f A ∀ a → ∈ $0 A ∃ c^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 c94ae54fe3203090a4662a9057d4409c916f1ffc22c369735ec956fa2da038c5 () (f, A) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                    prove → identityBinaryOperation $$$$0 f A ∀ a → ∈ $0 A ∃ c^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ identityBinaryOperation $$$$$0 f A ∀ a → ∈ $0 A ∃ c^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$$$0 = apply f orderedPair $0 $$0 $$$$$$$0) ($$$$0) 1.2.0.0.0.0.0.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                    prove ∀ a → ∈ $0 A ∃ c^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (identityBinaryOperation $$$$0 f A, ∀ a → ∈ $0 A ∃ b ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0) () 1.2.0.0.0.0.0.0.0.1 1a
-                    prove → ∈ $0 A ∃ c^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$0 = apply f orderedPair $0 $$0 $$$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$0 A ∃ c^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$$$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$$$0 $$$$$0) ($0) 1.2.0.0.0.0.0.0.0.2
-                    prove ∃ c^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$0 = apply f orderedPair $0 $$0 $$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∃ b ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$0 = apply f orderedPair $0 $$0 $$$$$0) () 1.2.0.0.0.0.0.0.0.3 1.2.0.0.0.0.0a
+                  elided f6bd6b2bf67d2b96c4cd6baa6d667a9ed079de9ee78366909a37d9fd69fd4c36 {
+                    prove ∧ binaryOperation f ∧ ∃! e identityBinaryOperation $0 f ∀ e → identityBinaryOperation $0 f ∀ a → ∈ $0 baseSet f ∃ c^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 f6bd6b2bf67d2b96c4cd6baa6d667a9ed079de9ee78366909a37d9fd69fd4c36 () (f) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove → identityBinaryOperation $$$$0 f ∀ a → ∈ $0 baseSet f ∃ c^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ identityBinaryOperation $$$$$0 f ∀ a → ∈ $0 baseSet f ∃ c^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$$$0 = apply f orderedPair $0 $$0 $$$$$$$0) ($$$$0) 1.2.0.0.0.0.0.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    prove ∀ a → ∈ $0 baseSet f ∃ c^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (identityBinaryOperation $$$$0 f, ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$$0 = apply f orderedPair $0 $$0 $$$$$$0) () 1.2.0.0.0.0.0.0.0.1 1a
+                    prove → ∈ $0 baseSet f ∃ c^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$0 = apply f orderedPair $0 $$0 $$$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$0 baseSet f ∃ c^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$$$$$0 $0 $$$$$0 = apply f orderedPair $0 $$$$$$0 $$$$$0) ($0) 1.2.0.0.0.0.0.0.0.2
+                    prove ∃ c^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$0 = apply f orderedPair $0 $$0 $$$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 baseSet f, ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$0 = apply f orderedPair $0 $$0 $$$$$0) () 1.2.0.0.0.0.0.0.0.3 1.2.0.0.0.0.0a
                   }
-                  let c^-1 ∧ ∈ $0 A ∧ = apply f orderedPair $$0 $0 $$$$$0 = apply f orderedPair $0 $$0 $$$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 A ∧ = apply f orderedPair $0 $$$$$0 $$$$0 = apply f orderedPair $$$$$0 $0 $$$$0, = $$$0 $$0) () {
-                    elided 2b1f64bf7a44b2d5687a2c7dcd59a1ad88bd55cb5d3493429b5b899161289887 {
-                      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∧ = apply f orderedPair $0 $$$$$$0 $0 = apply f orderedPair $$$$$$0 $0 $0 2b1f64bf7a44b2d5687a2c7dcd59a1ad88bd55cb5d3493429b5b899161289887 () ($$$$$0, f, A) 1a
-                      prove → ∈ $$$$0 A ∧ = apply f orderedPair $$$$0 $$$$$0 $$$$0 = apply f orderedPair $$$$$0 $$$$0 $$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∧ = apply f orderedPair $$$$$$0 $$$$$0 $$$$$$0 = apply f orderedPair $$$$$0 $$$$$$0 $$$$$$0) ($$$$0) 1.2.0.0.0.0.0.0.1.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove ∧ = apply f orderedPair $$$$0 $$$$$0 $$$$0 = apply f orderedPair $$$$$0 $$$$0 $$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 A, ∧ = apply f orderedPair $$$$0 $$$$$0 $$$$0 = apply f orderedPair $$$$$0 $$$$0 $$$$0) () 1.2.0.0.0.0.0.0.1.0.1 1.2.0a
+                  let c^-1 ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$$0 = apply f orderedPair $0 $$0 $$$$$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 baseSet f ∧ = apply f orderedPair $0 $$$$$0 $$$$0 = apply f orderedPair $$$$$0 $0 $$$$0, = $$$0 $$0) () {
+                    elided 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 {
+                      prove ∧ binaryOperation f ∧ ∈ $$$$$0 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 $$$$$$0 $0 = apply f orderedPair $$$$$$0 $0 $0 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 () ($$$$$0, f) 1a
+                      prove → ∈ $$$$0 baseSet f ∧ = apply f orderedPair $$$$0 $$$$$0 $$$$0 = apply f orderedPair $$$$$0 $$$$0 $$$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∧ = apply f orderedPair $$$$$$0 $$$$$0 $$$$$$0 = apply f orderedPair $$$$$0 $$$$$$0 $$$$$$0) ($$$$0) 1.2.0.0.0.0.0.0.1.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∧ = apply f orderedPair $$$$0 $$$$$0 $$$$0 = apply f orderedPair $$$$$0 $$$$0 $$$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 baseSet f, ∧ = apply f orderedPair $$$$0 $$$$$0 $$$$0 = apply f orderedPair $$$$$0 $$$$0 $$$$0) () 1.2.0.0.0.0.0.0.1.0.1 1.2.0a
                       prove = $$$$0 apply f orderedPair $$$$0 $$$$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f orderedPair $$$$0 $$$$$0, $$$$0) 1.2.0.0.0.0.0.0.1.0.2 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                     }
                     elided 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 {
@@ -280,35 +370,35 @@ conclusion cancellableBinaryOperation f A
                       prove = apply f orderedPair $$$$0 $$$$$0 apply f orderedPair $$$$0 apply f orderedPair $$0 $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () ($$$$$0, apply f orderedPair $$0 $0, apply f orderedPair $$$$0 $$$$$$0) 1.2.0.0.0.0.0.0.1.1.0
                     }
                     prove = $$$$0 apply f orderedPair $$$$0 apply f orderedPair $$0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$$0, apply f orderedPair $$$$0 $$$$$0, apply f orderedPair $$$$0 apply f orderedPair $$0 $0) 1.2.0.0.0.0.0.0.1.0 1.2.0.0.0.0.0.0.1.1
-                    elided 25ed140d4aefc196188a944cf0b4bd458dd8278e5f1e8f9ad712f3f626fe466c {
-                      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 25ed140d4aefc196188a944cf0b4bd458dd8278e5f1e8f9ad712f3f626fe466c () (f, A) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove → ∈ $$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$$$0 $$0 $0) ($$$$0) 1.2.0.0.0.0.0.0.1.3.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$0 $$0 $0) () 1.2.0.0.0.0.0.0.1.3.1 1.2.0a
-                      prove → ∈ $$0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$0 apply f orderedPair $$$$$$$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$$$$$$0 $0) ($$0) 1.2.0.0.0.0.0.0.1.3.2
-                      prove ∀ c → ∈ $0 A = apply f orderedPair $$$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ c → ∈ $0 A = apply f orderedPair $$$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$$0 $0) () 1.2.0.0.0.0.0.0.1.3.3 1.2.0.0.0.0.0a
-                      prove → ∈ $0 A = apply f orderedPair $$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A = apply f orderedPair $$$$0 apply f orderedPair $$0 $$$$$$0 apply f orderedPair apply f orderedPair $$$$0 $$0 $$$$$$0) ($0) 1.2.0.0.0.0.0.0.1.3.4
-                      prove = apply f orderedPair $$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply f orderedPair $$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$0 $0) () 1.2.0.0.0.0.0.0.1.3.5 1.2.0.0.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    elided a6a690f356dac6872518482e799cc4e1a213e7121c3ef09415fcbfc269a6e024 {
+                      prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 a6a690f356dac6872518482e799cc4e1a213e7121c3ef09415fcbfc269a6e024 () (f) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove → ∈ $$$$0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$$$0 $$0 $0) ($$$$0) 1.2.0.0.0.0.0.0.1.3.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$$0 baseSet f, ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$0 $$0 $0) () 1.2.0.0.0.0.0.0.1.3.1 1.2.0a
+                      prove → ∈ $$0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$0 apply f orderedPair $$$$$$$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$$$$$$0 $0) ($$0) 1.2.0.0.0.0.0.0.1.3.2
+                      prove ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 baseSet f, ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$$0 $0) () 1.2.0.0.0.0.0.0.1.3.3 1.2.0.0.0.0.0a
+                      prove → ∈ $0 baseSet f = apply f orderedPair $$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f = apply f orderedPair $$$$0 apply f orderedPair $$0 $$$$$$0 apply f orderedPair apply f orderedPair $$$$0 $$0 $$$$$$0) ($0) 1.2.0.0.0.0.0.0.1.3.4
+                      prove = apply f orderedPair $$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 baseSet f, = apply f orderedPair $$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$0 $0) () 1.2.0.0.0.0.0.0.1.3.5 1.2.0.0.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                     }
                     prove = $$$$0 apply f orderedPair apply f orderedPair $$$$0 $$0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$$0, apply f orderedPair $$$$0 apply f orderedPair $$0 $0, apply f orderedPair apply f orderedPair $$$$0 $$0 $0) 1.2.0.0.0.0.0.0.1.2 1.2.0.0.0.0.0.0.1.3
                     prove = apply f orderedPair apply f orderedPair $$$$0 $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply f orderedPair $$$$0 $$0, apply f orderedPair $$$0 $$0, apply f orderedPair $$$$$$0 $0) 1.2.0.0.0.0.0.0a
                     prove = $$$$0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$$0, apply f orderedPair apply f orderedPair $$$$0 $$0 $0, apply f orderedPair apply f orderedPair $$$0 $$0 $0) 1.2.0.0.0.0.0.0.1.4 1.2.0.0.0.0.0.0.1.5
-                    elided 25ed140d4aefc196188a944cf0b4bd458dd8278e5f1e8f9ad712f3f626fe466c {
-                      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 25ed140d4aefc196188a944cf0b4bd458dd8278e5f1e8f9ad712f3f626fe466c () (f, A) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove → ∈ $$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$$$0 $$0 $0) ($$$0) 1.2.0.0.0.0.0.0.1.7.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$0 $0) () 1.2.0.0.0.0.0.0.1.7.1 1.2.0.0.0a
-                      prove → ∈ $$0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∀ c → ∈ $0 A = apply f orderedPair $$$$0 apply f orderedPair $$$$$$$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$$$$$$0 $0) ($$0) 1.2.0.0.0.0.0.0.1.7.2
-                      prove ∀ c → ∈ $0 A = apply f orderedPair $$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 A, ∀ c → ∈ $0 A = apply f orderedPair $$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$$0 $0) () 1.2.0.0.0.0.0.0.1.7.3 1.2.0.0.0.0.0a
-                      prove → ∈ $0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A = apply f orderedPair $$$0 apply f orderedPair $$0 $$$$$$0 apply f orderedPair apply f orderedPair $$$0 $$0 $$$$$$0) ($0) 1.2.0.0.0.0.0.0.1.7.4
-                      prove = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0) () 1.2.0.0.0.0.0.0.1.7.5 1.2.0.0.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                    elided a6a690f356dac6872518482e799cc4e1a213e7121c3ef09415fcbfc269a6e024 {
+                      prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 a6a690f356dac6872518482e799cc4e1a213e7121c3ef09415fcbfc269a6e024 () (f) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove → ∈ $$$0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$$$$0 $$0 $0) ($$$0) 1.2.0.0.0.0.0.0.1.7.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 baseSet f, ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$$$0 $$0 $0) () 1.2.0.0.0.0.0.0.1.7.1 1.2.0.0.0a
+                      prove → ∈ $$0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$0 apply f orderedPair $$$$$$$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$$$$$$0 $0) ($$0) 1.2.0.0.0.0.0.0.1.7.2
+                      prove ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 baseSet f, ∀ c → ∈ $0 baseSet f = apply f orderedPair $$$$0 apply f orderedPair $$$0 $0 apply f orderedPair apply f orderedPair $$$$0 $$$0 $0) () 1.2.0.0.0.0.0.0.1.7.3 1.2.0.0.0.0.0a
+                      prove → ∈ $0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f = apply f orderedPair $$$0 apply f orderedPair $$0 $$$$$$0 apply f orderedPair apply f orderedPair $$$0 $$0 $$$$$$0) ($0) 1.2.0.0.0.0.0.0.1.7.4
+                      prove = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 baseSet f, = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair apply f orderedPair $$$0 $$0 $0) () 1.2.0.0.0.0.0.0.1.7.5 1.2.0.0.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                       prove = apply f orderedPair apply f orderedPair $$$0 $$0 $0 apply f orderedPair $$$0 apply f orderedPair $$0 $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f orderedPair $$$0 apply f orderedPair $$0 $0, apply f orderedPair apply f orderedPair $$$0 $$0 $0) 1.2.0.0.0.0.0.0.1.7.6
                     }
                     prove = $$$$0 apply f orderedPair $$$0 apply f orderedPair $$0 $0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$$0, apply f orderedPair apply f orderedPair $$$0 $$0 $0, apply f orderedPair $$$0 apply f orderedPair $$0 $0) 1.2.0.0.0.0.0.0.1.6 1.2.0.0.0.0.0.0.1.7
                     prove = apply f orderedPair $$$0 apply f orderedPair $$0 $0 apply f orderedPair $$$0 $$$$$0 1997b7acba285749f5310f91f0d3cd3da0791cc38c2f7f575c3aa898a8ccc472 () (apply f orderedPair $$0 $0, $$$$$0, apply f orderedPair $$$0 $$$$$$0) 1.2.0.0.0.0.0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                     prove = $$$$0 apply f orderedPair $$$0 $$$$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$$0, apply f orderedPair $$$0 apply f orderedPair $$0 $0, apply f orderedPair $$$0 $$$$$0) 1.2.0.0.0.0.0.0.1.8 1.2.0.0.0.0.0.0.1.9
-                    elided 2b1f64bf7a44b2d5687a2c7dcd59a1ad88bd55cb5d3493429b5b899161289887 {
-                      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∧ = apply f orderedPair $0 $$$$$$0 $0 = apply f orderedPair $$$$$$0 $0 $0 2b1f64bf7a44b2d5687a2c7dcd59a1ad88bd55cb5d3493429b5b899161289887 () ($$$$$0, f, A) 1a
-                      prove → ∈ $$$0 A ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 A ∧ = apply f orderedPair $$$$$$0 $$$$$0 $$$$$$0 = apply f orderedPair $$$$$0 $$$$$$0 $$$$$$0) ($$$0) 1.2.0.0.0.0.0.0.1.11.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 A, ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0) () 1.2.0.0.0.0.0.0.1.11.1 1.2.0.0.0a
+                    elided 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 {
+                      prove ∧ binaryOperation f ∧ ∈ $$$$$0 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 $$$$$$0 $0 = apply f orderedPair $$$$$$0 $0 $0 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 () ($$$$$0, f) 1a
+                      prove → ∈ $$$0 baseSet f ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$$$$0 baseSet f ∧ = apply f orderedPair $$$$$$0 $$$$$0 $$$$$$0 = apply f orderedPair $$$$$0 $$$$$$0 $$$$$$0) ($$$0) 1.2.0.0.0.0.0.0.1.11.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$$0 baseSet f, ∧ = apply f orderedPair $$$0 $$$$$0 $$$0 = apply f orderedPair $$$$$0 $$$0 $$$0) () 1.2.0.0.0.0.0.0.1.11.1 1.2.0.0.0a
                       prove = apply f orderedPair $$$0 $$$$$0 $$$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply f orderedPair $$$0 $$$$$0 $$$0, = apply f orderedPair $$$$$0 $$$0 $$$0) () 1.2.0.0.0.0.0.0.1.11.2
                     }
                     prove = $$$$0 $$$0 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () ($$$$0, apply f orderedPair $$$0 $$$$$0, $$$0) 1.2.0.0.0.0.0.0.1.10 1.2.0.0.0.0.0.0.1.11
@@ -320,14 +410,14 @@ conclusion cancellableBinaryOperation f A
         }
       }
     }
-    elided fca82884e18873aa503d40be6bcce3d679126a6f979aca0259cc47e2251e16be {
-      prove ∧ binaryOperation f A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f A, ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.2
-      prove rightCancellableBinaryOperation f A fca82884e18873aa503d40be6bcce3d679126a6f979aca0259cc47e2251e16be () (f, A) 1.3.0
+    elided aa5e91f06582b2b61e0b99e5574a8e710e50882d136dcbbb574bffabffd6b469 {
+      prove ∧ binaryOperation f ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f, ∀ a → ∈ $0 baseSet f ∀ b → ∈ $0 baseSet f ∀ c → ∈ $0 baseSet f → = apply f orderedPair $$$0 $0 apply f orderedPair $$0 $0 = $$$0 $$0) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.2
+      prove rightCancellableBinaryOperation f aa5e91f06582b2b61e0b99e5574a8e710e50882d136dcbbb574bffabffd6b469 () (f) 1.3.0
     }
-    elided cfcad437117937629360dcc100d83b0989543834dabbc4856589066d696b219f {
-      prove ∧ leftCancellableBinaryOperation f A rightCancellableBinaryOperation f A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (leftCancellableBinaryOperation f A, rightCancellableBinaryOperation f A) () 1.1 1.3
-      prove ∧ binaryOperation f A ∧ leftCancellableBinaryOperation f A rightCancellableBinaryOperation f A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f A, ∧ leftCancellableBinaryOperation f A rightCancellableBinaryOperation f A) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.4.0
-      prove cancellableBinaryOperation f A cfcad437117937629360dcc100d83b0989543834dabbc4856589066d696b219f () (f, A) 1.4.1
+    elided 60ca6c827ab638947c5b70f3980e567673adb4308ac46203644db053b01b6f7f {
+      prove ∧ leftCancellableBinaryOperation f rightCancellableBinaryOperation f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (leftCancellableBinaryOperation f, rightCancellableBinaryOperation f) () 1.1 1.3
+      prove ∧ binaryOperation f ∧ leftCancellableBinaryOperation f rightCancellableBinaryOperation f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f, ∧ leftCancellableBinaryOperation f rightCancellableBinaryOperation f) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.4.0
+      prove cancellableBinaryOperation f 60ca6c827ab638947c5b70f3980e567673adb4308ac46203644db053b01b6f7f () (f) 1.4.1
     }
   } 0
 }
