@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import {mapAtIndex, replaceAtIndex} from "./Helpers";
+import {mapAtIndex, mapAtIndexWithMetadata, replaceAtIndex} from "./Helpers";
 
 declare global {
     interface Window {
@@ -358,11 +358,31 @@ export class TypeQualifierExpression extends Expression {
   serializeNicely(boundVariableLists: string[][]): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
   }
-  setBoundVariableName(): Expression {
-    throw "Cannot set bound variable name in qualifier expression"
+  setBoundVariableName(newName: string, variableIndex: number, path: number[]): Expression {
+    if (path.length == 0) {
+      throw "Cannot set bound variable name in qualifier expression"
+    } else {
+      const [componentIndex, ...innerPath] = path;
+      if (componentIndex === 0) {
+        return new TypeQualifierExpression(this.definition, this.typeDefinition, this.term.setBoundVariableName(newName, variableIndex, innerPath), this.qualifierComponents);
+      } else {
+        return new TypeQualifierExpression(this.definition, this.typeDefinition, this.term, mapAtIndex(this.qualifierComponents, componentIndex - 1, e => e.setBoundVariableName(newName, variableIndex, innerPath)));
+      }
+    }
   }
-  replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
-    throw "Cannot replace in qualifier expression"
+  replaceAtPath(path: number[], expression: Expression): [Expression, number[][]] {
+    if (!path.length) {
+      return [expression, [path]];
+    } else {
+      const [componentIndex, ...innerPath] = path;
+      if (componentIndex === 0) {
+        const [replacedTerm, replacedInnerPaths] = this.term.replaceAtPath(innerPath, expression);
+        return [new TypeQualifierExpression(this.definition, this.typeDefinition, replacedTerm, this.qualifierComponents), replacedInnerPaths.map(p => [componentIndex, ...p])];
+      } else {
+        const [replacedComponents, replacedInnerPaths] = mapAtIndexWithMetadata(this.qualifierComponents, componentIndex - 1, e => e.replaceAtPath(innerPath, expression));
+        return [new TypeQualifierExpression(this.definition, this.typeDefinition, this.term, replacedComponents), replacedInnerPaths.map(p => [componentIndex, ...p])];
+      }
+    }
   }
   getDisambiguators(): string[] {
     return _.uniq(_.flatMap([this.term, ...this.qualifierComponents], x => x.getDisambiguators()));
