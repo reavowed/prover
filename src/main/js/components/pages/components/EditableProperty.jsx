@@ -7,7 +7,6 @@ export default class EditableProperty extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      savedValue: props.initialValue || "",
       currentValue: props.initialValue || "",
       saving: false
     }
@@ -15,7 +14,7 @@ export default class EditableProperty extends React.Component {
 
   render() {
     const {label, onSave, onError, inputType, inputProps} = this.props;
-    const {currentValue, saving, savedValue} = this.state;
+    const {currentValue, saving} = this.state;
 
     const save = () => {
       const valueBeingSaved = currentValue;
@@ -33,7 +32,6 @@ export default class EditableProperty extends React.Component {
             }
             onError(error);
           }
-          return this.setStatePromise({currentValue: savedValue});
         })
         .then(() => this.setStatePromise({saving: false}))
     };
