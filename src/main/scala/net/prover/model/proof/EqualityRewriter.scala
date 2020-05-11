@@ -1,7 +1,6 @@
 package net.prover.model.proof
 
 import net.prover.controllers.ExtractionHelper
-import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.model._
 import net.prover.model.definitions.{Equality, RearrangementStep, TermRewriteInference, Wrapper}
 import net.prover.model.expressions._
@@ -27,11 +26,9 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         (premiseSteps, _, possibleFinalSubstitutions) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, conclusionSubstitutions)
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
-        assertionStep <- Step.Assertion.forInference(inference, finalSubstitutions)
-        ExtractionApplication(_, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(assertionStep.statement, extractionOption.extractionInferences, inference, finalSubstitutions, None, None, _ => (Nil, Nil)).toOption
-        elidedExtractionStep = Step.Elided.ifNecessary(assertionStep +: extractionSteps, inference).get
+        extractionStep <- ExtractionHelper.getInferenceExtractionWithoutPremises(inference, finalSubstitutions, extractionOption)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
-      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premiseSteps.steps :+ elidedExtractionStep) ++ expansionStep.toSeq, inference.summary), inference.summary)
+      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premiseSteps :+ extractionStep).steps ++ expansionStep.toSeq, inference.summary), inference.summary)
     }
 
     def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {

@@ -1,8 +1,10 @@
 package net.prover.model
 
+import net.prover.model.TestDefinitions.{BlankDefinition, ConjunctionDefinition, ψ}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
-import net.prover.model.definitions.{ConjunctionDefinition, Definitions, ExpressionDefinition, StatementDefinition, TermDefinition}
+import net.prover.model.definitions.{ConjunctionDefinition, Definitions, ExpressionDefinition, Qualifier, StatementDefinition, TermDefinition}
+import net.prover.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
@@ -54,6 +56,9 @@ trait VariableDefinitions {
   implicit class FunctionParameterOps(functionParameter: FunctionParameter) {
     def template: Template = FunctionParameterTemplate(functionParameter)
   }
+  implicit class HasStatementDefinitionOps(hasStatementDefinition: HasStatementDefinition) {
+    def apply(components: Expression*) = hasStatementDefinition.statementDefinition(components: _*)
+  }
 
   val a = TermVariablePlaceholder("a")
   val b = TermVariablePlaceholder("b")
@@ -86,7 +91,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
       Nil,
       componentTypes,
       None,
-      Format.default(Nil, componentTypes),
+      Format.default(size),
       definingStatement,
       None,
       Nil)
@@ -102,7 +107,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
       Nil,
       componentTypes,
       None,
-      Format.default(Nil, componentTypes),
+      Format.default(size),
       definingStatement,
       None,
       Nil)
@@ -121,6 +126,19 @@ trait ExpressionDefinitions extends VariableDefinitions {
       None,
       Nil)
   }
+
+  private def simpleTermDefinition(
+    symbol: String,
+    components: Seq[ComponentType],
+    format: Format.Basic
+  ): TermDefinitionEntry = simpleTermDefinition(symbol, components, format, Nil, BlankDefinition)
+  private def simpleTermDefinition(
+    symbol: String,
+    components: Seq[ComponentType],
+    format: Format.Basic,
+    premises: Seq[Statement],
+    definition: Statement
+  ): TermDefinitionEntry = TermDefinitionEntry(symbol, Nil, components, None, None, format, premises, definition, None, Nil, Nil)
 
   val Implication = connective("→", 2, None).copy(attributes = Seq("deduction"))
   val DeductionDefinition = definitions.DeductionDefinition(Implication)
@@ -146,96 +164,19 @@ trait ExpressionDefinitions extends VariableDefinitions {
 
 
   val BlankDefinition = DefinedStatement(Nil, connective("false", 0, None))(Nil)
-  val EmptySetDefinition = TermDefinitionEntry(
-    "∅",
-    Nil,
-    Nil,
-    None,
-    None,
-    Format.default(Nil, Nil),
-    Nil,
-    ForAll("x")(Negation(ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)))),
-    None,
-    Nil,
-    Nil)
+  val EmptySetDefinition = simpleTermDefinition("∅", Nil, Format.default(0), Nil, ForAll("x")(Negation(ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)))))
   val EmptySet = DefinedTerm(Nil, EmptySetDefinition)(Nil)
 
-  val PowerSet = TermDefinitionEntry(
-    "powerSet",
-    Nil,
-    Seq(a),
-    None,
-    Some("Power Set"),
-    Format.Explicit("𝒫%1", "𝒫a", 2, requiresBrackets = false, requiresComponentBrackets = true),
-    Nil,
-    ForAll("y")(Equivalence(
-      ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)),
-      Subset(FunctionParameter(0, 0), a))),
-    None,
-    Nil,
-    Nil)
+  val PowerSet = simpleTermDefinition("powerSet", Seq(a), Format.Explicit("𝒫%1", "𝒫a", 2, false, true), Nil, ForAll("y")(Equivalence(ElementOf($, $.^), Subset($, a)))).copy(explicitName = Some("Power Set"))
 
-  val Singleton = TermDefinitionEntry(
-    "singleton",
-    Nil,
-    Seq(a),
-    None,
-    Some("Singleton"),
-    Format.Explicit("{%1}", "{a}", 2, requiresBrackets = false, requiresComponentBrackets = false),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
+  val Singleton = simpleTermDefinition("singleton", Seq(a), Format.Explicit("{%1}", "{a}", 2, false, false)).copy(explicitName = Some("Singleton"))
 
-  val Pair = TermDefinitionEntry(
-    "pair",
-    Nil,
-    Seq(a, b),
-    None,
-    Some("Unordered Pair"),
-    Format.Explicit("{%1, %2}", "{a, b}", 3, requiresBrackets = false, requiresComponentBrackets = false),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
-  val Product = TermDefinitionEntry(
-    "product",
-    Nil,
-    Seq(a, b),
-    None,
-    Some("Cartesian Product"),
-    Format.Explicit("%1 × %2", "a × b", 3, requiresBrackets = true, requiresComponentBrackets = true),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
-  val First = TermDefinitionEntry(
-    "first",
-    Nil,
-    Seq(a),
-    None,
-    None,
-    Format.Explicit("%1_0", "a_0", 2, requiresBrackets = false, requiresComponentBrackets = true),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
-  val Second = TermDefinitionEntry(
-    "second",
-    Nil,
-    Seq(a),
-    None,
-    None,
-    Format.Explicit("%1_1", "a_1", 2, requiresBrackets = false, requiresComponentBrackets = true),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
+  val Pair = simpleTermDefinition("pair", Seq(a, b), Format.Explicit("{%1, %2}", "{a, b}", 3, false, false)).copy(explicitName = Some("Unordered Pair"))
+  val Product = simpleTermDefinition("product", Seq(a, b), Format.Explicit("%1 × %2", "a × b", 3, true, true)).copy(explicitName = Some("Cartesian Product"))
+  val First = simpleTermDefinition("first", Seq(a), Format.Explicit("%1_0", "a_0", 2, requiresBrackets = false, requiresComponentBrackets = true))
+  val Second = simpleTermDefinition("second", Seq(a), Format.Explicit("%1_1", "a_10", 2, requiresBrackets = false, requiresComponentBrackets = true))
+
+  val Union = simpleTermDefinition("union", Seq(A), Format.Explicit("⋃A", Seq("union", "A"), false, true))
 
   val Comprehension = TermDefinitionEntry(
     "comprehension",
@@ -249,6 +190,12 @@ trait ExpressionDefinitions extends VariableDefinitions {
     None,
     Nil,
     Nil)
+
+  val PairSet = TypeDefinition("pairSet", "X", None, None, ForAllIn("x", X)(Exists("a")(Exists("b")(Equals($.^^, Pair($.^, $))))))
+  val Domain = simpleTermDefinition("domain", Seq(X), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(X)), Exists("b")(ElementOf(Pair($.^, $), X)))))
+  val Range = simpleTermDefinition("range", Seq(X), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(X)), Exists("a")(ElementOf(Pair($, $.^), X)))))
+  val Function = TypeDefinition("function", "f", None, None, Conjunction(PairSet(f), ForAllIn("a", Domain(f))(ExistsUnique("b")(ElementOf(Pair($.^, $), f)))))
+  val FunctionFrom = TypeQualifierDefinition("from", Function, Qualifier(Seq("A", "B"), Format.Explicit("from A B", Seq("A", "B"), true, true)), None, Conjunction(Equals(Domain(f), A), Subset(Range(f), B)), ConjunctionDefinition)
 
   val NaturalsDefinition = TermDefinitionEntry(
     "ℕ",
@@ -432,7 +379,8 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       ForAllDefinition, ExistsDefinition, ExistsUniqueDefinition,
       ElementOf, Equals, Subset) ++
     Seq(
-      EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Comprehension,
+      EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Union, Comprehension,
+      PairSet, Domain, Range, Function, FunctionFrom,
       NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, Apply, LessThanDefinition,
       IntegersDefinition) ++
     Seq(

@@ -30,7 +30,7 @@ object Statement {
     for {
       term <- Term.parser
       symbol <- Parser.singleWord
-      result <- context.entryContext.typeDefinitions.find(_.symbol == symbol).map(typeStatementParser(term, _)) orElse
+      result <- context.entryContext.typeDefinitions.get(symbol).map(typeStatementParser(term, _)) orElse
         context.entryContext.standalonePropertyDefinitions.find(_.symbol == symbol).map(propertyStatementParser(term, _)) getOrElse
         (throw new Exception(s"Unrecognised type or property'$symbol'"))
     } yield result

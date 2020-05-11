@@ -9,7 +9,7 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
   lazy val allInferences: Seq[Inference.FromEntry] = availableEntries.flatMap(_.inferences)
   lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.mapCollect(EntryContext.getStatementDefinitionFromEntry)
   lazy val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
-  lazy val typeDefinitions: Seq[TypeDefinition] = availableEntries.ofType[TypeDefinition]
+  lazy val typeDefinitions: Map[String, TypeDefinition] = availableEntries.ofType[TypeDefinition].map(t => t.symbol -> t).toMap
   lazy val propertyDefinitionsByType: Map[String, Seq[PropertyDefinitionOnType]] = availableEntries.ofType[PropertyDefinitionOnType].groupBy(_.parentType.symbol)
   lazy val qualifiersByType: Map[String, Seq[TypeQualifierDefinition]] = availableEntries.ofType[TypeQualifierDefinition].groupBy(_.parentType.symbol)
   lazy val relatedObjectsByType: Map[String, Seq[RelatedObjectDefinition]] = availableEntries.ofType[RelatedObjectDefinition].groupBy(_.parentType.symbol)
@@ -29,6 +29,13 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
   lazy val uniquenessDefinitionOption: Option[UniqueExistenceDefinition] = {
     statementDefinitions.find(_.attributes.contains("uniqueness")).map(UniqueExistenceDefinition)
   }
+
+  lazy val typeStatementDefinitionsByType: Map[String, Seq[StatementDefinition]] = {
+    typeDefinitions.mapValues { t =>
+      t.statementDefinition +: (qualifiersByType.getOrElse(t.symbol, Nil) ++ propertyDefinitionsByType.getOrElse(t.symbol, Nil) ++ relatedObjectsByType.getOrElse(t.symbol, Nil)).map(_.statementDefinition)
+    }
+  }
+  lazy val typeStatementDefinitions: Seq[StatementDefinition] = typeStatementDefinitionsByType.values.flatten.toSeq
 
   def addEntry(entry: ChapterEntry): EntryContext = {
     addEntries(Seq(entry))
@@ -60,7 +67,7 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
     }
   }
 
-  def typeDefinitionParser: Parser[TypeDefinition] = Parser.singleWord.map(typeName => typeDefinitions.find(_.symbol == typeName).getOrElse(throw new Exception(s"Unrecognised type '$typeName'")))
+  def typeDefinitionParser: Parser[TypeDefinition] = Parser.singleWord.map(typeName => typeDefinitions.getOrElse(typeName, throw new Exception(s"Unrecognised type '$typeName'")))
 
   def ++ (other: EntryContext) = {
     EntryContext(

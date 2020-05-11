@@ -181,7 +181,9 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
         implicit stepProvingContext: StepProvingContext
       ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
         val (targetSource, targetResult) = direction.swapSourceAndResult(targetLhs, targetRhs)
-        def getResult(applyExtractions: (Seq[Inference.Summary], Substitutions, ExpressionParsingContext => Try[Option[Statement]]) => Try[(ExtractionApplication, Seq[Step.Assertion], Seq[PremiseStep], Seq[Step.Target], Seq[Step] => Step.Elided)]) = {
+        def getResult(
+          applyExtractions: (Seq[Inference.Summary], Substitutions, ExpressionParsingContext => Try[Option[Statement]]) => Try[(Statement, Option[Step], Seq[Step.Target])]
+        ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
           for {
             extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
             substitutions <- definition.substitutions.parse()
@@ -194,20 +196,18 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
               case None =>
                 Success(None)
             }
-            (ExtractionApplication(conclusion, _, extractionSteps, extractionPremises, extractionTargets), additionalAssertions, additionalPremises, additionalTargets, elider) <- applyExtractions(extractionInferences, substitutions, getIntendedConclusion)
-            (conclusionRelation, conclusionLhs, conclusionRhs) <- ChainingMethods.getJoiner[T](conclusion).orBadRequest("Conclusion was not binary statement")
+            (extractionResult, extractionStep, targets) <- applyExtractions(extractionInferences, substitutions, getIntendedConclusion)
+            (conclusionRelation, conclusionLhs, conclusionRhs) <- ChainingMethods.getJoiner[T](extractionResult).orBadRequest("Conclusion was not binary statement")
             conclusionSource = direction.getSource(conclusionLhs, conclusionRhs)
             rewriteChainingDefinition <- handle(conclusionSource, targetSource, conclusionRelation, conclusionLhs, conclusionRhs)
-            extractionStep = Step.Elided.ifNecessary(additionalAssertions ++ extractionSteps, elider)
-            finalStep = Step.Elided.ifNecessary(((additionalPremises ++ extractionPremises).deduplicate.steps ++ extractionStep.toSeq) ++ rewriteChainingDefinition.step.toSeq, elider)
             intermediate = direction.getResult(rewriteChainingDefinition.lhs, rewriteChainingDefinition.rhs)
-            updatedChainingDefinition = rewriteChainingDefinition.copy(step = finalStep)
+            updatedChainingDefinition = rewriteChainingDefinition.copy(step = extractionStep)
             (targetLhs, targetRhs) = direction.swapSourceAndResult(intermediate, targetResult)
             (firstDefinition, secondDefinition) = direction.swapSourceAndResult(updatedChainingDefinition, ChainingStepDefinition.forTarget(targetLhs, targetRhs, targetRelation))
-          } yield (firstDefinition, secondDefinition, additionalTargets ++ extractionTargets)
+          } yield (firstDefinition, secondDefinition, targets)
         }
 
-        def fromInference(inferenceId: String) = {
+        def fromInference(inferenceId: String): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
           getResult { (extractionInferences, substitutions, getIntendedTarget) =>
             for {
               inference <- findInference(inferenceId)
@@ -224,12 +224,11 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                 case None =>
                   Success((inference, None))
               }
-              (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inferenceToApply, substitutions).orBadRequest("Could not apply substitutions to inference")
-              extractionApplication <- ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, intendedExtractionPremisesOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets)
-            } yield (extractionApplication, Seq(mainAssertion), mainPremises, mainTargets, Step.Elided.forInference(inference))
+              (derivationStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, intendedExtractionPremisesOption, intendedConclusionOption)
+            } yield (derivationStep.statement, Some(derivationStep.step), targets)
           }
         }
-        def fromPremise(serializedPremiseStatement: String) = {
+        def fromPremise(serializedPremiseStatement: String): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
           getResult { (extractionInferences, substitutions, getIntendedConclusion) =>
             for {
               premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
@@ -241,8 +240,8 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
               intendedConclusionOption <- getIntendedConclusion(epc)
               intendedPremiseStatementsOption <- definition.parseIntendedPremiseStatements(epc)
               substitutedIntendedPremiseStatementsOption <- intendedPremiseStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to extraction premises")).swap
-              extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, substitutedIntendedPremiseStatementsOption, intendedConclusionOption, PremiseFinder.findPremiseStepsOrTargets)
-            } yield (extractionApplication, Nil, Nil, Nil, Step.Elided.forDescription("Extracted"))
+              (result, step, targets)  <- ExtractionHelper.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedIntendedPremiseStatementsOption, intendedConclusionOption)
+            } yield (result, step, targets)
           }
         }
         definition.getFromInferenceOrPremise(fromInference, fromPremise)

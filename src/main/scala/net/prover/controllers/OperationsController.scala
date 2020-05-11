@@ -42,7 +42,7 @@ class OperationsController @Autowired() (val bookService: BookService) extends B
   @GetMapping(value = Array("clearInferencesUsingOldFunction"))
   def clearInferencesUsingOldFunction(): Unit = {
     updateEntries[Seq[Inference]](Nil, definitions => {
-      val oldFunctionDefinition = definitions.rootEntryContext.typeDefinitions.find(_.symbol == "oldFunction").get
+      val oldFunctionDefinition = definitions.rootEntryContext.typeDefinitions("oldFunction")
       (_, _, chapterEntry, _, inferencesToClear) => {
         val referencedEntries = chapterEntry match {
           case theorem: Theorem =>

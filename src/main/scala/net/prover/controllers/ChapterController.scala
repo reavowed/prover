@@ -294,7 +294,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       val name = getOptionalString(newTypeQualifierDefinition.name)
       for {
         symbol <- getMandatoryString(newTypeQualifierDefinition.symbol, "Symbol")
-        parentType <- entryContext.typeDefinitions.find(_.symbol == newTypeQualifierDefinition.parentType).orBadRequest(s"Unknown type '${newTypeQualifierDefinition.parentType}'")
+        parentType <- entryContext.typeDefinitions.get(newTypeQualifierDefinition.parentType).orBadRequest(s"Unknown type '${newTypeQualifierDefinition.parentType}'")
         qualifier <- getQualifier(newTypeQualifierDefinition.qualifierTermNames, newTypeQualifierDefinition.qualifierFormat)
         definition <- Statement.parser.parseFromString(newTypeQualifierDefinition.definition, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
@@ -321,7 +321,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       val name = getOptionalString(newPropertyDefinition.name)
       for {
         symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")
-        parentType <- entryContext.typeDefinitions.find(_.symbol == newPropertyDefinition.parentType).orBadRequest(s"Unknown type '${newPropertyDefinition.parentType}'")
+        parentType <- entryContext.typeDefinitions.get(newPropertyDefinition.parentType).orBadRequest(s"Unknown type '${newPropertyDefinition.parentType}'")
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newPropertyDefinition.requiredParentQualifier)
         requiredParentObjects <- getParentObjects(parentType, newPropertyDefinition.requiredParentObjects)
         adapter <- getOptionalAdapter(newPropertyDefinition.ownTermNames, newPropertyDefinition.parentTerms, (requiredParentQualifier.map(_.qualifier) orElse parentType.qualifier).termNames)
@@ -353,7 +353,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       for {
         symbol <- getMandatoryString(newRelatedObjectDefinition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newRelatedObjectDefinition.defaultTermName, "Default term name")
-        parentType <- entryContext.typeDefinitions.find(_.symbol == newRelatedObjectDefinition.parentType).orBadRequest(s"Unknown type '${newRelatedObjectDefinition.parentType}'")
+        parentType <- entryContext.typeDefinitions.get(newRelatedObjectDefinition.parentType).orBadRequest(s"Unknown type '${newRelatedObjectDefinition.parentType}'")
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newRelatedObjectDefinition.requiredParentQualifier)
         definingStatement <- Statement.parser.parseFromString(newRelatedObjectDefinition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")

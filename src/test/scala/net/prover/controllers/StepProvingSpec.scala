@@ -1,8 +1,11 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.PathData
+import net.prover.model.Format
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.Axiom
+import net.prover.model.definitions.ExpressionDefinition.ComponentType
+import net.prover.model.definitions.Qualifier
+import net.prover.model.entries.{Axiom, TermDefinitionEntry, TypeDefinition, TypeQualifierDefinition}
 import net.prover.model.expressions.{DefinedStatement, TermVariable}
 import net.prover.model.proof.{Step, StepProvingContext, SubstitutionContext}
 import org.specs2.matcher.Matcher
@@ -276,6 +279,46 @@ class StepProvingSpec extends ControllerSpec {
                       assertion(specification, Seq(Implication(ElementOf($.^^, B), ElementOf(add($.^, $.^^), Naturals))), Seq($)),
                       assertion(modusPonens, Seq(ElementOf($, B), ElementOf(add($.^, $), Naturals)), Nil))),
                     assertion(successorOfNaturalIsNatural, Nil, Seq(add($.^, $))))))))))))))
+    }
+
+    "group extractions by definition application in a nice way" in {
+      val additionProperty = Conjunction(
+        ForAllIn("a", Naturals)(Equals(add($, Zero), $)),
+        ForAllIn("a", Naturals)(ForAllIn("b", Naturals)(Equals(add($.^, Successor($)), Successor(add($.^, $))))))
+      val axiom = Axiom(
+        "Function Properties of Natural Addition",
+        Nil,
+        Conjunction(
+          Conjunction(
+            Function(Addition),
+            FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)),
+          additionProperty))
+
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndReplacement(service)
+      val controller = new StepProvingController(service)
+
+      controller.proveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        definitionWithInference(axiom, Nil, Nil, Seq(extractLeftConjunct, extractRightConjunct, FunctionFrom.statementDefinition.deconstructionInference.get, extractRightConjunct, extractLeftConjunct)))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex) :+ target(Equals(Domain(Addition), Product(Naturals, Naturals))),
+        fillerSteps(stepIndex) :+
+          elided(axiom, Seq(
+            elided(axiom, Seq(
+              assertion(axiom, Nil, Nil),
+              assertion(extractLeftConjunct, Seq(Conjunction(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), additionProperty), Nil))),
+            elided(FunctionFrom.statementDefinition.deconstructionInference.get, Seq(
+              assertion(FunctionFrom.statementDefinition.deconstructionInference.get, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
+              assertion(extractRightConjunct, Seq(Function(Addition), Conjunction(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals))), Nil),
+              assertion(extractLeftConjunct, Seq(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals)), Nil))))))(
+        defaultEntryContext.addEntry(axiom))
     }
   }
 }

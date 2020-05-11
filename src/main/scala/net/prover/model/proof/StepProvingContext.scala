@@ -16,47 +16,46 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
     premisesAndSimplifications.flatMap { case (premise, simplifications) => simplifications.reverse :+ premise }
   }
 
-  lazy val allPremiseExtractions: Seq[(Statement, Seq[PremiseStep])] = {
+  lazy val allPremiseExtractions: Seq[(Statement, Seq[DerivationStep])] = {
     for {
       premise <- stepContext.premises
       extractionOption <- SubstatementExtractor.getExtractionOptions(premise.statement)(this)
       if extractionOption.premises.isEmpty
-      extractionApplication <- ExtractionHelper.applyExtractions(premise, extractionOption.extractionInferences, Substitutions.empty, None, None, s => (Nil, s.map(Step.Target(_))))(this).toOption.toSeq
-        .map(ExtractionHelper.removeAllStructuralSimplifications(_)(provingContext))
-    } yield (extractionApplication.result, extractionApplication.extractionSteps.map(PremiseStep.fromAssertion))
+      (result, derivationSteps) <- ExtractionHelper.getPremiseExtractionWithoutPremises(premise, extractionOption.extractionInferences)(this).toSeq
+    } yield (result, derivationSteps)
   }
 
-  lazy val allPremiseSimplifications: Seq[(Statement, Seq[PremiseStep])] = {
+  lazy val allPremiseSimplifications: Seq[(Statement, Seq[DerivationStep])] = {
     implicit val substitutionContext: SubstitutionContext = stepContext
-    def simplifyAll(previous: Seq[(Statement, Seq[PremiseStep])], current: Seq[(Statement, Seq[PremiseStep])], simplifiers: Seq[PremiseSimplificationInference]): Seq[(Statement, Seq[PremiseStep])] = {
+    def simplifyAll(previous: Seq[(Statement, Seq[DerivationStep])], current: Seq[(Statement, Seq[DerivationStep])], simplifiers: Seq[PremiseSimplificationInference]): Seq[(Statement, Seq[DerivationStep])] = {
       if (current.isEmpty)
         previous
       else {
         val existing = previous ++ current
-        val newSimplifications = current.flatMap { case (statement, currentPremiseSteps) =>
+        val newSimplifications = current.flatMap { case (statement, currentDerivationSteps) =>
           simplifiers.mapCollect { simplifier =>
             simplifier.getPremiseSimplification(statement, existing)(this)
               .filter { case (statement, _) => !existing.exists(_._1 == statement)}
-              .map { case (statement, newPremiseSteps) => (statement, currentPremiseSteps ++ newPremiseSteps) }
+              .map { case (statement, newDerivationSteps) => (statement, currentDerivationSteps ++ newDerivationSteps) }
           }
         }
         simplifyAll(existing, newSimplifications, simplifiers)
       }
     }
-    def replaceEqualities(current: Seq[(Statement, Seq[PremiseStep])]): Seq[(Statement, Seq[PremiseStep])] = {
-      def replacePath(statement: Statement, path: Seq[Int], lhs: Term, rhs: Term, equality: Equality): Option[PremiseStep] = {
+    def replaceEqualities(current: Seq[(Statement, Seq[DerivationStep])]): Seq[(Statement, Seq[DerivationStep])] = {
+      def replacePath(statement: Statement, path: Seq[Int], lhs: Term, rhs: Term, equality: Equality): Option[DerivationStep] = {
         for {
           wrapper <- statement.getTerms().find(_._4 == path).filter(_._1 == lhs).map(_._2).map(Wrapper.fromExpression)
           step = equality.substitution.assertionStep(lhs, rhs, wrapper)
-        } yield PremiseStep.fromAssertion(step)
+        } yield DerivationStep.fromAssertion(step)
       }
-      def replaceAllPaths(statement: Statement, paths: Seq[Seq[Int]], lhs: Term, rhs: Term, equality: Equality): Option[PremiseStep] = {
+      def replaceAllPaths(statement: Statement, paths: Seq[Seq[Int]], lhs: Term, rhs: Term, equality: Equality): Option[DerivationStep] = {
         for {
-          (statement, premiseSteps) <- paths.mapFoldOption(statement) { replacePath(_, _, lhs, rhs, equality).map(step => (step.statement, step))  }
-          finalStep <- Step.Elided.ifNecessary(premiseSteps.steps, equality.substitution.inference)
-        } yield PremiseStep(statement, equality.substitution.inference, finalStep)
+          (statement, derivationSteps) <- paths.mapFoldOption(statement) { replacePath(_, _, lhs, rhs, equality).map(step => (step.statement, step))  }
+          finalStep <- Step.Elided.ifNecessary(derivationSteps.steps, equality.substitution.inference)
+        } yield DerivationStep(statement, equality.substitution.inference, finalStep)
       }
-      def getReplacements(lhs: Term, rhs: Term, equality: Equality): Seq[(Statement, Seq[PremiseStep])] = {
+      def getReplacements(lhs: Term, rhs: Term, equality: Equality): Seq[(Statement, Seq[DerivationStep])] = {
         if (lhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) || lhs.isInstanceOf[FunctionParameter])
           for {
             (premiseToRewrite, previousSteps) <- current
@@ -83,7 +82,7 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
     replaceEqualities(afterRewrites)
   }
 
-  lazy val premiseSimplificationsBySerializedStatement: Map[String, Seq[PremiseStep]] = {
+  lazy val premiseSimplificationsBySerializedStatement: Map[String, Seq[DerivationStep]] = {
     allPremiseSimplifications.map(_.mapLeft(_.serialized)).toMapPreservingEarliest
   }
 
@@ -104,7 +103,7 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
       this
   }
 
-  val cachedPremises: mutable.Map[String, Option[Seq[PremiseStep]]] = mutable.Map.empty
+  val cachedPremises: mutable.Map[String, Option[Seq[DerivationStep]]] = mutable.Map.empty
 }
 
 object StepProvingContext {

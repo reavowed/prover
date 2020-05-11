@@ -90,11 +90,7 @@ object SubstatementExtractor {
     for {
       definedStatement <- sourceStatement.asOptionalInstanceOf[DefinedStatement].toSeq
       definition = definedStatement.definition
-      if (
-        implicitly[EntryContext].typeDefinitions.map(_.statementDefinition) ++
-        implicitly[EntryContext].qualifiersByType.values.flatten.map(_.statementDefinition) ++
-        implicitly[EntryContext].propertyDefinitionsByType.values.flatten.map(_.statementDefinition)
-      ).contains(definition)
+      if implicitly[EntryContext].typeStatementDefinitions.contains(definition)
       deconstructionInference <- definedStatement.definition.deconstructionInference.toSeq
       extractionPremise <- deconstructionInference.premises.single.toSeq
       extractedSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality).toSeq

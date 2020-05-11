@@ -1,23 +1,20 @@
 package net.prover.controllers
 
-import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models._
 import net.prover.model.ExpressionParsingContext.TermVariableValidator
 import net.prover.model._
-import net.prover.model.expressions.{DefinedStatement, Expression, Statement}
+import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.collection.{SortedSet, TraversableLike}
 import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepProvingController @Autowired() (val bookService: BookService) extends BookModification with StepCreation with InferenceSearch {
-
   def createStep(
     definition: StepDefinition,
     getConclusionOption: (ExpressionParsingContext, Substitutions) => Try[Option[Statement]],
@@ -38,10 +35,9 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
         substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to intended new targets")).swap
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
-        ExtractionApplication(result, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractions(premise, extractionInferences, substitutions, substitutedNewTargetStatementsOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)
-        extractionStep = Step.Elided.ifNecessary(extractionSteps, "Extracted").get
-        finalStep = Step.Elided.ifNecessary(extractionPremises.steps :+ extractionStep, "Extracted").get
-      } yield (result, finalStep, extractionTargets)
+        (result, stepOption, extractionTargets) <- ExtractionHelper.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
+        step <- stepOption.orBadRequest("At least one step must be present")
+      } yield (result, step, extractionTargets)
     }
     definition.getFromInferenceOrPremise(withInference, withPremise)
   }

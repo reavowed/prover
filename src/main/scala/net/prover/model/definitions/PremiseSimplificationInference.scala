@@ -2,9 +2,9 @@ package net.prover.model.definitions
 
 import net.prover.model.Inference
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{PremiseStep, StepProvingContext}
+import net.prover.model.proof.{DerivationStep, StepProvingContext}
 
 trait PremiseSimplificationInference {
   def inference: Inference
-  def getPremiseSimplification(premiseToMatch: Statement, existingPremises: Seq[(Statement, Seq[PremiseStep])])(implicit stepProvingContext: StepProvingContext): Option[(Statement, Seq[PremiseStep])]
+  def getPremiseSimplification(premiseToMatch: Statement, existingPremises: Seq[(Statement, Seq[DerivationStep])])(implicit stepProvingContext: StepProvingContext): Option[(Statement, Seq[DerivationStep])]
 }

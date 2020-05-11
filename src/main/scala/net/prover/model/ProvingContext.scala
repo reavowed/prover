@@ -3,7 +3,7 @@ package net.prover.model
 import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.{PremiseStep, StepProvingContext}
+import net.prover.model.proof.{DerivationStep, StepProvingContext}
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}

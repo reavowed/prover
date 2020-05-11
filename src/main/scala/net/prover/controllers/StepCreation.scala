@@ -36,18 +36,13 @@ trait StepCreation extends BookModification {
         case None =>
           Success((inference, None))
       }
-      (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inferenceToApply, substitutions)(wrappedStepProvingContext).orBadRequest("Could not apply substitutions to inference")
-      ExtractionApplication(result, mainPremise, extractionSteps, extractionPremises, extractionTargets) <-
-        ExtractionHelper.applyExtractions(mainAssertion.statement, extractionInferences, inference, substitutions, newTargetStatementsForExtractionOption, conclusionOption, PremiseFinder.findPremiseStepsOrTargets)(wrappedStepProvingContext)
-      mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise)
-      extractionStep = Step.Elided.ifNecessary(mainAssertionWithCorrectConclusion +: extractionSteps, inference).get
-      assertionWithExtractionStep = Step.Elided.ifNecessary((mainPremises ++ extractionPremises).deduplicate.steps :+ extractionStep, inference).get
+      (derivationStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, newTargetStatementsForExtractionOption, conclusionOption)(wrappedStepProvingContext)
       (wrappedResult, wrappedStep, wrappedTargets) = if (unwrappers.nonEmpty)
         unwrappers
-          .addNecessaryExtractions(result, assertionWithExtractionStep, mainTargets ++ extractionTargets)
+          .addNecessaryExtractions(derivationStep.statement, derivationStep.step, targets)
           .map2(Step.Elided.forInference(inference)(_))
       else
-        (result, assertionWithExtractionStep, mainTargets ++ extractionTargets)
+        (derivationStep.statement, derivationStep.step, targets)
     } yield (wrappedResult, wrappedStep, wrappedTargets)
   }
 }

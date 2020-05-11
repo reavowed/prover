@@ -67,17 +67,20 @@ object Format {
     if (boundVariableNames.nonEmpty) {
       throw new Exception("Explicit format must be supplied for definition with bound variables")
     }
-    val (formatString, requiresBrackets) = componentTypes match {
-      case Nil =>
+    default(componentTypes.length)
+  }
+  def default(numberOfComponents: Int): Format.Default = {
+    val (formatString, requiresBrackets) = numberOfComponents match {
+      case 0 =>
         ("%0", false)
-      case Seq(_) =>
+      case 1 =>
         (s"%0%1", false)
-      case Seq(_, _) =>
+      case 2 =>
         (s"%1 %0 %2", true)
       case _ =>
         throw new Exception("Explicit format must be supplied for definition with more than two components")
     }
-    Format.Default(formatString, componentTypes.length + 1, requiresBrackets)
+    Format.Default(formatString, numberOfComponents + 1, requiresBrackets)
   }
 
   def optionalParserForExpressionDefinition(symbol: String, boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Parser[Format.Basic] = {

@@ -4,15 +4,15 @@ import net.prover.controllers.ExtractionHelper
 import net.prover.model.Inference
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
-import net.prover.model.proof.{PremiseStep, Step, StepProvingContext}
+import net.prover.model.proof.{DerivationStep, Step, StepProvingContext}
 
 case class ConclusionRelationSimplificationInference(inference: Inference, extractionOption: ExtractionOption, premiseDesimplifications: Seq[PremiseDesimplification]) {
-  def getConclusionSimplification(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[(Seq[Statement], Seq[PremiseStep])] = {
+  def getConclusionSimplification(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[(Seq[Statement], Seq[DerivationStep])] = {
     for {
       substitutions <- extractionOption.conclusion.calculateSubstitutions(target).flatMap(_.confirmTotality)
-      (extractionResult, extractionStep) <- ExtractionHelper.getExtractedAssertionStep(inference, substitutions, extractionOption)
-      if extractionResult == target
-      (simplifiedTargets, premiseSteps) <- premiseDesimplifications.getSubstitutedPremises(substitutions)
-    } yield (simplifiedTargets, premiseSteps :+ PremiseStep(extractionResult, inference, extractionStep))
+      derivationStep <- ExtractionHelper.getInferenceExtractionWithoutPremises(inference, substitutions, extractionOption)
+      if derivationStep.statement == target
+      (simplifiedTargets, derivationSteps) <- premiseDesimplifications.getSubstitutedPremises(substitutions)
+    } yield (simplifiedTargets, derivationSteps :+ derivationStep)
   }
 }

@@ -485,18 +485,8 @@ object Step {
         } yield (extractionOption, substitutions)).headOption
         for {
           (extractionOption, substitutions) <- substitutionsOption.failIfUndefined(InferenceReplacementException.AtStep("Could not find extraction option")(stepProvingContext.stepContext))
-          assertionStep <- Assertion.forInference(newInference, substitutions).failIfUndefined(InferenceReplacementException.AtStep("Could not apply substitutions")(stepProvingContext.stepContext))
-          ExtractionApplication(_, _, extractionSteps, _, _) <- ExtractionHelper.applyExtractions(
-            assertionStep.statement,
-            extractionOption.extractionInferences,
-            newInference,
-            substitutions,
-            Some(premises.drop(newInference.premises.length).map(_.statement)),
-            Some(statement),
-            _ => (Nil, Nil)
-          ).recoverWith { case e => Failure(InferenceReplacementException.AtStep(e.getMessage)(stepProvingContext.stepContext)) }
-          extractionStep <- Elided.ifNecessary(assertionStep +: extractionSteps, newInference).failIfUndefined(InferenceReplacementException.AtStep("Could not elide step")(stepProvingContext.stepContext))
-        } yield extractionStep
+          extractionStep <- ExtractionHelper.getInferenceExtractionWithoutPremises(newInference, substitutions, extractionOption).failIfUndefined(InferenceReplacementException.AtStep("Could not apply extraction")(stepProvingContext.stepContext))
+        } yield extractionStep.step
       } else Success(this)
     }
     override def clearInference(inferenceToClear: Inference): Step = {
