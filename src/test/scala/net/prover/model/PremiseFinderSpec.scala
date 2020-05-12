@@ -5,7 +5,7 @@ import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
 import net.prover.model.entries.{Axiom, PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{PremiseFinder, PremiseReference, Step, StepContext, StepReference}
+import net.prover.model.proof.{PremiseFinder, PremiseReference, Step, StepContext, StepReference, SubstitutionContext}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
@@ -250,6 +250,27 @@ class PremiseFinderSpec extends Specification {
         φ($),
         Seq(φ($.^), Equals($.^, $)),
         2)
+    }
+
+    "find a premise from a fact using the first possible extraction" in {
+      // If the latest extraction is used, the premise finder can actually extract that + is a function from the definition of FunctionFrom, which is not the best way of doing it
+      val additionProperty = Conjunction(
+        ForAllIn("a", Naturals)(Equals(add($, Zero), $)),
+        ForAllIn("a", Naturals)(ForAllIn("b", Naturals)(Equals(add($.^, Successor($)), Successor(add($.^, $))))))
+      val axiom = Axiom(
+        "Function Properties of Natural Addition",
+        Nil,
+        Conjunction(
+          Conjunction(
+            Function(Addition),
+            FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)),
+          additionProperty))
+
+      findPremise(Function(Addition), Nil)(defaultEntryContext.addEntry(axiom)) must beSome(Seq(
+        elided(axiom, Seq(
+          assertion(axiom, Nil, Nil),
+          assertion(extractLeftConjunct, Seq(Conjunction(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), additionProperty), Nil),
+          assertion(extractLeftConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))))(SubstitutionContext.outsideProof))
     }
   }
 }
