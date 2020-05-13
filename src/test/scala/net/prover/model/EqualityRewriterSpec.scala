@@ -7,52 +7,8 @@ import org.specs2.execute.Result
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
-class ProofHelperSpec extends Specification {
-  "rearranging a statement" should {
-    def rearrange(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
-      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
-      TermRearranger.rearrange(targetStatement)
-        .map(_.recalculateReferences(stepContext, implicitly[ProvingContext])._1)
-    }
-
-    def testRearranging(targetStatement: Statement, premises: Seq[Statement]) = {
-      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
-      val step = rearrange(targetStatement, premises)
-      step must beSome(beStepThatMakesValidTheorem(premises, targetStatement))
-    }
-
-    "rearrange with associativity and commutativity" in {
-      val conclusion = Equals(
-        add(add(a, b), add(c, d)),
-        add(add(a, c), add(b, d)))
-      testRearranging(conclusion, Nil)
-    }
-
-    "rearrange using a premise in same order" in {
-      val premise = Equals(add(a, b), add(c, d))
-      val conclusion = Equals(add(d, c), add(b, a))
-      testRearranging(conclusion, Seq(premise))
-    }
-
-    "rearrange using a premise in reversed order" in {
-      val premise = Equals(add(a, b), add(c, d))
-      val conclusion = Equals(add(b, a), add(d, c))
-      testRearranging(conclusion, Seq(premise))
-    }
-
-    "rearrange inside a function" in {
-      val conclusion = Equals(F(add(add(a, b), add(c, d)), add(c, d)), F(add(add(a, c), add(b, d)), add(d, c)))
-      testRearranging(conclusion, Nil)
-    }
-
-    "rearrange inside equivalence" in {
-      val conclusion = Equivalence(Equals(add(add(a, b), add(c, d)), add(c, d)), Equals(add(add(a, c), add(b, d)), add(d, c)))
-      testRearranging(conclusion, Nil)
-    }
-  }
-
+class EqualityRewriterSpec extends Specification {
   "rewriting a statement" should {
-
     def testRewrite(premises: Seq[Statement], target: Statement) = {
       implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
 

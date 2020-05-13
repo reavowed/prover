@@ -1,17 +1,11 @@
 package net.prover.model.definitions
 
 import net.prover.model.Inference
-import net.prover.model.expressions.{Expression, Term}
-import net.prover.model.proof.{ProofHelper, StepProvingContext}
+import net.prover.model.expressions.Term
+import net.prover.model.proof.SubstatementExtractor.ExtractionOption
+import net.prover.model.proof.SubstitutionContext
 
-case class Commutativity(operator: BinaryOperator, inference: Inference.Summary, equality: Equality) {
-  def rearrangementStep[T <: Expression](a: Term, b: Term, wrapper: Wrapper[Term, T], expansion: Expansion[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = {
-    for {
-      (assertionStep, targetSteps) <- ProofHelper.getAssertionWithPremisesAndElide(
-        inference,
-        inference.requiredSubstitutions.fill(Nil, Seq(a, b)))
-      if targetSteps.isEmpty
-      expansionSteps = expansion.assertionStepIfNecessary(operator(a, b), operator(b, a), wrapper).toSeq
-    } yield RearrangementStep(wrapper(operator(b, a)), assertionStep +: expansionSteps, inference)
-  }
+case class Commutativity(operator: BinaryOperator, inference: Inference.Summary, extractionOption: ExtractionOption) extends RearrangementOperation.Binary {
+  override def source(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(a, b)
+  override def result(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(b, a)
 }

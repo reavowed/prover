@@ -64,6 +64,7 @@ trait VariableDefinitions {
   val b = TermVariablePlaceholder("b")
   val c = TermVariablePlaceholder("c")
   val d = TermVariablePlaceholder("d")
+  val e = TermVariablePlaceholder("e")
   val f = TermVariablePlaceholder("f")
   val A = TermVariablePlaceholder("A")
   val B = TermVariablePlaceholder("B")
@@ -248,19 +249,10 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     Nil)
   val One = DefinedTerm(Nil, OneDefinition)(Nil)
-  val AdditionDefinition = TermDefinitionEntry(
-    "+",
-    Nil,
-    Nil,
-    Some("ℕ"),
-    None,
-    Format.default(Nil, Nil),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
+  val AdditionDefinition = simpleTermDefinition("+", Nil, Format.default(0), Nil, BlankDefinition).copy(disambiguator = Some("ℕ"))
   val Addition = DefinedTerm(Nil, AdditionDefinition)(Nil)
+  val MultiplicationDefinition = simpleTermDefinition("×", Nil, Format.default(0), Nil, BlankDefinition).copy(disambiguator = Some("ℕ"))
+  val Multiplication = DefinedTerm(Nil, MultiplicationDefinition)(Nil)
   val Apply = TermDefinitionEntry(
     "apply",
     Nil,
@@ -317,6 +309,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil)
 
   def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
+  def multiply(l: Term, r: Term) = Apply(Multiplication, Pair(l, r))
 }
 
 trait InferenceDefinitions extends ExpressionDefinitions {
@@ -364,6 +357,9 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val additionIsClosed = Axiom("Addition Is Closed", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(add(a, b), Naturals))
   val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
   val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
+  val multiplicationIsAssociative = Axiom("Multiplication Is Associative", Nil, Equals(multiply(a, multiply(b, c)), multiply(multiply(a, b), c)))
+  val multiplicationIsCommutative = Axiom("Multiplication Is Commutative", Nil, Equals(multiply(a, b), multiply(b, a)))
+  val multiplicationDistributesOverAddition = Axiom("Multiplication Distributes over Addition", Nil, Conjunction(Equals(multiply(a, add(b, c)), add(multiply(a, b), multiply(a, c))), Equals(multiply(add(a, b), c), add(multiply(a, c), multiply(b, c)))))
   val addingZeroIsSame = Axiom("Adding Zero Is Same", Nil, Equals(a, add(a, Zero)))
   val orderingIsTransitive = Axiom("Natural Ordering Is Transitive", Seq(lessThan(a, b), lessThan(b, c)), lessThan(a, c))
 }
@@ -404,7 +400,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
     Seq(
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Union, Comprehension,
       PairSet, Domain, Range, Function, FunctionFrom,
-      NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, Apply, LessThanDefinition,
+      NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, MultiplicationDefinition, Apply, LessThanDefinition,
       IntegersDefinition) ++
     Seq(
       specification, existence, modusPonens, modusTollens,
@@ -415,7 +411,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       distributeImplicationOverEquivalence, distributeUniversalQuantifierOverEquivalence,
       reverseEquality, reverseNegatedEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfOrderedPairInCartesianProduct, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, orderedPairIsElementOfCartesianProduct, firstElement,
-      zeroIsANaturalNumber, oneIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, addingZeroIsSame, orderingIsTransitive) ++
+      zeroIsANaturalNumber, oneIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, multiplicationIsAssociative, multiplicationIsCommutative, multiplicationDistributesOverAddition, addingZeroIsSame, orderingIsTransitive) ++
     Seq(InfixRelationShorthand, NotElementOfShorthand, NotEqualShorthand))
 
   implicit class ParserOps[T](parser: Parser[T]) {

@@ -59,6 +59,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableEquality: Allowable[Equality] = allowableGeneric(Generic[Equality])
     implicit val allowableCommutativity: Allowable[Commutativity] = allowableGeneric(Generic[Commutativity])
     implicit val allowableAssociativity: Allowable[Associativity] = allowableGeneric(Generic[Associativity])
+    implicit val allowableRearrangeableOperator: Allowable[RearrangeableOperator] = allowableGeneric(Generic[RearrangeableOperator])
+    implicit val allowableLeftDistributivity: Allowable[LeftDistributivity] = allowableGeneric(Generic[LeftDistributivity])
+    implicit val allowableRightDistributivity: Allowable[RightDistributivity] = allowableGeneric(Generic[RightDistributivity])
     implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowableGeneric(Generic[PremiseRelationSimplificationInference])
     implicit val allowablePremiseRelationRewriteInference: Allowable[PremiseRelationRewriteInference] = allowableGeneric(Generic[PremiseRelationRewriteInference])
     implicit val allowableConclusionRelationSimplificationInference: Allowable[ConclusionRelationSimplificationInference] = allowableGeneric(Generic[ConclusionRelationSimplificationInference])
@@ -159,9 +162,11 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val generalizationDistributions: Map[BinaryJoiner[Statement], Inference] = filter(definitions.generalizationDistributions)
   lazy val deductionDistributions: Map[BinaryJoiner[Statement], Inference] = filter(definitions.deductionDistributions)
 
-  lazy val rearrangeableFunctions: Seq[(BinaryOperator, Commutativity, Associativity)] = {
-    filter(definitions.rearrangeableFunctions)
+  lazy val rearrangeableOperators: Seq[RearrangeableOperator] = {
+    filter(definitions.rearrangeableOperators)
   }
+  lazy val leftDistributivities: Seq[LeftDistributivity] = filter(definitions.leftDistributivities)
+  lazy val rightDistributivities: Seq[RightDistributivity] = filter(definitions.rightDistributivities)
 
   lazy val premiseRelationSimplificationInferences: Map[BinaryRelation, Seq[PremiseRelationSimplificationInference]] = filter(definitions.premiseRelationSimplificationInferences)
   lazy val premiseRelationRewriteInferences: Map[BinaryRelation, Seq[PremiseRelationRewriteInference]] = filter(definitions.premiseRelationRewriteInferences)

@@ -176,37 +176,71 @@ case class Definitions(rootEntryContext: EntryContext) {
     } yield connective -> inference).toMap
   }
 
-  lazy val rearrangeableFunctions: Seq[(BinaryOperator, Commutativity, Associativity)] = {
+  private val rearrangementInferences = for {
+    inference <- inferenceEntries
+    extractionOption <- extractionOptionsByInferenceId(inference.id)
+    substitutions = extractionOption.requiredSubstitutions
+    if substitutions.statements.isEmpty &&
+      substitutions.hasNoApplications &&
+      extractionOption.conclusion.requiredSubstitutions.isEquivalentTo(substitutions) &&
+      extractionOption.premises.forall { premise =>
+        findRelation(premise)(SubstitutionContext.outsideProof).exists { case BinaryRelationStatement(_, left, right) =>
+          TermUtils.isSimpleTermVariable(left) && TermUtils.isCombinationOfConstants(right)
+        }
+      }
+  } yield (inference, extractionOption)
+
+  lazy val rearrangeableOperators: Seq[RearrangeableOperator] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
       equality <- equalityOption.toSeq
-      appropriateInferences = inferenceEntries.filter { inference =>
-        val substitutions = inference.requiredSubstitutions
-        substitutions.statements.isEmpty &&
-          substitutions.hasNoApplications &&
-          inference.conclusion.requiredSubstitutions.isEquivalentTo(substitutions)
-      }
-      results <- appropriateInferences
-        .mapCollect { inference =>
+      results <- rearrangementInferences
+        .mapCollect { case (inference, extractionOption) =>
           for {
-            (l, r) <- equality.unapply(inference.conclusion)
+            (l, r) <- equality.unapply(extractionOption.conclusion)
             operator = BinaryOperator(l)
             (first: TermVariable, second: TermVariable) <- operator.unapply(l)
             if r == operator(second, first)
-          } yield (operator, Commutativity(operator, inference.summary, equality))
+          } yield (operator, Commutativity(operator, inference.summary, extractionOption))
         }
         .mapCollect { case (operator, commutativity) =>
-          appropriateInferences
-            .mapFind { inference =>
+          rearrangementInferences
+            .mapFind { case (inference, extractionOption) =>
               for {
-                (l, r) <- equality.unapply(inference.conclusion)
+                (l, r) <- equality.unapply(extractionOption.conclusion)
                 (a: TermVariable, bc) <- operator.unapply(l)
                 (b: TermVariable, c: TermVariable) <- operator.unapply(bc)
                 if r == operator(operator(a, b), c)
-              } yield (operator, commutativity, Associativity(operator, inference.summary, equality))
+              } yield RearrangeableOperator(operator, commutativity, Associativity(operator, inference.summary, extractionOption))
             }
         }
     } yield results
+  }
+  lazy val leftDistributivities: Seq[LeftDistributivity] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      equality <- equalityOption.toSeq
+      (inference, extractionOption) <- rearrangementInferences
+      (lhs, rhs) <- equality.unapply(extractionOption.conclusion).toSeq
+      distributor <- rearrangeableOperators
+      (TermVariable(a, Nil), lhsRhs) <- distributor.unapply(lhs).toSeq
+      distributee <- rearrangeableOperators
+      (TermVariable(b, Nil), TermVariable(c, Nil)) <- distributee.unapply(lhsRhs).toSeq
+      if rhs == distributee(distributor(TermVariable(a, Nil), TermVariable(b, Nil)), distributor(TermVariable(a, Nil), TermVariable(c, Nil)))
+    } yield LeftDistributivity(distributor, distributee, inference.summary, extractionOption)
+  }
+  lazy val rightDistributivities: Seq[RightDistributivity] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      equality <- equalityOption.toSeq
+      (inference, extractionOption) <- rearrangementInferences
+      (lhs, rhs) <- equality.unapply(extractionOption.conclusion).toSeq
+      distributor <- rearrangeableOperators
+      (lhsLhs, TermVariable(c, Nil)) <- distributor.unapply(lhs).toSeq
+      distributee <- rearrangeableOperators
+      (TermVariable(a, Nil), TermVariable(b, Nil)) <- distributee.unapply(lhsLhs).toSeq
+      if rhs == distributee(distributor(TermVariable(a, Nil), TermVariable(c, Nil)), distributor(TermVariable(b, Nil), TermVariable(c, Nil)))
+    } yield RightDistributivity(distributor, distributee, inference.summary, extractionOption)
   }
 
   def getWrappedSimpleTermVariable(term: Term): Option[String] = {
