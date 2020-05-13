@@ -13,18 +13,27 @@ class PremiseFinderSpec extends Specification {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
 
   "premise finder" should {
+    def getStepContext(premises: Seq[Statement], depth: Int): StepContext = {
+      val emptyContext = StepContext(StepReference(Nil), premises.map(_.requiredSubstitutions).foldTogether.terms.map(_._1), Nil, Nil)
+      val contextWithDepth = (0 until depth).foldLeft(emptyContext){ (stepContext, i) => stepContext.addBoundVariable(s"$$$i")}
+      premises.zipWithIndex.foldLeft(contextWithDepth) { case (context, (premise, index)) =>
+        context.addStatement(premise, PremiseReference(index))
+      }
+    }
+
     def checkFindPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): MatchResult[Any] = {
       findPremise(target, premises, depth)(entryContext) must beSome(beStepsThatMakeValidTheorem(premises, target, depth)(entryContext))
     }
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
-      val emptyContext = StepContext(StepReference(Nil), premises.map(_.requiredSubstitutions).foldTogether.terms.map(_._1), Nil, Nil)
-      val contextWithDepth = (0 until depth).foldLeft(emptyContext){ (stepContext, i) => stepContext.addBoundVariable(s"$$$i")}
-      implicit val stepContext =  premises.zipWithIndex.foldLeft(contextWithDepth) { case (context, (premise, index)) =>
-        context.addStatement(premise, PremiseReference(index))
-      }
+      PremiseFinder.findPremiseStepsForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, depth))).map(_.steps)
+    }
 
-      PremiseFinder.findPremiseStepsForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, stepContext)).map(_.steps)
+    def findPremiseOrTarget(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): (Seq[Step], Seq[Statement]) = {
+      implicit val stepContext = getStepContext(premises, depth)
+      PremiseFinder.findPremiseStepsOrTargets(Seq(target))(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, depth)))
+        .mapLeft(_.steps)
+        .mapRight(_.map(_.statement))
     }
 
     "find premise using rewrite" in {
@@ -272,5 +281,35 @@ class PremiseFinderSpec extends Specification {
           assertion(extractLeftConjunct, Seq(Conjunction(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), additionProperty), Nil),
           assertion(extractLeftConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))))(SubstitutionContext.outsideProof))
     }
+
+    "replace terms in a target using a fact" in {
+      val axiom = Axiom(
+        "Function Properties of Natural Addition",
+        Nil,
+        Conjunction(
+          Function(Addition),
+          FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)))
+
+      findPremiseOrTarget(
+        ForAllIn("x", Domain(Addition))(ForAllIn("y", Domain(Addition))(φ($.^, $))),
+        Nil)(
+        defaultEntryContext.addEntry(axiom)
+      ) mustEqual (
+        Seq(
+          elided(axiom, Seq(
+            elided(axiom, Seq(
+              assertion(axiom, Nil, Nil),
+              assertion(extractRightConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))),
+            elided(FunctionFrom.statementDefinition.deconstructionInference.get, Seq(
+              assertion(FunctionFrom.statementDefinition.deconstructionInference.get, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
+              assertion(extractRightConjunct, Seq(Function(Addition), Conjunction(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals))), Nil),
+              assertion(extractLeftConjunct, Seq(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals)), Nil),
+              assertion(reverseEquality, Nil, Seq(Domain(Addition), Product(Naturals, Naturals))))))),
+          elided(substitutionOfEquals, Seq(
+            assertion(substitutionOfEquals, Seq(ForAllIn("x", $.^)(ForAllIn("y", Product(Naturals, Naturals))(φ($.^, $)))), Seq(Product(Naturals, Naturals), Domain(Addition))),
+            assertion(substitutionOfEquals, Seq(ForAllIn("x", Domain(Addition))(ForAllIn("y", $.^^)(φ($.^, $)))), Seq(Product(Naturals, Naturals), Domain(Addition))))))(SubstitutionContext.outsideProof),
+        Seq(ForAllIn("x", Product(Naturals, Naturals))(ForAllIn("y", Product(Naturals, Naturals))(φ($.^, $)))))
+    }
+
   }
 }

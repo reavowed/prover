@@ -1,11 +1,13 @@
 package net.prover.model.definitions
 
+import net.prover.controllers.ExtractionHelper
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 import net.prover.model.proof.{SubstatementExtractor, SubstitutionContext}
+import net.prover.model.utils.TermUtils
 import net.prover.util.Direction
 
 import scala.Ordering.Implicits._
@@ -207,35 +209,23 @@ case class Definitions(rootEntryContext: EntryContext) {
     } yield results
   }
 
-  def getSimpleTermVariable(term: Term): Option[String] = {
-    term.asOptionalInstanceOf[TermVariable].filter(_.arguments.isEmpty).map(_.name)
-  }
-  def isSimpleTermVariable(term: Term): Boolean = {
-    getSimpleTermVariable(term).isDefined
-  }
-  def getSimpleTermDefinition(term: Term): Option[TermDefinition] = {
-    term.asOptionalInstanceOf[DefinedTerm].filter(_.components.isEmpty).map(_.definition)
-  }
-  def isSimpleTermDefinition(term: Term): Boolean = {
-    getSimpleTermDefinition(term).isDefined
-  }
   def getWrappedSimpleTermVariable(term: Term): Option[String] = {
-    getSimpleTermVariable(term) orElse
+    TermUtils.getSimpleTermVariable(term) orElse
       term.asOptionalInstanceOf[DefinedTerm].flatMap(_.components.single).flatMap(_.asOptionalInstanceOf[Term]).flatMap(getWrappedSimpleTermVariable)
   }
-  def findRelation(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(BinaryRelation, Term, Term)] = {
-    definedBinaryRelations.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => (relation, lhs, rhs) })
+  def findRelation(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryRelationStatement] = {
+    definedBinaryRelations.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => BinaryRelationStatement(relation, lhs, rhs) })
   }
 
-  lazy val premiseRelationSimplificationInferences: Seq[PremiseRelationSimplificationInference] = {
+  lazy val premiseRelationSimplificationInferences: Map[BinaryRelation, Seq[PremiseRelationSimplificationInference]] = {
     def checkLhsIsValid(premiseLhs: Term, conclusionLhs: Term): Boolean = {
       // valid examples:
       //   a -> a
       //   a -> a_0
       //   (a, b) -> a
-      (isSimpleTermVariable(premiseLhs) && premiseLhs == conclusionLhs) || // a -> a
-        getSimpleTermVariable(premiseLhs).exists(getWrappedSimpleTermVariable(conclusionLhs).contains) || // a -> a_0
-        getSimpleTermVariable(conclusionLhs).exists(premiseLhs.requiredSubstitutions.terms.map(_._1).contains) // (a, b) -> a
+      (TermUtils.isSimpleTermVariable(premiseLhs) && premiseLhs == conclusionLhs) || // a -> a
+        TermUtils.getSimpleTermVariable(premiseLhs).exists(getWrappedSimpleTermVariable(conclusionLhs).contains) || // a -> a_0
+        TermUtils.getSimpleTermVariable(conclusionLhs).exists(premiseLhs.requiredSubstitutions.terms.map(_._1).contains) // (a, b) -> a
     }
     def checkRhsIsValidSimplification(premiseRhs: Term, conclusionRhs: Term): Boolean = {
       // valid examples:
@@ -243,8 +233,8 @@ case class Definitions(rootEntryContext: EntryContext) {
       //   A x B -> A
       //   ℤ+ -> ℤ
       premiseRhs.complexity > conclusionRhs.complexity &&
-        (getSimpleTermVariable(conclusionRhs).exists(premiseRhs.requiredSubstitutions.terms.map(_._1).contains) ||
-          getSimpleTermDefinition(conclusionRhs).exists(conclusionDefinition => getSimpleTermDefinition(premiseRhs).exists(premiseDefinition => premiseDefinition.definingStatement.referencedDefinitions.contains(conclusionDefinition))))
+        (TermUtils.getSimpleTermVariable(conclusionRhs).exists(premiseRhs.requiredSubstitutions.terms.map(_._1).contains) ||
+          TermUtils.getTermConstantDefinition(conclusionRhs).exists(conclusionDefinition => TermUtils.getTermConstantDefinition(premiseRhs).exists(premiseDefinition => premiseDefinition.definingStatement.referencedDefinitions.contains(conclusionDefinition))))
     }
     def getSubstitutionTermNames(t: Term): Set[String] = t.requiredSubstitutions.terms.map(_._1).toSet
     def checkNoSubstitutionOverlap(premiseLhs: Term, conclusionRhs: Term): Boolean = {
@@ -252,22 +242,22 @@ case class Definitions(rootEntryContext: EntryContext) {
     }
 
     implicit val substitutionContext = SubstitutionContext.outsideProof
-    for {
+    (for {
       inference <- allInferences
       extractionOption <- extractionOptionsByInferenceId(inference.id)
       singlePremise <- extractionOption.premises.single.toSeq
       if singlePremise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
       if extractionOption.requiredSubstitutions.statements.isEmpty && extractionOption.requiredSubstitutions.hasNoApplications
-      (_, conclusionLhs, conclusionRhs) <- findRelation(extractionOption.conclusion).toSeq
-      (_, premiseLhs, premiseRhs) <- findRelation(singlePremise).toSeq
+      BinaryRelationStatement(_, conclusionLhs, conclusionRhs) <- findRelation(extractionOption.conclusion).toSeq
+      BinaryRelationStatement(premiseRelation, premiseLhs, premiseRhs) <- findRelation(singlePremise).toSeq
       if checkLhsIsValid(premiseLhs, conclusionLhs) && checkRhsIsValidSimplification(premiseRhs, conclusionRhs) && checkNoSubstitutionOverlap(premiseLhs, conclusionRhs)
-    } yield PremiseRelationSimplificationInference(inference, singlePremise, extractionOption.conclusion, extractionOption)
+    } yield premiseRelation -> PremiseRelationSimplificationInference(inference, singlePremise, extractionOption.conclusion, extractionOption)).toSeqMap
   }
 
-  lazy val premiseRelationRewriteInferences: Seq[PremiseRelationRewriteInference] = {
+  lazy val premiseRelationRewriteInferences: Map[BinaryRelation, Seq[PremiseRelationRewriteInference]] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
 
-    def findPremiseRelation(lastPremise: Statement): Seq[(BinaryRelation, Term, Term, Substitutions.Possible)] = {
+    def findPremiseRelation(lastPremise: Statement): Seq[(BinaryRelationStatement, Substitutions.Possible)] = {
       val relationsFromTemplate = definedBinaryRelations.ofType[BinaryRelationFromGeneralShorthand].mapCollect { relation =>
         val generalTemplate = relation.shorthand.template.expand(
           Map.empty,
@@ -278,27 +268,27 @@ case class Definitions(rootEntryContext: EntryContext) {
         ).asInstanceOf[Statement]
         for {
           substitutions <- generalTemplate.calculateSubstitutions(lastPremise)
-          lhsVariableName <- getSimpleTermVariable(substitutions.terms(relation.lhsVariableName)._2)
-          rhsVariableName <- getSimpleTermVariable(substitutions.terms(relation.rhsVariableName)._2)
-          symbolVariableName <- getSimpleTermVariable(substitutions.terms(relation.symbolVariableName)._2)
-        } yield (relation, TermVariable(lhsVariableName), TermVariable(rhsVariableName), Substitutions.Possible(terms = Map(symbolVariableName -> (0, relation.definition()))))
+          lhsVariableName <- TermUtils.getSimpleTermVariable(substitutions.terms(relation.lhsVariableName)._2)
+          rhsVariableName <- TermUtils.getSimpleTermVariable(substitutions.terms(relation.rhsVariableName)._2)
+          symbolVariableName <- TermUtils.getSimpleTermVariable(substitutions.terms(relation.symbolVariableName)._2)
+        } yield (BinaryRelationStatement(relation, TermVariable(lhsVariableName), TermVariable(rhsVariableName)), Substitutions.Possible(terms = Map(symbolVariableName -> (0, relation.definition()))))
       }
       if (relationsFromTemplate.nonEmpty)
         relationsFromTemplate
       else
-        findRelation(lastPremise).toSeq.map { case (relation, lhs, rhs) => (relation, lhs, rhs, Substitutions.Possible.empty) }
+        findRelation(lastPremise).toSeq.map(_ -> Substitutions.Possible.empty)
     }
     def areValidSecondaryComponents(premiseComponent: Term, conclusionComponent: Term): Boolean = {
-      (isSimpleTermVariable(premiseComponent) && isSimpleTermVariable(conclusionComponent)) ||
+      (TermUtils.isSimpleTermVariable(premiseComponent) && TermUtils.isSimpleTermVariable(conclusionComponent)) ||
         (premiseComponent.requiredSubstitutions.isEmpty && conclusionComponent.requiredSubstitutions.isEmpty)
     }
     def componentsAreValid(premiseLhs: Term, premiseRhs: Term, conclusionLhs: Term, conclusionRhs: Term): Boolean = {
-      isSimpleTermVariable(premiseLhs) &&
+      TermUtils.isSimpleTermVariable(premiseLhs) &&
         ((conclusionLhs == premiseLhs && areValidSecondaryComponents(premiseRhs, conclusionRhs)) ||
         (conclusionRhs == premiseLhs && areValidSecondaryComponents(premiseRhs, conclusionLhs)))
     }
 
-    for {
+    (for {
       inference <- allInferences
       extractionOption <- extractionOptionsByInferenceId(inference.id)
       (initialPremiseOption, lastPremise) <- extractionOption.premises match {
@@ -307,12 +297,12 @@ case class Definitions(rootEntryContext: EntryContext) {
         case _ => Nil
       }
       if extractionOption.premises.map(_.requiredSubstitutions).foldTogether.contains(extractionOption.conclusion.requiredSubstitutions)
-      (conclusionRelation, conclusionLhs, conclusionRhs) <- findRelation(extractionOption.conclusion).toSeq
-      (premiseRelation, premiseLhs, premiseRhs, initialSubstitutions) <- findPremiseRelation(lastPremise)
+      BinaryRelationStatement(conclusionRelation, conclusionLhs, conclusionRhs) <- findRelation(extractionOption.conclusion).toSeq
+      (BinaryRelationStatement(premiseRelation, premiseLhs, premiseRhs), initialSubstitutions) <- findPremiseRelation(lastPremise)
       if componentsAreValid(premiseLhs, premiseRhs, conclusionLhs, conclusionRhs) &&
         !initialPremiseOption.exists(initialPremise => premiseRelation.unapply(initialPremise).nonEmpty || conclusionRelation.unapply(initialPremise).nonEmpty) &&
         (initialPremiseOption.isDefined || premiseRelation != conclusionRelation)
-    } yield PremiseRelationRewriteInference(inference, initialPremiseOption, lastPremise, extractionOption.conclusion, extractionOption, initialSubstitutions)
+    } yield premiseRelation -> PremiseRelationRewriteInference(inference, initialPremiseOption, lastPremise, extractionOption.conclusion, extractionOption, initialSubstitutions)).toSeqMap
   }
 
   def getPossiblePremiseDesimplifications(premise: Statement): Seq[PremiseDesimplification] = {
@@ -337,31 +327,31 @@ case class Definitions(rootEntryContext: EntryContext) {
     implicit val substitutionContext = SubstitutionContext.outsideProof
 
     def isLeftSimplification(conclusionLhs: Term, conclusionRhs: Term, premises: Seq[Statement]): Boolean = {
-      if (isSimpleTermVariable(conclusionRhs))
+      if (TermUtils.isSimpleTermVariable(conclusionRhs))
         premises.forall { premise =>
-          findRelation(premise).exists { case (_, premiseLhs, premiseRhs) =>
-            isSimpleTermVariable(premiseLhs) && premiseRhs == conclusionRhs && premiseLhs.complexity < conclusionLhs.complexity
+          findRelation(premise).exists { case BinaryRelationStatement(_, premiseLhs, premiseRhs) =>
+            TermUtils.isSimpleTermVariable(premiseLhs) && premiseRhs == conclusionRhs && premiseLhs.complexity < conclusionLhs.complexity
           }
         }
-      else if (isSimpleTermDefinition(conclusionRhs))
+      else if (TermUtils.isTermConstant(conclusionRhs))
         premises.forall { premise =>
-          findRelation(premise).exists { case (_, premiseLhs, premiseRhs) =>
-            isSimpleTermVariable(premiseLhs) && isSimpleTermDefinition(premiseRhs) && premiseLhs.complexity < conclusionLhs.complexity
+          findRelation(premise).exists { case BinaryRelationStatement(_, premiseLhs, premiseRhs) =>
+            TermUtils.isSimpleTermVariable(premiseLhs) && TermUtils.isTermConstant(premiseRhs) && premiseLhs.complexity < conclusionLhs.complexity
           }
         }
       else false
     }
     def isRightSimplification(conclusionLhs: Term, conclusionRhs: Term, premises: Seq[Statement]): Boolean = {
-      if (isSimpleTermVariable(conclusionLhs))
+      if (TermUtils.isSimpleTermVariable(conclusionLhs))
         premises.forall { premise =>
-          findRelation(premise).exists { case (_, premiseLhs, premiseRhs) =>
-            premiseLhs == conclusionLhs && isSimpleTermVariable(premiseRhs) && premiseRhs.complexity < conclusionRhs.complexity
+          findRelation(premise).exists { case BinaryRelationStatement(_, premiseLhs, premiseRhs) =>
+            premiseLhs == conclusionLhs && TermUtils.isSimpleTermVariable(premiseRhs) && premiseRhs.complexity < conclusionRhs.complexity
           }
         }
-      else if (isSimpleTermDefinition(conclusionLhs))
+      else if (TermUtils.isTermConstant(conclusionLhs))
         premises.forall { premise =>
-          findRelation(premise).exists { case (_, premiseLhs, premiseRhs) =>
-            isSimpleTermDefinition(premiseLhs) && isSimpleTermVariable(premiseRhs) && premiseRhs.complexity < conclusionRhs.complexity
+          findRelation(premise).exists { case BinaryRelationStatement(_, premiseLhs, premiseRhs) =>
+            TermUtils.isTermConstant(premiseLhs) && TermUtils.isSimpleTermVariable(premiseRhs) && premiseRhs.complexity < conclusionRhs.complexity
           }
         }
       else false
@@ -370,16 +360,16 @@ case class Definitions(rootEntryContext: EntryContext) {
       premises.lastOption.exists { lastPremise =>
         definedBinaryRelations.exists { lastPremiseRelation =>
           lastPremiseRelation.unapply(lastPremise).exists { case (lastPremiseLhs, lastPremiseRhs) =>
-            getSimpleTermVariable(lastPremiseLhs).exists { lastPremiseLhsVariable =>
-              getSimpleTermVariable(lastPremiseRhs).exists { lastPremiseRhsVariable =>
+            TermUtils.getSimpleTermVariable(lastPremiseLhs).exists { lastPremiseLhsVariable =>
+              TermUtils.getSimpleTermVariable(lastPremiseRhs).exists { lastPremiseRhsVariable =>
                 lastPremiseLhs.complexity < conclusionLhs.complexity &&
                   lastPremiseRhs.complexity < conclusionRhs.complexity &&
                   conclusionLhs.requiredSubstitutions == Substitutions.Required(Nil, Seq(lastPremiseLhsVariable -> 0)) &&
                   conclusionRhs.requiredSubstitutions == Substitutions.Required(Nil, Seq(lastPremiseRhsVariable -> 0)) &&
                   premises.init.forall { premise =>
-                    findRelation(premise).exists { case (_, premiseLhs, premiseRhs) =>
-                      getSimpleTermVariable(premiseLhs).exists(v => v == lastPremiseLhsVariable || v == lastPremiseRhsVariable) &&
-                        isSimpleTermDefinition(premiseRhs)
+                    findRelation(premise).exists { case BinaryRelationStatement(_, premiseLhs, premiseRhs) =>
+                      TermUtils.getSimpleTermVariable(premiseLhs).exists(v => v == lastPremiseLhsVariable || v == lastPremiseRhsVariable) &&
+                        TermUtils.isTermConstant(premiseRhs)
                     }
                   }
               }

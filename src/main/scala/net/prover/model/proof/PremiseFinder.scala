@@ -40,7 +40,7 @@ object PremiseFinder {
         premiseStatements <- inference.substitutePremises(substitutions)
         premiseSteps <- findPremiseStepsForStatements(premiseStatements)
         assertionStep = Step.Assertion(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
-      } yield premiseSteps :+ DerivationStep(targetStatement, inference, assertionStep)
+      } yield premiseSteps :+ DerivationStep.fromAssertion(assertionStep)
     }
     def bySimplifyingTargetRelation = provingContext.conclusionRelationSimplificationInferences.iterator.findFirst { conclusionRelationSimplificationInference =>
       for {
@@ -59,26 +59,42 @@ object PremiseFinder {
     premiseStatements.map(findPremiseStepsForStatement).traverseOption.map(_.flatten)
   }
 
+  private def getTarget(
+    premiseStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): (Seq[DerivationStep], Step.Target) = {
+    stepProvingContext.renamedTerms.foldLeft((Seq.empty[DerivationStep], premiseStatement)) { case ((currentSteps, currentStatement), (lhs, rhs, renameStepsConstructor, equality)) =>
+      EqualityRewriter.getReverseReplacements(currentStatement, lhs, rhs, equality) match {
+        case Some((result, derivationStep)) =>
+          (currentSteps ++ renameStepsConstructor() :+ derivationStep, result)
+        case None =>
+          (currentSteps, currentStatement)
+      }
+    }.mapRight(Step.Target(_))
+  }
+
+  private def findPremiseStepsOrTargets(
+    premiseStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): (Seq[DerivationStep], Seq[Step.Target]) = {
+    val directly = PremiseFinder.findPremiseStepsForStatement(premiseStatement).map(_ -> Nil)
+    def byDeconstructing = (for {
+      deconstructionInference <- stepProvingContext.provingContext.statementDefinitionDeconstructions
+      substitutions <- deconstructionInference.conclusion.calculateSubstitutions(premiseStatement).flatMap(_.confirmTotality).toSeq
+      step <- Step.Assertion.forInference(deconstructionInference, substitutions).toSeq
+      (innerSteps, innerTargets) = findPremiseStepsOrTargets(step.premises.map(_.statement))
+    } yield (innerSteps :+ DerivationStep.fromAssertion(step), innerTargets)).headOption
+
+    directly orElse byDeconstructing getOrElse getTarget(premiseStatement).mapRight(Seq(_))
+  }
+
   def findPremiseStepsOrTargets(
     premiseStatements: Seq[Statement])(
     implicit stepProvingContext: StepProvingContext
   ): (Seq[DerivationStep], Seq[Step.Target]) = {
     val (premiseSteps, targets) = premiseStatements.foldLeft((Seq.empty[DerivationStep], Seq.empty[Step.Target])) { case ((premiseStepsSoFar, targetStepsSoFar), premiseStatement) =>
-      PremiseFinder.findPremiseStepsForStatement(premiseStatement) match {
-        case Some(newPremiseSteps) =>
-          (premiseStepsSoFar ++ newPremiseSteps, targetStepsSoFar)
-        case None =>
-          val (deconstructedStatements, deconstructionSteps) = PremiseFinder.deconstructStatement(premiseStatement)
-          val (deconstructionTargetSteps, deconstructionPremiseSteps) = deconstructedStatements.foldLeft((Seq.empty[Step.Target], Seq.empty[DerivationStep])) { case ((otherTargetStepsSoFar, otherPremiseStepsSoFar), deconstructedStatement) =>
-            PremiseFinder.findPremiseStepsForStatement(deconstructedStatement) match {
-              case Some(newPremiseSteps) =>
-                (otherTargetStepsSoFar, otherPremiseStepsSoFar ++ newPremiseSteps)
-              case None =>
-                (otherTargetStepsSoFar :+ Step.Target(deconstructedStatement), otherPremiseStepsSoFar)
-            }
-          }
-          (premiseStepsSoFar ++ deconstructionPremiseSteps ++ deconstructionSteps.map(DerivationStep.fromAssertion), targetStepsSoFar ++ deconstructionTargetSteps)
-      }
+      val (stepsForThisPremise, targetsForThisPremise) = findPremiseStepsOrTargets(premiseStatement)
+      (premiseStepsSoFar ++ stepsForThisPremise, targetStepsSoFar ++ targetsForThisPremise)
     }
     (premiseSteps.deduplicate, targets)
   }

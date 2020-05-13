@@ -1,9 +1,10 @@
 package net.prover.model.proof
 
 import net.prover.controllers.ExtractionHelper
-import net.prover.model.definitions.{Equality, PremiseSimplificationInference, Wrapper}
-import net.prover.model.expressions.{FunctionParameter, Statement, Term, TermVariable}
+import net.prover.model.definitions.{BinaryRelation, BinaryRelationStatement, Equality, PremiseSimplificationInference, Wrapper}
+import net.prover.model.expressions.{DefinedTerm, FunctionParameter, Statement, Term, TermVariable}
 import net.prover.model._
+import net.prover.model.utils.TermUtils
 
 import scala.collection.mutable
 
@@ -27,50 +28,39 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
 
   lazy val allPremiseSimplifications: Seq[(Statement, Seq[DerivationStep])] = {
     implicit val substitutionContext: SubstitutionContext = stepContext
-    def simplifyAll(previous: Seq[(Statement, Seq[DerivationStep])], current: Seq[(Statement, Seq[DerivationStep])], simplifiers: Seq[PremiseSimplificationInference]): Seq[(Statement, Seq[DerivationStep])] = {
+    def simplifyAll(
+      previous: Seq[(Statement, Seq[DerivationStep])],
+      current: Seq[(Statement, Seq[DerivationStep])],
+      simplifiersByRelation: Map[BinaryRelation, Seq[PremiseSimplificationInference]]
+    ): Seq[(Statement, Seq[DerivationStep])] = {
       if (current.isEmpty)
         previous
       else {
         val existing = previous ++ current
-        val newSimplifications = current.flatMap { case (statement, currentDerivationSteps) =>
+        val newSimplifications = current.flatMap { case (statement, currentDerivationSteps) => {
+          val simplifiers = provingContext.findRelation(statement).flatMap(r => simplifiersByRelation.get(r.relation)).getOrElse(Nil)
           simplifiers.mapCollect { simplifier =>
             simplifier.getPremiseSimplification(statement, existing)(this)
               .filter { case (statement, _) => !existing.exists(_._1 == statement)}
               .map { case (statement, newDerivationSteps) => (statement, currentDerivationSteps ++ newDerivationSteps) }
           }
-        }
-        simplifyAll(existing, newSimplifications, simplifiers)
+        }}
+        simplifyAll(existing, newSimplifications, simplifiersByRelation)
       }
     }
     def replaceEqualities(current: Seq[(Statement, Seq[DerivationStep])]): Seq[(Statement, Seq[DerivationStep])] = {
-      def replacePath(statement: Statement, path: Seq[Int], lhs: Term, rhs: Term, equality: Equality): Option[DerivationStep] = {
-        for {
-          wrapper <- statement.getTerms().find(_._4 == path).filter(_._1 == lhs).map(_._2).map(Wrapper.fromExpression)
-          step = equality.substitution.assertionStep(lhs, rhs, wrapper)
-        } yield DerivationStep.fromAssertion(step)
-      }
-      def replaceAllPaths(statement: Statement, paths: Seq[Seq[Int]], lhs: Term, rhs: Term, equality: Equality): Option[DerivationStep] = {
-        for {
-          (statement, derivationSteps) <- paths.mapFoldOption(statement) { replacePath(_, _, lhs, rhs, equality).map(step => (step.statement, step))  }
-          finalStep <- Step.Elided.ifNecessary(derivationSteps.steps, equality.substitution.inference)
-        } yield DerivationStep(statement, equality.substitution.inference, finalStep)
-      }
       def getReplacements(lhs: Term, rhs: Term, equality: Equality): Seq[(Statement, Seq[DerivationStep])] = {
-        if (lhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) || lhs.isInstanceOf[FunctionParameter])
-          for {
-            (premiseToRewrite, previousSteps) <- current
-            paths = premiseToRewrite.getTerms()(stepContext).filter(_._1 == lhs).map(_._4)
-            if paths.nonEmpty && (equality.unapply(premiseToRewrite).isEmpty || paths.exists(_.length > 1))
-            replacementStep <- replaceAllPaths(premiseToRewrite, paths, lhs, rhs, equality)
-          } yield (replacementStep.statement, previousSteps :+ replacementStep)
-        else
-          Nil
+        for {
+          (premiseToRewrite, previousSteps) <- current
+          newStep <- EqualityRewriter.getForwardReplacements(premiseToRewrite, lhs, rhs, equality)(stepContext)
+        } yield (newStep.statement, previousSteps :+ newStep)
       }
 
       val equalityPremises = for {
         equality <- provingContext.equalityOption.toSeq
         (equalityPremise, previousSteps) <- current
         (premiseLhs, premiseRhs) <- equality.unapply(equalityPremise).toSeq
+        if (premiseLhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) || premiseLhs.isInstanceOf[FunctionParameter])
         (result, replacementSteps) <- getReplacements(premiseLhs, premiseRhs, equality)
       } yield (result, previousSteps ++ replacementSteps)
 
@@ -84,6 +74,28 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
 
   lazy val premiseSimplificationsBySerializedStatement: Map[String, Seq[DerivationStep]] = {
     allPremiseSimplifications.map(_.mapLeft(_.serialized)).toMapPreservingEarliest
+  }
+
+  lazy val renamedTerms: Seq[(Term, Term, () => Seq[DerivationStep], Equality)] = {
+    def isValid(lhs: Term, rhs: Term) = {
+      (TermUtils.isSimpleTermVariable(lhs) || TermUtils.isCombinationOfConstants(lhs)) && TermUtils.isWrappedSimpleTerm(rhs)
+    }
+
+    def fromPremises = for {
+      equality <- provingContext.equalityOption.toSeq
+      (premise, derivationSteps) <- allPremiseSimplifications.map(_.mapRight(v => () => v))
+      (lhs, rhs) <- equality.unapply(premise)(stepContext).toSeq
+      if isValid(lhs, rhs)
+    } yield (lhs, rhs, derivationSteps, equality)
+
+    def fromFacts = for {
+      equality <- provingContext.equalityOption.toSeq
+      (fact, inference, extractionOption) <- provingContext.facts
+      (lhs, rhs) <- equality.unapply(fact)(stepContext).toSeq
+      if isValid(lhs, rhs)
+    } yield (lhs, rhs, () => Seq(ExtractionHelper.getInferenceExtractionWithoutPremises(inference, Substitutions.empty, extractionOption)(this).get), equality)
+
+    fromPremises ++ fromFacts
   }
 
   def findPremise(statement: Statement): Option[Premise.SingleLinePremise] = {

@@ -103,6 +103,11 @@ package object model {
           f(acc, t).mapRight(ss :+ _)
       }
     }
+    def mapFoldRight[R, S](initial: R)(f: (R, T) => (R, S)): (R, Seq[S]) = {
+      seq.foldRight((initial, Seq.empty[S])) { case (t, (acc, ss)) =>
+        f(acc, t).mapRight(_ +: ss)
+      }
+    }
     def flatMapFold[R, S](initial: R)(f: (R, T) => (R, Seq[S])): (R, Seq[S]) = {
       seq.foldLeft((initial, Seq.empty[S])) { case ((acc, ss), t) =>
         f(acc, t).mapRight(ss ++ _)
@@ -590,6 +595,16 @@ package object model {
       for (x <- coll)
         if (!b.result().contains(x._1)) b += x
       b.result()
+    }
+    def toSeqMap[T, U](implicit ev: A <:< (T, U)): immutable.Map[T, Seq[U]] = {
+      val b = immutable.Map.newBuilder[T, mutable.Builder[U, Seq[U]]]
+      for (x <- coll) {
+        if (!b.result().contains(x._1)) {
+          b += (x._1 -> Seq.newBuilder[U])
+        }
+        b.result()(x._1) += x._2
+      }
+      b.result().mapValues(_.result())
     }
   }
 }

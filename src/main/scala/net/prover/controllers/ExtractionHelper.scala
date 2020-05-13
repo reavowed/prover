@@ -173,8 +173,7 @@ object ExtractionHelper {
     def groupSteps(steps: Seq[DerivationStep]): Unit = {
       currentMainStep match {
         case Some(step) =>
-          val elidedStep = Step.Elided.ifNecessary((step +: steps).steps, step.inference).get
-          stepsToReturn += DerivationStep(elidedStep.provenStatement.get, step.inference, elidedStep)
+          stepsToReturn += step.elideWithFollowingSteps(steps)
         case None =>
           stepsToReturn ++= removeNonEndStructuralSimplifications(steps)
       }
@@ -225,8 +224,7 @@ object ExtractionHelper {
     implicit stepProvingContext: StepProvingContext
   ): DerivationStep = {
     val updatedSteps = groupStepsByDefinition(derivationSteps, Some(DerivationStep.fromAssertion(assertionStep)))
-    val elidedStep = Step.Elided.ifNecessary(updatedSteps.steps, assertionStep.inference).get
-    DerivationStep(elidedStep.provenStatement.get, assertionStep.inference, elidedStep)
+    updatedSteps.head.elideWithFollowingSteps(updatedSteps.tail)
   }
 
   def getInferenceExtractionWithoutPremises(
@@ -251,11 +249,10 @@ object ExtractionHelper {
   ): Try[(DerivationStep, Seq[Step.Target])] = {
     for {
       (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
-      ExtractionApplication(extractionResult, mainPremise, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForInference(mainAssertion, extractionInferences, inference, substitutions, intendedPremises, intendedConclusion, PremiseFinder.findPremiseStepsOrTargets)
+      ExtractionApplication(_, mainPremise, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForInference(mainAssertion, extractionInferences, inference, substitutions, intendedPremises, intendedConclusion, PremiseFinder.findPremiseStepsOrTargets)
       mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise)
       extractionStep = createDerivationForInferenceExtraction(mainAssertionWithCorrectConclusion, extractionSteps)
-      assertionWithExtractionStep = Step.Elided.ifNecessary((mainPremises ++ extractionPremises :+ extractionStep).deduplicate.steps, inference).get
-    } yield (DerivationStep(extractionResult, inference, assertionWithExtractionStep), mainTargets ++ extractionTargets)
+    } yield (extractionStep.elideWithPremiseSteps((mainPremises ++ extractionPremises).deduplicate), mainTargets ++ extractionTargets)
   }
 
   def getPremiseExtractionWithoutPremises(

@@ -1,12 +1,14 @@
 package net.prover.model.proof
 
 import net.prover.controllers.ExtractionHelper
+import net.prover.controllers.models.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.model._
-import net.prover.model.definitions.{Equality, RearrangementStep, TermRewriteInference, Wrapper}
+import net.prover.model.definitions.{BinaryJoiner, Equality, RearrangementStep, TermRewriteInference, Wrapper}
 import net.prover.model.expressions._
 import net.prover.util.{Direction, PossibleSingleMatch}
 
 import scala.Ordering.Implicits._
+import scala.util.{Failure, Success, Try}
 
 case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: StepProvingContext)
 {
@@ -259,5 +261,109 @@ object EqualityRewriter {
       rewriter = EqualityRewriter(equality)
       result <- rewriter.rewrite(targetStatement)
     } yield result
+  }
+
+  def getForwardReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit stepContext: StepContext): Option[DerivationStep] = {
+    def replacePath(statement: Statement, path: Seq[Int]): (Statement, DerivationStep) = {
+      val wrapper = statement.getTerms().find(_._4 == path).filter(_._1 == lhs).map(_._2).map(Wrapper.fromExpression).get
+      val step = equality.substitution.assertionStep(lhs, rhs, wrapper)
+      (step.statement, DerivationStep.fromAssertion(step))
+    }
+    def replaceAllPaths(statement: Statement, paths: Seq[Seq[Int]]): DerivationStep = {
+      val (_, derivationSteps) = paths.mapFold(statement)(replacePath)
+      derivationSteps.head.elideWithFollowingSteps(derivationSteps.tail)
+    }
+    val paths = statement.getTerms().filter(_._1 == lhs).map(_._4)
+    if (paths.nonEmpty && (equality.unapply(statement).isEmpty || paths.forall(_.length > 1))) {
+      Some(replaceAllPaths(statement, paths))
+    } else {
+      None
+    }
+  }
+
+  def getReverseReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit stepContext: StepContext): Option[(Statement, DerivationStep)] = {
+    def replacePath(statement: Statement, path: Seq[Int]): (Statement, DerivationStep) = {
+      val wrapper = statement.getTerms().find(_._4 == path).filter(_._1 == rhs).map(_._2).map(Wrapper.fromExpression).get
+      val step = equality.substitution.assertionStep(lhs, rhs, wrapper)
+      (wrapper(lhs), DerivationStep.fromAssertion(step))
+    }
+    def replaceAllPaths(statement: Statement, paths: Seq[Seq[Int]]): (Statement, DerivationStep) = {
+      val (result, derivationSteps) = paths.mapFoldRight(statement)(replacePath)
+      (result, derivationSteps.head.elideWithFollowingSteps(derivationSteps.tail))
+    }
+    val paths = statement.getTerms().filter(_._1 == rhs).map(_._4)
+    if (paths.nonEmpty && (equality.unapply(statement).isEmpty || paths.forall(_.length > 1))) {
+      Some(replaceAllPaths(statement, paths))
+    } else {
+      None
+    }
+  }
+
+  case class RewritePossibility[T <: Expression : RewriteMethods](term: Term, function: T, depth: Int, path: Seq[Int], unwrappers: Seq[Unwrapper], stepProvingContext: StepProvingContext)
+
+  trait RewriteMethods[T <: Expression] {
+    def getRewritePossibilitiesFromOuterExpression(t: T, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepProvingContext: StepProvingContext): Seq[RewritePossibility[T]]
+    def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[T], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, T], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, T])]
+    def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperExpression: T, unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext): (Seq[Unwrapper], Term, Seq[Statement], T)
+  }
+  object RewriteMethods {
+    def apply[T <: Expression](implicit replacementMethods: RewriteMethods[T]) = replacementMethods
+
+    implicit def fromExpressionType[T <: Expression](implicit expressionType: ExpressionType[T]): RewriteMethods[T] = {
+      expressionType match {
+        case ExpressionType.StatementType =>
+          StatementRewriteMethods.asInstanceOf[RewriteMethods[T]]
+        case ExpressionType.TermType =>
+          TermRewriteMethods.asInstanceOf[RewriteMethods[T]]
+      }
+    }
+
+    object StatementRewriteMethods extends RewriteMethods[Statement] {
+      def getRewritePossibilitiesFromExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[Unwrapper], wrapper: Statement => Statement)(implicit stepProvingContext: StepProvingContext): Seq[RewritePossibility[Statement]] = {
+        statement.getTerms() map { case (term, predicate, depth, innerPath) =>
+          RewritePossibility[Statement](term, wrapper(predicate), depth, path ++ innerPath, unwrappers, stepProvingContext)
+        }
+      }
+      override def getRewritePossibilitiesFromOuterExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepProvingContext: StepProvingContext): Seq[RewritePossibility[Statement]] = {
+        def byGeneralization = for {
+          generalizationDefinition <- stepProvingContext.provingContext.entryContext.generalizationDefinitionOption
+          (specificationInference, _, _, _) <- stepProvingContext.provingContext.specificationInferenceOption
+          (variableName, predicate) <- generalizationDefinition.unapply(statement)
+          unwrapper = GeneralizationUnwrapper(variableName, generalizationDefinition, specificationInference)
+        } yield getRewritePossibilitiesFromOuterExpression(predicate, path :+ 0, unwrappers :+ unwrapper)(StepProvingContext.updateStepContext(unwrapper.enhanceContext))
+
+        def byDeduction = for {
+          deductionDefinition <- stepProvingContext.provingContext.deductionDefinitionOption
+          (deductionEliminationInference, _, _) <- stepProvingContext.provingContext.deductionEliminationInferenceOption
+          (antecedent, consequent) <- deductionDefinition.unapply(statement)
+          unwrapper = DeductionUnwrapper(antecedent, deductionDefinition, deductionEliminationInference)
+        } yield getRewritePossibilitiesFromExpression(antecedent, path :+ 0, unwrappers, deductionDefinition(_, consequent)) ++ getRewritePossibilitiesFromOuterExpression(consequent, path :+ 1, unwrappers :+ unwrapper)(StepProvingContext.updateStepContext(unwrapper.enhanceContext))
+
+        byGeneralization orElse byDeduction getOrElse getRewritePossibilitiesFromExpression(statement, path, unwrappers, identity)
+      }
+      override def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[Statement], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Statement], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Statement])] = {
+        unwrappers.rewrapWithDistribution(joiner, source, result, steps, wrapper, inferenceOption)
+      }
+      def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperStatement: Statement, unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext): (Seq[Unwrapper], Term, Seq[Statement], Statement) = {
+        unwrappers.removeUnneeded(source, premises, wrapperStatement)
+      }
+    }
+    object TermRewriteMethods extends RewriteMethods[Term] {
+      override def getRewritePossibilitiesFromOuterExpression(term: Term, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepProvingContext: StepProvingContext): Seq[RewritePossibility[Term]] = {
+        term.getTerms() map { case (innerTerm, function, depth, innerPath) =>
+          RewritePossibility[Term](innerTerm, function, depth, path ++ innerPath, unwrappers, stepProvingContext)
+        }
+      }
+      override def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[Term], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Term], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Term])] = {
+        if (unwrappers.nonEmpty) {
+          Failure(new Exception("Unwrappers for term somehow"))
+        } else {
+          Success((steps, wrapper))
+        }
+      }
+      def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperTerm: Term, unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext): (Seq[Unwrapper], Term, Seq[Statement], Term) = {
+        (Nil, source, premises, wrapperTerm)
+      }
+    }
   }
 }

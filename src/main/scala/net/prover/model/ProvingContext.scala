@@ -3,7 +3,7 @@ package net.prover.model
 import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.{DerivationStep, StepProvingContext}
+import net.prover.model.proof.{DerivationStep, StepProvingContext, SubstitutionContext}
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
@@ -144,6 +144,10 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryJoiners.ofType[BinaryConnective]
   lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryJoiners.ofType[BinaryRelation]
 
+  def findRelation(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryRelationStatement] = {
+    definedBinaryRelations.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => BinaryRelationStatement(relation, lhs, rhs) })
+  }
+
   lazy val reversals: Seq[Reversal[_ <: Expression]] = filter(definitions.reversals)
   lazy val transitivities: Seq[Transitivity[_ <: Expression]] = filter(definitions.transitivities)
   lazy val expansions: Seq[Expansion[_ <: Expression]] = filter(definitions.expansions)
@@ -159,8 +163,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     filter(definitions.rearrangeableFunctions)
   }
 
-  lazy val premiseRelationSimplificationInferences: Seq[PremiseRelationSimplificationInference] = filter(definitions.premiseRelationSimplificationInferences)
-  lazy val premiseRelationRewriteInferences: Seq[PremiseRelationRewriteInference] = filter(definitions.premiseRelationRewriteInferences)
+  lazy val premiseRelationSimplificationInferences: Map[BinaryRelation, Seq[PremiseRelationSimplificationInference]] = filter(definitions.premiseRelationSimplificationInferences)
+  lazy val premiseRelationRewriteInferences: Map[BinaryRelation, Seq[PremiseRelationRewriteInference]] = filter(definitions.premiseRelationRewriteInferences)
   lazy val conclusionRelationSimplificationInferences: Seq[ConclusionRelationSimplificationInference] = filter(definitions.conclusionRelationSimplificationInferences)
   lazy val conclusionSimplificationInferences: Seq[Inference] = filter(definitions.conclusionSimplificationInferences)
   lazy val termDefinitionRemovals: Map[TermDefinition, Seq[ExtractionOption]] = filter(definitions.termDefinitionRemovals)
