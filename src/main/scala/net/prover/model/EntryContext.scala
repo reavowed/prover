@@ -7,6 +7,7 @@ import net.prover.model.expressions._
 case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map[String, Inference], statementDefinitionsBySymbol: Map[String, StatementDefinition], termDefinitionsBySymbol: Map[String, TermDefinition]) {
 
   lazy val allInferences: Seq[Inference.FromEntry] = availableEntries.flatMap(_.inferences)
+  lazy val allInferenceIds: Set[String] = inferencesById.keySet
   lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.mapCollect(EntryContext.getStatementDefinitionFromEntry)
   lazy val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
   lazy val typeDefinitions: Map[String, TypeDefinition] = availableEntries.ofType[TypeDefinition].map(t => t.symbol -> t).toMap

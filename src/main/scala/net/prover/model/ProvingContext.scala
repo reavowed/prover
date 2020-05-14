@@ -3,7 +3,7 @@ package net.prover.model
 import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.{DerivationStep, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof.{DerivationStep, Step, StepProvingContext, SubstitutionContext}
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
@@ -39,7 +39,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowablePossibleSubstitutions: AlwaysAllowable[Substitutions.Possible] = alwaysAllowable
     implicit def allowableSeq[T](implicit inner: Allowable[T]): Allowable[Seq[T]] = allowable { x => x.forall(isAllowed) }
 
-    implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.allInferences.exists(_.id == i.id))
+    implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.allInferenceIds.contains(i.id))
     implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(d => entryContext.statementDefinitionsBySymbol.contains(d.symbol))
     implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(d => entryContext.termDefinitionsBySymbol.contains(d.symbol))
 
@@ -48,6 +48,9 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.firstPremiseJoiner) && isAllowed(r.secondPremiseJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
+    implicit val allowableStep: Allowable[Step] = allowable(step => step.referencedInferenceIds.forall(entryContext.allInferenceIds.contains))
+    implicit val allowableDerivationStep: Allowable[DerivationStep] = allowableGeneric(Generic[DerivationStep])
+    implicit val allowableKnownStatement: Allowable[KnownStatement] = allowableGeneric(Generic[KnownStatement])
     implicit val allowableExtractionOption: Allowable[ExtractionOption] = allowableGeneric(Generic[ExtractionOption])
     implicit def allowableDesimplifiedPremise: Allowable[DesimplifiedPremise] = allowableGeneric(Generic[DesimplifiedPremise])
     implicit def allowablePremiseDesimplification: Allowable[PremiseDesimplification] = allowable {
@@ -197,11 +200,11 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val structuralSimplificationInferences: Seq[(Inference, Statement)] = {
     filter(definitions.structuralSimplificationInferences)
   }
-  lazy val facts: Seq[(Statement, Inference, ExtractionOption)] = {
+  lazy val facts: Seq[DerivationStep] = {
     filter(definitions.facts)
   }
-  lazy val factsBySerializedStatement: Map[String, (Inference, ExtractionOption)] = {
-    facts.map { case (s, i, e) => (s.serialized, (i, e)) }.toMapPreservingEarliest
+  lazy val factsBySerializedStatement: Map[String, DerivationStep] = {
+    facts.map { fact => fact.statement.serialized -> fact }.toMapPreservingEarliest
   }
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {
     filter(definitions.statementDeductionInferences)

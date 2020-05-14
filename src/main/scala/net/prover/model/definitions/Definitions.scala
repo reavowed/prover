@@ -1,12 +1,11 @@
 package net.prover.model.definitions
 
-import net.prover.controllers.ExtractionHelper
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
-import net.prover.model.proof.{SubstatementExtractor, SubstitutionContext}
+import net.prover.model.proof.{DerivationStep, Step, SubstatementExtractor, SubstitutionContext}
 import net.prover.model.utils.TermUtils
 import net.prover.util.Direction
 
@@ -536,12 +535,13 @@ case class Definitions(rootEntryContext: EntryContext) {
     }
   }
 
-  lazy val facts: Seq[(Statement, Inference, ExtractionOption)] = {
+  lazy val facts: Seq[DerivationStep] = {
     for {
       inference <- allInferences
       extractionOption <- extractionOptionsByInferenceId(inference.id)
       if extractionOption.premises.isEmpty && extractionOption.requiredSubstitutions.isEmpty
-    } yield (extractionOption.conclusion, inference, extractionOption)
+      assertionStep = Step.Assertion(inference.conclusion, inference.summary, Nil, Substitutions.empty)
+    } yield SubstatementExtractor.createDerivationForInferenceExtraction(assertionStep, extractionOption.derivation)(provingContext)
   }
 
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {

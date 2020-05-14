@@ -78,7 +78,7 @@ object PossiblePremise {
     implicit stepProvingContext: StepProvingContext
   ): Seq[PossiblePremise] = {
     premises.map { premise =>
-      val matches = (stepProvingContext.allPremises.map(_.statement) ++ stepProvingContext.provingContext.facts.map(_._1)).mapCollect { availablePremise =>
+      val matches = (stepProvingContext.allPremises.map(_.statement) ++ stepProvingContext.provingContext.facts.map(_.statement)).mapCollect { availablePremise =>
         premise.calculateSubstitutions(availablePremise, substitutions.getOrElse(Substitutions.Possible.empty))
           .map(s => PossiblePremiseMatch(availablePremise, SuggestedSubstitutions(s)))
       }

@@ -1,24 +1,15 @@
 package net.prover.model.proof
 
-import net.prover.controllers.ExtractionHelper
-import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.model._
-import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition, StatementDefinition}
+import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions._
 
 object ProofHelper {
-  def findFact(target: Statement)(implicit stepProvingContext: StepProvingContext): Option[DerivationStep] = {
-    for {
-      (inference, extractionOption) <- stepProvingContext.provingContext.factsBySerializedStatement.get(target.serialized)
-      derivationStep <- ExtractionHelper.getInferenceExtractionWithoutPremises(inference, Substitutions.empty, extractionOption)
-    } yield derivationStep
-  }
   def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Option[(DerivationStep, Substitutions.Possible)] = {
-    stepProvingContext.provingContext.facts.mapFind { case (fact, inference, extractionOption) =>
+    stepProvingContext.provingContext.facts.mapFind { fact =>
       for {
-        substitutions <- target.calculateSubstitutions(fact, substitutionsSoFar)
-        derivationStep <- ExtractionHelper.getInferenceExtractionWithoutPremises(inference, Substitutions.empty, extractionOption)
-      } yield (derivationStep, substitutions)
+        substitutions <- target.calculateSubstitutions(fact.statement, substitutionsSoFar)
+      } yield (fact, substitutions)
     }
   }
 
@@ -55,7 +46,7 @@ object ProofHelper {
     for {
       premiseStatements <- inference.substitutePremises(substitutions)
       conclusion <- inference.substituteConclusion(substitutions)
-      (premiseSteps, targetSteps) = PremiseFinder.findPremiseStepsOrTargets(premiseStatements)
+      (premiseSteps, targetSteps) = PremiseFinder.findDerivationsOrTargets(premiseStatements)
       assertionStep = Step.Assertion(
         conclusion,
         inference.summary,

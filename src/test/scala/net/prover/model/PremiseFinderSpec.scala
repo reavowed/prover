@@ -26,12 +26,12 @@ class PremiseFinderSpec extends Specification {
     }
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
-      PremiseFinder.findPremiseStepsForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, depth))).map(_.steps)
+      PremiseFinder.findDerivationForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, depth))).map(_.steps)
     }
 
     def findPremiseOrTarget(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): (Seq[Step], Seq[Statement]) = {
       implicit val stepContext = getStepContext(premises, depth)
-      PremiseFinder.findPremiseStepsOrTargets(Seq(target))(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, depth)))
+      PremiseFinder.findDerivationsOrTargets(Seq(target))(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, depth)))
         .mapLeft(_.steps)
         .mapRight(_.map(_.statement))
     }

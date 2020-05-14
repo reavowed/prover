@@ -31,7 +31,6 @@ sealed trait RearrangementOperation {
     } yield RearrangementStep(wrapper(source(terms)), forwardStep.substeps :+ reversalStep, inference)
   }
 }
-
 object RearrangementOperation {
   trait Binary extends RearrangementOperation {
     def source(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term
@@ -50,4 +49,21 @@ object RearrangementOperation {
     def rearrangementStep[T <: Expression](a: Term, b: Term, c: Term, wrapper: Wrapper[Term, T], expansion: Expansion[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = rearrangementStep(Seq(a, b, c), wrapper, expansion)
     def reversedRearrangementStep[T <: Expression](a: Term, b: Term, c: Term, wrapper: Wrapper[Term, T], expansion: Expansion[T], reversal: Reversal[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = reversedRearrangementStep(Seq(a, b, c), wrapper, expansion, reversal)
   }
+}
+
+case class Associativity(operator: BinaryOperator, inference: Inference.Summary, extractionOption: ExtractionOption) extends RearrangementOperation.Ternary {
+  override def source(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(a, operator(b, c))
+  override def result(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(operator(a, b), c)
+}
+case class Commutativity(operator: BinaryOperator, inference: Inference.Summary, extractionOption: ExtractionOption) extends RearrangementOperation.Binary {
+  override def source(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(a, b)
+  override def result(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(b, a)
+}
+case class LeftDistributivity(distributor: RearrangeableOperator, distributee: RearrangeableOperator, inference: Inference.Summary, extractionOption: ExtractionOption) extends RearrangementOperation.Ternary {
+  override def source(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = distributor(a, distributee(b, c))
+  override def result(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = distributee(distributor(a, b), distributor(a, c))
+}
+case class RightDistributivity(distributor: RearrangeableOperator, distributee: RearrangeableOperator, inference: Inference.Summary, extractionOption: ExtractionOption) extends RearrangementOperation.Ternary {
+  override def source(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = distributor(distributee(a, b), c)
+  override def result(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = distributee(distributor(a, c), distributor(b, c))
 }

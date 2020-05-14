@@ -4,7 +4,7 @@ import net.prover.exceptions.BadRequestException
 import net.prover.model.{definitions, _}
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.{ExtractionOption, VariableTracker}
-import net.prover.model.proof.{DerivationStep, Premise, PremiseFinder, ProofHelper, Step, StepProvingContext}
+import net.prover.model.proof.{DerivationStep, Premise, PremiseFinder, ProofHelper, Step, StepProvingContext, SubstatementExtractor}
 
 import scala.util.{Failure, Success, Try}
 
@@ -119,80 +119,7 @@ object ExtractionHelper {
   }
 
   private def groupStepsByDefinition(extractionApplication: ExtractionApplication, initialStep: Option[DerivationStep])(implicit provingContext: ProvingContext): ExtractionApplication = {
-    extractionApplication.copy(extractionSteps = groupStepsByDefinition(extractionApplication.extractionSteps, initialStep))
-  }
-  private def groupStepsByDefinition(steps: Seq[DerivationStep], initialMainStep: Option[DerivationStep])(implicit provingContext: ProvingContext): Seq[DerivationStep] = {
-    val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
-
-    var currentMainStep: Option[DerivationStep] = initialMainStep
-    val currentUngroupedSteps = Seq.newBuilder[DerivationStep]
-    val stepsToReturn = Seq.newBuilder[DerivationStep]
-
-    def removeUnnecessarySimplifications(steps: Seq[DerivationStep], typeSymbol: String): Seq[DerivationStep] = {
-      val definitions = provingContext.entryContext.typeStatementDefinitionsByType(typeSymbol)
-      def isTypeStatement(statement: Statement): Boolean = {
-        statement.asOptionalInstanceOf[DefinedStatement].map(_.definition).contains(provingContext.entryContext.typeDefinitions(typeSymbol).statementDefinition)
-      }
-      def isAccompanyingStatement(statement: Statement): Boolean = {
-        statement.asOptionalInstanceOf[DefinedStatement].map(_.definition).exists(definitions.contains)
-      }
-      def isCombinedTypeStatement(statement: Statement): Boolean = {
-        isTypeStatement(statement) ||
-          provingContext.entryContext.conjunctionDefinitionOption.exists { conjunction =>
-            conjunction.unapply(statement).exists { case (a, b) => isCombinedTypeStatement(a) && isAccompanyingStatement(b) }
-          }
-      }
-      @scala.annotation.tailrec
-      def helper(cleared: Seq[DerivationStep], remaining: Seq[DerivationStep]): Seq[DerivationStep] = {
-        remaining match {
-          case Nil =>
-            cleared
-          case head +: tail =>
-            if (isCombinedTypeStatement(head.statement) && tail.forall(s => structuralSimplificationIds.contains(s.inference.id)))
-              cleared :+ head
-            else
-              helper(cleared :+ head, tail)
-        }
-      }
-      helper(Nil, steps)
-    }
-    def removeNonEndStructuralSimplifications(steps: Seq[DerivationStep]): Seq[DerivationStep] = {
-      @scala.annotation.tailrec
-      def helper(remainingAssertions: Seq[DerivationStep], filteredAssertions: Seq[DerivationStep]): Seq[DerivationStep] = {
-        remainingAssertions match {
-          case head +: tail if structuralSimplificationIds.contains(head.inference.id) && tail.exists(a => !structuralSimplificationIds.contains(a.inference.id)) =>
-            helper(tail, filteredAssertions)
-          case head +: tail =>
-            helper(tail, filteredAssertions :+ head)
-          case Nil =>
-            filteredAssertions
-        }
-      }
-      helper(steps, Nil)
-    }
-    def groupSteps(steps: Seq[DerivationStep]): Unit = {
-      currentMainStep match {
-        case Some(step) =>
-          stepsToReturn += step.elideWithFollowingSteps(steps)
-        case None =>
-          stepsToReturn ++= removeNonEndStructuralSimplifications(steps)
-      }
-    }
-
-    for (currentStep <- steps) {
-      provingContext.entryContext.typeStatementDefinitionsByType.find { case (_, definitions) =>
-        definitions.mapCollect(_.deconstructionInference).map(_.id).contains(currentStep.inference.id)
-      } match {
-        case Some((typeSymbol, _)) =>
-          groupSteps(removeUnnecessarySimplifications(currentUngroupedSteps.result(), typeSymbol))
-          currentMainStep = Some(currentStep)
-          currentUngroupedSteps.clear()
-        case None =>
-          currentUngroupedSteps += currentStep
-      }
-    }
-    groupSteps(currentUngroupedSteps.result())
-    stepsToReturn.result()
+    extractionApplication.copy(extractionSteps = SubstatementExtractor.groupStepsByDefinition(extractionApplication.extractionSteps, initialStep))
   }
 
   def applyExtractionsForInference(
@@ -218,14 +145,6 @@ object ExtractionHelper {
   ): Try[ExtractionApplication] = {
     applyExtractions(premise.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext, findPremiseStepsOrTargets).map(groupStepsByDefinition(_, None))
   }
-  def createDerivationForInferenceExtraction(
-    assertionStep: Step.Assertion,
-    derivationSteps: Seq[DerivationStep])(
-    implicit stepProvingContext: StepProvingContext
-  ): DerivationStep = {
-    val updatedSteps = groupStepsByDefinition(derivationSteps, Some(DerivationStep.fromAssertion(assertionStep)))
-    updatedSteps.head.elideWithFollowingSteps(updatedSteps.tail)
-  }
 
   def getInferenceExtractionWithoutPremises(
     inference: Inference,
@@ -236,7 +155,7 @@ object ExtractionHelper {
     for {
       assertionStep <- Step.Assertion.forInference(inference, substitutions)
       extractionApplication <- ExtractionHelper.applyExtractionsForInference(assertionStep, extractionOption.extractionInferences, inference, substitutions, None, None, _ => (Nil, Nil)).toOption
-    } yield createDerivationForInferenceExtraction(assertionStep, extractionApplication.extractionSteps)
+    } yield SubstatementExtractor.createDerivationForInferenceExtraction(assertionStep, extractionApplication.extractionSteps)
   }
 
   def getInferenceExtractionWithPremises(
@@ -249,9 +168,9 @@ object ExtractionHelper {
   ): Try[(DerivationStep, Seq[Step.Target])] = {
     for {
       (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
-      ExtractionApplication(_, mainPremise, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForInference(mainAssertion, extractionInferences, inference, substitutions, intendedPremises, intendedConclusion, PremiseFinder.findPremiseStepsOrTargets)
+      ExtractionApplication(_, mainPremise, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForInference(mainAssertion, extractionInferences, inference, substitutions, intendedPremises, intendedConclusion, PremiseFinder.findDerivationsOrTargets)
       mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise)
-      extractionStep = createDerivationForInferenceExtraction(mainAssertionWithCorrectConclusion, extractionSteps)
+      extractionStep = SubstatementExtractor.createDerivationForInferenceExtraction(mainAssertionWithCorrectConclusion, extractionSteps)
     } yield (extractionStep.elideWithPremiseSteps((mainPremises ++ extractionPremises).deduplicate), mainTargets ++ extractionTargets)
   }
 
@@ -274,7 +193,7 @@ object ExtractionHelper {
     implicit stepProvingContext: StepProvingContext
   ): Try[(Statement, Option[Step], Seq[Step.Target])] = {
     for {
-      ExtractionApplication(extractionResult, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForPremise(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion, PremiseFinder.findPremiseStepsOrTargets)
+      ExtractionApplication(extractionResult, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForPremise(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion, PremiseFinder.findDerivationsOrTargets)
       extractionStep = Step.Elided.ifNecessary(extractionSteps.steps, "Extracted")
       assertionWithExtractionStep = Step.Elided.ifNecessary(extractionPremises.deduplicate.steps ++ extractionStep.toSeq, "Extracted")
     } yield (extractionResult, assertionWithExtractionStep, extractionTargets)

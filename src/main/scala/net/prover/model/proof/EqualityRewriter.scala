@@ -25,12 +25,12 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         (inferenceSource, inferenceResult) = direction.swapSourceAndResult(left, right)
         conclusionSubstitutions <- inferenceSource.calculateSubstitutions(premiseTerm).flatMap(_.confirmTotality)
         simplifiedTerm <- inferenceResult.applySubstitutions(conclusionSubstitutions).flatMap(_.asOptionalInstanceOf[Term])
-        (premiseSteps, _, possibleFinalSubstitutions) <- PremiseFinder.findPremiseStepsForStatementsBySubstituting(extractionOption.premises, conclusionSubstitutions)
+        (premises, possibleFinalSubstitutions) <- PremiseFinder.findDerivationsForStatementsBySubstituting(extractionOption.premises, conclusionSubstitutions)
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
         extractionStep <- ExtractionHelper.getInferenceExtractionWithoutPremises(inference, finalSubstitutions, extractionOption)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
-      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premiseSteps :+ extractionStep).steps ++ expansionStep.toSeq, inference.summary), inference.summary)
+      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation) :+ extractionStep).steps ++ expansionStep.toSeq, inference.summary), inference.summary)
     }
 
     def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
@@ -75,7 +75,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
       def findDirectly = {
         for {
-          premiseSteps <- PremiseFinder.findPremiseStepsForStatement(equality(premiseTerm, targetTerm))
+          premiseSteps <- PremiseFinder.findDerivationForStatement(equality(premiseTerm, targetTerm))
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
           inference = premiseSteps.inferences.singleMatch match {
             case PossibleSingleMatch.NoMatches =>
