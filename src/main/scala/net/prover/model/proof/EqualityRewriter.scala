@@ -263,37 +263,23 @@ object EqualityRewriter {
     } yield result
   }
 
-  def getForwardReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit stepContext: StepContext): Option[DerivationStep] = {
-    def replacePath(statement: Statement, path: Seq[Int]): (Statement, DerivationStep) = {
-      val wrapper = statement.getTerms().find(_._4 == path).filter(_._1 == lhs).map(_._2).map(Wrapper.fromExpression).get
-      val step = equality.substitution.assertionStep(lhs, rhs, wrapper)
-      (step.statement, DerivationStep.fromAssertion(step))
-    }
-    def replaceAllPaths(statement: Statement, paths: Seq[Seq[Int]]): DerivationStep = {
-      val (_, derivationSteps) = paths.mapFold(statement)(replacePath)
-      derivationSteps.head.elideWithFollowingSteps(derivationSteps.tail)
-    }
+  def getForwardReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality, wrapper: Wrapper[Statement, Statement])(implicit stepContext: StepContext): Option[DerivationStep] = {
     val paths = statement.getTerms().filter(_._1 == lhs).map(_._4)
     if (paths.nonEmpty && (equality.unapply(statement).isEmpty || paths.forall(_.length > 1))) {
-      Some(replaceAllPaths(statement, paths))
+      val innerWrapper = wrapper.insertWrapper(Wrapper.fromExpression(statement.getPredicateForTerm(lhs, stepContext.externalDepth)))
+      val step = equality.substitution.assertionStep(lhs, rhs, innerWrapper)
+      Some(DerivationStep.fromAssertion(step))
     } else {
       None
     }
   }
 
   def getReverseReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit stepContext: StepContext): Option[(Statement, DerivationStep)] = {
-    def replacePath(statement: Statement, path: Seq[Int]): (Statement, DerivationStep) = {
-      val wrapper = statement.getTerms().find(_._4 == path).filter(_._1 == rhs).map(_._2).map(Wrapper.fromExpression).get
-      val step = equality.substitution.assertionStep(lhs, rhs, wrapper)
-      (wrapper(lhs), DerivationStep.fromAssertion(step))
-    }
-    def replaceAllPaths(statement: Statement, paths: Seq[Seq[Int]]): (Statement, DerivationStep) = {
-      val (result, derivationSteps) = paths.mapFoldRight(statement)(replacePath)
-      (result, derivationSteps.head.elideWithFollowingSteps(derivationSteps.tail))
-    }
     val paths = statement.getTerms().filter(_._1 == rhs).map(_._4)
     if (paths.nonEmpty && (equality.unapply(statement).isEmpty || paths.forall(_.length > 1))) {
-      Some(replaceAllPaths(statement, paths))
+      val wrapper = Wrapper.fromExpression(statement.getPredicateForTerm(rhs, stepContext.externalDepth))
+      val step = equality.substitution.assertionStep(lhs, rhs, wrapper)
+      Some((wrapper(lhs), DerivationStep.fromAssertion(step)))
     } else {
       None
     }

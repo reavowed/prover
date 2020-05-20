@@ -1,6 +1,5 @@
 package net.prover.model.proof
 
-import net.prover.model.ProvingContext
 import net.prover.model.expressions.Statement
 
 case class StepContext private(

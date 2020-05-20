@@ -44,6 +44,9 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     }
     helper(Nil, arguments, Nil)
   }
+  override def getPredicateForTerm(term: Term, depth: Int): ExpressionType = {
+    update(arguments.map(_.getPredicateForTerm(term, depth)))
+  }
 
   def specify(
     targetArguments: Map[Int, Term],

@@ -128,12 +128,12 @@ trait ExpressionDefinitions extends VariableDefinitions {
       Nil)
   }
 
-  private def simpleTermDefinition(
+  def simpleTermDefinition(
     symbol: String,
     components: Seq[ComponentType],
     format: Format.Basic
   ): TermDefinitionEntry = simpleTermDefinition(symbol, components, format, Nil, BlankDefinition)
-  private def simpleTermDefinition(
+  def simpleTermDefinition(
     symbol: String,
     components: Seq[ComponentType],
     format: Format.Basic,
@@ -197,6 +197,9 @@ trait ExpressionDefinitions extends VariableDefinitions {
   val Range = simpleTermDefinition("range", Seq(X), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(X)), Exists("a")(ElementOf(Pair($, $.^), X)))))
   val Function = TypeDefinition("function", "f", None, None, Conjunction(PairSet(f), ForAllIn("a", Domain(f))(ExistsUnique("b")(ElementOf(Pair($.^, $), f)))))
   val FunctionFrom = TypeQualifierDefinition("from", Function, Qualifier(Seq("A", "B"), Format.Explicit("from A B", Seq("A", "B"), true, true)), None, Conjunction(Equals(Domain(f), A), Subset(Range(f), B)), ConjunctionDefinition)
+  val BaseSet = simpleTermDefinition("baseSet", Seq(X), Format.default(1), Nil, Equals($, Domain(Domain(X))))
+  val BinaryOperation = TypeDefinition("binaryOperation", "f", None, None, BlankDefinition)
+  val BinaryOperationOn = TypeQualifierDefinition("on", BinaryOperation, Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true)), None, Equals(BaseSet(f), A), ConjunctionDefinition)
 
   val NaturalsDefinition = TermDefinitionEntry(
     "ℕ",
@@ -249,7 +252,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     Nil)
   val One = DefinedTerm(Nil, OneDefinition)(Nil)
-  val AdditionDefinition = simpleTermDefinition("+", Nil, Format.default(0), Nil, BlankDefinition).copy(disambiguator = Some("ℕ"))
+  val AdditionDefinition = simpleTermDefinition("+", Nil, Format.default(0)).copy(disambiguator = Some("ℕ"))
   val Addition = DefinedTerm(Nil, AdditionDefinition)(Nil)
   val MultiplicationDefinition = simpleTermDefinition("×", Nil, Format.default(0), Nil, BlankDefinition).copy(disambiguator = Some("ℕ"))
   val Multiplication = DefinedTerm(Nil, MultiplicationDefinition)(Nil)
@@ -293,6 +296,8 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Nil,
     Nil)
   val Integers = IntegersDefinition()
+  val IntegerAdditionDefinition = simpleTermDefinition("+", Nil, Format.default(0), Nil, Conjunction(BinaryOperation($), BinaryOperationOn($, Integers))).copy(disambiguator = Some("ℤ"))
+  val IntegerAddition = DefinedTerm(Nil, IntegerAdditionDefinition)(Nil)
 
   val InfixRelationShorthand = DisplayShorthand(
     ElementOf.template(Pair.template(a.template, b.template), TermVariableTemplate("<")),
@@ -351,6 +356,8 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val orderedPairIsElementOfCartesianProduct = Axiom("Ordered Pair Is Element of Cartesian Product", Seq(ElementOf(a, A), ElementOf(b, B)), ElementOf(Pair(a, b), Product(A, B)))
   val firstElement = Axiom("First Element", Nil, Equals(First(Pair(a, b)), a))
 
+  val functionApplicationIsElementOfRange = Axiom("Function Application Is Element of Range", Seq(Function(f), ElementOf(a, Domain(f))), ElementOf(Apply(f, a), Range(f)))
+
   val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
   val oneIsANaturalNumber = Axiom("1 Is a Natural Number", Nil, ElementOf(One, Naturals))
   val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
@@ -399,9 +406,9 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       ElementOf, Equals, Subset) ++
     Seq(
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Union, Comprehension,
-      PairSet, Domain, Range, Function, FunctionFrom,
+      PairSet, Domain, Range, Function, FunctionFrom, BaseSet, BinaryOperation, BinaryOperationOn,
       NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, MultiplicationDefinition, Apply, LessThanDefinition,
-      IntegersDefinition) ++
+      IntegersDefinition, IntegerAdditionDefinition) ++
     Seq(
       specification, existence, modusPonens, modusTollens,
       addDoubleNegation, removeDoubleNegation,
@@ -411,6 +418,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       distributeImplicationOverEquivalence, distributeUniversalQuantifierOverEquivalence,
       reverseEquality, reverseNegatedEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfOrderedPairInCartesianProduct, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, orderedPairIsElementOfCartesianProduct, firstElement,
+      functionApplicationIsElementOfRange,
       zeroIsANaturalNumber, oneIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, multiplicationIsAssociative, multiplicationIsCommutative, multiplicationDistributesOverAddition, addingZeroIsSame, orderingIsTransitive) ++
     Seq(InfixRelationShorthand, NotElementOfShorthand, NotEqualShorthand))
 

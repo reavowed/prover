@@ -32,6 +32,13 @@ case class DefinedTerm(
     super[Term].getTerms(internalDepth, externalDepth) ++
       super[DefinedExpression].getTerms(internalDepth, externalDepth)
   }
+  override def getPredicateForTerm(term: Term, depth: Int): Term = {
+    if (term == this)
+      FunctionParameter(0, depth)
+    else
+      super.getPredicateForTerm(term, depth)
+  }
+
   override def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: Substitutions.Possible,

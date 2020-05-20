@@ -1,9 +1,10 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.definitions.{BinaryRelation, Equality, KnownStatement, PremiseSimplificationInference}
+import net.prover.model.definitions._
 import net.prover.model.expressions.{FunctionParameter, Statement, Term, TermVariable}
-import net.prover.model.utils.TermUtils
+import net.prover.model.proof.StepProvingContext.ValueToPropertyDerivation
+import net.prover.model.utils.ExpressionUtils
 
 import scala.collection.mutable
 
@@ -49,7 +50,7 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
       def getReplacements(lhs: Term, rhs: Term, equality: Equality, equalityStatement: KnownStatement): Seq[KnownStatement] = {
         for {
           knownStatement <- current
-          newStep <- EqualityRewriter.getForwardReplacements(knownStatement.statement, lhs, rhs, equality)(stepContext)
+          newStep <- EqualityRewriter.getForwardReplacements(knownStatement.statement, lhs, rhs, equality, Wrapper.identity)(stepContext)
         } yield KnownStatement.fromDerivation(equalityStatement.derivation ++ knownStatement.derivation :+ newStep)
       }
 
@@ -73,16 +74,16 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
     knownStatementsFromPremises.map(s => s.statement.serialized -> s).toMapPreservingEarliest
   }
 
-  lazy val renamedTerms: Seq[(Term, Term, Seq[DerivationStep], Equality)] = {
-    def isValid(lhs: Term, rhs: Term) = {
-      (TermUtils.isSimpleTermVariable(lhs) || TermUtils.isCombinationOfConstants(lhs)) && TermUtils.isWrappedSimpleTerm(rhs)
-    }
+  private def isProperty(propertyTerm: Term) = ExpressionUtils.isWrappedSimpleTerm(propertyTerm)
+  private def isValue(valueTerm: Term) = ExpressionUtils.isSimpleTermVariable(valueTerm) || ExpressionUtils.isCombinationOfTermConstants(valueTerm)
+
+  lazy val knownValuesToProperties: Seq[ValueToPropertyDerivation] = {
     for {
       equality <- provingContext.equalityOption.toSeq
       knownStatement <- knownStatementsFromPremises ++ provingContext.facts.map(KnownStatement.fromSingleStep)
-      (lhs, rhs) <- equality.unapply(knownStatement.statement)(stepContext).toSeq
-      if isValid(lhs, rhs)
-    } yield (lhs, rhs, knownStatement.derivation, equality)
+      (valueTerm, propertyTerm) <- equality.unapply(knownStatement.statement)(stepContext).toSeq
+      if isProperty(propertyTerm) && isValue(valueTerm)
+    } yield ValueToPropertyDerivation(propertyTerm, valueTerm, knownStatement.derivation, equality)
   }
 
   def findPremise(statement: Statement): Option[Premise.SingleLinePremise] = {
@@ -106,6 +107,8 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
 }
 
 object StepProvingContext {
+  case class ValueToPropertyDerivation(propertyTerm: Term, valueTerm: Term, valueToPropertyDerivation: Seq[DerivationStep], equality: Equality)
+
   def updateStepContext(f: StepContext => StepContext)(implicit stepProvingContext: StepProvingContext): StepProvingContext = {
     stepProvingContext.updateStepContext(f)
   }

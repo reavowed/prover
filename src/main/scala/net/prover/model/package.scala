@@ -61,6 +61,7 @@ package object model {
     def optionMapLeft[R](f: S => Option[R]): Option[(R, T)] = f(tuple._1).map((_, tuple._2))
     def optionMapRight[R](f: T => Option[R]): Option[(S, R)] = f(tuple._2).map((tuple._1, _))
     def reverse: (T, S) = (tuple._2, tuple._1)
+    def toSet(implicit f: S =:= T): Set[T] = Set(f(tuple._1), tuple._2)
   }
 
   implicit class Tuple2SameOps[T](tuple: (T, T)) {

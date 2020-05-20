@@ -6,6 +6,7 @@ import net.prover.model.proof.SubstitutionContext
 class Wrapper[TInput, TOutput](f: (TInput, SubstitutionContext) => TOutput) {
   def apply(t: TInput)(implicit substitutionContext: SubstitutionContext): TOutput = f(t, substitutionContext)
   def insert[TNewInput](g: (TNewInput, SubstitutionContext) => TInput): Wrapper[TNewInput, TOutput] = new Wrapper((input, context) => f(g(input, context), context))
+  def insertWrapper[TNewInput](wrapper: Wrapper[TNewInput, TInput]): Wrapper[TNewInput, TOutput] = new Wrapper((input, context) => f(wrapper(input)(context), context))
   def isIdentity(implicit wrapperIdentity: WrapperIdentity[TInput, TOutput], substitutionContext: SubstitutionContext): Boolean = wrapperIdentity.isIdentity(this, substitutionContext)
 }
 
@@ -15,7 +16,7 @@ trait WrapperIdentity[T, S] {
 object WrapperIdentity {
   implicit def termIdentity: WrapperIdentity[Term, Term] = (wrapper, context) => wrapper(TermVariable("_"))(context) == TermVariable("_")
   implicit def statementIdentity: WrapperIdentity[Statement, Statement] = (wrapper, context) => wrapper(StatementVariable("_"))(context) == StatementVariable("_")
-  def none[T, S]: WrapperIdentity[T, S] = (wrapper, _) => false
+  def none[T, S]: WrapperIdentity[T, S] = (_, _) => false
 }
 
 object Wrapper {

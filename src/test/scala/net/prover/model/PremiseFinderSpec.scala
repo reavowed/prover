@@ -107,7 +107,7 @@ class PremiseFinderSpec extends Specification {
 
     "find a premise by a conclusion simplification from extracting a term definition with multiple premises" in {
       val PairIsInteger = Axiom("Pair Is Integer", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(Pair(a, b), Integers))
-      val entryContextWithDefinitions = defaultEntryContext.addEntry(IntegersDefinition).addEntry(PairIsInteger)
+      val entryContextWithDefinitions = defaultEntryContext.addEntry(PairIsInteger)
 
       checkFindPremise(
         ElementOf(Pair(a, b), Integers),
@@ -176,30 +176,16 @@ class PremiseFinderSpec extends Specification {
     }
 
     "find a premise using chained simplifications requiring other premises" in {
-      val SetDifference = TermDefinitionEntry(
+      val SetDifference = simpleTermDefinition(
         "diff",
-        Nil,
-        Seq(ComponentType.TermComponent("A", Nil), ComponentType.TermComponent("B", Nil)),
-        None,
-        Some("Set Difference"),
+        Seq(A, B),
         Format.Explicit("%1/%2", "A/B", 3, false, true),
         Nil,
-        ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, A), Negation(ElementOf($, B))))),
-        None,
-        Nil,
-        Nil)
-      val ToInteger = TermDefinitionEntry(
+        ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, A), Negation(ElementOf($, B))))))
+      val ToInteger = simpleTermDefinition(
         "toZ",
-        Nil,
-        Seq(ComponentType.TermComponent("a", Nil)),
-        None,
-        None,
-        Format.Explicit("%1_ℤ", "a_ℤ", 2, false, true),
-        Nil,
-        BlankDefinition,
-        None,
-        Nil,
-        Nil)
+        Seq(a),
+        Format.Explicit("%1_ℤ", "a_ℤ", 2, false, true))
       val EqualityConditionForEmbeddedNaturals = Axiom("Equality Condition for Embedded Naturals", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(a, b), Equals(ToInteger(a), ToInteger(b))))
       val EmbeddedNaturalIsInteger = Axiom("Embedded Natural Is Integer", Seq(ElementOf(a, Naturals)), ElementOf(ToInteger(a), Integers))
       val OneIsNotZero = Axiom("One Is Not Zero", Nil, Negation(Equals(Zero, One)))
@@ -218,6 +204,9 @@ class PremiseFinderSpec extends Specification {
     }
 
     "find a premise using a rewrite that needs to substitute a term definition to get a valid relation" in {
+      // a ≠ ⍳(0)
+      // ⍳(0) < a
+      // a ∈ ℕ^+
       val PositiveNaturalsDefinition = TermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val Inject = TermDefinitionEntry("⍳", Nil, Seq(ComponentType.TermComponent("a", Nil)), None, None, Format.Explicit("%0(%1)", "⍳(a)", 2, false, false), Nil, BlankDefinition, None, Nil, Nil)
@@ -305,11 +294,48 @@ class PremiseFinderSpec extends Specification {
               assertion(extractRightConjunct, Seq(Function(Addition), Conjunction(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals))), Nil),
               assertion(extractLeftConjunct, Seq(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals)), Nil),
               assertion(reverseEquality, Nil, Seq(Domain(Addition), Product(Naturals, Naturals))))))),
-          elided(substitutionOfEquals, Seq(
-            assertion(substitutionOfEquals, Seq(ForAllIn("x", $.^)(ForAllIn("y", Product(Naturals, Naturals))(φ($.^, $)))), Seq(Product(Naturals, Naturals), Domain(Addition))),
-            assertion(substitutionOfEquals, Seq(ForAllIn("x", Domain(Addition))(ForAllIn("y", $.^^)(φ($.^, $)))), Seq(Product(Naturals, Naturals), Domain(Addition))))))(SubstitutionContext.outsideProof),
+          assertion(substitutionOfEquals, Seq(ForAllIn("x", $.^)(ForAllIn("y", $.^^)(φ($.^, $)))), Seq(Product(Naturals, Naturals), Domain(Addition))))(SubstitutionContext.outsideProof),
         Seq(ForAllIn("x", Product(Naturals, Naturals))(ForAllIn("y", Product(Naturals, Naturals))(φ($.^, $)))))
     }
 
+    "find a premise using a simplification that has a type statement premise" in {
+      // There's actually a LOT of complicated stuff going on here - the expected progression is:
+      // f(a) ∈ B
+      // f(a) ∈ range(f)    via  range(f) ⊆ B     (Definition of From)
+      // a ∈ domain(f)      via  f is a function  (Function Application Is Element of Range)
+      // a ∈ A              via  domain(f) = A    (Definition of From)
+
+      checkFindPremise(
+        ElementOf(Apply(f, a), B),
+        Seq(Conjunction(Function(f), FunctionFrom(f, A, B)), ElementOf(a, A)))
+    }
+
+    "find a premise using a type statement simplification and multiple renames" in {
+      // Now we expect:
+      // ⍳(a) ∈ baseSet(+_ℤ)  (target)
+      // ⍳(a) ∈ ℤ             (replace property with value)
+      // ⍳(a) ∈ range(⍳)       (rewrite via range(⍳) ⊆ ℤ)
+      // a ∈ domain(⍳)        (simplification via Function Application Is Element of Range)
+      // a ∈ ℕ               (replace property with value)
+
+      val IotaDefinition = simpleTermDefinition("⍳", Nil, Format.default(0), Nil, Conjunction(Function($), FunctionFrom($, Naturals, Integers)))
+      val Iota = IotaDefinition()
+
+      checkFindPremise(
+        ElementOf(Apply(Iota, a), BaseSet(IntegerAddition)),
+        Seq(ElementOf(a, Naturals)))(
+        defaultEntryContext.addEntry(IotaDefinition))
+    }
+
+    "find a premise using double simplification of a function application" in {
+      val IotaDefinition = simpleTermDefinition("⍳", Nil, Format.default(0), Nil, Conjunction(Function($), FunctionFrom($, Naturals, Integers)))
+      val Iota = IotaDefinition()
+      val DefinitionOfPositiveNatural = Axiom("Embedding Is Unique", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(Apply(Iota, a), Apply(Iota, b)), Equals(a, b)))
+
+      checkFindPremise(
+        Negation(Equals(Apply(Iota, Zero), Apply(Iota, a))),
+        Seq(Negation(Equals(a, Zero)), ElementOf(a, Naturals)))(
+        defaultEntryContext.addEntries(Seq(IotaDefinition, DefinitionOfPositiveNatural)))
+    }
   }
 }

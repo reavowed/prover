@@ -38,6 +38,10 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     }
     helper(Nil, components, Nil).mapCollect(_.optionMap1(t => if (boundVariableNames.isEmpty) Some(t) else t.removeExternalParameters(1)))
   }
+
+  override def getPredicateForTerm(term: Term, depth: Int): ExpressionType = {
+    updateComponents(components.map(_.getPredicateForTerm(term, definition.increaseDepth(depth))))
+  }
   override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
 
   override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {

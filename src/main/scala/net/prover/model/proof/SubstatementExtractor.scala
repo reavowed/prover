@@ -74,14 +74,14 @@ object SubstatementExtractor {
     provingContext: ProvingContext
   ): Seq[ExtractionOption] = {
     for {
-      (inference, extractionPremise, predicateName, _) <- provingContext.specificationInferenceOption.toSeq
-      extractionSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality).toSeq // missing external depth increase?
+      (inference, extractionPremise, _, specificationVariableName) <- provingContext.specificationInferenceOption.toSeq
+      substitutionsFromPremise <- extractionPremise.calculateSubstitutions(sourceStatement).toSeq // missing external depth increase?
       boundVariableName <- sourceStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).toSeq
-      (1, extractionPredicate) <- extractionSubstitutions.statements.get(predicateName).toSeq
       (newVariableName, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(boundVariableName)
-      nextPremise <- extractionPredicate.specify(Seq(TermVariable(newVariableName))).toSeq
+      fullSubstitutions <- substitutionsFromPremise.update(specificationVariableName, 0, TermVariable(newVariableName), Substitutions.Possible.termsLens).flatMap(_.confirmTotality).toSeq
+      nextPremise <- inference.conclusion.applySubstitutions(fullSubstitutions).toSeq
       innerOption <- recurse(nextPremise, newVariableTracker)
-      assertionStep = Step.Assertion(nextPremise, inference.summary, Seq(Premise.Pending(sourceStatement)), extractionSubstitutions)
+      assertionStep = Step.Assertion(nextPremise, inference.summary, Seq(Premise.Pending(sourceStatement)), fullSubstitutions)
     } yield innerOption.copy(
       derivation = DerivationStep.fromAssertion(assertionStep) +: innerOption.derivation,
       extractionInferences = inference +: innerOption.extractionInferences)

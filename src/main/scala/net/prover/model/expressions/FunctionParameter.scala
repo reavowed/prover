@@ -25,6 +25,13 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
   }
   override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): FunctionParameter = this
 
+  override def getPredicateForTerm(term: Term, depth: Int): Term = {
+    if (term == this)
+      FunctionParameter(0, depth)
+    else
+      this
+  }
+
   override def specify(
     targetArguments: Map[Int, Term],
     internalDepth: Int,

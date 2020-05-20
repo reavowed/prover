@@ -13,6 +13,12 @@ case class TermVariable(name: String, arguments: Seq[Term]) extends ExpressionVa
     super[Term].getTerms(internalDepth, externalDepth) ++
       super[ExpressionVariable].getTerms(internalDepth, externalDepth)
   }
+  override def getPredicateForTerm(term: Term, depth: Int): Term = {
+    if (term == this)
+      FunctionParameter(0, depth)
+    else
+      super.getPredicateForTerm(term, depth)
+  }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: Substitutions.Possible,
