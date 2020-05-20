@@ -82,13 +82,13 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
-      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(addingZeroIsSame, Nil, Nil))))
+      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, Nil))))
 
       checkModifySteps(
         service,
         fillerSteps(stepIndex) :+ target(lessThan(a, b)),
         fillerSteps(stepIndex) :+
-          assertion(addingZeroIsSame, Nil, Seq(a)) :+
+          assertion(zeroIsRightIdentityForAddition, Nil, Seq(a)) :+
           target(lessThan(add(a, Zero), b)) :+
           elided(substitutionOfEquals, Seq(
             assertion(reverseEquality, Nil, Seq(a, add(a, Zero))),
@@ -99,15 +99,15 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
-      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(addingZeroIsSame, Nil, Nil))))
+      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, Nil))))
 
       checkModifySteps(
         service,
         fillerSteps(stepIndex) :+ target(lessThan(a, b)),
         fillerSteps(stepIndex) :+
           target(lessThan(a, add(b, Zero))) :+
-          elided(addingZeroIsSame, Seq(
-            assertion(addingZeroIsSame, Nil, Seq(b)),
+          elided(zeroIsRightIdentityForAddition, Seq(
+            assertion(zeroIsRightIdentityForAddition, Nil, Seq(b)),
             assertion(reverseEquality, Nil, Seq(b, add(b, Zero))))) :+
           assertion(substitutionOfEquals, Seq(lessThan(a, $)), Seq(add(b, Zero), b)))
     }
@@ -117,14 +117,14 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
-      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(addingZeroIsSame, Seq(0), Nil))))
+      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Seq(0), Nil))))
 
       checkModifySteps(
         service,
         fillerSteps(stepIndex) :+ target(Equivalence(φ(a), ψ)),
         fillerSteps(stepIndex) :+
-          elided(addingZeroIsSame, Seq(
-            assertion(addingZeroIsSame, Nil, Seq(a)),
+          elided(zeroIsRightIdentityForAddition, Seq(
+            assertion(zeroIsRightIdentityForAddition, Nil, Seq(a)),
             assertion(equivalenceOfSubstitutedEquals, Seq(φ($)), Seq(a, add(a, Zero))))) :+
           target(Equivalence(φ(add(a, Zero)), ψ)) :+
           assertion(equivalenceIsTransitive, Seq(φ(a), φ(add(a, Zero)), ψ), Nil))
@@ -135,16 +135,16 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
-      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(addingZeroIsSame, Seq(0), Nil))))
+      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Seq(0), Nil))))
 
       checkModifySteps(
         service,
         fillerSteps(stepIndex) :+ target(Equivalence(φ, ψ(a))),
         fillerSteps(stepIndex) :+
           target(Equivalence(φ, ψ(add(a, Zero)))) :+
-          elided(addingZeroIsSame, Seq(
-            elided(addingZeroIsSame, Seq(
-              assertion(addingZeroIsSame, Nil, Seq(a)),
+          elided(zeroIsRightIdentityForAddition, Seq(
+            elided(zeroIsRightIdentityForAddition, Seq(
+              assertion(zeroIsRightIdentityForAddition, Nil, Seq(a)),
               assertion(reverseEquality, Nil, Seq(a, add(a, Zero))))),
             assertion(equivalenceOfSubstitutedEquals, Seq(ψ($)), Seq(add(a, Zero), a)))) :+
           assertion(equivalenceIsTransitive, Seq(φ, ψ(add(a, Zero)), ψ(a)), Nil))
@@ -155,15 +155,15 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
 
-      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(addingZeroIsSame, Nil, Nil))))
+      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, Nil))))
 
       checkModifySteps(
         service,
         fillerSteps(stepIndex) :+ target(ElementOf(a, b)),
         fillerSteps(stepIndex) :+
           target(ElementOf(a, add(b, Zero))) :+
-          elided(addingZeroIsSame, Seq(
-            assertion(addingZeroIsSame, Nil, Seq(b)),
+          elided(zeroIsRightIdentityForAddition, Seq(
+            assertion(zeroIsRightIdentityForAddition, Nil, Seq(b)),
             assertion(reverseEquality, Nil, Seq(b, add(b, Zero))))) :+
           assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(add(b, Zero), b)))
     }
@@ -181,7 +181,7 @@ class StepChainingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(addingZeroIsSame, Nil, Seq(b), Nil))
+        definitionWithInference(zeroIsRightIdentityForAddition, Nil, Seq(b), Nil))
 
       checkModifySteps(
         service,
@@ -191,7 +191,7 @@ class StepChainingSpec extends ControllerSpec {
           assertion(equalityIsTransitive, Nil, Seq(a, b, add(b, Zero))),
         fillerSteps(stepIndex - 1) :+
           target(Equals(a, b)) :+
-          assertion(addingZeroIsSame, Nil, Seq(b)) :+
+          assertion(zeroIsRightIdentityForAddition, Nil, Seq(b)) :+
           assertion(equalityIsTransitive, Nil, Seq(a, b, add(b, Zero))))
     }
   }

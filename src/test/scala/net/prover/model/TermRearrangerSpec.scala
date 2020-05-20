@@ -1,9 +1,11 @@
 package net.prover.model
 
-import net.prover.model.TestDefinitions._
-import net.prover.model.expressions.Statement
+import net.prover.model.TestDefinitions.{a, b, _}
+import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{Step, StepContext, TermRearranger}
+import net.prover.util.Direction
 import org.specs2.mutable.Specification
+import org.specs2.specification.core.Fragments
 
 class TermRearrangerSpec extends Specification {
 
@@ -55,45 +57,21 @@ class TermRearrangerSpec extends Specification {
       testRearranging(conclusion, Nil)
     }
 
-    "rearrange using left distributivity on main LHS" in {
-      // a(b + c) = ca + ab
-      testRearranging(Equals(multiply(a, add(b, c)), add(multiply(c, a), multiply(a, b))), Nil)
+    def testReversableOperationMultipleWays(description: String, f: (Term, Term) => Term, a: Term, b: Term, result: Term): Fragments = {
+      Fragments.foreach(Seq((Direction.Forward, "left"), (Direction.Reverse, "right"))) { case (interiorDirection, directionDescription) =>
+        Fragments.foreach(Seq((Direction.Forward, "LHS"), (Direction.Reverse, "RHS"))) { case (sideDirection, sideDescription) =>
+          Fragments.foreach(Seq[(Term => Term, Term => Term, String)]((identity[Term], identity[Term], "main"), (add(_, multiply(d, e)), add(multiply(e, d), _), "inner"))) { case (sourceWrapper, resultWrapper, wrapperDescription) =>
+            s"rearrange using $directionDescription $description on $wrapperDescription $sideDescription" ! {
+              val source = f.tupled(interiorDirection.swapSourceAndResult(a, b))
+              val statement = (Equals.apply(_: Term, _: Term)).tupled(sideDirection.swapSourceAndResult(sourceWrapper(source), resultWrapper(result)))
+              testRearranging(statement, Nil)
+            }
+          }
+        }
+      }
     }
 
-    "rearrange using right distributivity on main LHS" in {
-      // (b + c)a = ca + ab
-      testRearranging(Equals(multiply(add(b, c), a), add(multiply(c, a), multiply(a, b))), Nil)
-    }
-
-    "rearrange using left distributivity on main RHS" in {
-      // ca + ab = a(b + c)
-      testRearranging(Equals(add(multiply(c, a), multiply(a, b)), multiply(a, add(b, c))), Nil)
-    }
-
-    "rearrange using right distributivity on main RHS" in {
-      // ca + ab = (b + c)a
-      testRearranging(Equals(add(multiply(c, a), multiply(a, b)), multiply(add(b, c), a)), Nil)
-    }
-
-    "rearrange using left distributivity on inner LHS" in {
-      // a(b + c) + de = (ca + ab) + ed
-      testRearranging(Equals(add(multiply(a, add(b, c)), multiply(d, e)), add(add(multiply(c, a), multiply(a, b)), multiply(e, d))), Nil)
-    }
-
-    "rearrange using right distributivity on inner LHS" in {
-      // (b + c)a + de = ca + ab + ed
-      testRearranging(Equals(add(multiply(add(b, c), a), multiply(d, e)), add(add(multiply(c, a), multiply(a, b)), multiply(e, d))), Nil)
-    }
-
-    "rearrange using left distributivity on inner RHS" in {
-      // ca + ab + de = a(b + c) + ed
-      testRearranging(Equals(add(add(multiply(c, a), multiply(a, b)), multiply(d, e)), add(multiply(a, add(b, c)), multiply(e, d))), Nil)
-    }
-
-    "rearrange using right distributivity on inner RHS" in {
-      // ca + ab + de = (b + c)a + ed
-      testRearranging(Equals(add(add(multiply(c, a), multiply(a, b)), multiply(d, e)), add(multiply(add(b, c), a), multiply(e, d))), Nil)
-    }
+    testReversableOperationMultipleWays("distributivity", multiply, a, add(b, c), add(multiply(c, a), multiply(a, b)))
 
     "rearrange using multiple distributivities" in {
       // a(bc) + d(ec + f) = (ab + de)c + df
@@ -104,6 +82,14 @@ class TermRearrangerSpec extends Specification {
       // (f + ce)d + (cb)a = fd + c(ba + ed)
       // i.e. the above but backwards
       testRearranging(Equals(add(multiply(add(f, multiply(c, e)), d), multiply(multiply(c, b), a)), add(multiply(f, d), multiply(c, add(multiply(b, a), multiply(e, d))))), Nil)
+    }
+
+    testReversableOperationMultipleWays("identity", multiply, One, a, a)
+    testReversableOperationMultipleWays("absorber", multiply, Zero, a, Zero)
+
+    "rearrange using identities and absorbers" in {
+      // (a*1 + b*0, c*1) = (a, c)
+      testRearranging(Equals(Pair(add(multiply(a, One), multiply(b, Zero)), multiply(c, One)), Pair(a, c)), Nil)
     }
   }
 }

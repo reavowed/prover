@@ -364,10 +364,12 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val additionIsClosed = Axiom("Addition Is Closed", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(add(a, b), Naturals))
   val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
   val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
+  val zeroIsRightIdentityForAddition = Axiom("Adding Zero Is Same", Nil, Equals(a, add(a, Zero)))
   val multiplicationIsAssociative = Axiom("Multiplication Is Associative", Nil, Equals(multiply(a, multiply(b, c)), multiply(multiply(a, b), c)))
   val multiplicationIsCommutative = Axiom("Multiplication Is Commutative", Nil, Equals(multiply(a, b), multiply(b, a)))
   val multiplicationDistributesOverAddition = Axiom("Multiplication Distributes over Addition", Nil, Conjunction(Equals(multiply(a, add(b, c)), add(multiply(a, b), multiply(a, c))), Equals(multiply(add(a, b), c), add(multiply(a, c), multiply(b, c)))))
-  val addingZeroIsSame = Axiom("Adding Zero Is Same", Nil, Equals(a, add(a, Zero)))
+  val oneIsIdentityForMultiplication = Axiom("Identity for Multiplication", Nil, Conjunction(Equals(multiply(a, One), a), Equals(multiply(One, a), a)))
+  val zeroIsAbsorberForMultiplication = Axiom("Absorber for Multiplication", Nil, Conjunction(Equals(multiply(a, Zero), Zero), Equals(multiply(Zero, a), Zero)))
   val orderingIsTransitive = Axiom("Natural Ordering Is Transitive", Seq(lessThan(a, b), lessThan(b, c)), lessThan(a, c))
 }
 
@@ -419,7 +421,9 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       reverseEquality, reverseNegatedEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfOrderedPairInCartesianProduct, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, orderedPairIsElementOfCartesianProduct, firstElement,
       functionApplicationIsElementOfRange,
-      zeroIsANaturalNumber, oneIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, multiplicationIsAssociative, multiplicationIsCommutative, multiplicationDistributesOverAddition, addingZeroIsSame, orderingIsTransitive) ++
+      zeroIsANaturalNumber, oneIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, zeroIsRightIdentityForAddition,
+      multiplicationIsAssociative, multiplicationIsCommutative, multiplicationDistributesOverAddition, oneIsIdentityForMultiplication, zeroIsAbsorberForMultiplication,
+      orderingIsTransitive) ++
     Seq(InfixRelationShorthand, NotElementOfShorthand, NotEqualShorthand))
 
   implicit class ParserOps[T](parser: Parser[T]) {

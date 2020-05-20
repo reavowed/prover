@@ -141,11 +141,8 @@ object ExpressionUtils {
   def getCombinationOfSimpleTermVariables(term: Term): Option[Seq[String]] = {
     recurseOnTerms(term, getSimpleTermVariable)
   }
-  def getCombinationOfTermConstants(term: Term): Option[Seq[TermDefinition]] = {
-    recurseOnTerms(term, getTermConstantDefinition)
-  }
   def isCombinationOfTermConstants(t: Term): Boolean = {
-    getCombinationOfTermConstants(t).isDefined
+    recurseOnTerms(t, getTermConstantDefinition).isDefined
   }
   def isWrappedSimpleTerm(t: Term): Boolean = {
     t.asOptionalInstanceOf[DefinedTerm].map(_.components).exists {
@@ -168,6 +165,7 @@ object ExpressionUtils {
   private def recurseOnTerms[T](term: Term, f: Term => Option[T]): Option[Seq[T]] = {
     f(term).map(Seq(_)) orElse (for {
       definedTerm <- term.asOptionalInstanceOf[DefinedTerm]
+      if definedTerm.boundVariableNames.isEmpty
       termComponents <- definedTerm.components.map(_.asOptionalInstanceOf[Term]).traverseOption
       innerValues <- termComponents.map(recurseOnTerms(_, f)).traverseOption.map(_.flatten)
     } yield innerValues)
