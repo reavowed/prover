@@ -3,7 +3,6 @@ package net.prover.model.proof
 import net.prover.model._
 import net.prover.model.definitions.{RearrangeableOperator, _}
 import net.prover.model.expressions._
-import scalaz.Functor
 
 case class TermRearranger[T <: Expression](
     equality: Equality,
@@ -48,71 +47,95 @@ case class TermRearranger[T <: Expression](
     wrapper.insert(operator(lhs.baseTerm, _)(_))
   }
 
-  private def pullLeft(baseTree: OperatorTree, targetLeft: OperatorTree, wrapper: Wrapper[Term, T], operator: RearrangeableOperator): Option[(Seq[RearrangementStep[T]], OperatorTree)] = {
-    baseTree match {
-      case OperatorNode(`operator`, currentLeft, currentRight) =>
-        def matchingLeft = for {
-          steps <- matchTrees(currentLeft, targetLeft, addRight(wrapper, operator, currentRight))
-        } yield (steps, currentRight)
-
-        def matchingRight = for {
-          steps <- matchTrees(currentRight, targetLeft, addRight(wrapper, operator, currentLeft))
-          commutativityStep <- operator.commutativity.rearrangementStep(currentLeft.baseTerm, currentRight.baseTerm, wrapper, expansion)
-        } yield (commutativityStep +: steps, currentLeft)
-
-        def insideLeft = for {
-          (steps, remainingRight) <- pullLeft(currentLeft, targetLeft, addRight(wrapper, operator, currentRight), operator)
-          associativityStep <- operator.associativity.reversedRearrangementStep(targetLeft.baseTerm, remainingRight.baseTerm, currentRight.baseTerm, wrapper, expansion, reversal)
-        } yield (steps :+ associativityStep, operator(remainingRight, currentRight))
-
-        def insideRight = for {
-          (steps, remainingRight) <- pullLeft(currentRight, targetLeft, addRight(wrapper, operator, currentLeft), operator)
-          commutativityStep <- operator.commutativity.rearrangementStep(currentLeft.baseTerm, currentRight.baseTerm, wrapper, expansion)
-          associativityStep <- operator.associativity.reversedRearrangementStep(targetLeft.baseTerm, remainingRight.baseTerm, currentLeft.baseTerm, wrapper, expansion, reversal)
-        } yield ((commutativityStep +: steps) :+ associativityStep, operator(remainingRight, currentLeft))
-
-        def byRecursingInTarget = for {
-          OperatorNode(`operator`, targetLeftLeft, targetLeftRight) <- targetLeft.asOptionalInstanceOf[OperatorNode]
-          (stepsForLeftLeft, treeWithoutLeftLeft) <- pullLeft(baseTree, targetLeftLeft, wrapper, operator)
-          (stepsForLeftRight, treeWithoutLeft) <- pullLeft(
-            treeWithoutLeftLeft,
-            targetLeftRight,
-            addLeft(wrapper, operator, targetLeftLeft),
-            operator)
-          associativityStep <- operator.associativity.rearrangementStep(targetLeftLeft.baseTerm, targetLeftRight.baseTerm, treeWithoutLeft.baseTerm, wrapper, expansion)
-        } yield (stepsForLeftLeft ++ stepsForLeftRight :+ associativityStep, treeWithoutLeft)
-
-        def byLeftDistributingTarget = for {
-          OperatorNode(otherOperator, targetLeftLeft, OperatorNode(`operator`, innerLeft, innerRight)) <- targetLeft.asOptionalInstanceOf[OperatorNode]
-          leftDistributivity <- provingContext.leftDistributivities.find(d => d.distributor == otherOperator && d.distributee == operator)
-          (innerSteps, innerTree) <- pullLeft(baseTree, operator(otherOperator(targetLeftLeft, innerLeft), otherOperator(targetLeftLeft, innerRight)), wrapper, operator)
-          distributivityStep <- leftDistributivity.reversedRearrangementStep(targetLeftLeft.baseTerm, innerLeft.baseTerm, innerRight.baseTerm, addRight(wrapper, operator, innerTree), expansion, reversal)
-        } yield (innerSteps :+ distributivityStep, innerTree)
-
-        def byRightDistributingTarget = for {
-          OperatorNode(otherOperator, OperatorNode(`operator`, innerLeft, innerRight), targetLeftRight) <- targetLeft.asOptionalInstanceOf[OperatorNode]
-          rightDistributivity <- provingContext.rightDistributivities.find(d => d.distributor == otherOperator && d.distributee == operator)
-          (innerSteps, innerTree) <- pullLeft(baseTree, operator(otherOperator(innerLeft, targetLeftRight), otherOperator(innerRight, targetLeftRight)), wrapper, operator)
-          distributivityStep <- rightDistributivity.reversedRearrangementStep(innerLeft.baseTerm, innerRight.baseTerm, targetLeftRight.baseTerm, addRight(wrapper, operator, innerTree), expansion, reversal)
-        } yield (innerSteps :+ distributivityStep, innerTree)
-
-        matchingLeft orElse matchingRight orElse insideLeft orElse insideRight orElse byRecursingInTarget orElse byLeftDistributingTarget orElse byRightDistributingTarget
-      case OperatorNode(otherOperator, currentLeft, OperatorNode(`operator`, innerLeft, innerRight)) =>
-        for {
-          leftDistributivity <- provingContext.leftDistributivities.find(d => d.distributor == otherOperator && d.distributee == operator)
-          (innerSteps, innerTree) <- pullLeft(operator(otherOperator(currentLeft, innerLeft), otherOperator(currentLeft, innerRight)), targetLeft, wrapper, operator)
-          distributivityStep <- leftDistributivity.rearrangementStep(currentLeft.baseTerm, innerLeft.baseTerm, innerRight.baseTerm, wrapper, expansion)
-        } yield (distributivityStep +: innerSteps, innerTree)
-      case OperatorNode(otherOperator, OperatorNode(`operator`, innerLeft, innerRight), currentRight) =>
-        for {
-          rightDistributivity <- provingContext.rightDistributivities.find(d => d.distributor == otherOperator && d.distributee == operator)
-          (innerSteps, innerTree) <- pullLeft(operator(otherOperator(innerLeft, currentRight), otherOperator(innerRight, currentRight)), targetLeft, wrapper, operator)
-          distributivityStep <- rightDistributivity.rearrangementStep(innerLeft.baseTerm, innerRight.baseTerm, currentRight.baseTerm, wrapper, expansion)
-        } yield (distributivityStep +: innerSteps, innerTree)
-      case _ =>
-        None
-    }
+  def byDistributingGeneric[TMetadata](
+    lhs: OperatorTree,
+    rhs: OperatorTree,
+    getInnerOperator: OperatorTree => Option[RearrangeableOperator],
+    wrapper: Wrapper[Term, T],
+    extendWrapper: TMetadata => Wrapper[Term, T],
+    recurse: (OperatorTree, OperatorTree) => Option[(Seq[RearrangementStep[T]], TMetadata)]
+  ): Option[(Seq[RearrangementStep[T]], TMetadata)] = {
+    def byLeftDistributingLeft = for {
+      OperatorNode(lhsOuterOperator, lhsLeft, OperatorNode(innerOperator, lhsRightLeft, lhsRightRight)) <- lhs.asOptionalInstanceOf[OperatorNode]
+      if getInnerOperator(rhs).contains(innerOperator)
+      leftDistributivity <- provingContext.leftDistributivities.find(d => d.distributor == lhsOuterOperator && d.distributee == innerOperator)
+      (innerSteps, metadata) <- recurse(innerOperator(lhsOuterOperator(lhsLeft, lhsRightLeft), lhsOuterOperator(lhsLeft, lhsRightRight)), rhs)
+      distributivityStep <- leftDistributivity.rearrangementStep(lhsLeft.baseTerm, lhsRightLeft.baseTerm, lhsRightRight.baseTerm, wrapper, expansion)
+    } yield (distributivityStep +: innerSteps, metadata)
+    def byRightDistributingLeft = for {
+      OperatorNode(lhsOuterOperator, OperatorNode(innerOperator, lhsLeftLeft, lhsLeftRight), lhsRight) <- lhs.asOptionalInstanceOf[OperatorNode]
+      if getInnerOperator(rhs).contains(innerOperator)
+      rightDistributivity <- provingContext.rightDistributivities.find(d => d.distributor == lhsOuterOperator && d.distributee == innerOperator)
+      (innerSteps, metadata) <- recurse(innerOperator(lhsOuterOperator(lhsLeftLeft, lhsRight), lhsOuterOperator(lhsLeftRight, lhsRight)), rhs)
+      distributivityStep <- rightDistributivity.rearrangementStep(lhsLeftLeft.baseTerm, lhsLeftRight.baseTerm, lhsRight.baseTerm, wrapper, expansion)
+    } yield (distributivityStep +: innerSteps, metadata)
+    def byLeftDistributingRight = for {
+      OperatorNode(rhsOuterOperator, rhsLeft, OperatorNode(innerOperator, rhsRightLeft, rhsRightRight)) <- rhs.asOptionalInstanceOf[OperatorNode]
+      if getInnerOperator(lhs).contains(innerOperator)
+      leftDistributivity <- provingContext.leftDistributivities.find(d => d.distributor == rhsOuterOperator && d.distributee == innerOperator)
+      (innerSteps, metadata) <- recurse(lhs, innerOperator(rhsOuterOperator(rhsLeft, rhsRightLeft), rhsOuterOperator(rhsLeft, rhsRightRight)))
+      distributivityStep <- leftDistributivity.reversedRearrangementStep(rhsLeft.baseTerm, rhsRightLeft.baseTerm, rhsRightRight.baseTerm, extendWrapper(metadata), expansion, reversal)
+    } yield (innerSteps :+ distributivityStep, metadata)
+    def byRightDistributingRight = for {
+      OperatorNode(rhsOuterOperator, OperatorNode(innerOperator, rhsLeftLeft, rhsLeftRight), rhsRight) <- rhs.asOptionalInstanceOf[OperatorNode]
+      if getInnerOperator(lhs).contains(innerOperator)
+      rightDistributivity <- provingContext.rightDistributivities.find(d => d.distributor == rhsOuterOperator && d.distributee == innerOperator)
+      (innerSteps, metadata) <- recurse(lhs, innerOperator(rhsOuterOperator(rhsLeftLeft, rhsRight), rhsOuterOperator(rhsLeftRight, rhsRight)))
+      distributivityStep <- rightDistributivity.reversedRearrangementStep(rhsLeftLeft.baseTerm, rhsLeftRight.baseTerm, rhsRight.baseTerm, extendWrapper(metadata), expansion, reversal)
+    } yield (innerSteps :+ distributivityStep, metadata)
+    byLeftDistributingLeft orElse byRightDistributingLeft orElse byLeftDistributingRight orElse byRightDistributingRight
   }
+
+  // Attempts to rearrange baseTree such that it is an instance of an expectedResultOperator expression whose LHS is targetLeft
+  private def pullLeft(baseTree: OperatorTree, targetLeft: OperatorTree, expectedResultOperator: RearrangeableOperator, wrapper: Wrapper[Term, T]): Option[(Seq[RearrangementStep[T]], OperatorTree)] = {
+    def matchingLeft = for {
+      OperatorNode(`expectedResultOperator`, currentLeft, currentRight) <- baseTree.asOptionalInstanceOf[OperatorNode]
+      steps <- matchTrees(currentLeft, targetLeft, addRight(wrapper, expectedResultOperator, currentRight))
+    } yield (steps, currentRight)
+
+    def matchingRight = for {
+      OperatorNode(`expectedResultOperator`, currentLeft, currentRight) <- baseTree.asOptionalInstanceOf[OperatorNode]
+      steps <- matchTrees(currentRight, targetLeft, addRight(wrapper, expectedResultOperator, currentLeft))
+      commutativityStep <- expectedResultOperator.commutativity.rearrangementStep(currentLeft.baseTerm, currentRight.baseTerm, wrapper, expansion)
+    } yield (commutativityStep +: steps, currentLeft)
+
+    def insideLeft = for {
+      OperatorNode(`expectedResultOperator`, currentLeft, currentRight) <- baseTree.asOptionalInstanceOf[OperatorNode]
+      (steps, remainingRight) <- pullLeft(currentLeft, targetLeft, expectedResultOperator, addRight(wrapper, expectedResultOperator, currentRight))
+      associativityStep <- expectedResultOperator.associativity.reversedRearrangementStep(targetLeft.baseTerm, remainingRight.baseTerm, currentRight.baseTerm, wrapper, expansion, reversal)
+    } yield (steps :+ associativityStep, expectedResultOperator(remainingRight, currentRight))
+
+    def insideRight = for {
+      OperatorNode(`expectedResultOperator`, currentLeft, currentRight) <- baseTree.asOptionalInstanceOf[OperatorNode]
+      (steps, remainingRight) <- pullLeft(currentRight, targetLeft, expectedResultOperator, addRight(wrapper, expectedResultOperator, currentLeft))
+      commutativityStep <- expectedResultOperator.commutativity.rearrangementStep(currentLeft.baseTerm, currentRight.baseTerm, wrapper, expansion)
+      associativityStep <- expectedResultOperator.associativity.reversedRearrangementStep(targetLeft.baseTerm, remainingRight.baseTerm, currentLeft.baseTerm, wrapper, expansion, reversal)
+    } yield ((commutativityStep +: steps) :+ associativityStep, expectedResultOperator(remainingRight, currentLeft))
+
+    def byRecursingInTarget = for {
+      OperatorNode(`expectedResultOperator`, _, _) <- baseTree.asOptionalInstanceOf[OperatorNode]
+      OperatorNode(`expectedResultOperator`, targetLeftLeft, targetLeftRight) <- targetLeft.asOptionalInstanceOf[OperatorNode]
+      (stepsForLeftLeft, treeWithoutLeftLeft) <- pullLeft(baseTree, targetLeftLeft, expectedResultOperator, wrapper)
+      (stepsForLeftRight, treeWithoutLeft) <- pullLeft(treeWithoutLeftLeft, targetLeftRight, expectedResultOperator, addLeft(wrapper, expectedResultOperator, targetLeftLeft))
+      associativityStep <- expectedResultOperator.associativity.rearrangementStep(targetLeftLeft.baseTerm, targetLeftRight.baseTerm, treeWithoutLeft.baseTerm, wrapper, expansion)
+    } yield (stepsForLeftLeft ++ stepsForLeftRight :+ associativityStep, treeWithoutLeft)
+
+    def byDistributing = byDistributingGeneric[OperatorTree](
+      baseTree,
+      targetLeft,
+      _ => Some(expectedResultOperator),
+      wrapper,
+      addRight(wrapper, expectedResultOperator, _),
+      pullLeft(_, _, expectedResultOperator, wrapper))
+
+    matchingLeft orElse
+      matchingRight orElse
+      insideLeft orElse
+      insideRight orElse
+      byRecursingInTarget orElse
+      byDistributing
+  }
+
 
   private def matchTrees(lhs: OperatorTree, rhs: OperatorTree, wrapper: Wrapper[Term, T]): Option[Seq[RearrangementStep[T]]] = {
     if (lhs.baseTerm == rhs.baseTerm)
@@ -122,46 +145,23 @@ case class TermRearranger[T <: Expression](
         OperatorNode(lhsOperator, _, _) <- lhs.asOptionalInstanceOf[OperatorNode]
         OperatorNode(rhsOperator, rhsLeft, rhsRight) <- rhs.asOptionalInstanceOf[OperatorNode]
         if lhsOperator == rhsOperator
-        (stepsToPullLeft, lhsRight) <- pullLeft(lhs, rhsLeft, wrapper, lhsOperator)
+        (stepsToPullLeft, lhsRight) <- pullLeft(lhs, rhsLeft, lhsOperator, wrapper)
         stepsToMatchRight <- matchTrees(
           lhsRight,
           rhsRight,
           addLeft(wrapper, lhsOperator, rhsLeft))
       } yield stepsToPullLeft ++ stepsToMatchRight
-      def byLeftDistributingLhs = for {
-        OperatorNode(lhsOuterOperator, lhsLeft, OperatorNode(lhsInnerOperator, lhsRightLeft, lhsRightRight)) <- lhs.asOptionalInstanceOf[OperatorNode]
-        OperatorNode(rhsOperator, _, _) <- rhs.asOptionalInstanceOf[OperatorNode]
-        if lhsInnerOperator == rhsOperator
-        leftDistributivity <- provingContext.leftDistributivities.find(d => d.distributor == lhsOuterOperator && d.distributee == lhsInnerOperator)
-        innerSteps <- matchTrees(lhsInnerOperator(lhsOuterOperator(lhsLeft, lhsRightLeft), lhsOuterOperator(lhsLeft, lhsRightRight)), rhs, wrapper)
-        distributivityStep <- leftDistributivity.rearrangementStep(lhsLeft.baseTerm, lhsRightLeft.baseTerm, lhsRightRight.baseTerm, wrapper, expansion)
-      } yield distributivityStep +: innerSteps
-      def byRightDistributingLhs = for {
-        OperatorNode(lhsOuterOperator, OperatorNode(lhsInnerOperator, lhsLeftLeft, lhsLeftRight), lhsRight) <- lhs.asOptionalInstanceOf[OperatorNode]
-        OperatorNode(rhsOperator, _, _) <- rhs.asOptionalInstanceOf[OperatorNode]
-        if lhsInnerOperator == rhsOperator
-        rightDistributivity <- provingContext.rightDistributivities.find(d => d.distributor == lhsOuterOperator && d.distributee == lhsInnerOperator)
-        innerSteps <- matchTrees(lhsInnerOperator(lhsOuterOperator(lhsLeftLeft, lhsRight), lhsOuterOperator(lhsLeftRight, lhsRight)), rhs, wrapper)
-        distributivityStep <- rightDistributivity.rearrangementStep(lhsLeftLeft.baseTerm, lhsLeftRight.baseTerm, lhsRight.baseTerm, wrapper, expansion)
-      } yield distributivityStep +: innerSteps
-      def byLeftDistributingRhs = for {
-        OperatorNode(lhsOperator, _, _) <- lhs.asOptionalInstanceOf[OperatorNode]
-        OperatorNode(rhsOuterOperator, rhsLeft, OperatorNode(rhsInnerOperator, rhsRightLeft, rhsRightRight)) <- rhs.asOptionalInstanceOf[OperatorNode]
-        if lhsOperator == rhsInnerOperator
-        leftDistributivity <- provingContext.leftDistributivities.find(d => d.distributor == rhsOuterOperator && d.distributee == rhsInnerOperator)
-        innerSteps <- matchTrees(lhs, rhsInnerOperator(rhsOuterOperator(rhsLeft, rhsRightLeft), rhsOuterOperator(rhsLeft, rhsRightRight)), wrapper)
-        distributivityStep <- leftDistributivity.reversedRearrangementStep(rhsLeft.baseTerm, rhsRightLeft.baseTerm, rhsRightRight.baseTerm, wrapper, expansion, reversal)
-      } yield innerSteps :+ distributivityStep
-      def byRightDistributingRhs = for {
-        OperatorNode(lhsOperator, _, _) <- lhs.asOptionalInstanceOf[OperatorNode]
-        OperatorNode(rhsOuterOperator, OperatorNode(rhsInnerOperator, rhsLeftLeft, rhsLeftRight), rhsRight) <- rhs.asOptionalInstanceOf[OperatorNode]
-        if lhsOperator == rhsInnerOperator
-        rightDistributivity <- provingContext.rightDistributivities.find(d => d.distributor == rhsOuterOperator && d.distributee == rhsInnerOperator)
-        innerSteps <- matchTrees(lhs, rhsInnerOperator(rhsOuterOperator(rhsLeftLeft, rhsRight), rhsOuterOperator(rhsLeftRight, rhsRight)), wrapper)
-        distributivityStep <- rightDistributivity.reversedRearrangementStep(rhsLeftLeft.baseTerm, rhsLeftRight.baseTerm, rhsRight.baseTerm, wrapper, expansion, reversal)
-      } yield innerSteps :+ distributivityStep
 
-      directly orElse byLeftDistributingLhs orElse byRightDistributingLhs orElse byLeftDistributingRhs orElse byRightDistributingLhs orElse byRightDistributingRhs
+      def byDistributing = byDistributingGeneric[Unit](
+        lhs,
+        rhs,
+        _.asOptionalInstanceOf[OperatorNode].map(_.operator),
+        wrapper,
+        _ => wrapper,
+        matchTrees(_, _, wrapper).map(_ -> ())
+      ).map(_._1)
+
+      directly orElse byDistributing
     }
   }
 
