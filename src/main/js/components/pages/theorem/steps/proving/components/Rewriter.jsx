@@ -66,10 +66,12 @@ export default class Rewriter extends React.Component {
   };
   onPremiseSelected = (selectedPremiseSuggestion) => {
     const currentPaths = this.getCurrentPaths();
-    const availableRewrites = _.chain(selectedPremiseSuggestion.rewriteSuggestions)
-      .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
-      .map(s => { return { path: s.path, replacementExpression: s.result, rewrite: {path: s.path, serializedPremiseStatement: selectedPremiseSuggestion.statement.serialize(), reverse: s.reverse }}})
-      .value();
+    const availableRewrites = selectedPremiseSuggestion ?
+      _.chain(selectedPremiseSuggestion.rewriteSuggestions)
+        .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
+        .map(s => { return { path: s.path, replacementExpression: s.result, rewrite: {path: s.path, serializedPremiseStatement: selectedPremiseSuggestion.statement.serialize(), reverse: s.reverse }}})
+        .value() :
+      [];
     this.setState({availableRewrites, selectedPremiseSuggestion});
   };
 
