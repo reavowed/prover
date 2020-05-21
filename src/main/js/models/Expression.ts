@@ -226,7 +226,15 @@ export class DefinedExpression extends Expression {
 }
 
 export class TypeExpression extends Expression {
-  constructor(public definition: TypeDefinition, public term: Expression, public explicitQualifier: TypeQualifierDefinition | undefined, public qualifierComponents: Expression[],  public properties: PropertyDefinition[], public conjunctionDefinition: ExpressionDefinition | undefined) { super(); }
+  constructor(
+      public definition: TypeDefinition,
+      public term: Expression,
+      public explicitQualifier: TypeQualifierDefinition | undefined,
+      public qualifierComponents: Expression[],
+      public properties: PropertyDefinition[],
+      public objects: [RelatedObjectDefinition, Expression][],
+      public conjunctionDefinition: ExpressionDefinition | undefined)
+  { super(); }
   serialize(): string {
     const serializedTerm = this.term.serialize();
     const serializedQualifierComponents = this.qualifierComponents.map(c => c.serialize());
@@ -241,27 +249,47 @@ export class TypeExpression extends Expression {
       wordsWithQualifier = [this.definition.symbol, serializedTerm, ...serializedQualifierComponents];
     }
 
-    const allWords = _.reduce(
+    const wordsAfterProperties = _.reduce(
         this.properties,
         // @ts-ignore
         (wordsSoFar: string[], propertyDefinition: PropertyDefinition) => {
           if (!this.conjunctionDefinition) throw "Cannot serialize type with property without conjunction";
+          const wordsWithoutQualifier = [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, propertyDefinition.qualifiedSymbol, serializedTerm];
           if (propertyDefinition.requiredParentQualifier || this.definition.defaultQualifier) {
-            return [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, propertyDefinition.qualifiedSymbol, serializedTerm, ...serializedQualifierComponents];
-
+            return [...wordsWithoutQualifier, ...serializedQualifierComponents];
           } else {
-            return [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, propertyDefinition.qualifiedSymbol, serializedTerm];
+            return wordsWithoutQualifier;
           }
         },
         wordsWithQualifier);
-    return allWords.join(" ")
+
+    const wordsAfterObjects = _.reduce(
+        this.objects,
+        // @ts-ignore
+        (wordsSoFar: string[], [objectDefinition, objectTerm]: [RelatedObjectDefinition, Expression]) => {
+          if (!this.conjunctionDefinition) throw "Cannot serialize type with object without conjunction";
+          const wordsWithoutQualifier = [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, objectDefinition.qualifiedSymbol, ...objectTerm.serialize(), serializedTerm];
+          if (objectDefinition.requiredParentQualifier || this.definition.defaultQualifier) {
+            return [...wordsWithoutQualifier, ...serializedQualifierComponents];
+          } else {
+            return wordsWithoutQualifier;
+          }
+        },
+        wordsAfterProperties);
+    return wordsAfterObjects.join(" ")
   }
   serializeNicely(boundVariableLists: string[][]): string {
     const baseWords = ["is", this.term.serializeNicely(boundVariableLists), this.definition.symbol]
     const worldsWithQualifier = this.explicitQualifier ?
         [...baseWords, this.explicitQualifier.symbol, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))] :
         [...baseWords, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))];
-    const allWords = this.properties.length ? [...worldsWithQualifier, "with", "(" + this.properties.map(p => p.symbol).join(" ") + ")"] : worldsWithQualifier;
+    const propertyAndObjectWords = [
+        ...this.properties.map(p => p.symbol),
+        ..._.flatMap(this.objects, ([objectDefinition, objectTerm]) => [objectDefinition.symbol, ...objectTerm.serialize()])
+    ];
+    const allWords = propertyAndObjectWords.length ?
+        [...worldsWithQualifier, "with", "(" + propertyAndObjectWords.join(" ") + ")"] :
+        worldsWithQualifier;
     return allWords.join(" ")
   }
   addQualifier(newQualifier: TypeQualifierDefinition, qualifierComponents: Expression[], conjunctionDefinition: ExpressionDefinition) {
@@ -271,6 +299,10 @@ export class TypeExpression extends Expression {
   }
   addProperty(newProperty: PropertyDefinition, conjunctionDefinition: ExpressionDefinition) {
     this.properties = [...this.properties, newProperty];
+    this.conjunctionDefinition = conjunctionDefinition;
+  }
+  addObject(newObjectDefinition: RelatedObjectDefinition, objectTerm: Expression, conjunctionDefinition: ExpressionDefinition) {
+    this.objects = [...this.objects, [newObjectDefinition, objectTerm]];
     this.conjunctionDefinition = conjunctionDefinition;
   }
   setBoundVariableName(): Expression {
@@ -283,9 +315,11 @@ export class TypeExpression extends Expression {
 
     const hasExplicitQualifier = !!this.explicitQualifier;
 
-    const getMainExpressionPath = () => Array(this.properties.length + (hasExplicitQualifier ? 1 : 0)).fill(0);
-    const getExplicitQualifierExpressionPath = () => [...Array(this.properties.length).fill(0), 1];
-    const getPropertyExpressionPath = (index: number) => [...Array(index).fill(0), 1];
+    const numberOfObjectsAndProperties = this.properties.length + this.objects.length;
+    const getMainExpressionPath = () => Array(numberOfObjectsAndProperties + (hasExplicitQualifier ? 1 : 0)).fill(0);
+    const getExplicitQualifierExpressionPath = () => [...Array(numberOfObjectsAndProperties).fill(0), 1];
+    const getPropertyExpressionPath = (index: number) => [...Array(numberOfObjectsAndProperties - index - 1).fill(0), 1];
+    const getObjectExpressionPath = (index: number) => [...Array(this.objects.length - index - 1).fill(0), 1];
 
     const replaceInMainExpression = (innerPath: number[]) => {
       const [first, ...remaining] = innerPath;
@@ -299,23 +333,34 @@ export class TypeExpression extends Expression {
     };
     const replaceInTerm = (innerPath: number[]) => {
       const [replacedTerm, replacedPathsInTerm] = this.term.replaceAtPath(innerPath, expression);
-      const replacedExpression = new TypeExpression(this.definition, replacedTerm, this.explicitQualifier, this.qualifierComponents, this.properties, this.conjunctionDefinition);
+      const replacedExpression = new TypeExpression(this.definition, replacedTerm, this.explicitQualifier, this.qualifierComponents, this.properties, this.objects, this.conjunctionDefinition);
       const getReplacementPaths = (outerPath: number[]) => replacedPathsInTerm.map(p => [...outerPath, 0, ...p]);
       const replacedPathsInMainExpression = getReplacementPaths(getMainExpressionPath());
       const replacedPathsInQualifierExpression = hasExplicitQualifier ?
           getReplacementPaths(getExplicitQualifierExpressionPath()) :
           [];
       const replacedPathsInPropertyExpressions = _.flatMap(_.range(this.properties.length), i => getReplacementPaths(getPropertyExpressionPath(i)));
-      const result: [Expression, number[][]] = [replacedExpression, [...replacedPathsInMainExpression, ...replacedPathsInQualifierExpression, ...replacedPathsInPropertyExpressions]];
+      const replacedPathsInObjectsExpressions = _.flatMap(_.range(this.objects.length), i => getReplacementPaths(getObjectExpressionPath(i)));
+      const result: [Expression, number[][]] = [replacedExpression, [...replacedPathsInMainExpression, ...replacedPathsInQualifierExpression, ...replacedPathsInPropertyExpressions, ...replacedPathsInObjectsExpressions]];
       return result;
     };
     const replaceInQualifierComponent = (componentIndex: number, innerPath: number[]) => {
       const [replacedComponent, replacedPathsInComponent] = this.qualifierComponents[componentIndex].replaceAtPath(innerPath, expression);
       const replacedComponents = [...this.qualifierComponents.slice(0, componentIndex), replacedComponent, ... this.qualifierComponents.slice(componentIndex + 1)];
-      const replacedExpression = new TypeExpression(this.definition, this.term, this.explicitQualifier, replacedComponents, this.properties, this.conjunctionDefinition);
+      const replacedExpression = new TypeExpression(this.definition, this.term, this.explicitQualifier, replacedComponents, this.properties, this.objects, this.conjunctionDefinition);
       const getReplacementPaths = (outerPath: number[]) => replacedPathsInComponent.map(p => [...outerPath, componentIndex + 1, ...p]);
+      const getReplacementPathsForObject = (outerPath: number[]) => replacedPathsInComponent.map(p => [...outerPath, componentIndex + 2, ...p]);
       if (hasExplicitQualifier) {
-        const result: [Expression, number[][]] =  [replacedExpression, getReplacementPaths(getExplicitQualifierExpressionPath())];
+        const replacedPathsInQualifierExpression = getReplacementPaths(getExplicitQualifierExpressionPath());
+        const replacedPathsInProperties = _.chain(_.range(this.properties.length))
+            .filter(i => this.properties[i].requiredParentQualifier == this.explicitQualifier?.symbol)
+            .flatMap(i => getReplacementPaths(getPropertyExpressionPath(i)))
+            .value();
+        const replacedPathsInObjects = _.chain(_.range(this.objects.length))
+            .filter(i => this.objects[i][0].requiredParentQualifier == this.explicitQualifier?.symbol)
+            .flatMap(i => getReplacementPathsForObject(getObjectExpressionPath(i)))
+            .value();
+        const result: [Expression, number[][]] =  [replacedExpression, [...replacedPathsInQualifierExpression, ...replacedPathsInProperties, ...replacedPathsInObjects]];
         return result;
       } else {
         const replacedPathsInMainExpression = getReplacementPaths(getMainExpressionPath());
@@ -326,10 +371,10 @@ export class TypeExpression extends Expression {
     };
 
     // @ts-ignore
-    if (!_.startsWith(path, Array(this.properties.length).fill(0))) {
-      throw "Cannot replace directly in property expression"
+    if (!_.startsWith(path, Array(numberOfObjectsAndProperties).fill(0))) {
+      throw "Cannot replace directly in property or object expression"
     }
-    const pathAfterProperties = path.slice(this.properties.length);
+    const pathAfterProperties = path.slice(numberOfObjectsAndProperties);
     if (hasExplicitQualifier) {
       const [first, ...remaining] = pathAfterProperties;
       if (first == 0) {

@@ -45,6 +45,6 @@ module.exports = env => {
       "react": "React",
       "react-dom": "ReactDOM"
     },
-    plugins: [env.NODE_ENV === "development" && new ReactRefreshWebpackPlugin({disableRefreshCheck: true, useLegacyWDSSockets: true})].filter(Boolean)
+    plugins: [env.NODE_ENV === "development" && new ReactRefreshWebpackPlugin({useLegacyWDSSockets: true})].filter(Boolean)
   }
 };

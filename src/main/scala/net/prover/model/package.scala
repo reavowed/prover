@@ -608,4 +608,20 @@ package object model {
       b.result().mapValues(_.result())
     }
   }
+
+  implicit class SeqEitherOps[A, B](seq: Seq[Either[A, B]]) {
+    def split: (Seq[A], Seq[B]) = {
+      val aBuilder = Seq.newBuilder[A]
+      val bBuilder = Seq.newBuilder[B]
+      for (x <- seq) {
+        x match {
+          case Left(a) =>
+            aBuilder += a
+          case Right(b) =>
+            bBuilder += b
+        }
+      }
+      (aBuilder.result(), bBuilder.result())
+    }
+  }
 }

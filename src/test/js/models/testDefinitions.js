@@ -3,7 +3,8 @@ import {DisambiguatedSymbol, Variable} from "../../../main/js/models/Expression"
 export const injectiveDefinition = {
   symbol: "injective",
   qualifiedSymbol: "injectiveFunction",
-  name: "injective"
+  name: "injective",
+  requiredParentQualifier: null
 };
 export const surjectiveDefinition = {
   symbol: "surjective",
@@ -25,10 +26,19 @@ export const functionDefinition = {
   name: "function",
   defaultQualifier: null,
   properties: [injectiveDefinition, surjectiveDefinition],
-  qualifiers: [functionFromDefinition]
+  qualifiers: [functionFromDefinition],
+  relatedObjects: []
 };
 export const relationDefinition = {
-  defaultQualifier: {}
+  symbol: "relation",
+  name: "relation",
+  defaultQualifier: {
+    defaultTermNames: ["A"],
+    format: "on %0"
+  },
+  properties: [],
+  qualifiers: [],
+  relatedObjects: []
 };
 export const conjunctionDefinition = {
   symbol: {
@@ -43,6 +53,46 @@ export const conjunctionDefinition = {
   numberOfComponents: 2,
   attributes: ["conjunction"]
 };
+
+export const associativeDefinition = {
+  symbol: "associative",
+  qualifiedSymbol: "associativeBinaryOperation",
+  name: "associative",
+  requiredParentQualifier: null
+};
+export const commutativeDefinition = {
+  symbol: "commutative",
+  qualifiedSymbol: "commutativeBinaryOperation",
+  name: "commutative",
+  requiredParentQualifier: null
+};
+export const identityDefinition = {
+  symbol: "identity",
+  qualifiedSymbol: "binaryOperationIdentity",
+  name: "identity",
+  article: "an",
+  defaultTermName: "e",
+  requiredParentQualifier: null
+};
+export const binaryOperationOnDefinition = {
+  symbol: "on",
+  qualifiedSymbol: "binaryOperationOn",
+  name: "on",
+  qualifier: {
+    defaultTermNames: ["A"],
+    format: "on %0"
+  }
+};
+export const binaryOperationDefinition = {
+  symbol: "binaryOperation",
+  name: "binary operation",
+  defaultQualifier: null,
+  properties: [associativeDefinition, commutativeDefinition],
+  qualifiers: [binaryOperationOnDefinition],
+  relatedObjects: [identityDefinition]
+};
+
+export const e = new Variable("e", []);
 export const f = new Variable("f", []);
 export const g = new Variable("g", []);
 export const R = new Variable("R", []);

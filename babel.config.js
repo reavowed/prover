@@ -16,7 +16,7 @@ module.exports = {
   ],
   env: {
     development: {
-      plugins: ['react-refresh/babel']
+      plugins: ['react-refresh/babel', '@babel/plugin-transform-react-jsx-source']
     },
     test: {
       presets: ["@babel/preset-typescript"],

@@ -17,9 +17,9 @@ trait ReactViews {
         <style>{"html, body { height: 100%; } .popover { max-width: 100%; }"}</style>
       </head>
       <body>
-        <script src="http://localhost:8079/node_modules/react/umd/react.development.js"></script>
-        <script src="http://localhost:8079/node_modules/react-dom/umd/react-dom.development.js"></script>
-        <script src="http://localhost:8079/bundle.js"></script>
+        <script crossorigin=""  src="http://localhost:8079/node_modules/react/umd/react.development.js"></script>
+        <script crossorigin="" src="http://localhost:8079/node_modules/react-dom/umd/react-dom.development.js"></script>
+        <script crossorigin=""  src="http://localhost:8079/bundle.js"></script>
         <script type="text/javascript">{Unparsed(s"App.render(App.$viewName, ${JsonMapping.toString(props)});")}</script>
       </body>
     </html>.toString()

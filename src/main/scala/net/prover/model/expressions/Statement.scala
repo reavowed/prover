@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model._
-import net.prover.model.entries.{StandalonePropertyDefinition, TypeDefinition}
+import net.prover.model.entries.{StandalonePropertyDefinition, TypeDefinition, TypeQualifierDefinition}
 
 trait Statement extends Expression with TypedExpression[Statement]
 
@@ -37,27 +37,85 @@ object Statement {
   }
 
   def typeStatementParser(term: Term, typeDefinition: TypeDefinition)(implicit context: ExpressionParsingContext): Parser[Statement] = {
+    def qualifierParser: Parser[(Option[TypeQualifierDefinition], Seq[Term])] = {
+      typeDefinition.qualifier match {
+        case Some(qualifier) =>
+          qualifier.termNames.map(_ => Term.parser).traverse.map(None -> _)
+        case None =>
+          for {
+            qualifierOption <- Parser.optional(qualifierSymbol => context.entryContext.qualifiersByType.get(typeDefinition.symbol).flatMap(_.find(_.symbol == qualifierSymbol)))
+            qualifierTerms <- qualifierOption match {
+              case Some(qualifier) =>
+                qualifier.qualifier.termNames.map(_ => Term.parser).traverse
+              case None =>
+                Parser.constant(Nil)
+            }
+          } yield (qualifierOption, qualifierTerms)
+      }
+    }
+
+
     for {
-      otherComponents <- typeDefinition.qualifier.termNames.map(_ => Term.parser).traverse
-      qualifierOption <- Parser.optional(qualifierSymbol => context.entryContext.qualifiersByType.get(typeDefinition.symbol).flatMap(_.find(_.symbol == qualifierSymbol)))
-      qualifierStatementOption <- qualifierOption.map(q => {
-        q.qualifier.termNames.map(_ => Term.parser).traverse.map(components => q.statementDefinition(term +: components: _*))
-      }).traverse
-      availableProperties = context.entryContext.propertyDefinitionsByType.get(typeDefinition.symbol).toSeq.flatten
-      properties <- Parser.optional("with", Parser.wordsInParens.map(_.map(s => availableProperties.find(_.symbol == s).getOrElse(throw new Exception(s"Unrecognised property '$s' for '${typeDefinition.symbol}'")))), Nil)
+      defaultQualifierComponents <- typeDefinition.qualifier.termNames.map(_ => Term.parser).traverse
+      qualifierAndTerms <- qualifierParser
+      (qualifierOption, qualifierTerms) = qualifierAndTerms
+      qualifierStatementOption = qualifierOption.map(q => q.statementDefinition(term +: qualifierTerms: _*))
+      propertiesAndObjectStatements <- Parser.optional("with", propertiesAndObjectStatementsParser(typeDefinition, qualifierOption, term, qualifierTerms), Nil)
     } yield {
-      val baseStatement = DefinedStatement(term +: otherComponents, typeDefinition.statementDefinition)(Nil)
+      val baseStatement = DefinedStatement(term +: defaultQualifierComponents, typeDefinition.statementDefinition)(Nil)
       val statementWithQualifier = qualifierStatementOption.map { qualifierStatement =>
-        val conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add properties to a type without a conjunction definition"))
+        val conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add a qualifier to a type without a conjunction definition"))
         conjunctionDefinition(baseStatement, qualifierStatement)
       }.getOrElse(baseStatement)
-      properties.foldLeft(statementWithQualifier) { (statement, property) =>
-        val conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add properties to a type without a conjunction definition"))
-        val propertyStatement = property.statementDefinition(term +: otherComponents: _*)
-        conjunctionDefinition(statement, propertyStatement)
+      propertiesAndObjectStatements.foldLeft(statementWithQualifier) { (statement, propertyOrObjectStatement) =>
+        val conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add properties or objects to a type without a conjunction definition"))
+        conjunctionDefinition(statement, propertyOrObjectStatement)
       }
     }
   }
+
+  def propertiesAndObjectStatementsParser(
+    typeDefinition: TypeDefinition,
+    explicitQualifierOption: Option[TypeQualifierDefinition],
+    mainTerm: Term,
+    qualifierTerms: Seq[Term])(
+    implicit context: ExpressionParsingContext
+  ): Parser[Seq[Statement]] = {
+    def getTerms(requiredQualifierOption: Option[TypeQualifierDefinition], description: String): Seq[Term] = {
+      requiredQualifierOption match {
+        case Some(requiredQualifier) =>
+          if (explicitQualifierOption.contains(requiredQualifier))
+            mainTerm +: qualifierTerms
+          else
+            throw new Exception(s"$description on ${typeDefinition.symbol} requires qualifier ${requiredQualifier.symbol}")
+        case None =>
+          if (typeDefinition.qualifier.nonEmpty)
+            mainTerm +: qualifierTerms
+          else
+            Seq(mainTerm)
+      }
+    }
+    def getProperty(w: String): Option[Parser[Statement]] = {
+      context.entryContext.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
+        val terms = getTerms(d.requiredParentQualifier, s"property ${d.symbol}")
+        Parser.constant(d.statementDefinition(terms:_*))
+      }
+    }
+    def getObject(w: String): Option[Parser[Statement]] = {
+      context.entryContext.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
+        for {
+          objectTerm <- Term.parser
+          otherTerms = getTerms(d.requiredParentQualifier, s"object ${d.symbol}")
+        } yield d.statementDefinition(objectTerm +: otherTerms:_*)
+      }
+    }
+    val parser = for {
+      word <- Parser.singleWord
+      result <- getProperty(word) orElse getObject(word) getOrElse { throw new Exception(s"Unrecognised property or object $word")}
+    } yield result
+    parser.listInParens(None)
+  }
+
 
   def propertyStatementParser(term: Term, standalonePropertyDefinition: StandalonePropertyDefinition)(implicit context: ExpressionParsingContext): Parser[Statement] = {
     Parser.constant(standalonePropertyDefinition.statementDefinition(term))

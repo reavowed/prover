@@ -95,12 +95,27 @@ export class Parser {
                 return [firstComponent, tokensAfterComponents];
               }
             }
+            if (firstComponent instanceof TypeExpression && secondComponent instanceof RelatedObjectExpression && _.includes(firstComponent.definition.relatedObjects, secondComponent.definition)) {
+              function matchQualifiers() {
+                if (!firstComponent.definition.defaultQualifier && !secondComponent.definition.requiredParentQualifier) {
+                  return true
+                } else if (firstComponent.definition.defaultQualifier || (secondComponent.definition.requiredParentQualifier && firstComponent.explicitQualifier && firstComponent.explicitQualifier.symbol === secondComponent.definition.requiredParentQualifier)) {
+                  return secondComponent.qualifierComponents.map(c => c.serialize()).join(" ") === firstComponent.qualifierComponents.map(c => c.serialize()).join(" ")
+                } else {
+                  return false;
+                }
+              }
+              if (secondComponent.parentTerm.serialize() === firstComponent.term.serialize() && matchQualifiers()) {
+                firstComponent.addObject(secondComponent.definition, secondComponent.term, expressionDefinition);
+                return [firstComponent, tokensAfterComponents];
+              }
+            }
           }
           return [new DefinedExpression(expressionDefinition, boundVariables, components), tokensAfterComponents];
         } else if (typeDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, typeDefinition.defaultQualifier?.defaultTermNames.length ?? 0);
-          return [new TypeExpression(typeDefinition, term, null, components, [], null), tokensAfterComponents];
+          return [new TypeExpression(typeDefinition, term, null, components, [], [], null), tokensAfterComponents];
         } else if (qualifierAndParentType) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifierAndParentType.qualifierDefinition.qualifier.defaultTermNames.length);

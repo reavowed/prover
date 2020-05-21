@@ -21,4 +21,8 @@ object KnownStatement {
   def deriveFromPrevious(derivationStep: DerivationStep, previousDerivation: Seq[DerivationStep]): KnownStatement = {
     KnownStatement(derivationStep.statement, previousDerivation :+ derivationStep)
   }
+
+  implicit class SeqOps(knownStatements: Seq[KnownStatement]) {
+    def deduplicate: Seq[KnownStatement] = knownStatements.distinctBy(_.statement)
+  }
 }

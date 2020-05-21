@@ -15,7 +15,7 @@ import {
   surjectiveDefinition
 } from "./testDefinitions";
 
-const expression = new TypeExpression(functionDefinition, f, functionFromDefinition, [A, B], [injectiveDefinition, surjectiveDefinition], undefined)
+const expression = new TypeExpression(functionDefinition, f, functionFromDefinition, [A, B], [injectiveDefinition, surjectiveDefinition], [], undefined)
 
 function createComponent(pathsToHighlight) {
   const actionHighlights = _.map(pathsToHighlight, path => {return {path}});
