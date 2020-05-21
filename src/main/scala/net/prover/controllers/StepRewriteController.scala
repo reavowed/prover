@@ -121,7 +121,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       (premisesWithReferencedLines ++ extractedPremises).mapCollect { case (statement, reference) =>
         for {
           (lhs, rhs) <- equality.unapply(statement)
-          results = replacementPossibilities.filter(_.term == lhs).map(_.path).map(PremiseRewritePath(_, rhs))
+          results = replacementPossibilities.filter(p => p.term == lhs.insertExternalParameters(p.unwrappers.depth)).map(_.path).map(PremiseRewritePath(_, rhs))
           if results.nonEmpty
         } yield PremiseSuggestion(statement, reference, results)
       }
@@ -177,7 +177,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     } yield (removedSource, rewrittenTerm, Seq(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
   }
 
-  def getRewriteStepForPremise[TExpression <: Expression with TypedExpression[TExpression]](
+  def getRewriteStepForPremise[TExpression <: Expression with TypedExpression[TExpression] : RewriteMethods](
     serializedPremiseStatement: String,
     baseTerm: Term,
     rewrite: RewriteRequest,
@@ -188,12 +188,13 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     implicit stepProvingContext: StepProvingContext
   ): Try[(Term, Term, Seq[Step], Option[Inference.Summary], Option[Inference.Summary], Seq[Unwrapper], TExpression)] = {
     for {
-      premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
-      (premiseLhs, premiseRhs) <- equality.unapply(premiseStatement).orBadRequest("Premise was not equality")
-      _ <- (premiseLhs == baseTerm).orBadRequest("Premise did not match term at path")
+      premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest.map(_.insertExternalParameters(unwrappers.depth))
+      (removedUnwrappers, removedSource, Seq(removedPremiseStatement), removedWrapperExpression) = RewriteMethods[TExpression].removeUnwrappers(baseTerm, Seq(premiseStatement), wrapperExpression, unwrappers)
+      (premiseLhs, premiseRhs) <- equality.unapply(removedPremiseStatement).orBadRequest("Premise was not equality")
+      _ <- (removedSource == premiseLhs).orBadRequest("Premise did not match term at path")
       statementToFind = (equality.apply _).tupled(direction.swapSourceAndResult(premiseLhs, premiseRhs))
       knownStatement <- stepProvingContext.knownStatementsFromPremisesBySerializedStatement.get(statementToFind.serialized).orBadRequest(s"Could not find premise ${statementToFind.toString}")
-    } yield (premiseLhs, premiseRhs, knownStatement.derivation.steps, None, knownStatement.derivation.inferences.distinct.single.map(_.summary), unwrappers, wrapperExpression)
+    } yield (premiseLhs, premiseRhs, knownStatement.derivation.steps, None, knownStatement.derivation.inferences.distinct.single.map(_.summary), removedUnwrappers, removedWrapperExpression)
   }
 
   def rewrite[TExpression <: Expression with TypedExpression[TExpression] : RewriteMethods, TStep](
@@ -216,7 +217,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
               rewritePossibilities = getRewritePossibilities(currentInnerExpression)
               RewritePossibility(baseTerm, function, _, _, baseUnwrappers, replacementStepProvingContext) <- rewritePossibilities.find(_.path == rewrite.path).orBadRequest(s"No term at path ${rewrite.path.mkString(".")}")
               (term, rewrittenTerm, rewriteSteps, inferenceOption, fallbackInferenceOption, unwrappers, wrapperExpression) <- ((rewrite.inferenceId.map(getRewriteStepForInference(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality)(implicitly, replacementStepProvingContext)) orElse
-                rewrite.serializedPremiseStatement.map(getRewriteStepForPremise(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality)(replacementStepProvingContext))) orBadRequest
+                rewrite.serializedPremiseStatement.map(getRewriteStepForPremise(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality))) orBadRequest
                 "Neither inference nor premise supplied").flatten
               wrapper = Wrapper.fromExpression(wrapperExpression)
               (source, result) = direction.swapSourceAndResult(term, rewrittenTerm)

@@ -1,10 +1,10 @@
 package net.prover.controllers
 
-import net.prover.controllers.StepRewriteController.{InferenceRewritePath, InferenceRewriteSuggestion}
+import net.prover.controllers.StepRewriteController.{InferenceRewritePath, InferenceRewriteSuggestion, PremiseRewritePath, PremiseSuggestion}
 import net.prover.controllers.models.{PathData, PremiseRewrite, RewriteRequest}
 import net.prover.model.TestDefinitions
-import net.prover.model.TestDefinitions._
-import net.prover.model.proof.{Step, StepProvingContext}
+import net.prover.model.TestDefinitions.{target, _}
+import net.prover.model.proof.{PremiseReference, Step, StepProvingContext, StepReference}
 import org.springframework.http.ResponseEntity
 
 import scala.util.Success
@@ -255,7 +255,7 @@ class StepRewriteSpec extends ControllerSpec {
 
       responseEntity.getBody must beAnInstanceOf[Seq[InferenceRewriteSuggestion]]
 
-      responseEntity.getBody.asInstanceOf[Seq[InferenceRewriteSuggestion]] must contain { (inferenceSuggestion: InferenceRewriteSuggestion) =>
+      responseEntity.getBody must contain { (inferenceSuggestion: InferenceRewriteSuggestion) =>
         inferenceSuggestion.inference mustEqual elementOfCartesianProductFromCoordinates
         inferenceSuggestion.rewriteSuggestions must contain { (rewritePath: InferenceRewritePath) =>
           rewritePath.path mustEqual Seq(0, 1, 0)
@@ -510,6 +510,64 @@ class StepRewriteSpec extends ControllerSpec {
                     assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
                     assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))))),
                   assertion(substitutionOfEquals, Seq(Implication(Equals($.^, Zero), φ)), Seq(Pair(First($), Second($)), $)))))))))))
+    }
+
+    "correctly increase depth of bound variables when getting rewrite premise suggestions inside a generalization" in {
+      val service = mock[BookService]
+      val controller = new StepRewriteController(service)
+
+      val premise = Equals($, $.^)
+      val premiseReference = StepReference(outerStepPath :+ (stepIndex - 1))
+      val target = ForAllIn("x", A)(φ($, $.^))
+      implicit val stepContext = createOuterStepContext(Nil, Seq("A"), Seq("a", "b")).addStatement(premise, premiseReference)
+
+      service.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
+        Success((Step.Target(target), implicitly[StepProvingContext]))
+
+      val responseEntity = controller.getRewritePremiseSuggestions(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        target.serialized,
+        ""
+      ).asInstanceOf[ResponseEntity[Seq[PremiseSuggestion]]]
+
+      responseEntity.getBody must beAnInstanceOf[Seq[PremiseSuggestion]]
+
+      responseEntity.getBody mustEqual Seq(PremiseSuggestion(
+        premise,
+        Some(premiseReference),
+        Seq(PremiseRewritePath(Seq(0, 1, 1), $.^))))
+    }
+
+    "correctly increase depth of bound variables when applying rewrite inside a generalization" in {
+      val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+      val controller = new StepRewriteController(service)
+
+      val boundVariables = Seq("a", "b")
+      val premise = Equals($, $.^)
+      val premiseReference = StepReference(outerStepPath :+ (stepIndex - 1))
+      val statement = ForAllIn("x", A)(φ($, $.^))
+      implicit val stepContext = createOuterStepContext(Nil, Seq("A"), boundVariables).addStatement(premise, premiseReference)
+
+      controller.rewriteManually(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        Seq(Seq(rewrite(premise, Seq(0, 1, 1)))))
+
+      checkModifyStepsWithoutProps(
+        service,
+        fillerSteps(stepIndex - 1) :+ target(premise) :+ target(statement),
+        fillerSteps(stepIndex - 1) :+ target(premise) :+ target(ForAllIn("x", A)(φ($, $.^^))) :+ elided(substitutionOfEquals, Seq(
+          assertion(reverseEquality, Nil, Seq($, $.^)),
+          assertion(substitutionOfEquals, Seq(ForAllIn("x", A)(φ($, $.^^^))), Seq($.^, $)))),
+        boundVariables)
     }
   }
 }
