@@ -200,7 +200,7 @@ export default class ConclusionChooser extends React.Component {
                   <option value="" />
                   {possibleMatches.map(({matchingPremise}, i) =>
                     <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                        <ExpressionComponent expression={matchingPremise} boundVariableLists={boundVariableLists} entryContext={entryContext} />
+                        <ExpressionComponent expression={matchingPremise} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} entryContext={entryContext} />
                       )}}/>
                   )}
                 </Form.Control>
