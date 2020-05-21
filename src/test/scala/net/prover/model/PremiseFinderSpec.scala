@@ -36,6 +36,10 @@ class PremiseFinderSpec extends Specification {
         .mapRight(_.map(_.statement))
     }
 
+    "find a simplified premise without a derivation" in {
+      findPremise(φ, Seq(Conjunction(φ, ψ))) must beSome(beEqualTo(Nil))
+    }
+
     "find premise using rewrite" in {
       checkFindPremise(
         Equals(a, b),

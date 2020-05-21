@@ -18,11 +18,15 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
   }
 
   lazy val allPremiseExtractions: Seq[KnownStatement] = {
-    for {
-      premise <- stepContext.premises
+    val given = premisesAndSimplifications.map(_._1).map(p => KnownStatement(p.statement, Nil))
+    val simplified = premisesAndSimplifications.flatMap(_._2).map(p => KnownStatement(p.statement, Nil))
+    val extracted = for {
+      premise <- premisesAndSimplifications.map(_._1)
       extractionOption <- SubstatementExtractor.getExtractionOptions(premise.statement)(this)
       if extractionOption.premises.isEmpty
     } yield KnownStatement(extractionOption.conclusion, extractionOption.derivation)
+
+    (given ++ simplified ++ extracted).deduplicate
   }
 
   lazy val knownStatementsFromPremises: Seq[KnownStatement] = {
