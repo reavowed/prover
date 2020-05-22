@@ -423,9 +423,10 @@ case class Definitions(rootEntryContext: EntryContext) {
 
     def isValidSimplification(premises: Seq[BinaryRelationStatement], conclusion: BinaryRelationStatement, optionalTypeStatement: Option[TypeLikeStatement]): Boolean = {
       // e.g. a ∈ ℕ, b ∈ ℕ -> (a, b)ℤ ∈ ℤ
+      // e.g. a ∈ ℤ, b ∈ ℤ/{0} -> (a, b)ℚ ∈ ℚ
       // or a ∈ ℤ, b ∈ ℤ -> a + b ∈ ℤ
       val isLhsBreakdown: Boolean = {
-        ExpressionUtils.isTermConstant(conclusion.right) && premises.forall(p => ExpressionUtils.isTermConstant(p.right)) &&
+        ExpressionUtils.isCombinationOfTermConstants(conclusion.right) && premises.forall(p => ExpressionUtils.isCombinationOfTermConstants(p.right)) &&
           premises.forall(p => p.left.complexity < conclusion.left.complexity) &&
           ExpressionUtils.getCombinationOfSimpleTermVariables(conclusion.left).exists { termVariables =>
             termVariables.zipStrict(premises).exists(_.forall { case (variableName, premise) => ExpressionUtils.getSimpleTermVariable(premise.left).contains(variableName)})
