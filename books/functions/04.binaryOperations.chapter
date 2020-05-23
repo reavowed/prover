@@ -106,6 +106,42 @@ comment Identities.
 relatedObject identity e for binaryOperation
   definition (∧ ∈ e baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e $0 = apply f orderedPair e $0 $0)
 
+theorem Identities are Unique
+premise binaryOperation f
+premise identityBinaryOperation e_1 f
+premise identityBinaryOperation e_2 f
+conclusion = e_1 e_2
+{
+  elided 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 {
+    prove ∧ binaryOperation f ∧ ∈ e_1 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_1 $0 = apply f orderedPair e_1 $0 $0 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 () (e_1, f) p1
+    prove ∧ ∈ e_1 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_1 $0 = apply f orderedPair e_1 $0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (binaryOperation f, ∧ ∈ e_1 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_1 $0 = apply f orderedPair e_1 $0 $0) () 0.0
+    prove ∈ e_1 baseSet f 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ e_1 baseSet f, ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_1 $0 = apply f orderedPair e_1 $0 $0) () 0.1
+    elided 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 {
+      prove ∧ binaryOperation f ∧ ∈ e_2 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_2 $0 = apply f orderedPair e_2 $0 $0 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 () (e_2, f) p2
+      prove ∧ ∈ e_2 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_2 $0 = apply f orderedPair e_2 $0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (binaryOperation f, ∧ ∈ e_2 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_2 $0 = apply f orderedPair e_2 $0 $0) () 0.3.0
+      prove ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_2 $0 = apply f orderedPair e_2 $0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ e_2 baseSet f, ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_2 $0 = apply f orderedPair e_2 $0 $0) () 0.3.1
+      prove → ∈ e_1 baseSet f ∧ = apply f orderedPair e_1 e_2 e_1 = apply f orderedPair e_2 e_1 e_1 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_2 $0 = apply f orderedPair e_2 $0 $0) (e_1) 0.3.2
+      prove ∧ = apply f orderedPair e_1 e_2 e_1 = apply f orderedPair e_2 e_1 e_1 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ e_1 baseSet f, ∧ = apply f orderedPair e_1 e_2 e_1 = apply f orderedPair e_2 e_1 e_1) () 0.3.3 0.2
+      prove = apply f orderedPair e_1 e_2 e_1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply f orderedPair e_1 e_2 e_1, = apply f orderedPair e_2 e_1 e_1) () 0.3.4
+      prove = e_1 apply f orderedPair e_1 e_2 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply f orderedPair e_1 e_2, e_1) 0.3.5
+    }
+  }
+  elided 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 {
+    prove ∧ binaryOperation f ∧ ∈ e_2 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_2 $0 = apply f orderedPair e_2 $0 $0 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 () (e_2, f) p2
+    prove ∧ ∈ e_2 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_2 $0 = apply f orderedPair e_2 $0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (binaryOperation f, ∧ ∈ e_2 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_2 $0 = apply f orderedPair e_2 $0 $0) () 1.0
+    prove ∈ e_2 baseSet f 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ e_2 baseSet f, ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_2 $0 = apply f orderedPair e_2 $0 $0) () 1.1
+    elided 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 {
+      prove ∧ binaryOperation f ∧ ∈ e_1 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_1 $0 = apply f orderedPair e_1 $0 $0 38930d0ec244c285dc5d4499d0a94339bcb6140e0caf9db154ac3f348debc683 () (e_1, f) p1
+      prove ∧ ∈ e_1 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_1 $0 = apply f orderedPair e_1 $0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (binaryOperation f, ∧ ∈ e_1 baseSet f ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_1 $0 = apply f orderedPair e_1 $0 $0) () 1.3.0
+      prove ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_1 $0 = apply f orderedPair e_1 $0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ e_1 baseSet f, ∀ a → ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_1 $0 = apply f orderedPair e_1 $0 $0) () 1.3.1
+      prove → ∈ e_2 baseSet f ∧ = apply f orderedPair e_2 e_1 e_2 = apply f orderedPair e_1 e_2 e_2 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 baseSet f ∧ = apply f orderedPair $0 e_1 $0 = apply f orderedPair e_1 $0 $0) (e_2) 1.3.2
+      prove ∧ = apply f orderedPair e_2 e_1 e_2 = apply f orderedPair e_1 e_2 e_2 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ e_2 baseSet f, ∧ = apply f orderedPair e_2 e_1 e_2 = apply f orderedPair e_1 e_2 e_2) () 1.3.3 1.2
+      prove = apply f orderedPair e_1 e_2 e_2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply f orderedPair e_2 e_1 e_2, = apply f orderedPair e_1 e_2 e_2) () 1.3.4
+    }
+  }
+  prove = e_1 e_2 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (e_1, apply f orderedPair e_1 e_2, e_2) 0 1
+}
+
 comment Cancellable operators.
 
 property leftCancellable on binaryOperation
@@ -420,4 +456,44 @@ conclusion cancellableBinaryOperation f
       prove cancellableBinaryOperation f 60ca6c827ab638947c5b70f3980e567673adb4308ac46203644db053b01b6f7f () (f) 1.4.1
     }
   } 0
+}
+
+theorem Direct Invertibility Condition for Binary Operator
+premise ∧ binaryOperation f identityBinaryOperation e f
+premise ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 e = apply f orderedPair $0 $$0 e
+conclusion invertibleBinaryOperation f
+{
+  prove ∃ x identityBinaryOperation $0 f c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (identityBinaryOperation $0 f) (e) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+  elided e10ac4017e2c048f49c072235718f14c5ab55a5af487126d94155d8c9a1a7151 {
+    take x {
+      take y {
+        assume ∧ identityBinaryOperation $$0 f identityBinaryOperation $0 f {
+          prove = $$0 $0 e10ac4017e2c048f49c072235718f14c5ab55a5af487126d94155d8c9a1a7151 () (f, $$0, $0) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0.0.0a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        }
+      }
+    }
+  }
+  elided f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 {
+    prove ∧ ∃ x identityBinaryOperation $0 f ∀ x ∀ y → ∧ identityBinaryOperation $$0 f identityBinaryOperation $0 f = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃ x identityBinaryOperation $0 f, ∀ x ∀ y → ∧ identityBinaryOperation $$0 f identityBinaryOperation $0 f = $$0 $0) () 0 1
+    prove ∃! e identityBinaryOperation $0 f f28bbf8a26618ec5303196198e49d07d3df6722303a6e5a47977eac4caa3dde0 (identityBinaryOperation $0 f) () 2.0
+  }
+  take e' {
+    assume identityBinaryOperation $0 f {
+      elided e10ac4017e2c048f49c072235718f14c5ab55a5af487126d94155d8c9a1a7151 {
+        prove binaryOperation f 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (binaryOperation f, identityBinaryOperation e f) () p0
+        prove identityBinaryOperation e f 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (binaryOperation f, identityBinaryOperation e f) () p0
+        prove = e $0 e10ac4017e2c048f49c072235718f14c5ab55a5af487126d94155d8c9a1a7151 () (f, e, $0) 3.0.0.0 3.0.0.1 3.0a
+      }
+      elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+        prove ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 e 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$$0 = apply f orderedPair $0 $$0 e) (e, $0) 3.0.0 p1
+        prove ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$$0) (e, $0) 3.0.0 3.0.1.0
+      }
+    }
+  }
+  elided 17dc9de550593e9d7664827cf8b13905a55dedd93c9e37e4c44581d720c8f7f3 {
+    prove binaryOperation f 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (binaryOperation f, identityBinaryOperation e f) () p0
+    prove ∧ ∃! e identityBinaryOperation $0 f ∀ e → identityBinaryOperation $0 f ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∃! e identityBinaryOperation $0 f, ∀ e → identityBinaryOperation $0 f ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0) () 2 3
+    prove ∧ binaryOperation f ∧ ∃! e identityBinaryOperation $0 f ∀ e → identityBinaryOperation $0 f ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (binaryOperation f, ∧ ∃! e identityBinaryOperation $0 f ∀ e → identityBinaryOperation $0 f ∀ a → ∈ $0 baseSet f ∃ b ∧ ∈ $0 baseSet f ∧ = apply f orderedPair $$0 $0 $$$0 = apply f orderedPair $0 $$0 $$$0) () 4.0 4.1
+    prove invertibleBinaryOperation f 17dc9de550593e9d7664827cf8b13905a55dedd93c9e37e4c44581d720c8f7f3 () (f) 4.2
+  }
 }
