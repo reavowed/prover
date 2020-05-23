@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.TestDefinitions.{BlankDefinition, ConjunctionDefinition, DeductionDefinition, GeneralizationDefinition, entryContextToProvingContext, ψ}
+import net.prover.model.TestDefinitions.{BlankDefinition, Conjunction, ConjunctionDefinition, DeductionDefinition, Function, FunctionFrom, GeneralizationDefinition, Integers, Naturals, entryContextToProvingContext, simpleTermDefinition, ψ}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.{ConjunctionDefinition, Definitions, ExpressionDefinition, Qualifier, StatementDefinition, TermDefinition}
@@ -283,21 +283,19 @@ trait ExpressionDefinitions extends VariableDefinitions {
   val LessThan = DefinedTerm(Nil, LessThanDefinition)(Nil)
   def lessThan(a: Term, b: Term): Statement = ElementOf(Pair(a, b), LessThan)
 
-  val IntegersDefinition = TermDefinitionEntry(
-    "ℤ",
-    Nil,
-    Nil,
-    None,
-    None,
-    Format.default(Nil, Nil),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
+  def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
+  def multiply(l: Term, r: Term) = Apply(Multiplication, Pair(l, r))
+
+  val IntegersDefinition = simpleTermDefinition("ℤ", Nil, Format.default(0))
   val Integers = IntegersDefinition()
+  val IntegerEmbeddingDefinition = simpleTermDefinition("⍳", Nil, Format.default(0), Nil, Conjunction(Function($), FunctionFrom($, Naturals, Integers)))
+  val IntegerEmbedding = IntegerEmbeddingDefinition()
+
   val IntegerAdditionDefinition = simpleTermDefinition("+", Nil, Format.default(0), Nil, Conjunction(BinaryOperation($), BinaryOperationOn($, Integers))).copy(disambiguator = Some("ℤ"))
   val IntegerAddition = DefinedTerm(Nil, IntegerAdditionDefinition)(Nil)
+  val IntegerNegation = simpleTermDefinition("-", Seq(a), Format.default(1), Seq(ElementOf(a, Integers)), Conjunction(ElementOf($, Integers), Conjunction(Equals(addZ(a, $), toZ(Zero)), Equals(addZ($, a), toZ(Zero)))))
+  val IntegerMultiplicationDefinition = simpleTermDefinition("×", Nil, Format.default(0), Nil, Conjunction(BinaryOperation($), BinaryOperationOn($, Integers))).copy(disambiguator = Some("ℤ"))
+  val IntegerMultiplication = DefinedTerm(Nil, IntegerMultiplicationDefinition)(Nil)
 
   val InfixRelationShorthand = DisplayShorthand(
     ElementOf.template(Pair.template(a.template, b.template), TermVariableTemplate("<")),
@@ -313,8 +311,9 @@ trait ExpressionDefinitions extends VariableDefinitions {
     Format.Explicit("a ≠ b", Seq("a", "b"), false, false),
     Nil)
 
-  def add(l: Term, r: Term) = Apply(Addition, Pair(l, r))
-  def multiply(l: Term, r: Term) = Apply(Multiplication, Pair(l, r))
+  def toZ(t: Term) = Apply(IntegerEmbedding, t)
+  def addZ(l: Term, r: Term) = Apply(IntegerAddition, Pair(l, r))
+  def multiplyZ(l: Term, r: Term) = Apply(IntegerMultiplication, Pair(l, r))
 }
 
 trait InferenceDefinitions extends ExpressionDefinitions {
@@ -371,6 +370,19 @@ trait InferenceDefinitions extends ExpressionDefinitions {
   val oneIsIdentityForMultiplication = Axiom("Identity for Multiplication", Nil, Conjunction(Equals(multiply(a, One), a), Equals(multiply(One, a), a)))
   val zeroIsAbsorberForMultiplication = Axiom("Absorber for Multiplication", Nil, Conjunction(Equals(multiply(a, Zero), Zero), Equals(multiply(Zero, a), Zero)))
   val orderingIsTransitive = Axiom("Natural Ordering Is Transitive", Seq(lessThan(a, b), lessThan(b, c)), lessThan(a, c))
+
+  val integerAdditionIsClosed = Axiom("Integer Addition Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(addZ(a, b), Integers))
+  val integerAdditionIsAssociative = Axiom("Integer Addition Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(addZ(a, addZ(b, c)), addZ(addZ(a, b), c)))
+  val integerAdditionIsCommutative = Axiom("Integer Addition Is Commutative", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Equals(addZ(a, b), addZ(b, a)))
+  val identityForIntegerAddition = Axiom("Identity for Integer Addition", Seq(ElementOf(a, Integers)), Conjunction(Equals(addZ(a, toZ(Zero)), a), Equals(addZ(toZ(Zero), a), a)))
+  val integerMultiplicationIsClosed = Axiom("Integer Multiplication Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(multiplyZ(a, b), Integers))
+  val integerMultiplicationIsAssociative = Axiom("Integer Multiplication Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(multiplyZ(a, multiplyZ(b, c)), multiplyZ(multiplyZ(a, b), c)))
+  val integerMultiplicationIsCommutative = Axiom("Integer Multiplication Is Commutative", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Equals(multiplyZ(a, b), multiplyZ(b, a)))
+  val integerMultiplicationDistributesOverAddition = Axiom("Integer Multiplication Distributes over Addition", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Conjunction(Equals(multiplyZ(a, addZ(b, c)), addZ(multiplyZ(a, b), multiplyZ(a, c))), Equals(multiplyZ(addZ(a, b), c), addZ(multiplyZ(a, c), multiplyZ(b, c)))))
+
+  val identityForIntegerMultiplication = Axiom("Identity for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(One)), a), Equals(multiplyZ(toZ(One), a), a)))
+  val absorberForIntegerMultiplication = Axiom("Absorber for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(Zero)), toZ(Zero)), Equals(multiplyZ(toZ(Zero), a), toZ(Zero))))
+  val negationOfIntegerMultiplication = Axiom("Negation of Integer Multipliciation", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Conjunction(Equals(multiplyZ(a, IntegerNegation(b)), IntegerNegation(multiplyZ(a, b))), Equals(multiplyZ(IntegerNegation(a), b), IntegerNegation(multiplyZ(a, b)))))
 }
 
 trait StepHelpers {
@@ -397,10 +409,8 @@ trait StepHelpers {
 }
 
 object TestDefinitions extends VariableDefinitions with ExpressionDefinitions with InferenceDefinitions with StepHelpers {
-
   import org.specs2.matcher.Matchers._
   import org.specs2.matcher.MustExpectations._
-
   implicit val defaultEntryContext: EntryContext = EntryContext(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
@@ -410,7 +420,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Union, Comprehension,
       PairSet, Domain, Range, Function, FunctionFrom, BaseSet, BinaryOperation, BinaryOperationOn,
       NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, MultiplicationDefinition, Apply, LessThanDefinition,
-      IntegersDefinition, IntegerAdditionDefinition) ++
+      IntegersDefinition, IntegerEmbeddingDefinition, IntegerAdditionDefinition, IntegerNegation, IntegerMultiplicationDefinition) ++
     Seq(
       specification, existence, modusPonens, modusTollens,
       addDoubleNegation, removeDoubleNegation,
@@ -423,7 +433,9 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       functionApplicationIsElementOfRange,
       zeroIsANaturalNumber, oneIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, zeroIsRightIdentityForAddition,
       multiplicationIsAssociative, multiplicationIsCommutative, multiplicationDistributesOverAddition, oneIsIdentityForMultiplication, zeroIsAbsorberForMultiplication,
-      orderingIsTransitive) ++
+      orderingIsTransitive,
+      integerAdditionIsClosed, integerAdditionIsAssociative, integerAdditionIsCommutative, identityForIntegerAddition,
+      integerMultiplicationIsClosed, integerMultiplicationIsAssociative, integerMultiplicationIsCommutative, integerMultiplicationDistributesOverAddition, identityForIntegerMultiplication, absorberForIntegerMultiplication, negationOfIntegerMultiplication) ++
     Seq(InfixRelationShorthand, NotElementOfShorthand, NotEqualShorthand))
 
   implicit class ParserOps[T](parser: Parser[T]) {

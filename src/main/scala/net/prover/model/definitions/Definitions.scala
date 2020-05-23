@@ -177,7 +177,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   }
 
   private val rearrangementInferences = for {
-    inference <- inferenceEntries
+    inference <- allInferences
     extractionOption <- extractionOptionsByInferenceId(inference.id)
     substitutions = extractionOption.requiredSubstitutions
     if substitutions.statements.isEmpty &&
@@ -198,6 +198,7 @@ case class Definitions(rootEntryContext: EntryContext) {
         (l, r) <- equality.unapply(extractionOption.conclusion)
         operator = BinaryOperator(l)
         (first: TermVariable, second: TermVariable) <- operator.unapply(l)
+        if first.name < second.name
         if r == operator(second, first)
       } yield (operator, Commutativity(operator, inference.summary, extractionOption))
     }
@@ -210,54 +211,54 @@ case class Definitions(rootEntryContext: EntryContext) {
           } yield Associativity(operator, inference.summary, extractionOption)
         }
     }
-    def findLeftIdentity(operator: BinaryOperator, equality: Equality): Option[LeftIdentity] = {
-      rearrangementInferences
-        .mapFind { case (inference, extractionOption) =>
-          for {
-            (operator(identityConstant, variable: TermVariable), rhs) <- equality.unapply(extractionOption.conclusion)
-            if rhs == variable && ExpressionUtils.isCombinationOfTermConstants(identityConstant)
-          } yield LeftIdentity(operator, identityConstant, inference.summary, extractionOption)
-        }
-    }
-    def findRightIdentity(operator: BinaryOperator, equality: Equality): Option[RightIdentity] = {
-      rearrangementInferences
-        .mapFind { case (inference, extractionOption) =>
-          for {
-            (operator(variable: TermVariable, identityConstant), rhs) <- equality.unapply(extractionOption.conclusion)
-            if rhs == variable && ExpressionUtils.isCombinationOfTermConstants(identityConstant)
-          } yield RightIdentity(operator, identityConstant, inference.summary, extractionOption)
-        }
-    }
-    def findLeftAbsorber(operator: BinaryOperator, equality: Equality): Option[LeftAbsorber] = {
-      rearrangementInferences
-        .mapFind { case (inference, extractionOption) =>
-          for {
-            (operator(absorberConstant, _: TermVariable), rhs) <- equality.unapply(extractionOption.conclusion)
-            if rhs == absorberConstant && ExpressionUtils.isCombinationOfTermConstants(absorberConstant)
-          } yield LeftAbsorber(operator, absorberConstant, inference.summary, extractionOption)
-        }
-    }
-    def findRightAbsorber(operator: BinaryOperator, equality: Equality): Option[RightAbsorber] = {
-      rearrangementInferences
-        .mapFind { case (inference, extractionOption) =>
-          for {
-            (operator(_: TermVariable, absorberConstant), rhs) <- equality.unapply(extractionOption.conclusion)
-            if rhs == absorberConstant && ExpressionUtils.isCombinationOfTermConstants(absorberConstant)
-          } yield RightAbsorber(operator, absorberConstant, inference.summary, extractionOption)
-        }
+    def getOperator(operator: BinaryOperator, commutativity: Commutativity, associativity: Associativity, equality: Equality): RearrangeableOperator = {
+      val leftIdentities = rearrangementInferences.mapCollect { case (inference, extractionOption) =>
+        for {
+          (operator(identityConstant, variable: TermVariable), rhs) <- equality.unapply(extractionOption.conclusion)
+          if rhs == variable && ExpressionUtils.isCombinationOfTermConstants(identityConstant)
+        } yield LeftIdentity(operator, identityConstant, inference.summary, extractionOption)
+      }
+      val rightIdentities = rearrangementInferences.mapCollect { case (inference, extractionOption) =>
+        for {
+          (operator(variable: TermVariable, identityConstant), rhs) <- equality.unapply(extractionOption.conclusion)
+          if rhs == variable && ExpressionUtils.isCombinationOfTermConstants(identityConstant)
+        } yield RightIdentity(operator, identityConstant, inference.summary, extractionOption)
+      }
+      val leftAbsorbers = rearrangementInferences.mapCollect { case (inference, extractionOption) =>
+        for {
+          (operator(absorberConstant, _: TermVariable), rhs) <- equality.unapply(extractionOption.conclusion)
+          if rhs == absorberConstant && ExpressionUtils.isCombinationOfTermConstants(absorberConstant)
+        } yield LeftAbsorber(operator, absorberConstant, inference.summary, extractionOption)
+      }
+      val rightAbsorbers = rearrangementInferences.mapCollect { case (inference, extractionOption) =>
+        for {
+          (operator(_: TermVariable, absorberConstant), rhs) <- equality.unapply(extractionOption.conclusion)
+          if rhs == absorberConstant && ExpressionUtils.isCombinationOfTermConstants(absorberConstant)
+        } yield RightAbsorber(operator, absorberConstant, inference.summary, extractionOption)
+      }
+      val inverses = for {
+        rightIdentity <- rightIdentities
+        leftIdentity <- leftIdentities
+        if rightIdentity.identityTerm == leftIdentity.identityTerm
+        identityTerm = rightIdentity.identityTerm
+        (rightInverseInference, rightInverseExtractionOption) <- rearrangementInferences
+        (operator(TermVariable(v, Nil), inverseTerm), `identityTerm`) <- equality.unapply(rightInverseExtractionOption.conclusion).toSeq
+        if ExpressionUtils.getSingleSimpleTermVariable(inverseTerm).contains(v)
+        (leftInverseInference, leftInverseExtractionOption) <- rearrangementInferences
+        if leftInverseExtractionOption.conclusion == equality(operator(inverseTerm, TermVariable(v, Nil)), identityTerm)
+        inverseOperator = UnaryOperator(inverseTerm)
+      } yield DoubleSidedInverse(
+        operator,
+        inverseOperator,
+        RightInverse(operator, inverseOperator, identityTerm, rightInverseInference.summary, rightInverseExtractionOption),
+        LeftInverse(operator, inverseOperator, identityTerm, leftInverseInference.summary, leftInverseExtractionOption))
+      RearrangeableOperator(operator, commutativity, associativity, leftIdentities, rightIdentities, leftAbsorbers, rightAbsorbers, inverses)
     }
     for {
       equality <- equalityOption.toSeq
       (operator, commutativity) <- findCommutativities(equality)
       associativity <- findAssociativity(operator, equality)
-    } yield RearrangeableOperator(
-      operator,
-      commutativity,
-      associativity,
-      findLeftIdentity(operator, equality),
-      findRightIdentity(operator, equality),
-      findLeftAbsorber(operator, equality),
-      findRightAbsorber(operator, equality))
+    } yield getOperator(operator, commutativity, associativity, equality)
   }
   lazy val leftDistributivities: Seq[LeftDistributivity] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
@@ -284,6 +285,32 @@ case class Definitions(rootEntryContext: EntryContext) {
       (TermVariable(a, Nil), TermVariable(b, Nil)) <- distributee.unapply(lhsLhs).toSeq
       if rhs == distributee(distributor(TermVariable(a, Nil), TermVariable(c, Nil)), distributor(TermVariable(b, Nil), TermVariable(c, Nil)))
     } yield RightDistributivity(distributor, distributee, inference.summary, extractionOption)
+  }
+
+  lazy val unaryOperators: Seq[UnaryOperator] = rearrangeableOperators.flatMap(_.inverses).map(_.inverseOperator)
+  lazy val leftOperatorExtractions: Seq[LeftOperatorExtraction] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      equality <- equalityOption.toSeq
+      unaryOperator <- unaryOperators
+      rearrangeableOperator <- rearrangeableOperators
+      binaryOperator = rearrangeableOperator.operator
+      (inference, extractionOption) <- rearrangementInferences
+      (binaryOperator(unaryOperator(TermVariable(a, Nil)), TermVariable(b, Nil)), rhs) <- equality.unapply(extractionOption.conclusion)
+      if rhs == unaryOperator(binaryOperator(TermVariable(a, Nil), TermVariable(b, Nil)))
+    } yield LeftOperatorExtraction(unaryOperator, binaryOperator, inference.summary, extractionOption)
+  }
+  lazy val rightOperatorExtractions: Seq[RightOperatorExtraction] = {
+    implicit val substitutionContext = SubstitutionContext.outsideProof
+    for {
+      equality <- equalityOption.toSeq
+      unaryOperator <- unaryOperators
+      rearrangeableOperator <- rearrangeableOperators
+      binaryOperator = rearrangeableOperator.operator
+      (inference, extractionOption) <- rearrangementInferences
+      (binaryOperator(TermVariable(a, Nil), unaryOperator(TermVariable(b, Nil))), rhs) <- equality.unapply(extractionOption.conclusion)
+      if rhs == unaryOperator(binaryOperator(TermVariable(a, Nil), TermVariable(b, Nil)))
+    } yield RightOperatorExtraction(unaryOperator, binaryOperator, inference.summary, extractionOption)
   }
 
   def findRelation(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryRelationStatement] = {

@@ -322,13 +322,11 @@ class PremiseFinderSpec extends Specification {
       // a ∈ domain(⍳)        (simplification via Function Application Is Element of Range)
       // a ∈ ℕ               (replace property with value)
 
-      val IotaDefinition = simpleTermDefinition("⍳", Nil, Format.default(0), Nil, Conjunction(Function($), FunctionFrom($, Naturals, Integers)))
-      val Iota = IotaDefinition()
 
       checkFindPremise(
-        ElementOf(Apply(Iota, a), BaseSet(IntegerAddition)),
+        ElementOf(Apply(IntegerEmbedding, a), BaseSet(IntegerAddition)),
         Seq(ElementOf(a, Naturals)))(
-        defaultEntryContext.addEntry(IotaDefinition))
+        defaultEntryContext.addEntry(IntegerEmbeddingDefinition))
     }
 
     "find a premise using double simplification of a function application" in {

@@ -57,14 +57,14 @@ class TermRearrangerSpec extends Specification {
       testRearranging(conclusion, Nil)
     }
 
-    def testReversableOperationMultipleWays(description: String, f: (Term, Term) => Term, a: Term, b: Term, result: Term): Fragments = {
+    def testReversableOperationMultipleWays(description: String, f: (Term, Term) => Term, a: Term, b: Term, result: Term, premises: Seq[Statement] = Nil): Fragments = {
       Fragments.foreach(Seq((Direction.Forward, "left"), (Direction.Reverse, "right"))) { case (interiorDirection, directionDescription) =>
         Fragments.foreach(Seq((Direction.Forward, "LHS"), (Direction.Reverse, "RHS"))) { case (sideDirection, sideDescription) =>
           Fragments.foreach(Seq[(Term => Term, Term => Term, String)]((identity[Term], identity[Term], "main"), (add(_, multiply(d, e)), add(multiply(e, d), _), "inner"))) { case (sourceWrapper, resultWrapper, wrapperDescription) =>
             s"rearrange using $directionDescription $description on $wrapperDescription $sideDescription" ! {
               val source = f.tupled(interiorDirection.swapSourceAndResult(a, b))
               val statement = (Equals.apply(_: Term, _: Term)).tupled(sideDirection.swapSourceAndResult(sourceWrapper(source), resultWrapper(result)))
-              testRearranging(statement, Nil)
+              testRearranging(statement, premises)
             }
           }
         }
@@ -90,6 +90,13 @@ class TermRearrangerSpec extends Specification {
     "rearrange using identities and absorbers" in {
       // (a*1 + b*0, c*1) = (a, c)
       testRearranging(Equals(Pair(add(multiply(a, One), multiply(b, Zero)), multiply(c, One)), Pair(a, c)), Nil)
+    }
+
+    testReversableOperationMultipleWays("inverse", addZ, a, IntegerNegation(a), toZ(Zero), Seq(ElementOf(a, Integers)))
+    testReversableOperationMultipleWays("inverse extraction", multiplyZ, a, IntegerNegation(b), IntegerNegation(multiplyZ(a, b)), Seq(ElementOf(a, Integers), ElementOf(b, Integers)))
+
+    "rearrange using inverse with extraction" in {
+      testRearranging(Equals(addZ(multiplyZ(a, b), multiplyZ(b, IntegerNegation(a))), toZ(Zero)), Seq(ElementOf(a, Integers), ElementOf(b, Integers)))
     }
   }
 }

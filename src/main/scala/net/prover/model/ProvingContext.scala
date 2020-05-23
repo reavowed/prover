@@ -3,9 +3,9 @@ package net.prover.model
 import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.{DerivationStep, Step, StepProvingContext, SubstitutionContext}
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
-import net.prover.model.utils.ExpressionUtils.{TypeLikeStatement, TypeStatement}
+import net.prover.model.proof.{DerivationStep, Step, StepProvingContext, SubstitutionContext}
+import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
 
@@ -60,17 +60,25 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
       case desimplifiedPremise: DesimplifiedPremise => allowableDesimplifiedPremise.isAllowed(desimplifiedPremise)
     }
 
-    implicit val alwaysAllowableOperator: Allowable[BinaryOperator] = alwaysAllowable
+    implicit val alwaysAllowableOperator: Allowable[Operator] = alwaysAllowable
     implicit val allowableEquality: Allowable[Equality] = allowableGeneric(Generic[Equality])
+
     implicit val allowableCommutativity: Allowable[Commutativity] = allowableGeneric(Generic[Commutativity])
     implicit val allowableAssociativity: Allowable[Associativity] = allowableGeneric(Generic[Associativity])
     implicit val allowableLeftIdentity: Allowable[LeftIdentity] = allowableGeneric(Generic[LeftIdentity])
     implicit val allowableRightIdentity: Allowable[RightIdentity] = allowableGeneric(Generic[RightIdentity])
     implicit val allowableLeftAbsorber: Allowable[LeftAbsorber] = allowableGeneric(Generic[LeftAbsorber])
     implicit val allowableRightAbsorber: Allowable[RightAbsorber] = allowableGeneric(Generic[RightAbsorber])
+    implicit val allowableLeftInverse: Allowable[LeftInverse] = allowableGeneric(Generic[LeftInverse])
+    implicit val allowableRightInverse: Allowable[RightInverse] = allowableGeneric(Generic[RightInverse])
+    implicit val allowableDoubleSidedInverse: Allowable[DoubleSidedInverse] = allowableGeneric(Generic[DoubleSidedInverse])
+
     implicit val allowableRearrangeableOperator: Allowable[RearrangeableOperator] = allowableGeneric(Generic[RearrangeableOperator])
     implicit val allowableLeftDistributivity: Allowable[LeftDistributivity] = allowableGeneric(Generic[LeftDistributivity])
     implicit val allowableRightDistributivity: Allowable[RightDistributivity] = allowableGeneric(Generic[RightDistributivity])
+    implicit val allowableLeftOperatorExtraction: Allowable[LeftOperatorExtraction] = allowableGeneric(Generic[LeftOperatorExtraction])
+    implicit val allowableRightOperatorExtraction: Allowable[RightOperatorExtraction] = allowableGeneric(Generic[RightOperatorExtraction])
+
     implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowableGeneric(Generic[PremiseRelationSimplificationInference])
     implicit val allowablePremiseRelationRewriteInference: Allowable[RelationRewriteInference] = allowableGeneric(Generic[RelationRewriteInference])
     implicit val allowableConclusionRelationSimplificationInference: Allowable[ConclusionRelationSimplificationInference] = allowableGeneric(Generic[ConclusionRelationSimplificationInference])
@@ -176,6 +184,11 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   }
   lazy val leftDistributivities: Seq[LeftDistributivity] = filter(definitions.leftDistributivities)
   lazy val rightDistributivities: Seq[RightDistributivity] = filter(definitions.rightDistributivities)
+  lazy val unaryOperators: Seq[UnaryOperator] = {
+    filter(definitions.unaryOperators)
+  }
+  lazy val leftOperatorExtractions: Seq[LeftOperatorExtraction] = filter(definitions.leftOperatorExtractions)
+  lazy val rightOperatorExtractions: Seq[RightOperatorExtraction] = filter(definitions.rightOperatorExtractions)
 
   lazy val premiseRelationSimplificationInferences: Map[BinaryRelation, Seq[PremiseRelationSimplificationInference]] = filter(definitions.premiseRelationSimplificationInferences)
   lazy val relationRewriteInferences: Seq[RelationRewriteInference] = filter(definitions.relationRewriteInferences)

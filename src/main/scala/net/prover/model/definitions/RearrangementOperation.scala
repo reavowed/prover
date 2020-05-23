@@ -90,3 +90,21 @@ case class RightAbsorber(operator: BinaryOperator, absorberTerm: Term, inference
   override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(a, absorberTerm)
   override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = absorberTerm
 }
+case class RightInverse(operator: BinaryOperator, inverseOperator: UnaryOperator, identityTerm: Term, inference: Inference.Summary, extractionOption: ExtractionOption) extends RearrangementOperation.Unary {
+  override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(a, inverseOperator(a))
+  override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = identityTerm
+}
+case class LeftInverse(operator: BinaryOperator, inverseOperator: UnaryOperator, identityTerm: Term, inference: Inference.Summary, extractionOption: ExtractionOption) extends RearrangementOperation.Unary {
+  override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(inverseOperator(a), a)
+  override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = identityTerm
+}
+case class DoubleSidedInverse(operator: BinaryOperator, inverseOperator: UnaryOperator, rightInverse: RightInverse, leftInverse: LeftInverse)
+
+case class LeftOperatorExtraction(unaryOperator: UnaryOperator, binaryOperator: BinaryOperator, inference: Inference.Summary, extractionOption: ExtractionOption) extends RearrangementOperation.Binary {
+  override def source(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = binaryOperator(unaryOperator(a), b)
+  override def result(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = unaryOperator(binaryOperator(a, b))
+}
+case class RightOperatorExtraction(unaryOperator: UnaryOperator, binaryOperator: BinaryOperator, inference: Inference.Summary, extractionOption: ExtractionOption) extends RearrangementOperation.Binary {
+  override def source(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = binaryOperator(a, unaryOperator(b))
+  override def result(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = unaryOperator(binaryOperator(a, b))
+}
