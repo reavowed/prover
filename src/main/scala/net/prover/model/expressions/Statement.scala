@@ -31,8 +31,9 @@ object Statement {
       term <- Term.parser
       symbol <- Parser.singleWord
       result <- context.entryContext.typeDefinitions.get(symbol).map(typeStatementParser(term, _)) orElse
-        context.entryContext.standalonePropertyDefinitions.find(_.symbol == symbol).map(propertyStatementParser(term, _)) getOrElse
-        (throw new Exception(s"Unrecognised type or property'$symbol'"))
+        context.entryContext.standalonePropertyDefinitions.find(_.symbol == symbol).map(propertyStatementParser(term, _)) orElse
+        typePropertyStatementParser(term, symbol) getOrElse
+        (throw new Exception(s"Unrecognised type or property '$symbol'"))
     } yield result
   }
 
@@ -54,13 +55,53 @@ object Statement {
       }
     }
 
+    def propertiesAndObjectStatementsParser(
+      explicitQualifierOption: Option[TypeQualifierDefinition],
+      mainTerm: Term,
+      qualifierTerms: Seq[Term])(
+      implicit context: ExpressionParsingContext
+    ): Parser[Seq[Statement]] = {
+      def getTerms(requiredQualifierOption: Option[TypeQualifierDefinition], description: String): Seq[Term] = {
+        requiredQualifierOption match {
+          case Some(requiredQualifier) =>
+            if (explicitQualifierOption.contains(requiredQualifier))
+              mainTerm +: qualifierTerms
+            else
+              throw new Exception(s"$description on ${typeDefinition.symbol} requires qualifier ${requiredQualifier.symbol}")
+          case None =>
+            if (typeDefinition.qualifier.nonEmpty)
+              mainTerm +: qualifierTerms
+            else
+              Seq(mainTerm)
+        }
+      }
+      def getProperty(w: String): Option[Parser[Statement]] = {
+        context.entryContext.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
+          val terms = getTerms(d.requiredParentQualifier, s"property ${d.symbol}")
+          Parser.constant(d.statementDefinition(terms:_*))
+        }
+      }
+      def getObject(w: String): Option[Parser[Statement]] = {
+        context.entryContext.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
+          for {
+            objectTerm <- Term.parser
+            otherTerms = getTerms(d.requiredParentQualifier, s"object ${d.symbol}")
+          } yield d.statementDefinition(objectTerm +: otherTerms:_*)
+        }
+      }
+      val parser = for {
+        word <- Parser.singleWord
+        result <- getProperty(word) orElse getObject(word) getOrElse { throw new Exception(s"Unrecognised property or object $word")}
+      } yield result
+      parser.listInParens(None)
+    }
 
     for {
       defaultQualifierComponents <- typeDefinition.qualifier.termNames.map(_ => Term.parser).traverse
       qualifierAndTerms <- qualifierParser
       (qualifierOption, qualifierTerms) = qualifierAndTerms
       qualifierStatementOption = qualifierOption.map(q => q.statementDefinition(term +: qualifierTerms: _*))
-      propertiesAndObjectStatements <- Parser.optional("with", propertiesAndObjectStatementsParser(typeDefinition, qualifierOption, term, qualifierTerms), Nil)
+      propertiesAndObjectStatements <- Parser.optional("with", propertiesAndObjectStatementsParser(qualifierOption, term, qualifierTerms), Nil)
     } yield {
       val baseStatement = DefinedStatement(term +: defaultQualifierComponents, typeDefinition.statementDefinition)(Nil)
       val statementWithQualifier = qualifierStatementOption.map { qualifierStatement =>
@@ -74,51 +115,15 @@ object Statement {
     }
   }
 
-  def propertiesAndObjectStatementsParser(
-    typeDefinition: TypeDefinition,
-    explicitQualifierOption: Option[TypeQualifierDefinition],
-    mainTerm: Term,
-    qualifierTerms: Seq[Term])(
-    implicit context: ExpressionParsingContext
-  ): Parser[Seq[Statement]] = {
-    def getTerms(requiredQualifierOption: Option[TypeQualifierDefinition], description: String): Seq[Term] = {
-      requiredQualifierOption match {
-        case Some(requiredQualifier) =>
-          if (explicitQualifierOption.contains(requiredQualifier))
-            mainTerm +: qualifierTerms
-          else
-            throw new Exception(s"$description on ${typeDefinition.symbol} requires qualifier ${requiredQualifier.symbol}")
-        case None =>
-          if (typeDefinition.qualifier.nonEmpty)
-            mainTerm +: qualifierTerms
-          else
-            Seq(mainTerm)
-      }
-    }
-    def getProperty(w: String): Option[Parser[Statement]] = {
-      context.entryContext.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
-        val terms = getTerms(d.requiredParentQualifier, s"property ${d.symbol}")
-        Parser.constant(d.statementDefinition(terms:_*))
-      }
-    }
-    def getObject(w: String): Option[Parser[Statement]] = {
-      context.entryContext.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
-        for {
-          objectTerm <- Term.parser
-          otherTerms = getTerms(d.requiredParentQualifier, s"object ${d.symbol}")
-        } yield d.statementDefinition(objectTerm +: otherTerms:_*)
-      }
-    }
-    val parser = for {
-      word <- Parser.singleWord
-      result <- getProperty(word) orElse getObject(word) getOrElse { throw new Exception(s"Unrecognised property or object $word")}
-    } yield result
-    parser.listInParens(None)
-  }
-
-
   def propertyStatementParser(term: Term, standalonePropertyDefinition: StandalonePropertyDefinition)(implicit context: ExpressionParsingContext): Parser[Statement] = {
     Parser.constant(standalonePropertyDefinition.statementDefinition(term))
+  }
+
+  def typePropertyStatementParser(mainTerm: Term, symbol: String)(implicit context: ExpressionParsingContext): Option[Parser[Statement]] = {
+    for {
+      Seq(typeSymbol, propertySymbol) <- "^(\\w+)\\.(\\w+)$".r.unapplySeq(symbol)
+      propertyDefinition <- context.entryContext.propertyDefinitionsByType.getOrElse(typeSymbol, Nil).find(_.symbol == propertySymbol)
+    } yield propertyDefinition.qualifierTermNames.map(_ => Term.parser).traverse.map(qualifierTerms => propertyDefinition.statementDefinition(mainTerm +: qualifierTerms:_*))
   }
 
   def listParser(implicit context: ExpressionParsingContext): Parser[Seq[Statement]] = parser.listInParens(Some(","))

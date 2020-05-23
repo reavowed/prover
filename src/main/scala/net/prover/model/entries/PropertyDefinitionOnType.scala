@@ -30,7 +30,8 @@ case class PropertyDefinitionOnType(
   def baseFormat = Format.Explicit(s"%1 is %0", s"${parentType.defaultTermName} is $name", 2, true, true)
   def fullFormat = parentType.qualifier.prependFormat(baseFormat)
 
-  val (parentTypeConditionConstructor, allTermNames) = PropertyDefinitionOnType.getParentConditionAndTermNames(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
+  val (parentTypeConditionConstructor, qualifierTermNames) = PropertyDefinitionOnType.getParentConditionAndQualifierTermNames(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
+  val allTermNames = parentType.defaultTermName +: qualifierTermNames
 
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
     qualifiedSymbol,
@@ -112,7 +113,7 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
     }
   }
 
-  def getParentConditionAndTermNames(
+  def getParentConditionAndQualifierTermNames(
     parentType: TypeDefinition,
     termListAdapter: Option[TermListAdapter],
     requiredParentQualifier: Option[TypeQualifierDefinition],
@@ -143,7 +144,7 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
         parentType.statementDefinition(mainTerm +: qualifierTerms: _*)
     }
     val qualifierConstructor = requiredParentObjects.map(rpo => rpo.conditionConstructor(conjunctionDefinition)(_)).getOrElse(identity[Statement](_))
-    ((statement: Statement) => conjunctionDefinition(qualifierCondition, qualifierConstructor(statement)), mainTermName +: qualifierTermNames)
+    ((statement: Statement) => conjunctionDefinition(qualifierCondition, qualifierConstructor(statement)), qualifierTermNames)
   }
 
   override def name: String = "property"
@@ -156,8 +157,8 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
       termListAdapter <- Parser.optional("termListAdapter", TermListAdapter.parser)
       explicitName <- Parser.optional("name", Parser.allInParens)
       conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create property definition without conjunction"))
-      (_, termNames) = getParentConditionAndTermNames(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
-      epc = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.outsideProof(context, termNames))
+      (_, qualifierTermNames) = getParentConditionAndQualifierTermNames(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
+      epc = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.outsideProof(context, parentType.defaultTermName +: qualifierTermNames))
       definingStatement <- Parser.required("definition", Statement.parser(epc).inParens)
     } yield PropertyDefinitionOnType(symbol, parentType, requiredParentQualifier, requiredParentObjects, termListAdapter, explicitName, definingStatement, conjunctionDefinition)
   }
