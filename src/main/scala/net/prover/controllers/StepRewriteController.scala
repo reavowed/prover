@@ -173,7 +173,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality.orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
       extractionStep <- ExtractionHelper.getInferenceExtractionWithoutPremises(inference, finalSubstitutions, extractionOption).orBadRequest("Could not apply extraction")
-      elidedStep = Step.Elided.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).steps, inference).get
+      elidedStep = Step.Elided.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).deduplicate.steps, inference).get
     } yield (removedSource, rewrittenTerm, Seq(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
   }
 
