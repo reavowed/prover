@@ -32,7 +32,8 @@ object Statement {
       symbol <- Parser.singleWord
       result <- context.entryContext.typeDefinitions.get(symbol).map(typeStatementParser(term, _)) orElse
         context.entryContext.standalonePropertyDefinitions.find(_.symbol == symbol).map(propertyStatementParser(term, _)) orElse
-        typePropertyStatementParser(term, symbol) getOrElse
+        typePropertyStatementParser(term, symbol) orElse
+        typeObjectStatementParser(term, symbol) getOrElse
         (throw new Exception(s"Unrecognised type or property '$symbol'"))
     } yield result
   }
@@ -124,6 +125,13 @@ object Statement {
       Seq(typeSymbol, propertySymbol) <- "^(\\w+)\\.(\\w+)$".r.unapplySeq(symbol)
       propertyDefinition <- context.entryContext.propertyDefinitionsByType.getOrElse(typeSymbol, Nil).find(_.symbol == propertySymbol)
     } yield propertyDefinition.qualifierTermNames.map(_ => Term.parser).traverse.map(qualifierTerms => propertyDefinition.statementDefinition(mainTerm +: qualifierTerms:_*))
+  }
+
+  def typeObjectStatementParser(mainTerm: Term, symbol: String)(implicit context: ExpressionParsingContext): Option[Parser[Statement]] = {
+    for {
+      Seq(typeSymbol, objectSymbol) <- "^(\\w+)\\.(\\w+)$".r.unapplySeq(symbol)
+      objectDefinition <- context.entryContext.relatedObjectsByType.getOrElse(typeSymbol, Nil).find(_.symbol == objectSymbol)
+    } yield objectDefinition.parentTermNames.map(_ => Term.parser).traverse.map(parentTerms => objectDefinition.statementDefinition(mainTerm +: parentTerms:_*))
   }
 
   def listParser(implicit context: ExpressionParsingContext): Parser[Seq[Statement]] = parser.listInParens(Some(","))
