@@ -127,16 +127,25 @@ object SubstatementExtractor {
       }
   }
 
-  private def getExtractionOptions(
+  private def getExtractionOptionsRecursive(
     sourceStatement: Statement,
     variableTracker: VariableTracker)(
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[ExtractionOption] = {
     getFinalExtractionOptions(sourceStatement, variableTracker) ++
-      getStatementExtractionOptions(sourceStatement, getExtractionOptions, variableTracker) ++
-      getPredicateExtractionOptions(sourceStatement, getExtractionOptions, variableTracker) ++
-      getDefinitionDeconstructionExtractionOptions(sourceStatement, getExtractionOptions, variableTracker)
+      getStatementExtractionOptions(sourceStatement, getExtractionOptionsRecursive, variableTracker) ++
+      getPredicateExtractionOptions(sourceStatement, getExtractionOptionsRecursive, variableTracker) ++
+      getDefinitionDeconstructionExtractionOptions(sourceStatement, getExtractionOptionsRecursive, variableTracker)
+  }
+
+  private def getExtractionOptions(
+    sourceStatement: Statement,
+    variableTracker: VariableTracker)(
+    implicit substitutionContext: SubstitutionContext,
+    provingContext: ProvingContext
+  ): Seq[ExtractionOption] = {
+    getExtractionOptionsRecursive(sourceStatement, variableTracker).map(o => o.copy(derivation = groupStepsByDefinition(o.derivation, None)))
   }
 
   def getExtractionOptions(inference: Inference)(implicit provingContext: ProvingContext): Seq[ExtractionOption] = {
