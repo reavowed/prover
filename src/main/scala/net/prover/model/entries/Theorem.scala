@@ -235,6 +235,6 @@ object Theorem extends Inference.EntryParser {
       premises <- premisesParser(expressionParsingContext)
       conclusion <- conclusionParser(expressionParsingContext)
       proofs <- proofsParser(name, variableDefinitions, premises, conclusion)
-    } yield Theorem(name, variableDefinitions, premises, conclusion, proofs)
+    } yield Theorem(name, VariableDefinitions.fromStatements(premises :+ conclusion), premises, conclusion, proofs)
   }
 }

@@ -46,7 +46,7 @@ object Axiom extends Inference.EntryParser {
       expressionParsingContext = ExpressionParsingContext.withDefinitions(variableDefinitions)
       premises <- premisesParser(expressionParsingContext)
       conclusion <- conclusionParser(expressionParsingContext)
-    } yield Axiom(name, variableDefinitions, premises, conclusion)
+    } yield Axiom(name, VariableDefinitions.fromStatements(premises :+ conclusion), premises, conclusion)
   }
   override def toString = name
 }

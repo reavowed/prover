@@ -38,18 +38,17 @@ case class ExpressionParsingContext(
     copy(variableDefinitions = variableDefinitions.addSimpleTermVariables(additionalTermVariableNames))
   }
 
-  private def getVariable[T](name: String, arguments: Seq[Term], definitions: Seq[VariableDefinition], description: String, constructor: (String, Seq[Term]) => T): Option[T] = {
-    definitions.find(_.name == name).map { definition =>
-      if (definition.arity != arguments.length) throw new Exception(s"${description.capitalize} variable $name requires ${definition.arity} parameters")
-      constructor(definition.name, arguments)
+  private def getVariable[T](name: String, arguments: Seq[Term], recogniser: String => Option[String], description: String, constructor: (String, Seq[Term]) => T): Option[T] = {
+    recogniser(name).map { name =>
+      constructor(name, arguments)
     }
   }
 
   def getStatementVariable(name: String, arguments: Seq[Term]): Option[StatementVariable] = {
-    getVariable(name, arguments, variableDefinitions.statementVariableDefinitions, "statement", StatementVariable.apply)
+    getVariable(name, arguments, ExpressionParsingContext.RecognisedStatementVariableName.unapply, "statement", StatementVariable.apply)
   }
   def getTermVariable(name: String, arguments: Seq[Term]): Option[TermVariable] = {
-    getVariable(name, arguments, variableDefinitions.termVariableDefinitions, "term", TermVariable.apply)
+    getVariable(name, arguments, ExpressionParsingContext.RecognisedTermVariableName.unapply, "term", TermVariable.apply)
   }
 
   object SimpleStatementVariable {
