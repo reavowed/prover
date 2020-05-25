@@ -11,16 +11,14 @@ object Statement {
       case "with" =>
         for {
           arguments <- Term.parser.listInParensOrSingle(None)
-          name <- Parser.selectWord("variable name") {
-            case ExpressionParsingContext.RecognisedStatementVariableName(name) => name
-          }
-        } yield StatementVariable(name, arguments)
+          name <- Parser.singleWord
+        } yield context.getStatementVariable(name, arguments).getOrElse(throw new Exception(s"Unrecognised statement variable $name"))
       case "is" =>
         typeOrPropertyStatementParser
       case context.entryContext.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
-      case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
-        Parser.constant(StatementVariable(name, Nil))
+      case context.SimpleStatementVariable(variable) =>
+        Parser.constant(variable)
       case context.entryContext.RecognisedStatementShorthand(template) =>
         template.expressionParser.map(_.asInstanceOf[Statement])
     }

@@ -18,8 +18,8 @@ class StepChainingSpec extends ControllerSpec {
 
       checkModifySteps(
         service,
-        fillerSteps(stepIndex) :+ target(Equivalence(φ, χ)),
-          fillerSteps(stepIndex) :+
+        fillerSteps(stepIndex - 1) :+ target(ψ) :+ target(Equivalence(φ, χ)),
+          fillerSteps(stepIndex - 1) :+ target(ψ) :+
             target(Equivalence(φ, ψ)) :+
             target(Equivalence(ψ, χ)) :+
             assertion(equivalenceIsTransitive, Seq(φ, ψ, χ), Nil))
@@ -34,11 +34,11 @@ class StepChainingSpec extends ControllerSpec {
 
       checkModifySteps(
         service,
-        fillerSteps(stepIndex - 1) :+
+        fillerSteps(stepIndex - 2) :+ target(χ) :+
           target(Equivalence(φ, ψ)) :+
           target(Equivalence(ψ, ω)) :+
           assertion(equivalenceIsTransitive, Seq(φ, ψ, ω), Nil),
-        fillerSteps(stepIndex - 1) :+
+        fillerSteps(stepIndex - 2) :+ target(χ) :+
           target(Equivalence(φ, ψ)) :+
           target(Equivalence(ψ, χ)) :+
           assertion(equivalenceIsTransitive, Seq(φ, ψ, χ), Nil) :+

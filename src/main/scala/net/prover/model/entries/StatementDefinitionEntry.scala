@@ -31,7 +31,7 @@ case class StatementDefinitionEntry(
       format.serialized.toSeq ++
       definingStatement.map(s => s"definition (${s.serialized})").toSeq ++
       shorthand.map(s => s"shorthand ($s)").toSeq ++
-      Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq
+      Attributes.serialize(attributes).toSeq
     ).indent
 
   override def replaceDefinitions(
@@ -68,11 +68,12 @@ object StatementDefinitionEntry extends ChapterEntryParser {
       boundVariablesAndComponentTypes <- ExpressionDefinitionEntry.boundVariablesAndComponentTypesParser
       boundVariables = boundVariablesAndComponentTypes._1
       componentTypes = boundVariablesAndComponentTypes._2
+      expressionParsingContext = ExpressionParsingContext.forComponentTypes(componentTypes)
       name <- nameParser
       format <- Format.optionalParserForExpressionDefinition(symbol, boundVariables, componentTypes)
-      optionalDefiningStatement <- definingStatementParser(ExpressionParsingContext.outsideProof(entryContext))
+      optionalDefiningStatement <- definingStatementParser(expressionParsingContext)
       shorthand <- ExpressionDefinitionEntry.shorthandParser
-      attributes <- ExpressionDefinitionEntry.attributesParser
+      attributes <- Attributes.parser
     } yield {
       StatementDefinitionEntry(
         symbol,

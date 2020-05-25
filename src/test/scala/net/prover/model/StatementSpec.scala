@@ -6,6 +6,13 @@ import org.specs2.mutable.Specification
 
 class StatementSpec extends Specification {
 
+  implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext(
+    defaultEntryContext,
+    VariableDefinitions(
+      Seq(VariableDefinition("φ", 0, Nil), VariableDefinition("ψ", 0, Nil), VariableDefinition("χ", 1, Nil)),
+      Seq(VariableDefinition("a", 0, Nil), VariableDefinition("b", 0, Nil))),
+    Nil)
+
   def parseStatement(line: String): Statement = {
     Statement.parser.parseAndDiscard(line)
   }
@@ -24,8 +31,8 @@ class StatementSpec extends Specification {
     }
 
     "parse a nested binary connective" in {
-      parseStatement("→ → φ ψ χ") mustEqual
-        Implication(Implication(φ, ψ), χ)
+      parseStatement("→ → φ ψ φ") mustEqual
+        Implication(Implication(φ, ψ), φ)
     }
 
     "parse a bound predicate application" in {
@@ -47,7 +54,7 @@ class StatementSpec extends Specification {
     }
 
     "parse a list with multiple statements" in {
-      parseStatementList("(φ, ψ, χ)") mustEqual Seq(φ, ψ, χ).map(_.toVariable)
+      parseStatementList("(φ, ψ, with a χ)") mustEqual Seq(φ(), ψ(), χ(a))
     }
 
     "parse a type without a qualifier" in {

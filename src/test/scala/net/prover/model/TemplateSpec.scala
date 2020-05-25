@@ -6,6 +6,11 @@ import TestDefinitions._
 
 class TemplateSpec extends Specification {
 
+  implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext(
+    defaultEntryContext,
+    VariableDefinitions(Seq(VariableDefinition("ψ", 1, Nil)), Seq("A").map(VariableDefinition(_, 0, Nil))),
+    Nil)
+
   "a template" should {
     "parse bound variables correctly" in {
       val template = Template.parser.parseFromString("∀ x → ∈ $0 X φ", "test template")

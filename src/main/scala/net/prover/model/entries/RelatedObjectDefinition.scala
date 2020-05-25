@@ -63,7 +63,8 @@ object RelatedObjectDefinition extends ChapterEntryParser {
       parentType <- Parser.required("for", context.typeDefinitionParser)
       requiredParentQualifier <- parentType.parentQualifierParser
       explicitName <- Parser.optional("name", Parser.allInParens)
-      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultTermName +: requiredParentQualifier.map(_.allTermNames).getOrElse(parentType.allTermNames))).inParens)
+      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(defaultTermName +: requiredParentQualifier.map(_.allTermNames).getOrElse(parentType.allTermNames))
+      definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
       conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create related object definition without conjunction"))
     } yield RelatedObjectDefinition(symbol, parentType, defaultTermName, requiredParentQualifier, explicitName, definingStatement, conjunctionDefinition)
   }

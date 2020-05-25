@@ -38,7 +38,7 @@ case class TermDefinitionEntry(
       (if (premises.nonEmpty) Seq(s"premises (${premises.map(_.serialized).mkString(", ")})") else Nil) ++
       Seq("(" + definitionPredicate.serialized + ")") ++
       shorthand.map(s => s"shorthand ($s)").toSeq ++
-      Some(attributes).filter(_.nonEmpty).map(attributes => s"attributes (${attributes.mkString(" ")})").toSeq ++
+      Attributes.serialize(attributes).toSeq ++
       (if (disambiguatorAdders.nonEmpty) Seq("disambiguatorAdders " + disambiguatorAdders.serialized) else Nil)
     ).indent
 
@@ -75,19 +75,19 @@ object TermDefinitionEntry extends ChapterEntryParser {
     Parser.allInParens)
 
   def parser(implicit entryContext: EntryContext): Parser[TermDefinitionEntry] = {
-    implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
       baseSymbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinitionEntry.boundVariablesAndComponentTypesParser
       boundVariables = boundVariablesAndComponentTypes._1
       componentTypes = boundVariablesAndComponentTypes._2
+      expressionParsingContext = ExpressionParsingContext.forComponentTypes(componentTypes)
       disambiguatorOption <- Parser.optional("disambiguator", Parser.singleWord)
       name <- nameParser
       format <- Format.optionalParserForExpressionDefinition(baseSymbol, boundVariables, componentTypes)
-      premises <- premisesParser
+      premises <- premisesParser(expressionParsingContext)
       definitionPredicate <- Statement.parser(expressionParsingContext.addInitialParameter("_")).inParens
       shorthand <- ExpressionDefinitionEntry.shorthandParser
-      attributes <- ExpressionDefinitionEntry.attributesParser
+      attributes <- Attributes.parser
       disambiguatorAdders <- Parser.optional("disambiguatorAdders", DisambiguatorAdder.listParser).getOrElse(Nil)
     } yield {
       TermDefinitionEntry(

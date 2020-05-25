@@ -3,9 +3,9 @@ package net.prover.model
 import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
-import net.prover.model.entries.{Axiom, PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
+import net.prover.model.entries.{PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{PremiseFinder, PremiseReference, Step, StepContext, StepReference, SubstitutionContext}
+import net.prover.model.proof._
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
@@ -13,9 +13,9 @@ class PremiseFinderSpec extends Specification {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
 
   "premise finder" should {
-    def getStepContext(premises: Seq[Statement], depth: Int): StepContext = {
-      val emptyContext = StepContext(StepReference(Nil), premises.map(_.requiredSubstitutions).foldTogether.terms.map(_._1), Nil, Nil)
-      val contextWithDepth = (0 until depth).foldLeft(emptyContext){ (stepContext, i) => stepContext.addBoundVariable(s"$$$i")}
+    def getStepContext(premises: Seq[Statement], target: Statement, depth: Int): StepContext = {
+      val emptyContext = createBaseStepContext(Nil, premises :+ target)
+      val contextWithDepth = (0 until depth).foldLeft(emptyContext){ (stepContext, i) => stepContext.addBoundVariable(s"x_$i")}
       premises.zipWithIndex.foldLeft(contextWithDepth) { case (context, (premise, index)) =>
         context.addStatement(premise, PremiseReference(index))
       }
@@ -26,12 +26,12 @@ class PremiseFinderSpec extends Specification {
     }
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
-      PremiseFinder.findDerivationForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, depth))).map(_.steps)
+      PremiseFinder.findDerivationForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, target, depth))).map(_.steps)
     }
 
     def findPremiseOrTarget(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): (Seq[Step], Seq[Statement]) = {
-      implicit val stepContext = getStepContext(premises, depth)
-      PremiseFinder.findDerivationsOrTargets(Seq(target))(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, depth)))
+      implicit val stepContext = getStepContext(premises, target, depth)
+      PremiseFinder.findDerivationsOrTargets(Seq(target))(entryContextAndStepContextToStepProvingContext(entryContext, stepContext))
         .mapLeft(_.steps)
         .mapRight(_.map(_.statement))
     }
@@ -110,7 +110,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "find a premise by a conclusion simplification from extracting a term definition with multiple premises" in {
-      val PairIsInteger = Axiom("Pair Is Integer", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(Pair(a, b), Integers))
+      val PairIsInteger = createInference("Pair Is Integer", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(Pair(a, b), Integers))
       val entryContextWithDefinitions = defaultEntryContext.addEntry(PairIsInteger)
 
       checkFindPremise(
@@ -132,14 +132,14 @@ class PremiseFinderSpec extends Specification {
     }
 
     "avoid infinite loop with complexity increases" in {
-      val ElementOfSuccessorIsElementOfSet = Axiom("Element of Successor Is Element of Set", Seq(ElementOf(a, Successor(b))), ElementOf(a, b))
+      val ElementOfSuccessorIsElementOfSet = createInference("Element of Successor Is Element of Set", Seq(ElementOf(a, Successor(b))), ElementOf(a, b))
       val entryContextWithDefinition = defaultEntryContext.addEntry(ElementOfSuccessorIsElementOfSet)
 
       findPremise(ElementOf(a, b), Nil)(entryContextWithDefinition) must beNone
     }
 
     "avoid infinite loop by passing from complex relation to simpler one" in {
-      val LessThanIsElementRelation = Axiom("Less Than Is Element Relation", Seq(lessThan(a, b)), ElementOf(a, b)) // if naively implemented, the premise finder will treat "a < b" as "(a, b) ∈ <" and recurse
+      val LessThanIsElementRelation = createInference("Less Than Is Element Relation", Seq(lessThan(a, b)), ElementOf(a, b)) // if naively implemented, the premise finder will treat "a < b" as "(a, b) ∈ <" and recurse
       val entryContextWithDefinition = defaultEntryContext.addEntry(LessThanIsElementRelation)
 
       findPremise(ElementOf(a, b), Nil)(entryContextWithDefinition) must beNone
@@ -148,7 +148,7 @@ class PremiseFinderSpec extends Specification {
     "simplify a conclusion by converting a complex defined term into a simpler one" in {
       val PositiveNaturalsDefinition = TermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
-      val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
+      val DefinitionOfPositiveNatural = createInference("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
 
       val entryContextWithDefinitions = defaultEntryContext
         .addEntry(PositiveNaturalsDefinition)
@@ -163,7 +163,7 @@ class PremiseFinderSpec extends Specification {
     "rewrite a premise using a fact" in {
       val PositiveNaturalsDefinition = TermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
-      val PositiveNaturalsAreASubsetOfTheNaturals = Axiom("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
+      val PositiveNaturalsAreASubsetOfTheNaturals = createInference("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
 
       val entryContextWithDefinitions = defaultEntryContext
         .addEntry(PositiveNaturalsDefinition)
@@ -190,9 +190,9 @@ class PremiseFinderSpec extends Specification {
         "toZ",
         Seq(a),
         Format.Explicit("%1_ℤ", "a_ℤ", 2, false, true))
-      val EqualityConditionForEmbeddedNaturals = Axiom("Equality Condition for Embedded Naturals", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(a, b), Equals(ToInteger(a), ToInteger(b))))
-      val EmbeddedNaturalIsInteger = Axiom("Embedded Natural Is Integer", Seq(ElementOf(a, Naturals)), ElementOf(ToInteger(a), Integers))
-      val OneIsNotZero = Axiom("One Is Not Zero", Nil, Negation(Equals(Zero, One)))
+      val EqualityConditionForEmbeddedNaturals = createInference("Equality Condition for Embedded Naturals", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(a, b), Equals(ToInteger(a), ToInteger(b))))
+      val EmbeddedNaturalIsInteger = createInference("Embedded Natural Is Integer", Seq(ElementOf(a, Naturals)), ElementOf(ToInteger(a), Integers))
+      val OneIsNotZero = createInference("One Is Not Zero", Nil, Negation(Equals(Zero, One)))
 
       val entryContextWithDefinitions = defaultEntryContext
         .addEntry(SetDifference)
@@ -214,12 +214,12 @@ class PremiseFinderSpec extends Specification {
       val PositiveNaturalsDefinition = TermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val Inject = TermDefinitionEntry("⍳", Nil, Seq(ComponentType.TermComponent("a", Nil)), None, None, Format.Explicit("%0(%1)", "⍳(a)", 2, false, false), Nil, BlankDefinition, None, Nil, Nil)
-      val DefinitionOfPositiveNatural = Axiom("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Inject(Zero), $)))))
+      val DefinitionOfPositiveNatural = createInference("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Inject(Zero), $)))))
       val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, false))), None, BlankDefinition)
       val Irreflexive = PropertyDefinitionOnType("irreflexive", Relation, None, None, None, None, BlankDefinition, ConjunctionDefinition)
-      val elementsRelatedByIrreflexiveNotEqual = Axiom("Elements Related by an Irreflexive Relation Are Not Equal", Seq(Irreflexive.statementDefinition(A, B), ElementOf(Pair(a, b), A)), Negation(Equals(a, b)))
-      val lessThanIsIrreflexive = Axiom("< Is Irreflexive", Nil, Irreflexive.statementDefinition(LessThan, Naturals))
-      val injectedNaturalIsNatural = Axiom("Injected Natural Is Natural", Seq(ElementOf(a, Naturals)), ElementOf(Inject(a), Naturals))
+      val elementsRelatedByIrreflexiveNotEqual = createInference("Elements Related by an Irreflexive Relation Are Not Equal", Seq(Irreflexive.statementDefinition(A, B), ElementOf(Pair(a, b), A)), Negation(Equals(a, b)))
+      val lessThanIsIrreflexive = createInference("< Is Irreflexive", Nil, Irreflexive.statementDefinition(LessThan, Naturals))
+      val injectedNaturalIsNatural = createInference("Injected Natural Is Natural", Seq(ElementOf(a, Naturals)), ElementOf(Inject(a), Naturals))
 
       val entryContextWithDefinitions = defaultEntryContext
         .addEntry(PositiveNaturalsDefinition)
@@ -259,7 +259,7 @@ class PremiseFinderSpec extends Specification {
       val additionProperty = Conjunction(
         ForAllIn("a", Naturals)(Equals(add($, Zero), $)),
         ForAllIn("a", Naturals)(ForAllIn("b", Naturals)(Equals(add($.^, Successor($)), Successor(add($.^, $))))))
-      val axiom = Axiom(
+      val axiom = createInference(
         "Function Properties of Natural Addition",
         Nil,
         Conjunction(
@@ -276,7 +276,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "replace terms in a target using a fact" in {
-      val axiom = Axiom(
+      val axiom = createInference(
         "Function Properties of Natural Addition",
         Nil,
         Conjunction(
@@ -329,7 +329,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "find a premise using double simplification of a function application" in {
-      val IntegerEmbeddingIsUnique = Axiom("Integer Embedding Is Unique", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(toZ(a), toZ(b)), Equals(a, b)))
+      val IntegerEmbeddingIsUnique = createInference("Integer Embedding Is Unique", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(toZ(a), toZ(b)), Equals(a, b)))
 
       checkFindPremise(
         Negation(Equals(toZ(Zero), toZ(a))),

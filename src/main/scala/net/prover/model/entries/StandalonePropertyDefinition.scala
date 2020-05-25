@@ -55,8 +55,9 @@ object StandalonePropertyDefinition extends ChapterEntryParser {
     for {
       symbol <- Parser.singleWord
       defaultTermName <- Parser.singleWord
+      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(Seq(defaultTermName))
       explicitName <- Parser.optional("name", Parser.allInParens)
-      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, Seq(defaultTermName))).inParens)
+      definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
     } yield StandalonePropertyDefinition(symbol, defaultTermName, explicitName, definingStatement)
   }
 }

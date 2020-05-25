@@ -1,25 +1,26 @@
 package net.prover.model
 
-import net.prover.model.TestDefinitions.{BlankDefinition, Conjunction, ConjunctionDefinition, DeductionDefinition, Function, FunctionFrom, GeneralizationDefinition, Integers, Naturals, entryContextToProvingContext, simpleTermDefinition, ψ}
-import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
+import net.prover.model.TestDefinitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
-import net.prover.model.definitions.{ConjunctionDefinition, Definitions, ExpressionDefinition, Qualifier, StatementDefinition, TermDefinition}
+import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
+import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.model.entries._
 import net.prover.model.expressions._
-import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof._
 import org.specs2.matcher.Matcher
 
-trait VariableDefinitions {
+trait TestVariableDefinitions {
   trait Placeholder[T <: ExpressionVariable[_ <: Expression]] {
     def name: String
     def toVariable: T
     def ->[B, A1, B1](b: B)(implicit f1: Placeholder[T] => A1, f2: B => B1): (A1, B1) = (f1(this), f2(b))
     def ->[B, A1, B1](i: Int, b: B)(implicit f1: Placeholder[T] => A1, f2: B => B1): (A1, (Int, B1)) = (f1(this), (i, f2(b)))
   }
+
   case class StatementVariablePlaceholder(name: String) extends Placeholder[StatementVariable] {
     def apply(terms: Term*) = StatementVariable(name, terms)
-    override def toVariable = StatementVariable(name, Nil)
+    override def toVariable = apply()
   }
   implicit def placeholderToStatementComponent(placeholder: StatementVariablePlaceholder): StatementComponent = StatementComponent(placeholder.name, Nil)
 
@@ -30,7 +31,7 @@ trait VariableDefinitions {
 
   case class TermVariablePlaceholder(name: String) extends Placeholder[TermVariable] {
     def apply(terms: Term*) = TermVariable(name, terms)
-    override def toVariable = TermVariable(name, Nil)
+    override def toVariable = apply()
     def template: Template = TermVariableTemplate(name)
   }
   implicit def placeholderToTermComponent(placeholder: TermVariablePlaceholder): TermComponent = TermComponent(placeholder.name, Nil)
@@ -80,7 +81,7 @@ trait VariableDefinitions {
   implicit def placeholderToString(placeholder: Placeholder[_]): String = placeholder.name
 }
 
-trait ExpressionDefinitions extends VariableDefinitions {
+trait TestExpressionDefinitions extends TestVariableDefinitions {
   private def connective(
     symbol: String,
     size: Int,
@@ -317,76 +318,80 @@ trait ExpressionDefinitions extends VariableDefinitions {
   def multiplyZ(l: Term, r: Term) = Apply(IntegerMultiplication, Pair(l, r))
 }
 
-trait InferenceDefinitions extends ExpressionDefinitions {
-  val specification = Axiom("Specification", Seq(ForAll("x")(φ($))), φ(a))
-  val existence = Axiom("Existence", Seq(φ(a)), Exists("x")(φ($)))
-  val modusPonens = Axiom("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
-  val modusTollens = Axiom("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
+trait TestInferenceDefinitions extends TestExpressionDefinitions {
+  def createInference(name: String, premises: Seq[Statement], conclusion: Statement): Axiom = {
+    Axiom(name, VariableDefinitions.fromStatements(premises :+ conclusion), premises, conclusion)
+  }
 
-  val addDoubleNegation = Axiom("Add Double Negation", Seq(φ), Negation(Negation(φ)))
-  val removeDoubleNegation = Axiom("Remove Double Negation", Seq(Negation(Negation(φ))), φ)
+  val specification = createInference("Specification", Seq(ForAll("x")(φ($))), φ(a))
+  val existence = createInference("Existence", Seq(φ(a)), Exists("x")(φ($)))
+  val modusPonens = createInference("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
+  val modusTollens = createInference("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
 
-  val extractLeftConjunct = Axiom("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), φ)
-  val extractRightConjunct = Axiom("Extract Right Conjunct", Seq(Conjunction(φ, ψ)), ψ)
-  val combineConjunction = Axiom("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
+  val addDoubleNegation = createInference("Add Double Negation", Seq(φ), Negation(Negation(φ)))
+  val removeDoubleNegation = createInference("Remove Double Negation", Seq(Negation(Negation(φ))), φ)
 
-  val addLeftDisjunct = Axiom("Add Left Disjunct", Seq(φ), Disjunction(ψ, φ))
-  val addRightDisjunct = Axiom("Add Right Disjunct", Seq(φ), Disjunction(φ, ψ))
+  val extractLeftConjunct = createInference("Extract Left Conjunct", Seq(Conjunction(φ, ψ)), φ)
+  val extractRightConjunct = createInference("Extract Right Conjunct", Seq(Conjunction(φ, ψ)), ψ)
+  val combineConjunction = createInference("Combine Conjunction", Seq(φ, ψ), Conjunction(φ, ψ))
 
-  val reverseEquivalence = Axiom("Reverse Equivalence", Seq(Equivalence(φ, ψ)), Equivalence(ψ, φ))
-  val equivalenceIsTransitive = Axiom("Equivalence Is Transitive", Seq(Equivalence(φ, ψ), Equivalence(ψ, χ)), Equivalence(φ, χ))
-  val forwardImplicationFromEquivalence = Axiom("Forward Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(φ, ψ))
-  val reverseImplicationFromEquivalence = Axiom("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
+  val addLeftDisjunct = createInference("Add Left Disjunct", Seq(φ), Disjunction(ψ, φ))
+  val addRightDisjunct = createInference("Add Right Disjunct", Seq(φ), Disjunction(φ, ψ))
 
-  val distributeImplicationOverEquivalence = Axiom("Distribute Implication over Equivalence", Seq(Implication(φ, Equivalence(ψ, χ))), Equivalence(Implication(φ, ψ), Implication(φ, χ)))
-  val distributeUniversalQuantifierOverEquivalence = Axiom("Distribute Universal Quantifier over Equivalence", Seq(ForAll("x")(Equivalence(φ($), ψ($)))), Equivalence(ForAll("x")(φ($)), ForAll("x")(ψ($))))
+  val reverseEquivalence = createInference("Reverse Equivalence", Seq(Equivalence(φ, ψ)), Equivalence(ψ, φ))
+  val equivalenceIsTransitive = createInference("Equivalence Is Transitive", Seq(Equivalence(φ, ψ), Equivalence(ψ, χ)), Equivalence(φ, χ))
+  val forwardImplicationFromEquivalence = createInference("Forward Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(φ, ψ))
+  val reverseImplicationFromEquivalence = createInference("Reverse Implication from Equivalence", Seq(Equivalence(φ, ψ)), Implication(ψ, φ))
 
-  val reverseEquality = Axiom("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
-  val reverseNegatedEquality = Axiom("Reverse Negated Equality", Seq(Negation(Equals(a, b))), Negation(Equals(b, a)))
-  val equalityIsTransitive = Axiom("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
-  val substitutionOfEquals = Axiom("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
-  val substitutionOfEqualsIntoFunction = Axiom("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
-  val equivalenceOfSubstitutedEquals = Axiom("Equivalence of Substituted Equals", Seq(Equals(a, b)), Equivalence(φ(a), φ(b)))
+  val distributeImplicationOverEquivalence = createInference("Distribute Implication over Equivalence", Seq(Implication(φ, Equivalence(ψ, χ))), Equivalence(Implication(φ, ψ), Implication(φ, χ)))
+  val distributeUniversalQuantifierOverEquivalence = createInference("Distribute Universal Quantifier over Equivalence", Seq(ForAll("x")(Equivalence(φ($), ψ($)))), Equivalence(ForAll("x")(φ($)), ForAll("x")(ψ($))))
 
-  val membershipConditionForSingleton = Axiom("Membership Condition for Singleton", Nil, ForAll("x")(Equivalence(ElementOf($, Singleton(a)), Equals($, a))))
-  val elementOfCartesianProductFromCoordinates = Axiom("Element of Cartesian Product from Coordinates", Seq(ElementOf(a, Product(A, B))), Equals(a, Pair(First(a), Second(a))))
-  val firstCoordinateOfOrderedPairInCartesianProduct = Axiom("First Coordinate of Ordered Pair in Cartesian Product", Seq(ElementOf(Pair(a, b), Product(A, B))), ElementOf(a, A))
-  val firstCoordinateOfElementOfCartesianProduct = Axiom("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(First(a), A))
-  val secondCoordinateOfElementOfCartesianProduct = Axiom("Second Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(Second(a), B))
-  val orderedPairIsElementOfCartesianProduct = Axiom("Ordered Pair Is Element of Cartesian Product", Seq(ElementOf(a, A), ElementOf(b, B)), ElementOf(Pair(a, b), Product(A, B)))
-  val firstElement = Axiom("First Element", Nil, Equals(First(Pair(a, b)), a))
+  val reverseEquality = createInference("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
+  val reverseNegatedEquality = createInference("Reverse Negated Equality", Seq(Negation(Equals(a, b))), Negation(Equals(b, a)))
+  val equalityIsTransitive = createInference("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
+  val substitutionOfEquals = createInference("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
+  val substitutionOfEqualsIntoFunction = createInference("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
+  val equivalenceOfSubstitutedEquals = createInference("Equivalence of Substituted Equals", Seq(Equals(a, b)), Equivalence(φ(a), φ(b)))
 
-  val functionApplicationIsElementOfRange = Axiom("Function Application Is Element of Range", Seq(Function(f), ElementOf(a, Domain(f))), ElementOf(Apply(f, a), Range(f)))
+  val membershipConditionForSingleton = createInference("Membership Condition for Singleton", Nil, ForAll("x")(Equivalence(ElementOf($, Singleton(a)), Equals($, a))))
+  val elementOfCartesianProductFromCoordinates = createInference("Element of Cartesian Product from Coordinates", Seq(ElementOf(a, Product(A, B))), Equals(a, Pair(First(a), Second(a))))
+  val firstCoordinateOfOrderedPairInCartesianProduct = createInference("First Coordinate of Ordered Pair in Cartesian Product", Seq(ElementOf(Pair(a, b), Product(A, B))), ElementOf(a, A))
+  val firstCoordinateOfElementOfCartesianProduct = createInference("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(First(a), A))
+  val secondCoordinateOfElementOfCartesianProduct = createInference("Second Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(Second(a), B))
+  val orderedPairIsElementOfCartesianProduct = createInference("Ordered Pair Is Element of Cartesian Product", Seq(ElementOf(a, A), ElementOf(b, B)), ElementOf(Pair(a, b), Product(A, B)))
+  val firstElement = createInference("First Element", Nil, Equals(First(Pair(a, b)), a))
 
-  val zeroIsANaturalNumber = Axiom("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
-  val oneIsANaturalNumber = Axiom("1 Is a Natural Number", Nil, ElementOf(One, Naturals))
-  val successorOfNaturalIsNatural = Axiom("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
-  val additionIsClosed = Axiom("Addition Is Closed", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(add(a, b), Naturals))
-  val additionIsAssociative = Axiom("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
-  val additionIsCommutative = Axiom("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
-  val zeroIsRightIdentityForAddition = Axiom("Adding Zero Is Same", Nil, Equals(a, add(a, Zero)))
-  val multiplicationIsAssociative = Axiom("Multiplication Is Associative", Nil, Equals(multiply(a, multiply(b, c)), multiply(multiply(a, b), c)))
-  val multiplicationIsCommutative = Axiom("Multiplication Is Commutative", Nil, Equals(multiply(a, b), multiply(b, a)))
-  val multiplicationDistributesOverAddition = Axiom("Multiplication Distributes over Addition", Nil, Conjunction(Equals(multiply(a, add(b, c)), add(multiply(a, b), multiply(a, c))), Equals(multiply(add(a, b), c), add(multiply(a, c), multiply(b, c)))))
-  val oneIsIdentityForMultiplication = Axiom("Identity for Multiplication", Nil, Conjunction(Equals(multiply(a, One), a), Equals(multiply(One, a), a)))
-  val zeroIsAbsorberForMultiplication = Axiom("Absorber for Multiplication", Nil, Conjunction(Equals(multiply(a, Zero), Zero), Equals(multiply(Zero, a), Zero)))
-  val orderingIsTransitive = Axiom("Natural Ordering Is Transitive", Seq(lessThan(a, b), lessThan(b, c)), lessThan(a, c))
+  val functionApplicationIsElementOfRange = createInference("Function Application Is Element of Range", Seq(Function(f), ElementOf(a, Domain(f))), ElementOf(Apply(f, a), Range(f)))
 
-  val integerAdditionIsClosed = Axiom("Integer Addition Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(addZ(a, b), Integers))
-  val integerAdditionIsAssociative = Axiom("Integer Addition Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(addZ(a, addZ(b, c)), addZ(addZ(a, b), c)))
-  val integerAdditionIsCommutative = Axiom("Integer Addition Is Commutative", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Equals(addZ(a, b), addZ(b, a)))
-  val identityForIntegerAddition = Axiom("Identity for Integer Addition", Seq(ElementOf(a, Integers)), Conjunction(Equals(addZ(a, toZ(Zero)), a), Equals(addZ(toZ(Zero), a), a)))
-  val integerMultiplicationIsClosed = Axiom("Integer Multiplication Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(multiplyZ(a, b), Integers))
-  val integerMultiplicationIsAssociative = Axiom("Integer Multiplication Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(multiplyZ(a, multiplyZ(b, c)), multiplyZ(multiplyZ(a, b), c)))
-  val integerMultiplicationIsCommutative = Axiom("Integer Multiplication Is Commutative", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Equals(multiplyZ(a, b), multiplyZ(b, a)))
-  val integerMultiplicationDistributesOverAddition = Axiom("Integer Multiplication Distributes over Addition", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Conjunction(Equals(multiplyZ(a, addZ(b, c)), addZ(multiplyZ(a, b), multiplyZ(a, c))), Equals(multiplyZ(addZ(a, b), c), addZ(multiplyZ(a, c), multiplyZ(b, c)))))
+  val zeroIsANaturalNumber = createInference("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
+  val oneIsANaturalNumber = createInference("1 Is a Natural Number", Nil, ElementOf(One, Naturals))
+  val successorOfNaturalIsNatural = createInference("A Successor of a Natural Number Is a Natural Number", Seq(ElementOf(a, Naturals)), ElementOf(Successor(a), Naturals))
+  val additionIsClosed = createInference("Addition Is Closed", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(add(a, b), Naturals))
+  val additionIsAssociative = createInference("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
+  val additionIsCommutative = createInference("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
+  val zeroIsRightIdentityForAddition = createInference("Adding Zero Is Same", Nil, Equals(a, add(a, Zero)))
+  val multiplicationIsAssociative = createInference("Multiplication Is Associative", Nil, Equals(multiply(a, multiply(b, c)), multiply(multiply(a, b), c)))
+  val multiplicationIsCommutative = createInference("Multiplication Is Commutative", Nil, Equals(multiply(a, b), multiply(b, a)))
+  val multiplicationDistributesOverAddition = createInference("Multiplication Distributes over Addition", Nil, Conjunction(Equals(multiply(a, add(b, c)), add(multiply(a, b), multiply(a, c))), Equals(multiply(add(a, b), c), add(multiply(a, c), multiply(b, c)))))
+  val oneIsIdentityForMultiplication = createInference("Identity for Multiplication", Nil, Conjunction(Equals(multiply(a, One), a), Equals(multiply(One, a), a)))
+  val zeroIsAbsorberForMultiplication = createInference("Absorber for Multiplication", Nil, Conjunction(Equals(multiply(a, Zero), Zero), Equals(multiply(Zero, a), Zero)))
+  val orderingIsTransitive = createInference("Natural Ordering Is Transitive", Seq(lessThan(a, b), lessThan(b, c)), lessThan(a, c))
 
-  val identityForIntegerMultiplication = Axiom("Identity for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(One)), a), Equals(multiplyZ(toZ(One), a), a)))
-  val absorberForIntegerMultiplication = Axiom("Absorber for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(Zero)), toZ(Zero)), Equals(multiplyZ(toZ(Zero), a), toZ(Zero))))
-  val negationOfIntegerMultiplication = Axiom("Negation of Integer Multipliciation", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Conjunction(Equals(multiplyZ(a, IntegerNegation(b)), IntegerNegation(multiplyZ(a, b))), Equals(multiplyZ(IntegerNegation(a), b), IntegerNegation(multiplyZ(a, b)))))
+  val integerAdditionIsClosed = createInference("Integer Addition Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(addZ(a, b), Integers))
+  val integerAdditionIsAssociative = createInference("Integer Addition Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(addZ(a, addZ(b, c)), addZ(addZ(a, b), c)))
+  val integerAdditionIsCommutative = createInference("Integer Addition Is Commutative", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Equals(addZ(a, b), addZ(b, a)))
+  val identityForIntegerAddition = createInference("Identity for Integer Addition", Seq(ElementOf(a, Integers)), Conjunction(Equals(addZ(a, toZ(Zero)), a), Equals(addZ(toZ(Zero), a), a)))
+  val integerMultiplicationIsClosed = createInference("Integer Multiplication Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(multiplyZ(a, b), Integers))
+  val integerMultiplicationIsAssociative = createInference("Integer Multiplication Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(multiplyZ(a, multiplyZ(b, c)), multiplyZ(multiplyZ(a, b), c)))
+  val integerMultiplicationIsCommutative = createInference("Integer Multiplication Is Commutative", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Equals(multiplyZ(a, b), multiplyZ(b, a)))
+  val integerMultiplicationDistributesOverAddition = createInference("Integer Multiplication Distributes over Addition", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Conjunction(Equals(multiplyZ(a, addZ(b, c)), addZ(multiplyZ(a, b), multiplyZ(a, c))), Equals(multiplyZ(addZ(a, b), c), addZ(multiplyZ(a, c), multiplyZ(b, c)))))
+
+  val identityForIntegerMultiplication = createInference("Identity for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(One)), a), Equals(multiplyZ(toZ(One), a), a)))
+  val absorberForIntegerMultiplication = createInference("Absorber for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(Zero)), toZ(Zero)), Equals(multiplyZ(toZ(Zero), a), toZ(Zero))))
+  val negationOfIntegerMultiplication = createInference("Negation of Integer Multipliciation", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Conjunction(Equals(multiplyZ(a, IntegerNegation(b)), IntegerNegation(multiplyZ(a, b))), Equals(multiplyZ(IntegerNegation(a), b), IntegerNegation(multiplyZ(a, b)))))
 }
 
-trait StepHelpers {
+trait StepHelpers extends TestVariableDefinitions {
 
   def assertion(inference: Inference, statements: Seq[Statement], terms: Seq[Term]): SubstitutionContext => Step.Assertion = { substitutionContext =>
     Step.Assertion.forInference(inference, inference.requiredSubstitutions.fill(statements, terms))(substitutionContext).get
@@ -409,7 +414,7 @@ trait StepHelpers {
   }
 }
 
-object TestDefinitions extends VariableDefinitions with ExpressionDefinitions with InferenceDefinitions with StepHelpers {
+object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with StepHelpers {
   import org.specs2.matcher.Matchers._
   import org.specs2.matcher.MustExpectations._
   implicit val defaultEntryContext: EntryContext = EntryContext(
@@ -444,10 +449,13 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       parser.parseFromString(text, "test")
     }
   }
-  implicit def entryContextToParsingContext(implicit entryContext: EntryContext): ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
   implicit def entryContextToProvingContext(implicit entryContext: EntryContext): ProvingContext = ProvingContext(entryContext, new Definitions(entryContext))
   implicit def entryContextAndStepContextToStepProvingContext(implicit entryContext: EntryContext, stepContext: StepContext): StepProvingContext = {
     StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
+  }
+
+  def createBaseStepContext(premises: Seq[Statement], otherStatements: Seq[Statement]): StepContext = {
+    StepContext.withPremisesAndVariables(premises, VariableDefinitions.fromStatements(premises ++ otherStatements))
   }
 
   def beValidTheorem(implicit entryContext: EntryContext): Matcher[Theorem] = (theorem: Theorem) => {
@@ -458,13 +466,14 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
   }
 
   def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement)(implicit entryContext: EntryContext): Matcher[Seq[Step]] = {
-    beValidTheorem(entryContext) ^^ { steps: Seq[Step] =>
+    beValidTheorem(entryContext) ^^ { steps: Seq[Step] => {
       Theorem(
         "Test Theorem",
+        VariableDefinitions.fromStatements(premises :+ conclusion),
         premises,
         conclusion,
         Seq(Theorem.Proof(steps)))
-    }
+    }}
   }
 
   def beStepThatMakesValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int = 0)(implicit stepContext: StepContext): Matcher[Step] = {

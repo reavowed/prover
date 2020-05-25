@@ -32,20 +32,19 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     seq.map(_(sc))
   }
 
-  def createOuterStepContext(
-    premises: Seq[Statement],
-    termVariableNames: Seq[String],
+  def createOuterStepContextForStatements(
+    statements: Seq[Statement],
     boundVariables: Seq[String]
   ): StepContext = {
-    val baseContext = StepContext.withPremisesAndTerms(premises, termVariableNames)
+    val baseContext = createBaseStepContext(Nil, statements)
     val contextWithBoundVariables = boundVariables.foldLeft(baseContext) { case (context, variable) => context.addBoundVariable(variable) }
     outerStepPath.foldLeft(contextWithBoundVariables) { case (context, index) => context.atIndex(index) }
   }
-  def createOuterStepContext(
+  def createOuterStepContextForSteps(
     steps: Seq[Step],
     boundVariables: Seq[String]
   ): StepContext = {
-    createOuterStepContext(Nil, steps.mapCollect(_.provenStatement).flatMap(_.requiredSubstitutions.terms).map(_._1).distinct, boundVariables)
+    createOuterStepContextForStatements(steps.mapCollect(_.provenStatement), boundVariables)
   }
 
   def definitionWithInference(
@@ -76,7 +75,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     extractionInferences: Seq[Inference],
     conclusionOption: Option[Statement]
   ): StepDefinition = {
-    implicit val stepContext = createOuterStepContext(Nil, Nil)
+    implicit val stepContext: StepContext = createOuterStepContextForStatements(Nil, Nil)
     val extractionOption = SubstatementExtractor.getExtractionOptions(premise).find(_.extractionInferences == extractionInferences).get
     val baseSubstitutions = premise.calculateSubstitutions(premise).get
     val substitutions = baseSubstitutions.copy(terms = baseSubstitutions.terms ++ extractionOption.requiredSubstitutions.fill(Nil, terms).terms)
@@ -152,7 +151,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
   def buildStepsWithReferences(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit entryContext: EntryContext): Seq[Step] = {
     implicit val provingContext = entryContextToProvingContext(entryContext)
     val steps = stepsConstructor(SubstitutionContext.withExtraParameters(boundVariables.length) (SubstitutionContext.outsideProof))
-    val outerStepContext = createOuterStepContext(steps, boundVariables)
+    val outerStepContext = createOuterStepContextForSteps(steps, boundVariables)
     steps.recalculateReferences(outerStepContext, provingContext)._1
   }
   def recalculateReferences(steps: Seq[Step], outerStepContext: StepContext)(implicit entryContext: EntryContext): Seq[Step] = {
@@ -199,7 +198,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
   ): (Seq[Step], StepProvingContext) => Try[(Seq[Step], Seq[Step])] = {
     implicit val provingContext = entryContextToProvingContext(entryContext)
     val existingSteps = existingStepsFn(SubstitutionContext.outsideProof)
-    val outerStepContext = createOuterStepContext(existingSteps, boundVariables)
+    val outerStepContext = createOuterStepContextForSteps(existingSteps, boundVariables)
     val existingStepsWithReferences = recalculateReferences(existingSteps, outerStepContext)(entryContext)
     (existingStepsWithReferences, StepProvingContext(outerStepContext, provingContext)) -> beSuccessfulTry[(Seq[Step], Seq[Step])].withValue(stepsMatcher ^^ { t: (Seq[Step], Seq[Step]) => recalculateReferences(t._1, outerStepContext)(entryContext) })
   }
@@ -211,7 +210,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
   ): (Seq[Step], StepProvingContext) => Try[(Seq[Step], InsertionAndReplacementProps)] = {
     implicit val provingContext = entryContextToProvingContext(entryContext)
     val existingSteps = buildStepsWithReferences(existingStepsFn, boundVariables)(entryContext)
-    val outerStepContext = createOuterStepContext(existingSteps, boundVariables)
+    val outerStepContext = createOuterStepContextForSteps(existingSteps, boundVariables)
     (existingSteps, StepProvingContext(outerStepContext, provingContext)) -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)].withValue(stepsMatcher ^^ { t: (Seq[Step], InsertionAndReplacementProps) => recalculateReferences(t._1, outerStepContext)(entryContext) })
   }
 }

@@ -1,7 +1,6 @@
 package net.prover.controllers
 
 import net.prover.controllers.models._
-import net.prover.model.ExpressionParsingContext.TermVariableValidator
 import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
@@ -27,10 +26,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         substitutions <- definition.substitutions.parse()
-        epc = ExpressionParsingContext(
-          implicitly,
-          TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten),
-          stepProvingContext.stepContext.boundVariableLists.map(_.zipWithIndex))
+        epc = ExpressionParsingContext.atStep(stepProvingContext).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
         conclusionOption <- getConclusionOption(epc, substitutions)
         newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
         substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to intended new targets")).swap

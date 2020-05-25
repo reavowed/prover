@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.model.TestDefinitions.{a, b, _}
 import net.prover.model.expressions.{Statement, Term}
-import net.prover.model.proof.{Step, StepContext, TermRearranger}
+import net.prover.model.proof.{Step, TermRearranger}
 import net.prover.util.Direction
 import org.specs2.mutable.Specification
 import org.specs2.specification.core.Fragments
@@ -11,13 +11,13 @@ class TermRearrangerSpec extends Specification {
 
   "rearranging a statement" should {
     def rearrange(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
-      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
+      implicit val stepContext = createBaseStepContext(premises, Seq(targetStatement))
       TermRearranger.rearrange(targetStatement)
         .map(_.recalculateReferences(stepContext, implicitly[ProvingContext])._1)
     }
 
     def testRearranging(targetStatement: Statement, premises: Seq[Statement]) = {
-      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
+      implicit val stepContext = createBaseStepContext(premises, Seq(targetStatement))
       val step = rearrange(targetStatement, premises)
       step must beSome(beStepThatMakesValidTheorem(premises, targetStatement))
     }

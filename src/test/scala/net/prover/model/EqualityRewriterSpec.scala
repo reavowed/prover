@@ -1,16 +1,15 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.model.expressions.{FunctionParameter, Statement, Term}
+import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof._
 import org.specs2.execute.Result
-import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
 class EqualityRewriterSpec extends Specification {
   "rewriting a statement" should {
     def testRewrite(premises: Seq[Statement], target: Statement) = {
-      implicit val stepContext = StepContext.withPremisesAndTerms(premises, Nil)
+      implicit val stepContext = createBaseStepContext(premises, Seq(target))
 
       val stepOption = EqualityRewriter.rewrite(target)
       stepOption must beSome(beStepThatMakesValidTheorem(premises, target))

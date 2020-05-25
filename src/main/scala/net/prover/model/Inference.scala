@@ -2,11 +2,11 @@ package net.prover.model
 
 import java.security.MessageDigest
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.Inference._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
-import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
+import net.prover.model.entries.{ChapterEntry, ChapterEntryParser, StatementDefinitionEntry}
 import net.prover.model.expressions._
 import net.prover.model.proof.{StepContext, SubstitutionContext}
 
@@ -20,6 +20,9 @@ trait Inference {
   def premises: Seq[Statement]
   @JsonSerialize
   def conclusion: Statement
+
+  @JsonIgnore
+  def variableDefinitions: VariableDefinitions
 
   def summary: Summary = Summary(this)
 
@@ -117,21 +120,28 @@ object Inference {
     }
   }
 
-  case class Summary(name: String, id: String, premises: Seq[Statement], conclusion: Statement, additionalVariableNames: Seq[String]) extends Inference {
+  case class Summary(
+    name: String,
+    id: String,
+    variableDefinitions: VariableDefinitions,
+    premises: Seq[Statement],
+    conclusion: Statement
+  ) extends Inference {
     def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Summary = {
       val newPremises = premises.map(_.replaceDefinitions(expressionDefinitionReplacements))
       val newConclusion = conclusion.replaceDefinitions(expressionDefinitionReplacements)
       Summary(
         name,
         Inference.calculateHash(newPremises, newConclusion),
+        variableDefinitions,
         newPremises,
-        newConclusion,
-        additionalVariableNames)
+        newConclusion)
     }
   }
   object Summary {
     def apply(inference: Inference): Summary = {
-      inference.asOptionalInstanceOf[Summary].getOrElse(Summary(inference.name, inference.id, inference.premises, inference.conclusion, Nil))
+      inference.asOptionalInstanceOf[Summary]
+        .getOrElse(Summary(inference.name, inference.id, inference.variableDefinitions, inference.premises, inference.conclusion))
     }
   }
 
@@ -143,6 +153,7 @@ object Inference {
 
   case class StatementDefinition(
       nameOfDefinition: String,
+      variableDefinitions: VariableDefinitions,
       premise: Statement,
       conclusion: Statement)
     extends Inference.Definition
@@ -152,6 +163,7 @@ object Inference {
 
   case class TermDefinition(
       nameOfDefinition: String,
+      variableDefinitions: VariableDefinitions,
       premises: Seq[Statement],
       conclusion: Statement)
     extends Inference.Definition

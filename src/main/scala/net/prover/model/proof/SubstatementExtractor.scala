@@ -23,7 +23,7 @@ object SubstatementExtractor {
   }
   object VariableTracker {
     def fromInference(inference: Inference): VariableTracker = VariableTracker(inference.requiredSubstitutions.terms.map(_._1), Nil)
-    def fromStepContext(implicit stepContext: StepContext): VariableTracker = VariableTracker(stepContext.termVariableNames, Nil)
+    def fromStepContext(implicit stepContext: StepContext): VariableTracker = VariableTracker(stepContext.variableDefinitions.termVariableDefinitions.map(_.name), Nil)
   }
 
   private def getBaseExtractionOption(sourceStatement: Statement, variableTracker: VariableTracker): Seq[ExtractionOption] = {

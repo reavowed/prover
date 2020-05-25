@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions._
-import net.prover.model.{DisambiguatedSymbol, ExpressionParsingContext, Format, Inference, Parser, ParsingContextWithParameters, TemplateParsingContext}
+import net.prover.model.{DisambiguatedSymbol, ExpressionParsingContext, Format, Inference, Parser, ParsingContextWithParameters, TemplateParsingContext, VariableDefinitions}
 
 trait ExpressionDefinition {
   def baseSymbol: String
@@ -20,9 +20,10 @@ trait ExpressionDefinition {
   def defaultValue: Expression
   def attributes: Seq[String]
   def complexity: Int
-
   @JsonIgnore
   def associatedChapterEntry: ChapterEntry
+
+  def variableDefinitions: VariableDefinitions = VariableDefinitions.fromComponentTypes(componentTypes)
 
   def increaseDepth(internalDepth: Int): Int = {
     if (boundVariableNames.nonEmpty)
@@ -75,7 +76,7 @@ object ExpressionDefinition {
       Parser.selectOptionalWordParser {
         case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
           Parser.constant(StatementComponent(name, Nil))
-        case ExpressionParsingContext.RecognisedDefaultTermVariableNameWithSuffix(name) =>
+        case ExpressionParsingContext.RecognisedTermVariableName(name) =>
           Parser.constant(TermComponent(name, Nil))
       }.whileDefined
     }
@@ -84,7 +85,7 @@ object ExpressionDefinition {
       Parser.selectOptionalWordParser {
         case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
           Parser.constant(StatementComponent(name, Nil))
-        case ExpressionParsingContext.RecognisedDefaultTermVariableNameWithSuffix(name) =>
+        case ExpressionParsingContext.RecognisedTermVariableName(name) =>
           Parser.constant(TermComponent(name, Nil))
         case "with" =>
           for {
@@ -95,7 +96,7 @@ object ExpressionDefinition {
             componentType <- Parser.selectWord("predicate or function name") {
               case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
                 StatementComponent(name, arguments)
-              case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
+              case ExpressionParsingContext.RecognisedTermVariableName(name) =>
                 TermComponent(name, arguments)
             }
           } yield componentType
@@ -131,8 +132,8 @@ trait StatementDefinition extends ExpressionDefinition {
   def definingStatement: Option[Statement]
   val disambiguator: Option[String] = None
   val defaultValue: DefinedStatement = DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)
-  val constructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, _, defaultValue))
-  val deconstructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, defaultValue, _))
+  val constructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, variableDefinitions,  _, defaultValue))
+  val deconstructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, variableDefinitions, defaultValue, _))
   def inferences: Seq[Inference.FromEntry] = constructionInference.toSeq ++ deconstructionInference.toSeq
 
   override val complexity: Int = definingStatement.map(_.definitionalComplexity).getOrElse(1)
@@ -185,7 +186,7 @@ trait TermDefinition extends ExpressionDefinition {
   def definitionPredicate: Statement
   val defaultValue: DefinedTerm = DefinedTerm(componentTypes.map(_.expression), this)(boundVariableNames)
   val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0).get
-  val definitionInference: Inference.Definition = Inference.TermDefinition(name, premises, definingStatement)
+  val definitionInference: Inference.Definition = Inference.TermDefinition(name, variableDefinitions, premises, definingStatement)
   def inferences: Seq[Inference.FromEntry] = Seq(definitionInference)
 
   override val complexity: Int = definitionPredicate.definitionalComplexity

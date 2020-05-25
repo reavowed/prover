@@ -1,12 +1,9 @@
 package net.prover.controllers
 
-import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.StepChainingController.ChainedTargetDefinition
-import net.prover.controllers.models.{PathData, PossibleConclusion, PossibleConclusionWithPremises, PossibleInference, PossibleInferenceWithTargets, PossibleTarget, StepDefinition}
-import net.prover.model.ExpressionParsingContext.TermVariableValidator
+import net.prover.controllers.models._
 import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
 import net.prover.model.{ExpressionParsingContext, Inference, Substitutions}
 import net.prover.util.Direction
@@ -211,7 +208,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           getResult { (extractionInferences, substitutions, getIntendedTarget) =>
             for {
               inference <- findInference(inferenceId)
-              epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromInference(inference).baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
+              epc = ExpressionParsingContext.forInference(inference).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
               intendedConclusionOption <- getIntendedTarget(epc)
               intendedPremiseStatementsOption <- definition.parseIntendedPremiseStatements(epc)
               (inferenceToApply, intendedExtractionPremisesOption) <- intendedPremiseStatementsOption match {
@@ -233,10 +230,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
             for {
               premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
               premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
-              epc = ExpressionParsingContext(
-                implicitly,
-                TermVariableValidator.LimitedList(VariableTracker.fromStepContext.baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten),
-                stepProvingContext.stepContext.boundVariableLists.map(_.zipWithIndex))
+              epc = ExpressionParsingContext.atStep(stepProvingContext).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
               intendedConclusionOption <- getIntendedConclusion(epc)
               intendedPremiseStatementsOption <- definition.parseIntendedPremiseStatements(epc)
               substitutedIntendedPremiseStatementsOption <- intendedPremiseStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to extraction premises")).swap

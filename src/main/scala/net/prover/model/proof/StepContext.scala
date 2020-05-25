@@ -1,10 +1,11 @@
 package net.prover.model.proof
 
+import net.prover.model.VariableDefinitions
 import net.prover.model.expressions.Statement
 
 case class StepContext private(
     stepReference: StepReference,
-    termVariableNames: Seq[String],
+    variableDefinitions: VariableDefinitions,
     boundVariableLists: Seq[Seq[String]],
     premises: Seq[Premise.Given])
   extends SubstitutionContext
@@ -34,8 +35,8 @@ case class StepContext private(
   }
 }
 object StepContext {
-  def withPremisesAndTerms(premises: Seq[Statement], termVariableNames: Seq[String]): StepContext = {
-    val emptyContext = StepContext(StepReference(Nil), termVariableNames, Nil, Nil)
+  def withPremisesAndVariables(premises: Seq[Statement], variableDefinitions: VariableDefinitions): StepContext = {
+    val emptyContext = StepContext(StepReference(Nil), variableDefinitions, Nil, Nil)
     premises.zipWithIndex.foldLeft(emptyContext) { case (context, (premise, index)) =>
       context.addStatement(premise, PremiseReference(index))
     }

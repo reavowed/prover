@@ -167,13 +167,15 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
-      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       for {
         name <- getMandatoryString(newTheoremDefinition.name, "Theorem name")
-        premises <- getPremises(newTheoremDefinition.premises)
-        conclusion <- Statement.parser.parseFromString(newTheoremDefinition.conclusion, "conclusion").recoverWithBadRequest
+        variableDefinitions <- getVariableDefinitions(newTheoremDefinition.statementVariableDefinitions, newTheoremDefinition.termVariableDefinitions)
+        expressionParsingContext = ExpressionParsingContext.withDefinitions(variableDefinitions)
+        premises <- getPremises(newTheoremDefinition.premises)(expressionParsingContext)
+        conclusion <- getStatement(newTheoremDefinition.conclusion, "conclusion")(expressionParsingContext)
         newTheorem = Theorem(
           name,
+          variableDefinitions,
           premises,
           conclusion,
           Seq(Theorem.Proof(Seq(Step.Target(conclusion)))))
@@ -196,7 +198,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
-      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       val name = getOptionalString(newStatementDefinition.name)
       val shorthand = getOptionalString(newStatementDefinition.shorthand)
       val attributes = getWords(newStatementDefinition.attributes)
@@ -205,6 +206,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         boundVariableNamesAndComponentTypes <- ExpressionDefinitionEntry.rawBoundVariablesAndComponentTypesParser.parseFromString(newStatementDefinition.components, "components").recoverWithBadRequest
         boundVariableNames = boundVariableNamesAndComponentTypes._1
         componentTypes = boundVariableNamesAndComponentTypes._2
+        expressionParsingContext = ExpressionParsingContext.forComponentTypes(componentTypes)
         definition <- newStatementDefinition.definition.filter(_.nonEmpty).map(d => Statement.parser(expressionParsingContext.addInitialParameter("_")).parseFromString(d, "definition").recoverWithBadRequest).swap
         format <- getFormat(newStatementDefinition.format, symbol, boundVariableNames, componentTypes)
         newStatementDefinition = StatementDefinitionEntry(
@@ -228,7 +230,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
-      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       val name = getOptionalString(newTermDefinition.name)
       val shorthand = getOptionalString(newTermDefinition.shorthand)
       val attributes = getWords(newTermDefinition.attributes)
@@ -238,9 +239,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         boundVariableNamesAndComponentTypes <- ExpressionDefinitionEntry.rawBoundVariablesAndComponentTypesParser.parseFromString(newTermDefinition.components, "components").recoverWithBadRequest
         boundVariableNames = boundVariableNamesAndComponentTypes._1
         componentTypes = boundVariableNamesAndComponentTypes._2
+        expressionParsingContext = ExpressionParsingContext.forComponentTypes(componentTypes)
         definition <- Statement.parser(expressionParsingContext.addInitialParameter("_")).parseFromString(newTermDefinition.definition, "definition").recoverWithBadRequest
         format <- getFormat(newTermDefinition.format, symbol, boundVariableNames, componentTypes)
-        premises <- newTermDefinition.premises.mapWithIndex((str, index) => Statement.parser.parseFromString(str, s"premise ${index + 1}")).recoverWithBadRequest
+        premises <- newTermDefinition.premises.mapWithIndex((str, index) => Statement.parser(expressionParsingContext).parseFromString(str, s"premise ${index + 1}")).recoverWithBadRequest
         newTerm = TermDefinitionEntry(
           symbol,
           boundVariableNames,
@@ -265,13 +267,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
-      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       val name = getOptionalString(newTypeDefinition.name)
       for {
         symbol <- getMandatoryString(newTypeDefinition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newTypeDefinition.defaultTermName, "Default term name")
         qualifier <- getOptionalQualifier(newTypeDefinition.qualifierTermNames, newTypeDefinition.qualifierFormat)
-        definition <- Statement.parser.parseFromString(newTypeDefinition.definition, "definition").recoverWithBadRequest
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(defaultTermName +: qualifier.termNames)
+        definition <- Statement.parser(expressionParsingContext).parseFromString(newTypeDefinition.definition, "definition").recoverWithBadRequest
         newTypeDefinition = TypeDefinition(
           symbol,
           defaultTermName,
@@ -290,13 +292,13 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
-      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       val name = getOptionalString(newTypeQualifierDefinition.name)
       for {
         symbol <- getMandatoryString(newTypeQualifierDefinition.symbol, "Symbol")
         parentType <- entryContext.typeDefinitions.get(newTypeQualifierDefinition.parentType).orBadRequest(s"Unknown type '${newTypeQualifierDefinition.parentType}'")
         qualifier <- getQualifier(newTypeQualifierDefinition.qualifierTermNames, newTypeQualifierDefinition.qualifierFormat)
-        definition <- Statement.parser.parseFromString(newTypeQualifierDefinition.definition, "definition").recoverWithBadRequest
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: qualifier.termNames)
+        definition <- Statement.parser(expressionParsingContext).parseFromString(newTypeQualifierDefinition.definition, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newTypeQualifierDefinition = TypeQualifierDefinition(
           symbol,
@@ -317,7 +319,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
-      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       val name = getOptionalString(newPropertyDefinition.name)
       for {
         symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")
@@ -325,8 +326,9 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newPropertyDefinition.requiredParentQualifier)
         requiredParentObjects <- getParentObjects(parentType, newPropertyDefinition.requiredParentObjects)
         adapter <- getOptionalAdapter(newPropertyDefinition.ownTermNames, newPropertyDefinition.parentTerms, (requiredParentQualifier.map(_.qualifier) orElse parentType.qualifier).termNames)
-        definingStatement <- Statement.parser.parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(PropertyDefinitionOnType.getParentConditionAndQualifierTermNames(parentType, adapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition )._2)
+        definingStatement <- Statement.parser(expressionParsingContext).parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
         newPropertyDefinition = PropertyDefinitionOnType(
           symbol,
           parentType,
@@ -341,21 +343,21 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   }
 
   @PostMapping(value = Array("/relatedObjectDefinitions"), produces = Array("application/json;charset=UTF-8"))
-  def createPropertyDefinition(
+  def createRelatedObjectDefinition(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newRelatedObjectDefinition: NewRelatedObjectDefinitionModel
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
-      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       val name = getOptionalString(newRelatedObjectDefinition.name)
       for {
         symbol <- getMandatoryString(newRelatedObjectDefinition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newRelatedObjectDefinition.defaultTermName, "Default term name")
         parentType <- entryContext.typeDefinitions.get(newRelatedObjectDefinition.parentType).orBadRequest(s"Unknown type '${newRelatedObjectDefinition.parentType}'")
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newRelatedObjectDefinition.requiredParentQualifier)
-        definingStatement <- Statement.parser.parseFromString(newRelatedObjectDefinition.definingStatement, "definition").recoverWithBadRequest
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: requiredParentQualifier.map(_.qualifier).orElse(parentType.qualifier).termNames)
+        definingStatement <- Statement.parser(expressionParsingContext).parseFromString(newRelatedObjectDefinition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newPropertyDefinition = RelatedObjectDefinition(
           symbol,
@@ -377,12 +379,12 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
   ): ResponseEntity[_] = {
     bookService.addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
       implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
-      implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
       val name = getOptionalString(newPropertyDefinition.name)
       for {
         symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newPropertyDefinition.defaultTermName, "Default term name")
-        definition <- Statement.parser.parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(Seq(defaultTermName))
+        definition <- Statement.parser(expressionParsingContext).parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
         newPropertyDefinition = StandalonePropertyDefinition(
           symbol,
           defaultTermName,
@@ -481,6 +483,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
 object ChapterController {
   case class NewTheoremModel(
     name: String,
+    statementVariableDefinitions: Seq[String],
+    termVariableDefinitions: Seq[String],
     premises: Seq[String],
     conclusion: String)
   case class NewStatementDefinitionModel(

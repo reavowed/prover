@@ -70,7 +70,8 @@ object TypeDefinition extends ChapterEntryParser {
       defaultTermName <- Parser.singleWord
       qualifier <- Parser.optional("qualifier", Qualifier.parser)
       explicitName <- Parser.optional("name", Parser.allInParens)
-      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, defaultTermName +: qualifier.termNames)).inParens)
+      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(defaultTermName +: qualifier.termNames)
+      definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
     } yield TypeDefinition(symbol, defaultTermName, qualifier, explicitName, definingStatement)
   }
 }

@@ -18,6 +18,7 @@ import scala.util.{Failure, Try}
 @JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
     name: String,
+    variableDefinitions: VariableDefinitions,
     premises: Seq[Statement],
     conclusion: Statement,
     proofs: Seq[Proof])
@@ -29,7 +30,7 @@ case class Theorem(
   override def inferences: Seq[Inference.FromEntry] = Seq(this)
 
   def isComplete(definitions: Definitions): Boolean = proofs.exists(_.isComplete(definitions))
-  def initialStepContext: StepContext = StepContext.withPremisesAndTerms(premises, requiredSubstitutions.terms.map(_._1))
+  def initialStepContext: StepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)
 
   private def modifyProof[F[_] : Functor](proofIndex: Int, f: Proof => Option[F[Proof]]): Option[F[Theorem]] = {
     proofs.splitAtIndexIfValid(proofIndex).flatMap { case (before, proof, after) =>
@@ -68,6 +69,7 @@ case class Theorem(
   }
 
   override def serializedLines: Seq[String] = Seq(s"theorem $name") ++
+    variableDefinitions.serializedLines ++
     premises.map("premise " + _.serialized) ++
     Seq("conclusion " + conclusion.serialized) ++
     proofs.flatMap(_.serializedLines)
@@ -93,6 +95,7 @@ case class Theorem(
   ): Theorem = {
     Theorem(
       name,
+      variableDefinitions,
       premises.map(_.replaceDefinitions(expressionDefinitionReplacements)),
       conclusion.replaceDefinitions(expressionDefinitionReplacements),
       proofs.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
@@ -205,11 +208,16 @@ object Theorem extends Inference.EntryParser {
     }
   }
 
-  def proofsParser(theoremName: String, premises: Seq[Statement], conclusion: Statement)(implicit entryContext: EntryContext): Parser[Seq[Proof]] = {
+  def proofsParser(
+    theoremName: String,
+    variableDefinitions: VariableDefinitions,
+    premises: Seq[Statement],
+    conclusion: Statement)(
+    implicit entryContext: EntryContext
+  ): Parser[Seq[Proof]] = {
+    val initialStepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)
     val proofParser = for {
-      steps <- Step.listParser(
-        entryContext,
-        StepContext.withPremisesAndTerms(premises, (premises :+ conclusion).map(_.requiredSubstitutions).foldTogether.terms.map(_._1))).inBraces
+      steps <- Step.listParser(entryContext, initialStepContext).inBraces
       _ = if (!steps.mapCollect(_.provenStatement).lastOption.contains(conclusion)) throw new Exception(s"Proof of theorem '$theoremName' did not prove $conclusion")
     } yield Proof(steps)
 
@@ -220,18 +228,13 @@ object Theorem extends Inference.EntryParser {
   }
 
   override def parser(implicit entryContext: EntryContext): Parser[Theorem] = {
-    implicit val expressionParsingContext: ExpressionParsingContext = ExpressionParsingContext.outsideProof(entryContext)
     for {
       name <- Parser.toEndOfLine
-      premises <- premisesParser
-      conclusion <- conclusionParser
-      proofs <- proofsParser(name, premises, conclusion)
-    } yield {
-      Theorem(
-        name,
-        premises,
-        conclusion,
-        proofs)
-    }
+      variableDefinitions <- VariableDefinitions.parser
+      expressionParsingContext = ExpressionParsingContext.withDefinitions(variableDefinitions)
+      premises <- premisesParser(expressionParsingContext)
+      conclusion <- conclusionParser(expressionParsingContext)
+      proofs <- proofsParser(name, variableDefinitions, premises, conclusion)
+    } yield Theorem(name, variableDefinitions, premises, conclusion, proofs)
   }
 }

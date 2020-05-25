@@ -39,15 +39,15 @@ object Term {
       case "with" =>
         for {
           arguments <- Term.parser.listInParensOrSingle(None)
-          name <- Parser.selectWord("variable name") {
-            case context.RecognisedTermVariableName(name) => name
-          }
-        } yield TermVariable(name, arguments)
+          name <- Parser.singleWord
+        } yield context.getTermVariable(name, arguments).getOrElse(throw new Exception(s"Unrecognised statement variable $name"))
       case context.entryContext.RecognisedTermDefinition(termDefinition) =>
         termDefinition.termParser
       case context.entryContext.RecognisedTermShorthand(template) =>
         template.expressionParser.map(_.asInstanceOf[Term])
-      case context.RecognisedTermVariableOrParameter(variableOrParameter) =>
+      case context.SimpleTermVariable(variable) =>
+        Parser.constant(variable)
+      case context.RecognisedParameter(variableOrParameter) =>
         Parser.constant(variableOrParameter)
     }
   }
@@ -71,7 +71,7 @@ object Term {
       definition.templateParser
     case context.RecognisedParameter(parameter) =>
       Parser.constant(FunctionParameterTemplate(parameter))
-    case ExpressionParsingContext.RecognisedDefaultTermVariableName(name) =>
+    case ExpressionParsingContext.RecognisedTermVariableName(name) =>
       Parser.constant(TermVariableTemplate(name))
   }
 }

@@ -15,7 +15,7 @@ object TermListAdapter {
   def parser(implicit entryContext: EntryContext): Parser[TermListAdapter] = {
     for {
       termNames <- Parser.wordsInParens
-      expressionParsingContext = ExpressionParsingContext.outsideProof(entryContext, Nil).addInitialParameters(termNames)
+      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(termNames)
       templates <- Term.parser(expressionParsingContext).listInParens(Some(","))
     } yield TermListAdapter(termNames, templates)
   }

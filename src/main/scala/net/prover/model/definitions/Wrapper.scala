@@ -1,5 +1,6 @@
 package net.prover.model.definitions
 
+import net.prover.model.VariableDefinition
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
 

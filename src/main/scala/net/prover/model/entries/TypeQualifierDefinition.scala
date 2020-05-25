@@ -62,8 +62,9 @@ object TypeQualifierDefinition extends ChapterEntryParser {
       symbol <- Parser.singleWord
       parentType <- Parser.required("on", context.typeDefinitionParser)
       qualifier <- Qualifier.parser
+      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: qualifier.termNames)
       explicitName <- Parser.optional("name", Parser.allInParens)
-      definingStatement <- Parser.required("definition", Statement.parser(ExpressionParsingContext.outsideProof(context, parentType.defaultTermName +: qualifier.termNames)).inParens)
+      definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
       conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
     } yield TypeQualifierDefinition(symbol, parentType, qualifier, explicitName, definingStatement, conjunctionDefinition)
   }

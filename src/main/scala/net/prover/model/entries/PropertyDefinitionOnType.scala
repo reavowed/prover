@@ -158,8 +158,8 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
       explicitName <- Parser.optional("name", Parser.allInParens)
       conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create property definition without conjunction"))
       (_, qualifierTermNames) = getParentConditionAndQualifierTermNames(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
-      epc = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.outsideProof(context, parentType.defaultTermName +: qualifierTermNames))
-      definingStatement <- Parser.required("definition", Statement.parser(epc).inParens)
+      expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: qualifierTermNames))
+      definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
     } yield PropertyDefinitionOnType(symbol, parentType, requiredParentQualifier, requiredParentObjects, termListAdapter, explicitName, definingStatement, conjunctionDefinition)
   }
 }

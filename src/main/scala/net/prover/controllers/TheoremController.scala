@@ -22,7 +22,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @RequestBody serializedNewPremises: Seq[String]
   ): ResponseEntity[_] = {
     bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      implicit val expressionParsingContext = ExpressionParsingContext.outsideProof(provingContext.entryContext)
+      implicit val expressionParsingContext = ExpressionParsingContext.forInference(theorem)(provingContext.entryContext)
       for {
         newPremises <- getPremises(serializedNewPremises)
       } yield theorem.copy(premises = newPremises)
@@ -36,7 +36,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     @RequestBody serializedNewConclusion: String
   ): ResponseEntity[_] = {
     bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      implicit val expressionParsingContext = ExpressionParsingContext.outsideProof(provingContext.entryContext)
+      implicit val expressionParsingContext = ExpressionParsingContext.forInference(theorem)(provingContext.entryContext)
       for {
         newConclusion <- getStatement(serializedNewConclusion, "conclusion")
       } yield theorem.copy(conclusion = newConclusion)

@@ -29,7 +29,7 @@ class StepProvingSpec extends ControllerSpec {
 
       service.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns Success((
         Step.Target(Negation(Equals(a, b))),
-        entryContextAndStepContextToStepProvingContext(defaultEntryContext, createOuterStepContext(Nil, Nil))))
+        entryContextAndStepContextToStepProvingContext(defaultEntryContext, createOuterStepContextForStatements(Nil, Nil))))
 
       controller.getPossibleInferencesForCurrentTarget(
         bookKey,
@@ -113,7 +113,7 @@ class StepProvingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
 
-      val axiom = Axiom("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
+      val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
       val entryContext = defaultEntryContext.copy(availableEntries = defaultEntryContext.availableEntries :+ axiom)
 
       val premise = φ(a)
@@ -220,7 +220,7 @@ class StepProvingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
 
-      val axiom = Axiom("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
+      val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
       val entryContext = defaultEntryContext.copy(availableEntries = defaultEntryContext.availableEntries :+ axiom)
 
       val premise = Exists("z")(ψ(a, $))
@@ -236,8 +236,8 @@ class StepProvingSpec extends ControllerSpec {
 
       checkModifyStepsWithMatcher(
         service,
-        fillerSteps(stepIndex) :+ target(statementToProve),
-        matchSteps(fillerSteps(stepIndex) :+ target(premise) :+ elided(axiom, Seq(
+        fillerSteps(stepIndex - 1) :+ target(ψ(b, c)) :+ target(statementToProve),
+        matchSteps(fillerSteps(stepIndex - 1) :+ target(ψ(b, c)) :+ target(premise) :+ elided(axiom, Seq(
           assertion(axiom, Seq(φ($), ψ($(0), $(1))), Nil),
           assertion(specification, Seq(Equivalence(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
           assertion(reverseImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
@@ -285,7 +285,7 @@ class StepProvingSpec extends ControllerSpec {
       val additionProperty = Conjunction(
         ForAllIn("a", Naturals)(Equals(add($, Zero), $)),
         ForAllIn("a", Naturals)(ForAllIn("b", Naturals)(Equals(add($.^, Successor($)), Successor(add($.^, $))))))
-      val axiom = Axiom(
+      val axiom = createInference(
         "Function Properties of Natural Addition",
         Nil,
         Conjunction(

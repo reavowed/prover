@@ -44,8 +44,4 @@ object ExpressionDefinitionEntry {
   }
 
   def shorthandParser: Parser[Option[String]] = Parser.optional("shorthand", Parser.allInParens)
-
-  def attributesParser: Parser[Seq[String]] = {
-    Parser.optional("attributes", Parser.wordsInParens, Nil)
-  }
 }

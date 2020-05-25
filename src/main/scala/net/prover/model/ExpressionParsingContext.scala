@@ -1,12 +1,12 @@
 package net.prover.model
 
-import net.prover.model.ExpressionParsingContext.TermVariableValidator
-import net.prover.model.expressions._
+import net.prover.model.definitions.ExpressionDefinition.ComponentType
+import net.prover.model.expressions.{StatementVariable, Term, TermVariable}
 import net.prover.model.proof.{StepContext, StepProvingContext}
 
 case class ExpressionParsingContext(
     entryContext: EntryContext,
-    termVariableValidator: TermVariableValidator,
+    variableDefinitions: VariableDefinitions,
     parameterLists: Seq[Seq[(String, Int)]])
   extends ParsingContextWithParameters[ExpressionParsingContext]
 {
@@ -34,12 +34,32 @@ case class ExpressionParsingContext(
     copy(parameterLists = parameters.zipWithIndex +: parameterLists)
   }
 
-  object RecognisedTermVariableName {
-    def unapply(text: String): Option[String] = termVariableValidator.getVariable(text)
+  def addSimpleTermVariables(additionalTermVariableNames: Seq[String]): ExpressionParsingContext = {
+    copy(variableDefinitions = variableDefinitions.addSimpleTermVariables(additionalTermVariableNames))
   }
-  object RecognisedTermVariableOrParameter {
-    def unapply(string: String): Option[Term] = {
-      termVariableValidator.getVariableOrParameter(string, RecognisedParameter.unapply(string))
+
+  private def getVariable[T](name: String, arguments: Seq[Term], definitions: Seq[VariableDefinition], description: String, constructor: (String, Seq[Term]) => T): Option[T] = {
+    definitions.find(_.name == name).map { definition =>
+      if (definition.arity != arguments.length) throw new Exception(s"${description.capitalize} variable $name requires ${definition.arity} parameters")
+      constructor(definition.name, arguments)
+    }
+  }
+
+  def getStatementVariable(name: String, arguments: Seq[Term]): Option[StatementVariable] = {
+    getVariable(name, arguments, variableDefinitions.statementVariableDefinitions, "statement", StatementVariable.apply)
+  }
+  def getTermVariable(name: String, arguments: Seq[Term]): Option[TermVariable] = {
+    getVariable(name, arguments, variableDefinitions.termVariableDefinitions, "term", TermVariable.apply)
+  }
+
+  object SimpleStatementVariable {
+    def unapply(name: String): Option[StatementVariable] = {
+      getStatementVariable(name, Nil)
+    }
+  }
+  object SimpleTermVariable {
+    def unapply(name: String): Option[TermVariable] = {
+      getTermVariable(name, Nil)
     }
   }
 }
@@ -53,47 +73,26 @@ object ExpressionParsingContext {
   object RecognisedStatementVariableName {
     def unapply(text: String): Option[String] = s"($StatementVariablePattern)".r.unapplySeq(text).flatMap(_.headOption)
   }
-  object RecognisedDefaultTermVariableName {
-    def unapply(text: String): Option[String] = s"($TermVariableNamePattern)".r.unapplySeq(text).flatMap(_.headOption)
-  }
-  object RecognisedDefaultTermVariableNameWithSuffix {
+  object RecognisedTermVariableName {
     def unapply(text: String): Option[String] = s"($TermVariableNamePattern$TermVariableSuffixPattern)".r.unapplySeq(text).flatMap(_.headOption)
   }
 
-  trait TermVariableValidator {
-    protected def isValidTermVariable(text: String): Boolean
-    def getVariable(text: String): Option[String] = Some(text).filter(isValidTermVariable)
-    def getVariableOrParameter(text: String, parameter: Option[FunctionParameter]): Option[Term]
+  def forInference(inference: Inference)(implicit entryContext: EntryContext): ExpressionParsingContext = withDefinitions(inference.variableDefinitions)
+  def forComponentTypes(componentTypes: Seq[ComponentType])(implicit entryContext: EntryContext): ExpressionParsingContext = {
+    withDefinitions(VariableDefinitions.fromComponentTypes(componentTypes))
   }
-  object TermVariableValidator{
-    case object AnyTermVariable extends TermVariableValidator {
-      override protected def isValidTermVariable(text: String): Boolean = RecognisedDefaultTermVariableNameWithSuffix.unapply(text).nonEmpty
-      override def getVariableOrParameter(text: String, parameter: Option[FunctionParameter]): Option[Term] = {
-        parameter orElse getVariable(text).map(TermVariable(_, Nil))
-      }
-    }
-    case class LimitedList(allowedTermVariables: Seq[String]) extends TermVariableValidator {
-      override def isValidTermVariable(text: String): Boolean = allowedTermVariables.contains(text)
-      override def getVariableOrParameter(text: String, parameter: Option[FunctionParameter]): Option[Term] = {
-        getVariable(text).map(TermVariable(_, Nil)) orElse parameter
-      }
-    }
+  def forTypeDefinition(termNames: Seq[String])(implicit entryContext: EntryContext): ExpressionParsingContext = {
+    withDefinitions(VariableDefinitions.empty.addSimpleTermVariables(termNames))
   }
 
-  def outsideProof(entryContext: EntryContext): ExpressionParsingContext =
-    ExpressionParsingContext(
-      entryContext,
-      TermVariableValidator.AnyTermVariable,
-      Nil)
-  def outsideProof(entryContext: EntryContext, termVariableNames: Seq[String]): ExpressionParsingContext =
-    ExpressionParsingContext(
-      entryContext,
-      TermVariableValidator.LimitedList(termVariableNames),
-      Nil)
+  def withDefinitions(variableDefinitions: VariableDefinitions)(implicit entryContext: EntryContext): ExpressionParsingContext = {
+    ExpressionParsingContext(entryContext, variableDefinitions, Nil)
+  }
+
   implicit def atStep(implicit entryContext: EntryContext, stepContext: StepContext): ExpressionParsingContext = {
     ExpressionParsingContext(
       entryContext,
-      TermVariableValidator.LimitedList(stepContext.termVariableNames),
+      stepContext.variableDefinitions,
       stepContext.boundVariableLists.map(_.zipWithIndex))
   }
   implicit def atStep(stepProvingContext: StepProvingContext): ExpressionParsingContext = {

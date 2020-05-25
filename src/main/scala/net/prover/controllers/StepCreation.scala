@@ -1,12 +1,9 @@
 package net.prover.controllers
 
-import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.{StepDefinition, Unwrapper}
-import net.prover.model.ExpressionParsingContext.TermVariableValidator
-import net.prover.model.{ExpressionParsingContext, Substitutions}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{PremiseFinder, ProofHelper, Step, StepProvingContext}
-import net.prover.model.proof.SubstatementExtractor.VariableTracker
+import net.prover.model.proof.{Step, StepProvingContext}
+import net.prover.model.{ExpressionParsingContext, Substitutions}
 
 import scala.util.{Success, Try}
 
@@ -23,7 +20,7 @@ trait StepCreation extends BookModification {
       wrappedStepProvingContext = StepProvingContext.updateStepContext(unwrappers.enhanceContext)
       substitutions <- definition.substitutions.parse()(ExpressionParsingContext.atStep(wrappedStepProvingContext))
       extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
-      epc = ExpressionParsingContext(implicitly, TermVariableValidator.LimitedList(VariableTracker.fromInference(inference).baseVariableNames ++ definition.additionalVariableNames.toSeq.flatten), Nil)
+      epc = ExpressionParsingContext.forInference(inference).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
       conclusionOption <- getConclusionOption(epc, substitutions)
       newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
       (inferenceToApply, newTargetStatementsForExtractionOption) <- newTargetStatementsOption match {

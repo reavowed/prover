@@ -80,7 +80,7 @@ trait ParameterValidation {
     getOptionalString(possibleSerializedTemplates) match {
       case Some(serializedTemplates) =>
         val termNames = getWords(termNamesText)
-        implicit val epc = ExpressionParsingContext.outsideProof(entryContext, Nil).addInitialParameters(termNames)
+        implicit val epc = ExpressionParsingContext.forTypeDefinition(termNames)
         for {
           templates <- qualifierTermNames.indices.map(_ => Term.parser).traverse.parseFromString(serializedTemplates, "templates").recoverWithBadRequest
         } yield Some(TermListAdapter(termNames, templates))
@@ -89,10 +89,24 @@ trait ParameterValidation {
     }
   }
 
+  private def parse[T](parser: Parser[T], str: String, description: String): Try[T] = {
+    parser.parseFromString(str, description).recoverWithBadRequest
+  }
+  private def parseAll[T](parser: Parser[T], strs: Seq[String], description: String): Try[Seq[T]] = {
+    strs.mapWithIndex((str, index) =>  parse(parser, str, s"$description ${index + 1}")).traverseTry
+  }
+
+  def getVariableDefinitions(statementVariableDefinitionsText: Seq[String], termVariableDefinitionsText: Seq[String]): Try[VariableDefinitions] = {
+    for {
+      statementVariableDefinitions <- parseAll(VariableDefinition.parser, statementVariableDefinitionsText.flatMap(getOptionalString), "statement variable definition")
+      termVariableDefinitions <- parseAll(VariableDefinition.parser, termVariableDefinitionsText.flatMap(getOptionalString), "term variable definition")
+    } yield VariableDefinitions(statementVariableDefinitions, termVariableDefinitions)
+  }
+
   def getPremises(serializedPremises: Seq[String])(implicit expressionParsingContext: ExpressionParsingContext): Try[Seq[Statement]] = {
-    serializedPremises.flatMap(getOptionalString).mapWithIndex((str, index) => getStatement(str, s"premise ${index + 1}")).traverseTry
+    parseAll(Statement.parser, serializedPremises.flatMap(getOptionalString), "premise")
   }
   def getStatement(serializedStatement: String, description: String)(implicit expressionParsingContext: ExpressionParsingContext): Try[Statement] = {
-    Statement.parser.parseFromString(serializedStatement, description).recoverWithBadRequest
+    parse(Statement.parser, serializedStatement, description)
   }
 }
