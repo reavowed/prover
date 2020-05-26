@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {StepReference} from "../../../../models/Step";
 import HashParamsContext from "../../../HashParamsContext";
 import {formatHtml} from "../../../helpers/Formatter";
+import ProofContext from "../ProofContext";
 import ProofLine from "./components/ProofLine";
 import Step from "./Step";
 import {Steps} from "./Steps";
@@ -13,17 +14,25 @@ const SubproofOutline = styled.div`
   padding: 0.5rem 1rem 0.5rem 0;
 `;
 
-export class SubproofStep extends React.Component {
-  static contextType = HashParamsContext;
+export class SubproofStepWithContexts extends React.Component {
   constructor(...args) {
     super(...args);
     const {step} = this.props;
     this.state = {
-      showingSubproof: !step.isComplete && (step.substeps.length > 1 || step.substeps[0].type !== "target") || _.intersection(_.map(this.props.step.inferencesUsed, "id"), this.context.inferencesToHighlight).length
+      showingSubproof: !step.isComplete && (step.substeps.length > 1 || step.substeps[0].type !== "target") || _.intersection(_.map(this.props.step.inferencesUsed, "id"), this.props.hashParamsContext.inferencesToHighlight).length
     };
   }
   toggleSubproof = () => {
     this.setState({showingSubproof: !this.state.showingSubproof})
+  };
+
+  unpackStep = () => {
+    this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "unpack", {method: "POST"});
+  };
+  onProofLineKeyDown = (event) => {
+    if (event.key === "u") {
+      this.unpackStep();
+    }
   };
   render() {
     let {step, path, additionalReferences} = this.props;
@@ -44,11 +53,20 @@ export class SubproofStep extends React.Component {
         {titleElement}
         <ProofLine path={path}
                    premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
-                   incomplete={!step.isComplete}>
+                   incomplete={!step.isComplete}
+                   onKeyDown={this.onProofLineKeyDown}>
           <ProofLine.SingleStatementWithPrefixContent prefix="Then"
                                                       statement={step.provenStatement}
                                                       path={path} />
         </ProofLine>
       </Step.WithoutSubsteps>;
   }
+}
+
+export function SubproofStep(props) {
+  return <ProofContext.Consumer>{proofContext =>
+    <HashParamsContext.Consumer>{hashParamsContext =>
+      <SubproofStepWithContexts {...props} proofContext={proofContext} hashParamsContext={hashParamsContext}/>
+    }</HashParamsContext.Consumer>
+  }</ProofContext.Consumer>
 }
