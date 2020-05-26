@@ -57,9 +57,9 @@ export default class Rewriter extends React.Component {
 
   onInferenceSelected = (selectedInferenceSuggestion) => {
     const currentPaths = this.getCurrentPaths();
-    const availableRewrites = _.chain(selectedInferenceSuggestion.rewriteSuggestions)
-      .filter(s => !_.some(currentPaths, path => _.startsWith(s.path, path)))
-      .map(s => { return { path: s.path, replacementExpression: s.result, rewrite: { path: s.path, inferenceId: selectedInferenceSuggestion.inference.id, extractionInferenceIds: selectedInferenceSuggestion.extractionInferenceIds }}})
+    const availableRewrites = _.chain(selectedInferenceSuggestion.paths)
+      .filter(path => !_.some(currentPaths, currentPath => _.startsWith(path, currentPath)))
+      .map(path => { return { path, replacementExpression: selectedInferenceSuggestion.result, rewrite: { path, inferenceId: selectedInferenceSuggestion.inference.id, extractionInferenceIds: selectedInferenceSuggestion.extractionInferenceIds }}})
       .value();
     this.setState({availableRewrites});
     this.resetPremiseSuggestions();

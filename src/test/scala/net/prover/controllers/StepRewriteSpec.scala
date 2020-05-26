@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.StepRewriteController.{InferenceRewritePath, InferenceRewriteSuggestion, PremiseRewritePath, PremiseSuggestion}
+import net.prover.controllers.StepRewriteController.{InferenceRewriteSuggestion, PremiseRewritePath, PremiseSuggestion}
 import net.prover.controllers.models.{PathData, PremiseRewrite, RewriteRequest}
 import net.prover.model.TestDefinitions
 import net.prover.model.TestDefinitions.{target, _}
@@ -257,9 +257,7 @@ class StepRewriteSpec extends ControllerSpec {
 
       responseEntity.getBody must contain { (inferenceSuggestion: InferenceRewriteSuggestion) =>
         inferenceSuggestion.inference mustEqual elementOfCartesianProductFromCoordinates
-        inferenceSuggestion.rewriteSuggestions must contain { (rewritePath: InferenceRewritePath) =>
-          rewritePath.path mustEqual Seq(0, 1, 0)
-        }
+        inferenceSuggestion.paths must contain(Seq(0, 1, 0))
       }
     }
 

@@ -336,7 +336,6 @@ export class Parser {
       this.parseInferenceSummary(suggestion.inference);
       suggestion.source = this.parseExpression(suggestion.source);
       suggestion.result = this.parseExpression(suggestion.result);
-      suggestion.rewriteSuggestions = _.map(suggestion.rewriteSuggestions, s => { return { path: s.path, result: this.parseExpression(s.result) } });
       return suggestion;
     })
   };

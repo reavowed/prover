@@ -35,6 +35,16 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     }
   }
 
+  implicit val seqOrdering: Ordering[Seq[Int]] = new Ordering[Seq[Int]] {
+    override def compare(x: Seq[Int], y: Seq[Int]): Int = {
+      val res0 = Ordering[Int].compare(x.length, y.length)
+      if (res0 != 0)
+        res0
+      else
+        Ordering.Implicits.seqDerivedOrdering[Seq, Int].compare(x, y)
+    }
+  }
+
   @GetMapping(value = Array("/rewriteSuggestions"), produces = Array("application/json;charset=UTF-8"))
   def getSuggestions(
     @PathVariable("bookKey") bookKey: String,
@@ -56,34 +66,39 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
 
       case class InferenceRewriteSuggestionWithMaximumMatchingComplexity(inferenceRewriteSuggestion: InferenceRewriteSuggestion, maximumMatchingComplexity: Int)
 
-      def getRewritePath(termRewriteInference: TermRewriteInference, replacementPossibility: RewritePossibility[_ <: Expression]): Option[InferenceRewritePath] = {
+      def getRewritePath(termRewriteInference: TermRewriteInference, replacementPossibility: RewritePossibility[_ <: Expression]): Option[(Term, Term, Seq[Int])] = {
         import replacementPossibility._
         for {
           substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
           (_, substitutionsAfterPremises) <- PremiseFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
           result <- termRewriteInference.rhs.applySubstitutions(substitutionsAfterPremises.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
-        } yield InferenceRewritePath(path, result)
+        } yield (term, result, path)
       }
 
-      def getSuggestionsForInference(termRewriteInference: TermRewriteInference): Option[InferenceRewriteSuggestionWithMaximumMatchingComplexity] = {
-        val suggestions = replacementPossibilities.mapCollect(p => getRewritePath(termRewriteInference, p).map(_ -> p.term.structuralComplexity))
-        if (suggestions.nonEmpty) {
-          val suggestion = InferenceRewriteSuggestion(
-            termRewriteInference.inferenceSummary,
-            termRewriteInference.extractionOption.extractionInferences.map(_.id),
-            termRewriteInference.lhs,
-            termRewriteInference.rhs,
-            suggestions.map(_._1))
-          Some(InferenceRewriteSuggestionWithMaximumMatchingComplexity(suggestion, suggestions.map(_._2).max))
+      def getSuggestionsForInference(termRewriteInference: TermRewriteInference): Seq[InferenceRewriteSuggestion] = {
+        val paths = replacementPossibilities.mapCollect(getRewritePath(termRewriteInference, _))
+        if (paths.nonEmpty) {
+          paths
+            .groupBy(x => (x._1, x._2))
+            .mapValues(_.map(_._3))
+            .toSeq
+            .sortBy(_._2.min)
+            .map { case ((source, result), paths) =>
+              InferenceRewriteSuggestion(
+                termRewriteInference.inferenceSummary,
+                termRewriteInference.extractionOption.extractionInferences.map(_.id),
+                source,
+                result,
+                paths)
+            }
         } else
-          None
+          Nil
       }
 
       def getSuggestionsForInferenceBatch(rewriteInferences: Seq[TermRewriteInference]): Seq[InferenceRewriteSuggestion] = {
         rewriteInferences
-          .mapCollect(getSuggestionsForInference)
-          .sortBy(_.maximumMatchingComplexity)(Ordering[Int].reverse)
-          .map(_.inferenceRewriteSuggestion)
+          .flatMap(getSuggestionsForInference)
+          .sortBy(_.source.complexity)(Ordering[(Int, Int)].reverse)
       }
 
       val filter = inferenceFilter(searchText)
@@ -459,8 +474,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
 object StepRewriteController {
   val logger: Logger = LoggerFactory.getLogger(StepRewriteController.getClass)
 
-  case class InferenceRewriteSuggestion(inference: Inference.Summary, extractionInferenceIds: Seq[String], source: Term, result: Term, rewriteSuggestions: Seq[InferenceRewritePath])
-  case class InferenceRewritePath(path: Seq[Int], result: Term)
+  case class InferenceRewriteSuggestion(inference: Inference.Summary, extractionInferenceIds: Seq[String], source: Term, result: Term, paths: Seq[Seq[Int]])
   case class PremiseSuggestion(statement: Statement, reference: Option[PreviousLineReference], rewriteSuggestions: Seq[PremiseRewritePath])
   case class PremiseRewritePath(path: Seq[Int], result: Term)
 }
