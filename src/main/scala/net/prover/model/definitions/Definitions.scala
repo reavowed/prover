@@ -7,7 +7,7 @@ import net.prover.model.expressions._
 import net.prover.model.proof.SubstatementExtractor.ExtractionOption
 import net.prover.model.proof.{DerivationStep, Step, SubstatementExtractor, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils
-import net.prover.model.utils.ExpressionUtils.{TypeLikeStatement, TypeStatement}
+import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.util.Direction
 
 import scala.Ordering.Implicits._
@@ -176,7 +176,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     } yield connective -> inference).toMap
   }
 
-  private val rearrangementInferences = for {
+  private lazy val rearrangementInferences = for {
     inference <- allInferences
     extractionOption <- extractionOptionsByInferenceId(inference.id)
     substitutions = extractionOption.requiredSubstitutions
