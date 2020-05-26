@@ -195,10 +195,10 @@ case class Definitions(rootEntryContext: EntryContext) {
     def findCommutativities(equality: Equality): Seq[(BinaryOperator, Commutativity)] = {
       for {
         (inference, extractionOption) <- rearrangementInferences
+        if !extractionOption.derivation.lastOption.exists(_.inference == equality.reversal.inference)
         (l, r) <- equality.unapply(extractionOption.conclusion)
         operator = BinaryOperator(l)
         (first: TermVariable, second: TermVariable) <- operator.unapply(l)
-        if first.name < second.name
         if r == operator(second, first)
       } yield (operator, Commutativity(operator, inference.summary, extractionOption))
     }
