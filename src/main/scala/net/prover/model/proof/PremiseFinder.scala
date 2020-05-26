@@ -2,9 +2,8 @@ package net.prover.model.proof
 
 import net.prover.controllers.ExtractionHelper
 import net.prover.model.Substitutions
-import net.prover.model.definitions.{BinaryRelationStatement, KnownStatement, TermDefinition, Wrapper}
+import net.prover.model.definitions.{BinaryRelationStatement, KnownStatement, TermDefinition, ValueToPropertyDerivation, Wrapper}
 import net.prover.model.expressions._
-import net.prover.model.proof.StepProvingContext.ValueToPropertyDerivation
 
 object PremiseFinder {
 
@@ -85,7 +84,7 @@ object PremiseFinder {
     }
     withoutRenaming(binaryRelationStatement) orElse {
       (for {
-        ValueToPropertyDerivation(propertyTerm, valueTerm, valueToPropertyDerivation, equality) <- stepProvingContext.knownValuesToProperties.filter(_.propertyTerm == binaryRelationStatement.right)
+        ValueToPropertyDerivation(valueTerm, propertyTerm, valueToPropertyDerivation, equality) <- stepProvingContext.knownValuesToProperties.filter(_.propertyTerm == binaryRelationStatement.right)
         innerDerivation <- withoutRenaming(binaryRelationStatement.withNewRight(valueTerm))
         renameStep = DerivationStep.fromAssertion(equality.substitution.assertionStep(valueTerm, propertyTerm, new Wrapper[Term, Statement]((t, c) => binaryRelationStatement.relation(binaryRelationStatement.left, t)(c))))
       } yield innerDerivation ++ valueToPropertyDerivation :+ renameStep).headOption
@@ -99,7 +98,7 @@ object PremiseFinder {
     stepProvingContext.knownValuesToProperties.foldLeft((premiseStatement, Seq.empty[DerivationStep])) { case ((currentStatement, currentDerivation), propertyValue) =>
       EqualityRewriter.getReverseReplacements(currentStatement, propertyValue.valueTerm, propertyValue.propertyTerm, propertyValue.equality) match {
         case Some((result, derivationStep)) =>
-          (result, currentDerivation ++ propertyValue.valueToPropertyDerivation :+ derivationStep)
+          (result, currentDerivation ++ propertyValue.derivation :+ derivationStep)
         case None =>
           (currentStatement, currentDerivation)
       }

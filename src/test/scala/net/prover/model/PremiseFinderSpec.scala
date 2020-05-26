@@ -322,7 +322,6 @@ class PremiseFinderSpec extends Specification {
       // a ∈ domain(⍳)        (simplification via Function Application Is Element of Range)
       // a ∈ ℕ               (replace property with value)
 
-
       checkFindPremise(
         ElementOf(Apply(IntegerEmbedding, a), BaseSet(IntegerAddition)),
         Seq(ElementOf(a, Naturals)))(
@@ -330,14 +329,18 @@ class PremiseFinderSpec extends Specification {
     }
 
     "find a premise using double simplification of a function application" in {
-      val IotaDefinition = simpleTermDefinition("⍳", Nil, Format.default(0), Nil, Conjunction(Function($), FunctionFrom($, Naturals, Integers)))
-      val Iota = IotaDefinition()
-      val DefinitionOfPositiveNatural = Axiom("Embedding Is Unique", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(Apply(Iota, a), Apply(Iota, b)), Equals(a, b)))
+      val IntegerEmbeddingIsUnique = Axiom("Integer Embedding Is Unique", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(toZ(a), toZ(b)), Equals(a, b)))
 
       checkFindPremise(
-        Negation(Equals(Apply(Iota, Zero), Apply(Iota, a))),
+        Negation(Equals(toZ(Zero), toZ(a))),
         Seq(Negation(Equals(a, Zero)), ElementOf(a, Naturals)))(
-        defaultEntryContext.addEntries(Seq(IotaDefinition, DefinitionOfPositiveNatural)))
+        defaultEntryContext.addEntry(IntegerEmbeddingIsUnique))
+    }
+
+    "find a premise by equality substitution using a fact" in {
+      checkFindPremise(
+        ElementOf(add(a, b), Naturals),
+        Seq(ElementOf(a, Naturals), ElementOf(b, Domain(IntegerEmbedding))))
     }
   }
 }

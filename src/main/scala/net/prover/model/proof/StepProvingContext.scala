@@ -3,12 +3,12 @@ package net.prover.model.proof
 import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions.{FunctionParameter, Statement, Term, TermVariable}
-import net.prover.model.proof.StepProvingContext.ValueToPropertyDerivation
-import net.prover.model.utils.ExpressionUtils
 
 import scala.collection.mutable
 
 case class StepProvingContext(stepContext: StepContext, provingContext: ProvingContext) {
+  private implicit val substitutionContext: SubstitutionContext = stepContext
+
   lazy val premisesAndSimplifications: Seq[(Premise.Given, Seq[Premise.Simplification])] = {
     stepContext.premises.reverse.map(p => p -> SimplificationFinder.getSimplifications(p)(this))
   }
@@ -29,65 +29,66 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
     (given ++ simplified ++ extracted).deduplicate
   }
 
+  private def simplifyAll(
+    previous: Seq[KnownStatement],
+    current: Seq[KnownStatement],
+    simplifiersByRelation: Map[BinaryRelation, Seq[PremiseSimplificationInference]]
+  ): Seq[KnownStatement] = {
+    if (current.isEmpty)
+      previous
+    else {
+      val existing = previous ++ current
+      val newSimplifications = current.flatMap { currentKnownStatement => {
+        val simplifiers = provingContext.findRelation(currentKnownStatement.statement).flatMap(r => simplifiersByRelation.get(r.relation)).getOrElse(Nil)
+        simplifiers.mapCollect { simplifier =>
+          simplifier.getPremiseSimplification(currentKnownStatement, existing)(this)
+            .filter { newKnownStatement => !existing.exists(_.statement == newKnownStatement.statement)}
+        }
+      }}
+      simplifyAll(existing, newSimplifications, simplifiersByRelation)
+    }
+  }
+
+  private lazy val allPremisesAfterSimplifications = simplifyAll(Nil, allPremiseExtractions, provingContext.premiseRelationSimplificationInferences)
+  private lazy val allPremisesAfterRewrites = simplifyAll(Nil, allPremisesAfterSimplifications, provingContext.premiseRelationRewriteInferences)
+
+  lazy val knownValuesToProperties: Seq[ValueToPropertyDerivation] = {
+    (for {
+      equality <- provingContext.equalityOption.toSeq
+      knownStatement <- allPremisesAfterRewrites
+      result <- ValueToPropertyDerivation.getFromKnownStatement(knownStatement, equality)(stepContext)
+    } yield result) ++ provingContext.factValuesToProperties
+  }
+  lazy val knownPropertiesToValues: Seq[PropertyToValueDerivation] = {
+    (for {
+      equality <- provingContext.equalityOption.toSeq
+      knownStatement <- allPremisesAfterRewrites
+      result <- PropertyToValueDerivation.getFromKnownStatement(knownStatement, equality)(stepContext)
+    } yield result) ++ provingContext.factPropertiesToValues
+  }
+
   lazy val knownStatementsFromPremises: Seq[KnownStatement] = {
-    implicit val substitutionContext: SubstitutionContext = stepContext
-    def simplifyAll(
-      previous: Seq[KnownStatement],
-      current: Seq[KnownStatement],
-      simplifiersByRelation: Map[BinaryRelation, Seq[PremiseSimplificationInference]]
-    ): Seq[KnownStatement] = {
-      if (current.isEmpty)
-        previous
-      else {
-        val existing = previous ++ current
-        val newSimplifications = current.flatMap { currentKnownStatement => {
-          val simplifiers = provingContext.findRelation(currentKnownStatement.statement).flatMap(r => simplifiersByRelation.get(r.relation)).getOrElse(Nil)
-          simplifiers.mapCollect { simplifier =>
-            simplifier.getPremiseSimplification(currentKnownStatement, existing)(this)
-              .filter { newKnownStatement => !existing.exists(_.statement == newKnownStatement.statement)}
-          }
-        }}
-        simplifyAll(existing, newSimplifications, simplifiersByRelation)
-      }
-    }
-    def replaceEqualities(current: Seq[KnownStatement]): Seq[KnownStatement] = {
-      def getReplacements(lhs: Term, rhs: Term, equality: Equality, equalityStatement: KnownStatement): Seq[KnownStatement] = {
-        for {
-          knownStatement <- current
-          newStep <- EqualityRewriter.getForwardReplacements(knownStatement.statement, lhs, rhs, equality, Wrapper.identity)(stepContext)
-        } yield KnownStatement.fromDerivation(equalityStatement.derivation ++ knownStatement.derivation :+ newStep)
-      }
 
-      val equalityPremises = for {
-        equality <- provingContext.equalityOption.toSeq
-        knownStatement <- current
-        (lhs, rhs) <- equality.unapply(knownStatement.statement).toSeq
-        if (lhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) || lhs.isInstanceOf[FunctionParameter])
-        newKnownStatement <- getReplacements(lhs, rhs, equality, knownStatement)
-      } yield newKnownStatement
+    val byLocalEqualities = for {
+      equality <- provingContext.equalityOption.toSeq
+      equalityStatement <- allPremisesAfterRewrites
+      (lhs, rhs) <- equality.unapply(equalityStatement.statement).toSeq
+      if lhs.asOptionalInstanceOf[TermVariable].exists(_.arguments.isEmpty) || lhs.isInstanceOf[FunctionParameter]
+      knownStatement <- allPremisesAfterRewrites
+      newStep <- EqualityRewriter.getForwardReplacements(knownStatement.statement, lhs, rhs, equality, Wrapper.identity)(stepContext)
+    } yield KnownStatement.fromDerivation(knownStatement.derivation ++ equalityStatement.derivation :+ newStep)
 
-      current ++ equalityPremises
-    }
+    val byKnownProperties = for {
+      PropertyToValueDerivation(propertyTerm, valueTerm, derivation, equality) <- knownPropertiesToValues
+      knownStatement <- allPremisesAfterRewrites
+      newStep <- EqualityRewriter.getForwardReplacements(knownStatement.statement, propertyTerm, valueTerm, equality, Wrapper.identity)(stepContext)
+    } yield KnownStatement.fromDerivation(knownStatement.derivation ++ derivation :+ newStep)
 
-    val afterSimplifications = simplifyAll(Nil, allPremiseExtractions, provingContext.premiseRelationSimplificationInferences)
-    val afterRewrites = simplifyAll(Nil, afterSimplifications, provingContext.premiseRelationRewriteInferences)
-    replaceEqualities(afterRewrites)
+    allPremisesAfterRewrites ++ byLocalEqualities ++ byKnownProperties
   }
 
   lazy val knownStatementsFromPremisesBySerializedStatement: Map[String, KnownStatement] = {
     knownStatementsFromPremises.map(s => s.statement.serialized -> s).toMapPreservingEarliest
-  }
-
-  private def isProperty(propertyTerm: Term) = ExpressionUtils.isWrappedSimpleTerm(propertyTerm)
-  private def isValue(valueTerm: Term) = ExpressionUtils.isSimpleTermVariable(valueTerm) || ExpressionUtils.isCombinationOfTermConstants(valueTerm)
-
-  lazy val knownValuesToProperties: Seq[ValueToPropertyDerivation] = {
-    for {
-      equality <- provingContext.equalityOption.toSeq
-      knownStatement <- knownStatementsFromPremises ++ provingContext.facts.map(KnownStatement.fromSingleStep)
-      (valueTerm, propertyTerm) <- equality.unapply(knownStatement.statement)(stepContext).toSeq
-      if isProperty(propertyTerm) && isValue(valueTerm)
-    } yield ValueToPropertyDerivation(propertyTerm, valueTerm, knownStatement.derivation, equality)
   }
 
   def findPremise(statement: Statement): Option[Premise.SingleLinePremise] = {
@@ -111,7 +112,6 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
 }
 
 object StepProvingContext {
-  case class ValueToPropertyDerivation(propertyTerm: Term, valueTerm: Term, valueToPropertyDerivation: Seq[DerivationStep], equality: Equality)
 
   def updateStepContext(f: StepContext => StepContext)(implicit stepProvingContext: StepProvingContext): StepProvingContext = {
     stepProvingContext.updateStepContext(f)
