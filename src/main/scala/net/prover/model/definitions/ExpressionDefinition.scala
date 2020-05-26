@@ -91,7 +91,7 @@ object ExpressionDefinition {
             arguments <- Parser.selectWord("argument") {
               case name if boundVariableNames.contains(name) =>
                 ComponentArgument(name, boundVariableNames.indexOf(name))
-            }.listOrSingle(None)
+            }.listInParensOrSingle(None)
             componentType <- Parser.selectWord("predicate or function name") {
               case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
                 StatementComponent(name, arguments)

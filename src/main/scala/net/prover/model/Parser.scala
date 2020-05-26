@@ -92,7 +92,7 @@ case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
   def parseAndDiscard(tokenStream: TokenStream): T = {
     parse(tokenStream)._1
   }
-  def listOrSingle(separatorOption: Option[String]): Parser[Seq[T]] = {
+  def listInParensOrSingle(separatorOption: Option[String]): Parser[Seq[T]] = {
     listInParens(separatorOption).tryOrElse(map(Seq(_)))
   }
   def toEndOfFile: Parser[Seq[T]] = Parser { tokenStream =>

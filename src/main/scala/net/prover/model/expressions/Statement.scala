@@ -10,7 +10,7 @@ object Statement {
     Parser.selectWordParser("statement") {
       case "with" =>
         for {
-          arguments <- Term.parser.listOrSingle(None)
+          arguments <- Term.parser.listInParensOrSingle(None)
           name <- Parser.selectWord("variable name") {
             case ExpressionParsingContext.RecognisedStatementVariableName(name) => name
           }
@@ -94,7 +94,7 @@ object Statement {
         word <- Parser.singleWord
         result <- getProperty(word) orElse getObject(word) getOrElse { throw new Exception(s"Unrecognised property or object $word")}
       } yield result
-      parser.listInParens(None)
+      parser.listInParensOrSingle(None)
     }
 
     for {

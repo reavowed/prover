@@ -38,7 +38,7 @@ object Term {
     Parser.selectWordParser("term") {
       case "with" =>
         for {
-          arguments <- Term.parser.listOrSingle(None)
+          arguments <- Term.parser.listInParensOrSingle(None)
           name <- Parser.selectWord("variable name") {
             case context.RecognisedTermVariableName(name) => name
           }
