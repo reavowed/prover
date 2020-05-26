@@ -116,4 +116,12 @@ test("highlights only relevant words if property expression that doesn't include
   expect(getHighlightedString(words)).toBe("f is surjective from A → B");
 });
 
+test("highlights all relevant subcomponents when a single path in the conjunction tree is highlighted", () => {
+  const tree = renderExpression([[0]]);
+  const words = _.filter(tree.children, (c,i) => i%2 === 0);
+
+  expect(tree).not.toBeHighlighted();
+  expect(getHighlightedString(words)).toBe("f is an injective function from A → B");
+});
+
 

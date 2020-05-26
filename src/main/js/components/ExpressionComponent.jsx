@@ -23,10 +23,15 @@ const HighlightingStyle = styled.span`
 `;
 
 function filterPaths(actions, initialPath) {
-  return _.chain(actions)
-    .filter(a => _.startsWith(a.path, initialPath))
-    .map(a => Object.assign({}, a, {path: a.path.slice(initialPath.length)}))
-    .value();
+  const result = [];
+  _.forEach(actions, a => {
+    if (_.startsWith(a.path, initialPath)) {
+      result.push({...a, path: a.path.slice(initialPath.length)});
+    } else if (_.startsWith(initialPath, a.path)) {
+      result.push({...a, path: []});
+    }
+  });
+  return result;
 }
 
 function filterPathsMultiple(actions, initialPaths) {
@@ -188,8 +193,8 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
           if (expression.explicitQualifier) {
             const propertyIndexesRequiringQualifier = _.chain(expression.properties).map((p, i) => (p.requiredParentQualifier === expression.explicitQualifier.symbol) ? i : null).filter(x => x !== null).value();
             const objectIndexesRequiringQualifier = _.chain(expression.objects).map(([d, t], i) => (d.requiredParentQualifier === expression.explicitQualifier.symbol) ? i : null).filter(x => x !== null).value();
-            const qualifierHighlightPaths = [...propertyIndexesRequiringQualifier.map(getPropertyPath), objectIndexesRequiringQualifier.map(getObjectPath)];
-            const formattedQualifier = renderQualifier(expression.explicitQualifier.qualifier, expression.qualifierComponents, qualifierPath, actionHighlights, staticHighlights, qualifierHighlightPaths);
+            const qualifierHighlightPaths = [qualifierPath, ...propertyIndexesRequiringQualifier.map(getPropertyPath), objectIndexesRequiringQualifier.map(getObjectPath)];
+            const formattedQualifier = renderQualifier(expression.explicitQualifier.qualifier, expression.qualifierComponents, qualifierPath, qualifierHighlightPaths);
             result.push(<> </>);
             result.push(formattedQualifier);
           } else if (expression.definition.defaultQualifier) {
