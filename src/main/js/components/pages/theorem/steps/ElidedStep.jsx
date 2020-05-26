@@ -113,11 +113,12 @@ export function ElidedStepProofLine(props) {
 
 export class ElidedStep extends React.Component {
   render() {
-    const {step, path} = this.props;
+    const {step, path, additionalReferences} = this.props;
     return <ElidedStepProofLine {...this.props} prefix="Then">
       <ProofLine.SingleStatementWithPrefixContent prefix="Then"
                                                   statement={step.provenStatement}
-                                                  path={path} />
+                                                  path={path}
+                                                  additionalReferences={additionalReferences}  />
     </ElidedStepProofLine>;
   }
 }
