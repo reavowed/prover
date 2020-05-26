@@ -8,6 +8,7 @@ export interface InlineTextEditorProps {
   callback: (newName: string) => Promise<void>
 }
 interface InlineTextEditorState {
+  saving: boolean
   editing: boolean
   newText: string
 }
@@ -52,6 +53,7 @@ export class InlineTextEditor extends React.Component<InlineTextEditorProps, Inl
   constructor(props: InlineTextEditorProps) {
     super(props);
     this.state = {
+      saving: false,
       editing: false,
       newText: ''
     };
@@ -78,6 +80,9 @@ export class InlineTextEditor extends React.Component<InlineTextEditorProps, Inl
       }
     }
   }
+  setStatePromise<K extends keyof InlineTextEditorState>(newState: Pick<InlineTextEditorState, K>) {
+    return new Promise(resolve => this.setState(newState, resolve));
+  };
   onInputKeyUp = (event: any) => {
     if (event.key === "Enter") {
       this.saveValue();
@@ -88,8 +93,10 @@ export class InlineTextEditor extends React.Component<InlineTextEditorProps, Inl
   saveValue = () => {
     const {text: originalName} = this.props;
     const {newText} = this.state;
-    if (newText !== originalName) {
-      this.props.callback(this.state.newText).then(() => this.setState({editing: false}));
+    if (newText !== originalName && !this.state.saving) {
+      this.setStatePromise({saving: true})
+          .then(() => this.props.callback(this.state.newText))
+          .then(() => this.setStatePromise({editing: false, saving: false}));
     } else {
       this.setState({editing: false});
     }
