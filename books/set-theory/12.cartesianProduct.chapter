@@ -815,34 +815,34 @@ premise ¬ = B ∅
 conclusion = domain product A B A
 {
   take a {
-    assume ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B {
-      let b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 range product A B ∈ orderedPair $0 $$0 product A B, ∈ $0 A) () {
+    assume ∃ b ∧ ∈ $0 codomain product A B ∈ orderedPair $$0 $0 product A B {
+      let b ∧ ∈ $0 codomain product A B ∈ orderedPair $$0 $0 product A B 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 codomain product A B ∈ orderedPair $0 $$0 product A B, ∈ $0 A) () {
         prove ∈ $$0 A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () ($$0, $0, A, B) 0.0.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
       } 0.0a
     }
     assume ∈ $0 A {
       prove ∃ b ∈ $0 B 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (B) p0
-      let b ∈ $0 B 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 B, ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B) () {
-        elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
+      let b ∈ $0 B 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $$0 B, ∃ b ∧ ∈ $0 codomain product A B ∈ orderedPair $$0 $0 product A B) () {
+        elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
           prove ∈ orderedPair $$0 $0 product A B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, B) 0.1a 0.1.1a
-          elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-            prove ∧ ∈ $$0 domain product A B ∈ $0 range product A B be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () ($$0, $0, product A B) 0.1.1.0.0
-            prove ∈ $0 range product A B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 domain product A B, ∈ $0 range product A B) () 0.1.1.0.1.0
+          elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+            prove ∧ ∈ $$0 domain product A B ∈ $0 codomain product A B a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba () ($$0, $0, product A B) 0.1.1.0.0
+            prove ∈ $0 codomain product A B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 domain product A B, ∈ $0 codomain product A B) () 0.1.1.0.1.0
           }
         }
         elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
           prove ∈ orderedPair $$0 $0 product A B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, B) 0.1a 0.1.1a
-          prove ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 range product A B, ∈ orderedPair $$0 $0 product A B) () 0.1.1.0 0.1.1.1.0
-          prove ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$$0 $0 product A B c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 range product A B ∈ orderedPair $$0 $$$0 product A B) ($0) 0.1.1.1.1
+          prove ∧ ∈ $0 codomain product A B ∈ orderedPair $$0 $0 product A B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 codomain product A B, ∈ orderedPair $$0 $0 product A B) () 0.1.1.0 0.1.1.1.0
+          prove ∃ b ∧ ∈ $0 codomain product A B ∈ orderedPair $$$0 $0 product A B c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 codomain product A B ∈ orderedPair $$0 $$$0 product A B) ($0) 0.1.1.1.1
         }
       } 0.1.0
     }
-    elided 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 {
-      prove ∀ a ↔ ∈ $0 domain product A B ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 () (product A B)
-      prove ↔ ∈ $0 domain product A B ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 domain product A B ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$$0 $0 product A B) ($0) 0.2.0
+    elided dfc9ee7893004f7f46920a6fc6f1d7e911900f9c19f48ad40b2b7df302fb8141 {
+      prove ∀ a ↔ ∈ $0 domain product A B ∃ b ∧ ∈ $0 codomain product A B ∈ orderedPair $$0 $0 product A B dfc9ee7893004f7f46920a6fc6f1d7e911900f9c19f48ad40b2b7df302fb8141 () (product A B)
+      prove ↔ ∈ $0 domain product A B ∃ b ∧ ∈ $0 codomain product A B ∈ orderedPair $$0 $0 product A B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 domain product A B ∃ b ∧ ∈ $0 codomain product A B ∈ orderedPair $$$0 $0 product A B) ($0) 0.2.0
     }
-    prove ↔ ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B ∈ $0 A 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B, ∈ $0 A) () 0.0 0.1
-    prove ↔ ∈ $0 domain product A B ∈ $0 A e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 domain product A B, ∃ b ∧ ∈ $0 range product A B ∈ orderedPair $$0 $0 product A B, ∈ $0 A) () 0.2 0.3
+    prove ↔ ∃ b ∧ ∈ $0 codomain product A B ∈ orderedPair $$0 $0 product A B ∈ $0 A 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∃ b ∧ ∈ $0 codomain product A B ∈ orderedPair $$0 $0 product A B, ∈ $0 A) () 0.0 0.1
+    prove ↔ ∈ $0 domain product A B ∈ $0 A e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 domain product A B, ∃ b ∧ ∈ $0 codomain product A B ∈ orderedPair $$0 $0 product A B, ∈ $0 A) () 0.2 0.3
   }
   prove = domain product A B A 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (domain product A B, A) 0
 }

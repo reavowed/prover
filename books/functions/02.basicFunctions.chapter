@@ -135,7 +135,7 @@ conclusion ∧ function ∪ f g functionFrom ∪ f g ∪ A C ∪ B D
         }
       }
       elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
-        prove ∧ function f ∧ = domain f A ⊆ range f B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove ∧ function f ∧ = domain f A ⊆ codomain f B 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
         prove = A domain f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain f, A) 11.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         prove ∈ $0 domain f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$0) (A, domain f) 11.0.1.1 11.0a
         prove ∈ orderedPair $0 apply f $0 f 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 () (f, $0) 11.0.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 11.0.1.2
@@ -183,7 +183,7 @@ conclusion ∧ function ∪ f g functionFrom ∪ f g ∪ A C ∪ B D
         }
       }
       elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
-        prove ∧ function g ∧ = domain g C ⊆ range g D ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (g, C, D) p1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove ∧ function g ∧ = domain g C ⊆ codomain g D 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (g, C, D) p1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
         prove = C domain g 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain g, C) 11.1.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         prove ∈ $0 domain g 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$0) (C, domain g) 11.1.1.1 11.1a
         prove ∈ orderedPair $0 apply g $0 g 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 () (g, $0) 11.1.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 11.1.1.2
@@ -262,7 +262,7 @@ conclusion ∀ a → ∈ $0 A = apply f $0 apply g $0
   take a {
     assume ∈ $0 A {
       elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
-        prove ∧ function f ∧ = domain f A ⊆ range f B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove ∧ function f ∧ = domain f A ⊆ codomain f B 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
         prove = A domain f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain f, A) 0.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         prove ∈ $0 domain f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$0) (A, domain f) 0.0.0.1 0.0a
         prove ∈ orderedPair $0 apply f $0 f 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 () (f, $0) 0.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.0.0.2
@@ -356,7 +356,7 @@ conclusion ∃! f ∧ ∧ function $0 functionFrom $0 A B ∀ a → ∈ $0 A wit
       take a {
         assume ∈ $0 A {
           elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
-            prove ∧ function $$0 ∧ = domain $$0 A ⊆ range $$0 B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, A, B) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∧ function $$0 ∧ = domain $$0 A ⊆ codomain $$0 B 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, A, B) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove = A domain $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain $$0, A) 0.1.0.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
             prove ∈ $0 domain $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$$0) (A, domain $$0) 0.1.0.0.0.1 0.1.0.0a
             prove ∈ orderedPair $0 apply $$0 $0 $$0 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 () ($$0, $0) 0.1.0.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.1.0.0.0.2
@@ -697,9 +697,9 @@ conclusion ∧ function ∘ g f functionFrom ∘ g f A C
     prove = ∘ g f functionMap a domain f apply g apply f $0 2eaa5123423edcdc36655ae131ec6d712303841f87d594ebde9d79bcd551839e () (g, f)
     elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
       prove functionFrom f A B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f, functionFrom f A B) () p0
-      prove ∧ function f ∧ = domain f A ⊆ range f B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, A, B) 0.1.0
-      prove ∧ = domain f A ⊆ range f B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f, ∧ = domain f A ⊆ range f B) () 0.1.1
-      prove = domain f A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain f A, ⊆ range f B) () 0.1.2
+      prove ∧ function f ∧ = domain f A ⊆ codomain f B 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (f, A, B) 0.1.0
+      prove ∧ = domain f A ⊆ codomain f B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f, ∧ = domain f A ⊆ codomain f B) () 0.1.1
+      prove = domain f A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain f A, ⊆ codomain f B) () 0.1.2
       prove = ∘ g f functionMap a A apply g apply f $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= ∘ g f functionMap a $$0 apply g apply f $0) (domain f, A) 0.1.3 0.0
     }
   }
@@ -721,10 +721,10 @@ conclusion = apply ∘ g f a apply g apply f a
   prove = ∘ g f functionMap a domain f apply g apply f $0 2eaa5123423edcdc36655ae131ec6d712303841f87d594ebde9d79bcd551839e () (g, f)
   elided 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 {
     prove functionFrom f A B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f, functionFrom f A B) () p0
-    elided ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da {
-      prove ∧ function f ∧ = domain f A ⊆ range f B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, A, B) 1.0
-      prove ∧ = domain f A ⊆ range f B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f, ∧ = domain f A ⊆ range f B) () 1.1.0
-      prove = domain f A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain f A, ⊆ range f B) () 1.1.1
+    elided 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 {
+      prove ∧ function f ∧ = domain f A ⊆ codomain f B 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (f, A, B) 1.0
+      prove ∧ = domain f A ⊆ codomain f B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f, ∧ = domain f A ⊆ codomain f B) () 1.1.0
+      prove = domain f A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain f A, ⊆ codomain f B) () 1.1.1
       prove = A domain f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain f, A) 1.1.2
     }
     prove ∈ a domain f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ a $0) (A, domain f) 1.1 p2

@@ -108,12 +108,12 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → �
             assume ∈ $0 B {
               elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
                 prove ∈ orderedPair $$0 $0 product A B 133a8023f5290d9efd5d4afaa982b92980bfdde08be94573c715890097f0a8c1 () ($$0, A, $0, B) 0.1.0.0a 0.1.0.0.0.0a
-                elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                  elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                    prove ∧ function $$$0 ∧ = domain $$$0 product A B ⊆ range $$$0 C ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$$0, product A B, C) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                    elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                      prove functionFrom $$$0 product A B C df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () ($$$0, product A B, C) 0.1.0.0.0.0.0.1.0.0
-                      prove ∧ function $$$0 ∧ = domain $$$0 product A B ⊆ range $$$0 C ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$$0, product A B, C) 0.1.0.0.0.0.0.1.0.1.0
+                elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                  elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                    prove ∧ function $$$0 ∧ = domain $$$0 product A B ⊆ codomain $$$0 C 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$$0, product A B, C) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                      prove functionFrom $$$0 product A B C 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () ($$$0, product A B, C) 0.1.0.0.0.0.0.1.0.0
+                      prove ∧ function $$$0 ∧ = domain $$$0 product A B ⊆ codomain $$$0 C 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$$0, product A B, C) 0.1.0.0.0.0.0.1.0.1.0
                       prove = product A B domain $$$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain $$$0, product A B) 0.1.0.0.0.0.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                     }
                   }

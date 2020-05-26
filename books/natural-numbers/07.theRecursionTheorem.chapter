@@ -167,19 +167,19 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 ℕ X ∧ = apply $0 0ℕ 
               prove ∃ n ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 powerSet product ℕ X, ∃ n ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () 0.3.0.0.1.0.3
             }
             let n ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$0 ℕ ∧ ∧ function $0 functionFrom $0 $$$$0 X ∀ a → ∈ $0 $$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0, = $$0 g_0) () {
-              elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-                elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-                  prove ∧ ∈ 0ℕ domain $$0 ∈ $$$0 range $$0 be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () (0ℕ, $$$0, $$0) 0.3.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                  prove ∈ 0ℕ domain $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ 0ℕ domain $$0, ∈ $$$0 range $$0) () 0.3.0.0.1.1.0.0.0
+              elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+                elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+                  prove ∧ ∈ 0ℕ domain $$0 ∈ $$$0 codomain $$0 a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba () (0ℕ, $$$0, $$0) 0.3.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  prove ∈ 0ℕ domain $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ 0ℕ domain $$0, ∈ $$$0 codomain $$0) () 0.3.0.0.1.1.0.0.0
                 }
-                elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                  elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                    prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ range $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, $0, X) 0.3.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                    elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                      prove functionFrom $$0 $0 X df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () ($$0, $0, X) 0.3.0.0.1.1.0.1.0.0
-                      prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ range $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, $0, X) 0.3.0.0.1.1.0.1.0.1.0
-                      prove ∧ = domain $$0 $0 ⊆ range $$0 X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0, ∧ = domain $$0 $0 ⊆ range $$0 X) () 0.3.0.0.1.1.0.1.0.1.1
-                      prove = domain $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain $$0 $0, ⊆ range $$0 X) () 0.3.0.0.1.1.0.1.0.1.2
+                elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                  elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                    prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, $0, X) 0.3.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                      prove functionFrom $$0 $0 X 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () ($$0, $0, X) 0.3.0.0.1.1.0.1.0.0
+                      prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, $0, X) 0.3.0.0.1.1.0.1.0.1.0
+                      prove ∧ = domain $$0 $0 ⊆ codomain $$0 X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0, ∧ = domain $$0 $0 ⊆ codomain $$0 X) () 0.3.0.0.1.1.0.1.0.1.1
+                      prove = domain $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain $$0 $0, ⊆ codomain $$0 X) () 0.3.0.0.1.1.0.1.0.1.2
                     }
                   }
                   prove ∈ 0ℕ $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ 0ℕ $$$$$0) (domain $$0, $0) 0.3.0.0.1.1.0.1.0 0.3.0.0.1.1.0.0
@@ -230,19 +230,19 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 ℕ X ∧ = apply $0 0ℕ 
                 }
                 let m_n ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$0 ℕ ∧ ∧ function $0 functionFrom $0 $$$$$0 X ∀ a → ∈ $0 $$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0, ∃! y ∈ orderedPair successor $$$$0 $0 union $$$$$0) () {
                   subproof (Existence) {
-                    elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-                      elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-                        prove ∧ ∈ $$$$0 domain $$0 ∈ $$$0 range $$0 be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () ($$$$0, $$$0, $$0) 0.5.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                        prove ∈ $$$$0 domain $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$$0 domain $$0, ∈ $$$0 range $$0) () 0.5.0.0.0.0.1.1.0.0.0.0
+                    elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+                      elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+                        prove ∧ ∈ $$$$0 domain $$0 ∈ $$$0 codomain $$0 a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba () ($$$$0, $$$0, $$0) 0.5.0.0.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                        prove ∈ $$$$0 domain $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$$$0 domain $$0, ∈ $$$0 codomain $$0) () 0.5.0.0.0.0.1.1.0.0.0.0
                       }
-                      elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                        elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                          prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ range $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, $0, X) 0.5.0.0.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                          elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                            prove functionFrom $$0 $0 X df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () ($$0, $0, X) 0.5.0.0.0.0.1.1.0.0.1.0.0
-                            prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ range $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, $0, X) 0.5.0.0.0.0.1.1.0.0.1.0.1.0
-                            prove ∧ = domain $$0 $0 ⊆ range $$0 X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0, ∧ = domain $$0 $0 ⊆ range $$0 X) () 0.5.0.0.0.0.1.1.0.0.1.0.1.1
-                            prove = domain $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain $$0 $0, ⊆ range $$0 X) () 0.5.0.0.0.0.1.1.0.0.1.0.1.2
+                      elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                        elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                          prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, $0, X) 0.5.0.0.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                          elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                            prove functionFrom $$0 $0 X 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () ($$0, $0, X) 0.5.0.0.0.0.1.1.0.0.1.0.0
+                            prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, $0, X) 0.5.0.0.0.0.1.1.0.0.1.0.1.0
+                            prove ∧ = domain $$0 $0 ⊆ codomain $$0 X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0, ∧ = domain $$0 $0 ⊆ codomain $$0 X) () 0.5.0.0.0.0.1.1.0.0.1.0.1.1
+                            prove = domain $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain $$0 $0, ⊆ codomain $$0 X) () 0.5.0.0.0.0.1.1.0.0.1.0.1.2
                           }
                         }
                         prove ∈ $$$$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$0 $$$$$$0) (domain $$0, $0) 0.5.0.0.0.0.1.1.0.0.1.0 0.5.0.0.0.0.1.1.0.0.0
@@ -491,19 +491,19 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 ℕ X ∧ = apply $0 0ℕ 
                             prove ∃ m ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 powerSet product ℕ X, ∃ m ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () 0.5.0.0.0.0.1.1.1.0.0.1.0.3
                           }
                           let m_n^+ ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$$$$$0 ℕ ∧ ∧ function $0 functionFrom $0 $$$$$$$$0 X ∀ a → ∈ $0 $$$$$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0, = $$0 apply f $$$$$0) () {
-                            elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-                              elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-                                prove ∧ ∈ successor $$$$$$$0 domain $$0 ∈ $$$0 range $$0 be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () (successor $$$$$$$0, $$$0, $$0) 0.5.0.0.0.0.1.1.1.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                                prove ∈ successor $$$$$$$0 domain $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ successor $$$$$$$0 domain $$0, ∈ $$$0 range $$0) () 0.5.0.0.0.0.1.1.1.0.0.1.1.0.0.0
+                            elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+                              elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+                                prove ∧ ∈ successor $$$$$$$0 domain $$0 ∈ $$$0 codomain $$0 a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba () (successor $$$$$$$0, $$$0, $$0) 0.5.0.0.0.0.1.1.1.0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                                prove ∈ successor $$$$$$$0 domain $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ successor $$$$$$$0 domain $$0, ∈ $$$0 codomain $$0) () 0.5.0.0.0.0.1.1.1.0.0.1.1.0.0.0
                               }
-                              elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                                elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                                  prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ range $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                                  elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                                    prove functionFrom $$0 $0 X df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.0
-                                    prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ range $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.1.0
-                                    prove ∧ = domain $$0 $0 ⊆ range $$0 X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0, ∧ = domain $$0 $0 ⊆ range $$0 X) () 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.1.1
-                                    prove = domain $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain $$0 $0, ⊆ range $$0 X) () 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.1.2
+                              elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                                elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                                  prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                                  elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                                    prove functionFrom $$0 $0 X 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.0
+                                    prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.1.0
+                                    prove ∧ = domain $$0 $0 ⊆ codomain $$0 X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0, ∧ = domain $$0 $0 ⊆ codomain $$0 X) () 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.1.1
+                                    prove = domain $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain $$0 $0, ⊆ codomain $$0 X) () 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.1.2
                                   }
                                 }
                                 prove ∈ successor $$$$$$$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ successor $$$$$$$0 $$$$$$$$$0) (domain $$0, $0) 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0 0.5.0.0.0.0.1.1.1.0.0.1.1.0.0
@@ -511,12 +511,12 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 ℕ X ∧ = apply $0 0ℕ 
                             }
                             prove ∈ $$$$$$$0 $0 6c55f1601007dfc54b875e2523e977e5202b276f07f49eaf6f873c8ceed4272c () ($0, $$$$$$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.5.0.0.0.0.1.1.1.0.0.1.1.0
                             elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
-                              elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                                elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                                  prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ range $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                                  elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                                    prove functionFrom $$0 $0 X df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1.2.0.0.0
-                                    prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ range $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1.2.0.0.1.0
+                              elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                                elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                                  prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                                  elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                                    prove functionFrom $$0 $0 X 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1.2.0.0.0
+                                    prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, $0, X) 0.5.0.0.0.0.1.1.1.0.0.1.1.2.0.0.1.0
                                     prove = $0 domain $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain $$0, $0) 0.5.0.0.0.0.1.1.1.0.0.1.1.2.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                                   }
                                 }
@@ -591,12 +591,12 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 ℕ X ∧ = apply $0 0ℕ 
         assume ∈ $0 ℕ {
           elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
             prove ∈ successor $0 ℕ 38d457454151e2e23b714e87ab690c1e0897a286b8349b60cbcd33b33b6db270 () ($0) 0.9.0.0a
-            elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-              elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                prove ∧ function union $$0 ∧ = domain union $$0 ℕ ⊆ range union $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (union $$0, ℕ, X) 0.7 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                  prove functionFrom union $$0 ℕ X df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () (union $$0, ℕ, X) 0.9.0.0.0.1.0.0
-                  prove ∧ function union $$0 ∧ = domain union $$0 ℕ ⊆ range union $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (union $$0, ℕ, X) 0.9.0.0.0.1.0.1.0
+            elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+              elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                prove ∧ function union $$0 ∧ = domain union $$0 ℕ ⊆ codomain union $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (union $$0, ℕ, X) 0.7 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                  prove functionFrom union $$0 ℕ X 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () (union $$0, ℕ, X) 0.9.0.0.0.1.0.0
+                  prove ∧ function union $$0 ∧ = domain union $$0 ℕ ⊆ codomain union $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (union $$0, ℕ, X) 0.9.0.0.0.1.0.1.0
                   prove = ℕ domain union $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain union $$0, ℕ) 0.9.0.0.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                 }
               }
@@ -614,19 +614,19 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 ℕ X ∧ = apply $0 0ℕ 
               prove ∃ m ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 powerSet product ℕ X, ∃ m ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0) () 0.9.0.0.2.0.3
             }
             let m_n ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 X ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply f apply $$$$0 $0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$$$0 ℕ ∧ ∧ function $0 functionFrom $0 $$$$0 X ∀ a → ∈ $0 $$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 g_0 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply f apply $$$0 $0, = apply union $$$0 successor $$0 apply f apply union $$$0 $$0) () {
-              elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-                elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-                  prove ∧ ∈ successor $$$0 domain $$0 ∈ apply union $$$$0 successor $$$0 range $$0 be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () (successor $$$0, apply union $$$$0 successor $$$0, $$0) 0.9.0.0.2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-                  prove ∈ successor $$$0 domain $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ successor $$$0 domain $$0, ∈ apply union $$$$0 successor $$$0 range $$0) () 0.9.0.0.2.1.0.0.0
+              elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+                elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+                  prove ∧ ∈ successor $$$0 domain $$0 ∈ apply union $$$$0 successor $$$0 codomain $$0 a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba () (successor $$$0, apply union $$$$0 successor $$$0, $$0) 0.9.0.0.2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+                  prove ∈ successor $$$0 domain $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ successor $$$0 domain $$0, ∈ apply union $$$$0 successor $$$0 codomain $$0) () 0.9.0.0.2.1.0.0.0
                 }
-                elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                  elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                    prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ range $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, $0, X) 0.9.0.0.2.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                    elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-                      prove functionFrom $$0 $0 X df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () ($$0, $0, X) 0.9.0.0.2.1.0.1.0.0
-                      prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ range $$0 X ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, $0, X) 0.9.0.0.2.1.0.1.0.1.0
-                      prove ∧ = domain $$0 $0 ⊆ range $$0 X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0, ∧ = domain $$0 $0 ⊆ range $$0 X) () 0.9.0.0.2.1.0.1.0.1.1
-                      prove = domain $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain $$0 $0, ⊆ range $$0 X) () 0.9.0.0.2.1.0.1.0.1.2
+                elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                  elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                    prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, $0, X) 0.9.0.0.2.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                    elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+                      prove functionFrom $$0 $0 X 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () ($$0, $0, X) 0.9.0.0.2.1.0.1.0.0
+                      prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 X 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, $0, X) 0.9.0.0.2.1.0.1.0.1.0
+                      prove ∧ = domain $$0 $0 ⊆ codomain $$0 X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function $$0, ∧ = domain $$0 $0 ⊆ codomain $$0 X) () 0.9.0.0.2.1.0.1.0.1.1
+                      prove = domain $$0 $0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain $$0 $0, ⊆ codomain $$0 X) () 0.9.0.0.2.1.0.1.0.1.2
                     }
                   }
                   prove ∈ successor $$$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ successor $$$0 $$$$$0) (domain $$0, $0) 0.9.0.0.2.1.0.1.0 0.9.0.0.2.1.0.0

@@ -28,10 +28,10 @@ conclusion ↔ ∧ binaryOperation f binaryOperationOn f A ∧ function f functi
     }
   }
   assume ∧ function f functionFrom f product A A A {
-    elided ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da {
-      prove ∧ function f ∧ = domain f product A A ⊆ range f A ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, product A A, A) 1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove ∧ = domain f product A A ⊆ range f A 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f, ∧ = domain f product A A ⊆ range f A) () 1.0.0
-      prove = domain f product A A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain f product A A, ⊆ range f A) () 1.0.1
+    elided 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 {
+      prove ∧ function f ∧ = domain f product A A ⊆ codomain f A 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (f, product A A, A) 1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove ∧ = domain f product A A ⊆ codomain f A 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function f, ∧ = domain f product A A ⊆ codomain f A) () 1.0.0
+      prove = domain f product A A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain f product A A, ⊆ codomain f A) () 1.0.1
     }
     assume = A ∅ {
       elided be77545baf146bbd805162cf9db6967b03c9667ba730db5d2a239976bc36e720 {
@@ -57,7 +57,7 @@ conclusion ↔ ∧ binaryOperation f binaryOperationOn f A ∧ function f functi
     }
     prove = domain product A A A 35f46479d4f3054e0f463194f8ed4dd77e7526b58f2b6157594bf81bccfcf95a (= A ∅, = domain product A A A) () 1.1 1.2
     elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
-      prove ∧ function f ∧ = domain f product A A ⊆ range f A ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, product A A, A) 1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove ∧ function f ∧ = domain f product A A ⊆ codomain f A 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (f, product A A, A) 1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
       prove = product A A domain f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain f, product A A) 1.4.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
       prove = domain domain f A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= domain $0 A) (product A A, domain f) 1.4.1 1.3
     }

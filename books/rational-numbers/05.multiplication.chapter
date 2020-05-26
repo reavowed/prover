@@ -893,30 +893,30 @@ conclusion identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 1ℕ ×ℚ
               prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
               prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 0.0.2.0.3.0.0
             }
-            elided ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da {
-              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 0.0.2.0.3.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-              prove ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ) () 0.0.2.0.3.1.0
-              prove = domain ⍳_ℚ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain ⍳_ℚ ℤ, ⊆ range ⍳_ℚ ℚ) () 0.0.2.0.3.1.1
+            elided 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 {
+              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 0.0.2.0.3.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              prove ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ) () 0.0.2.0.3.1.0
+              prove = domain ⍳_ℚ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain ⍳_ℚ ℤ, ⊆ codomain ⍳_ℚ ℚ) () 0.0.2.0.3.1.1
               prove = ℤ domain ⍳_ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℚ, ℤ) 0.0.2.0.3.1.2
             }
           }
           prove ∈ apply ⍳_ℤ 1ℕ domain ⍳_ℚ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ apply ⍳_ℤ 1ℕ $$0) (ℤ, domain ⍳_ℚ) 0.0.2.0.3 0.0.2.0.2
-          prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ range ⍳_ℚ fc2b11f609f14a73a1a1c695e32c4280401ac16545d1dcdcf84595d763384fb9 () (⍳_ℚ, apply ⍳_ℤ 1ℕ) 0.0.2.0.0 0.0.2.0.4
+          prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ 2f276361233657cb972d2f76aedad9e29c92a0b8facd2ba5339a6270cde41b59 () (⍳_ℚ, apply ⍳_ℤ 1ℕ) 0.0.2.0.0 0.0.2.0.4
           elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
             elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
               prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
               prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 0.0.2.0.6.0.0
             }
-            elided ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da {
-              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 0.0.2.0.6.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-              prove ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ) () 0.0.2.0.6.1.0
-              prove ⊆ range ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= domain ⍳_ℚ ℤ, ⊆ range ⍳_ℚ ℚ) () 0.0.2.0.6.1.1
+            elided 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 {
+              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 0.0.2.0.6.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+              prove ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ) () 0.0.2.0.6.1.0
+              prove ⊆ codomain ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= domain ⍳_ℚ ℤ, ⊆ codomain ⍳_ℚ ℚ) () 0.0.2.0.6.1.1
             }
           }
           elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
-            prove ∀ x → ∈ $0 range ⍳_ℚ ∈ $0 ℚ f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (range ⍳_ℚ, ℚ) 0.0.2.0.6
-            prove → ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ range ⍳_ℚ ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 range ⍳_ℚ ∈ $$0 ℚ) (apply ⍳_ℚ apply ⍳_ℤ 1ℕ) 0.0.2.0.7.0
-            prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ range ⍳_ℚ, ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ) () 0.0.2.0.7.1 0.0.2.0.5
+            prove ∀ x → ∈ $0 codomain ⍳_ℚ ∈ $0 ℚ f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (codomain ⍳_ℚ, ℚ) 0.0.2.0.6
+            prove → ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 codomain ⍳_ℚ ∈ $$0 ℚ) (apply ⍳_ℚ apply ⍳_ℤ 1ℕ) 0.0.2.0.7.0
+            prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ, ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ) () 0.0.2.0.7.1 0.0.2.0.5
           }
           elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {
             elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {
@@ -968,30 +968,30 @@ conclusion identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 1ℕ ×ℚ
         prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
         prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 1.4.0.0
       }
-      elided ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da {
-        prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 1.4.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-        prove ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ) () 1.4.1.0
-        prove = domain ⍳_ℚ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain ⍳_ℚ ℤ, ⊆ range ⍳_ℚ ℚ) () 1.4.1.1
+      elided 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 {
+        prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 1.4.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ) () 1.4.1.0
+        prove = domain ⍳_ℚ ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain ⍳_ℚ ℤ, ⊆ codomain ⍳_ℚ ℚ) () 1.4.1.1
         prove = ℤ domain ⍳_ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℚ, ℤ) 1.4.1.2
       }
     }
     prove ∈ apply ⍳_ℤ 1ℕ domain ⍳_ℚ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ apply ⍳_ℤ 1ℕ $0) (ℤ, domain ⍳_ℚ) 1.4 1.3
-    prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ range ⍳_ℚ fc2b11f609f14a73a1a1c695e32c4280401ac16545d1dcdcf84595d763384fb9 () (⍳_ℚ, apply ⍳_ℤ 1ℕ) 1.1 1.5
+    prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ 2f276361233657cb972d2f76aedad9e29c92a0b8facd2ba5339a6270cde41b59 () (⍳_ℚ, apply ⍳_ℤ 1ℕ) 1.1 1.5
     elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
       elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
         prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
         prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 1.7.0.0
       }
-      elided ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da {
-        prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 1.7.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-        prove ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ) () 1.7.1.0
-        prove ⊆ range ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= domain ⍳_ℚ ℤ, ⊆ range ⍳_ℚ ℚ) () 1.7.1.1
+      elided 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 {
+        prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 1.7.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ) () 1.7.1.0
+        prove ⊆ codomain ⍳_ℚ ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= domain ⍳_ℚ ℤ, ⊆ codomain ⍳_ℚ ℚ) () 1.7.1.1
       }
     }
     elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
-      prove ∀ x → ∈ $0 range ⍳_ℚ ∈ $0 ℚ f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (range ⍳_ℚ, ℚ) 1.7
-      prove → ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ range ⍳_ℚ ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 range ⍳_ℚ ∈ $0 ℚ) (apply ⍳_ℚ apply ⍳_ℤ 1ℕ) 1.8.0
-      prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ range ⍳_ℚ, ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ) () 1.8.1 1.6
+      prove ∀ x → ∈ $0 codomain ⍳_ℚ ∈ $0 ℚ f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (codomain ⍳_ℚ, ℚ) 1.7
+      prove → ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 codomain ⍳_ℚ ∈ $0 ℚ) (apply ⍳_ℚ apply ⍳_ℤ 1ℕ) 1.8.0
+      prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ, ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ) () 1.8.1 1.6
     }
     elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {
       elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {

@@ -33,43 +33,62 @@ conclusion ↔ = apply f a_1 apply f a_2 = a_1 a_2
   prove ↔ = apply f a_1 apply f a_2 = a_1 a_2 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= apply f a_1 apply f a_2, = a_1 a_2) () 0 1
 }
 
-theorem A Function Is Surjective on Its Image
-premise ∧ function f functionFrom f A B
-conclusion ∧ ∧ function f functionFrom f A image f surjectiveFunction f A image f
+theorem A Function Is Surjective on Its Codomain
+premise function f
+conclusion surjectiveFunction f domain f codomain f
 {
-  prove ∧ function f functionFrom f A image f 5f781145c04d59ca5d5c859acc61c92429ad0e615c3b4d89d63ce713ec00b8f5 () (f, A, B) p0
+  prove functionFrom f domain f codomain f 50a3b7897ade9db200800dc751725c8a1c8b09e9d67d5b955854ab9fc2c0d333 () (f) p0
   take b {
-    assume ∈ $0 image f {
-      elided 7d288036ed2a37e18951a0a380c8a0b688a56d1ec51e2bcba9035657ace638e9 {
-        prove ∀ b ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 7d288036ed2a37e18951a0a380c8a0b688a56d1ec51e2bcba9035657ace638e9 () (f, A, B) p0
-        prove ↔ ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 image f ∃ a ∧ ∈ $0 A = $$$0 apply f $0) ($0) 1.0.0.0
-        prove → ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 image f, ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 1.0.0.1
-        prove ∃ a ∧ ∈ $0 A = $$0 apply f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 image f, ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 1.0.0.2 1.0a
+    assume ∈ $0 codomain f {
+      elided 056378a7b8d3ccf6542f9cf65a3313b90e48152c27b2e475a5ed698060f9456d {
+        prove ∀ b ↔ ∈ $0 codomain f ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f 056378a7b8d3ccf6542f9cf65a3313b90e48152c27b2e475a5ed698060f9456d () (f)
+        prove ↔ ∈ $0 codomain f ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 codomain f ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$$0 f) ($0) 1.0.0.0
+        prove → ∈ $0 codomain f ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 codomain f, ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f) () 1.0.0.1
+        prove ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 codomain f, ∃ a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f) () 1.0.0.2 1.0a
       }
+      let a ∧ ∈ $0 domain f ∈ orderedPair $0 $$0 f 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 domain f ∈ orderedPair $$0 $0 f, ∃ a ∧ ∈ $0 domain f = $$0 apply f $0) () {
+        elided f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 {
+          prove ∧ function f functionFrom f domain f codomain f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f, functionFrom f domain f codomain f) () p0 0
+          elided f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 {
+            prove ↔ ∈ orderedPair $0 $$0 f ∧ ∈ $0 domain f = $$0 apply f $0 f5c8dbef89b6351ed0b47b8a34bc324c775e13dac959a2891fefa1741b23cf32 () (f, domain f, codomain f, $0, $$0) 1.0.1.0.0
+            prove → ∈ orderedPair $0 $$0 f ∧ ∈ $0 domain f = $$0 apply f $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ orderedPair $0 $$0 f, ∧ ∈ $0 domain f = $$0 apply f $0) () 1.0.1.0.1.0
+            prove ∧ ∈ $0 domain f = $$0 apply f $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $0 $$0 f, ∧ ∈ $0 domain f = $$0 apply f $0) () 1.0.1.0.1.1 1.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove = $$0 apply f $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 domain f, = $$0 apply f $0) () 1.0.1.0.1.2
+          }
+        }
+        elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
+          prove ∧ ∈ $0 domain f = $$0 apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 domain f, = $$0 apply f $0) () 1.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 1.0.1.0
+          prove ∃ a ∧ ∈ $0 domain f = $$$0 apply f $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 domain f = $$0 apply f $$$0) ($0) 1.0.1.1.0
+        }
+      } 1.0.0
     }
   }
   elided 082a6d62f87b04d2e8a4c2b5c14e4850934a4c385873c6f12368e3bfd2d5f854 {
-    prove ∧ ∧ function f functionFrom f A image f ∀ b → ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, ∀ b → ∈ $0 image f ∃ a ∧ ∈ $0 A = $$0 apply f $0) () 0 1
-    prove surjectiveFunction f A image f 082a6d62f87b04d2e8a4c2b5c14e4850934a4c385873c6f12368e3bfd2d5f854 () (f, A, image f) 2.0
+    prove ∧ function f functionFrom f domain f codomain f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f, functionFrom f domain f codomain f) () p0 0
+    prove ∧ ∧ function f functionFrom f domain f codomain f ∀ b → ∈ $0 codomain f ∃ a ∧ ∈ $0 domain f = $$0 apply f $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f domain f codomain f, ∀ b → ∈ $0 codomain f ∃ a ∧ ∈ $0 domain f = $$0 apply f $0) () 2.0 1
+    prove surjectiveFunction f domain f codomain f 082a6d62f87b04d2e8a4c2b5c14e4850934a4c385873c6f12368e3bfd2d5f854 () (f, domain f, codomain f) 2.1
   }
-  prove ∧ ∧ function f functionFrom f A image f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, surjectiveFunction f A image f) () 0 2
 }
 
-theorem Injective Function Is Bijective with Its Image
-premise ∧ ∧ function f functionFrom f A B injectiveFunction f
-conclusion ∧ ∧ function f functionFrom f A image f bijectiveFunction f A image f
+theorem Injective Function Is Bijective with Its Codomain
+premise ∧ function f injectiveFunction f
+conclusion ∧ ∧ function f functionFrom f domain f codomain f bijectiveFunction f domain f codomain f
 {
-  prove ∧ function f functionFrom f A image f 5f781145c04d59ca5d5c859acc61c92429ad0e615c3b4d89d63ce713ec00b8f5 () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-  elided 6a55ebe7e39e8577498fc7a0c55a6ffa83691aeaf5db1cc96788297eb1b16a18 {
-    prove ∧ ∧ function f functionFrom f A image f surjectiveFunction f A image f 6a55ebe7e39e8577498fc7a0c55a6ffa83691aeaf5db1cc96788297eb1b16a18 () (f, A, image f) 0
-    prove surjectiveFunction f A image f 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∧ function f functionFrom f A image f, surjectiveFunction f A image f) () 1.0
-  }
+  prove functionFrom f domain f codomain f 50a3b7897ade9db200800dc751725c8a1c8b09e9d67d5b955854ab9fc2c0d333 () (f) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+  prove surjectiveFunction f domain f codomain f e10915a75894e8f8cc0c740b5bda87dfff39d1966ecd4090a7940656baac9006 () (f) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
   elided ff881cd1f2dbb9807f49ac6b86efc883777c3e395df5a2af2aa4717b16a07b32 {
-    prove ∧ injectiveFunction f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (injectiveFunction f, surjectiveFunction f A image f) () p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 1
-    prove ∧ ∧ function f functionFrom f A image f ∧ injectiveFunction f surjectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, ∧ injectiveFunction f surjectiveFunction f A image f) () 0 2.0
-    prove bijectiveFunction f A image f ff881cd1f2dbb9807f49ac6b86efc883777c3e395df5a2af2aa4717b16a07b32 () (f, A, image f) 2.1
+    prove ∧ function f functionFrom f domain f codomain f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f, functionFrom f domain f codomain f) () p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0
+    prove ∧ injectiveFunction f surjectiveFunction f domain f codomain f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (injectiveFunction f, surjectiveFunction f domain f codomain f) () p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 1
+    prove ∧ ∧ function f functionFrom f domain f codomain f ∧ injectiveFunction f surjectiveFunction f domain f codomain f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f domain f codomain f, ∧ injectiveFunction f surjectiveFunction f domain f codomain f) () 2.0 2.1
+    prove bijectiveFunction f domain f codomain f ff881cd1f2dbb9807f49ac6b86efc883777c3e395df5a2af2aa4717b16a07b32 () (f, domain f, codomain f) 2.2
   }
-  prove ∧ ∧ function f functionFrom f A image f bijectiveFunction f A image f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f A image f, bijectiveFunction f A image f) () 0 2
+  elided bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d {
+    elided 2e2d096331fcc31a9981442b06e8d16f6995ea226ccd1afbe2062ed91aba6f0b {
+      prove ∧ ∧ function f functionFrom f domain f codomain f ∧ injectiveFunction f surjectiveFunction f domain f codomain f 2e2d096331fcc31a9981442b06e8d16f6995ea226ccd1afbe2062ed91aba6f0b () (f, domain f, codomain f) 2
+      prove ∧ function f functionFrom f domain f codomain f 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ function f functionFrom f domain f codomain f, ∧ injectiveFunction f surjectiveFunction f domain f codomain f) () 3.0.0
+    }
+    prove ∧ ∧ function f functionFrom f domain f codomain f bijectiveFunction f domain f codomain f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function f functionFrom f domain f codomain f, bijectiveFunction f domain f codomain f) () 3.0 2
+  }
 }
 
 comment Inverses for bijective functions.
@@ -155,7 +174,7 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
                     prove = apply f $$$0 apply f $$$$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= apply f $$$0 $$$$$$$0) ($$$$$0, apply f $$$$0) 0.0.2.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.0.2.0.1.2.0.1.0.7
                     elided 787b1809d736da2aa022b933fbbcd66d4bb0889b6376f259efc15ab047ab2480 {
                       prove ∧ ∧ function f functionFrom f A B ∧ injectiveFunction f surjectiveFunction f A B 2e2d096331fcc31a9981442b06e8d16f6995ea226ccd1afbe2062ed91aba6f0b () (f, A, B) p0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-                      prove ∧ function f ∧ = domain f A ⊆ range f B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, A, B) 0.0.2.0.1.2.0.1.0.9.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+                      prove ∧ function f ∧ = domain f A ⊆ codomain f B 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (f, A, B) 0.0.2.0.1.2.0.1.0.9.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
                       prove = A domain f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain f, A) 0.0.2.0.1.2.0.1.0.9.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
                       prove ∈ $$$0 domain f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$0 $$$$$$$0) (A, domain f) 0.0.2.0.1.2.0.1.0.9.2 0.0.2.0.1.2.0.1.0.6
                       prove ∈ $$$$0 domain f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$$$0 $$$$$$$0) (A, domain f) 0.0.2.0.1.2.0.1.0.9.2 0.0.2.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
@@ -192,7 +211,7 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
         assume ∈ $0 A {
           prove ∈ apply f $0 B bb89c92e09f9a90a8d67399510536ffc5b1c61d0bc9109607cf88f9f65d0dd8f () (f, A, B, $0) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.1.2.0a
           elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
-            prove ∧ function f ∧ = domain f A ⊆ range f B ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∧ function f ∧ = domain f A ⊆ codomain f B 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (f, A, B) p0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove = A domain f 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain f, A) 0.1.2.0.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
             prove ∈ $0 domain f 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$$0) (A, domain f) 0.1.2.0.1.1 0.1.2.0a
             prove ∈ orderedPair $0 apply f $0 f 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 () (f, $0) 0.1.2.0.1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.1.2.0.1.2
@@ -231,7 +250,7 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
       take x {
         assume ∈ $0 B {
           elided 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 {
-            prove ∧ function $$0 ∧ = domain $$0 B ⊆ range $$0 A ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($$0, B, A) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∧ function $$0 ∧ = domain $$0 B ⊆ codomain $$0 A 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($$0, B, A) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
             prove = B domain $$0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain $$0, B) 0.2.2.0.0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
             prove ∈ $0 domain $$0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$$0) (B, domain $$0) 0.2.2.0.0.1 0.2.2.0a
             prove ∈ orderedPair $0 apply $$0 $0 $$0 6847bb7d2d29ff61e3726b8434a8db95c4cab655c56c3e82a2a352ff6a5eae80 () ($$0, $0) 0.2.2.0.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0.2.2.0.0.2
@@ -326,7 +345,7 @@ conclusion ∃! g ∧ ∧ ∧ function $0 functionFrom $0 B A bijectiveFunction 
         }
       }
       elided b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 {
-        prove ∧ function $0 ∧ = domain $0 B ⊆ range $0 A ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () ($0, B, A) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        prove ∧ function $0 ∧ = domain $0 B ⊆ codomain $0 A 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () ($0, B, A) 0.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
         prove = B domain $0 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain $0, B) 0.3.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
           prove ∀ b_1 → ∈ $0 domain $$0 ∀ b_2 → ∈ $0 B → = apply $$$0 $$0 apply $$$0 $0 = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ b_1 → ∈ $0 $$$0 ∀ b_2 → ∈ $0 B → = apply $$$0 $$0 apply $$$0 $0 = $$0 $0) (B, domain $0) 0.3.1.1 0.3.0

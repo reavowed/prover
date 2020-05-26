@@ -82,24 +82,24 @@ conclusion ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFu
       }
     }
     elided b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 {
-      elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-        elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-          elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-            prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ range ⍳_ℤ ℤ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℤ, ℕ, ℤ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-              prove functionFrom ⍳_ℤ ℕ ℤ df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () (⍳_ℤ, ℕ, ℤ) 3.1.0.0.0.0
-              prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ range ⍳_ℤ ℤ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℤ, ℕ, ℤ) 3.1.0.0.0.1.0
+      elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+        elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+          elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+            prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℤ, ℕ, ℤ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+              prove functionFrom ⍳_ℤ ℕ ℤ 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () (⍳_ℤ, ℕ, ℤ) 3.1.0.0.0.0
+              prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℤ, ℕ, ℤ) 3.1.0.0.0.1.0
               prove = ℕ domain ⍳_ℤ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℤ, ℕ) 3.1.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
             }
           }
           prove ∀ a → ∈ $0 domain ⍳_ℤ ∀ b → ∈ $0 ℕ → = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ a → ∈ $0 $$0 ∀ b → ∈ $0 ℕ → = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 = $$0 $0) (ℕ, domain ⍳_ℤ) 3.1.0.0.0 3.0
         }
-        elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-          elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-            prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ range ⍳_ℤ ℤ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℤ, ℕ, ℤ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-              prove functionFrom ⍳_ℤ ℕ ℤ df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () (⍳_ℤ, ℕ, ℤ) 3.1.0.1.0.0
-              prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ range ⍳_ℤ ℤ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℤ, ℕ, ℤ) 3.1.0.1.0.1.0
+        elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+          elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+            prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℤ, ℕ, ℤ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+              prove functionFrom ⍳_ℤ ℕ ℤ 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () (⍳_ℤ, ℕ, ℤ) 3.1.0.1.0.0
+              prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℤ, ℕ, ℤ) 3.1.0.1.0.1.0
               prove = ℕ domain ⍳_ℤ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℤ, ℕ) 3.1.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
             }
           }
@@ -164,23 +164,23 @@ conclusion ↔ = apply ⍳_ℤ a apply ⍳_ℤ b = a b
   }
   elided d4f2728fc28fbcb4b4267dc207c0697bbc142e3fdaa5028c112a0349a092914c {
     prove ∧ function ⍳_ℤ injectiveFunction ⍳_ℤ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function ⍳_ℤ, injectiveFunction ⍳_ℤ) () 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-    elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-      elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-        prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ range ⍳_ℤ ℤ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℤ, ℕ, ℤ) 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-        elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-          prove functionFrom ⍳_ℤ ℕ ℤ df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () (⍳_ℤ, ℕ, ℤ) 1.1.0.0
-          prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ range ⍳_ℤ ℤ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℤ, ℕ, ℤ) 1.1.0.1.0
+    elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+      elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+        prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℤ, ℕ, ℤ) 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+          prove functionFrom ⍳_ℤ ℕ ℤ 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () (⍳_ℤ, ℕ, ℤ) 1.1.0.0
+          prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℤ, ℕ, ℤ) 1.1.0.1.0
           prove = ℕ domain ⍳_ℤ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℤ, ℕ) 1.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         }
       }
       prove ∈ a domain ⍳_ℤ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ a $0) (ℕ, domain ⍳_ℤ) 1.1.0 p0
     }
-    elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-      elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-        prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ range ⍳_ℤ ℤ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℤ, ℕ, ℤ) 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-        elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-          prove functionFrom ⍳_ℤ ℕ ℤ df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () (⍳_ℤ, ℕ, ℤ) 1.2.0.0
-          prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ range ⍳_ℤ ℤ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℤ, ℕ, ℤ) 1.2.0.1.0
+    elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+      elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+        prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℤ, ℕ, ℤ) 0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+          prove functionFrom ⍳_ℤ ℕ ℤ 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () (⍳_ℤ, ℕ, ℤ) 1.2.0.0
+          prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℤ, ℕ, ℤ) 1.2.0.1.0
           prove = ℕ domain ⍳_ℤ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℤ, ℕ) 1.2.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
         }
       }

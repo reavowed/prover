@@ -127,24 +127,24 @@ conclusion ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFu
       }
     }
     elided b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 {
-      elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-        elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-          elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-              prove functionFrom ⍳_ℚ ℤ ℚ df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () (⍳_ℚ, ℤ, ℚ) 2.1.0.0.0.0
-              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 2.1.0.0.0.1.0
+      elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+        elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+          elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+              prove functionFrom ⍳_ℚ ℤ ℚ 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () (⍳_ℚ, ℤ, ℚ) 2.1.0.0.0.0
+              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 2.1.0.0.0.1.0
               prove = ℤ domain ⍳_ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℚ, ℤ) 2.1.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
             }
           }
           prove ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 ℤ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ x → ∈ $0 $$0 ∀ y → ∈ $0 ℤ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) (ℤ, domain ⍳_ℚ) 2.1.0.0.0 2.0
         }
-        elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-          elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            elided df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 {
-              prove functionFrom ⍳_ℚ ℤ ℚ df390dc30c3c6eef685b9c951e4b57dc884f00b0d0c2c8d601273f5a1ab20c53 () (⍳_ℚ, ℤ, ℚ) 2.1.0.1.0.0
-              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ range ⍳_ℚ ℚ ef5352cadd56c5234cfd5b83e7c8f9545de0222af8e48a9e7c40fc1b4328f0da () (⍳_ℚ, ℤ, ℚ) 2.1.0.1.0.1.0
+        elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+          elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
+              prove functionFrom ⍳_ℚ ℤ ℚ 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () (⍳_ℚ, ℤ, ℚ) 2.1.0.1.0.0
+              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 2.1.0.1.0.1.0
               prove = ℤ domain ⍳_ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℚ, ℤ) 2.1.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
             }
           }

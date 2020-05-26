@@ -273,16 +273,16 @@ term domain (X)
   format (domain(X)) no-component-brackets
   (= $0 comprehension a union union X ∃ b ∈ orderedPair $$0 $0 X)
 
-term range (X)
-  format (range(X)) no-component-brackets
+term codomain (X)
+  format (codomain(X)) no-component-brackets
   (= $0 comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X)
 
-theorem Coordinates of Element Are Elements of Domain and Range
+theorem Coordinates of Element Are Elements of Domain and Codomain
 premise ∈ orderedPair a b X
-conclusion ∧ ∈ a domain X ∈ b range X
+conclusion ∧ ∈ a domain X ∈ b codomain X
 {
   prove = domain X comprehension a union union X ∃ b ∈ orderedPair $$0 $0 X 7b833dc0f479c3b0be87e12315e7ec8fce752f153c09a3bdb0ecfa17ae29cd39 () (X)
-  prove = range X comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X 81ded196ec62e6f1918c14e4ea73b8fe31bf93aca4587ed502f1e6c16bca02c0 () (X)
+  prove = codomain X comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X 68cf63cd4e65a53cc05a446c3aea611bf16e4475c96e8b098802881fe1c1a270 () (X)
   prove ∧ ∈ a union union X ∈ b union union X 4045b77075b9886a649be5c1969da923695dd0be04a4aa51ad27ebbb799bcfac () (a, b, X) p0
   elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
     prove ∃ b ∈ orderedPair a $0 X c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∈ orderedPair a $0 X) (b) p0
@@ -301,18 +301,18 @@ conclusion ∧ ∈ a domain X ∈ b range X
     elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
       prove ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ b union union X, ∃ a ∈ orderedPair $0 b X) () 2 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 4.0
       elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-        prove ∀ y ↔ ∈ $0 range X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∃ a ∈ orderedPair $0 $$0 X) (range X, union union X) 1
-        prove ↔ ∈ b range X ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 range X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X) (b) 4.1.1.0
-        prove → ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X ∈ b range X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b range X, ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X) () 4.1.1.1
-        prove ∈ b range X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X, ∈ b range X) () 4.1.1.2 4.1.0
+        prove ∀ y ↔ ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∃ a ∈ orderedPair $0 $$0 X) (codomain X, union union X) 1
+        prove ↔ ∈ b codomain X ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X) (b) 4.1.1.0
+        prove → ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X ∈ b codomain X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b codomain X, ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X) () 4.1.1.1
+        prove ∈ b codomain X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X, ∈ b codomain X) () 4.1.1.2 4.1.0
       }
     }
   }
-  prove ∧ ∈ a domain X ∈ b range X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a domain X, ∈ b range X) () 3 4
+  prove ∧ ∈ a domain X ∈ b codomain X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a domain X, ∈ b codomain X) () 3 4
 }
 
 theorem Membership Condition for Domain
-conclusion ∀ a ↔ ∈ $0 domain X ∃ b ∧ ∈ $0 range X ∈ orderedPair $$0 $0 X
+conclusion ∀ a ↔ ∈ $0 domain X ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X
 {
   prove = domain X comprehension a union union X ∃ b ∈ orderedPair $$0 $0 X 7b833dc0f479c3b0be87e12315e7ec8fce752f153c09a3bdb0ecfa17ae29cd39 () (X)
   take a {
@@ -324,19 +324,19 @@ conclusion ∀ a ↔ ∈ $0 domain X ∃ b ∧ ∈ $0 range X ∈ orderedPair $$
         prove ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 domain X, ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X) () 1.0.0.2 1.0a
         prove ∃ b ∈ orderedPair $$0 $0 X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 union union X, ∃ b ∈ orderedPair $$0 $0 X) () 1.0.0.3
       }
-      let b ∈ orderedPair $$0 $0 X 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ orderedPair $0 $$0 X, ∃ b ∧ ∈ $0 range X ∈ orderedPair $$0 $0 X) () {
-        elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-          prove ∧ ∈ $$0 domain X ∈ $0 range X be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () ($$0, $0, X) 1.0.1a
-          prove ∈ $0 range X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 domain X, ∈ $0 range X) () 1.0.1.0.0
+      let b ∈ orderedPair $$0 $0 X 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ orderedPair $0 $$0 X, ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X) () {
+        elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+          prove ∧ ∈ $$0 domain X ∈ $0 codomain X a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba () ($$0, $0, X) 1.0.1a
+          prove ∈ $0 codomain X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $$0 domain X, ∈ $0 codomain X) () 1.0.1.0.0
         }
         elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-          prove ∧ ∈ $0 range X ∈ orderedPair $$0 $0 X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 range X, ∈ orderedPair $$0 $0 X) () 1.0.1.0 1.0.1a
-          prove ∃ b ∧ ∈ $0 range X ∈ orderedPair $$$0 $0 X c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 range X ∈ orderedPair $$0 $$$0 X) ($0) 1.0.1.1.0
+          prove ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 codomain X, ∈ orderedPair $$0 $0 X) () 1.0.1.0 1.0.1a
+          prove ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$$0 $0 X c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $$$0 codomain X ∈ orderedPair $$0 $$$0 X) ($0) 1.0.1.1.0
         }
       } 1.0.0
     }
-    assume ∃ b ∧ ∈ $0 range X ∈ orderedPair $$0 $0 X {
-      let b ∧ ∈ $0 range X ∈ orderedPair $$0 $0 X 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 range X ∈ orderedPair $0 $$0 X, ∈ $0 domain X) () {
+    assume ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X {
+      let b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 codomain X ∈ orderedPair $0 $$0 X, ∈ $0 domain X) () {
         elided 4045b77075b9886a649be5c1969da923695dd0be04a4aa51ad27ebbb799bcfac {
           prove ∧ ∈ $$0 union union X ∈ $0 union union X 4045b77075b9886a649be5c1969da923695dd0be04a4aa51ad27ebbb799bcfac () ($$0, $0, X) 1.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           prove ∈ $$0 union union X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $$0 union union X, ∈ $0 union union X) () 1.1.0.0.0
@@ -353,27 +353,27 @@ conclusion ∀ a ↔ ∈ $0 domain X ∃ b ∧ ∈ $0 range X ∈ orderedPair $$
         }
       } 1.1a
     }
-    prove ↔ ∈ $0 domain X ∃ b ∧ ∈ $0 range X ∈ orderedPair $$0 $0 X 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 domain X, ∃ b ∧ ∈ $0 range X ∈ orderedPair $$0 $0 X) () 1.0 1.1
+    prove ↔ ∈ $0 domain X ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 domain X, ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X) () 1.0 1.1
   }
 }
 
-theorem Membership Condition for Range
-conclusion ∀ b ↔ ∈ $0 range X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X
+theorem Membership Condition for Codomain
+conclusion ∀ b ↔ ∈ $0 codomain X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X
 {
-  prove = range X comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X 81ded196ec62e6f1918c14e4ea73b8fe31bf93aca4587ed502f1e6c16bca02c0 () (X)
+  prove = codomain X comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X 68cf63cd4e65a53cc05a446c3aea611bf16e4475c96e8b098802881fe1c1a270 () (X)
   take b {
-    assume ∈ $0 range X {
+    assume ∈ $0 codomain X {
       elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-        prove ∀ y ↔ ∈ $0 range X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∃ a ∈ orderedPair $0 $$$0 X) (range X, union union X) 0
-        prove ↔ ∈ $0 range X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 range X ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X) ($0) 1.0.0.0
-        prove → ∈ $0 range X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 range X, ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X) () 1.0.0.1
-        prove ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 range X, ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X) () 1.0.0.2 1.0a
+        prove ∀ y ↔ ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∃ a ∈ orderedPair $0 $$$0 X) (codomain X, union union X) 0
+        prove ↔ ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 codomain X ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X) ($0) 1.0.0.0
+        prove → ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 codomain X, ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X) () 1.0.0.1
+        prove ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 codomain X, ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X) () 1.0.0.2 1.0a
         prove ∃ a ∈ orderedPair $0 $$0 X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 union union X, ∃ a ∈ orderedPair $0 $$0 X) () 1.0.0.3
       }
       let a ∈ orderedPair $0 $$0 X 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ orderedPair $$0 $0 X, ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X) () {
-        elided be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc {
-          prove ∧ ∈ $0 domain X ∈ $$0 range X be2ecea13a4fe0cc39a3db5dadf064260021c0ee606110f3e9a689c56b0711fc () ($0, $$0, X) 1.0.1a
-          prove ∈ $0 domain X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 domain X, ∈ $$0 range X) () 1.0.1.0.0
+        elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+          prove ∧ ∈ $0 domain X ∈ $$0 codomain X a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba () ($0, $$0, X) 1.0.1a
+          prove ∈ $0 domain X 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 domain X, ∈ $$0 codomain X) () 1.0.1.0.0
         }
         elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
           prove ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 domain X, ∈ orderedPair $0 $$0 X) () 1.0.1.0 1.0.1a
@@ -382,7 +382,7 @@ conclusion ∀ b ↔ ∈ $0 range X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0
       } 1.0.0
     }
     assume ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X {
-      let a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 domain X ∈ orderedPair $$0 $0 X, ∈ $0 range X) () {
+      let a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 domain X ∈ orderedPair $$0 $0 X, ∈ $0 codomain X) () {
         elided 4045b77075b9886a649be5c1969da923695dd0be04a4aa51ad27ebbb799bcfac {
           prove ∧ ∈ $0 union union X ∈ $$0 union union X 4045b77075b9886a649be5c1969da923695dd0be04a4aa51ad27ebbb799bcfac () ($0, $$0, X) 1.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           prove ∈ $$0 union union X 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 union union X, ∈ $$0 union union X) () 1.1.0.0.0
@@ -391,15 +391,15 @@ conclusion ∀ b ↔ ∈ $0 range X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0
           prove ∃ a ∈ orderedPair $0 $$$0 X c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∈ orderedPair $$$0 $$0 X) ($0) 1.1.0a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
           prove ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $$0 union union X, ∃ a ∈ orderedPair $0 $$$0 X) () 1.1.0.0 1.1.0.1.0
           elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-            prove ∀ y ↔ ∈ $0 range X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∃ a ∈ orderedPair $0 $$$$0 X) (range X, union union X) 0
-            prove ↔ ∈ $$0 range X ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 range X ∧ ∈ $$$0 union union X ∃ a ∈ orderedPair $0 $$$$0 X) ($$0) 1.1.0.1.2.0
-            prove → ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X ∈ $$0 range X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $$0 range X, ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X) () 1.1.0.1.2.1
-            prove ∈ $$0 range X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X, ∈ $$0 range X) () 1.1.0.1.2.2 1.1.0.1.1
+            prove ∀ y ↔ ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∃ a ∈ orderedPair $0 $$$$0 X) (codomain X, union union X) 0
+            prove ↔ ∈ $$0 codomain X ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 codomain X ∧ ∈ $$$0 union union X ∃ a ∈ orderedPair $0 $$$$0 X) ($$0) 1.1.0.1.2.0
+            prove → ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X ∈ $$0 codomain X 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $$0 codomain X, ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X) () 1.1.0.1.2.1
+            prove ∈ $$0 codomain X fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X, ∈ $$0 codomain X) () 1.1.0.1.2.2 1.1.0.1.1
           }
         }
       } 1.1a
     }
-    prove ↔ ∈ $0 range X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 range X, ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X) () 1.0 1.1
+    prove ↔ ∈ $0 codomain X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 codomain X, ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X) () 1.0 1.1
   }
 }
 
@@ -409,7 +409,7 @@ conclusion = domain ∅ ∅
   take x {
     elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
       take b {
-        assume ∈ $0 range ∅ {
+        assume ∈ $0 codomain ∅ {
           elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
             prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
             prove ¬ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ∈ $$$0 ∅) (orderedPair $$0 $0) 0.0.0.0.0.0
@@ -420,32 +420,32 @@ conclusion = domain ∅ ∅
     elided (By definition) {
       elided 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 {
         take b {
-          prove → ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 range ∅ ¬ ∈ orderedPair $$0 $$$0 ∅) ($0) 0.0
-          prove ¬ ¬ → ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (→ ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅) () 0.1.0.0.0
+          prove → ∈ $0 codomain ∅ ¬ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 codomain ∅ ¬ ∈ orderedPair $$0 $$$0 ∅) ($0) 0.0
+          prove ¬ ¬ → ∈ $0 codomain ∅ ¬ ∈ orderedPair $$0 $0 ∅ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (→ ∈ $0 codomain ∅ ¬ ∈ orderedPair $$0 $0 ∅) () 0.1.0.0.0
         }
       }
       elided e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a {
         take b {
-          prove ¬ ¬ → ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ¬ → ∈ $$$0 range ∅ ¬ ∈ orderedPair $$0 $$$0 ∅) ($0) 0.1.0
-          assume ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ {
-            prove ¬ → ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅ e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (∈ $0 range ∅, ∈ orderedPair $$0 $0 ∅) () 0.1.1.0.1a
+          prove ¬ ¬ → ∈ $0 codomain ∅ ¬ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (¬ ¬ → ∈ $$$0 codomain ∅ ¬ ∈ orderedPair $$0 $$$0 ∅) ($0) 0.1.0
+          assume ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ {
+            prove ¬ → ∈ $0 codomain ∅ ¬ ∈ orderedPair $$0 $0 ∅ e66e2caa484077c75888eabc92a1e604b915b7665a373f5117f129066102e19a (∈ $0 codomain ∅, ∈ orderedPair $$0 $0 ∅) () 0.1.1.0.1a
           }
-          prove ¬ ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅, ¬ → ∈ $0 range ∅ ¬ ∈ orderedPair $$0 $0 ∅) () 0.1.1.0.1 0.1.1.0.0
+          prove ¬ ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅, ¬ → ∈ $0 codomain ∅ ¬ ∈ orderedPair $$0 $0 ∅) () 0.1.1.0.1 0.1.1.0.0
         }
       }
-      prove ¬ ¬ ∀ b ¬ ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (∀ b ¬ ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅) () 0.1.1
+      prove ¬ ¬ ∀ b ¬ ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (∀ b ¬ ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅) () 0.1.1
       elided 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 {
-        assume ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ {
-          prove ¬ ∀ b ¬ ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 (∧ ∈ $$0 range ∅ ∈ orderedPair $0 $$0 ∅) () 0.1.3.0a
+        assume ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ {
+          prove ¬ ∀ b ¬ ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ 2e23c931f80654b98fe01dcb541eeca6782bc0a4ef37a3a87a1bbe9360494693 (∧ ∈ $$0 codomain ∅ ∈ orderedPair $0 $$0 ∅) () 0.1.3.0a
         }
-        prove ¬ ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅, ¬ ∀ b ¬ ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅) () 0.1.3.0 0.1.2
+        prove ¬ ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅, ¬ ∀ b ¬ ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅) () 0.1.3.0 0.1.2
       }
     }
-    elided 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 {
-      prove ∀ a ↔ ∈ $0 domain ∅ ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 9382285e970f3d8589795a77ad3236edeed0617f124306359e534cc98bbc7545 () (∅)
-      prove ↔ ∈ $0 domain ∅ ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 domain ∅ ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$$0 $0 ∅) ($0) 0.2.0
-      prove → ∈ $0 domain ∅ ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 domain ∅, ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅) () 0.2.1
-      prove ¬ ∈ $0 domain ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ $0 domain ∅, ∃ b ∧ ∈ $0 range ∅ ∈ orderedPair $$0 $0 ∅) () 0.2.2 0.1
+    elided dfc9ee7893004f7f46920a6fc6f1d7e911900f9c19f48ad40b2b7df302fb8141 {
+      prove ∀ a ↔ ∈ $0 domain ∅ ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ dfc9ee7893004f7f46920a6fc6f1d7e911900f9c19f48ad40b2b7df302fb8141 () (∅)
+      prove ↔ ∈ $0 domain ∅ ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 domain ∅ ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$$0 $0 ∅) ($0) 0.2.0
+      prove → ∈ $0 domain ∅ ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 domain ∅, ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅) () 0.2.1
+      prove ¬ ∈ $0 domain ∅ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ $0 domain ∅, ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅) () 0.2.2 0.1
     }
   }
   prove = domain ∅ ∅ 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (domain ∅) 0
