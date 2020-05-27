@@ -171,7 +171,7 @@ conclusion ↔ ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x →
 
 theorem Any Function Is From Its Domain to Its Codomain
 premise function f
-conclusion functionFrom f domain f codomain f
+conclusion ∧ function f functionFrom f domain f codomain f
 {
   prove = domain f domain f 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (domain f)
   prove ⊆ codomain f codomain f f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (codomain f)
@@ -180,6 +180,7 @@ conclusion functionFrom f domain f codomain f
     prove ∧ function f ∧ = domain f domain f ⊆ codomain f codomain f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f, ∧ = domain f domain f ⊆ codomain f codomain f) () p0 2.0
     prove functionFrom f domain f codomain f 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () (f, domain f, codomain f) 2.1
   }
+  prove ∧ function f functionFrom f domain f codomain f bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function f, functionFrom f domain f codomain f) () p0 2
 }
 
 term apply (f a)
