@@ -136,5 +136,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.symbol, parentRequiresBrackets = true)
   }
   override def serialized: String = (Seq(definition.disambiguatedSymbol.serialized) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
-  override def serializedForHash: String = (Seq(definition.disambiguatedSymbol.serialized) ++ components.map(_.serializedForHash)).mkString(" ")
+  override def toStringForHash(variableDefinitions: VariableDefinitions): String = {
+    (Seq(definition.disambiguatedSymbol.serialized) ++ components.map(_.toStringForHash(variableDefinitions))).mkString(" ")
+  }
 }

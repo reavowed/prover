@@ -3,9 +3,9 @@ Establish the existence of the singleton set {a}.
 theorem There Exists a Set with an Element
 conclusion ∃ x ∃ y ∈ $0 $$0
 {
-  prove ∈ ∅ powerSet ∅ 73e9742459642589048ead035078a534a2a395b858e45eeca2a982b48588d58d () (∅)
-  prove ∃ y ∈ $0 powerSet ∅ c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∈ $0 powerSet ∅) (∅) 0
-  prove ∃ x ∃ y ∈ $0 $$0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∃ y ∈ $0 $$0) (powerSet ∅) 1
+  prove ∈ ∅ powerSet ∅ 1b4b7e14784be7940f719468c38125a9b1ab00f3064655f8f6ae03612d948f85 () (∅)
+  prove ∃ y ∈ $0 powerSet ∅ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ $0 powerSet ∅) (∅) 0
+  prove ∃ x ∃ y ∈ $0 $$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ y ∈ $0 $$0) (powerSet ∅) 1
 }
 
 theorem Singleton Existence
@@ -13,20 +13,20 @@ termVariables(a 0)
 conclusion ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a
 {
   prove ∃ x ∃ y ∈ $0 $$0 2cccf54c4f38ed8afb8227abf888c17e48598e20266c00a7f8d4977ba6408c73 () ()
-  let b ∃ y ∈ $0 $$0 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∃ y ∈ $0 $$0, ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a) () {
-    prove ∃! x = $0 a c95bd5a48f1e634431831232959dc7b7ef2ed222c694cac5df9ed7f08eee333a () (a)
-    elided 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f {
+  let b ∃ y ∈ $0 $$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∃ y ∈ $0 $$0, ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a) () {
+    prove ∃! x = $0 a 8bd430aa127bd6eb6ab68bdc4b82882686238ffa92fc641c4ddb1f14b418aa1f () (a)
+    elided acbe547cc61228898842cf6a8732b10d52cf1f493dd2455a7cecc64235f53854 {
       take y {
-        prove → ∈ $0 $$0 ∃! x = $0 a 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (∃! x = $0 a, ∈ $0 $$0) () 1.0
+        prove → ∈ $0 $$0 ∃! x = $0 a acbe547cc61228898842cf6a8732b10d52cf1f493dd2455a7cecc64235f53854 (∃! x = $0 a, ∈ $0 $$0) () 1.0
       }
     }
-    prove ∃! z ∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $0 $$$$0 = $$0 a a23a254299d258a1307d257384c823b073a0c85f62f1606a89715f5d133ca2c7 (= $$1 a) ($0) 1.1
-    elided f3b93ffee9d1e4d18f4185d1961d7b248a588d2c491f7a35890fdbb6a207eff3 {
+    prove ∃! z ∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $0 $$$$0 = $$0 a b9824fd6f00092a866dd6293c23a983e93e0ddf13a433df477ab83cd6fbf83fa (= $$1 a) ($0) 1.1
+    elided 896718a0341030f17ff2e74abbede53e5da0804f5c580bbb709b6363bcbf119e {
       take x {
-        prove ↔ ∃ y ∧ ∈ $0 $$$0 = $$0 a = $0 a f3b93ffee9d1e4d18f4185d1961d7b248a588d2c491f7a35890fdbb6a207eff3 (∈ $$$0 $$0, = $0 a) () 1a
+        prove ↔ ∃ y ∧ ∈ $0 $$$0 = $$0 a = $0 a 896718a0341030f17ff2e74abbede53e5da0804f5c580bbb709b6363bcbf119e (∈ $$$0 $$0, = $0 a) () 1a
       }
     }
-    prove ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a d2e7024f4fa96bd78696602328e3ef0d125281eafe2790c6fc17fcd49b3cc2f1 (∃ y ∧ ∈ $0 $$0 = $$$0 a, = $$0 a) () 1.2 1.3
+    prove ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a 8ae8122d854da1474bddaf18a318cb348535112ca944d8e70f9ebf555a97ed2e (∃ y ∧ ∈ $0 $$0 = $$$0 a, = $$0 a) () 1.2 1.3
   } 0
 }
 
@@ -39,8 +39,8 @@ theorem A Set Is an Element of Its Singleton
 termVariables(a 0)
 conclusion ∈ a singleton a
 {
-  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a)
-  prove ∈ a singleton a b89e77bd31fd5214622c9e98732d2adc733bb4d42c134ca34a05047e7698f5a7 (∈ $0 singleton a) (a) 0
+  prove ∀ x ↔ ∈ $0 singleton a = $0 a 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (a)
+  prove ∈ a singleton a 77e84bb4cca8e45bae306bcda7f8aac1e9fd1910ce48db79ed57d6bd8667e744 (∈ $0 singleton a) (a) 0
 }
 
 theorem Element of Singleton
@@ -48,11 +48,11 @@ termVariables(b 0, a 0)
 premise ∈ b singleton a
 conclusion = b a
 {
-  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a)
-  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ ∈ b singleton a = b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 singleton a = $0 a) (b) 0
-    prove → ∈ b singleton a = b a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b singleton a, = b a) () 1.0
-    prove = b a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b singleton a, = b a) () 1.1 p0
+  prove ∀ x ↔ ∈ $0 singleton a = $0 a 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (a)
+  elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+    prove ↔ ∈ b singleton a = b a b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 singleton a = $0 a) (b) 0
+    prove → ∈ b singleton a = b a 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ b singleton a, = b a) () 1.0
+    prove = b a 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ b singleton a, = b a) () 1.1 p0
   }
 }
 
@@ -61,22 +61,22 @@ termVariables(a 0, b 0)
 premise = singleton a singleton b
 conclusion = a b
 {
-  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a)
-  prove ∀ x ↔ ∈ $0 singleton b = $0 a 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ x ↔ ∈ $0 $$0 = $0 a) (singleton a, singleton b) p0 0
-  prove ∀ x ↔ ∈ $0 singleton b = $0 b 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (b)
-  elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+  prove ∀ x ↔ ∈ $0 singleton a = $0 a 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (a)
+  prove ∀ x ↔ ∈ $0 singleton b = $0 a 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∀ x ↔ ∈ $0 $$0 = $0 a) (singleton a, singleton b) p0 0
+  prove ∀ x ↔ ∈ $0 singleton b = $0 b 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (b)
+  elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
     take x {
-      prove ↔ ∈ $0 singleton b = $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 singleton b = $$0 a) ($0) 1
-      prove ↔ = $0 a ∈ $0 singleton b 0d73a88c5af14f7eac09defe2f05ff8a357957bbd8936dbba2efbc450dcf1f6e (∈ $0 singleton b, = $0 a) () 3.0.0
-      prove ↔ ∈ $0 singleton b = $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 singleton b = $$0 b) ($0) 2
-      prove ↔ = $0 a = $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (= $0 a, ∈ $0 singleton b, = $0 b) () 3.0.1 3.0.2
+      prove ↔ ∈ $0 singleton b = $0 a b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 singleton b = $$0 a) ($0) 1
+      prove ↔ = $0 a ∈ $0 singleton b aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ $0 singleton b, = $0 a) () 3.0.0
+      prove ↔ ∈ $0 singleton b = $0 b b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 singleton b = $$0 b) ($0) 2
+      prove ↔ = $0 a = $0 b cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (= $0 a, ∈ $0 singleton b, = $0 b) () 3.0.1 3.0.2
     }
   }
-  prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a)
-  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ = a a = a b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ = $0 a = $0 b) (a) 3
-    prove → = a a = a b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= a a, = a b) () 5.0
-    prove = a b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= a a, = a b) () 5.1 4
+  prove = a a 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (a)
+  elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+    prove ↔ = a a = a b b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ = $0 a = $0 b) (a) 3
+    prove → = a a = a b 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (= a a, = a b) () 5.0
+    prove = a b 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= a a, = a b) () 5.1 4
   }
 }
 
@@ -85,22 +85,22 @@ termVariables(a 0, S 0)
 premise ∈ a S
 conclusion ⊆ singleton a S
 {
-  prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a)
+  prove ∀ x ↔ ∈ $0 singleton a = $0 a 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (a)
   take x {
     assume = $0 a {
-      prove ∈ $0 S 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ $$0 S) ($0, a) 1.0a p0
+      prove ∈ $0 S 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$0 S) ($0, a) 1.0a p0
     }
   }
   take x {
     assume ∈ $0 singleton a {
-      prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) 2.0a
-      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-        prove → = $0 a ∈ $0 S 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ = $$0 a ∈ $$0 S) ($0) 1
-        prove ∈ $0 S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= $0 a, ∈ $0 S) () 2.0.1.0 2.0.0
+      prove = $0 a 6acf06be48fa49ac292909853e78fdb76495f5eee6ccc72143d1c51f5f3e56d4 () ($0, a) 2.0a
+      elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+        prove → = $0 a ∈ $0 S b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ = $$0 a ∈ $$0 S) ($0) 1
+        prove ∈ $0 S 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= $0 a, ∈ $0 S) () 2.0.1.0 2.0.0
       }
     }
   }
-  prove ⊆ singleton a S 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (singleton a, S) 2
+  prove ⊆ singleton a S ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (singleton a, S) 2
 }
 
 theorem Singleton Is in Power Set
@@ -108,16 +108,16 @@ termVariables(a 0, S 0)
 premise ∈ a S
 conclusion ∈ singleton a powerSet S
 {
-  prove ⊆ singleton a S ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, S) p0
-  prove ∈ singleton a powerSet S 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (singleton a, S) 0
+  prove ⊆ singleton a S 0b12623ee6714e2d19658cded86d4dd9badc9ff00665610d50c4ebe0ed9e7d60 () (a, S) p0
+  prove ∈ singleton a powerSet S 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (singleton a, S) 0
 }
 
 theorem A Singleton Is Not the Empty Set
 termVariables(a 0)
 conclusion ¬ = singleton a ∅
 {
-  prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a)
-  prove ¬ = singleton a ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (a, singleton a) 0
+  prove ∈ a singleton a a0bad9956e6b2f9007fb684c8e27101690c71803f9e2bc8b777f2486d3992f88 () (a)
+  prove ¬ = singleton a ∅ d197f0469101dba16f72c9b3e6c622698a14a37bfe377f0d1e1e06962e7f87ec () (a, singleton a) 0
 }
 
 theorem Subsets of a Singleton
@@ -126,18 +126,18 @@ premise ⊆ S singleton a
 conclusion ⊕ = S singleton a = S ∅
 {
   assume ∃ y ∈ $0 S {
-    let b ∈ $0 S 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∈ $0 S, ∈ a S) () {
-      prove ∈ $0 singleton a ff37f458545f4531362d785e49474caeaf61befe5f251a1724a6c9c4fe0ede1c () (S, singleton a, $0) p0 0.0a
-      prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) 0.0.0
-      prove ∈ a S 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $$0 S) ($0, a) 0.0.1 0.0a
+    let b ∈ $0 S 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ $0 S, ∈ a S) () {
+      prove ∈ $0 singleton a f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (S, singleton a, $0) p0 0.0a
+      prove = $0 a 6acf06be48fa49ac292909853e78fdb76495f5eee6ccc72143d1c51f5f3e56d4 () ($0, a) 0.0.0
+      prove ∈ a S 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$0 S) ($0, a) 0.0.1 0.0a
     } 0a
-    prove ⊆ singleton a S ffcdbff805a13a37f12a0c3ae59a3b90120bd07a8b95215ee9b2178227c28326 () (a, S) 0.0
-    prove = S singleton a 0477ee5edbf3b855830ed7f269321584ce9ef7540ea076c0bfcc087dec2b62b6 () (S, singleton a) p0 0.1
+    prove ⊆ singleton a S 0b12623ee6714e2d19658cded86d4dd9badc9ff00665610d50c4ebe0ed9e7d60 () (a, S) 0.0
+    prove = S singleton a 9f48c2bb0ba338d6e4e1a339ac98f11e5822b9a48ce717c13e45c6046c6798b2 () (S, singleton a) p0 0.1
   }
   assume ¬ ∃ y ∈ $0 S {
-    prove = S ∅ 390a59191aac7aa37bb4b44fdcb7c73e8cfcc43ddbf73aedc606428f3be459ad () (S) 1a
+    prove = S ∅ af5531b2602db7f5be6467227130a81ee26f96ed2cd1838633cb9a02c4bf5dd9 () (S) 1a
   }
-  prove ∨ = S singleton a = S ∅ 8f4dce2a580ead51e91bb5caa5ae4b8474eb94defe5e756747db4d413819415c (∃ y ∈ $0 S, = S singleton a, = S ∅) () 0 1
-  prove ¬ = singleton a ∅ 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a)
-  prove ⊕ = S singleton a = S ∅ cc33f6b28f64a37e2f3542e4cf12cd895be950c17403f5fff89e02ecec3dfcfe () (S, singleton a, ∅) 2 3
+  prove ∨ = S singleton a = S ∅ 2675666723e5a17ef041d85c43dad465dfd282e6739857d16692114b32aced76 (∃ y ∈ $0 S, = S singleton a, = S ∅) () 0 1
+  prove ¬ = singleton a ∅ 2b266ead09f76c219a5a3293616bf58733897755d025a67762562dbdb7130085 () (a)
+  prove ⊕ = S singleton a = S ∅ 2ec44dfe949551b6e9a0e09c0cd79ac7344da789bb4549540c5996aae935e8bb () (S, singleton a, ∅) 2 3
 }

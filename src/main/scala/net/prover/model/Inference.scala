@@ -102,7 +102,7 @@ trait Inference {
 
 object Inference {
   trait WithCalculatedId extends Inference {
-    val id: String = Inference.calculateHash(premises, conclusion)
+    val id: String = Inference.calculateHash(premises, conclusion, variableDefinitions)
   }
   trait FromEntry extends WithCalculatedId {
     def isComplete(definitions: Definitions): Boolean
@@ -132,7 +132,7 @@ object Inference {
       val newConclusion = conclusion.replaceDefinitions(expressionDefinitionReplacements)
       Summary(
         name,
-        Inference.calculateHash(newPremises, newConclusion),
+        Inference.calculateHash(newPremises, newConclusion, variableDefinitions),
         variableDefinitions,
         newPremises,
         newConclusion)
@@ -172,8 +172,8 @@ object Inference {
     Some(inference.name, inference.premises, inference.conclusion)
   }
 
-  def calculateHash(premises: Seq[Statement], conclusion: Statement): String = {
-    val serialized = (premises.map("premise " + _.serializedForHash) :+ conclusion.serializedForHash).mkString("\n")
+  def calculateHash(premises: Seq[Statement], conclusion: Statement, variableDefinitions: VariableDefinitions): String = {
+    val serialized = (premises.map("premise " + _.toStringForHash(variableDefinitions)) :+ conclusion.toStringForHash(variableDefinitions)).mkString("\n")
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))

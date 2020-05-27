@@ -5,26 +5,26 @@ statementVariables(φ 1)
 premise ∃ x with ($0) φ
 conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
 {
-  let a with ($0) φ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (with ($0) φ, ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) () {
+  let a with ($0) φ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0) φ, ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) () {
     take y {
       assume ∀ x → with ($0) φ ∈ $$0 $0 {
-        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → with ($$0) φ ∈ $0 $$0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$$0) φ ∈ $0 $$$0) ($$0) 0.0.0a
-          prove ∈ $0 $$0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($$0) φ, ∈ $0 $$0) () 0.0.0.0.0 0a
+        elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+          prove → with ($$0) φ ∈ $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$$0) φ ∈ $0 $$$0) ($$0) 0.0.0a
+          prove ∈ $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($$0) φ, ∈ $0 $$0) () 0.0.0.0.0 0a
         }
       }
-      prove ↔ ∧ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 ∀ x → with ($0) φ ∈ $$0 $0 6301d09d66b0a087d37eb6fdfb57305fb0584d31883012474d1101001436cb7e (∀ x → with ($0) φ ∈ $$0 $0, ∈ $0 $$0) () 0.0.0
+      prove ↔ ∧ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 ∀ x → with ($0) φ ∈ $$0 $0 cf157b2b1bd058c8f87e3c98b7214da8a96a8f4e81231e5ccf6187ba601b2b5e (∀ x → with ($0) φ ∈ $$0 $0, ∈ $0 $$0) () 0.0.0
     }
-    let S = $0 comprehension z $$$0 ∀ x → with ($0) φ ∈ $$0 $0 cb84c8582b173bd789069a9c24be2c2604ae787d8770545353294a965cc418b3 (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) (comprehension z $$0 ∀ x → with ($0) φ ∈ $$0 $0) {
-      prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∀ x → with ($0) φ ∈ $$$$0 $0) ($0, $$0) 0.1a
-      elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+    let S = $0 comprehension z $$$0 ∀ x → with ($0) φ ∈ $$0 $0 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0) (comprehension z $$0 ∀ x → with ($0) φ ∈ $$0 $0) {
+      prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∀ x → with ($0) φ ∈ $$$$0 $0) ($0, $$0) 0.1a
+      elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
         take y {
-          prove ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$$0 $$0 ∧ ∈ $$$$0 $$$0 ∀ x → with ($0) φ ∈ $$$$$0 $0) ($0) 0.1.0
-          prove ↔ ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 ∀ x → with ($0) φ ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∧ ∈ $$$$0 $$$0 ∀ x → with ($0) φ ∈ $$$$$0 $0 ∀ x → with ($0) φ ∈ $$$$$0 $0) ($0) 0.0
-          prove ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 $$0, ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0, ∀ x → with ($0) φ ∈ $$0 $0) () 0.1.1.0.0 0.1.1.0.1
+          prove ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 $$0 ∧ ∈ $$$$0 $$$0 ∀ x → with ($0) φ ∈ $$$$$0 $0) ($0) 0.1.0
+          prove ↔ ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0 ∀ x → with ($0) φ ∈ $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∧ ∈ $$$$0 $$$0 ∀ x → with ($0) φ ∈ $$$$$0 $0 ∀ x → with ($0) φ ∈ $$$$$0 $0) ($0) 0.0
+          prove ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 $$0, ∧ ∈ $0 $$$0 ∀ x → with ($0) φ ∈ $$0 $0, ∀ x → with ($0) φ ∈ $$0 $0) () 0.1.1.0.0 0.1.1.0.1
         }
       }
-      prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∀ y ↔ ∈ $0 $$$$0 ∀ x → with ($0) φ ∈ $$0 $0) ($0) 0.1.1
+      prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∀ y ↔ ∈ $0 $$$$0 ∀ x → with ($0) φ ∈ $$0 $0) ($0) 0.1.1
     }
   } p0
 }
@@ -34,9 +34,9 @@ termVariables(a 0)
 premise ¬ = a ∅
 conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0
 {
-  prove ∃ x ∈ $0 a 196f416041e082f41107dc082ec91b96c45cc88434f927dbb931166a7a682750 () (a) p0
-  prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0 abba1013aa8f6c308803b75be9ad5743dbacab674c1314b1a8b0e4550d3e8153 (∈ $0 a) () 0
-  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a (∀ x → ∈ $0 a ∈ $$0 $0) () 1
+  prove ∃ x ∈ $0 a 3533f6dbdbf8d0f28da330a846256442487d9d249dba242bb407d5b7ec57865d () (a) p0
+  prove ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0 abd81bf2d9e719e3cb6c893d89aa167396a7a3ccc117352caa78fe642407c07a (∈ $0 a) () 0
+  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0 288a339c30f6b561d0a86d8a4ad51c2acccaa964cc586fd001f47dde466ba92c (∀ x → ∈ $0 a ∈ $$0 $0) () 1
 }
 
 term intersection (a)
@@ -53,55 +53,55 @@ theorem Membership Condition for Binary Intersection
 termVariables(a 0, b 0)
 conclusion ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b
 {
-  prove ¬ = pair a b ∅ f62b1ca093e555223e44de12325c96d4a9497e339544fc6d12d6d5afb49f13ce () (a, b)
-  prove ∀ x ↔ ∈ $0 intersection pair a b ∀ y → ∈ $0 pair a b ∈ $$0 $0 edd1e3274ecc3701947081b2c61edca69f7b274a4794426773b48608f01e1cb9 () (pair a b) 0
+  prove ¬ = pair a b ∅ e777b8cef763827ba814c08245dd2b6cabaefb14aa2a5d8971176a7f35038203 () (a, b)
+  prove ∀ x ↔ ∈ $0 intersection pair a b ∀ y → ∈ $0 pair a b ∈ $$0 $0 8fa52b5a80d8c7ad84afbac6e967c3b9dc2a0895c4d6cc55530f05dd98649581 () (pair a b) 0
   take x {
     assume ∀ y → ∈ $0 pair a b ∈ $$0 $0 {
-      prove ∈ a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b)
-      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-        prove → ∈ a pair a b ∈ $0 a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 pair a b ∈ $0 $$0) (a) 2.0a
-        prove ∈ $0 a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a pair a b, ∈ $0 a) () 2.0.1.0 2.0.0
+      prove ∈ a pair a b 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b72df9639e () (a, b)
+      elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+        prove → ∈ a pair a b ∈ $0 a b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 pair a b ∈ $0 $$0) (a) 2.0a
+        prove ∈ $0 a 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ a pair a b, ∈ $0 a) () 2.0.1.0 2.0.0
       }
-      prove ∈ b pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a)
-      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-        prove → ∈ b pair a b ∈ $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 pair a b ∈ $0 $$0) (b) 2.0a
-        prove ∈ $0 b fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b pair a b, ∈ $0 b) () 2.0.3.0 2.0.2
+      prove ∈ b pair a b 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (b, a)
+      elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+        prove → ∈ b pair a b ∈ $0 b b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 pair a b ∈ $0 $$0) (b) 2.0a
+        prove ∈ $0 b 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ b pair a b, ∈ $0 b) () 2.0.3.0 2.0.2
       }
-      prove ∧ ∈ $0 a ∈ $0 b bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 a, ∈ $0 b) () 2.0.1 2.0.3
+      prove ∧ ∈ $0 a ∈ $0 b 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 a, ∈ $0 b) () 2.0.1 2.0.3
     }
     assume ∧ ∈ $0 a ∈ $0 b {
       take y {
         assume = $0 a {
-          prove ∈ $$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ $$0 $$$0) ($0, a) 2.1.0.0a 2.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+          prove ∈ $$0 $0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$0 $$$0) ($0, a) 2.1.0.0a 2.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         }
         assume = $0 b {
-          prove ∈ $$0 $0 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ $$0 $$$0) ($0, b) 2.1.0.1a 2.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove ∈ $$0 $0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$0 $$$0) ($0, b) 2.1.0.1a 2.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         }
         assume ∨ = $0 a = $0 b {
-          prove ∈ $$0 $0 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (= $0 a, = $0 b, ∈ $$0 $0) () 2.1.0.2a 2.1.0.0 2.1.0.1
+          prove ∈ $$0 $0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= $0 a, = $0 b, ∈ $$0 $0) () 2.1.0.2a 2.1.0.0 2.1.0.1
         }
       }
-      prove ∀ y ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b)
-      elided 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 {
+      prove ∀ y ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 () (a, b)
+      elided fdfa0040ca36d70ab3bc93906e3b3ef953b4c0f212eb782f88a9d66a6cd2691b {
         take y {
-          prove ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 pair a b ∨ = $$$0 a = $$$0 b) ($0) 2.1.1
-          prove → ∈ $0 pair a b ∨ = $0 a = $0 b f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 pair a b, ∨ = $0 a = $0 b) () 2.1.2.0.0
-          prove → ∨ = $0 a = $0 b ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∨ = $$$0 a = $$$0 b ∈ $$0 $$$0) ($0) 2.1.0
-          prove → ∈ $0 pair a b ∈ $$0 $0 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (∈ $0 pair a b, ∨ = $0 a = $0 b, ∈ $$0 $0) () 2.1.2.0.1 2.1.2.0.2
+          prove ↔ ∈ $0 pair a b ∨ = $0 a = $0 b b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 pair a b ∨ = $$$0 a = $$$0 b) ($0) 2.1.1
+          prove → ∈ $0 pair a b ∨ = $0 a = $0 b 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 pair a b, ∨ = $0 a = $0 b) () 2.1.2.0.0
+          prove → ∨ = $0 a = $0 b ∈ $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∨ = $$$0 a = $$$0 b ∈ $$0 $$$0) ($0) 2.1.0
+          prove → ∈ $0 pair a b ∈ $$0 $0 fdfa0040ca36d70ab3bc93906e3b3ef953b4c0f212eb782f88a9d66a6cd2691b (∈ $0 pair a b, ∨ = $0 a = $0 b, ∈ $$0 $0) () 2.1.2.0.1 2.1.2.0.2
         }
       }
     }
-    prove ↔ ∀ y → ∈ $0 pair a b ∈ $$0 $0 ∧ ∈ $0 a ∈ $0 b 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ y → ∈ $0 pair a b ∈ $$0 $0, ∧ ∈ $0 a ∈ $0 b) () 2.0 2.1
+    prove ↔ ∀ y → ∈ $0 pair a b ∈ $$0 $0 ∧ ∈ $0 a ∈ $0 b df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∀ y → ∈ $0 pair a b ∈ $$0 $0, ∧ ∈ $0 a ∈ $0 b) () 2.0 2.1
   }
-  elided e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c {
+  elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
     take x {
-      prove ↔ ∈ $0 intersection pair a b ∀ y → ∈ $0 pair a b ∈ $$0 $0 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 intersection pair a b ∀ y → ∈ $0 pair a b ∈ $$$0 $0) ($0) 1
-      prove ↔ ∀ y → ∈ $0 pair a b ∈ $$0 $0 ∧ ∈ $0 a ∈ $0 b 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∀ y → ∈ $0 pair a b ∈ $$$0 $0 ∧ ∈ $$0 a ∈ $$0 b) ($0) 2
-      prove ↔ ∈ $0 intersection pair a b ∧ ∈ $0 a ∈ $0 b e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ $0 intersection pair a b, ∀ y → ∈ $0 pair a b ∈ $$0 $0, ∧ ∈ $0 a ∈ $0 b) () 3.0.0 3.0.1
+      prove ↔ ∈ $0 intersection pair a b ∀ y → ∈ $0 pair a b ∈ $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 intersection pair a b ∀ y → ∈ $0 pair a b ∈ $$$0 $0) ($0) 1
+      prove ↔ ∀ y → ∈ $0 pair a b ∈ $$0 $0 ∧ ∈ $0 a ∈ $0 b b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∀ y → ∈ $0 pair a b ∈ $$$0 $0 ∧ ∈ $$0 a ∈ $$0 b) ($0) 2
+      prove ↔ ∈ $0 intersection pair a b ∧ ∈ $0 a ∈ $0 b cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 intersection pair a b, ∀ y → ∈ $0 pair a b ∈ $$0 $0, ∧ ∈ $0 a ∈ $0 b) () 3.0.0 3.0.1
     }
   }
-  prove = ∩ a b intersection pair a b 526cf0b0946fc0f192ef24c8fe6bdaac82003702c32545dd39660e026823bb29 () (a, b)
-  prove ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 a ∈ $0 b) (∩ a b, intersection pair a b) 4 3
+  prove = ∩ a b intersection pair a b 2904137758be75b1d7a133618a0d09d65ee5661fa65a6c40213eca707ca08dbf () (a, b)
+  prove ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 a ∈ $0 b) (∩ a b, intersection pair a b) 4 3
 }
 
 theorem Element of Binary Intersection
@@ -109,11 +109,11 @@ termVariables(a 0, A 0, B 0)
 premise ∈ a ∩ A B
 conclusion ∧ ∈ a A ∈ a B
 {
-  prove ∀ y ↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (A, B)
-  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ ∈ a ∩ A B ∧ ∈ a A ∈ a B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B) (a) 0
-    prove → ∈ a ∩ A B ∧ ∈ a A ∈ a B f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ a ∩ A B, ∧ ∈ a A ∈ a B) () 1.0
-    prove ∧ ∈ a A ∈ a B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a ∩ A B, ∧ ∈ a A ∈ a B) () 1.1 p0
+  prove ∀ y ↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (A, B)
+  elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+    prove ↔ ∈ a ∩ A B ∧ ∈ a A ∈ a B b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B) (a) 0
+    prove → ∈ a ∩ A B ∧ ∈ a A ∈ a B 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ a ∩ A B, ∧ ∈ a A ∈ a B) () 1.0
+    prove ∧ ∈ a A ∈ a B 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ a ∩ A B, ∧ ∈ a A ∈ a B) () 1.1 p0
   }
 }
 
@@ -121,14 +121,14 @@ theorem Binary Intersection Is Symmetric
 termVariables(a 0, b 0)
 conclusion = ∩ a b ∩ b a
 {
-  prove ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (a, b)
-  prove ∀ x ↔ ∈ $0 ∩ b a ∧ ∈ $0 b ∈ $0 a 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (b, a)
-  elided ceda842906abdc74679aabcef2c6848746135351212be45dd529a31e12e21892 {
+  prove ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (a, b)
+  prove ∀ x ↔ ∈ $0 ∩ b a ∧ ∈ $0 b ∈ $0 a 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (b, a)
+  elided b356169c385355e0eba377b961d4c0bbbeb649b0834fc1324faa9e712d4db587 {
     take x {
-      prove ↔ ∧ ∈ $0 a ∈ $0 b ∧ ∈ $0 b ∈ $0 a ceda842906abdc74679aabcef2c6848746135351212be45dd529a31e12e21892 (∈ $0 a, ∈ $0 b) ()
+      prove ↔ ∧ ∈ $0 a ∈ $0 b ∧ ∈ $0 b ∈ $0 a b356169c385355e0eba377b961d4c0bbbeb649b0834fc1324faa9e712d4db587 (∈ $0 a, ∈ $0 b) ()
     }
   }
-  prove = ∩ a b ∩ b a 4b83926de252406c08777885e14c3c906028ee3c7fb53340249ba1eb1ada4d4d (∧ ∈ $0 a ∈ $0 b, ∧ ∈ $0 b ∈ $0 a) (∩ a b, ∩ b a) 0 1 2
+  prove = ∩ a b ∩ b a aaab61a4596fa162a6e81a9ad0b3a803eec50e8cfc3b5a55db30a3884165a8ca (∧ ∈ $0 a ∈ $0 b, ∧ ∈ $0 b ∈ $0 a) (∩ a b, ∩ b a) 0 1 2
 }
 
 theorem An Element of Two Sets Is an Element of Their Intersection
@@ -137,12 +137,12 @@ premise ∈ a A
 premise ∈ a B
 conclusion ∈ a ∩ A B
 {
-  prove ∀ x ↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (A, B)
-  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ ∈ a ∩ A B ∧ ∈ a A ∈ a B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B) (a) 0
-    prove → ∧ ∈ a A ∈ a B ∈ a ∩ A B 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ a ∩ A B, ∧ ∈ a A ∈ a B) () 1.0
-    prove ∧ ∈ a A ∈ a B bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, ∈ a B) () p0 p1
-    prove ∈ a ∩ A B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ a A ∈ a B, ∈ a ∩ A B) () 1.1 1.2
+  prove ∀ x ↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (A, B)
+  elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+    prove ↔ ∈ a ∩ A B ∧ ∈ a A ∈ a B b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 ∩ A B ∧ ∈ $0 A ∈ $0 B) (a) 0
+    prove → ∧ ∈ a A ∈ a B ∈ a ∩ A B 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ a ∩ A B, ∧ ∈ a A ∈ a B) () 1.0
+    prove ∧ ∈ a A ∈ a B 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ a A, ∈ a B) () p0 p1
+    prove ∈ a ∩ A B 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ a A ∈ a B, ∈ a ∩ A B) () 1.1 1.2
   }
 }
 
@@ -153,10 +153,10 @@ premise ∈ a A
 conclusion ¬ ∈ a B
 {
   assume ∈ a B {
-    prove ∈ a ∩ A B f6b140168c8fe9d0c02c45f1ad9e1787200d6b3f6bc5493b60c653483319a99f () (a, A, B) p1 0a
-    prove ¬ = ∩ A B ∅ 0a662af6f3a25797424f6b16b90695b0cdd91186a9f2aaaedad7dd1412ca7619 () (a, ∩ A B) 0.0
+    prove ∈ a ∩ A B 5cfa7495cb5ecbf61be53d87749d4bb7653440a3668657c5832f5ef4d6b16c7c () (a, A, B) p1 0a
+    prove ¬ = ∩ A B ∅ d197f0469101dba16f72c9b3e6c622698a14a37bfe377f0d1e1e06962e7f87ec () (a, ∩ A B) 0.0
   }
-  prove ¬ ∈ a B fe1952f61ad5c705bf713942d95e29697c0982f410b0eec7b80038c966eaa461 (∈ a B, = ∩ A B ∅) () 0 p0
+  prove ¬ ∈ a B c6b6030434c95c400a4957ceb07ae21ea196cdb331dff0f66919e9330fb24450 (∈ a B, = ∩ A B ∅) () 0 p0
 }
 
 theorem A Set Can Only Be an Element of One of a Disjoint Pair
@@ -165,9 +165,9 @@ premise = ∩ A B ∅
 premise ∈ a B
 conclusion ¬ ∈ a A
 {
-  prove = ∩ B A ∩ A B aaeab6d7d3d52825168c301db980e40e9b4f91b1ea9d470fae589d4fdbbb6b0a () (B, A)
-  prove = ∩ B A ∅ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (∩ B A, ∩ A B, ∅) 0 p0
-  prove ¬ ∈ a A d67ac36a53ad0c96b62926315f6b8e27b9496d02c67bae65854aaf941f66dc8a () (B, A, a) 1 p1
+  prove = ∩ B A ∩ A B abc01ddb628a9bd1ec31c384b4080d3cfa84837739d6e2360d77cba13c487648 () (B, A)
+  prove = ∩ B A ∅ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (∩ B A, ∩ A B, ∅) 0 p0
+  prove ¬ ∈ a A 4b3b8ad7d1e7ec1a2cdad30691043fbbfa3f30dae199cef5e6bcdf4de6b48df0 () (B, A, a) 1 p1
 }
 
 theorem Element Transfers from Intersection
@@ -175,8 +175,8 @@ termVariables(a 0, A 0, B 0)
 premise ∈ a ∩ A B
 conclusion ∈ a A
 {
-  prove ∧ ∈ a A ∈ a B c8434f4c956c72be837fe66113319fe6b79528f533893d507e97834daf174260 () (a, A, B) p0
-  prove ∈ a A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ a A, ∈ a B) () 0
+  prove ∧ ∈ a A ∈ a B e9423e705bb1853702cf1d6375d29c0a0150a410b425f4a002dd4ed11f9078e3 () (a, A, B) p0
+  prove ∈ a A 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ a A, ∈ a B) () 0
 }
 
 theorem Element Transfers from Intersection
@@ -184,8 +184,8 @@ termVariables(a 0, A 0, B 0)
 premise ∈ a ∩ A B
 conclusion ∈ a B
 {
-  prove ∧ ∈ a A ∈ a B c8434f4c956c72be837fe66113319fe6b79528f533893d507e97834daf174260 () (a, A, B) p0
-  prove ∈ a B 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ a A, ∈ a B) () 0
+  prove ∧ ∈ a A ∈ a B e9423e705bb1853702cf1d6375d29c0a0150a410b425f4a002dd4ed11f9078e3 () (a, A, B) p0
+  prove ∈ a B 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ a A, ∈ a B) () 0
 }
 
 theorem Disjoint Pair
@@ -195,17 +195,17 @@ conclusion = ∩ A B ∅
 {
   take x {
     assume ∈ $0 ∩ A B {
-      prove ∈ $0 A 26ba817aef955985d69fa18ff4ef29ab6c00d5eef00d28d06c6791e41947c5eb () ($0, A, B) 0.0a
-      prove ∈ $0 B 5fecea1e57a95e4064274ac5dede19744c44a8f63e36ce07662cbaa577e956db () ($0, A, B) 0.0a
-      elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-        prove → ∈ $0 A ¬ ∈ $0 B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ¬ ∈ $$0 B) ($0) p0
-        prove ¬ ∈ $0 B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ¬ ∈ $0 B) () 0.0.2.0 0.0.0
+      prove ∈ $0 A dd8c6cd9966959b85508f977f90de4787f93a2a8838671e2d74455a335289aed () ($0, A, B) 0.0a
+      prove ∈ $0 B f412982a831b03e01b99e918d64639de8d17223b590cb1b6a0c9e8a69f229a06 () ($0, A, B) 0.0a
+      elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+        prove → ∈ $0 A ¬ ∈ $0 B b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 A ¬ ∈ $$0 B) ($0) p0
+        prove ¬ ∈ $0 B 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ¬ ∈ $0 B) () 0.0.2.0 0.0.0
       }
-      prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∈ $0 B) () 0.0.1 0.0.2
+      prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∈ $0 B) () 0.0.1 0.0.2
     }
-    prove ¬ ∈ $0 ∩ A B adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (∈ $0 ∩ A B) () 0.0
+    prove ¬ ∈ $0 ∩ A B f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (∈ $0 ∩ A B) () 0.0
   }
-  prove = ∩ A B ∅ 5a0c9d59fc32105d62c25b9e1215721f2748a1705d2e6fc33b3faed70a0fd20c () (∩ A B) 0
+  prove = ∩ A B ∅ 486b54d6aae6ee342bf0d2dc2f5c8cbf7cd8b55d00a364066240c0bca925c1f4 () (∩ A B) 0
 }
 
 theorem Disjoint Pair
@@ -213,7 +213,7 @@ termVariables(A 0, B 0)
 premise ∀ x → ∈ $0 A ¬ ∈ $0 B
 conclusion = ∩ B A ∅
 {
-  prove = ∩ B A ∩ A B aaeab6d7d3d52825168c301db980e40e9b4f91b1ea9d470fae589d4fdbbb6b0a () (B, A)
-  prove = ∩ A B ∅ b80bb75d6dc623394f9f9d5d78b00f112d814f0a5a1aa3c718cc6420f534a673 () (A, B) p0
-  prove = ∩ B A ∅ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (∩ B A, ∩ A B, ∅) 0 1
+  prove = ∩ B A ∩ A B abc01ddb628a9bd1ec31c384b4080d3cfa84837739d6e2360d77cba13c487648 () (B, A)
+  prove = ∩ A B ∅ 78851639dac82f917360234cb01c66a8bdbfe01dab630d54d3a5dfc814f968a8 () (A, B) p0
+  prove = ∩ B A ∅ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (∩ B A, ∩ A B, ∅) 0 1
 }

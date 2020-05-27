@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.proof.SubstitutionContext
-import net.prover.model.{ExpressionParsingContext, Parser, Substitutions}
+import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, VariableDefinitions}
 
 @JsonSerialize(using = classOf[ExpressionSerializer])
 trait Expression extends TypedExpression[Expression]
@@ -155,7 +155,7 @@ trait TypedExpression[+ExpressionType <: Expression] {
   }
   def safeToString: String = toString
   def serialized: String
-  def serializedForHash: String
+  def toStringForHash(variableDefinitions: VariableDefinitions): String
 }
 
 object Expression {

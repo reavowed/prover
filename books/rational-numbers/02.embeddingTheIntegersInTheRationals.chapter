@@ -14,43 +14,43 @@ conclusion ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFu
 {
   prove = ⍳_ℚ functionMap a ℤ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 39a26647ae69a195dd1fd19ea59ebbb658c55805d5fb87cbeb2697ab6d6c708d () ()
   subproof (Function) {
-    elided dc9f819c99c206921f90a3ce2cf0c91e1c6992e394200bcbf791c8519db369fa {
+    elided 396dbf4232e257c4c4d6a5e5dbe7bfd3814ce1b72ae08f15a04defb592a96742 {
       take a {
         assume ∈ $0 ℤ {
-          elided dc9f819c99c206921f90a3ce2cf0c91e1c6992e394200bcbf791c8519db369fa {
+          elided 396dbf4232e257c4c4d6a5e5dbe7bfd3814ce1b72ae08f15a04defb592a96742 {
             prove ¬ = 1ℕ 0ℕ bdaf6427cfd0b36642272a980ebfbca98f289fa9b1a02f7cacacf5cd2789af03 () ()
-            elided 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba {
+            elided d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b {
               prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
               prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-              elided 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba {
-                prove ↔ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba () (1ℕ, 0ℕ) 1.0.0.0.0.1.0 1.0.0.0.0.1.1
-                prove → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 1.0.0.0.0.1.2.0
-                prove ¬ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 1.0.0.0.0.1.2.1 1.0.0.0.0.0
+              elided d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b {
+                prove ↔ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b () (1ℕ, 0ℕ) 1.0.0.0.0.1.0 1.0.0.0.0.1.1
+                prove → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 1.0.0.0.0.1.2.0
+                prove ¬ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 1.0.0.0.0.1.2.1 1.0.0.0.0.0
               }
             }
-            elided 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 {
-              prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (apply ⍳_ℤ 0ℕ)
-              prove ↔ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 singleton apply ⍳_ℤ 0ℕ = $$0 apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 1.0.0.0.0.2.0
-              prove → ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.2.1
-              prove ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.2.2 1.0.0.0.0.1
+            elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+              prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (apply ⍳_ℤ 0ℕ)
+              prove ↔ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 singleton apply ⍳_ℤ 0ℕ = $$0 apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 1.0.0.0.0.2.0
+              prove → ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.2.1
+              prove ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.2.2 1.0.0.0.0.1
             }
-            elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
+            elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
               prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
-              prove ∈ apply ⍳_ℤ 1ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (1ℕ) 1.0.0.0.0.3.0
-              prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply ⍳_ℤ 1ℕ ℤ, ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.3.1 1.0.0.0.0.2
-              elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
-                prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
-                prove ↔ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 1.0.0.0.0.3.3.0
-                prove → ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.3.3.1
-                prove ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.3.3.2 1.0.0.0.0.3.2
+              prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 1.0.0.0.0.3.0
+              prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 1ℕ ℤ, ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.3.1 1.0.0.0.0.2
+              elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
+                prove ↔ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 1.0.0.0.0.3.3.0
+                prove → ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.3.3.1
+                prove ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.3.3.2 1.0.0.0.0.3.2
               }
             }
-            prove ∈ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ ℚ dc9f819c99c206921f90a3ce2cf0c91e1c6992e394200bcbf791c8519db369fa () ($0, apply ⍳_ℤ 1ℕ) 1.0.0.0a 1.0.0.0.0.3
+            prove ∈ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ ℚ 396dbf4232e257c4c4d6a5e5dbe7bfd3814ce1b72ae08f15a04defb592a96742 () ($0, apply ⍳_ℤ 1ℕ) 1.0.0.0a 1.0.0.0.0.3
           }
         }
       }
     }
-    prove ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ 85ce16d136ee19597f2883b235610673f4951cc0c051d363caafda809339b3bb () (⍳_ℚ, ℤ, equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ, ℚ) 0 1.0
+    prove ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ 49727ac5186e6b8f7eb3d0851aac61a302ea69932f3ee7bfdf036e6054f6a9fc () (⍳_ℚ, ℤ, equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ, ℚ) 0 1.0
   }
   subproof (Injective) {
     take a {
@@ -58,67 +58,67 @@ conclusion ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFu
         take b {
           assume ∈ $0 ℤ {
             assume = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 {
-              elided 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 {
-                elided 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 {
-                  elided 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 {
-                    prove ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 () (⍳_ℚ, ℤ, equivalenceClass orderedPair $$$0 apply ⍳_ℤ 1ℕ ~_ℚ) 0
-                    prove → ∈ $$0 ℤ = apply ⍳_ℚ $$0 equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℤ = apply ⍳_ℚ $$$0 equivalenceClass orderedPair $$$0 apply ⍳_ℤ 1ℕ ~_ℚ) ($$0) 2.0.0.0.0.0.0.0.0.0
-                    prove = apply ⍳_ℚ $$0 equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $$0 ℤ, = apply ⍳_ℚ $$0 equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ) () 2.0.0.0.0.0.0.0.0.1 2.0.0a
+              elided 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 {
+                elided 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 {
+                  elided 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 {
+                    prove ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 () (⍳_ℚ, ℤ, equivalenceClass orderedPair $$$0 apply ⍳_ℤ 1ℕ ~_ℚ) 0
+                    prove → ∈ $$0 ℤ = apply ⍳_ℚ $$0 equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ = apply ⍳_ℚ $$$0 equivalenceClass orderedPair $$$0 apply ⍳_ℤ 1ℕ ~_ℚ) ($$0) 2.0.0.0.0.0.0.0.0.0
+                    prove = apply ⍳_ℚ $$0 equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℤ, = apply ⍳_ℚ $$0 equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ) () 2.0.0.0.0.0.0.0.0.1 2.0.0a
                   }
-                  prove = equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ apply ⍳_ℚ $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$$0 apply ⍳_ℚ $0) (apply ⍳_ℚ $$0, equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ) 2.0.0.0.0.0.0.0.0 2.0.0.0.0.0a
+                  prove = equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ apply ⍳_ℚ $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$0 apply ⍳_ℚ $0) (apply ⍳_ℚ $$0, equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ) 2.0.0.0.0.0.0.0.0 2.0.0.0.0.0a
                 }
-                elided 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 {
-                  elided 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 {
-                    prove ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 () (⍳_ℚ, ℤ, equivalenceClass orderedPair $$$0 apply ⍳_ℤ 1ℕ ~_ℚ) 0
-                    prove → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ℤ = apply ⍳_ℚ $$$0 equivalenceClass orderedPair $$$0 apply ⍳_ℤ 1ℕ ~_ℚ) ($0) 2.0.0.0.0.0.0.1.0.0
-                    prove = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℤ, = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 2.0.0.0.0.0.0.1.0.1 2.0.0.0.0a
+                elided 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 {
+                  elided 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 {
+                    prove ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 () (⍳_ℚ, ℤ, equivalenceClass orderedPair $$$0 apply ⍳_ℤ 1ℕ ~_ℚ) 0
+                    prove → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ = apply ⍳_ℚ $$$0 equivalenceClass orderedPair $$$0 apply ⍳_ℤ 1ℕ ~_ℚ) ($0) 2.0.0.0.0.0.0.1.0.0
+                    prove = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℤ, = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 2.0.0.0.0.0.0.1.0.1 2.0.0.0.0a
                   }
-                  prove = equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ $$$0) (apply ⍳_ℚ $0, equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) 2.0.0.0.0.0.0.1.0 2.0.0.0.0.0.0.0
+                  prove = equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ $$$0) (apply ⍳_ℚ $0, equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) 2.0.0.0.0.0.0.1.0 2.0.0.0.0.0.0.0
                 }
               }
-              elided 705464b7810f69eb9ea1a35294b587a45a86a86f31b8715500c75d0b2b8e08b3 {
+              elided 522b246576a6bb2e76c7d3917e4e9c66e78d974362fb77197832983b366e44c8 {
                 prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
-                prove ∈ apply ⍳_ℤ 1ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (1ℕ) 2.0.0.0.0.0.1.0
+                prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 2.0.0.0.0.0.1.0
                 prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
                 prove ¬ = 1ℕ 0ℕ bdaf6427cfd0b36642272a980ebfbca98f289fa9b1a02f7cacacf5cd2789af03 () ()
-                elided 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba {
-                  prove ↔ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba () (1ℕ, 0ℕ) 2.0.0.0.0.0.1.0 2.0.0.0.0.0.1.2
-                  prove → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 2.0.0.0.0.0.1.4.0
-                  prove ¬ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 2.0.0.0.0.0.1.4.1 2.0.0.0.0.0.1.3
+                elided d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b {
+                  prove ↔ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b () (1ℕ, 0ℕ) 2.0.0.0.0.0.1.0 2.0.0.0.0.0.1.2
+                  prove → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 2.0.0.0.0.0.1.4.0
+                  prove ¬ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 2.0.0.0.0.0.1.4.1 2.0.0.0.0.0.1.3
                 }
-                elided 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 {
-                  prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (apply ⍳_ℤ 0ℕ)
-                  prove ↔ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ = $$$0 apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 2.0.0.0.0.0.1.5.0
-                  prove → ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 2.0.0.0.0.0.1.5.1
-                  prove ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 2.0.0.0.0.0.1.5.2 2.0.0.0.0.0.1.4
+                elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+                  prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (apply ⍳_ℤ 0ℕ)
+                  prove ↔ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ = $$$0 apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 2.0.0.0.0.0.1.5.0
+                  prove → ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 2.0.0.0.0.0.1.5.1
+                  prove ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 2.0.0.0.0.0.1.5.2 2.0.0.0.0.0.1.4
                 }
-                prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply ⍳_ℤ 1ℕ ℤ, ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 2.0.0.0.0.0.1.1 2.0.0.0.0.0.1.5
-                elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
-                  prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
-                  prove ↔ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 2.0.0.0.0.0.1.7.0
-                  prove → ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 2.0.0.0.0.0.1.7.1
-                  prove ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ) () 2.0.0.0.0.0.1.7.2 2.0.0.0.0.0.1.6
+                prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 1ℕ ℤ, ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 2.0.0.0.0.0.1.1 2.0.0.0.0.0.1.5
+                elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                  prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
+                  prove ↔ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 2.0.0.0.0.0.1.7.0
+                  prove → ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 2.0.0.0.0.0.1.7.1
+                  prove ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ) () 2.0.0.0.0.0.1.7.2 2.0.0.0.0.0.1.6
                 }
-                elided 705464b7810f69eb9ea1a35294b587a45a86a86f31b8715500c75d0b2b8e08b3 {
-                  prove ↔ = equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 705464b7810f69eb9ea1a35294b587a45a86a86f31b8715500c75d0b2b8e08b3 () ($$0, apply ⍳_ℤ 1ℕ, $0, apply ⍳_ℤ 1ℕ) 2.0.0a 2.0.0.0.0.0.1.7 2.0.0.0.0a 2.0.0.0.0.0.1.7
-                  prove → = equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ, = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0) () 2.0.0.0.0.0.1.8.0
-                  prove = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ, = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0) () 2.0.0.0.0.0.1.8.1 2.0.0.0.0.0.0
+                elided 522b246576a6bb2e76c7d3917e4e9c66e78d974362fb77197832983b366e44c8 {
+                  prove ↔ = equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 522b246576a6bb2e76c7d3917e4e9c66e78d974362fb77197832983b366e44c8 () ($$0, apply ⍳_ℤ 1ℕ, $0, apply ⍳_ℤ 1ℕ) 2.0.0a 2.0.0.0.0.0.1.7 2.0.0.0.0a 2.0.0.0.0.0.1.7
+                  prove → = equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (= equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ, = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0) () 2.0.0.0.0.0.1.8.0
+                  prove = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ, = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0) () 2.0.0.0.0.0.1.8.1 2.0.0.0.0.0.0
                 }
               }
-              elided 7d0ce1b3066284608d9aaa0ccfb5d9665209d51b2c07fafa43cd1b6e91c3f5ea {
-                elided 7d0ce1b3066284608d9aaa0ccfb5d9665209d51b2c07fafa43cd1b6e91c3f5ea {
-                  elided 7d0ce1b3066284608d9aaa0ccfb5d9665209d51b2c07fafa43cd1b6e91c3f5ea {
-                    prove ∧ = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ $$0 = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $$0 $$0 7d0ce1b3066284608d9aaa0ccfb5d9665209d51b2c07fafa43cd1b6e91c3f5ea () ($$0) 2.0.0a
-                    prove = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ $$0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ $$0, = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $$0 $$0) () 2.0.0.0.0.0.2.0.0.0
+              elided 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 {
+                elided 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 {
+                  elided 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 {
+                    prove ∧ = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ $$0 = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $$0 $$0 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 () ($$0) 2.0.0a
+                    prove = apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ $$0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ $$0, = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $$0 $$0) () 2.0.0.0.0.0.2.0.0.0
                   }
-                  prove = $$0 apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$$0 apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0) (apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ, $$0) 2.0.0.0.0.0.2.0.0 2.0.0.0.0.0.1
+                  prove = $$0 apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$0 apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0) (apply ×ℤ orderedPair $$0 apply ⍳_ℤ 1ℕ, $$0) 2.0.0.0.0.0.2.0.0 2.0.0.0.0.0.1
                 }
-                elided 7d0ce1b3066284608d9aaa0ccfb5d9665209d51b2c07fafa43cd1b6e91c3f5ea {
-                  elided 7d0ce1b3066284608d9aaa0ccfb5d9665209d51b2c07fafa43cd1b6e91c3f5ea {
-                    prove ∧ = apply ×ℤ orderedPair $0 apply ⍳_ℤ 1ℕ $0 = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 $0 7d0ce1b3066284608d9aaa0ccfb5d9665209d51b2c07fafa43cd1b6e91c3f5ea () ($0) 2.0.0.0.0a
-                    prove = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 $0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply ×ℤ orderedPair $0 apply ⍳_ℤ 1ℕ $0, = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 $0) () 2.0.0.0.0.0.2.1.0.0
+                elided 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 {
+                  elided 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 {
+                    prove ∧ = apply ×ℤ orderedPair $0 apply ⍳_ℤ 1ℕ $0 = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 $0 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 () ($0) 2.0.0.0.0a
+                    prove = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply ×ℤ orderedPair $0 apply ⍳_ℤ 1ℕ $0, = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0 $0) () 2.0.0.0.0.0.2.1.0.0
                   }
-                  prove = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= $$0 $$$0) (apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0, $0) 2.0.0.0.0.0.2.1.0 2.0.0.0.0.0.2.0
+                  prove = $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 $$$0) (apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ $0, $0) 2.0.0.0.0.0.2.1.0 2.0.0.0.0.0.2.0
                 }
               }
             }
@@ -126,51 +126,51 @@ conclusion ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFu
         }
       }
     }
-    elided b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 {
-      elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
-        elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
-          elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
-            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
-              prove functionFrom ⍳_ℚ ℤ ℚ 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () (⍳_ℚ, ℤ, ℚ) 2.1.0.0.0.0
-              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 2.1.0.0.0.1.0
-              prove = ℤ domain ⍳_ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℚ, ℤ) 2.1.0.0.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+    elided 75e8af58388ac13c5f8f13fdd1cd63625a3f3f8696326041ae5da8f76ca64d68 {
+      elided 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a {
+        elided 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a {
+          elided 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a {
+            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            elided 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a {
+              prove functionFrom ⍳_ℚ ℤ ℚ 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a () (⍳_ℚ, ℤ, ℚ) 2.1.0.0.0.0
+              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 2.1.0.0.0.1.0
+              prove = ℤ domain ⍳_ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain ⍳_ℚ, ℤ) 2.1.0.0.0.1.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             }
           }
-          prove ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 ℤ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ x → ∈ $0 $$0 ∀ y → ∈ $0 ℤ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) (ℤ, domain ⍳_ℚ) 2.1.0.0.0 2.0
+          prove ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 ℤ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∀ x → ∈ $0 $$0 ∀ y → ∈ $0 ℤ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) (ℤ, domain ⍳_ℚ) 2.1.0.0.0 2.0
         }
-        elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
-          elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
-            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            elided 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 {
-              prove functionFrom ⍳_ℚ ℤ ℚ 266120aa95b9d08db0363f00e13eed99a6a6e131e97502e60c2f647aa0fa5805 () (⍳_ℚ, ℤ, ℚ) 2.1.0.1.0.0
-              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 5a7fa652a02a88d7268b3f40a683423b4f82e6077f93512a17dc3b337d781e70 () (⍳_ℚ, ℤ, ℚ) 2.1.0.1.0.1.0
-              prove = ℤ domain ⍳_ℚ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ⍳_ℚ, ℤ) 2.1.0.1.0.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+        elided 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a {
+          elided 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a {
+            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            elided 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a {
+              prove functionFrom ⍳_ℚ ℤ ℚ 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a () (⍳_ℚ, ℤ, ℚ) 2.1.0.1.0.0
+              prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 2.1.0.1.0.1.0
+              prove = ℤ domain ⍳_ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain ⍳_ℚ, ℤ) 2.1.0.1.0.1.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             }
           }
-          prove ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 $$$0 → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) (ℤ, domain ⍳_ℚ) 2.1.0.1.0 2.1.0.0
+          prove ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 $$$0 → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) (ℤ, domain ⍳_ℚ) 2.1.0.1.0 2.1.0.0
         }
       }
-      elided b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 {
-        prove ∧ function ⍳_ℚ ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (function ⍳_ℚ, ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) () 1 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 2.1.0
-        prove injectiveFunction ⍳_ℚ b070308ed687f772ec10437bfc34eb00e708ae3c5457ce55f00585405e09db49 () (⍳_ℚ) 2.1.1.0
+      elided 75e8af58388ac13c5f8f13fdd1cd63625a3f3f8696326041ae5da8f76ca64d68 {
+        prove ∧ function ⍳_ℚ ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function ⍳_ℚ, ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) () 1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.1.0
+        prove injectiveFunction ⍳_ℚ 75e8af58388ac13c5f8f13fdd1cd63625a3f3f8696326041ae5da8f76ca64d68 () (⍳_ℚ) 2.1.1.0
       }
     }
   }
   subproof (Function value) {
     take a {
       assume ∈ $0 ℤ {
-        elided 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 {
-          prove ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 6a61676b52b10c1932d25edb38f6c41bcf9d8d1b6ccdfc1e08f591f793eac902 () (⍳_ℚ, ℤ, equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ) 0
-          prove → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 ℤ = apply ⍳_ℚ $$0 equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ) ($0) 3.0.0.0.0
-          prove = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 ℤ, = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 3.0.0.0.1 3.0.0a
+        elided 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 {
+          prove ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 () (⍳_ℚ, ℤ, equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ) 0
+          prove → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℤ = apply ⍳_ℚ $$0 equivalenceClass orderedPair $$0 apply ⍳_ℤ 1ℕ ~_ℚ) ($0) 3.0.0.0.0
+          prove = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℤ, = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 3.0.0.0.1 3.0.0a
         }
       }
     }
   }
-  elided bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d {
-    prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ, injectiveFunction ⍳_ℚ) () 1 2
-    prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 4.0 3
+  elided 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 {
+    prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ, injectiveFunction ⍳_ℚ) () 1 2
+    prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 4.0 3
   }
 }
 
@@ -179,69 +179,69 @@ termVariables(b 0)
 premise ∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ
 conclusion = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ
 {
-  elided 544cafc53411ece71b8b97f836e3d1d50ec0cd6fbb9cb519d46d086e304cc9c6 {
+  elided b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 {
     prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
-    prove ∈ apply ⍳_ℤ 1ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (1ℕ) 0.0
-    elided 544cafc53411ece71b8b97f836e3d1d50ec0cd6fbb9cb519d46d086e304cc9c6 {
-      prove ∧ = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 544cafc53411ece71b8b97f836e3d1d50ec0cd6fbb9cb519d46d086e304cc9c6 () (apply ⍳_ℤ 1ℕ) 0.1
-      prove = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (= apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ, = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 0.2.0
+    prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 0.0
+    elided b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 {
+      prove ∧ = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 () (apply ⍳_ℤ 1ℕ) 0.1
+      prove = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ, = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 0.2.0
     }
   }
-  elided 544cafc53411ece71b8b97f836e3d1d50ec0cd6fbb9cb519d46d086e304cc9c6 {
-    elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
-      prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
-      prove ↔ ∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ b ℤ ¬ ∈ b singleton apply ⍳_ℤ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) (b) 1.0.0
-      prove → ∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ b ℤ ¬ ∈ b singleton apply ⍳_ℤ 0ℕ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ b ℤ ¬ ∈ b singleton apply ⍳_ℤ 0ℕ) () 1.0.1
-      prove ∧ ∈ b ℤ ¬ ∈ b singleton apply ⍳_ℤ 0ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ b ℤ ¬ ∈ b singleton apply ⍳_ℤ 0ℕ) () 1.0.2 p0
-      prove ∈ b ℤ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ b ℤ, ¬ ∈ b singleton apply ⍳_ℤ 0ℕ) () 1.0.3
+  elided b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 {
+    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+      prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
+      prove ↔ ∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ b ℤ ¬ ∈ b singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) (b) 1.0.0
+      prove → ∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ b ℤ ¬ ∈ b singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ b ℤ ¬ ∈ b singleton apply ⍳_ℤ 0ℕ) () 1.0.1
+      prove ∧ ∈ b ℤ ¬ ∈ b singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ b ℤ ¬ ∈ b singleton apply ⍳_ℤ 0ℕ) () 1.0.2 p0
+      prove ∈ b ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ b ℤ, ¬ ∈ b singleton apply ⍳_ℤ 0ℕ) () 1.0.3
     }
-    elided 544cafc53411ece71b8b97f836e3d1d50ec0cd6fbb9cb519d46d086e304cc9c6 {
-      prove ∧ = apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ b apply ⍳_ℤ 0ℕ 544cafc53411ece71b8b97f836e3d1d50ec0cd6fbb9cb519d46d086e304cc9c6 () (b) 1.0
-      prove = apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ, = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ b apply ⍳_ℤ 0ℕ) () 1.1.0
-      prove = apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ, apply ⍳_ℤ 0ℕ) 1.1.1
+    elided b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 {
+      prove ∧ = apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ b apply ⍳_ℤ 0ℕ b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 () (b) 1.0
+      prove = apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ, = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ b apply ⍳_ℤ 0ℕ) () 1.1.0
+      prove = apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ, apply ⍳_ℤ 0ℕ) 1.1.1
     }
   }
-  prove = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ, apply ⍳_ℤ 0ℕ, apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ) 0 1
-  elided 705464b7810f69eb9ea1a35294b587a45a86a86f31b8715500c75d0b2b8e08b3 {
+  prove = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ, apply ⍳_ℤ 0ℕ, apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ) 0 1
+  elided 522b246576a6bb2e76c7d3917e4e9c66e78d974362fb77197832983b366e44c8 {
     prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-    prove ∈ apply ⍳_ℤ 0ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0ℕ) 3.0
+    prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 3.0
     prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
-    prove ∈ apply ⍳_ℤ 1ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (1ℕ) 3.2
+    prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 3.2
     prove ¬ = 1ℕ 0ℕ bdaf6427cfd0b36642272a980ebfbca98f289fa9b1a02f7cacacf5cd2789af03 () ()
-    elided 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba {
-      prove ↔ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ 249501c95ad26f7c4c27578c0138ddbc2105762d8c33d5d4660ba24bd3c63eba () (1ℕ, 0ℕ) 3.2 3.0
-      prove → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 3.5.0
-      prove ¬ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 3.5.1 3.4
+    elided d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b {
+      prove ↔ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b () (1ℕ, 0ℕ) 3.2 3.0
+      prove → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 3.5.0
+      prove ¬ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 3.5.1 3.4
     }
-    elided 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 {
-      prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (apply ⍳_ℤ 0ℕ)
-      prove ↔ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 3.6.0
-      prove → ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 3.6.1
-      prove ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 3.6.2 3.5
+    elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+      prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (apply ⍳_ℤ 0ℕ)
+      prove ↔ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 3.6.0
+      prove → ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 3.6.1
+      prove ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ) () 3.6.2 3.5
     }
-    prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ apply ⍳_ℤ 1ℕ ℤ, ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 3.3 3.6
-    elided b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 {
-      prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b73ca2abb713743414d48b59d45612d40ff508ebf0db1303d2eb38c8743612e3 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
-      prove ↔ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 3.8.0
-      prove → ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 3.8.1
-      prove ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ) () 3.8.2 3.7
+    prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 1ℕ ℤ, ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 3.3 3.6
+    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+      prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
+      prove ↔ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) (apply ⍳_ℤ 1ℕ) 3.8.0
+      prove → ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ) () 3.8.1
+      prove ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ apply ⍳_ℤ 1ℕ ℤ ¬ ∈ apply ⍳_ℤ 1ℕ singleton apply ⍳_ℤ 0ℕ, ∈ apply ⍳_ℤ 1ℕ diff ℤ singleton apply ⍳_ℤ 0ℕ) () 3.8.2 3.7
     }
-    elided 705464b7810f69eb9ea1a35294b587a45a86a86f31b8715500c75d0b2b8e08b3 {
-      prove ↔ = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ 705464b7810f69eb9ea1a35294b587a45a86a86f31b8715500c75d0b2b8e08b3 () (apply ⍳_ℤ 0ℕ, b, apply ⍳_ℤ 0ℕ, apply ⍳_ℤ 1ℕ) 3.1 p0 3.1 3.8
-      prove → = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (= equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ, = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ) () 3.9.0
-      prove = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (= apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ, = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ) () 3.9.1 2
+    elided 522b246576a6bb2e76c7d3917e4e9c66e78d974362fb77197832983b366e44c8 {
+      prove ↔ = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ 522b246576a6bb2e76c7d3917e4e9c66e78d974362fb77197832983b366e44c8 () (apply ⍳_ℤ 0ℕ, b, apply ⍳_ℤ 0ℕ, apply ⍳_ℤ 1ℕ) 3.1 p0 3.1 3.8
+      prove → = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (= equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ, = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ) () 3.9.0
+      prove = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair b apply ⍳_ℤ 0ℕ, = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ) () 3.9.1 2
     }
   }
   elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
     prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-    prove ∈ apply ⍳_ℤ 0ℕ ℤ 8a3aafe18823011298d1b16dc04add4ebefad4759566ac5d7054f49a132d1f2f () (0ℕ) 4.0
+    prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 4.0
     elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
       prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
-      prove ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 4.2.0
-      prove → ∈ apply ⍳_ℤ 0ℕ ℤ = apply ⍳_ℚ apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) (apply ⍳_ℤ 0ℕ) 4.2.1
-      prove = apply ⍳_ℚ apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ apply ⍳_ℤ 0ℕ ℤ, = apply ⍳_ℚ apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ) () 4.2.2 4.1
-      prove = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (apply ⍳_ℚ apply ⍳_ℤ 0ℕ, equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ) 4.2.3
+      prove ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 4.2.0
+      prove → ∈ apply ⍳_ℤ 0ℕ ℤ = apply ⍳_ℚ apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) (apply ⍳_ℤ 0ℕ) 4.2.1
+      prove = apply ⍳_ℚ apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ 0ℕ ℤ, = apply ⍳_ℚ apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ) () 4.2.2 4.1
+      prove = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ⍳_ℚ apply ⍳_ℤ 0ℕ, equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ) 4.2.3
     }
   }
-  prove = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ 45671747ce3e408665d1f6b74999f63b9bd5247d3ad1b4daef8032d6e7aab796 () (equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ, equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ, apply ⍳_ℚ apply ⍳_ℤ 0ℕ) 3 4
+  prove = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ, equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ ~_ℚ, apply ⍳_ℚ apply ⍳_ℤ 0ℕ) 3 4
 }

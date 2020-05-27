@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.Substitutions
+import net.prover.model.{Substitutions, VariableDefinitions}
 import net.prover.model.definitions.ExpressionDefinition
 
 case class FunctionParameter(index: Int, level: Int) extends Term {
@@ -117,6 +117,6 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
   }
 
   override def serialized = (0 to level).map(_ => "$").mkString("") + index
-  override def serializedForHash = serialized
   override def toString = serialized
+  override def toStringForHash(variableDefinitions: VariableDefinitions): String = serialized
 }

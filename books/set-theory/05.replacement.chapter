@@ -12,8 +12,8 @@ termVariables(a 0)
 premise ∀ x → ∈ $0 a ∃! y with ($$0 $0) φ
 conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ
 {
-  prove ∃ z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ 6f9b24e8020dba4de68546edbfc06dfc99277efd6d9b8e5a335e63aa2887c042 (with ($0 $1) φ) (a) p0
-  prove ∃! z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a (∃ x ∧ ∈ $0 a with ($0 $$0) φ) () 0
+  prove ∃ z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ aca1535211144c546f3bc203f1bbcadafb901e52c221cae5eb790a78d3ad846c (with ($0 $1) φ) (a) p0
+  prove ∃! z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ 288a339c30f6b561d0a86d8a4ad51c2acccaa964cc586fd001f47dde466ba92c (∃ x ∧ ∈ $0 a with ($0 $$0) φ) () 0
 }
 
 theorem Existence of Replacement Set
@@ -22,10 +22,10 @@ conclusion ∃! B ∀ b ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F
 {
   take a {
     assume ∈ $0 A {
-      prove ∃! b = $0 with ($$0) F c95bd5a48f1e634431831232959dc7b7ef2ed222c694cac5df9ed7f08eee333a () (with ($0) F)
+      prove ∃! b = $0 with ($$0) F 8bd430aa127bd6eb6ab68bdc4b82882686238ffa92fc641c4ddb1f14b418aa1f () (with ($0) F)
     }
   }
-  prove ∃! B ∀ b ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F a23a254299d258a1307d257384c823b073a0c85f62f1606a89715f5d133ca2c7 (= $1 with ($0) F) (A) 0
+  prove ∃! B ∀ b ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F b9824fd6f00092a866dd6293c23a983e93e0ddf13a433df477ab83cd6fbf83fa (= $1 with ($0) F) (A) 0
 }
 
 term replacementSet ($x A with x F)
@@ -38,12 +38,12 @@ termVariables(S 0, A 0, F 1)
 premise = S replacementSet a A with ($0) F
 conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F
 {
-  prove ∀ y ↔ ∈ $0 replacementSet x A with ($0) F ∃ a ∧ ∈ $0 A = $$0 with ($0) F 8e6c4400b6cc995bb10f0746ea4444e9801d61d3b9ab5424ae31fc4a2628fff5 () (A, with ($0) F)
+  prove ∀ y ↔ ∈ $0 replacementSet x A with ($0) F ∃ a ∧ ∈ $0 A = $$0 with ($0) F 09ea54ce7130323780100ef7e69b72ffa0ecea8eeaf035264fd00edc1b09a66d () (A, with ($0) F)
   take s {
-    prove ↔ ∈ $0 replacementSet x A with ($0) F ∃ a ∧ ∈ $0 A = $$0 with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 replacementSet x A with ($0) F ∃ a ∧ ∈ $0 A = $$$0 with ($0) F) ($0) 0
-    elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
-      prove = replacementSet a A with ($0) F S 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (S, replacementSet a A with ($0) F) p0
-      prove ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F) (replacementSet a A with ($0) F, S) 1.1.0 1.0
+    prove ↔ ∈ $0 replacementSet x A with ($0) F ∃ a ∧ ∈ $0 A = $$0 with ($0) F b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 replacementSet x A with ($0) F ∃ a ∧ ∈ $0 A = $$$0 with ($0) F) ($0) 0
+    elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+      prove = replacementSet a A with ($0) F S da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (S, replacementSet a A with ($0) F) p0
+      prove ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F) (replacementSet a A with ($0) F, S) 1.1.0 1.0
     }
   }
 }
@@ -56,22 +56,22 @@ conclusion ⊆ S B
 {
   take b {
     assume ∈ $0 S {
-      elided b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 {
-        prove ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 () (S, A, with ($$0) F) p0
-        prove ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 S ∃ a ∧ ∈ $0 A = $$$0 with ($0) F) ($0) 0.0.0.0
-        prove → ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 S, ∃ a ∧ ∈ $0 A = $$0 with ($0) F) () 0.0.0.1
-        prove ∃ a ∧ ∈ $0 A = $$0 with ($0) F fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 S, ∃ a ∧ ∈ $0 A = $$0 with ($0) F) () 0.0.0.2 0.0a
+      elided a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec {
+        prove ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec () (S, A, with ($$0) F) p0
+        prove ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 S ∃ a ∧ ∈ $0 A = $$$0 with ($0) F) ($0) 0.0.0.0
+        prove → ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 S, ∃ a ∧ ∈ $0 A = $$0 with ($0) F) () 0.0.0.1
+        prove ∃ a ∧ ∈ $0 A = $$0 with ($0) F 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 S, ∃ a ∧ ∈ $0 A = $$0 with ($0) F) () 0.0.0.2 0.0a
       }
-      let a_b ∧ ∈ $0 A = $$0 with ($0) F 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 A = $0 with ($$0) F, ∈ $0 B) () {
-        elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-          prove → ∈ $0 A ∈ with ($0) F B 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 A ∈ with ($$$0) F B) ($0) p1
-          prove ∈ with ($0) F B fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∈ with ($0) F B) () 0.0.1.0.0 0.0.1a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+      let a_b ∧ ∈ $0 A = $$0 with ($0) F 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 A = $0 with ($$0) F, ∈ $0 B) () {
+        elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+          prove → ∈ $0 A ∈ with ($0) F B b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ∈ with ($$$0) F B) ($0) p1
+          prove ∈ with ($0) F B 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ∈ with ($0) F B) () 0.0.1.0.0 0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         }
-        prove ∈ $$0 B 9170cbe4f2646ec72e06c477f3e51bd4f71fa1cf39b511c0ab94db9526767d3a (∈ $$$0 B) ($$0, with ($0) F) 0.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c 0.0.1.0
+        prove ∈ $$0 B 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$$0 B) ($$0, with ($0) F) 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.0.1.0
       } 0.0.0
     }
   }
-  prove ⊆ S B 661665a947563caee66f924b537a676a531e3780284a0ebe20f4a0eddde58698 () (S, B) 0
+  prove ⊆ S B ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (S, B) 0
 }
 
 theorem Function of Element is Element of Replacement Set
@@ -80,15 +80,15 @@ premise = S replacementSet a A with ($0) F
 premise ∈ a A
 conclusion ∈ with (a) F S
 {
-  prove = with (a) F with (a) F 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (with (a) F)
-  elided c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd {
-    prove ∧ ∈ a A = with (a) F with (a) F bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, = with (a) F with (a) F) () p1 0
-    prove ∃ x ∧ ∈ $0 A = with (a) F with ($0) F c17db5084b27672bb6bce2c2090a844771fdd7145d5ba0aa45763e29d45703bd (∧ ∈ $0 A = with (a) F with ($0) F) (a) 1.0
+  prove = with (a) F with (a) F 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (with (a) F)
+  elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+    prove ∧ ∈ a A = with (a) F with (a) F 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ a A, = with (a) F with (a) F) () p1 0
+    prove ∃ x ∧ ∈ $0 A = with (a) F with ($0) F 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 A = with (a) F with ($0) F) (a) 1.0
   }
-  elided b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 {
-    prove ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F b29d1a2902ac2af3d85c5a939ca36f99c1a246caf6799bcf64e4b7a3ad1a40d0 () (S, A, with ($0) F) p0
-    prove ↔ ∈ with (a) F S ∃ a ∧ ∈ $0 A = with (a) F with ($0) F 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F) (with (a) F) 2.0
-    prove → ∃ a ∧ ∈ $0 A = with (a) F with ($0) F ∈ with (a) F S 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ with (a) F S, ∃ a ∧ ∈ $0 A = with (a) F with ($0) F) () 2.1
-    prove ∈ with (a) F S fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∃ a ∧ ∈ $0 A = with (a) F with ($0) F, ∈ with (a) F S) () 2.2 1
+  elided a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec {
+    prove ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec () (S, A, with ($0) F) p0
+    prove ↔ ∈ with (a) F S ∃ a ∧ ∈ $0 A = with (a) F with ($0) F b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F) (with (a) F) 2.0
+    prove → ∃ a ∧ ∈ $0 A = with (a) F with ($0) F ∈ with (a) F S 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ with (a) F S, ∃ a ∧ ∈ $0 A = with (a) F with ($0) F) () 2.1
+    prove ∈ with (a) F S 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ a ∧ ∈ $0 A = with (a) F with ($0) F, ∈ with (a) F S) () 2.2 1
   }
 }

@@ -19,7 +19,7 @@ object PremiseFinder {
     implicit stepProvingContext: StepProvingContext
   ): Option[Seq[DerivationStep]] = {
     stepProvingContext.cachedDerivations.getOrElseUpdate(
-      targetStatement.serializedForHash,
+      targetStatement.toStringForHash(stepProvingContext.stepContext.variableDefinitions),
       findDerivationForStatementUncached(targetStatement))
   }
 

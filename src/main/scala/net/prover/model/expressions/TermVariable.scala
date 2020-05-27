@@ -29,6 +29,10 @@ case class TermVariable(name: String, arguments: Seq[Term]) extends ExpressionVa
     super[Term].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
       super[ExpressionVariable].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
   }
+  def getSymbolForHash(variableDefinitions: VariableDefinitions): String = {
+    "t" + variableDefinitions.termVariableDefinitions.findIndexWhere(d => d.name == name && d.arity == arguments.length)
+      .getOrElse(throw new Exception(s"Could not find valid definition for variable $name"))
+  }
 }
 
 object TermVariable {

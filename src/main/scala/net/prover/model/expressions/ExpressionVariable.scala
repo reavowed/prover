@@ -136,7 +136,10 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
 
   override def toString: String = name + (if (arguments.nonEmpty) "(" + arguments.map(_.toString).mkString(", ") + ")" else "")
   override def serialized: String = (if (arguments.nonEmpty) "with (" + arguments.map(_.serialized).mkString(" ") + ") " else "") + name
-  override def serializedForHash: String = (if (arguments.nonEmpty) "with (" + arguments.map(_.serializedForHash).mkString(" ") + ") " else "") + name
+  override def toStringForHash(variableDefinitions: VariableDefinitions): String = {
+    (if (arguments.nonEmpty) "with (" + arguments.map(_.toStringForHash(variableDefinitions)).mkString(" ") + ") " else "") + getSymbolForHash(variableDefinitions)
+  }
+  def getSymbolForHash(variableDefinitions: VariableDefinitions): String
 }
 
 object ExpressionVariable {

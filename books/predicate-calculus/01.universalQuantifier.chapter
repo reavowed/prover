@@ -20,14 +20,14 @@ conclusion ↔ ∀ x → with ($0) χ with ($0) φ ∀ x → with ($0) χ with (
     take x {
       assume with ($0) χ {
         elided (Extracted) {
-          prove → with ($0) χ with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$0) χ with ($$0) φ) ($0) 0a
-          prove with ($0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) χ, with ($0) φ) () 0.0.0.0.0 0.0.0a
+          prove → with ($0) χ with ($0) φ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) χ with ($$0) φ) ($0) 0a
+          prove with ($0) φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) χ, with ($0) φ) () 0.0.0.0.0 0.0.0a
         }
         elided (Extracted) {
-          prove → with ($0) χ ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$0) χ ↔ with ($$0) φ with ($$0) ψ) ($0) p0
-          prove ↔ with ($0) φ with ($0) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) χ, ↔ with ($0) φ with ($0) ψ) () 0.0.0.1.0 0.0.0a
-          prove → with ($0) φ with ($0) ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (with ($0) φ, with ($0) ψ) () 0.0.0.1.1
-          prove with ($0) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, with ($0) ψ) () 0.0.0.1.2 0.0.0.0
+          prove → with ($0) χ ↔ with ($0) φ with ($0) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) χ ↔ with ($$0) φ with ($$0) ψ) ($0) p0
+          prove ↔ with ($0) φ with ($0) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) χ, ↔ with ($0) φ with ($0) ψ) () 0.0.0.1.0 0.0.0a
+          prove → with ($0) φ with ($0) ψ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (with ($0) φ, with ($0) ψ) () 0.0.0.1.1
+          prove with ($0) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) φ, with ($0) ψ) () 0.0.0.1.2 0.0.0.0
         }
       }
     }
@@ -36,19 +36,19 @@ conclusion ↔ ∀ x → with ($0) χ with ($0) φ ∀ x → with ($0) χ with (
     take x {
       assume with ($0) χ {
         elided (Extracted) {
-          prove → with ($0) χ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$0) χ with ($$0) ψ) ($0) 1a
-          prove with ($0) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) χ, with ($0) ψ) () 1.0.0.0.0 1.0.0a
+          prove → with ($0) χ with ($0) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) χ with ($$0) ψ) ($0) 1a
+          prove with ($0) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) χ, with ($0) ψ) () 1.0.0.0.0 1.0.0a
         }
         elided (Extracted) {
-          prove → with ($0) χ ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$0) χ ↔ with ($$0) φ with ($$0) ψ) ($0) p0
-          prove ↔ with ($0) φ with ($0) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) χ, ↔ with ($0) φ with ($0) ψ) () 1.0.0.1.0 1.0.0a
-          prove → with ($0) ψ with ($0) φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (with ($0) φ, with ($0) ψ) () 1.0.0.1.1
-          prove with ($0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) ψ, with ($0) φ) () 1.0.0.1.2 1.0.0.0
+          prove → with ($0) χ ↔ with ($0) φ with ($0) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) χ ↔ with ($$0) φ with ($$0) ψ) ($0) p0
+          prove ↔ with ($0) φ with ($0) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) χ, ↔ with ($0) φ with ($0) ψ) () 1.0.0.1.0 1.0.0a
+          prove → with ($0) ψ with ($0) φ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (with ($0) φ, with ($0) ψ) () 1.0.0.1.1
+          prove with ($0) φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) ψ, with ($0) φ) () 1.0.0.1.2 1.0.0.0
         }
       }
     }
   }
-  prove ↔ ∀ x → with ($0) χ with ($0) φ ∀ x → with ($0) χ with ($0) ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ x → with ($0) χ with ($0) φ, ∀ x → with ($0) χ with ($0) ψ) () 0 1
+  prove ↔ ∀ x → with ($0) χ with ($0) φ ∀ x → with ($0) χ with ($0) ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∀ x → with ($0) χ with ($0) φ, ∀ x → with ($0) χ with ($0) ψ) () 0 1
 }
 
 theorem Distribute Universal Quantifier over Equivalence
@@ -58,25 +58,25 @@ conclusion ↔ ∀ x with ($0) φ ∀ x with ($0) ψ
 {
   assume ∀ x with ($0) φ {
     take x {
-      prove with ($0) φ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (with ($$0) φ) ($0) 0a
+      prove with ($0) φ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (with ($$0) φ) ($0) 0a
       elided (Extracted) {
-        prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ with ($$0) φ with ($$0) ψ) ($0) p0
-        prove → with ($0) φ with ($0) ψ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (with ($0) φ, with ($0) ψ) () 0.0.1.0
-        prove with ($0) ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, with ($0) ψ) () 0.0.1.1 0.0.0
+        prove ↔ with ($0) φ with ($0) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$0) φ with ($$0) ψ) ($0) p0
+        prove → with ($0) φ with ($0) ψ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (with ($0) φ, with ($0) ψ) () 0.0.1.0
+        prove with ($0) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) φ, with ($0) ψ) () 0.0.1.1 0.0.0
       }
     }
   }
   assume ∀ x with ($0) ψ {
     take x {
-      prove with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (with ($$0) ψ) ($0) 1a
+      prove with ($0) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (with ($$0) ψ) ($0) 1a
       elided (Extracted) {
-        prove ↔ with ($0) φ with ($0) ψ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ with ($$0) φ with ($$0) ψ) ($0) p0
-        prove → with ($0) ψ with ($0) φ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (with ($0) φ, with ($0) ψ) () 1.0.1.0
-        prove with ($0) φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) ψ, with ($0) φ) () 1.0.1.1 1.0.0
+        prove ↔ with ($0) φ with ($0) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$0) φ with ($$0) ψ) ($0) p0
+        prove → with ($0) ψ with ($0) φ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (with ($0) φ, with ($0) ψ) () 1.0.1.0
+        prove with ($0) φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) ψ, with ($0) φ) () 1.0.1.1 1.0.0
       }
     }
   }
-  prove ↔ ∀ x with ($0) φ ∀ x with ($0) ψ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∀ x with ($0) φ, ∀ x with ($0) ψ) () 0 1
+  prove ↔ ∀ x with ($0) φ ∀ x with ($0) ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∀ x with ($0) φ, ∀ x with ($0) ψ) () 0 1
 }
 
 theorem Swap Restricted Universal Quantifiers
@@ -88,10 +88,10 @@ conclusion ∀ y → with ($0) ψ ∀ x → with ($0) φ with ($0 $$0) χ
     assume with ($0) ψ {
       take x {
         assume with ($0) φ {
-          prove → with ($0) φ ∀ y → with ($0) ψ with ($$0 $0) χ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$$0) φ ∀ y → with ($0) ψ with ($$$$0 $0) χ) ($0) p0
-          prove ∀ y → with ($0) ψ with ($$0 $0) χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($0) φ, ∀ y → with ($0) ψ with ($$0 $0) χ) () 0.0.0.0.0 0.0.0.0a
-          prove → with ($$0) ψ with ($0 $$0) χ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ with ($$$0) ψ with ($0 $$$0) χ) ($$0) 0.0.0.0.1
-          prove with ($0 $$0) χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (with ($$0) ψ, with ($0 $$0) χ) () 0.0.0.0.2 0.0a
+          prove → with ($0) φ ∀ y → with ($0) ψ with ($$0 $0) χ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$$0) φ ∀ y → with ($0) ψ with ($$$$0 $0) χ) ($0) p0
+          prove ∀ y → with ($0) ψ with ($$0 $0) χ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) φ, ∀ y → with ($0) ψ with ($$0 $0) χ) () 0.0.0.0.0 0.0.0.0a
+          prove → with ($$0) ψ with ($0 $$0) χ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$$0) ψ with ($0 $$$0) χ) ($$0) 0.0.0.0.1
+          prove with ($0 $$0) χ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($$0) ψ, with ($0 $$0) χ) () 0.0.0.0.2 0.0a
         }
       }
     }

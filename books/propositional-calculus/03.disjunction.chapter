@@ -9,8 +9,8 @@ statementVariables(φ 0, ψ 0)
 premise φ
 conclusion ∨ φ ψ
 {
-  prove → ¬ φ ψ 9b46701d1aa951dfb1ded533db23d843a270602c4f72661631fb683f9bbbb633 (φ, ψ) () p0
-  prove ∨ φ ψ 94eabd8c44d2886bcf8b632647ae5882b8e713fa3c14c8b25800ea563dfc1919 (φ, ψ) () 0
+  prove → ¬ φ ψ bd0a409baa4a2dff1d2053c7a0bc791f655bbe4fb70d1a774cb3d11c8e8dfcd0 (φ, ψ) () p0
+  prove ∨ φ ψ f1907fcb38bc4edb92cfc8dab5e442371437f79540509ece7bfd74945e1ea932 (φ, ψ) () 0
 }
 
 theorem Add Left Disjunct
@@ -18,16 +18,16 @@ statementVariables(ψ 0, φ 0)
 premise ψ
 conclusion ∨ φ ψ
 {
-  prove → ¬ φ ψ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (ψ, ¬ φ) () p0
-  prove ∨ φ ψ 94eabd8c44d2886bcf8b632647ae5882b8e713fa3c14c8b25800ea563dfc1919 (φ, ψ) () 0
+  prove → ¬ φ ψ acbe547cc61228898842cf6a8732b10d52cf1f493dd2455a7cecc64235f53854 (ψ, ¬ φ) () p0
+  prove ∨ φ ψ f1907fcb38bc4edb92cfc8dab5e442371437f79540509ece7bfd74945e1ea932 (φ, ψ) () 0
 }
 
 theorem Law of the Excluded Middle
 statementVariables(φ 0)
 conclusion ∨ φ ¬ φ
 {
-  prove → ¬ φ ¬ φ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (¬ φ) ()
-  prove ∨ φ ¬ φ 94eabd8c44d2886bcf8b632647ae5882b8e713fa3c14c8b25800ea563dfc1919 (φ, ¬ φ) () 0
+  prove → ¬ φ ¬ φ 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (¬ φ) ()
+  prove ∨ φ ¬ φ f1907fcb38bc4edb92cfc8dab5e442371437f79540509ece7bfd74945e1ea932 (φ, ¬ φ) () 0
 }
 
 theorem Proof by Cases
@@ -37,9 +37,9 @@ premise → φ χ
 premise → ψ χ
 conclusion χ
 {
-  prove → ¬ φ ψ 862ea012be93c379c01aff64885a7a24dd0ea42d5825b13b8ae15ee5eb65620d (φ, ψ) () p0
-  prove → ¬ φ χ 5feeb1fdd8d15399c5ddbc7d32d268aa57fbe1dee02ca9e06a4074fc6a3fd9c6 (¬ φ, ψ, χ) () 0 p2
-  prove χ 35f46479d4f3054e0f463194f8ed4dd77e7526b58f2b6157594bf81bccfcf95a (φ, χ) () p1 1
+  prove → ¬ φ ψ 7125b43c47098df13380d09d4838810f12045416fde263c39b7a200a8942ef16 (φ, ψ) () p0
+  prove → ¬ φ χ fdfa0040ca36d70ab3bc93906e3b3ef953b4c0f212eb782f88a9d66a6cd2691b (¬ φ, ψ, χ) () 0 p2
+  prove χ 12afb9df21eda1ecba39f95a0b7af6e3087951e80382722b0e143de0e3443389 (φ, χ) () p1 1
 }
 
 theorem Proof by Separate Cases
@@ -50,14 +50,14 @@ premise → ψ ω
 conclusion ∨ χ ω
 {
   assume φ {
-    prove χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, χ) () p1 0a
-    prove ∨ χ ω 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (χ, ω) () 0.0
+    prove χ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, χ) () p1 0a
+    prove ∨ χ ω 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (χ, ω) () 0.0
   }
   assume ψ {
-    prove ω fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, ω) () p2 1a
-    prove ∨ χ ω 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (ω, χ) () 1.0
+    prove ω 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (ψ, ω) () p2 1a
+    prove ∨ χ ω e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (ω, χ) () 1.0
   }
-  prove ∨ χ ω 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, ∨ χ ω) () p0 0 1
+  prove ∨ χ ω 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (φ, ψ, ∨ χ ω) () p0 0 1
 }
 
 theorem Proof by Exclusive Separate Cases
@@ -66,8 +66,8 @@ premise → φ ψ
 premise → ¬ φ χ
 conclusion ∨ ψ χ
 {
-  prove ∨ φ ¬ φ 55cacad7c48d56585c5db61f43accacd896d4b7d2209fc897d3c9a12ca23be2d (φ) ()
-  prove ∨ ψ χ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (φ, ¬ φ, ψ, χ) () 0 p0 p1
+  prove ∨ φ ¬ φ 463cb6809a9f4be671a279fc3400ca7f0a9e651ffc60c5441cb2475c9efd7148 (φ) ()
+  prove ∨ ψ χ 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (φ, ¬ φ, ψ, χ) () 0 p0 p1
 }
 
 theorem Combine Cases
@@ -77,7 +77,7 @@ premise → ψ χ
 conclusion → ∨ φ ψ χ
 {
   assume ∨ φ ψ {
-    prove χ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, χ) () 0a p0 p1
+    prove χ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (φ, ψ, χ) () 0a p0 p1
   }
 }
 
@@ -87,12 +87,12 @@ premise ∨ φ ψ
 conclusion ∨ ψ φ
 {
   assume φ {
-    prove ∨ ψ φ 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (φ, ψ) () 0a
+    prove ∨ ψ φ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (φ, ψ) () 0a
   }
   assume ψ {
-    prove ∨ ψ φ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (ψ, φ) () 1a
+    prove ∨ ψ φ 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (ψ, φ) () 1a
   }
-  prove ∨ ψ φ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, ∨ ψ φ) () p0 0 1
+  prove ∨ ψ φ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (φ, ψ, ∨ ψ φ) () p0 0 1
 }
 
 theorem Right Disjunct Must Be True
@@ -101,8 +101,8 @@ premise ∨ φ ψ
 premise ¬ φ
 conclusion ψ
 {
-  prove → ¬ φ ψ 862ea012be93c379c01aff64885a7a24dd0ea42d5825b13b8ae15ee5eb65620d (φ, ψ) () p0
-  prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ φ, ψ) () 0 p1
+  prove → ¬ φ ψ 7125b43c47098df13380d09d4838810f12045416fde263c39b7a200a8942ef16 (φ, ψ) () p0
+  prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ φ, ψ) () 0 p1
 }
 
 theorem Left Disjunct Must Be True
@@ -111,8 +111,8 @@ premise ∨ φ ψ
 premise ¬ ψ
 conclusion φ
 {
-  prove → ¬ φ ψ 862ea012be93c379c01aff64885a7a24dd0ea42d5825b13b8ae15ee5eb65620d (φ, ψ) () p0
-  prove φ 7d5c11683ad65a8e8a9efa2db1b483491968d60e11719288f0fff0cb4007f2ec (φ, ψ) () 0 p1
+  prove → ¬ φ ψ 7125b43c47098df13380d09d4838810f12045416fde263c39b7a200a8942ef16 (φ, ψ) () p0
+  prove φ b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (φ, ψ) () 0 p1
 }
 
 theorem Combine Negated Disjunction
@@ -122,9 +122,9 @@ premise ¬ ψ
 conclusion ¬ ∨ φ ψ
 {
   assume ∨ φ ψ {
-    prove ψ 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (φ, ψ) () 0a p0
+    prove ψ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (φ, ψ) () 0a p0
   }
-  prove ¬ ∨ φ ψ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (∨ φ ψ, ψ) () 0 p1
+  prove ¬ ∨ φ ψ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∨ φ ψ, ψ) () 0 p1
 }
 
 theorem Deduction in Left Disjunct
@@ -133,8 +133,8 @@ premise ∨ φ ψ
 premise → φ χ
 conclusion ∨ χ ψ
 {
-  prove → ψ ψ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (ψ) ()
-  prove ∨ χ ψ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (φ, ψ, χ, ψ) () p0 p1 0
+  prove → ψ ψ 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (ψ) ()
+  prove ∨ χ ψ 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (φ, ψ, χ, ψ) () p0 p1 0
 }
 
 theorem Deduction in Right Disjunct
@@ -143,8 +143,8 @@ premise ∨ φ ψ
 premise → ψ χ
 conclusion ∨ φ χ
 {
-  prove → φ φ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (φ) ()
-  prove ∨ φ χ 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (φ, ψ, φ, χ) () p0 0 p1
+  prove → φ φ 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (φ) ()
+  prove ∨ φ χ 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (φ, ψ, φ, χ) () p0 0 p1
 }
 
 theorem Eliminate Redundant Left Disjunct
@@ -153,8 +153,8 @@ premise ∨ φ ψ
 premise → φ ψ
 conclusion ψ
 {
-  prove → ψ ψ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (ψ) ()
-  prove ψ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, ψ) () p0 p1 0
+  prove → ψ ψ 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (ψ) ()
+  prove ψ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (φ, ψ, ψ) () p0 p1 0
 }
 
 theorem Eliminate Redundant Right Disjunct
@@ -163,8 +163,8 @@ premise ∨ φ ψ
 premise → ψ φ
 conclusion φ
 {
-  prove → φ φ d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 (φ) ()
-  prove φ 64ae1cf0976d44e858d922e17c975dfb110a5659576b3f0a67aafbc50e861343 (φ, ψ, φ) () p0 0 p1
+  prove → φ φ 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (φ) ()
+  prove φ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (φ, ψ, φ) () p0 0 p1
 }
 
 theorem Extract Left Negated Disjunct
@@ -173,10 +173,10 @@ premise ¬ ∨ φ ψ
 conclusion ¬ φ
 {
   assume φ {
-    prove ∨ φ ψ 1a07b3a277a0b6cb2a80e688bd0061462bbd859d896ba73b43d8f043b4c4908d (φ, ψ) () 0a
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∨ φ ψ) () 0.0 p0
+    prove ∨ φ ψ 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (φ, ψ) () 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∨ φ ψ) () 0.0 p0
   }
-  prove ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (φ) () 0
+  prove ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (φ) () 0
 }
 
 theorem Extract Right Negated Disjunct
@@ -185,8 +185,8 @@ premise ¬ ∨ φ ψ
 conclusion ¬ ψ
 {
   assume ψ {
-    prove ∨ φ ψ 465fa652faa5239d8c11a17e781f336a53284b9690e1b756efe680fec5068952 (ψ, φ) () 0a
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (∨ φ ψ) () 0.0 p0
+    prove ∨ φ ψ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (ψ, φ) () 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∨ φ ψ) () 0.0 p0
   }
-  prove ¬ ψ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (ψ) () 0
+  prove ¬ ψ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (ψ) () 0
 }

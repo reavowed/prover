@@ -14,7 +14,7 @@ statementVariables(φ 0)
 conclusion → φ φ
 {
   assume φ {
-    prove φ bef95b18b97a05ca4c8a14f15ac5e41f30b9f6ee30472fcd4734069751460227 (φ) () 0a
+    prove φ 99c9b30776361008f1532f8942d7a8bd8c54fa9a4c4784fd0b91d73187974c76 (φ) () 0a
   }
 }
 
@@ -31,8 +31,8 @@ premise → ψ χ
 conclusion → φ χ
 {
   assume φ {
-    prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () p0 0a
-    prove χ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (ψ, χ) () p1 0.0
+    prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ψ) () p0 0a
+    prove χ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (ψ, χ) () p1 0.0
   }
 }
 
@@ -53,8 +53,8 @@ statementVariables(φ 0)
 premise → ¬ φ ⊥
 conclusion φ
 {
-  prove ¬ ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (¬ φ) () p0
-  prove φ 76b4e9ddfc7625fe4a34be1acb6873a2eff48a658ea210614eb207b1c5a712d7 (φ) () 0
+  prove ¬ ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (¬ φ) () p0
+  prove φ 3d58b767b02b9b674b7902caa2ce63a1d81229ec46a079313659f847b3689d92 (φ) () 0
 }
 
 theorem Contradiction
@@ -63,8 +63,8 @@ premise φ
 premise ¬ φ
 conclusion ⊥
 {
-  prove → φ ⊥ e90047dcd0d8d94cb5bba934eb926519880bb863d497d3805aaf2fb67564014c (φ) () p1
-  prove ⊥ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ⊥) () 0 p0
+  prove → φ ⊥ 1e5738d7b76cfb85f824e6d7bc266b9a30a8a10276d00741a9ae3ed364cf321e (φ) () p1
+  prove ⊥ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ⊥) () 0 p0
 }
 
 theorem Principle of Explosion
@@ -73,9 +73,9 @@ premise ⊥
 conclusion φ
 {
   assume ¬ φ {
-    prove ⊥ bef95b18b97a05ca4c8a14f15ac5e41f30b9f6ee30472fcd4734069751460227 (⊥) () p0
+    prove ⊥ 99c9b30776361008f1532f8942d7a8bd8c54fa9a4c4784fd0b91d73187974c76 (⊥) () p0
   }
-  prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () 0
+  prove φ e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (φ) () 0
 }
 
 theorem Principle of Explosion
@@ -84,8 +84,8 @@ premise φ
 premise ¬ φ
 conclusion ψ
 {
-  prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () p0 p1
-  prove ψ b98d6d09d2418d878f39abf12fe811fcb151d44278257378df82b75217c58a99 (ψ) () 0
+  prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (φ) () p0 p1
+  prove ψ 71bab335d63296a8d7be6c522edb7ab345d5178314b0f34e68931b80634f0ce7 (ψ) () 0
 }
 
 theorem Add Double Negative
@@ -94,9 +94,9 @@ premise φ
 conclusion ¬ ¬ φ
 {
   assume ¬ φ {
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (φ) () p0 0a
   }
-  prove ¬ ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (¬ φ) () 0
+  prove ¬ ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (¬ φ) () 0
 }
 
 theorem Proof by Self-Contradiction
@@ -105,10 +105,10 @@ premise → φ ¬ φ
 conclusion ¬ φ
 {
   assume φ {
-    prove ¬ φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ¬ φ) () p0 0a
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () 0a 0.0
+    prove ¬ φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ¬ φ) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (φ) () 0a 0.0
   }
-  prove ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (φ) () 0
+  prove ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (φ) () 0
 }
 
 theorem Proof by Self-Contradiction
@@ -117,10 +117,10 @@ premise → ¬ φ φ
 conclusion φ
 {
   assume ¬ φ {
-    prove φ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ φ, φ) () p0 0a
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (φ) () 0.0 0a
+    prove φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ φ, φ) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (φ) () 0.0 0a
   }
-  prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () 0
+  prove φ e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (φ) () 0
 }
 
 theorem Modus Tollens
@@ -130,10 +130,10 @@ premise ¬ ψ
 conclusion ¬ φ
 {
   assume φ {
-    prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () p0 0a
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () 0.0 p1
+    prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ψ) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (ψ) () 0.0 p1
   }
-  prove ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (φ) () 0
+  prove ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (φ) () 0
 }
 
 theorem Modus Tollens
@@ -143,10 +143,10 @@ premise ψ
 conclusion ¬ φ
 {
   assume φ {
-    prove ¬ ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ¬ ψ) () p0 0a
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () p1 0.0
+    prove ¬ ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ¬ ψ) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (ψ) () p1 0.0
   }
-  prove ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (φ) () 0
+  prove ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (φ) () 0
 }
 
 theorem Modus Tollens
@@ -156,10 +156,10 @@ premise ¬ ψ
 conclusion φ
 {
   assume ¬ φ {
-    prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ φ, ψ) () p0 0a
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () 0.0 p1
+    prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ φ, ψ) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (ψ) () 0.0 p1
   }
-  prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () 0
+  prove φ e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (φ) () 0
 }
 
 theorem Proof by Exclusive Cases
@@ -169,11 +169,11 @@ premise → ¬ φ ψ
 conclusion ψ
 {
   assume ¬ ψ {
-    prove ¬ φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (φ, ψ) () p0 0a
-    prove ¬ ¬ φ 01dce924ecf3047f7e01c2d1e68a878ae22b55d65cd6a6d0aa2abd597fb8e206 (¬ φ, ψ) () p1 0a
-    prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (¬ φ) () 0.0 0.1
+    prove ¬ φ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (φ, ψ) () p0 0a
+    prove ¬ ¬ φ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (¬ φ, ψ) () p1 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (¬ φ) () 0.0 0.1
   }
-  prove ψ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (ψ) () 0
+  prove ψ e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (ψ) () 0
 }
 
 theorem Anything Implies A True Statement
@@ -182,7 +182,7 @@ premise φ
 conclusion → ψ φ
 {
   assume ψ {
-    prove φ bef95b18b97a05ca4c8a14f15ac5e41f30b9f6ee30472fcd4734069751460227 (φ) () p0
+    prove φ 99c9b30776361008f1532f8942d7a8bd8c54fa9a4c4784fd0b91d73187974c76 (φ) () p0
   }
 }
 
@@ -192,7 +192,7 @@ premise ¬ φ
 conclusion → φ ψ
 {
   assume φ {
-    prove ψ 11d0fff7a64bf999eb92163828dd9f9c59f567d1ed1e532cd51a8c5d0bbb731c (φ, ψ) () 0a p0
+    prove ψ 56ea0c2f6150a1c8039e028ea603ffd99cd1c5d6c0825b24f59c86a3e3ced6a1 (φ, ψ) () 0a p0
   }
 }
 
@@ -202,7 +202,7 @@ premise φ
 conclusion → ¬ φ ψ
 {
   assume ¬ φ {
-    prove ψ 11d0fff7a64bf999eb92163828dd9f9c59f567d1ed1e532cd51a8c5d0bbb731c (φ, ψ) () p0 0a
+    prove ψ 56ea0c2f6150a1c8039e028ea603ffd99cd1c5d6c0825b24f59c86a3e3ced6a1 (φ, ψ) () p0 0a
   }
 }
 
@@ -213,10 +213,10 @@ conclusion → ¬ ψ ¬ φ
 {
   assume ¬ ψ {
     assume φ {
-      prove ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (φ, ψ) () p0 0.0a
-      prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () 0.0.0 0a
+      prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ψ) () p0 0.0a
+      prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (ψ) () 0.0.0 0a
     }
-    prove ¬ φ adf61a70ac82351d7065a8a8f32f4fa715af013de5944858459cd3ecca9bb9e1 (φ) () 0.0
+    prove ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (φ) () 0.0
   }
 }
 
@@ -227,9 +227,9 @@ conclusion → ψ φ
 {
   assume ψ {
     assume ¬ φ {
-      prove ¬ ψ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ φ, ¬ ψ) () p0 0.0a
-      prove ⊥ bc7520f02885710a88df79571774c90291469a2f9c033d0eec28078a4ca2a69a (ψ) () 0a 0.0.0
+      prove ¬ ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ φ, ¬ ψ) () p0 0.0a
+      prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (ψ) () 0a 0.0.0
     }
-    prove φ b003a143e9942e01eb6ff78bc6cc97e0fafe9c84b3a2ebf689098381e0d2fdfc (φ) () 0.0
+    prove φ e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (φ) () 0.0
   }
 }

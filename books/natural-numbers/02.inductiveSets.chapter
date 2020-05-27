@@ -9,6 +9,6 @@ termVariables(S 0)
 premise inductive S
 conclusion ∈ ∅ S
 {
-  prove ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S 9fdf4a2b45725ccf4717edcf7aa0cdc5c999cd6fa1dcc06464e1e455cdbbff3c () (S) p0
-  prove ∈ ∅ S 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ ∅ S, ∀ n → ∈ $0 S ∈ successor $0 S) () 0
+  prove ∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S f2b7cefc49d2f0737d6a298a095bc653c10d6ec6e37017d9c09cc29edb582431 () (S) p0
+  prove ∈ ∅ S 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ ∅ S, ∀ n → ∈ $0 S ∈ successor $0 S) () 0
 }

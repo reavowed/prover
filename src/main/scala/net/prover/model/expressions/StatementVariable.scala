@@ -8,6 +8,10 @@ case class StatementVariable(name: String, arguments: Seq[Term]) extends Express
     case _ => None
   }
   def update(newArguments: Seq[Term]): StatementVariable = StatementVariable(name, newArguments)
+  def getSymbolForHash(variableDefinitions: VariableDefinitions): String = {
+    "s" + variableDefinitions.statementVariableDefinitions.findIndexWhere(d => d.name == name && d.arity == arguments.length)
+      .getOrElse(throw new Exception(s"Could not find valid definition for variable $name"))
+  }
 }
 
 object StatementVariable {

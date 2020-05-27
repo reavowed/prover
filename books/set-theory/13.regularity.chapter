@@ -9,9 +9,9 @@ premise ¬ = a ∅
 conclusion ∃ x ∧ ∈ $0 a = ∩ $0 a ∅
 {
   prove ∀ y → ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅ 5a2bf4e5105d379d8d2886424f9e4c79009e47b8c59897ad379640ef9c3fafe2 () ()
-  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove → ¬ = a ∅ ∃ x ∧ ∈ $0 a = ∩ $0 a ∅ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅) (a) 0
-    prove ∃ x ∧ ∈ $0 a = ∩ $0 a ∅ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (¬ = a ∅, ∃ x ∧ ∈ $0 a = ∩ $0 a ∅) () 1.0 p0
+  elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+    prove → ¬ = a ∅ ∃ x ∧ ∈ $0 a = ∩ $0 a ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅) (a) 0
+    prove ∃ x ∧ ∈ $0 a = ∩ $0 a ∅ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ = a ∅, ∃ x ∧ ∈ $0 a = ∩ $0 a ∅) () 1.0 p0
   }
 }
 
@@ -19,14 +19,14 @@ theorem No Set Contains Itself
 termVariables(a 0)
 conclusion ¬ ∈ a a
 {
-  prove ¬ = singleton a ∅ 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a)
-  prove ∃ y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ 455ccb71d56e4d462fa1343c5365aa1c0e182a9a527afa75377bc4ff87da1be0 () (singleton a) 0
-  let y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $0 singleton a = ∩ $0 singleton a ∅, = ∩ a singleton a ∅) () {
-    prove = $0 a 12e471655708fd90f9ddf0eca111400ff491f3ee9437c16f3be50844b83eb5eb () ($0, a) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
-    prove = ∩ a singleton a ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= ∩ $$0 singleton a ∅) ($0, a) 2.0 2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+  prove ¬ = singleton a ∅ 2b266ead09f76c219a5a3293616bf58733897755d025a67762562dbdb7130085 () (a)
+  prove ∃ y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ caeb0cf3cc259bc405ef6d844792b45098ddfdeee2b27bce34bab25d8b7ec3d7 () (singleton a) 0
+  let y ∧ ∈ $0 singleton a = ∩ $0 singleton a ∅ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 singleton a = ∩ $0 singleton a ∅, = ∩ a singleton a ∅) () {
+    prove = $0 a 6acf06be48fa49ac292909853e78fdb76495f5eee6ccc72143d1c51f5f3e56d4 () ($0, a) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+    prove = ∩ a singleton a ∅ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= ∩ $$0 singleton a ∅) ($0, a) 2.0 2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   } 1
-  prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a)
-  prove ¬ ∈ a a 27177c191d8f27ae5397cd3f90eed9841516040c0a0ed25957ef03f175584fb8 () (a, singleton a, a) 2 3
+  prove ∈ a singleton a a0bad9956e6b2f9007fb684c8e27101690c71803f9e2bc8b777f2486d3992f88 () (a)
+  prove ¬ ∈ a a 24f62408ff02d7907e3d04494e4b7151b1dc92227f23d3493f211a06828e0c14 () (a, singleton a, a) 2 3
 }
 
 theorem Element of a Set Is Not the Set
@@ -34,29 +34,29 @@ termVariables(a 0, b 0)
 premise ∈ a b
 conclusion ¬ = a b
 {
-  prove ¬ ∈ b b 20cf1e592f22097a835c234a5c951f903543c5c18428c4a87e7f583ce18fabcf () (b)
-  prove ¬ = a b 0f121f39bcadef0371e79ff08f42eddba567b599878e5b8a1bbb15b0e8036486 (∈ $0 b) (a, b) p0 0
+  prove ¬ ∈ b b 58f0a7f71c917f4d6cd1c96b9f76ef5b3af8d834a2505073b27bb3a7bbe99451 () (b)
+  prove ¬ = a b 0ec7472431b851c54c14ab1bc111421721cb9a7110c3ad3d5573eefebabf8aa0 (∈ $0 b) (a, b) p0 0
 }
 
 theorem No Two Sets Contain Each Other
 termVariables(b 0, a 0)
 conclusion ∨ ¬ ∈ b a ¬ ∈ a b
 {
-  prove ¬ = pair a b ∅ f62b1ca093e555223e44de12325c96d4a9497e339544fc6d12d6d5afb49f13ce () (a, b)
-  prove ∃ x ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ 455ccb71d56e4d462fa1343c5365aa1c0e182a9a527afa75377bc4ff87da1be0 () (pair a b) 0
-  let c ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $0 pair a b = ∩ $0 pair a b ∅, ∨ ¬ ∈ b a ¬ ∈ a b) () {
-    prove ∨ = $0 a = $0 b b728a0fc5f8024fd100bce84aa44cbb6faf844f817ec38d163e131e47456247f () ($0, a, b) 2a 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d
+  prove ¬ = pair a b ∅ e777b8cef763827ba814c08245dd2b6cabaefb14aa2a5d8971176a7f35038203 () (a, b)
+  prove ∃ x ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ caeb0cf3cc259bc405ef6d844792b45098ddfdeee2b27bce34bab25d8b7ec3d7 () (pair a b) 0
+  let c ∧ ∈ $0 pair a b = ∩ $0 pair a b ∅ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 pair a b = ∩ $0 pair a b ∅, ∨ ¬ ∈ b a ¬ ∈ a b) () {
+    prove ∨ = $0 a = $0 b 755a6dbda3a9a8372094e25f348a7578c296526a74ba5c52b062566f67761637 () ($0, a, b) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
     assume = $0 a {
-      prove = ∩ a pair a b ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= ∩ $$0 pair a b ∅) ($0, a) 2.1a 2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove ∈ b pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (b, a)
-      prove ¬ ∈ b a 27177c191d8f27ae5397cd3f90eed9841516040c0a0ed25957ef03f175584fb8 () (a, pair a b, b) 2.1.0 2.1.1
+      prove = ∩ a pair a b ∅ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= ∩ $$0 pair a b ∅) ($0, a) 2.1a 2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ∈ b pair a b 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (b, a)
+      prove ¬ ∈ b a 24f62408ff02d7907e3d04494e4b7151b1dc92227f23d3493f211a06828e0c14 () (a, pair a b, b) 2.1.0 2.1.1
     }
     assume = $0 b {
-      prove = ∩ b pair a b ∅ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (= ∩ $$0 pair a b ∅) ($0, b) 2.2a 2a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-      prove ∈ a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b)
-      prove ¬ ∈ a b 27177c191d8f27ae5397cd3f90eed9841516040c0a0ed25957ef03f175584fb8 () (b, pair a b, a) 2.2.0 2.2.1
+      prove = ∩ b pair a b ∅ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= ∩ $$0 pair a b ∅) ($0, b) 2.2a 2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ∈ a pair a b 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b72df9639e () (a, b)
+      prove ¬ ∈ a b 24f62408ff02d7907e3d04494e4b7151b1dc92227f23d3493f211a06828e0c14 () (b, pair a b, a) 2.2.0 2.2.1
     }
-    prove ∨ ¬ ∈ b a ¬ ∈ a b 522102b434007421c04d55819a83906e593a5ed2541a2183b4d162873729b6ea (= $0 a, = $0 b, ¬ ∈ b a, ¬ ∈ a b) () 2.0 2.1 2.2
+    prove ∨ ¬ ∈ b a ¬ ∈ a b 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (= $0 a, = $0 b, ¬ ∈ b a, ¬ ∈ a b) () 2.0 2.1 2.2
   } 1
 }
 
@@ -65,9 +65,9 @@ termVariables(a 0, b 0)
 premise ∈ a b
 conclusion ¬ ∈ b a
 {
-  prove ∨ ¬ ∈ a b ¬ ∈ b a 4cbbdc5eb910728a90ce8062525b404c9ab8f9883733c35b15aa90d25cb834e1 () (a, b)
+  prove ∨ ¬ ∈ a b ¬ ∈ b a 2b0b24f2f84b7d50edd48b994b9076f24dddaec91b6e5487e9febb15ddd30fc6 () (a, b)
   elided (Extracted) {
-    prove ¬ ¬ ∈ a b 0c5615e335395650a1250d51c0b75fc0b770ec6270e03a7d76fb98057416dd15 (∈ a b) () p0
-    prove ¬ ∈ b a 54498172fe518969d7afc7d3cd376396bb0aead29726a0e1a9b0be16a7effde6 (¬ ∈ a b, ¬ ∈ b a) () 0 1.0
+    prove ¬ ¬ ∈ a b 3df4534886dd61f6ef0a8462fb7cdbff93a3381c7b5ce4d4871f1d25450b688a (∈ a b) () p0
+    prove ¬ ∈ b a f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (¬ ∈ a b, ¬ ∈ b a) () 0 1.0
   }
 }

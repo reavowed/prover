@@ -8,8 +8,8 @@ theorem Power Sets Are Unique
 termVariables(a 0)
 conclusion ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a
 {
-  prove ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a ad5d7177bdc835a8084d2c813386ca2a01d8a4c734faa19bb31bc2133696258c () (a)
-  prove ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a 2057f9dceb83e8502df8e4604d0d4d9a3ddcab400e7055e03603d8ba5febaf9a (⊆ $0 a) () 0
+  prove ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a 1e3d00be51177230dc14fbd10a0e4332044f9b0e4d262c86abeedc12024722d2 () (a)
+  prove ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a 288a339c30f6b561d0a86d8a4ad51c2acccaa964cc586fd001f47dde466ba92c (⊆ $0 a) () 0
 }
 
 term powerSet (a)
@@ -23,11 +23,11 @@ termVariables(b 0, a 0)
 premise ⊆ b a
 conclusion ∈ b powerSet a
 {
-  prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a 4e668b7d4f1228aec6efbd169870c864859c5b647b9e7d308a999c2bcd3f6ae3 () (a)
-  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ ∈ b powerSet a ⊆ b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 powerSet a ⊆ $0 a) (b) 0
-    prove → ⊆ b a ∈ b powerSet a 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b powerSet a, ⊆ b a) () 1.0
-    prove ∈ b powerSet a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (⊆ b a, ∈ b powerSet a) () 1.1 p0
+  prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a ab22215b9e9ab2f32e4fdd795de72aa621ea1c776d69a6d5d3692469ba4ecdcf () (a)
+  elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+    prove ↔ ∈ b powerSet a ⊆ b a b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 powerSet a ⊆ $0 a) (b) 0
+    prove → ⊆ b a ∈ b powerSet a 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ b powerSet a, ⊆ b a) () 1.0
+    prove ∈ b powerSet a 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (⊆ b a, ∈ b powerSet a) () 1.1 p0
   }
 }
 
@@ -36,11 +36,11 @@ termVariables(b 0, a 0)
 premise ∈ b powerSet a
 conclusion ⊆ b a
 {
-  prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a 4e668b7d4f1228aec6efbd169870c864859c5b647b9e7d308a999c2bcd3f6ae3 () (a)
-  elided fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 {
-    prove ↔ ∈ b powerSet a ⊆ b a 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 powerSet a ⊆ $0 a) (b) 0
-    prove → ∈ b powerSet a ⊆ b a f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b powerSet a, ⊆ b a) () 1.0
-    prove ⊆ b a fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b powerSet a, ⊆ b a) () 1.1 p0
+  prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a ab22215b9e9ab2f32e4fdd795de72aa621ea1c776d69a6d5d3692469ba4ecdcf () (a)
+  elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+    prove ↔ ∈ b powerSet a ⊆ b a b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 powerSet a ⊆ $0 a) (b) 0
+    prove → ∈ b powerSet a ⊆ b a 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ b powerSet a, ⊆ b a) () 1.0
+    prove ⊆ b a 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ b powerSet a, ⊆ b a) () 1.1 p0
   }
 }
 
@@ -48,14 +48,14 @@ theorem ∅ Is in Any Power Set
 termVariables(a 0)
 conclusion ∈ ∅ powerSet a
 {
-  prove ⊆ ∅ a 1bde69fc8b90a9ca85033f763d7edeaa761c9b52a26ea2e64796515496237aa9 () (a)
-  prove ∈ ∅ powerSet a 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (∅, a) 0
+  prove ⊆ ∅ a e80dbd150e124b5ae524c59ff43b8233ff5c3e64ab4b90b524f50be0c81732c9 () (a)
+  prove ∈ ∅ powerSet a 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (∅, a) 0
 }
 
 theorem Any Set Is in Its Own Power Set
 termVariables(a 0)
 conclusion ∈ a powerSet a
 {
-  prove ⊆ a a f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (a)
-  prove ∈ a powerSet a 7a6e250b22bc2b6037efb1601d6bbecd9d32d4d1a9f8516558a1e8113ef782fd () (a, a) 0
+  prove ⊆ a a fff98b9c0fc51a3a1b88a451546bf03f8a2295c91df4fb09494bfedf71c31a8b () (a)
+  prove ∈ a powerSet a 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (a, a) 0
 }
