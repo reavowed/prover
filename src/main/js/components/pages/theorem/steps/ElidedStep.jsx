@@ -24,12 +24,6 @@ class ElidedStepProofLineWithContexts extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (this.props.step.isComplete && !prevProps.step.isComplete) {
-      this.setState({showProofCard: false});
-    }
-  }
-
   toggleProofCard = () => {
     this.setStatePromise({showProofCard: !this.state.showProofCard})
       .then(() => this.proofLineRef.current && this.proofLineRef.current.focus());
