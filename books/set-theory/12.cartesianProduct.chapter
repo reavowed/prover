@@ -1,6 +1,7 @@
 Introduce the Cartesian product of two sets, a×b.
 
 theorem Ordered Pair Is Element of Double Power Set of Union
+termVariables(a 0, A 0, b 0, B 0)
 premise ∈ a A
 premise ∈ b B
 conclusion ∈ orderedPair a b powerSet powerSet ∪ A B
@@ -21,6 +22,7 @@ term product (A B)
   shorthand (prod)
 
 theorem Membership Condition for Cartesian Product
+termVariables(A 0, B 0)
 conclusion ∀ x ↔ ∈ $0 product A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0
 {
   prove = product A B comprehension y powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 1e2c83e13a9307acf5b3453fbb4a006828b56c7b7418af8e4243ea700e4535fd () (A, B)
@@ -46,6 +48,7 @@ conclusion ∀ x ↔ ∈ $0 product A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = 
 }
 
 theorem Element of Cartesian Product
+termVariables(X 0, A 0, B 0)
 premise ∈ X product A B
 conclusion ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0
 {
@@ -58,6 +61,7 @@ conclusion ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = X orderedPair $$0 $0
 }
 
 theorem First Coordinate of Element of Cartesian Product
+termVariables(x 0, A 0, B 0)
 premise ∈ x product A B
 conclusion ∈ first x A
 {
@@ -73,6 +77,7 @@ conclusion ∈ first x A
 }
 
 theorem Second Coordinate of Element of Cartesian Product
+termVariables(x 0, A 0, B 0)
 premise ∈ x product A B
 conclusion ∈ second x B
 {
@@ -89,6 +94,7 @@ conclusion ∈ second x B
 }
 
 theorem Element of Cartesian Product from Coordinates
+termVariables(x 0, A 0, B 0)
 premise ∈ x product A B
 conclusion = x orderedPair first x second x
 {
@@ -98,6 +104,7 @@ conclusion = x orderedPair first x second x
 }
 
 theorem Ordered Pair Is Element of Cartesian Product
+termVariables(a 0, A 0, b 0, B 0)
 premise ∈ a A
 premise ∈ b B
 conclusion ∈ orderedPair a b product A B
@@ -120,6 +127,7 @@ conclusion ∈ orderedPair a b product A B
 }
 
 theorem First Coordinate of Ordered Pair in Cartesian Product
+termVariables(a 0, b 0, A 0, B 0)
 premise ∈ orderedPair a b product A B
 conclusion ∈ a A
 {
@@ -129,6 +137,7 @@ conclusion ∈ a A
 }
 
 theorem Second Coordinate of Ordered Pair in Cartesian Product
+termVariables(a 0, b 0, A 0, B 0)
 premise ∈ orderedPair a b product A B
 conclusion ∈ b B
 {
@@ -138,6 +147,7 @@ conclusion ∈ b B
 }
 
 theorem Subset of Cartesian Product Is Pair-Set
+termVariables(X 0, A 0, B 0)
 premise ⊆ X product A B
 conclusion pairSet X
 {
@@ -158,6 +168,7 @@ conclusion pairSet X
 }
 
 theorem Product of Subsets Is Subset of Product
+termVariables(A 0, C 0, B 0, D 0)
 premise ⊆ A C
 premise ⊆ B D
 conclusion ⊆ product A B product C D
@@ -177,6 +188,7 @@ conclusion ⊆ product A B product C D
 }
 
 theorem Product Preserves Subset
+termVariables(A 0, B 0, C 0)
 premise ⊆ A B
 conclusion ⊆ product A C product B C
 {
@@ -185,6 +197,7 @@ conclusion ⊆ product A C product B C
 }
 
 theorem Product Preserves Subset
+termVariables(A 0, B 0, C 0)
 premise ⊆ A B
 conclusion ⊆ product C A product C B
 {
@@ -193,6 +206,8 @@ conclusion ⊆ product C A product C B
 }
 
 theorem Universal Condition for Elements of Cartesian Product by Coordinates
+statementVariables(φ 2)
+termVariables(A 0, B 0)
 conclusion ↔ ∀ x → ∈ $0 product A B with (first $0 second $0) φ ∀ a → ∈ $0 A ∀ b → ∈ $0 B with ($$0 $0) φ
 {
   assume ∀ x → ∈ $0 product A B with (first $0 second $0) φ {
@@ -238,6 +253,8 @@ conclusion ↔ ∀ x → ∈ $0 product A B with (first $0 second $0) φ ∀ a �
 }
 
 theorem Existence Condition for Element of Cartesian Product by Coordinates
+statementVariables(φ 2)
+termVariables(A 0, B 0)
 conclusion ↔ ∃ x ∧ ∈ $0 product A B with (first $0 second $0) φ ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B with ($$0 $0) φ
 {
   assume ∃ x ∧ ∈ $0 product A B with (first $0 second $0) φ {
@@ -281,6 +298,8 @@ conclusion ↔ ∃ x ∧ ∈ $0 product A B with (first $0 second $0) φ ∃ a �
 }
 
 theorem Existence Condition for Element of Subset of Cartesian Product by Coordinates
+statementVariables(φ 2)
+termVariables(X 0, A 0, B 0)
 premise ⊆ X product A B
 conclusion ↔ ∃ x ∧ ∈ $0 X with (first $0 second $0) φ ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 X with ($$0 $0) φ
 {
@@ -337,6 +356,7 @@ term replacementSet2 ($a $b X with (a b) F)
   (= $0 replacementSet x X with (first $0 second $0) F)
 
 theorem Membership Condition for Double Replacement Set
+termVariables(S 0, X 0, F 2, A 0, B 0)
 premise = S replacementSet2 a b X with ($0 $1) F
 premise ⊆ X product A B
 conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orderedPair $$0 $0 X = $$$0 with ($$0 $0) F
@@ -356,6 +376,7 @@ conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∧ ∈ orde
 }
 
 theorem Membership Condition for Double Replacement Set over Product
+termVariables(S 0, A 0, B 0, F 2)
 premise = S replacementSet2 a b product A B with ($0 $1) F
 conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 with ($$0 $0) F
 {
@@ -374,6 +395,7 @@ conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 with 
 }
 
 theorem Function of Element is Element of Double Replacement Set
+termVariables(S 0, X 0, F 2, a 0, A 0, b 0, B 0)
 premise = S replacementSet2 a b X with ($0 $1) F
 premise ∈ a A
 premise ∈ b B
@@ -399,6 +421,7 @@ conclusion ∈ with (a b) F S
 }
 
 theorem Function of Element is Element of Double Replacement Set over Product
+termVariables(S 0, A 0, B 0, F 2, a 0, b 0)
 premise = S replacementSet2 a b product A B with ($0 $1) F
 premise ∈ a A
 premise ∈ b B
@@ -426,6 +449,7 @@ conclusion ∈ with (a b) F S
 }
 
 theorem Double Replacement Set Is Subset
+termVariables(S 0, X 0, F 2, A 0, B 0, C 0)
 premise = S replacementSet2 a b X with ($0 $1) F
 premise ⊆ X product A B
 premise ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∈ with ($$0 $0) F C
@@ -466,6 +490,7 @@ term quadrupleReplacementSet ($a $b $c $d X with (a b c d) F)
   (= $0 replacementSet2 x y X with (first $0 second $0 first $1 second $1) F)
 
 theorem Membership Condition for Quadruple Replacement Set
+termVariables(S 0, X 0, F 4, A 0, B 0, C 0, D 0)
 premise = S quadrupleReplacementSet a b c d X with ($0 $1 $2 $3) F
 premise ⊆ X product product A B product C D
 conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∃ c ∧ ∈ $0 C ∃ d ∧ ∈ $0 D ∧ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 X = $$$$$0 with ($$$$0 $$$0 $$0 $0) F
@@ -530,6 +555,7 @@ conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∃ c ∧ �
 }
 
 theorem Membership Condition for Quadruple Replacement Set over Product
+termVariables(S 0, A 0, B 0, C 0, D 0, F 4)
 premise = S quadrupleReplacementSet a b c d product product A B product C D with ($0 $1 $2 $3) F
 conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∃ c ∧ ∈ $0 C ∃ d ∧ ∈ $0 D = $$$$$0 with ($$$$0 $$$0 $$0 $0) F
 {
@@ -557,6 +583,7 @@ conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B ∃ c ∧ �
 }
 
 theorem Function of Element is Element of Quadruple Replacement Set
+termVariables(S 0, A 0, B 0, C 0, D 0, F 4, a 0, b 0, c 0, d 0)
 premise = S quadrupleReplacementSet a b c d product product A B product C D with ($0 $1 $2 $3) F
 premise ∈ a A
 premise ∈ b B
@@ -612,6 +639,7 @@ conclusion ∈ with (a b c d) F S
 }
 
 theorem Quadruple Replacement Set Is Subset
+termVariables(S 0, X 0, F 4, A 0, B 0, C 0, D 0, E 0)
 premise = S quadrupleReplacementSet a b c d X with ($0 $1 $2 $3) F
 premise ⊆ X product product A B product C D
 premise ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D → ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 X ∈ with ($$$$0 $$$0 $$0 $0) F E
@@ -661,6 +689,8 @@ term productComprehension ($a $b X with (a b) φ)
   (= $0 comprehension x X with (first $0 second $0) φ)
 
 theorem Membership Condition for Product Comprehension
+statementVariables(φ 2)
+termVariables(S 0, A 0, B 0)
 premise = S productComprehension a b product A B with ($0 $1) φ
 conclusion ∀ a → ∈ $0 A ∀ b → ∈ $0 B ↔ ∈ orderedPair $$0 $0 S with ($$0 $0) φ
 {
@@ -725,6 +755,8 @@ conclusion ∀ a → ∈ $0 A ∀ b → ∈ $0 B ↔ ∈ orderedPair $$0 $0 S wi
 }
 
 theorem Product Comprehension Is a Subset of Its Domain
+statementVariables(φ 2)
+termVariables(S 0, X 0)
 premise = S productComprehension a b X with ($0 $1) φ
 conclusion ⊆ S X
 {
@@ -743,6 +775,8 @@ term quadrupleComprehension ($a $b $c $d X with (a b c d) φ)
   (= $0 productComprehension x y X with (first $0 second $0 first $1 second $1) φ)
 
 theorem Membership Condition for Quadruple Comprehension
+statementVariables(φ 4)
+termVariables(S 0, A 0, B 0, C 0, D 0)
 premise = S quadrupleComprehension a b c d product product A B product C D with ($0 $1 $2 $3) φ
 conclusion ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 S with ($$$$0 $$$0 $$0 $0) φ
 {
@@ -800,6 +834,8 @@ conclusion ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → �
 }
 
 theorem Quadruple Comprehension Is Subset of Its Domain
+statementVariables(φ 4)
+termVariables(S 0, X 0)
 premise = S quadrupleComprehension a b c d X with ($0 $1 $2 $3) φ
 conclusion ⊆ S X
 {
@@ -811,6 +847,7 @@ conclusion ⊆ S X
 }
 
 theorem Domain of Cartesian Product
+termVariables(B 0, A 0)
 premise ¬ = B ∅
 conclusion = domain product A B A
 {
@@ -848,6 +885,7 @@ conclusion = domain product A B A
 }
 
 theorem Cartesian Product Is Empty Iff One of Its Components is Empty
+termVariables(A 0, B 0)
 conclusion ↔ = product A B ∅ ∨ = A ∅ = B ∅
 {
   prove = product A B comprehension x powerSet powerSet ∪ A B ∃ a ∧ ∈ $0 A ∃ b ∧ ∈ $0 B = $$$0 orderedPair $$0 $0 1e2c83e13a9307acf5b3453fbb4a006828b56c7b7418af8e4243ea700e4535fd () (A, B)

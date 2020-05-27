@@ -6,6 +6,7 @@ type equivalenceRelation ≈
   definition (∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A)
 
 theorem Domain and Codomain of Equivalence Relation
+termVariables(≈ 0, A 0)
 premise equivalenceRelation ≈ A
 conclusion ∧ = domain ≈ A = codomain ≈ A
 {
@@ -119,6 +120,7 @@ term equivalenceQuotient (A ≈)
   shorthand (eq)
 
 theorem Equivalence Class Is Element of Quotient
+termVariables(≈ 0, A 0, a 0)
 premise equivalenceRelation ≈ A
 premise ∈ a A
 conclusion ∈ equivalenceClass a ≈ equivalenceQuotient A ≈
@@ -128,6 +130,7 @@ conclusion ∈ equivalenceClass a ≈ equivalenceQuotient A ≈
 }
 
 theorem Element of Quotient Is Equivalence Class
+termVariables(≈ 0, A 0, x 0)
 premise equivalenceRelation ≈ A
 premise ∈ x equivalenceQuotient A ≈
 conclusion ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈
@@ -142,6 +145,7 @@ conclusion ∃ a ∧ ∈ $0 A = x equivalenceClass $0 ≈
 }
 
 theorem Element of Own Equivalence Class
+termVariables(≈ 0, A 0, a 0)
 premise equivalenceRelation ≈ A
 premise ∈ a A
 conclusion ∈ a equivalenceClass a ≈
@@ -173,6 +177,7 @@ conclusion ∈ a equivalenceClass a ≈
 }
 
 theorem Element Condition for Equivalence Class
+termVariables(≈ 0, A 0, a 0, b 0)
 premise equivalenceRelation ≈ A
 premise ∈ a A
 premise ∈ b A
@@ -196,6 +201,7 @@ conclusion ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈
 }
 
 theorem Equality Condition for Equivalence Classes
+termVariables(≈ 0, A 0, a 0, b 0)
 premise equivalenceRelation ≈ A
 premise ∈ a A
 premise ∈ b A
@@ -322,6 +328,7 @@ conclusion ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a
 comment If a function on a set is constant on the equivalence classes of a relation on that set, we can lift the function to one on the quotient.
 
 theorem Lift Function to Quotient
+termVariables(≈ 0, A 0, f 0, B 0)
 premise equivalenceRelation ≈ A
 premise ∧ function f functionFrom f A B
 premise ∀ x → ∈ $0 A ∀ y → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ = apply f $$0 apply f $0
@@ -444,6 +451,8 @@ term quotientFunction (f A B ≈)
   (∧ ∧ function $0 functionFrom $0 equivalenceQuotient A ≈ B ∀ a → ∈ $0 A = apply $$0 equivalenceClass $0 ≈ apply f $0)
 
 theorem Existence of Relation on Product Quotient
+statementVariables(φ 4)
+termVariables(≈ 0, A 0, B 0, C 0, D 0)
 premise equivalenceRelation ≈ product A B
 premise ⊆ C A
 premise ⊆ D B

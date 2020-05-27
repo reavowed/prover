@@ -6,6 +6,7 @@ term productRelation (R S)
   (= $0 quadrupleComprehension a b c d product product union union R union union S product union union R union union S ∧ ∈ orderedPair $0 $2 R ∈ orderedPair $1 $3 S)
 
 theorem Domain of a Relation
+termVariables(R 0, A 0)
 premise relation R A
 conclusion ⊆ union union R A
 {
@@ -78,6 +79,7 @@ conclusion ⊆ union union R A
 }
 
 theorem Product Relation Is Relation on Products
+termVariables(R 0, A 0, S 0, B 0)
 premise relation R A
 premise relation S B
 conclusion relation productRelation R S product A B
@@ -159,6 +161,7 @@ conclusion relation productRelation R S product A B
 }
 
 theorem Membership Condition for Product Relation
+termVariables(R 0, A 0, S 0, B 0)
 premise relation R A
 premise relation S B
 conclusion ∀ a_1 → ∈ $0 A ∀ b_1 → ∈ $0 B ∀ a_2 → ∈ $0 A ∀ b_2 → ∈ $0 B ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 productRelation R S ∧ ∈ orderedPair $$$$0 $$0 R ∈ orderedPair $$$0 $0 S
@@ -241,6 +244,7 @@ conclusion ∀ a_1 → ∈ $0 A ∀ b_1 → ∈ $0 B ∀ a_2 → ∈ $0 A ∀ b_
 }
 
 theorem Product of Reflexive Relations
+termVariables(R 0, A 0, S 0, B 0)
 premise ∧ relation R A reflexiveRelation R A
 premise ∧ relation S B reflexiveRelation S B
 conclusion reflexiveRelation productRelation R S product A B
@@ -298,6 +302,7 @@ conclusion reflexiveRelation productRelation R S product A B
 }
 
 theorem Product of Symmetric Relations
+termVariables(R 0, A 0, S 0, B 0)
 premise ∧ relation R A symmetricRelation R A
 premise ∧ relation S B symmetricRelation S B
 conclusion symmetricRelation productRelation R S product A B
@@ -399,6 +404,7 @@ conclusion symmetricRelation productRelation R S product A B
 }
 
 theorem Product of Transitive Relations
+termVariables(R 0, A 0, S 0, B 0)
 premise ∧ relation R A transitiveRelation R A
 premise ∧ relation S B transitiveRelation S B
 conclusion transitiveRelation productRelation R S product A B
@@ -541,6 +547,7 @@ conclusion transitiveRelation productRelation R S product A B
 }
 
 theorem Product of Equivalence Relations
+termVariables(R 0, A 0, S 0, B 0)
 premise equivalenceRelation R A
 premise equivalenceRelation S B
 conclusion equivalenceRelation productRelation R S product A B
@@ -568,6 +575,7 @@ conclusion equivalenceRelation productRelation R S product A B
 }
 
 theorem Function from Product of Quotients to Quotient of Products
+termVariables(R 0, A 0, S 0, B 0, f 0)
 premise equivalenceRelation R A
 premise equivalenceRelation S B
 premise = f replacementSet2 a b product A B orderedPair orderedPair equivalenceClass $0 R equivalenceClass $1 S equivalenceClass orderedPair $0 $1 productRelation R S
@@ -731,6 +739,7 @@ conclusion ∧ ∧ function f functionFrom f product equivalenceQuotient A R equ
 }
 
 theorem Lift Function to Product Quotient
+termVariables(R 0, A 0, S 0, B 0, f 0, C 0)
 premise equivalenceRelation R A
 premise equivalenceRelation S B
 premise ∧ function f functionFrom f product A B C
@@ -945,6 +954,7 @@ term productQuotientFunction (f A B C R S)
   (∧ ∧ function $0 functionFrom $0 product equivalenceQuotient A R equivalenceQuotient B S C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair equivalenceClass $$0 R equivalenceClass $0 S apply f orderedPair $$0 $0)
 
 theorem Lift Function to Quadruple Quotient
+termVariables(R 0, A 0, B 0, S 0, C 0, D 0, f 0, E 0)
 premise equivalenceRelation R product A B
 premise equivalenceRelation S product C D
 premise ∧ function f functionFrom f product product A B product C D E

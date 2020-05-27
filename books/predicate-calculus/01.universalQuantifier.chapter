@@ -6,10 +6,13 @@ statement ∀ ($x with x φ)
   attributes (generalization)
 
 axiom Specification
+statementVariables(φ 1)
+termVariables(a 0)
 premise ∀ x with ($0) φ
 conclusion with (a) φ
 
 theorem Quantified Universal Equivalence
+statementVariables(χ 1, φ 1, ψ 1)
 premise ∀ x → with ($0) χ ↔ with ($0) φ with ($0) ψ
 conclusion ↔ ∀ x → with ($0) χ with ($0) φ ∀ x → with ($0) χ with ($0) ψ
 {
@@ -49,6 +52,7 @@ conclusion ↔ ∀ x → with ($0) χ with ($0) φ ∀ x → with ($0) χ with (
 }
 
 theorem Distribute Universal Quantifier over Equivalence
+statementVariables(φ 1, ψ 1)
 premise ∀ x ↔ with ($0) φ with ($0) ψ
 conclusion ↔ ∀ x with ($0) φ ∀ x with ($0) ψ
 {
@@ -76,6 +80,7 @@ conclusion ↔ ∀ x with ($0) φ ∀ x with ($0) ψ
 }
 
 theorem Swap Restricted Universal Quantifiers
+statementVariables(φ 1, ψ 1, χ 2)
 premise ∀ x → with ($0) φ ∀ y → with ($0) ψ with ($$0 $0) χ
 conclusion ∀ y → with ($0) ψ ∀ x → with ($0) φ with ($0 $$0) χ
 {

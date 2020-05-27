@@ -9,6 +9,7 @@ display ∀ A → ⊆ $0 B φ as ((∀A ⊆ B)φ)
 display ∃ A ∧ ⊆ $0 B φ as ((∀A ⊆ B)φ)
 
 theorem Element of Subset Is Element of Set
+termVariables(A 0, B 0, a 0)
 premise ⊆ A B
 premise ∈ a A
 conclusion ∈ a B
@@ -21,6 +22,7 @@ conclusion ∈ a B
 }
 
 theorem Subset Is Antisymmetric
+termVariables(A 0, B 0)
 premise ⊆ A B
 premise ⊆ B A
 conclusion = A B
@@ -38,6 +40,7 @@ conclusion = A B
 }
 
 theorem Subset Is Transitive
+termVariables(A 0, B 0, C 0)
 premise ⊆ A B
 premise ⊆ B C
 conclusion ⊆ A C
@@ -52,6 +55,7 @@ conclusion ⊆ A C
 }
 
 theorem Any Set Is a Subset of Itself
+termVariables(A 0)
 conclusion ⊆ A A
 {
   elided d46d6468764b9c79a41d7ea3533f24631258533469dbbb7793bbd7b34c02f6e2 {
@@ -63,6 +67,7 @@ conclusion ⊆ A A
 }
 
 theorem Uniqueness Condition from Subset Condition
+statementVariables(φ 1)
 premise ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ ⊆ $$0 $0
 conclusion ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0
 {

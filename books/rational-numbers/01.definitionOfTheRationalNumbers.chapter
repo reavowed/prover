@@ -1035,6 +1035,7 @@ term ℚ ()
   shorthand (rat)
 
 theorem Equality Condition for Rational Equivalence Classes
+termVariables(a 0, b 0, c 0, d 0)
 premise ∈ a ℤ
 premise ∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ
 premise ∈ c ℤ
@@ -1064,6 +1065,7 @@ conclusion ↔ = equivalenceClass orderedPair a b ~_ℚ equivalenceClass ordered
 comment Some useful theorems about the set of non-zero integers.
 
 theorem Product of Non-Zeros Is Non-Zero
+termVariables(a 0, b 0)
 premise ∈ a diff ℤ singleton apply ⍳_ℤ 0ℕ
 premise ∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ
 conclusion ∈ apply ×ℤ orderedPair a b diff ℤ singleton apply ⍳_ℤ 0ℕ
@@ -1149,6 +1151,7 @@ conclusion ∈ apply ×ℤ orderedPair a b diff ℤ singleton apply ⍳_ℤ 0ℕ
 }
 
 theorem Element of Non-Zero Rationals Is Either Less than or Greater than Zero
+termVariables(a 0)
 premise ∈ a diff ℤ singleton apply ⍳_ℤ 0ℕ
 conclusion ⊕ ∈ orderedPair apply ⍳_ℤ 0ℕ a <ℤ ∈ orderedPair a apply ⍳_ℤ 0ℕ <ℤ
 {
@@ -1225,6 +1228,7 @@ conclusion ⊕ ∈ orderedPair apply ⍳_ℤ 0ℕ a <ℤ ∈ orderedPair a apply
 }
 
 theorem Negative of Non-Zero is Non-Zero
+termVariables(a 0)
 premise ∈ a diff ℤ singleton apply ⍳_ℤ 0ℕ
 conclusion ∈ negatedZ a diff ℤ singleton apply ⍳_ℤ 0ℕ
 {
@@ -1404,6 +1408,7 @@ conclusion ⊆ ℤ^+ diff ℤ singleton apply ⍳_ℤ 0ℕ
 comment Now we can show that every rational can be formed as the ratio of two integers, where the denominator is positive.
 
 theorem Rational Is Equivalence Class with Positive Denominator
+termVariables(a 0)
 premise ∈ a ℚ
 conclusion ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = a equivalenceClass orderedPair $$0 $0 ~_ℚ
 {
@@ -1584,6 +1589,7 @@ conclusion ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = a equivalenceClass orde
 }
 
 theorem Equivalence Class Is Rational
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ
 conclusion ∈ equivalenceClass orderedPair a b ~_ℚ ℚ
@@ -1601,6 +1607,7 @@ conclusion ∈ equivalenceClass orderedPair a b ~_ℚ ℚ
 }
 
 theorem Equal Rationals Share Positive Denominators
+termVariables(a 0, b 0, c 0, d 0)
 premise ∈ a ℤ
 premise ∈ b ℤ^+
 premise ∈ c ℤ
@@ -1760,6 +1767,7 @@ conclusion ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ a <ℤ ∈ orderedPair apply �
 }
 
 theorem Equal Rationals Share Negative Denominators
+termVariables(a 0, b 0, c 0, d 0)
 premise ∈ a ℤ
 premise ∈ b ℤ^+
 premise ∈ c ℤ
@@ -1817,6 +1825,7 @@ conclusion ↔ ∈ orderedPair a apply ⍳_ℤ 0ℕ <ℤ ∈ orderedPair c apply
 }
 
 theorem Equal Rationals Share Zero Denominators
+termVariables(a 0, b 0, c 0, d 0)
 premise ∈ a ℤ
 premise ∈ b ℤ^+
 premise ∈ c ℤ
@@ -1956,6 +1965,7 @@ conclusion ↔ = a apply ⍳_ℤ 0ℕ = c apply ⍳_ℤ 0ℕ
 comment We can go further, and say that every rational can be formed as the ratio of two coprime integers. This representation is unique.
 
 theorem Rational Is Equivalence Class in Lowest Terms
+termVariables(a 0)
 premise ∈ a ℚ
 conclusion ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ ∧ = a equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ
 {

@@ -172,6 +172,7 @@ conclusion ∧ relation <ℕ ℕ irreflexiveRelation <ℕ ℕ
 }
 
 theorem Natural Number Strict Ordering Is Transitive
+termVariables(n 0, m 0, r 0)
 premise ∈ orderedPair n m <ℕ
 premise ∈ orderedPair m r <ℕ
 conclusion ∈ orderedPair n r <ℕ
@@ -206,6 +207,7 @@ conclusion ∈ orderedPair n r <ℕ
 comment Ordering and successors.
 
 theorem Natural Number Is Less than Successor
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ∈ orderedPair n successor n <ℕ
 {
@@ -266,6 +268,7 @@ conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ orderedPair success
 }
 
 theorem Remove Successor from Ordering
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ orderedPair successor n successor m <ℕ
@@ -474,6 +477,7 @@ conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 
 }
 
 theorem Less than Successor Is Less than Or Equal to
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ↔ ∈ orderedPair n successor m <ℕ ∈ orderedPair n m ≤ℕ
@@ -506,6 +510,7 @@ conclusion ↔ ∈ orderedPair n successor m <ℕ ∈ orderedPair n m ≤ℕ
 }
 
 theorem Greater than Or Equal to Successor Is Greater than
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ↔ ∈ orderedPair successor n m ≤ℕ ∈ orderedPair n m <ℕ
@@ -869,6 +874,7 @@ conclusion reflexiveRelation ≤ℕ ℕ
 }
 
 theorem ≤ Is Transitive
+termVariables(n 0, m 0, r 0)
 premise ∈ orderedPair n m ≤ℕ
 premise ∈ orderedPair m r ≤ℕ
 conclusion ∈ orderedPair n r ≤ℕ
@@ -903,6 +909,7 @@ conclusion ∈ orderedPair n r ≤ℕ
 }
 
 theorem < Distributes over ≤ from Left
+termVariables(n 0, m 0, r 0)
 premise ∈ orderedPair n m <ℕ
 premise ∈ orderedPair m r ≤ℕ
 conclusion ∈ orderedPair n r <ℕ
@@ -935,6 +942,7 @@ conclusion ∈ orderedPair n r <ℕ
 }
 
 theorem < Distributes over ≤ from Right
+termVariables(n 0, m 0, r 0)
 premise ∈ orderedPair n m ≤ℕ
 premise ∈ orderedPair m r <ℕ
 conclusion ∈ orderedPair n r <ℕ
@@ -972,6 +980,7 @@ conclusion ∈ orderedPair n r <ℕ
 comment Ordering and zero.
 
 theorem A Natural Number That Is Greater than Another Is Non-Zero
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ orderedPair n m <ℕ
@@ -995,6 +1004,7 @@ conclusion ¬ = m 0ℕ
 }
 
 theorem No Natural Number Is Less than Zero
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ¬ ∈ orderedPair n 0ℕ <ℕ
 {
@@ -1022,6 +1032,7 @@ conclusion ¬ ∈ orderedPair n 0ℕ <ℕ
 }
 
 theorem A Natural Number Is Either Zero or Greater than Zero
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ⊕ = n 0ℕ ∈ orderedPair 0ℕ n <ℕ
 {
@@ -1057,6 +1068,7 @@ conclusion ⊕ = n 0ℕ ∈ orderedPair 0ℕ n <ℕ
 }
 
 theorem A Natural Number Is At Least as Big as Zero
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ∈ orderedPair 0ℕ n ≤ℕ
 {
@@ -1093,6 +1105,7 @@ term ℕ^+ ()
   (= $0 comprehension n ℕ ∈ orderedPair 0ℕ $0 <ℕ)
 
 theorem Proof by Strong Induction
+statementVariables(φ 1)
 premise ∀ n → ∈ $0 ℕ → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 <ℕ with ($0) φ with ($0) φ
 conclusion ∀ n → ∈ $0 ℕ with ($0) φ
 {
@@ -1181,6 +1194,7 @@ conclusion ∀ n → ∈ $0 ℕ with ($0) φ
 }
 
 theorem Every Set of Naturals Bounded Above Has a Greatest Element
+termVariables(S 0)
 premise ⊆ S ℕ
 premise ¬ = S ∅
 premise ∃ a ∧ ∈ $0 ℕ ∀ b → ∈ $0 S ∈ orderedPair $0 $$0 ≤ℕ

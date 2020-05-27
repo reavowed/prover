@@ -55,6 +55,7 @@ display apply ×ℕ orderedPair a b as (%0%1) requires-brackets
 write apply ×ℕ orderedPair a b as mulN
 
 theorem Multiplication Is Closed on the Natural Numbers
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∈ apply ×ℕ orderedPair n m ℕ
@@ -68,6 +69,7 @@ conclusion ∈ apply ×ℕ orderedPair n m ℕ
 }
 
 theorem Successor of Natural Multiplication (Right)
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion = apply ×ℕ orderedPair n successor m apply +ℕ orderedPair apply ×ℕ orderedPair n m n
@@ -86,6 +88,7 @@ conclusion = apply ×ℕ orderedPair n successor m apply +ℕ orderedPair apply 
 }
 
 theorem Absorber for Natural Multiplication
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ∧ = apply ×ℕ orderedPair n 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ n 0ℕ
 {
@@ -127,6 +130,7 @@ conclusion ∧ = apply ×ℕ orderedPair n 0ℕ 0ℕ = apply ×ℕ orderedPair 0
 }
 
 theorem Successor of Natural Multiplication (Left)
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion = apply ×ℕ orderedPair successor n m apply +ℕ orderedPair apply ×ℕ orderedPair n m m
@@ -210,6 +214,7 @@ conclusion = apply ×ℕ orderedPair successor n m apply +ℕ orderedPair apply 
 }
 
 theorem Natural Multiplication is Commutative
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion = apply ×ℕ orderedPair n m apply ×ℕ orderedPair m n
@@ -241,6 +246,7 @@ conclusion = apply ×ℕ orderedPair n m apply ×ℕ orderedPair m n
 }
 
 theorem Identity for Natural Multiplication
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ∧ = apply ×ℕ orderedPair n 1ℕ n = apply ×ℕ orderedPair 1ℕ n n
 {
@@ -280,6 +286,7 @@ conclusion ∧ = apply ×ℕ orderedPair n 1ℕ n = apply ×ℕ orderedPair 1ℕ
 }
 
 theorem Left Distribute Natural Multiplication over Addition
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -389,6 +396,7 @@ conclusion = apply ×ℕ orderedPair n apply +ℕ orderedPair m r apply +ℕ ord
 }
 
 theorem Right Distribute Natural Multiplication over Addition
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -415,6 +423,7 @@ conclusion = apply ×ℕ orderedPair apply +ℕ orderedPair n m r apply +ℕ ord
 }
 
 theorem Natural Multiplication is Associative
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -469,6 +478,7 @@ conclusion = apply ×ℕ orderedPair n apply ×ℕ orderedPair m r apply ×ℕ o
 }
 
 theorem Natural Multiplication By Non-Zero Preserves <
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -670,6 +680,7 @@ conclusion ∧ ↔ ∈ orderedPair apply ×ℕ orderedPair n r apply ×ℕ order
 }
 
 theorem Natural Multiplication Is Right-Cancellable
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -757,6 +768,7 @@ conclusion ↔ = apply ×ℕ orderedPair n r apply ×ℕ orderedPair m r ∨ = n
 }
 
 theorem Natural Multiplication Is Left-Cancellable
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -778,6 +790,7 @@ conclusion ↔ = apply ×ℕ orderedPair r n apply ×ℕ orderedPair r m ∨ = n
 }
 
 theorem Natural Multiplication Is Zero Iff A Multiplicand Is Zero
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ↔ = apply ×ℕ orderedPair n m 0ℕ ∨ = n 0ℕ = m 0ℕ
@@ -831,6 +844,7 @@ conclusion ↔ = apply ×ℕ orderedPair n m 0ℕ ∨ = n 0ℕ = m 0ℕ
 }
 
 theorem Multiplication of Non-Zero Natural Is At Least As Large
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ¬ = m 0ℕ
@@ -881,6 +895,7 @@ conclusion ∈ orderedPair n apply ×ℕ orderedPair n m ≤ℕ
 }
 
 theorem Cross-Multiplication Order Condition for Naturals
+termVariables(n 0, m 0, r 0, s 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ

@@ -117,6 +117,7 @@ conclusion ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFu
 }
 
 theorem Injected Natural Is Integer
+termVariables(a 0)
 premise ∈ a ℕ
 conclusion ∈ apply ⍳_ℤ a ℤ
 {
@@ -129,6 +130,7 @@ conclusion ∈ apply ⍳_ℤ a ℤ
 }
 
 theorem 0_ℤ as Equivalence Class of Same Naturals
+termVariables(a 0)
 premise ∈ a ℕ
 conclusion = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair a a ~_ℤ
 {
@@ -154,6 +156,7 @@ conclusion = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair a a ~_ℤ
 }
 
 theorem Equality Condition for Embedded Naturals
+termVariables(a 0, b 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 conclusion ↔ = apply ⍳_ℤ a apply ⍳_ℤ b = a b

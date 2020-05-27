@@ -1,6 +1,7 @@
 Arbitrary and binary intersections.
 
 theorem Intersection over a Class
+statementVariables(φ 1)
 premise ∃ x with ($0) φ
 conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
 {
@@ -29,6 +30,7 @@ conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) φ ∈ $$0 $0
 }
 
 theorem Arbitrary Intersections Are Unique
+termVariables(a 0)
 premise ¬ = a ∅
 conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 a ∈ $$0 $0
 {
@@ -48,6 +50,7 @@ term ∩ (a b)
   shorthand (int)
 
 theorem Membership Condition for Binary Intersection
+termVariables(a 0, b 0)
 conclusion ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b
 {
   prove ¬ = pair a b ∅ f62b1ca093e555223e44de12325c96d4a9497e339544fc6d12d6d5afb49f13ce () (a, b)
@@ -102,6 +105,7 @@ conclusion ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b
 }
 
 theorem Element of Binary Intersection
+termVariables(a 0, A 0, B 0)
 premise ∈ a ∩ A B
 conclusion ∧ ∈ a A ∈ a B
 {
@@ -114,6 +118,7 @@ conclusion ∧ ∈ a A ∈ a B
 }
 
 theorem Binary Intersection Is Symmetric
+termVariables(a 0, b 0)
 conclusion = ∩ a b ∩ b a
 {
   prove ∀ x ↔ ∈ $0 ∩ a b ∧ ∈ $0 a ∈ $0 b 4531ff4276081570d10e83f219055e0ef0f37ce40d20588976e960c3725c2dbb () (a, b)
@@ -127,6 +132,7 @@ conclusion = ∩ a b ∩ b a
 }
 
 theorem An Element of Two Sets Is an Element of Their Intersection
+termVariables(a 0, A 0, B 0)
 premise ∈ a A
 premise ∈ a B
 conclusion ∈ a ∩ A B
@@ -141,6 +147,7 @@ conclusion ∈ a ∩ A B
 }
 
 theorem A Set Can Only Be an Element of One of a Disjoint Pair
+termVariables(A 0, B 0, a 0)
 premise = ∩ A B ∅
 premise ∈ a A
 conclusion ¬ ∈ a B
@@ -153,6 +160,7 @@ conclusion ¬ ∈ a B
 }
 
 theorem A Set Can Only Be an Element of One of a Disjoint Pair
+termVariables(A 0, B 0, a 0)
 premise = ∩ A B ∅
 premise ∈ a B
 conclusion ¬ ∈ a A
@@ -163,6 +171,7 @@ conclusion ¬ ∈ a A
 }
 
 theorem Element Transfers from Intersection
+termVariables(a 0, A 0, B 0)
 premise ∈ a ∩ A B
 conclusion ∈ a A
 {
@@ -171,6 +180,7 @@ conclusion ∈ a A
 }
 
 theorem Element Transfers from Intersection
+termVariables(a 0, A 0, B 0)
 premise ∈ a ∩ A B
 conclusion ∈ a B
 {
@@ -179,6 +189,7 @@ conclusion ∈ a B
 }
 
 theorem Disjoint Pair
+termVariables(A 0, B 0)
 premise ∀ x → ∈ $0 A ¬ ∈ $0 B
 conclusion = ∩ A B ∅
 {
@@ -198,6 +209,7 @@ conclusion = ∩ A B ∅
 }
 
 theorem Disjoint Pair
+termVariables(A 0, B 0)
 premise ∀ x → ∈ $0 A ¬ ∈ $0 B
 conclusion = ∩ B A ∅
 {

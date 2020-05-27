@@ -1,10 +1,14 @@
 Introduce the Axiom of Replacement.
 
 axiom Axiom of Replacement
+statementVariables(φ 2)
+termVariables(a 0)
 premise ∀ x → ∈ $0 a ∃! y with ($$0 $0) φ
 conclusion ∃ z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ
 
 theorem Unique Replacement
+statementVariables(φ 2)
+termVariables(a 0)
 premise ∀ x → ∈ $0 a ∃! y with ($$0 $0) φ
 conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ
 {
@@ -13,6 +17,7 @@ conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 a with ($0 $$0) φ
 }
 
 theorem Existence of Replacement Set
+termVariables(A 0, F 1)
 conclusion ∃! B ∀ b ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F
 {
   take a {
@@ -29,6 +34,7 @@ term replacementSet ($x A with x F)
   (∀ y ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 A = $$0 with ($0) F)
 
 theorem Membership Condition for Replacement Set
+termVariables(S 0, A 0, F 1)
 premise = S replacementSet a A with ($0) F
 conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F
 {
@@ -43,6 +49,7 @@ conclusion ∀ s ↔ ∈ $0 S ∃ a ∧ ∈ $0 A = $$0 with ($0) F
 }
 
 theorem Replacement Set Is Subset
+termVariables(S 0, A 0, F 1, B 0)
 premise = S replacementSet a A with ($0) F
 premise ∀ a → ∈ $0 A ∈ with ($0) F B
 conclusion ⊆ S B
@@ -68,6 +75,7 @@ conclusion ⊆ S B
 }
 
 theorem Function of Element is Element of Replacement Set
+termVariables(S 0, A 0, F 1, a 0)
 premise = S replacementSet a A with ($0) F
 premise ∈ a A
 conclusion ∈ with (a) F S

@@ -5,6 +5,7 @@ statement ⊕ (φ ψ)
   shorthand (xor)
 
 theorem Reverse Exclusive Or
+statementVariables(φ 0, ψ 0)
 premise ⊕ φ ψ
 conclusion ⊕ ψ φ
 {
@@ -22,6 +23,7 @@ conclusion ⊕ ψ φ
 }
 
 theorem Or from Exclusive Or
+statementVariables(φ 0, ψ 0)
 premise ⊕ φ ψ
 conclusion ∨ φ ψ
 {
@@ -36,6 +38,7 @@ conclusion ∨ φ ψ
 }
 
 theorem Negated And from Exclusive Or
+statementVariables(φ 0, ψ 0)
 premise ⊕ φ ψ
 conclusion ¬ ∧ φ ψ
 {
@@ -49,6 +52,7 @@ conclusion ¬ ∧ φ ψ
 }
 
 theorem Exclusive Or from Or and Negated And
+statementVariables(φ 0, ψ 0)
 premise ∨ φ ψ
 premise ¬ ∧ φ ψ
 conclusion ⊕ φ ψ
@@ -69,6 +73,7 @@ conclusion ⊕ φ ψ
 }
 
 theorem Only One Part of an Exclusive Or Is True
+statementVariables(φ 0, ψ 0)
 premise ⊕ φ ψ
 premise φ
 conclusion ¬ ψ
@@ -80,6 +85,7 @@ conclusion ¬ ψ
 }
 
 theorem Only One Part of an Exclusive Or Is True
+statementVariables(φ 0, ψ 0)
 premise ⊕ φ ψ
 premise ψ
 conclusion ¬ φ
@@ -89,6 +95,7 @@ conclusion ¬ φ
 }
 
 theorem Proof by Exclusive Cases
+statementVariables(φ 0, ψ 0, χ 0)
 premise ⊕ φ ψ
 premise → φ χ
 premise → ψ χ
@@ -99,6 +106,7 @@ conclusion χ
 }
 
 theorem Exclusive Middle
+statementVariables(φ 0)
 conclusion ⊕ φ ¬ φ
 {
   assume φ {

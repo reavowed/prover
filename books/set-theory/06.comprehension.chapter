@@ -1,6 +1,8 @@
 Introduce set comprehension, {x ∈ A | φ(x)}.
 
 theorem Comprehensions Exist for Empty Sets
+statementVariables(φ 1)
+termVariables(A 0)
 premise ¬ ∃ x ∧ ∈ $0 A with ($0) φ
 conclusion ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 {
@@ -18,6 +20,8 @@ conclusion ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 }
 
 theorem Comprehensions Exist for Non-Empty Sets Lemma
+statementVariables(φ 1)
+termVariables(a 0, A 0)
 premise ∧ ∈ a A with (a) φ
 conclusion ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ with ($0) φ = $$0 a ∧ ∈ $0 A with ($0) φ
 {
@@ -61,6 +65,8 @@ conclusion ∀ y ↔ ∃ x ∧ ∈ $0 A ∨ ∧ with ($0) φ = $$0 $0 ∧ ¬ wit
 }
 
 theorem Comprehensions Exist for Non-Empty Sets
+statementVariables(φ 1)
+termVariables(A 0)
 premise ∃ y ∧ ∈ $0 A with ($0) φ
 conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 {
@@ -76,6 +82,8 @@ conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ
 }
 
 theorem Comprehensions Exist
+statementVariables(φ 1)
+termVariables(X 0)
 conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 X with ($0) φ
 {
   assume ¬ ∃ y ∧ ∈ $0 X with ($0) φ {
@@ -93,6 +101,8 @@ term comprehension ($x A with x φ)
   (∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 A with ($0) φ)
 
 theorem Membership Condition for a Comprehension
+statementVariables(φ 1)
+termVariables(S 0, A 0)
 premise = S comprehension x A with ($0) φ
 conclusion ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ
 {
@@ -101,6 +111,8 @@ conclusion ∀ y ↔ ∈ $0 S ∧ ∈ $0 A with ($0) φ
 }
 
 theorem A Comprehension Is a Subset of Its Domain
+statementVariables(φ 1)
+termVariables(S 0, A 0)
 premise = S comprehension x A with ($0) φ
 conclusion ⊆ S A
 {

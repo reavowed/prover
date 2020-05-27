@@ -1,6 +1,7 @@
 Prove the recursion theorem for recursively constructing functions on ℕ.
 
 theorem An Inductive Function Is Unique
+termVariables(A 0, a_0 0, a 1)
 premise ∃ f ∧ ∧ function $0 functionFrom $0 ℕ A ∧ = apply $0 0ℕ a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) a
 conclusion ∃! f ∧ ∧ function $0 functionFrom $0 ℕ A ∧ = apply $0 0ℕ a_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) a
 {
@@ -38,6 +39,7 @@ conclusion ∃! f ∧ ∧ function $0 functionFrom $0 ℕ A ∧ = apply $0 0ℕ 
 }
 
 theorem 𝒫(ℕ × X) Contains All Functions from a Natural Number to X
+termVariables(n 0, f 0, A 0)
 premise ∈ n ℕ
 premise ∧ function f functionFrom f n A
 conclusion ∈ f powerSet product ℕ A
@@ -55,6 +57,7 @@ conclusion ∈ f powerSet product ℕ A
 }
 
 theorem Extend Function from a Natural Number to Its Successor
+termVariables(n 0, f 0, A 0, a 0, g 0)
 premise ∈ n ℕ
 premise ∧ function f functionFrom f n A
 premise ∈ a A
@@ -69,6 +72,7 @@ conclusion ∧ function g functionFrom g successor n A
 }
 
 theorem Recursion Theorem
+termVariables(f 0, X 0, g_0 0)
 premise ∧ function f functionFrom f X X
 premise ∈ g_0 X
 conclusion ∃! g ∧ ∧ function $0 functionFrom $0 ℕ X ∧ = apply $0 0ℕ g_0 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply f apply $$0 $0
@@ -681,6 +685,7 @@ conclusion ∃! g ∧ ∧ function $0 functionFrom $0 ℕ X ∧ = apply $0 0ℕ 
 }
 
 theorem Uncurry Recursive Function
+termVariables(A 0, F_0 1, F_+ 2)
 premise ∀ n → ∈ $0 ℕ ∃! f ∧ ∧ function $0 functionFrom $0 ℕ A ∧ = apply $0 0ℕ with ($$0) F_0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) F_+
 conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ A ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) F_0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) F_+
 {

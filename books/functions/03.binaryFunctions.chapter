@@ -7,6 +7,7 @@ display apply x orderedPair a b as (a x b) requires-brackets if x infix-function
 write apply f orderedPair a b as apply2
 
 theorem Binary Functions with Same Values are Equal
+termVariables(f 0, A 0, B 0, C 0, g 0)
 premise ∧ function f functionFrom f product A B C
 premise ∧ function g functionFrom g product A B C
 premise ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 apply g orderedPair $$0 $0
@@ -32,6 +33,7 @@ conclusion = f g
 }
 
 theorem Uncurry Function
+termVariables(f 0, A 0, B 0, C 0)
 premise ∧ function f functionFrom f A functionSpace B C
 conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 apply apply f $$0 $0
 {

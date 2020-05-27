@@ -17,10 +17,13 @@ write ∀ x → ∈ $0 X φ as allin
 write ∃ x ∧ ∈ $0 X φ as exin
 
 axiom Extensionality
+termVariables(a 0, b 0)
 premise ∀ x ↔ ∈ $0 a ∈ $0 b
 conclusion = a b
 
 theorem Sets with Same Membership Condition Are Equal
+statementVariables(φ 1)
+termVariables(a 0, b 0)
 premise ∀ x ↔ ∈ $0 a with ($0) φ
 premise ∀ x ↔ ∈ $0 b with ($0) φ
 conclusion = a b
@@ -37,6 +40,8 @@ conclusion = a b
 }
 
 theorem Sets with Equivalent Membership Conditions Are Equal
+statementVariables(φ 1, ψ 1)
+termVariables(a 0, b 0)
 premise ∀ x ↔ ∈ $0 a with ($0) φ
 premise ∀ x ↔ ∈ $0 b with ($0) ψ
 premise ∀ x ↔ with ($0) φ with ($0) ψ
@@ -53,6 +58,7 @@ conclusion = a b
 }
 
 theorem A Set with a Membership Condition Is Unique
+statementVariables(φ 1)
 premise ∃ x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 conclusion ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 {
@@ -70,6 +76,7 @@ conclusion ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 }
 
 theorem Replace Equivalent Membership Condition
+statementVariables(φ 1, ψ 1)
 premise ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) φ
 premise ∀ y ↔ with ($0) φ with ($0) ψ
 conclusion ∃! x ∀ y ↔ ∈ $0 $$0 with ($0) ψ

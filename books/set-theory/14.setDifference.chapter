@@ -5,6 +5,7 @@ term diff (A B)
   (= $0 comprehension x A ¬ ∈ $0 B)
 
 theorem Element Condition for Set Difference
+termVariables(A 0, B 0)
 conclusion ∀ a ↔ ∈ $0 diff A B ∧ ∈ $0 A ¬ ∈ $0 B
 {
   prove = diff A B comprehension x A ¬ ∈ $0 B db6dfbb4cb468e3835e954a4061348b1c402c956b11c746712b4298d2e68a4fa () (A, B)

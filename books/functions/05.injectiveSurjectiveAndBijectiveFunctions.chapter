@@ -12,6 +12,7 @@ property bijective on function
   definition (∧ injectiveFunction f surjectiveFunction f A B)
 
 theorem Injective Function Value Is Unique
+termVariables(f 0, a_1 0, a_2 0)
 premise ∧ function f injectiveFunction f
 premise ∈ a_1 domain f
 premise ∈ a_2 domain f
@@ -34,6 +35,7 @@ conclusion ↔ = apply f a_1 apply f a_2 = a_1 a_2
 }
 
 theorem A Function Is Surjective on Its Codomain
+termVariables(f 0)
 premise function f
 conclusion ∧ ∧ function f functionFrom f domain f codomain f surjectiveFunction f domain f codomain f
 {
@@ -68,6 +70,7 @@ conclusion ∧ ∧ function f functionFrom f domain f codomain f surjectiveFunct
 }
 
 theorem Codomain Condition for Surjective Function
+termVariables(f 0, A 0, B 0)
 premise ∧ function f functionFrom f A B
 conclusion ↔ surjectiveFunction f A B = B codomain f
 {
@@ -146,6 +149,7 @@ conclusion ↔ surjectiveFunction f A B = B codomain f
 }
 
 theorem Injective Function Is Bijective with Its Codomain
+termVariables(f 0)
 premise ∧ function f injectiveFunction f
 conclusion ∧ ∧ function f functionFrom f domain f codomain f bijectiveFunction f domain f codomain f
 {
@@ -166,6 +170,7 @@ term inverseFunction (f)
   (= $0 replacementSet2 a b f orderedPair $1 $0)
 
 theorem Inverse of Injective Function
+termVariables(f 0)
 premise ∧ function f injectiveFunction f
 conclusion ∧ ∧ ∧ function inverseFunction f functionFrom inverseFunction f codomain f domain f bijectiveFunction inverseFunction f codomain f domain f ∧ = ∘ inverseFunction f f identityFunction domain f = ∘ f inverseFunction f identityFunction codomain f
 {
@@ -442,6 +447,7 @@ conclusion ∧ ∧ ∧ function inverseFunction f functionFrom inverseFunction f
 }
 
 theorem Inverse of Bijective Function
+termVariables(f 0, A 0, B 0)
 premise ∧ ∧ function f functionFrom f A B bijectiveFunction f A B
 conclusion ∧ ∧ ∧ function inverseFunction f functionFrom inverseFunction f B A bijectiveFunction inverseFunction f B A ∧ = ∘ inverseFunction f f identityFunction A = ∘ f inverseFunction f identityFunction B
 {
@@ -514,6 +520,7 @@ conclusion ∧ ∧ ∧ function inverseFunction f functionFrom inverseFunction f
 }
 
 theorem Inverse Function Is Left-Cancellable
+termVariables(f 0, a 0)
 premise ∧ function f injectiveFunction f
 premise ∈ a domain f
 conclusion = apply inverseFunction f apply f a a
@@ -541,6 +548,7 @@ conclusion = apply inverseFunction f apply f a a
 }
 
 theorem Inverse Function Is Right-Cancellable
+termVariables(f 0, b 0)
 premise ∧ function f injectiveFunction f
 premise ∈ b codomain f
 conclusion = apply f apply inverseFunction f b b
@@ -568,6 +576,7 @@ conclusion = apply f apply inverseFunction f b b
 }
 
 theorem Inverse Function on Set Is Left-Cancellable
+termVariables(f 0, A 0)
 premise ∧ function f injectiveFunction f
 premise ⊆ A domain f
 conclusion = applySet inverseFunction f applySet f A A
@@ -595,6 +604,7 @@ conclusion = applySet inverseFunction f applySet f A A
 }
 
 theorem Inverse Function on Set Is Right-Cancellable
+termVariables(f 0, B 0)
 premise ∧ function f injectiveFunction f
 premise ⊆ B codomain f
 conclusion = applySet f applySet inverseFunction f B B

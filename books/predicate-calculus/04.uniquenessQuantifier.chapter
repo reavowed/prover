@@ -7,6 +7,7 @@ statement ∃! ($x with x φ)
   attributes (uniqueness)
 
 theorem Value for Unique Existence
+statementVariables(φ 1, ψ 0)
 premise ∃! x with ($0) φ
 premise ∀ x → with ($0) φ ψ
 conclusion ψ
@@ -16,6 +17,7 @@ conclusion ψ
 }
 
 theorem Every Set Is Unique
+termVariables(a 0)
 conclusion ∃! y = $0 a
 {
   prove ∃ x = $0 a 8cf72cf7b527d9e599e1e396a28cdc3485d6e669a1aa4c12184758ca101eceb3 () (a)
@@ -33,6 +35,8 @@ conclusion ∃! y = $0 a
 }
 
 theorem Two Values Satisfying Unique Condition Are Equal
+statementVariables(φ 1)
+termVariables(a 0, b 0)
 premise ∃! x with ($0) φ
 premise with (a) φ
 premise with (b) φ
@@ -48,6 +52,8 @@ conclusion = a b
 }
 
 theorem Uniqueness by Equivalence with Single Value
+statementVariables(φ 1)
+termVariables(a 0)
 premise ∀ x ↔ with ($0) φ = $0 a
 conclusion ∃! x with ($0) φ
 {
@@ -82,6 +88,8 @@ conclusion ∃! x with ($0) φ
 }
 
 theorem Uniqueness Equivalence from Single Value
+statementVariables(φ 1)
+termVariables(a 0)
 premise ∀ x → with ($0) φ = $0 a
 premise with (a) φ
 conclusion ∀ x ↔ with ($0) φ = $0 a
@@ -101,6 +109,8 @@ conclusion ∀ x ↔ with ($0) φ = $0 a
 }
 
 theorem Uniqueness by Exhibiting Single Value
+statementVariables(φ 1)
+termVariables(a 0)
 premise with (a) φ
 premise ∀ x → with ($0) φ = $0 a
 conclusion ∃! x with ($0) φ
@@ -110,6 +120,7 @@ conclusion ∃! x with ($0) φ
 }
 
 theorem Existence of Unique Value
+statementVariables(φ 1)
 premise ∃! x with ($0) φ
 conclusion ∃ y ∀ x ↔ with ($0) φ = $0 $$0
 {
@@ -128,6 +139,8 @@ conclusion ∃ y ∀ x ↔ with ($0) φ = $0 $$0
 }
 
 theorem Unique Value Satisifies Condition
+statementVariables(φ 1)
+termVariables(a 0)
 premise ∀ x ↔ with ($0) φ = $0 a
 conclusion with (a) φ
 {
@@ -140,6 +153,8 @@ conclusion with (a) φ
 }
 
 theorem Uniqueness by Two Cases
+statementVariables(φ 0, ψ 0)
+termVariables(a 0, b 0)
 premise ⊕ φ ψ
 conclusion ∃! x ∨ ∧ φ = $0 a ∧ ψ = $0 b
 {
@@ -165,6 +180,8 @@ conclusion ∃! x ∨ ∧ φ = $0 a ∧ ψ = $0 b
 }
 
 theorem Uniqueness by Two Cases
+statementVariables(φ 0)
+termVariables(a 0, b 0)
 conclusion ∃! x ∨ ∧ φ = $0 a ∧ ¬ φ = $0 b
 {
   prove ⊕ φ ¬ φ 84a2ec9cae05bd957bd110d11107812df38d272dbeb35f3310d763b7fb5b5824 (φ) ()
@@ -172,6 +189,7 @@ conclusion ∃! x ∨ ∧ φ = $0 a ∧ ¬ φ = $0 b
 }
 
 theorem Replace Unique Condition
+statementVariables(φ 1, ψ 1)
 premise ∃! x with ($0) φ
 premise ∀ x ↔ with ($0) φ with ($0) ψ
 conclusion ∃! x with ($0) ψ
@@ -211,6 +229,7 @@ conclusion ∃! x with ($0) ψ
 }
 
 theorem Replace Uniqueness Quantifier Restriction
+statementVariables(φ 1, χ 1, ψ 1)
 premise ∃! x ∧ with ($0) φ with ($0) χ
 premise ∀ x ↔ with ($0) φ with ($0) ψ
 conclusion ∃! x ∧ with ($0) ψ with ($0) χ
@@ -225,6 +244,7 @@ conclusion ∃! x ∧ with ($0) ψ with ($0) χ
 }
 
 theorem Replace Quantified Unique Condition
+statementVariables(φ 1, ψ 1, χ 1)
 premise ∃! x ∧ with ($0) φ with ($0) ψ
 premise ∀ x → with ($0) φ ↔ with ($0) ψ with ($0) χ
 conclusion ∃! x ∧ with ($0) φ with ($0) χ

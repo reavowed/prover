@@ -1,6 +1,7 @@
 Define some basic functions.
 
 theorem The Empty Set Is a Function with Empty Domain
+termVariables(A 0)
 conclusion ∧ function ∅ functionFrom ∅ ∅ A
 {
   prove ⊆ ∅ product ∅ A 1bde69fc8b90a9ca85033f763d7edeaa761c9b52a26ea2e64796515496237aa9 () (product ∅ A)
@@ -22,6 +23,7 @@ conclusion ∧ function ∅ functionFrom ∅ ∅ A
 }
 
 theorem Function with a Singleton Domain
+termVariables(a 0, b 0)
 conclusion ∧ function singleton orderedPair a b functionFrom singleton orderedPair a b singleton a singleton b
 {
   prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a)
@@ -55,6 +57,7 @@ conclusion ∧ function singleton orderedPair a b functionFrom singleton ordered
 }
 
 theorem Combine Functions
+termVariables(f 0, A 0, B 0, g 0, C 0, D 0)
 premise ∧ function f functionFrom f A B
 premise ∧ function g functionFrom g C D
 premise ∀ x → ∈ $0 ∩ A C = apply f $0 apply g $0
@@ -209,6 +212,7 @@ conclusion ∧ function ∪ f g functionFrom ∪ f g ∪ A C ∪ B D
 }
 
 theorem Combine Disjoint Functions
+termVariables(f 0, A 0, B 0, g 0, C 0, D 0)
 premise ∧ function f functionFrom f A B
 premise ∧ function g functionFrom g C D
 premise = ∩ A C ∅
@@ -228,6 +232,7 @@ conclusion ∧ function ∪ f g functionFrom ∪ f g ∪ A C ∪ B D
 }
 
 theorem Extending a Function by One Value
+termVariables(f 0, A 0, B 0, a 0, b 0)
 premise ∧ function f functionFrom f A B
 premise ¬ ∈ a A
 premise ∈ b B
@@ -254,6 +259,7 @@ conclusion ∧ function ∪ f singleton orderedPair a b functionFrom ∪ f singl
 }
 
 theorem Extended Function is Equal to Original on its Domain
+termVariables(f 0, A 0, B 0, g 0, C 0, D 0)
 premise ∧ function f functionFrom f A B
 premise ∧ function g functionFrom g C D
 premise ⊆ f g
@@ -279,6 +285,8 @@ conclusion ∀ a → ∈ $0 A = apply f $0 apply g $0
 }
 
 theorem Function from Unique Pairing
+statementVariables(φ 2)
+termVariables(A 0, B 0)
 premise ∀ a → ∈ $0 A ∃! b ∧ ∈ $0 B with ($$0 $0) φ
 conclusion ∃! f ∧ ∧ function $0 functionFrom $0 A B ∀ a → ∈ $0 A with ($0 apply $$0 $0) φ
 {
@@ -423,6 +431,7 @@ term functionMap ($a A with a F)
   (= $0 replacementSet a A orderedPair $0 with ($0) F)
 
 theorem Function Map Is Function
+termVariables(f 0, A 0, F 1, B 0)
 premise = f functionMap a A with ($0) F
 premise ∀ a → ∈ $0 A ∈ with ($0) F B
 conclusion ∧ function f functionFrom f A B
@@ -490,6 +499,7 @@ conclusion ∧ function f functionFrom f A B
 }
 
 theorem Function Map Application
+termVariables(f 0, A 0, F 1)
 premise = f functionMap a A with ($0) F
 conclusion ∀ a → ∈ $0 A = apply f $0 with ($0) F
 {
@@ -528,6 +538,7 @@ term functionMap2 ($a $b A B with (a b) F)
   (= $0 functionMap x product A B with (first $0 second $0) F)
 
 theorem Binary Function Map Is Function
+termVariables(f 0, A 0, B 0, F 2, C 0)
 premise = f functionMap2 a b A B with ($0 $1) F
 premise ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∈ with ($$0 $0) F C
 conclusion ∧ function f functionFrom f product A B C
@@ -552,6 +563,7 @@ conclusion ∧ function f functionFrom f product A B C
 }
 
 theorem Binary Function Map Application
+termVariables(f 0, A 0, B 0, F 2)
 premise = f functionMap2 a b A B with ($0 $1) F
 conclusion ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply f orderedPair $$0 $0 with ($$0 $0) F
 {
@@ -589,6 +601,7 @@ term functionMap4 ($a $b $c $d A B C D with (a b c d) F)
   (= $0 functionMap2 x y product A B product C D with (first $0 second $0 first $1 second $1) F)
 
 theorem Quadruple Function Map Is Function
+termVariables(f 0, A 0, B 0, C 0, D 0, F 4, E 0)
 premise = f functionMap4 a b c d A B C D with ($0 $1 $2 $3) F
 premise ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D ∈ with ($$$$0 $$$0 $$0 $0) F E
 conclusion ∧ function f functionFrom f product product A B product C D E
@@ -625,6 +638,7 @@ conclusion ∧ function f functionFrom f product product A B product C D E
 }
 
 theorem Quadruple Function Map Application
+termVariables(f 0, A 0, B 0, C 0, D 0, F 4)
 premise = f functionMap4 a b c d A B C D with ($0 $1 $2 $3) F
 conclusion ∀ a → ∈ $0 A ∀ b → ∈ $0 B ∀ c → ∈ $0 C ∀ d → ∈ $0 D = apply f orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 with ($$$$0 $$$0 $$0 $0) F
 {
@@ -689,6 +703,7 @@ term ∘ (f g)
   shorthand (comp)
 
 theorem Function Composition Is Function
+termVariables(f 0, A 0, B 0, g 0, C 0)
 premise ∧ function f functionFrom f A B
 premise ∧ function g functionFrom g B C
 conclusion ∧ function ∘ g f functionFrom ∘ g f A C
@@ -713,6 +728,7 @@ conclusion ∧ function ∘ g f functionFrom ∘ g f A C
 }
 
 theorem Application of Function Composition
+termVariables(f 0, A 0, B 0, g 0, C 0, a 0)
 premise ∧ function f functionFrom f A B
 premise ∧ function g functionFrom g B C
 premise ∈ a A
@@ -737,6 +753,7 @@ conclusion = apply ∘ g f a apply g apply f a
 }
 
 theorem Application of Function Composition on Set
+termVariables(f 0, A 0, B 0, g 0, C 0, X 0)
 premise ∧ function f functionFrom f A B
 premise ∧ function g functionFrom g B C
 premise ⊆ X A
@@ -825,6 +842,7 @@ conclusion = applySet ∘ g f X applySet g applySet f X
 }
 
 theorem Function Composition Is Associative
+termVariables(f 0, A 0, B 0, g 0, C 0, h 0, D 0)
 premise ∧ function f functionFrom f A B
 premise ∧ function g functionFrom g B C
 premise ∧ function h functionFrom h C D
@@ -866,6 +884,7 @@ term identityFunction (A)
   (= $0 functionMap a A $0)
 
 theorem Identity Function Application
+termVariables(a 0, A 0)
 premise ∈ a A
 conclusion = apply identityFunction A a a
 {
@@ -878,6 +897,7 @@ conclusion = apply identityFunction A a a
 }
 
 theorem Identity Function Is a Function
+termVariables(A 0)
 conclusion ∧ function identityFunction A functionFrom identityFunction A A A
 {
   prove = identityFunction A functionMap a A $0 7b9df0bef16597c120d668a729681b34f596c78b952ec387d00609a6ba216ad7 () (A)
@@ -890,6 +910,7 @@ conclusion ∧ function identityFunction A functionFrom identityFunction A A A
 }
 
 theorem Identity Function Is Identity for Function Composition
+termVariables(f 0, A 0, B 0)
 premise ∧ function f functionFrom f A B
 conclusion ∧ = ∘ identityFunction B f f = ∘ f identityFunction A f
 {
@@ -921,6 +942,7 @@ conclusion ∧ = ∘ identityFunction B f f = ∘ f identityFunction A f
 }
 
 theorem Function Application of Identity on Set
+termVariables(X 0, A 0)
 premise ⊆ X A
 conclusion = applySet identityFunction A X X
 {

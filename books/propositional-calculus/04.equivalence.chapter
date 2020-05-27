@@ -7,6 +7,7 @@ statement ↔ (φ ψ)
 display ∧ ↔ φ χ ↔ ψ χ as (φ ↔ ψ ↔ χ) requires-brackets
 
 theorem Equivalence by Both Cases
+statementVariables(φ 0, ψ 0)
 premise → φ ψ
 premise → ψ φ
 conclusion ↔ φ ψ
@@ -16,6 +17,7 @@ conclusion ↔ φ ψ
 }
 
 theorem Reverse Equivalence
+statementVariables(φ 0, ψ 0)
 premise ↔ φ ψ
 conclusion ↔ ψ φ
 {
@@ -25,6 +27,7 @@ conclusion ↔ ψ φ
 }
 
 theorem Forward Implication from Equivalence
+statementVariables(φ 0, ψ 0)
 premise ↔ φ ψ
 conclusion → φ ψ
 {
@@ -33,6 +36,7 @@ conclusion → φ ψ
 }
 
 theorem Reverse Implication from Equivalence
+statementVariables(φ 0, ψ 0)
 premise ↔ φ ψ
 conclusion → ψ φ
 {
@@ -41,6 +45,7 @@ conclusion → ψ φ
 }
 
 theorem Equivalence Is Transitive
+statementVariables(φ 0, ψ 0, χ 0)
 premise ↔ φ ψ
 premise ↔ ψ χ
 conclusion ↔ φ χ
@@ -69,6 +74,7 @@ conclusion ↔ φ χ
 }
 
 theorem False Statements Are Equivalent
+statementVariables(φ 0, ψ 0)
 premise ¬ φ
 premise ¬ ψ
 conclusion ↔ φ ψ
@@ -79,6 +85,7 @@ conclusion ↔ φ ψ
 }
 
 theorem Distribute Implication over Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
 premise → φ ↔ ψ χ
 conclusion ↔ → φ ψ → φ χ
 {
@@ -106,6 +113,7 @@ conclusion ↔ → φ ψ → φ χ
 }
 
 theorem Negated Equivalence
+statementVariables(φ 0, ψ 0)
 conclusion ↔ ↔ φ ψ ↔ ¬ φ ¬ ψ
 {
   assume ↔ φ ψ {

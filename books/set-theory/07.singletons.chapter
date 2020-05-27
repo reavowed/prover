@@ -9,6 +9,7 @@ conclusion ∃ x ∃ y ∈ $0 $$0
 }
 
 theorem Singleton Existence
+termVariables(a 0)
 conclusion ∃! z ∀ x ↔ ∈ $0 $$0 = $0 a
 {
   prove ∃ x ∃ y ∈ $0 $$0 2cccf54c4f38ed8afb8227abf888c17e48598e20266c00a7f8d4977ba6408c73 () ()
@@ -35,6 +36,7 @@ term singleton (a)
   (∀ x ↔ ∈ $0 $$0 = $0 a)
 
 theorem A Set Is an Element of Its Singleton
+termVariables(a 0)
 conclusion ∈ a singleton a
 {
   prove ∀ x ↔ ∈ $0 singleton a = $0 a 4dbfdb2c6f199f71630ec380539f2d745d03b60abb086325a281cd7a77b747d8 () (a)
@@ -42,6 +44,7 @@ conclusion ∈ a singleton a
 }
 
 theorem Element of Singleton
+termVariables(b 0, a 0)
 premise ∈ b singleton a
 conclusion = b a
 {
@@ -54,6 +57,7 @@ conclusion = b a
 }
 
 theorem Sets Are Equal If Singletons Are Equal
+termVariables(a 0, b 0)
 premise = singleton a singleton b
 conclusion = a b
 {
@@ -77,6 +81,7 @@ conclusion = a b
 }
 
 theorem Singleton of Element Is Subset
+termVariables(a 0, S 0)
 premise ∈ a S
 conclusion ⊆ singleton a S
 {
@@ -99,6 +104,7 @@ conclusion ⊆ singleton a S
 }
 
 theorem Singleton Is in Power Set
+termVariables(a 0, S 0)
 premise ∈ a S
 conclusion ∈ singleton a powerSet S
 {
@@ -107,6 +113,7 @@ conclusion ∈ singleton a powerSet S
 }
 
 theorem A Singleton Is Not the Empty Set
+termVariables(a 0)
 conclusion ¬ = singleton a ∅
 {
   prove ∈ a singleton a e5855e5d9ee6a8e2618de2e4aead43174b17bc781361385ab8312d2d64a7efa9 () (a)
@@ -114,6 +121,7 @@ conclusion ¬ = singleton a ∅
 }
 
 theorem Subsets of a Singleton
+termVariables(S 0, a 0)
 premise ⊆ S singleton a
 conclusion ⊕ = S singleton a = S ∅
 {

@@ -7,6 +7,7 @@ term orderedPair (a b)
   shorthand (op)
 
 theorem Elements of Ordered Pair
+termVariables(c 0, a 0, b 0)
 premise ∈ c orderedPair a b
 conclusion ∨ = c singleton a = c pair a b
 {
@@ -16,6 +17,7 @@ conclusion ∨ = c singleton a = c pair a b
 }
 
 theorem Singleton of First Coordinate Is Element of Ordered Pair
+termVariables(a 0, b 0)
 conclusion ∈ singleton a orderedPair a b
 {
   prove ∈ singleton a pair singleton a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (singleton a, pair a b)
@@ -26,6 +28,7 @@ conclusion ∈ singleton a orderedPair a b
 }
 
 theorem Pair Is Element of Ordered Pair
+termVariables(a 0, b 0)
 conclusion ∈ pair a b orderedPair a b
 {
   prove ∈ pair a b pair singleton a pair a b c5583d9a3ff8f9a2303c940c2c619e40adc0830fdd976ec970e143e5c3b70e38 () (pair a b, singleton a)
@@ -36,6 +39,7 @@ conclusion ∈ pair a b orderedPair a b
 }
 
 theorem Ordered Pair with Same Coordinates Is Double Singleton
+termVariables(a 0)
 conclusion = orderedPair a a singleton singleton a
 {
   prove = pair a a singleton a 856bed8c7f5f249bac0978dd5f7359986d8eef536dff35c07c551f8061d9cd5c () (a)
@@ -47,6 +51,7 @@ conclusion = orderedPair a a singleton singleton a
 }
 
 theorem First Coordinates of Equal Ordered Pairs Are Equal
+termVariables(a 0, b 0, c 0, d 0)
 premise = orderedPair a b orderedPair c d
 conclusion = a c
 {
@@ -67,6 +72,7 @@ conclusion = a c
 }
 
 theorem Second Coordinates of Equal Ordered Pairs Are Equal
+termVariables(a 0, b 0, c 0, d 0)
 premise = orderedPair a b orderedPair c d
 conclusion = b d
 {
@@ -100,6 +106,7 @@ conclusion = b d
 }
 
 theorem Uniqueness of First Coordinate of Ordered Pair
+termVariables(x 0)
 premise ∃ a ∃ b = x orderedPair $$0 $0
 conclusion ∃! a ∃ b = x orderedPair $$0 $0
 {
@@ -122,6 +129,7 @@ conclusion ∃! a ∃ b = x orderedPair $$0 $0
 }
 
 theorem Uniqueness of Second Coordinate of Ordered Pair
+termVariables(x 0)
 premise ∃ a ∃ b = x orderedPair $$0 $0
 conclusion ∃! b ∃ a = x orderedPair $0 $$0
 {
@@ -159,6 +167,7 @@ term second (x)
 write orderedPair first a second a as expandPair
 
 theorem Ordered Pair from Coordinates
+termVariables(x 0)
 premise ∃ a ∃ b = x orderedPair $$0 $0
 conclusion = x orderedPair first x second x
 {
@@ -184,6 +193,7 @@ conclusion = x orderedPair first x second x
 }
 
 theorem First Coordinate of Ordered Pair
+termVariables(a 0, b 0)
 conclusion = first orderedPair a b a
 {
   elided 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc {
@@ -201,6 +211,7 @@ conclusion = first orderedPair a b a
 }
 
 theorem Second Coordinate of Ordered Pair
+termVariables(a 0, b 0)
 conclusion = second orderedPair a b b
 {
   elided 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc {
@@ -218,6 +229,7 @@ conclusion = second orderedPair a b b
 }
 
 theorem Double Union Contains Elements of Ordered Pair
+termVariables(a 0, b 0, X 0)
 premise ∈ orderedPair a b X
 conclusion ∧ ∈ a union union X ∈ b union union X
 {
@@ -278,6 +290,7 @@ term codomain (X)
   (= $0 comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X)
 
 theorem Coordinates of Element Are Elements of Domain and Codomain
+termVariables(a 0, b 0, X 0)
 premise ∈ orderedPair a b X
 conclusion ∧ ∈ a domain X ∈ b codomain X
 {
@@ -312,6 +325,7 @@ conclusion ∧ ∈ a domain X ∈ b codomain X
 }
 
 theorem Membership Condition for Domain
+termVariables(X 0)
 conclusion ∀ a ↔ ∈ $0 domain X ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X
 {
   prove = domain X comprehension a union union X ∃ b ∈ orderedPair $$0 $0 X 7b833dc0f479c3b0be87e12315e7ec8fce752f153c09a3bdb0ecfa17ae29cd39 () (X)
@@ -358,6 +372,7 @@ conclusion ∀ a ↔ ∈ $0 domain X ∃ b ∧ ∈ $0 codomain X ∈ orderedPair
 }
 
 theorem Membership Condition for Codomain
+termVariables(X 0)
 conclusion ∀ b ↔ ∈ $0 codomain X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X
 {
   prove = codomain X comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X 68cf63cd4e65a53cc05a446c3aea611bf16e4475c96e8b098802881fe1c1a270 () (X)

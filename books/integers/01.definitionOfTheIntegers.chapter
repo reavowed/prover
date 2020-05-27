@@ -680,6 +680,7 @@ term ℤ ()
   shorthand (int)
 
 theorem Equivalence Class Is Integer
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∈ equivalenceClass orderedPair n m ~_ℤ ℤ
@@ -696,6 +697,7 @@ conclusion ∈ equivalenceClass orderedPair n m ~_ℤ ℤ
 }
 
 theorem Integer Is Equivalence Class
+termVariables(x 0)
 premise ∈ x ℤ
 conclusion ∃ n ∧ ∈ $0 ℕ ∃ m ∧ ∈ $0 ℕ = x equivalenceClass orderedPair $$0 $0 ~_ℤ
 {
@@ -724,6 +726,7 @@ conclusion ∃ n ∧ ∈ $0 ℕ ∃ m ∧ ∈ $0 ℕ = x equivalenceClass ordere
 }
 
 theorem Equality Condition for Integer Equivalence Classes
+termVariables(a 0, b 0, c 0, d 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ∈ c ℕ
@@ -751,6 +754,7 @@ conclusion ↔ = equivalenceClass orderedPair a b ~_ℤ equivalenceClass ordered
 }
 
 theorem Classification of Integers
+termVariables(a 0)
 premise ∈ a ℤ
 conclusion ∨ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair 0ℕ $0 ~_ℤ ∃ n ∧ ∈ $0 ℕ = a equivalenceClass orderedPair $0 0ℕ ~_ℤ
 {

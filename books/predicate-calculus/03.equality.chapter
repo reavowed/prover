@@ -9,9 +9,12 @@ display ¬ = a b as (a ≠ b) requires-brackets
 display ∧ = a c = b c as (a = b = c) requires-brackets
 
 axiom Equality Is Reflexive
+termVariables(a 0)
 conclusion = a a
 
 axiom Substitution of Equals
+statementVariables(φ 1)
+termVariables(a 0, b 0)
 premise = a b
 premise with (a) φ
 conclusion with (b) φ
@@ -19,6 +22,7 @@ conclusion with (b) φ
 comment We first have to prove that equality is symmetric before we can prove the reversed version of the second axiom.
 
 theorem Reverse Equality
+termVariables(a 0, b 0)
 premise = a b
 conclusion = b a
 {
@@ -27,6 +31,8 @@ conclusion = b a
 }
 
 theorem Substitution of Equals (Reversed)
+statementVariables(φ 1)
+termVariables(a 0, b 0)
 premise = a b
 premise with (b) φ
 conclusion with (a) φ
@@ -38,6 +44,7 @@ conclusion with (a) φ
 comment Now we can also prove that the substitution axiom works when substituting into equal terms.
 
 theorem Substitution of Equals into Function
+termVariables(a 0, b 0, F 1)
 premise = a b
 conclusion = with (a) F with (b) F
 {
@@ -46,6 +53,7 @@ conclusion = with (a) F with (b) F
 }
 
 theorem Substitution of Equals into Function (Reversed)
+termVariables(a 0, b 0, F 1)
 premise = a b
 conclusion = with (b) F with (a) F
 {
@@ -56,6 +64,7 @@ conclusion = with (b) F with (a) F
 comment Basic facts about equality.
 
 theorem Equality Is Symmetric
+termVariables(a 0, b 0)
 conclusion ↔ = a b = b a
 {
   assume = a b {
@@ -68,6 +77,7 @@ conclusion ↔ = a b = b a
 }
 
 theorem Equality Is Transitive
+termVariables(a 0, b 0, c 0)
 premise = a b
 premise = b c
 conclusion = a c
@@ -76,6 +86,7 @@ conclusion = a c
 }
 
 theorem Equality by Equaling the Same Thing (Left)
+termVariables(a 0, x 0, b 0)
 premise = a x
 premise = b x
 conclusion = a b
@@ -85,6 +96,7 @@ conclusion = a b
 }
 
 theorem Equality by Equaling the Same Thing (Right)
+termVariables(x 0, a 0, b 0)
 premise = x a
 premise = x b
 conclusion = a b
@@ -94,6 +106,8 @@ conclusion = a b
 }
 
 theorem Equivalence of Substituted Equals
+statementVariables(φ 1)
+termVariables(a 0, b 0)
 premise = a b
 conclusion ↔ with (a) φ with (b) φ
 {
@@ -107,6 +121,8 @@ conclusion ↔ with (a) φ with (b) φ
 }
 
 theorem Distinguishable Terms Are Not Equal
+statementVariables(φ 1)
+termVariables(a 0, b 0)
 premise with (a) φ
 premise ¬ with (b) φ
 conclusion ¬ = a b
@@ -118,6 +134,7 @@ conclusion ¬ = a b
 }
 
 theorem Every Set Exists
+termVariables(a 0)
 conclusion ∃ x = $0 a
 {
   prove = a a 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (a)
@@ -125,6 +142,8 @@ conclusion ∃ x = $0 a
 }
 
 theorem Renamed Set
+statementVariables(φ 0)
+termVariables(a 0)
 premise ∀ x → = $0 a φ
 conclusion φ
 {
@@ -133,6 +152,7 @@ conclusion φ
 }
 
 theorem Exclusive Or for Equality
+termVariables(a 0, b 0, c 0)
 premise ∨ = a b = a c
 premise ¬ = b c
 conclusion ⊕ = a b = a c
@@ -145,6 +165,8 @@ conclusion ⊕ = a b = a c
 }
 
 theorem Equivalence of Generalised Equals
+statementVariables(φ 1, ψ 2)
+termVariables(G 1, H 1)
 premise ∀ x → with ($0) φ = with ($0) G with ($0) H
 conclusion ↔ ∀ x → with ($0) φ with ($0 with ($0) G) ψ ∀ x → with ($0) φ with ($0 with ($0) H) ψ
 {
@@ -182,6 +204,7 @@ conclusion ↔ ∀ x → with ($0) φ with ($0 with ($0) G) ψ ∀ x → with ($
 }
 
 theorem Reverse Negated Equality
+termVariables(a 0, b 0)
 premise ¬ = a b
 conclusion ¬ = b a
 {
@@ -193,6 +216,7 @@ conclusion ¬ = b a
 }
 
 theorem Function Equality Equivalence
+termVariables(a 0, F 1, b 0)
 premise → = with (a) F with (b) F = a b
 conclusion ↔ = with (a) F with (b) F = a b
 {

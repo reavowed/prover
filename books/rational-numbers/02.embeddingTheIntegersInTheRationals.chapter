@@ -175,6 +175,7 @@ conclusion ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFu
 }
 
 theorem Rational With Zero Denominator Is Zero
+termVariables(b 0)
 premise ∈ b diff ℤ singleton apply ⍳_ℤ 0ℕ
 conclusion = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ b ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ
 {

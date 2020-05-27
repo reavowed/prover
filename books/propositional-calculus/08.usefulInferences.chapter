@@ -3,6 +3,7 @@ Some inferences that can be used to reduce boilerplate in proofs.
 comment A set of more complicated structural facts that are surprisingly useful later on.
 
 theorem First Part of Disjoined Conjunct Equivalence
+statementVariables(φ 0, χ 0, ψ 0, ω 0)
 premise φ
 premise ¬ χ
 conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ψ
@@ -26,6 +27,7 @@ conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ψ
 }
 
 theorem Second Part of Disjoined Conjunct Equivalence
+statementVariables(φ 0, χ 0, ψ 0, ω 0)
 premise ¬ φ
 premise χ
 conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ω
@@ -41,6 +43,7 @@ conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ω
 comment Some tricks to simplify redundant statements.
 
 theorem Remove Redundant Left Conjunct from Equivalence
+statementVariables(φ 0, ψ 0)
 premise → φ ψ
 conclusion ↔ ∧ φ ψ φ
 {
@@ -55,6 +58,7 @@ conclusion ↔ ∧ φ ψ φ
 }
 
 theorem Remove Redundant Right Conjunct from Equivalence
+statementVariables(φ 0, ψ 0)
 premise → φ ψ
 conclusion ↔ ∧ ψ φ φ
 {
@@ -67,6 +71,7 @@ conclusion ↔ ∧ ψ φ φ
 }
 
 theorem Remove Redundant Left Disjunct from Equivalence
+statementVariables(φ 0, ψ 0)
 premise → φ ψ
 conclusion ↔ ∨ φ ψ ψ
 {
@@ -80,6 +85,7 @@ conclusion ↔ ∨ φ ψ ψ
 }
 
 theorem Remove Redundant Right Disjunct from Equivalence
+statementVariables(φ 0, ψ 0)
 premise → φ ψ
 conclusion ↔ ∨ ψ φ ψ
 {
@@ -93,6 +99,7 @@ conclusion ↔ ∨ ψ φ ψ
 }
 
 theorem Remove False Left Disjunct from Equivalence
+statementVariables(φ 0, ψ 0)
 premise ¬ φ
 conclusion ↔ ∨ φ ψ ψ
 {
@@ -106,6 +113,7 @@ conclusion ↔ ∨ φ ψ ψ
 }
 
 theorem Remove False Right Disjunct From Equivalence
+statementVariables(φ 0, ψ 0)
 premise ¬ φ
 conclusion ↔ ∨ ψ φ ψ
 {
@@ -121,6 +129,7 @@ conclusion ↔ ∨ ψ φ ψ
 comment Adding extra conjunctions to equivalences.
 
 theorem Add Left Conjunction to Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
 premise ↔ φ ψ
 conclusion ↔ ∧ χ φ ∧ χ ψ
 {
@@ -142,6 +151,7 @@ conclusion ↔ ∧ χ φ ∧ χ ψ
 }
 
 theorem Add Right Conjunction to Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
 premise ↔ φ ψ
 conclusion ↔ ∧ φ χ ∧ ψ χ
 {
@@ -163,6 +173,7 @@ conclusion ↔ ∧ φ χ ∧ ψ χ
 }
 
 theorem Distribute Implication over Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
 premise → φ ↔ ψ χ
 conclusion ↔ ∧ φ ψ ∧ φ χ
 {
@@ -188,6 +199,7 @@ conclusion ↔ ∧ φ ψ ∧ φ χ
 comment And removing them.
 
 theorem Remove Known Left Conjunct From Equivalence
+statementVariables(φ 0, ψ 0)
 premise φ
 conclusion ↔ ∧ φ ψ ψ
 {
@@ -204,6 +216,7 @@ conclusion ↔ ∧ φ ψ ψ
 }
 
 theorem Remove Known Right Conjunct From Equivalence
+statementVariables(φ 0, ψ 0)
 premise φ
 conclusion ↔ ∧ ψ φ ψ
 {
@@ -215,6 +228,7 @@ conclusion ↔ ∧ ψ φ ψ
 comment Adding extra disjunctions to equivalences.
 
 theorem Add Left Disjunction to Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
 premise ↔ φ ψ
 conclusion ↔ ∨ χ φ ∨ χ ψ
 {
@@ -230,6 +244,7 @@ conclusion ↔ ∨ χ φ ∨ χ ψ
 }
 
 theorem Add Right Disjunction to Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
 premise ↔ φ ψ
 conclusion ↔ ∨ φ χ ∨ ψ χ
 {
@@ -241,6 +256,7 @@ conclusion ↔ ∨ φ χ ∨ ψ χ
 }
 
 theorem Disjunction of Equivalences
+statementVariables(φ 0, ψ 0, χ 0, ω 0)
 premise ↔ φ ψ
 premise ↔ χ ω
 conclusion ↔ ∨ φ χ ∨ ψ ω
@@ -261,6 +277,7 @@ conclusion ↔ ∨ φ χ ∨ ψ ω
 comment Extend a disjunction to conjunction.
 
 theorem Extend Disjunction of Equivalents to Conjunction
+statementVariables(φ 0, ψ 0)
 premise ∨ φ ψ
 premise ↔ φ ψ
 conclusion ∧ φ ψ

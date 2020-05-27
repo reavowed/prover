@@ -32,6 +32,7 @@ conclusion ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0
 }
 
 theorem A Set Is an Element of Its Successor
+termVariables(n 0)
 conclusion ∈ n successor n
 {
   prove = n n 5219290cd02226ba51f9a52acabbe8b9a53b0f6dbadd81739189b9c069fe07dc () (n)
@@ -48,6 +49,7 @@ conclusion ∈ n successor n
 }
 
 theorem A Set Is a Subset of Its Successor
+termVariables(n 0)
 conclusion ⊆ n successor n
 {
   take x {
@@ -115,6 +117,7 @@ conclusion ∀ n ∀ m ↔ = successor $$0 successor $0 = $$0 $0
 }
 
 theorem Nothing Equals Its Successor
+termVariables(n 0)
 conclusion ¬ = n successor n
 {
   prove ∈ n successor n bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n)

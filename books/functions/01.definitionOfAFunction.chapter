@@ -7,6 +7,7 @@ qualifier from on function (A B) (from A → B)
   definition (∧ = domain f A ⊆ codomain f B)
 
 theorem Subset Condition for Function From
+termVariables(f 0, A 0, B 0)
 conclusion ↔ ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x → ∈ $0 A ∃! b ∈ orderedPair $$0 $0 f
 {
   assume ∧ function f functionFrom f A B {
@@ -170,6 +171,7 @@ conclusion ↔ ∧ function f functionFrom f A B ∧ ⊆ f product A B ∀ x →
 }
 
 theorem Any Function Is From Its Domain to Its Codomain
+termVariables(f 0)
 premise function f
 conclusion ∧ function f functionFrom f domain f codomain f
 {
@@ -190,6 +192,7 @@ term apply (f a)
   (∈ orderedPair a $0 f)
 
 theorem Function Application Is Element of Codomain
+termVariables(f 0, a 0)
 premise function f
 premise ∈ a domain f
 conclusion ∈ apply f a codomain f
@@ -202,6 +205,7 @@ conclusion ∈ apply f a codomain f
 }
 
 theorem Function Application Is Element of Explicit Range
+termVariables(f 0, A 0, B 0, a 0)
 premise ∧ function f functionFrom f A B
 premise ∈ a A
 conclusion ∈ apply f a B
@@ -228,6 +232,7 @@ conclusion ∈ apply f a B
 }
 
 theorem Extend Function Range to Superset
+termVariables(f 0, A 0, B 0, C 0)
 premise ∧ function f functionFrom f A B
 premise ⊆ B C
 conclusion ∧ function f functionFrom f A C
@@ -252,6 +257,7 @@ conclusion ∧ function f functionFrom f A C
 }
 
 theorem Function Element Condition
+termVariables(f 0, A 0, B 0, a 0, b 0)
 premise ∧ function f functionFrom f A B
 conclusion ↔ ∈ orderedPair a b f ∧ ∈ a A = b apply f a
 {
@@ -300,6 +306,7 @@ conclusion ↔ ∈ orderedPair a b f ∧ ∈ a A = b apply f a
 }
 
 theorem Membership Condition for Function
+termVariables(f 0, A 0, B 0)
 premise ∧ function f functionFrom f A B
 conclusion ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
 {
@@ -351,6 +358,7 @@ conclusion ∀ x ↔ ∈ $0 f ∃ a ∧ ∈ $0 A = $$0 orderedPair $0 apply f $0
 }
 
 theorem Functions with Same Values Are Equal
+termVariables(f 0, A 0, B 0, g 0)
 premise ∧ function f functionFrom f A B
 premise ∧ function g functionFrom g A B
 premise ∀ x → ∈ $0 A = apply f $0 apply g $0
@@ -393,6 +401,7 @@ conclusion = f g
 }
 
 theorem Function With Specified Values Is Unique
+termVariables(A 0, B 0, F 1)
 premise ∃ f ∧ ∧ function $0 functionFrom $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F
 conclusion ∃! f ∧ ∧ function $0 functionFrom $0 A B ∀ x → ∈ $0 A = apply $$0 $0 with ($0) F
 {
@@ -423,6 +432,7 @@ conclusion ∃! f ∧ ∧ function $0 functionFrom $0 A B ∀ x → ∈ $0 A = a
 }
 
 theorem Binary Function With Specified Values Is Unique
+termVariables(A 0, B 0, C 0, F 2)
 premise ∃ f ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 with ($$0 $0) F
 conclusion ∃! f ∧ ∧ function $0 functionFrom $0 product A B C ∀ a → ∈ $0 A ∀ b → ∈ $0 B = apply $$$0 orderedPair $$0 $0 with ($$0 $0) F
 {
@@ -548,6 +558,7 @@ term functionSpace (A B)
   (= $0 comprehension f powerSet product A B ∧ function $0 functionFrom $0 A B)
 
 theorem Membership Condition for Function Space
+termVariables(A 0, B 0)
 conclusion ∀ f ↔ ∈ $0 functionSpace A B ∧ function $0 functionFrom $0 A B
 {
   prove = functionSpace A B comprehension f powerSet product A B ∧ function $0 functionFrom $0 A B cfd940e8fa9ddcd627b4ba225788cca7681ae54bc1ce7f196a3450eebf33dbe0 () (A, B)
@@ -578,6 +589,7 @@ term applySet (f X)
   (= $0 replacementSet x X apply f $0)
 
 theorem Membership Condition for Function Application on Set
+termVariables(f 0, X 0)
 conclusion ∀ b ↔ ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0
 {
   prove = applySet f X replacementSet x X apply f $0 a564957c0aece7e88622a5a789115097486a8284167b3d3a7d6371f2ed9519f5 () (f, X)
@@ -585,6 +597,7 @@ conclusion ∀ b ↔ ∈ $0 applySet f X ∃ a ∧ ∈ $0 X = $$0 apply f $0
 }
 
 theorem Function Application on Set Is Subset of Range
+termVariables(f 0, A 0, B 0, X 0)
 premise ∧ function f functionFrom f A B
 premise ⊆ X A
 conclusion ⊆ applySet f X B
@@ -617,6 +630,7 @@ conclusion ⊆ applySet f X B
 }
 
 theorem Function Application of Element of Set Is Element of Function Application on Set
+termVariables(f 0, A 0, B 0, X 0, a 0)
 premise ∧ function f functionFrom f A B
 premise ⊆ X A
 premise ∈ a X

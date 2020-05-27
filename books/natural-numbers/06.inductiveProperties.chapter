@@ -21,6 +21,7 @@ conclusion ∀ n → ∈ $0 ℕ ∨ = $0 0ℕ ∃ m ∧ ∈ $0 ℕ = $$0 success
 }
 
 theorem Proof by Induction on Property for Non-Zero Numbers
+statementVariables(φ 1)
 premise with (1ℕ) φ
 premise ∀ n → ∈ $0 ℕ → ¬ = $0 0ℕ → with ($0) φ with (successor $0) φ
 conclusion ∀ n → ∈ $0 ℕ → ¬ = $0 0ℕ with ($0) φ
@@ -74,6 +75,7 @@ conclusion ∀ n → ∈ $0 ℕ → ¬ = $0 0ℕ with ($0) φ
 }
 
 theorem Every Element of a Natural Number Is a Natural Number
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m n
 conclusion ∈ m ℕ
@@ -124,6 +126,7 @@ conclusion ∈ m ℕ
 }
 
 theorem A Natural Number Is a Subset of the Natural Numbers
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ⊆ n ℕ
 {
@@ -136,6 +139,7 @@ conclusion ⊆ n ℕ
 }
 
 theorem A Natural Number Either Is 0 or Contains 0
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ⊕ = n 0ℕ ∈ 0ℕ n
 {
@@ -329,6 +333,7 @@ conclusion ∀ n → ∈ $0 ℕ ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = 
 }
 
 theorem Natural Number Trichotomy
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∨ ∈ n m ∨ = n m ∈ m n
@@ -462,6 +467,7 @@ conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 $$0 ∀ x → ∈ $0 $$0 ∈ $0
 }
 
 theorem A Natural Number Contains the Predecessor of an Element
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ successor m n
 conclusion ∈ m n
@@ -479,6 +485,7 @@ conclusion ∈ m n
 }
 
 theorem Zero Is an Element of a Successor
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ∈ 0ℕ successor n
 {

@@ -6,6 +6,7 @@ statement ∧ (φ ψ)
   attributes (conjunction)
 
 theorem Extract Left Conjunct
+statementVariables(φ 0, ψ 0)
 premise ∧ φ ψ
 conclusion φ
 {
@@ -17,6 +18,7 @@ conclusion φ
 }
 
 theorem Extract Right Conjunct
+statementVariables(φ 0, ψ 0)
 premise ∧ φ ψ
 conclusion ψ
 {
@@ -28,6 +30,7 @@ conclusion ψ
 }
 
 theorem Combine Conjunction
+statementVariables(φ 0, ψ 0)
 premise φ
 premise ψ
 conclusion ∧ φ ψ
@@ -40,6 +43,7 @@ conclusion ∧ φ ψ
 }
 
 theorem Reverse Conjunction
+statementVariables(φ 0, ψ 0)
 premise ∧ φ ψ
 conclusion ∧ ψ φ
 {
@@ -49,6 +53,7 @@ conclusion ∧ ψ φ
 }
 
 theorem Law of Non-Contradiction
+statementVariables(φ 0)
 conclusion ¬ ∧ φ ¬ φ
 {
   assume ∧ φ ¬ φ {
@@ -60,6 +65,7 @@ conclusion ¬ ∧ φ ¬ φ
 comment Some inferences for negated conjunctions.
 
 theorem Add Right Negated Conjunct
+statementVariables(φ 0, ψ 0)
 premise ¬ φ
 conclusion ¬ ∧ φ ψ
 {
@@ -70,6 +76,7 @@ conclusion ¬ ∧ φ ψ
 }
 
 theorem Add Left Negated Conjunct
+statementVariables(ψ 0, φ 0)
 premise ¬ ψ
 conclusion ¬ ∧ φ ψ
 {
@@ -80,6 +87,7 @@ conclusion ¬ ∧ φ ψ
 }
 
 theorem Add Negated Conjunct
+statementVariables(φ 0, ψ 0)
 premise φ
 conclusion ¬ ∧ ¬ φ ψ
 {
@@ -90,6 +98,7 @@ conclusion ¬ ∧ ¬ φ ψ
 }
 
 theorem Add Negated Conjunct
+statementVariables(ψ 0, φ 0)
 premise ψ
 conclusion ¬ ∧ φ ¬ ψ
 {
@@ -100,6 +109,7 @@ conclusion ¬ ∧ φ ¬ ψ
 }
 
 theorem Extract Negated Conjunct
+statementVariables(φ 0, ψ 0)
 premise ¬ ∧ φ ψ
 premise φ
 conclusion ¬ ψ
@@ -111,6 +121,7 @@ conclusion ¬ ψ
 }
 
 theorem Extract Negated Conjunct
+statementVariables(φ 0, ψ 0)
 premise ¬ ∧ φ ψ
 premise ψ
 conclusion ¬ φ

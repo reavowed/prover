@@ -42,6 +42,7 @@ property semicomplete on relation
   definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 R ∨ = $$0 $0 ∈ orderedPair $0 $$0 R)
 
 theorem Antisymmetric Relation from Extended Asymmetric Relation
+termVariables(R 0, A 0, S 0)
 premise ∧ relation R A asymmetricRelation R A
 premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
 conclusion ∧ relation S A antisymmetricRelation S A
@@ -103,6 +104,7 @@ conclusion ∧ relation S A antisymmetricRelation S A
 }
 
 theorem Transitive Relation from Extended Transitive Relation
+termVariables(R 0, A 0, S 0)
 premise ∧ relation R A transitiveRelation R A
 premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
 conclusion ∧ relation S A transitiveRelation S A
@@ -193,6 +195,7 @@ conclusion ∧ relation S A transitiveRelation S A
 }
 
 theorem Complete Relation from Extended Semi-Complete Relation
+termVariables(R 0, A 0, S 0)
 premise ∧ relation R A semicompleteRelation R A
 premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
 conclusion ∧ relation S A completeRelation S A
@@ -273,6 +276,7 @@ conclusion ∧ relation S A completeRelation S A
 }
 
 theorem Asymmetric Relation Is Irreflexive
+termVariables(~ 0, A 0)
 premise ∧ relation ~ A asymmetricRelation ~ A
 conclusion irreflexiveRelation ~ A
 {
@@ -298,6 +302,7 @@ conclusion irreflexiveRelation ~ A
 }
 
 theorem Complete Relation Is Reflexive
+termVariables(~ 0, A 0)
 premise ∧ relation ~ A completeRelation ~ A
 conclusion reflexiveRelation ~ A
 {
@@ -324,6 +329,7 @@ conclusion reflexiveRelation ~ A
 }
 
 theorem Elements Related by an Irreflexive Relation Are Not Equal
+termVariables(~ 0, A 0, a 0, b 0)
 premise ∧ relation ~ A irreflexiveRelation ~ A
 premise ∈ orderedPair a b ~
 conclusion ¬ = a b

@@ -24,6 +24,7 @@ conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 
 }
 
 theorem 1 Divides Every Natural Number
+termVariables(a 0)
 premise ∈ a ℕ
 conclusion ∈ orderedPair 1ℕ a |ℕ
 {
@@ -50,6 +51,7 @@ conclusion ∈ orderedPair 1ℕ a |ℕ
 }
 
 theorem Every Natural Divides Itself
+termVariables(a 0)
 premise ∈ a ℕ
 conclusion ∈ orderedPair a a |ℕ
 {
@@ -74,6 +76,7 @@ conclusion ∈ orderedPair a a |ℕ
 }
 
 theorem Every Natural Divides Zero
+termVariables(a 0)
 premise ∈ a ℕ
 conclusion ∈ orderedPair a 0ℕ |ℕ
 {
@@ -101,6 +104,7 @@ conclusion ∈ orderedPair a 0ℕ |ℕ
 }
 
 theorem Non-Dividend Is Non-Zero
+termVariables(a 0, b 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ¬ ∈ orderedPair a b |ℕ
@@ -118,6 +122,7 @@ conclusion ¬ = b 0ℕ
 }
 
 theorem Divisors of Non-Zero Naturals Are Smaller than It
+termVariables(a 0, b 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ∈ orderedPair a b |ℕ
@@ -181,6 +186,7 @@ conclusion ∧ ∈ orderedPair 1ℕ a ≤ℕ ∈ orderedPair a b ≤ℕ
 }
 
 theorem Divisibility of Product of Naturals
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ∈ c ℕ
@@ -281,6 +287,7 @@ conclusion ∈ orderedPair a apply ×ℕ orderedPair b c |ℕ
 }
 
 theorem Euclidean Division for Naturals
+termVariables(a 0, b 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ∈ orderedPair 0ℕ b <ℕ
@@ -431,6 +438,7 @@ conclusion ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = a apply +ℕ orderedP
 comment Define the greatest common divisor of two naturals.
 
 theorem Existence of Greatest Common Divisor for Naturals
+termVariables(a 0, b 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ∨ ∈ orderedPair 0ℕ a <ℕ ∈ orderedPair 0ℕ b <ℕ
@@ -759,6 +767,7 @@ conclusion prime 2ℕ
 }
 
 theorem Prime Is Coprime to Non-Dividend
+termVariables(p 0, a 0)
 premise ∈ p ℕ
 premise ∈ a ℕ
 premise prime p

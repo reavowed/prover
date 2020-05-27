@@ -1013,6 +1013,7 @@ conclusion identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 1ℕ ×ℚ
 }
 
 theorem No Rational Squares to a Prime
+termVariables(p 0)
 premise ∈ p ℕ
 premise prime p
 conclusion ¬ ∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply ⍳_ℤ p

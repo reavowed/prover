@@ -11,6 +11,7 @@ type totalOrder <
   definition (∧ ∧ ∧ relation < A antisymmetricRelation < A transitiveRelation < A completeRelation < A)
 
 theorem Total Order from Extended Strict Total Order
+termVariables(R 0, A 0, S 0)
 premise strictTotalOrder R A
 premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
 conclusion totalOrder S A

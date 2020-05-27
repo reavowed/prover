@@ -9,6 +9,7 @@ term × ()
 write apply ×ℤ orderedPair a b as mulZ
 
 theorem ×_ℤ Is Well-Defined
+termVariables(f 0)
 premise = f functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ
 conclusion ∀ a_1 → ∈ $0 ℕ ∀ b_1 → ∈ $0 ℕ ∀ a_2 → ∈ $0 ℕ ∀ b_2 → ∈ $0 ℕ ∀ c_1 → ∈ $0 ℕ ∀ d_1 → ∈ $0 ℕ ∀ c_2 → ∈ $0 ℕ ∀ d_2 → ∈ $0 ℕ → ∧ ∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$$$0 $$$$$0 ~_ℤ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply f orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 apply f orderedPair orderedPair $$$$$$0 $$$$$0 orderedPair $$0 $0
 {
@@ -730,6 +731,7 @@ conclusion ∧ function ×ℤ functionFrom ×ℤ product ℤ ℤ ℤ
 }
 
 theorem Multiplication Is Closed on the Integers
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion ∈ apply ×ℤ orderedPair a b ℤ
@@ -742,6 +744,7 @@ conclusion ∈ apply ×ℤ orderedPair a b ℤ
 }
 
 theorem Integer Multiplication on Equivalence Classes
+termVariables(a 0, b 0, c 0, d 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ∈ c ℕ
@@ -822,6 +825,7 @@ conclusion = apply ×ℤ orderedPair equivalenceClass orderedPair a b ~_ℤ equi
 }
 
 theorem Integer Multiplication Is Commutative
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion = apply ×ℤ orderedPair a b apply ×ℤ orderedPair b a
@@ -894,6 +898,7 @@ conclusion = apply ×ℤ orderedPair a b apply ×ℤ orderedPair b a
 }
 
 theorem Integer Multiplication Is Associative
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ
@@ -1261,6 +1266,7 @@ conclusion = apply ×ℤ orderedPair a apply ×ℤ orderedPair b c apply ×ℤ o
 }
 
 theorem Absorber for Integer Multiplication
+termVariables(a 0)
 premise ∈ a ℤ
 conclusion ∧ = apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ a apply ⍳_ℤ 0ℕ
 {
@@ -1371,6 +1377,7 @@ conclusion ∧ = apply ×ℤ orderedPair a apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ
 }
 
 theorem Identity for Integer Multiplication
+termVariables(a 0)
 premise ∈ a ℤ
 conclusion ∧ = apply ×ℤ orderedPair a apply ⍳_ℤ 1ℕ a = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ a a
 {
@@ -1469,6 +1476,7 @@ conclusion ∧ = apply ×ℤ orderedPair a apply ⍳_ℤ 1ℕ a = apply ×ℤ or
 }
 
 theorem Integer Multiplication Is Cancellable
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ
@@ -2372,6 +2380,7 @@ conclusion ∧ ↔ = apply ×ℤ orderedPair a c apply ×ℤ orderedPair b c ∨
 }
 
 theorem Integer Multiplication Is Zero Iff A Multiplicand Is Zero
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion ↔ = apply ×ℤ orderedPair a b apply ⍳_ℤ 0ℕ ∨ = a apply ⍳_ℤ 0ℕ = b apply ⍳_ℤ 0ℕ
@@ -2704,6 +2713,7 @@ conclusion ↔ = apply ×ℤ orderedPair a b apply ⍳_ℤ 0ℕ ∨ = a apply �
 }
 
 theorem Right-Distribute Integer Multiplication over Addition
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ
@@ -2936,6 +2946,7 @@ conclusion = apply ×ℤ orderedPair apply +ℤ orderedPair a b c apply +ℤ ord
 }
 
 theorem Left-Distribute Integer Multiplication over Addition
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ
@@ -2962,6 +2973,7 @@ conclusion = apply ×ℤ orderedPair a apply +ℤ orderedPair b c apply +ℤ ord
 }
 
 theorem Integer Multiplication of Negative
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion ∧ = apply ×ℤ orderedPair a negatedZ b negatedZ apply ×ℤ orderedPair a b = apply ×ℤ orderedPair negatedZ a b negatedZ apply ×ℤ orderedPair a b
@@ -3090,6 +3102,7 @@ conclusion ∧ = apply ×ℤ orderedPair a negatedZ b negatedZ apply ×ℤ order
 }
 
 theorem Integer Multiplication of Two Negatives
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion = apply ×ℤ orderedPair negatedZ a negatedZ b apply ×ℤ orderedPair a b
@@ -3123,6 +3136,7 @@ conclusion = apply ×ℤ orderedPair negatedZ a negatedZ b apply ×ℤ orderedPa
 }
 
 theorem Positive Integer Multiplication Preserves Strict Order
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ
@@ -3451,6 +3465,7 @@ conclusion ∧ ↔ ∈ orderedPair apply ×ℤ orderedPair a c apply ×ℤ order
 }
 
 theorem Positive Integer Multiplication Preserves Non-Strict Order
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ
@@ -3523,6 +3538,7 @@ conclusion ∧ ↔ ∈ orderedPair apply ×ℤ orderedPair a c apply ×ℤ order
 }
 
 theorem Negative Integer Multiplication Reverses Order
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ
@@ -3877,6 +3893,7 @@ conclusion ∧ ↔ ∈ orderedPair apply ×ℤ orderedPair a c apply ×ℤ order
 }
 
 theorem Natural Embedding Preserves Multiplication
+termVariables(a 0, b 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 conclusion = apply ⍳_ℤ apply ×ℕ orderedPair a b apply ×ℤ orderedPair apply ⍳_ℤ a apply ⍳_ℤ b
@@ -3976,6 +3993,7 @@ conclusion = apply ⍳_ℤ apply ×ℕ orderedPair a b apply ×ℤ orderedPair a
 }
 
 theorem Multiplication of Two Positive Integers Is Positive
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ orderedPair apply ⍳_ℤ 0ℕ a <ℤ
@@ -4008,6 +4026,7 @@ conclusion ∧ ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a 
 }
 
 theorem Multiplication of Two Positive Integers Is Positive
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ orderedPair apply ⍳_ℤ 0ℕ a <ℤ
@@ -4034,6 +4053,7 @@ conclusion ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b <ℤ
 }
 
 theorem Multiplication of Two Non-Negative Integers Is Non-Negative
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ
@@ -4105,6 +4125,7 @@ conclusion ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair a b ≤ℤ
 }
 
 theorem Multiplication of Non-Negative Integer by Positive Integer Is at Least As Large
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ

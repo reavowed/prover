@@ -46,6 +46,7 @@ term + ()
 write apply +ℕ orderedPair a b as addN
 
 theorem Successor of Addition (Right)
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion = apply +ℕ orderedPair n successor m successor apply +ℕ orderedPair n m
@@ -60,6 +61,7 @@ conclusion = apply +ℕ orderedPair n successor m successor apply +ℕ orderedPa
 }
 
 theorem Identity for Addition
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ∧ = apply +ℕ orderedPair n 0ℕ n = apply +ℕ orderedPair 0ℕ n n
 {
@@ -93,6 +95,7 @@ conclusion ∧ = apply +ℕ orderedPair n 0ℕ n = apply +ℕ orderedPair 0ℕ n
 }
 
 theorem Successor of Addition (Left)
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion = apply +ℕ orderedPair successor n m successor apply +ℕ orderedPair n m
@@ -136,6 +139,7 @@ conclusion = apply +ℕ orderedPair successor n m successor apply +ℕ orderedPa
 }
 
 theorem Addition is Closed on the Natural Numbers
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∈ apply +ℕ orderedPair n m ℕ
@@ -151,6 +155,7 @@ conclusion ∈ apply +ℕ orderedPair n m ℕ
 }
 
 theorem Successor Is Adding 1
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion = successor n apply +ℕ orderedPair n 1ℕ
 {
@@ -178,6 +183,7 @@ conclusion = successor n apply +ℕ orderedPair n 1ℕ
 }
 
 theorem Natural Addition is Commutative
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion = apply +ℕ orderedPair n m apply +ℕ orderedPair m n
@@ -209,6 +215,7 @@ conclusion = apply +ℕ orderedPair n m apply +ℕ orderedPair m n
 }
 
 theorem Natural Addition is Associative
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -258,6 +265,7 @@ conclusion = apply +ℕ orderedPair n apply +ℕ orderedPair m r apply +ℕ orde
 }
 
 theorem Natural Addition is Right-Cancellable
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -312,6 +320,7 @@ conclusion ↔ = apply +ℕ orderedPair n r apply +ℕ orderedPair m r = n m
 }
 
 theorem Natural Addition is Left-Cancellable
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -333,6 +342,7 @@ conclusion ↔ = apply +ℕ orderedPair r n apply +ℕ orderedPair r m = n m
 }
 
 theorem Natural Addition Preserves Order (Left)
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -393,6 +403,7 @@ conclusion ↔ ∈ orderedPair apply +ℕ orderedPair n r apply +ℕ orderedPair
 }
 
 theorem Natural Addition Preserves Order (Right)
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -414,6 +425,7 @@ conclusion ↔ ∈ orderedPair apply +ℕ orderedPair n m apply +ℕ orderedPair
 }
 
 theorem Natural Addition Preserves ≤ (Left)
+termVariables(n 0, m 0, r 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ∈ r ℕ
@@ -470,6 +482,7 @@ conclusion ↔ ∈ orderedPair apply +ℕ orderedPair n r apply +ℕ orderedPair
 }
 
 theorem Addition of Non-Zero Natural Is Increase
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 premise ¬ = m 0ℕ
@@ -507,6 +520,7 @@ conclusion ∈ orderedPair n apply +ℕ orderedPair n m <ℕ
 }
 
 theorem Addition of Natural Is At Least As Large
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ∈ orderedPair n apply +ℕ orderedPair n m ≤ℕ
@@ -556,6 +570,7 @@ conclusion ∈ orderedPair n apply +ℕ orderedPair n m ≤ℕ
 }
 
 theorem Natural Addition Is Zero Iff Both Summands Are Zero
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ↔ = apply +ℕ orderedPair n m 0ℕ ∧ = n 0ℕ = m 0ℕ
@@ -631,6 +646,7 @@ conclusion ↔ = apply +ℕ orderedPair n m 0ℕ ∧ = n 0ℕ = m 0ℕ
 }
 
 theorem Difference Condition for Strictly-Ordered Naturals
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ↔ ∈ orderedPair n m <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair n $0 m
@@ -721,6 +737,7 @@ conclusion ↔ ∈ orderedPair n m <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = 
 }
 
 theorem Difference Condition for Non-Strictly Ordered Naturals
+termVariables(n 0, m 0)
 premise ∈ n ℕ
 premise ∈ m ℕ
 conclusion ↔ ∈ orderedPair n m ≤ℕ ∃ d ∧ ∈ $0 ℕ = apply +ℕ orderedPair n $0 m
@@ -772,6 +789,7 @@ conclusion ↔ ∈ orderedPair n m ≤ℕ ∃ d ∧ ∈ $0 ℕ = apply +ℕ orde
 }
 
 theorem Reversed Order in Equal Sums of Naturals
+termVariables(a 0, b 0, c 0, d 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ∈ c ℕ

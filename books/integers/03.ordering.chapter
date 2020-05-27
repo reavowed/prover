@@ -630,6 +630,7 @@ conclusion strictTotalOrder <ℤ ℤ
 }
 
 theorem <_ℤ Is Transitive
+termVariables(a 0, b 0, c 0)
 premise ∈ orderedPair a b <ℤ
 premise ∈ orderedPair b c <ℤ
 conclusion ∈ orderedPair a c <ℤ
@@ -682,6 +683,7 @@ conclusion irreflexiveRelation <ℤ ℤ
 }
 
 theorem Natural Embedding Preserves Strict Order
+termVariables(a 0, b 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 conclusion ↔ ∈ orderedPair a b <ℕ ∈ orderedPair apply ⍳_ℤ a apply ⍳_ℤ b <ℤ
@@ -840,6 +842,7 @@ conclusion totalOrder ≤ℤ ℤ
 }
 
 theorem ≤_ℤ Is Transitive
+termVariables(a 0, b 0, c 0)
 premise ∈ orderedPair a b ≤ℤ
 premise ∈ orderedPair b c ≤ℤ
 conclusion ∈ orderedPair a c ≤ℤ
@@ -893,6 +896,7 @@ conclusion reflexiveRelation ≤ℤ ℤ
 }
 
 theorem Natural Embedding Preserves Non-Strict Order
+termVariables(a 0, b 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 conclusion ↔ ∈ orderedPair a b ≤ℕ ∈ orderedPair apply ⍳_ℤ a apply ⍳_ℤ b ≤ℤ
@@ -929,6 +933,7 @@ conclusion ↔ ∈ orderedPair a b ≤ℕ ∈ orderedPair apply ⍳_ℤ a apply 
 comment Show that the strict ordering on ℤ distributes over the non-strict ordering.
 
 theorem <_ℤ Distributes over ≤_ℤ from Left
+termVariables(a 0, b 0, c 0)
 premise ∈ orderedPair a b <ℤ
 premise ∈ orderedPair b c ≤ℤ
 conclusion ∈ orderedPair a c <ℤ
@@ -964,6 +969,7 @@ conclusion ∈ orderedPair a c <ℤ
 }
 
 theorem <_ℤ Distributes over ≤_ℤ from Right
+termVariables(a 0, b 0, c 0)
 premise ∈ orderedPair a b ≤ℤ
 premise ∈ orderedPair b c <ℤ
 conclusion ∈ orderedPair a c <ℤ
@@ -1002,6 +1008,7 @@ conclusion ∈ orderedPair a c <ℤ
 }
 
 theorem Two Integers Are Either Strictly Ordered Or Non-Strictly Ordered
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion ∧ ⊕ ∈ orderedPair a b <ℤ ∈ orderedPair b a ≤ℤ ⊕ ∈ orderedPair a b ≤ℤ ∈ orderedPair b a <ℤ
@@ -1401,6 +1408,7 @@ conclusion ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveF
 }
 
 theorem Non-Negative Integer Has a Corresponding Natural
+termVariables(a 0)
 premise ∈ a ℤ
 premise ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ
 conclusion ∃! n ∧ ∈ $0 ℕ = a apply ⍳_ℤ $0

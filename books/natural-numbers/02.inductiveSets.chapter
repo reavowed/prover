@@ -5,6 +5,7 @@ statement inductive (S)
   definition (∧ ∈ ∅ S ∀ n → ∈ $0 S ∈ successor $0 S)
 
 theorem An Inductive Set Contains the Empty Set
+termVariables(S 0)
 premise inductive S
 conclusion ∈ ∅ S
 {

@@ -19,6 +19,7 @@ conclusion ∈ 0ℕ ℕ
 }
 
 theorem 0 Is Not the Successor of Any Natural Number
+termVariables(n 0)
 conclusion ¬ = successor n 0ℕ
 {
   prove ∈ n successor n bc756d29841468f3767ef3d7f7e3d30bd5b6c911412e50f6b89947c99915b841 () (n)

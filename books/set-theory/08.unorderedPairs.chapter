@@ -1,6 +1,7 @@
 Establish the existence of the unordered pair {a, b}.
 
 theorem Unordered Pair Existence Lemma
+termVariables(a 0, b 0)
 conclusion ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 a ∧ = $0 ∅ = $$0 b ∨ = $0 a = $0 b
 {
   take y {
@@ -43,6 +44,7 @@ conclusion ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 single
 }
 
 theorem Unordered Pair Existence
+termVariables(a 0, b 0)
 conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 a = $0 b
 {
   take x {
@@ -63,6 +65,7 @@ term pair (a b)
   (∀ x ↔ ∈ $0 $$0 ∨ = $0 a = $0 b)
 
 theorem Elements of Unordered Pair
+termVariables(c 0, a 0, b 0)
 premise ∈ c pair a b
 conclusion ∨ = c a = c b
 {
@@ -75,6 +78,7 @@ conclusion ∨ = c a = c b
 }
 
 theorem First Element of Unordered Pair
+termVariables(a 0, b 0)
 conclusion ∈ a pair a b
 {
   prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b)
@@ -88,6 +92,7 @@ conclusion ∈ a pair a b
 }
 
 theorem Second Element of Unordered Pair
+termVariables(b 0, a 0)
 conclusion ∈ b pair a b
 {
   prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b)
@@ -101,6 +106,7 @@ conclusion ∈ b pair a b
 }
 
 theorem An Unordered Pair Is Not the Empty Set
+termVariables(a 0, b 0)
 conclusion ¬ = pair a b ∅
 {
   prove ∈ a pair a b bfc094e90b092aa3e522a3fd5324c8844b000a3eaf96c48172cf024d8fa5afc4 () (a, b)
@@ -108,6 +114,7 @@ conclusion ¬ = pair a b ∅
 }
 
 theorem Reverse Unordered Pair
+termVariables(a 0, b 0)
 conclusion = pair a b pair b a
 {
   prove ∀ x ↔ ∈ $0 pair a b ∨ = $0 a = $0 b 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, b)
@@ -121,6 +128,7 @@ conclusion = pair a b pair b a
 }
 
 theorem Repeated Pair Is Singleton
+termVariables(a 0)
 conclusion = pair a a singleton a
 {
   prove ∀ x ↔ ∈ $0 pair a a ∨ = $0 a = $0 a 0a765765ca4f31f48da9479d5697c7c5309c57735fb677b6f7930b371dd3f542 () (a, a)
@@ -141,6 +149,7 @@ conclusion = pair a a singleton a
 }
 
 theorem Sets Are Equal If Pair Is Singleton
+termVariables(a 0, b 0, c 0)
 premise = pair a b singleton c
 conclusion = a c
 {
@@ -150,6 +159,7 @@ conclusion = a c
 }
 
 theorem Sets Are Equal If Pair Is Singleton
+termVariables(a 0, b 0, c 0)
 premise = pair a b singleton c
 conclusion = b c
 {
@@ -159,6 +169,7 @@ conclusion = b c
 }
 
 theorem Sets Are Equal If Pair Is Singleton
+termVariables(a 0, b 0, c 0)
 premise = pair a b singleton c
 conclusion = a b
 {
@@ -168,6 +179,7 @@ conclusion = a b
 }
 
 theorem Unordered Pair Is Subset
+termVariables(a 0, S 0, b 0)
 premise ∈ a S
 premise ∈ b S
 conclusion ⊆ pair a b S
@@ -196,6 +208,7 @@ conclusion ⊆ pair a b S
 }
 
 theorem Unordered Pair Is Element of Power Set
+termVariables(a 0, S 0, b 0)
 premise ∈ a S
 premise ∈ b S
 conclusion ∈ pair a b powerSet S

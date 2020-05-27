@@ -4,6 +4,7 @@ axiom Axiom of Empty Set
 conclusion ∃ X ∀ x ¬ ∈ $0 $$0
 
 theorem Two Empty Sets Are Equal
+termVariables(a 0, b 0)
 premise ∀ x ¬ ∈ $0 a
 premise ∀ x ¬ ∈ $0 b
 conclusion = a b
@@ -40,6 +41,7 @@ term ∅ ()
   shorthand (empty)
 
 theorem A Set with No Elements Is the Empty Set
+termVariables(a 0)
 premise ∀ x ¬ ∈ $0 a
 conclusion = a ∅
 {
@@ -48,6 +50,7 @@ conclusion = a ∅
 }
 
 theorem A Set with No Elements Is the Empty Set
+termVariables(a 0)
 premise ¬ ∃ x ∈ $0 a
 conclusion = a ∅
 {
@@ -56,6 +59,7 @@ conclusion = a ∅
 }
 
 theorem A Set with an Element Is Not the Empty Set
+termVariables(b 0, a 0)
 premise ∈ b a
 conclusion ¬ = a ∅
 {
@@ -70,6 +74,7 @@ conclusion ¬ = a ∅
 }
 
 theorem A Set That Is Not the Empty Set Has an Element
+termVariables(a 0)
 premise ¬ = a ∅
 conclusion ∃ x ∈ $0 a
 {
@@ -80,6 +85,7 @@ conclusion ∃ x ∈ $0 a
 }
 
 theorem The Empty Set Is a Subset of Any Set
+termVariables(a 0)
 conclusion ⊆ ∅ a
 {
   prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()

@@ -1,6 +1,7 @@
 Define the absolute value of an integer.
 
 theorem Existence of Absolute Value
+termVariables(a 0)
 premise ∈ a ℤ
 conclusion ∃! b ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 a = $0 negatedZ a
 {
@@ -139,6 +140,7 @@ term absZ (a)
   (∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 a = $0 negatedZ a)
 
 theorem Absolute Value Is Unique
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ orderedPair apply ⍳_ℤ 0ℕ b ≤ℤ
@@ -155,6 +157,7 @@ conclusion = b absZ a
 }
 
 theorem Non-Negative Integer Is Its Own Absolute Value
+termVariables(a 0)
 premise ∈ a ℤ
 conclusion ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ = a absZ a
 {
@@ -180,6 +183,7 @@ conclusion ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ a ≤ℤ = a absZ a
 }
 
 theorem Absolute Value of Negation
+termVariables(a 0)
 premise ∈ a ℤ
 conclusion = absZ negatedZ a absZ a
 {
@@ -227,6 +231,7 @@ conclusion = absZ negatedZ a absZ a
 }
 
 theorem Absolute Value of Multiplication
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion = absZ apply ×ℤ orderedPair a b apply ×ℤ orderedPair absZ a absZ b
@@ -333,6 +338,7 @@ conclusion = absZ apply ×ℤ orderedPair a b apply ×ℤ orderedPair absZ a abs
 }
 
 theorem Integer Is At Most Its Absolute Value
+termVariables(a 0)
 premise ∈ a ℤ
 conclusion ∈ orderedPair a absZ a ≤ℤ
 {
@@ -403,6 +409,7 @@ conclusion ∈ orderedPair a absZ a ≤ℤ
 }
 
 theorem Absolute Value Is Only Zero for Zero
+termVariables(a 0)
 premise ∈ a ℤ
 conclusion ↔ = a apply ⍳_ℤ 0ℕ = absZ a apply ⍳_ℤ 0ℕ
 {

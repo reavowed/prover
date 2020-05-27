@@ -6,6 +6,8 @@ statement ∃ ($x with x φ)
   shorthand (ex)
 
 theorem Existence by Exhibiting Value
+statementVariables(φ 1)
+termVariables(a 0)
 premise with (a) φ
 conclusion ∃ x with ($0) φ
 {
@@ -19,6 +21,7 @@ conclusion ∃ x with ($0) φ
 comment If something exists, we can name that something with an arbitrary variable for free.
 
 theorem Value for Existence
+statementVariables(φ 1, ψ 0)
 premise ∃ x with ($0) φ
 premise ∀ x → with ($0) φ ψ
 conclusion ψ
@@ -38,6 +41,7 @@ conclusion ψ
 comment Swapping an existence condition with an equivalent one.
 
 theorem Existence Equivalence
+statementVariables(φ 1, ψ 1)
 premise ∀ x ↔ with ($0) φ with ($0) ψ
 conclusion ↔ ∃ x with ($0) φ ∃ x with ($0) ψ
 {
@@ -65,6 +69,7 @@ conclusion ↔ ∃ x with ($0) φ ∃ x with ($0) ψ
 }
 
 theorem Quantified Existence Equivalence
+statementVariables(χ 1, φ 1, ψ 1)
 premise ∀ x → with ($0) χ ↔ with ($0) φ with ($0) ψ
 conclusion ↔ ∃ x ∧ with ($0) χ with ($0) φ ∃ x ∧ with ($0) χ with ($0) ψ
 {
@@ -102,6 +107,7 @@ conclusion ↔ ∃ x ∧ with ($0) χ with ($0) φ ∃ x ∧ with ($0) χ with (
 comment Swapping between universal and existential quantifiers.
 
 theorem Not Exists Not Is For All
+statementVariables(φ 1)
 premise ¬ ∃ x ¬ with ($0) φ
 conclusion ∀ x with ($0) φ
 {
@@ -114,6 +120,7 @@ conclusion ∀ x with ($0) φ
 }
 
 theorem Not Exists Is For All Not
+statementVariables(φ 1)
 premise ¬ ∃ x with ($0) φ
 conclusion ∀ x ¬ with ($0) φ
 {
@@ -124,6 +131,7 @@ conclusion ∀ x ¬ with ($0) φ
 }
 
 theorem For All Not Is Not Exists
+statementVariables(φ 1)
 premise ∀ x ¬ with ($0) φ
 conclusion ¬ ∃ x with ($0) φ
 {
@@ -134,6 +142,7 @@ conclusion ¬ ∃ x with ($0) φ
 }
 
 theorem Swap Existential Quantifiers
+statementVariables(φ 2)
 premise ∃ a ∃ b with ($$0 $0) φ
 conclusion ∃ b ∃ a with ($0 $$0) φ
 {
@@ -146,6 +155,7 @@ conclusion ∃ b ∃ a with ($0 $$0) φ
 }
 
 theorem Swap Restricted Existential Quantifiers
+statementVariables(φ 1, ψ 1, χ 2)
 premise ∃ a ∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ
 conclusion ∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ
 {
@@ -164,6 +174,7 @@ conclusion ∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ
 }
 
 theorem Remove Existential Quantifier Restriction
+statementVariables(φ 1, ψ 1)
 premise ∃ a ∧ with ($0) φ with ($0) ψ
 conclusion ∃ a with ($0) ψ
 {
@@ -173,6 +184,7 @@ conclusion ∃ a with ($0) ψ
 }
 
 theorem Remove Two Existential Quantifier Restrictions
+statementVariables(φ 1, ψ 1, χ 2)
 premise ∃ a ∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ
 conclusion ∃ a ∃ b with ($$0 $0) χ
 {

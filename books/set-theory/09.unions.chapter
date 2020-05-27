@@ -1,9 +1,11 @@
 Arbitrary and binary unions.
 
 axiom Axiom of Union
+termVariables(a 0)
 conclusion ∃ x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0
 
 theorem Arbitrary Unions Exist
+termVariables(a 0)
 conclusion ∃! x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0
 {
   prove ∃ x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 a ∈ $$0 $0 7368a5aaf2ab8f127dfe8575ac80d95f32cf5e92f047b096c5dfe41f6b5dc039 () (a)
@@ -16,6 +18,7 @@ term union (a)
   (∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $$0 $0 ∈ $0 a)
 
 theorem Element of Arbitrary Union
+termVariables(a 0, A 0)
 premise ∈ a union A
 conclusion ∃ x ∧ ∈ a $0 ∈ $0 A
 {
@@ -28,6 +31,7 @@ conclusion ∃ x ∧ ∈ a $0 ∈ $0 A
 }
 
 theorem Element of Element Is Element of Union
+termVariables(b 0, a 0, A 0)
 premise ∈ b a
 premise ∈ a A
 conclusion ∈ b union A
@@ -49,6 +53,7 @@ term ∪ (a b)
   shorthand (un)
 
 theorem Membership Condition for Binary Union
+termVariables(a 0, b 0)
 conclusion ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
 {
   prove = ∪ a b union pair a b 523a320399c522cb7939b676b443444325ae6bc54389fb87a6fc4b2d72971a20 () (a, b)
@@ -96,6 +101,7 @@ conclusion ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b
 }
 
 theorem Element of Binary Union
+termVariables(c 0, a 0, b 0)
 premise ∈ c ∪ a b
 conclusion ∨ ∈ c a ∈ c b
 {
@@ -108,6 +114,7 @@ conclusion ∨ ∈ c a ∈ c b
 }
 
 theorem Binary Union Is Symmetric
+termVariables(a 0, b 0)
 conclusion = ∪ a b ∪ b a
 {
   prove ∀ x ↔ ∈ $0 ∪ a b ∨ ∈ $0 a ∈ $0 b 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (a, b)
@@ -121,6 +128,7 @@ conclusion = ∪ a b ∪ b a
 }
 
 theorem Element of Union (Left)
+termVariables(c 0, a 0, b 0)
 premise ∈ c a
 conclusion ∈ c ∪ a b
 {
@@ -134,6 +142,7 @@ conclusion ∈ c ∪ a b
 }
 
 theorem Element of Union (Right)
+termVariables(c 0, b 0, a 0)
 premise ∈ c b
 conclusion ∈ c ∪ a b
 {
@@ -147,6 +156,7 @@ conclusion ∈ c ∪ a b
 }
 
 theorem The Empty Set Is an Identity for Binary Union
+termVariables(a 0)
 conclusion = ∪ ∅ a a
 {
   prove ∀ x ↔ ∈ $0 ∪ ∅ a ∨ ∈ $0 ∅ ∈ $0 a 360c59f2acd55b7842e8cf2ff5b20dd18d1544a119325c3d9b02053b53e4384a () (∅, a)
@@ -169,6 +179,7 @@ conclusion = ∪ ∅ a a
 }
 
 theorem A Union of a Non-Empty Set Is Non-Empty
+termVariables(a 0, b 0)
 premise ¬ = a ∅
 conclusion ¬ = ∪ a b ∅
 {
@@ -180,6 +191,7 @@ conclusion ¬ = ∪ a b ∅
 }
 
 theorem A Union of a Non-Empty Set Is Non-Empty
+termVariables(a 0, b 0)
 premise ¬ = a ∅
 conclusion ¬ = ∪ b a ∅
 {
@@ -191,6 +203,7 @@ conclusion ¬ = ∪ b a ∅
 }
 
 theorem Set Is in One Part of a Binary Union
+termVariables(a 0, b 0, c 0)
 premise ∈ a ∪ b c
 premise ¬ ∈ a b
 conclusion ∈ a c
@@ -200,6 +213,7 @@ conclusion ∈ a c
 }
 
 theorem Set Is in One Part of a Binary Union
+termVariables(a 0, b 0, c 0)
 premise ∈ a ∪ b c
 premise ¬ ∈ a c
 conclusion ∈ a b
@@ -209,6 +223,7 @@ conclusion ∈ a b
 }
 
 theorem Union Membership Equivalence If Not In One Set
+termVariables(a 0, c 0, b 0)
 premise ¬ ∈ a c
 conclusion ↔ ∈ a b ∈ a ∪ b c
 {
@@ -222,6 +237,7 @@ conclusion ↔ ∈ a b ∈ a ∪ b c
 }
 
 theorem Union Membership Equivalence If Not In One Set
+termVariables(a 0, b 0, c 0)
 premise ¬ ∈ a b
 conclusion ↔ ∈ a c ∈ a ∪ b c
 {
@@ -235,6 +251,7 @@ conclusion ↔ ∈ a c ∈ a ∪ b c
 }
 
 theorem Union of Subsets Is a Subset
+termVariables(A 0, X 0, B 0)
 premise ⊆ A X
 premise ⊆ B X
 conclusion ⊆ ∪ A B X
@@ -261,6 +278,7 @@ conclusion ⊆ ∪ A B X
 }
 
 theorem Subset of Union (Left)
+termVariables(X 0, A 0, B 0)
 premise ⊆ X A
 conclusion ⊆ X ∪ A B
 {
@@ -274,6 +292,7 @@ conclusion ⊆ X ∪ A B
 }
 
 theorem Subset of Union (Right)
+termVariables(X 0, A 0, B 0)
 premise ⊆ X A
 conclusion ⊆ X ∪ B A
 {
@@ -283,6 +302,7 @@ conclusion ⊆ X ∪ B A
 }
 
 theorem Set Is Subset of Its Union
+termVariables(A 0, B 0)
 conclusion ⊆ A ∪ A B
 {
   prove ⊆ A A f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (A)
@@ -290,6 +310,7 @@ conclusion ⊆ A ∪ A B
 }
 
 theorem Set Is Subset of Its Union
+termVariables(B 0, A 0)
 conclusion ⊆ B ∪ A B
 {
   prove ⊆ B B f44f38fb228f6b7d73c261c9471169d869df0e8b489f65d14b3dd21b8b32808f () (B)
@@ -297,6 +318,7 @@ conclusion ⊆ B ∪ A B
 }
 
 theorem Redundant Union with Subset
+termVariables(A 0, B 0)
 premise ⊆ A B
 conclusion = ∪ A B B
 {
@@ -326,6 +348,7 @@ conclusion = ∪ A B B
 }
 
 theorem Redundant Union with Subset
+termVariables(A 0, B 0)
 premise ⊆ A B
 conclusion = ∪ B A B
 {
@@ -335,6 +358,7 @@ conclusion = ∪ B A B
 }
 
 theorem Redundant Union with Singleton
+termVariables(a 0, A 0)
 premise ∈ a A
 conclusion = ∪ A singleton a A
 {
@@ -343,6 +367,7 @@ conclusion = ∪ A singleton a A
 }
 
 theorem Union of Subsets Is Subset
+termVariables(A 0, B 0)
 premise ⊆ A powerSet B
 conclusion ⊆ union A B
 {
@@ -360,6 +385,7 @@ conclusion ⊆ union A B
 }
 
 theorem Element is Subset of Union
+termVariables(a 0, A 0)
 premise ∈ a A
 conclusion ⊆ a union A
 {

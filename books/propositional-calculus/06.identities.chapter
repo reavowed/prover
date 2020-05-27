@@ -1,6 +1,7 @@
 Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
 
 theorem And Is Symmetric
+statementVariables(φ 0, ψ 0)
 conclusion ↔ ∧ φ ψ ∧ ψ φ
 {
   assume ∧ φ ψ {
@@ -13,6 +14,7 @@ conclusion ↔ ∧ φ ψ ∧ ψ φ
 }
 
 theorem Or Is Symmetric
+statementVariables(φ 0, ψ 0)
 conclusion ↔ ∨ φ ψ ∨ ψ φ
 {
   assume ∨ φ ψ {
@@ -25,6 +27,7 @@ conclusion ↔ ∨ φ ψ ∨ ψ φ
 }
 
 theorem And Is Idempotent
+statementVariables(φ 0)
 conclusion ↔ ∧ φ φ φ
 {
   assume ∧ φ φ {
@@ -37,6 +40,7 @@ conclusion ↔ ∧ φ φ φ
 }
 
 theorem Or Is Idempotent
+statementVariables(φ 0)
 conclusion ↔ ∨ φ φ φ
 {
   assume ∨ φ φ {

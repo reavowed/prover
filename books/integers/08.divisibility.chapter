@@ -26,6 +26,7 @@ conclusion ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 
 }
 
 theorem 1 Divides Every Integer
+termVariables(a 0)
 premise ∈ a ℤ
 conclusion ∈ orderedPair apply ⍳_ℤ 1ℕ a |ℤ
 {
@@ -53,6 +54,7 @@ conclusion ∈ orderedPair apply ⍳_ℤ 1ℕ a |ℤ
 }
 
 theorem Every Integer Divides Itself
+termVariables(a 0)
 premise ∈ a ℤ
 conclusion ∈ orderedPair a a |ℤ
 {
@@ -80,6 +82,7 @@ conclusion ∈ orderedPair a a |ℤ
 }
 
 theorem Negated Divisor Is Divisor
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion ↔ ∈ orderedPair a b |ℤ ∈ orderedPair negatedZ a b |ℤ
@@ -157,6 +160,7 @@ conclusion ↔ ∈ orderedPair a b |ℤ ∈ orderedPair negatedZ a b |ℤ
 }
 
 theorem Negated Dividend Is Dividend
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion ↔ ∈ orderedPair a b |ℤ ∈ orderedPair a negatedZ b |ℤ
@@ -233,6 +237,7 @@ conclusion ↔ ∈ orderedPair a b |ℤ ∈ orderedPair a negatedZ b |ℤ
 }
 
 theorem Absolute Value of Divisor Is Divisor
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 conclusion ↔ ∈ orderedPair a b |ℤ ∈ orderedPair absZ a b |ℤ
@@ -260,6 +265,7 @@ conclusion ↔ ∈ orderedPair a b |ℤ ∈ orderedPair absZ a b |ℤ
 }
 
 theorem Bounds for Divisor of Non-Zero Integer
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ orderedPair a b |ℤ
@@ -419,6 +425,7 @@ conclusion ∧ ∈ orderedPair negatedZ absZ b a ≤ℤ ∈ orderedPair a absZ b
 }
 
 theorem Divisibility of Sum of Integers
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ
@@ -477,6 +484,7 @@ conclusion ∈ orderedPair a apply +ℤ orderedPair b c |ℤ
 }
 
 theorem Divisibility of Product of Integers
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ
@@ -571,6 +579,7 @@ conclusion ∈ orderedPair a apply ×ℤ orderedPair b c |ℤ
 }
 
 theorem Existence of Greatest Common Divisor for Integers
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∨ ¬ = a apply ⍳_ℤ 0ℕ ¬ = b apply ⍳_ℤ 0ℕ
@@ -810,6 +819,7 @@ term gcd (a b)
   (∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 a |ℤ ∧ ∈ orderedPair $0 b |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 a |ℤ ∈ orderedPair $0 b |ℤ ∈ orderedPair $0 $$0 ≤ℤ)
 
 theorem Euclidean Division for Integers
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ¬ = b apply ⍳_ℤ 0ℕ
@@ -1451,6 +1461,7 @@ conclusion ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = a apply +ℤ orderedP
 }
 
 theorem Bezout's Lemma
+termVariables(a 0, b 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∨ ¬ = a apply ⍳_ℤ 0ℕ ¬ = b apply ⍳_ℤ 0ℕ
@@ -2988,6 +2999,7 @@ conclusion ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair ap
 }
 
 theorem Natural Embedding Preserves Divisibility
+termVariables(a 0, b 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 conclusion ↔ ∈ orderedPair a b |ℕ ∈ orderedPair apply ⍳_ℤ a apply ⍳_ℤ b |ℤ
@@ -3188,6 +3200,7 @@ conclusion ↔ ∈ orderedPair a b |ℕ ∈ orderedPair apply ⍳_ℤ a apply �
 }
 
 theorem Natural Embedding Preserves GCD
+termVariables(a 0, b 0)
 premise ∈ a ℕ
 premise ∈ b ℕ
 premise ∨ ∈ orderedPair 0ℕ a <ℕ ∈ orderedPair 0ℕ b <ℕ
@@ -3467,6 +3480,7 @@ conclusion = apply ⍳_ℤ gcdℕ a b gcdℤ apply ⍳_ℤ a apply ⍳_ℤ b
 }
 
 theorem Euclid's Lemma
+termVariables(p 0, a 0, b 0)
 premise ∈ p ℕ
 premise ∈ a ℕ
 premise ∈ b ℕ
@@ -3661,6 +3675,7 @@ conclusion ↔ ∈ orderedPair p apply ×ℕ orderedPair a b |ℕ ∨ ∈ ordere
 }
 
 theorem Euclid's Lemma for Integers
+termVariables(p 0, a 0, b 0)
 premise ∈ p ℕ
 premise prime p
 premise ∈ a ℤ
@@ -3943,6 +3958,7 @@ conclusion ↔ ∈ orderedPair apply ⍳_ℤ p apply ×ℤ orderedPair a b |ℤ 
 }
 
 theorem Multiplication of Divisors
+termVariables(a 0, b 0, c 0, d 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ
@@ -4035,6 +4051,7 @@ conclusion ∈ orderedPair apply ×ℤ orderedPair a b apply ×ℤ orderedPair c
 }
 
 theorem Multiplication is Cancellable in Divisor Relation
+termVariables(a 0, b 0, c 0)
 premise ∈ a ℤ
 premise ∈ b ℤ
 premise ∈ c ℤ

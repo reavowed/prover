@@ -16,6 +16,7 @@ term ℕ ()
   shorthand (nat)
 
 theorem An Element of All Inductive Sets Is a Natural Number
+termVariables(n 0)
 premise ∀ X → inductive $0 ∈ n $0
 conclusion ∈ n ℕ
 {
@@ -28,6 +29,7 @@ conclusion ∈ n ℕ
 }
 
 theorem A Natural Number Is an Element of Any Inductive Set
+termVariables(n 0, S 0)
 premise ∈ n ℕ
 premise inductive S
 conclusion ∈ n S
@@ -45,6 +47,7 @@ conclusion ∈ n S
 }
 
 theorem A Successor of a Natural Number Is a Natural Number
+termVariables(n 0)
 premise ∈ n ℕ
 conclusion ∈ successor n ℕ
 {

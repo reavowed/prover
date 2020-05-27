@@ -4,6 +4,7 @@ axiom Axiom of Regularity
 conclusion ∀ x → ¬ = $0 ∅ ∃ y ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅
 
 theorem Regularity
+termVariables(a 0)
 premise ¬ = a ∅
 conclusion ∃ x ∧ ∈ $0 a = ∩ $0 a ∅
 {
@@ -15,6 +16,7 @@ conclusion ∃ x ∧ ∈ $0 a = ∩ $0 a ∅
 }
 
 theorem No Set Contains Itself
+termVariables(a 0)
 conclusion ¬ ∈ a a
 {
   prove ¬ = singleton a ∅ 1c4e6217e33217004ef0962a46f7422720c1fd5d2c8bb711f976bf01166dc708 () (a)
@@ -28,6 +30,7 @@ conclusion ¬ ∈ a a
 }
 
 theorem Element of a Set Is Not the Set
+termVariables(a 0, b 0)
 premise ∈ a b
 conclusion ¬ = a b
 {
@@ -36,6 +39,7 @@ conclusion ¬ = a b
 }
 
 theorem No Two Sets Contain Each Other
+termVariables(b 0, a 0)
 conclusion ∨ ¬ ∈ b a ¬ ∈ a b
 {
   prove ¬ = pair a b ∅ f62b1ca093e555223e44de12325c96d4a9497e339544fc6d12d6d5afb49f13ce () (a, b)
@@ -57,6 +61,7 @@ conclusion ∨ ¬ ∈ b a ¬ ∈ a b
 }
 
 theorem Element of a Set Cannot Contain It
+termVariables(a 0, b 0)
 premise ∈ a b
 conclusion ¬ ∈ b a
 {
