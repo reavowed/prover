@@ -49,5 +49,17 @@ class StatementSpec extends Specification {
     "parse a list with multiple statements" in {
       parseStatementList("(φ, ψ, χ)") mustEqual Seq(φ, ψ, χ).map(_.toVariable)
     }
+
+    "parse a type without a qualifier" in {
+      parseStatement("is f function") mustEqual Function(f)
+    }
+
+    "parse a type with a default qualifier" in {
+      parseStatement("is R relation A") mustEqual Relation(R, A)
+    }
+
+    "parse a type with an explicit qualifier" in {
+      parseStatement("is f function from A B") mustEqual Conjunction(Function(f), FunctionFrom(f, A, B))
+    }
   }
 }

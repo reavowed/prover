@@ -98,10 +98,10 @@ object Statement {
     }
 
     for {
-      defaultQualifierComponents <- typeDefinition.qualifier.termNames.map(_ => Term.parser).traverse
       qualifierAndTerms <- qualifierParser
       (qualifierOption, qualifierTerms) = qualifierAndTerms
-      qualifierStatementOption = qualifierOption.map(q => q.statementDefinition(term +: qualifierTerms: _*))
+      defaultQualifierComponents = if (typeDefinition.qualifier.isDefined) qualifierTerms else Nil
+        qualifierStatementOption = qualifierOption.map(q => q.statementDefinition(term +: qualifierTerms: _*))
       propertiesAndObjectStatements <- Parser.optional("with", propertiesAndObjectStatementsParser(qualifierOption, term, qualifierTerms), Nil)
     } yield {
       val baseStatement = DefinedStatement(term +: defaultQualifierComponents, typeDefinition.statementDefinition)(Nil)

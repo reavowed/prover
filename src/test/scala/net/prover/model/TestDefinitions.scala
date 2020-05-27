@@ -195,6 +195,7 @@ trait ExpressionDefinitions extends VariableDefinitions {
   val PairSet = TypeDefinition("pairSet", "X", None, None, ForAllIn("x", X)(Exists("a")(Exists("b")(Equals($.^^, Pair($.^, $))))))
   val Domain = simpleTermDefinition("domain", Seq(X), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(X)), Exists("b")(ElementOf(Pair($.^, $), X)))))
   val Range = simpleTermDefinition("range", Seq(X), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(X)), Exists("a")(ElementOf(Pair($, $.^), X)))))
+  val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true))), None, Subset(R, Product(A, A)))
   val Function = TypeDefinition("function", "f", None, None, Conjunction(PairSet(f), ForAllIn("a", Domain(f))(ExistsUnique("b")(ElementOf(Pair($.^, $), f)))))
   val FunctionFrom = TypeQualifierDefinition("from", Function, Qualifier(Seq("A", "B"), Format.Explicit("from A B", Seq("A", "B"), true, true)), None, Conjunction(Equals(Domain(f), A), Subset(Range(f), B)), ConjunctionDefinition)
   val BaseSet = simpleTermDefinition("baseSet", Seq(X), Format.default(1), Nil, Equals($, Domain(Domain(X))))
@@ -418,7 +419,7 @@ object TestDefinitions extends VariableDefinitions with ExpressionDefinitions wi
       ElementOf, Equals, Subset) ++
     Seq(
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Union, Comprehension,
-      PairSet, Domain, Range, Function, FunctionFrom, BaseSet, BinaryOperation, BinaryOperationOn,
+      PairSet, Domain, Range, Relation, Function, FunctionFrom, BaseSet, BinaryOperation, BinaryOperationOn,
       NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, MultiplicationDefinition, Apply, LessThanDefinition,
       IntegersDefinition, IntegerEmbeddingDefinition, IntegerAdditionDefinition, IntegerNegation, IntegerMultiplicationDefinition) ++
     Seq(
