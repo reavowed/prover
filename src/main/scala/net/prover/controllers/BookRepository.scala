@@ -63,7 +63,13 @@ class BookRepository {
   private val writeLock = new ReentrantLock()
   private var _booksAndDefinitions: (Seq[Book], Definitions) = (Nil, Definitions(EntryContext(Nil)))
 
-  queueUpdateActions(TypedUpdateAction[Identity]((_, _) => parseBooksInitiallyUnsafe()))
+  {
+    val initialParseAction = TypedUpdateAction[Identity]((_, _) => parseBooksInitiallyUnsafe())
+    queueUpdateActions(initialParseAction)
+    Await.ready(initialParseAction.future, Duration.Inf).value.get.recover {
+      case e => BookRepository.logger.error("Error parsing books", e)
+    }
+  }
 
   def booksAndDefinitions: (Seq[Book], Definitions) = withLock(bookLock.readLock()) {
     _booksAndDefinitions
@@ -113,7 +119,6 @@ class BookRepository {
           }
         }
         results += result
-        BookRepository.logger.info(s"Action completed")
       }
       nextAction.isDefined
     }
@@ -124,7 +129,6 @@ class BookRepository {
     try {
       val lastSuccessfulResult = results.result().filter(_.isSuccess).lastOption
       lastSuccessfulResult.foreach(_.withResult { (books, _) => writeBooks(books) })
-      BookRepository.logger.info(s"Books written")
     } finally {
       writeLock.unlock()
     }
