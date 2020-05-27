@@ -5,11 +5,110 @@ type equivalenceRelation ≈
   name (equivalence relation)
   definition (∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A)
 
+theorem Domain and Codomain of Equivalence Relation
+premise equivalenceRelation ≈ A
+conclusion ∧ = domain ≈ A = codomain ≈ A
+{
+  elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
+    elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
+      prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
+      prove ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A, transitiveRelation ≈ A) () 0.0.0
+    }
+    elided 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 {
+      prove ∧ relation ≈ A ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈ 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 () (≈, A) 0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+      prove relation ≈ A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (relation ≈ A, ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈) () 0.1.0
+    }
+    prove ⊆ ≈ product A A bdc3e1f2449e2fbd0a83076d34a8055e2d09d67c1806a4bc59547d29cfa15bd1 () (≈, A) 0.1
+  }
+  take a {
+    assume ∈ $0 domain ≈ {
+      elided dfc9ee7893004f7f46920a6fc6f1d7e911900f9c19f48ad40b2b7df302fb8141 {
+        prove ∀ a ↔ ∈ $0 domain ≈ ∃ b ∧ ∈ $0 codomain ≈ ∈ orderedPair $$0 $0 ≈ dfc9ee7893004f7f46920a6fc6f1d7e911900f9c19f48ad40b2b7df302fb8141 () (≈)
+        prove ↔ ∈ $0 domain ≈ ∃ b ∧ ∈ $0 codomain ≈ ∈ orderedPair $$0 $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 domain ≈ ∃ b ∧ ∈ $0 codomain ≈ ∈ orderedPair $$$0 $0 ≈) ($0) 1.0.0.0
+        prove → ∈ $0 domain ≈ ∃ b ∧ ∈ $0 codomain ≈ ∈ orderedPair $$0 $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 domain ≈, ∃ b ∧ ∈ $0 codomain ≈ ∈ orderedPair $$0 $0 ≈) () 1.0.0.1
+        prove ∃ b ∧ ∈ $0 codomain ≈ ∈ orderedPair $$0 $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 domain ≈, ∃ b ∧ ∈ $0 codomain ≈ ∈ orderedPair $$0 $0 ≈) () 1.0.0.2 1.0a
+      }
+      let b ∧ ∈ $0 codomain ≈ ∈ orderedPair $$0 $0 ≈ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 codomain ≈ ∈ orderedPair $0 $$0 ≈, ∈ $0 A) () {
+        elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+          prove ∀ x → ∈ $0 ≈ ∈ $0 product A A f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (≈, product A A) 0
+          prove → ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$0 $0 product A A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ≈ ∈ $$$0 product A A) (orderedPair $$0 $0) 1.0.1.0.0
+          prove ∈ orderedPair $$0 $0 product A A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $$0 $0 ≈, ∈ orderedPair $$0 $0 product A A) () 1.0.1.0.1 1.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        }
+        prove ∈ $$0 A 2b0f416d546afcaf7f75cc85bbf643b962a8b083a293fec2be31202da2120866 () ($$0, $0, A, A) 1.0.1.0
+      } 1.0.0
+    }
+    assume ∈ $0 A {
+      elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
+        elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
+          prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
+          prove ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A, transitiveRelation ≈ A) () 1.1.0.0.0
+        }
+        elided 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 {
+          prove ∧ relation ≈ A ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈ 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 () (≈, A) 1.1.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (relation ≈ A, ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈) () 1.1.0.1.0
+          prove → ∈ $0 A ∈ orderedPair $0 $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∈ orderedPair $$0 $$0 ≈) ($0) 1.1.0.1.1
+          prove ∈ orderedPair $0 $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∈ orderedPair $0 $0 ≈) () 1.1.0.1.2 1.1a
+        }
+      }
+      elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+        prove ∧ ∈ $0 domain ≈ ∈ $0 codomain ≈ a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba () ($0, $0, ≈) 1.1.0
+        prove ∈ $0 domain ≈ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 domain ≈, ∈ $0 codomain ≈) () 1.1.1.0
+      }
+    }
+    elided a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 {
+      prove ∧ → ∈ $0 domain ≈ ∈ $0 A → ∈ $0 A ∈ $0 domain ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (→ ∈ $0 domain ≈ ∈ $0 A, → ∈ $0 A ∈ $0 domain ≈) () 1.0 1.1
+      prove ↔ ∈ $0 domain ≈ ∈ $0 A a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (∈ $0 domain ≈, ∈ $0 A) () 1.2.0
+    }
+  }
+  prove = domain ≈ A 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (domain ≈, A) 1
+  take b {
+    assume ∈ $0 codomain ≈ {
+      elided 056378a7b8d3ccf6542f9cf65a3313b90e48152c27b2e475a5ed698060f9456d {
+        prove ∀ b ↔ ∈ $0 codomain ≈ ∃ a ∧ ∈ $0 domain ≈ ∈ orderedPair $0 $$0 ≈ 056378a7b8d3ccf6542f9cf65a3313b90e48152c27b2e475a5ed698060f9456d () (≈)
+        prove ↔ ∈ $0 codomain ≈ ∃ a ∧ ∈ $0 domain ≈ ∈ orderedPair $0 $$0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 codomain ≈ ∃ a ∧ ∈ $0 domain ≈ ∈ orderedPair $0 $$$0 ≈) ($0) 3.0.0.0
+        prove → ∈ $0 codomain ≈ ∃ a ∧ ∈ $0 domain ≈ ∈ orderedPair $0 $$0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 codomain ≈, ∃ a ∧ ∈ $0 domain ≈ ∈ orderedPair $0 $$0 ≈) () 3.0.0.1
+        prove ∃ a ∧ ∈ $0 domain ≈ ∈ orderedPair $0 $$0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 codomain ≈, ∃ a ∧ ∈ $0 domain ≈ ∈ orderedPair $0 $$0 ≈) () 3.0.0.2 3.0a
+      }
+      let a ∧ ∈ $0 domain ≈ ∈ orderedPair $0 $$0 ≈ 6f651defad28a88ffdb61d8b66f9280e4ae1293d389ac3b6dd7c0cd7d55ac919 (∧ ∈ $$0 domain ≈ ∈ orderedPair $$0 $0 ≈, ∈ $0 A) () {
+        elided f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 {
+          prove ∀ x → ∈ $0 ≈ ∈ $0 product A A f6d721711b374d0e1771712f340ce441ceccc471a3d1206702e46c4a47b448b4 () (≈, product A A) 0
+          prove → ∈ orderedPair $0 $$0 ≈ ∈ orderedPair $0 $$0 product A A 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$$0 ≈ ∈ $$$0 product A A) (orderedPair $0 $$0) 3.0.1.0.0
+          prove ∈ orderedPair $0 $$0 product A A fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair $0 $$0 ≈, ∈ orderedPair $0 $$0 product A A) () 3.0.1.0.1 3.0.1a 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+        }
+        prove ∈ $$0 A fd9eacaeda58b006596b2a50422b6bc2841496d77f4db1e4196a7e9759de2d78 () ($0, $$0, A, A) 3.0.1.0
+      } 3.0.0
+    }
+    assume ∈ $0 A {
+      elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
+        elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
+          prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
+          prove ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A, transitiveRelation ≈ A) () 3.1.0.0.0
+        }
+        elided 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 {
+          prove ∧ relation ≈ A ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈ 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 () (≈, A) 3.1.0.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (relation ≈ A, ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈) () 3.1.0.1.0
+          prove → ∈ $0 A ∈ orderedPair $0 $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∈ orderedPair $$0 $$0 ≈) ($0) 3.1.0.1.1
+          prove ∈ orderedPair $0 $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, ∈ orderedPair $0 $0 ≈) () 3.1.0.1.2 3.1a
+        }
+      }
+      elided a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba {
+        prove ∧ ∈ $0 domain ≈ ∈ $0 codomain ≈ a1c9bdf2b445518812424dbca4d72bb8eb50e24360689dc9f7ef38d534784fba () ($0, $0, ≈) 3.1.0
+        prove ∈ $0 codomain ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 domain ≈, ∈ $0 codomain ≈) () 3.1.1.0
+      }
+    }
+    elided a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 {
+      prove ∧ → ∈ $0 codomain ≈ ∈ $0 A → ∈ $0 A ∈ $0 codomain ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (→ ∈ $0 codomain ≈ ∈ $0 A, → ∈ $0 A ∈ $0 codomain ≈) () 3.0 3.1
+      prove ↔ ∈ $0 codomain ≈ ∈ $0 A a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (∈ $0 codomain ≈, ∈ $0 A) () 3.2.0
+    }
+  }
+  prove = codomain ≈ A 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (codomain ≈, A) 3
+  prove ∧ = domain ≈ A = codomain ≈ A bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (= domain ≈ A, = codomain ≈ A) () 2 4
+}
+
 term equivalenceClass (a ≈)
   name (Equivalence Class)
   format ([a]_≈)
-  premises (equivalenceRelation ≈ A, ∈ a A)
-  (= $0 comprehension x A ∈ orderedPair a $0 ≈)
+  (= $0 comprehension x domain ≈ ∈ orderedPair a $0 ≈)
   shorthand (ec)
 
 term equivalenceQuotient (A ≈)
@@ -47,20 +146,28 @@ premise equivalenceRelation ≈ A
 premise ∈ a A
 conclusion ∈ a equivalenceClass a ≈
 {
-  prove = equivalenceClass a ≈ comprehension x A ∈ orderedPair a $0 ≈ f2e5322bcbc2762c77a7c0c134101ca46410896012aa8739a73a188c900d9b2c () (≈, A, a) p0 p1
+  prove = equivalenceClass a ≈ comprehension x domain ≈ ∈ orderedPair a $0 ≈ 37a0de93458eb64b78d57473e00763e9ad6cf4b48192aec1f691e28a5c6219c0 () (a, ≈)
+  elided 414dc6d2387124881d3435c635502805b882d392e2fe44b64996b0d67dd4e6a1 {
+    prove ∧ = domain ≈ A = codomain ≈ A 414dc6d2387124881d3435c635502805b882d392e2fe44b64996b0d67dd4e6a1 () (≈, A) p0
+    prove = domain ≈ A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain ≈ A, = codomain ≈ A) () 1.0
+  }
+  elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+    prove = A domain ≈ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ≈, A) 1
+    prove ∈ a domain ≈ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ a $0) (A, domain ≈) 2.0 p1
+  }
   elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
     prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
-    prove ∧ relation ≈ A ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈ 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 () (≈, A) 1.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-    prove → ∈ a A ∈ orderedPair a a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∈ orderedPair $0 $0 ≈) (a) 1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-    prove ∈ orderedPair a a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∈ orderedPair a a ≈) () 1.2 p1
+    prove ∧ relation ≈ A ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ≈ 9d8f92e17462137703faed1ca5e03fa9cfde7192f120a98ce87be8e9ed9e75d7 () (≈, A) 3.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove → ∈ a A ∈ orderedPair a a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $0 A ∈ orderedPair $0 $0 ≈) (a) 3.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+    prove ∈ orderedPair a a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∈ orderedPair a a ≈) () 3.2 p1
   }
   elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-    prove ∧ ∈ a A ∈ orderedPair a a ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a A, ∈ orderedPair a a ≈) () p1 1
+    prove ∧ ∈ a domain ≈ ∈ orderedPair a a ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ a domain ≈, ∈ orderedPair a a ≈) () 2 3
     elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-      prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $0 ≈) (equivalenceClass a ≈, A) 0
-      prove ↔ ∈ a equivalenceClass a ≈ ∧ ∈ a A ∈ orderedPair a a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈) (a) 2.1.0
-      prove → ∧ ∈ a A ∈ orderedPair a a ≈ ∈ a equivalenceClass a ≈ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ a equivalenceClass a ≈, ∧ ∈ a A ∈ orderedPair a a ≈) () 2.1.1
-      prove ∈ a equivalenceClass a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ a A ∈ orderedPair a a ≈, ∈ a equivalenceClass a ≈) () 2.1.2 2.0
+      prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $0 ≈) (equivalenceClass a ≈, domain ≈) 0
+      prove ↔ ∈ a equivalenceClass a ≈ ∧ ∈ a domain ≈ ∈ orderedPair a a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈) (a) 4.1.0
+      prove → ∧ ∈ a domain ≈ ∈ orderedPair a a ≈ ∈ a equivalenceClass a ≈ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ a equivalenceClass a ≈, ∧ ∈ a domain ≈ ∈ orderedPair a a ≈) () 4.1.1
+      prove ∈ a equivalenceClass a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ a domain ≈ ∈ orderedPair a a ≈, ∈ a equivalenceClass a ≈) () 4.1.2 4.0
     }
   }
 }
@@ -71,31 +178,21 @@ premise ∈ a A
 premise ∈ b A
 conclusion ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈
 {
-  prove = equivalenceClass a ≈ comprehension x A ∈ orderedPair a $0 ≈ f2e5322bcbc2762c77a7c0c134101ca46410896012aa8739a73a188c900d9b2c () (≈, A, a) p0 p1
-  assume ∈ b equivalenceClass a ≈ {
-    elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-      prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $0 ≈) (equivalenceClass a ≈, A) 0
-      prove ↔ ∈ b equivalenceClass a ≈ ∧ ∈ b A ∈ orderedPair a b ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈) (b) 1.0.0
-      prove → ∈ b equivalenceClass a ≈ ∧ ∈ b A ∈ orderedPair a b ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b equivalenceClass a ≈, ∧ ∈ b A ∈ orderedPair a b ≈) () 1.0.1
-      prove ∧ ∈ b A ∈ orderedPair a b ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b equivalenceClass a ≈, ∧ ∈ b A ∈ orderedPair a b ≈) () 1.0.2 1a
-      prove ∈ orderedPair a b ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ b A, ∈ orderedPair a b ≈) () 1.0.3
-    }
+  prove = equivalenceClass a ≈ comprehension x domain ≈ ∈ orderedPair a $0 ≈ 37a0de93458eb64b78d57473e00763e9ad6cf4b48192aec1f691e28a5c6219c0 () (a, ≈)
+  elided 414dc6d2387124881d3435c635502805b882d392e2fe44b64996b0d67dd4e6a1 {
+    prove ∧ = domain ≈ A = codomain ≈ A 414dc6d2387124881d3435c635502805b882d392e2fe44b64996b0d67dd4e6a1 () (≈, A) p0
+    prove = domain ≈ A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain ≈ A, = codomain ≈ A) () 1.0
   }
-  assume ∈ orderedPair a b ≈ {
-    elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-      prove ∧ ∈ b A ∈ orderedPair a b ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ b A, ∈ orderedPair a b ≈) () p2 2a
-      elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-        prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $0 ≈) (equivalenceClass a ≈, A) 0
-        prove ↔ ∈ b equivalenceClass a ≈ ∧ ∈ b A ∈ orderedPair a b ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈) (b) 2.0.1.0
-        prove → ∧ ∈ b A ∈ orderedPair a b ≈ ∈ b equivalenceClass a ≈ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ b equivalenceClass a ≈, ∧ ∈ b A ∈ orderedPair a b ≈) () 2.0.1.1
-        prove ∈ b equivalenceClass a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ b A ∈ orderedPair a b ≈, ∈ b equivalenceClass a ≈) () 2.0.1.2 2.0.0
-      }
-    }
+  elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
+    prove = A domain ≈ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (domain ≈, A) 1
+    prove ∈ b domain ≈ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ b $0) (A, domain ≈) 2.0 p2
   }
-  prove ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ b equivalenceClass a ≈, ∈ orderedPair a b ≈) () 1 2
-}
-{
-  target ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈
+  elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
+    prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $0 ≈) (equivalenceClass a ≈, domain ≈) 0
+    prove ↔ ∈ b equivalenceClass a ≈ ∧ ∈ b domain ≈ ∈ orderedPair a b ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈) (b) 3.0
+  }
+  prove ↔ ∧ ∈ b domain ≈ ∈ orderedPair a b ≈ ∈ orderedPair a b ≈ 4b99767b8dc2cb07921bf81b7932158d803045759fc0924fc9b6b13d24638a7f (∈ b domain ≈, ∈ orderedPair a b ≈) () 2
+  prove ↔ ∈ b equivalenceClass a ≈ ∈ orderedPair a b ≈ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∈ b equivalenceClass a ≈, ∧ ∈ b domain ≈ ∈ orderedPair a b ≈, ∈ orderedPair a b ≈) () 3 4
 }
 
 theorem Equality Condition for Equivalence Classes
@@ -104,116 +201,122 @@ premise ∈ a A
 premise ∈ b A
 conclusion ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a b ≈
 {
-  prove = equivalenceClass a ≈ comprehension x A ∈ orderedPair a $0 ≈ f2e5322bcbc2762c77a7c0c134101ca46410896012aa8739a73a188c900d9b2c () (≈, A, a) p0 p1
-  prove = equivalenceClass b ≈ comprehension x A ∈ orderedPair b $0 ≈ f2e5322bcbc2762c77a7c0c134101ca46410896012aa8739a73a188c900d9b2c () (≈, A, b) p0 p2
+  elided 414dc6d2387124881d3435c635502805b882d392e2fe44b64996b0d67dd4e6a1 {
+    prove ∧ = domain ≈ A = codomain ≈ A 414dc6d2387124881d3435c635502805b882d392e2fe44b64996b0d67dd4e6a1 () (≈, A) p0
+    prove = domain ≈ A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (= domain ≈ A, = codomain ≈ A) () 0.0
+  }
+  prove = equivalenceClass a ≈ comprehension x domain ≈ ∈ orderedPair a $0 ≈ 37a0de93458eb64b78d57473e00763e9ad6cf4b48192aec1f691e28a5c6219c0 () (a, ≈)
+  prove = equivalenceClass b ≈ comprehension x domain ≈ ∈ orderedPair b $0 ≈ 37a0de93458eb64b78d57473e00763e9ad6cf4b48192aec1f691e28a5c6219c0 () (b, ≈)
   assume = equivalenceClass a ≈ equivalenceClass b ≈ {
     prove ∈ b equivalenceClass b ≈ a2c3ae5d05953aca74d207208b7ac3cebbe21923fb3013e35e6db79e251224e7 () (≈, A, b) p0 p2
     elided 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 {
-      prove = equivalenceClass b ≈ equivalenceClass a ≈ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (equivalenceClass a ≈, equivalenceClass b ≈) 2a
-      prove ∈ b equivalenceClass a ≈ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ b $0) (equivalenceClass b ≈, equivalenceClass a ≈) 2.1.0 2.0
+      prove = equivalenceClass b ≈ equivalenceClass a ≈ 4567f51620a8049fe91ed02631eb7e57332cbda0ced00a4271ed8493a14d4802 () (equivalenceClass a ≈, equivalenceClass b ≈) 3a
+      prove ∈ b equivalenceClass a ≈ 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ b $0) (equivalenceClass b ≈, equivalenceClass a ≈) 3.1.0 3.0
     }
     elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-      prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $0 ≈) (equivalenceClass a ≈, A) 0
-      prove ↔ ∈ b equivalenceClass a ≈ ∧ ∈ b A ∈ orderedPair a b ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈) (b) 2.2.0
-      prove → ∈ b equivalenceClass a ≈ ∧ ∈ b A ∈ orderedPair a b ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b equivalenceClass a ≈, ∧ ∈ b A ∈ orderedPair a b ≈) () 2.2.1
-      prove ∧ ∈ b A ∈ orderedPair a b ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b equivalenceClass a ≈, ∧ ∈ b A ∈ orderedPair a b ≈) () 2.2.2 2.1
-      prove ∈ orderedPair a b ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ b A, ∈ orderedPair a b ≈) () 2.2.3
+      prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $0 ≈) (equivalenceClass a ≈, domain ≈) 1
+      prove ↔ ∈ b equivalenceClass a ≈ ∧ ∈ b domain ≈ ∈ orderedPair a b ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈) (b) 3.2.0
+      prove → ∈ b equivalenceClass a ≈ ∧ ∈ b domain ≈ ∈ orderedPair a b ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ b equivalenceClass a ≈, ∧ ∈ b domain ≈ ∈ orderedPair a b ≈) () 3.2.1
+      prove ∧ ∈ b domain ≈ ∈ orderedPair a b ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b equivalenceClass a ≈, ∧ ∈ b domain ≈ ∈ orderedPair a b ≈) () 3.2.2 3.1
+      prove ∈ orderedPair a b ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ b domain ≈, ∈ orderedPair a b ≈) () 3.2.3
     }
   }
   assume ∈ orderedPair a b ≈ {
     take x {
       assume ∈ $0 equivalenceClass a ≈ {
         elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-          prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $$0 ≈) (equivalenceClass a ≈, A) 0
-          prove ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass a ≈ ∧ ∈ $$0 A ∈ orderedPair a $$0 ≈) ($0) 3.0.0.0.0
-          prove → ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 equivalenceClass a ≈, ∧ ∈ $0 A ∈ orderedPair a $0 ≈) () 3.0.0.0.1
-          prove ∧ ∈ $0 A ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 equivalenceClass a ≈, ∧ ∈ $0 A ∈ orderedPair a $0 ≈) () 3.0.0.0.2 3.0.0a
-          prove ∈ $0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, ∈ orderedPair a $0 ≈) () 3.0.0.0.3
+          prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $$0 ≈) (equivalenceClass a ≈, domain ≈) 1
+          prove ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass a ≈ ∧ ∈ $$0 domain ≈ ∈ orderedPair a $$0 ≈) ($0) 4.0.0.0.0
+          prove → ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 equivalenceClass a ≈, ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈) () 4.0.0.0.1
+          prove ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 equivalenceClass a ≈, ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈) () 4.0.0.0.2 4.0.0a
+          prove ∈ $0 domain ≈ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 domain ≈, ∈ orderedPair a $0 ≈) () 4.0.0.0.3
         }
+        prove ∈ $0 A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$0) (domain ≈, A) 0 4.0.0.0
         elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-          prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $$0 ≈) (equivalenceClass a ≈, A) 0
-          prove ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass a ≈ ∧ ∈ $$0 A ∈ orderedPair a $$0 ≈) ($0) 3.0.0.1.0
-          prove → ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 equivalenceClass a ≈, ∧ ∈ $0 A ∈ orderedPair a $0 ≈) () 3.0.0.1.1
-          prove ∧ ∈ $0 A ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 equivalenceClass a ≈, ∧ ∈ $0 A ∈ orderedPair a $0 ≈) () 3.0.0.1.2 3.0.0a
-          prove ∈ orderedPair a $0 ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∈ orderedPair a $0 ≈) () 3.0.0.1.3
+          prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $$0 ≈) (equivalenceClass a ≈, domain ≈) 1
+          prove ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass a ≈ ∧ ∈ $$0 domain ≈ ∈ orderedPair a $$0 ≈) ($0) 4.0.0.2.0
+          prove → ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 equivalenceClass a ≈, ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈) () 4.0.0.2.1
+          prove ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 equivalenceClass a ≈, ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈) () 4.0.0.2.2 4.0.0a
+          prove ∈ orderedPair a $0 ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 domain ≈, ∈ orderedPair a $0 ≈) () 4.0.0.2.3
         }
         elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
           prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
-          prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $0 $$0 ≈ 96054ab331ced506a8a72cbcd1b258be5b229dc75f3031d392f2b8f2bc225772 () (≈, A) 3.0.0.2.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-          prove → ∈ a A ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A → ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair $0 $$$0 ≈) (a) 3.0.0.2.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-          prove ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈) () 3.0.0.2.2 p1
-          prove → ∈ b A → ∈ orderedPair a b ≈ ∈ orderedPair b a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A → ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 a ≈) (b) 3.0.0.2.3
-          prove → ∈ orderedPair a b ≈ ∈ orderedPair b a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, → ∈ orderedPair a b ≈ ∈ orderedPair b a ≈) () 3.0.0.2.4 p2
-          prove ∈ orderedPair b a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair a b ≈, ∈ orderedPair b a ≈) () 3.0.0.2.5 3a
+          prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $0 $$0 ≈ 96054ab331ced506a8a72cbcd1b258be5b229dc75f3031d392f2b8f2bc225772 () (≈, A) 4.0.0.3.0 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove → ∈ a A ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A → ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair $0 $$$0 ≈) (a) 4.0.0.3.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+          prove ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ b → ∈ $0 A → ∈ orderedPair a $0 ≈ ∈ orderedPair $0 a ≈) () 4.0.0.3.2 p1
+          prove → ∈ b A → ∈ orderedPair a b ≈ ∈ orderedPair b a ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A → ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 a ≈) (b) 4.0.0.3.3
+          prove → ∈ orderedPair a b ≈ ∈ orderedPair b a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, → ∈ orderedPair a b ≈ ∈ orderedPair b a ≈) () 4.0.0.3.4 p2
+          prove ∈ orderedPair b a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ orderedPair a b ≈, ∈ orderedPair b a ≈) () 4.0.0.3.5 4a
         }
         elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
-          prove ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair b a ≈, ∈ orderedPair a $0 ≈) () 3.0.0.2 3.0.0.1
+          prove ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair b a ≈, ∈ orderedPair a $0 ≈) () 4.0.0.3 4.0.0.2
           elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
             prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
-            prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$0 $0 ≈ cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f () (≈, A) 3.0.0.3.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            prove → ∈ b A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$$0 $0 ≈) (b) 3.0.0.3.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈) () 3.0.0.3.1.2 p2
-            prove → ∈ a A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$$0 ≈ ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair b $0 ≈) (a) 3.0.0.3.1.3
-            prove ∀ c → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ c → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈) () 3.0.0.3.1.4 p1
-            prove → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $$0 ≈ ∈ orderedPair b $$0 ≈) ($0) 3.0.0.3.1.5
-            prove → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈) () 3.0.0.3.1.6 3.0.0.0
-            prove ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈, ∈ orderedPair b $0 ≈) () 3.0.0.3.1.7 3.0.0.3.0
+            prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$0 $0 ≈ cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f () (≈, A) 4.0.0.4.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove → ∈ b A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$$0 $0 ≈) (b) 4.0.0.4.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair b $0 ≈) () 4.0.0.4.1.2 p2
+            prove → ∈ a A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair b $$$0 ≈ ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair b $0 ≈) (a) 4.0.0.4.1.3
+            prove ∀ c → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ c → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈) () 4.0.0.4.1.4 p1
+            prove → ∈ $0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $$0 ≈ ∈ orderedPair b $$0 ≈) ($0) 4.0.0.4.1.5
+            prove → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, → ∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈ ∈ orderedPair b $0 ≈) () 4.0.0.4.1.6 4.0.0.1
+            prove ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair b a ≈ ∈ orderedPair a $0 ≈, ∈ orderedPair b $0 ≈) () 4.0.0.4.1.7 4.0.0.4.0
           }
         }
         elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-          prove ∧ ∈ $0 A ∈ orderedPair b $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 A, ∈ orderedPair b $0 ≈) () 3.0.0.0 3.0.0.3
+          prove ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 domain ≈, ∈ orderedPair b $0 ≈) () 4.0.0.0 4.0.0.4
           elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-            prove ∀ y ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 A ∈ orderedPair b $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair b $$0 ≈) (equivalenceClass b ≈, A) 1
-            prove ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 A ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass b ≈ ∧ ∈ $$0 A ∈ orderedPair b $$0 ≈) ($0) 3.0.0.4.1.0
-            prove → ∧ ∈ $0 A ∈ orderedPair b $0 ≈ ∈ $0 equivalenceClass b ≈ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 equivalenceClass b ≈, ∧ ∈ $0 A ∈ orderedPair b $0 ≈) () 3.0.0.4.1.1
-            prove ∈ $0 equivalenceClass b ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 A ∈ orderedPair b $0 ≈, ∈ $0 equivalenceClass b ≈) () 3.0.0.4.1.2 3.0.0.4.0
+            prove ∀ y ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair b $$0 ≈) (equivalenceClass b ≈, domain ≈) 2
+            prove ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass b ≈ ∧ ∈ $$0 domain ≈ ∈ orderedPair b $$0 ≈) ($0) 4.0.0.5.1.0
+            prove → ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ ∈ $0 equivalenceClass b ≈ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 equivalenceClass b ≈, ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈) () 4.0.0.5.1.1
+            prove ∈ $0 equivalenceClass b ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈, ∈ $0 equivalenceClass b ≈) () 4.0.0.5.1.2 4.0.0.5.0
           }
         }
       }
       assume ∈ $0 equivalenceClass b ≈ {
         elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-          prove ∀ y ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 A ∈ orderedPair b $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair b $$0 ≈) (equivalenceClass b ≈, A) 1
-          prove ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 A ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass b ≈ ∧ ∈ $$0 A ∈ orderedPair b $$0 ≈) ($0) 3.0.1.0.0
-          prove → ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 A ∈ orderedPair b $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 equivalenceClass b ≈, ∧ ∈ $0 A ∈ orderedPair b $0 ≈) () 3.0.1.0.1
-          prove ∧ ∈ $0 A ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 equivalenceClass b ≈, ∧ ∈ $0 A ∈ orderedPair b $0 ≈) () 3.0.1.0.2 3.0.1a
-          prove ∈ $0 A 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 A, ∈ orderedPair b $0 ≈) () 3.0.1.0.3
+          prove ∀ y ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair b $$0 ≈) (equivalenceClass b ≈, domain ≈) 2
+          prove ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass b ≈ ∧ ∈ $$0 domain ≈ ∈ orderedPair b $$0 ≈) ($0) 4.0.1.0.0
+          prove → ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 equivalenceClass b ≈, ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈) () 4.0.1.0.1
+          prove ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 equivalenceClass b ≈, ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈) () 4.0.1.0.2 4.0.1a
+          prove ∈ $0 domain ≈ 594251b6ea5693171d3e341888c5d2e826933ccd9cf4f970bb3c11b0b66d455d (∈ $0 domain ≈, ∈ orderedPair b $0 ≈) () 4.0.1.0.3
         }
+        prove ∈ $0 A 91709a3b29f9f5f3c0b8e961a3c5382d08fbc5583f3542a858fa9c4a9cddc2c0 (∈ $0 $$0) (domain ≈, A) 0 4.0.1.0
         elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-          prove ∀ y ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 A ∈ orderedPair b $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair b $$0 ≈) (equivalenceClass b ≈, A) 1
-          prove ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 A ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass b ≈ ∧ ∈ $$0 A ∈ orderedPair b $$0 ≈) ($0) 3.0.1.1.0
-          prove → ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 A ∈ orderedPair b $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 equivalenceClass b ≈, ∧ ∈ $0 A ∈ orderedPair b $0 ≈) () 3.0.1.1.1
-          prove ∧ ∈ $0 A ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 equivalenceClass b ≈, ∧ ∈ $0 A ∈ orderedPair b $0 ≈) () 3.0.1.1.2 3.0.1a
-          prove ∈ orderedPair b $0 ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 A, ∈ orderedPair b $0 ≈) () 3.0.1.1.3
+          prove ∀ y ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair b $$0 ≈) (equivalenceClass b ≈, domain ≈) 2
+          prove ↔ ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass b ≈ ∧ ∈ $$0 domain ≈ ∈ orderedPair b $$0 ≈) ($0) 4.0.1.2.0
+          prove → ∈ $0 equivalenceClass b ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ f52a64651ebe26ac0a89861f589c8ea822f14de99cc435c8115d97330a16dee9 (∈ $0 equivalenceClass b ≈, ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈) () 4.0.1.2.1
+          prove ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 equivalenceClass b ≈, ∧ ∈ $0 domain ≈ ∈ orderedPair b $0 ≈) () 4.0.1.2.2 4.0.1a
+          prove ∈ orderedPair b $0 ≈ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (∈ $0 domain ≈, ∈ orderedPair b $0 ≈) () 4.0.1.2.3
         }
         elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
-          prove ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair a b ≈, ∈ orderedPair b $0 ≈) () 3a 3.0.1.1
+          prove ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ orderedPair a b ≈, ∈ orderedPair b $0 ≈) () 4a 4.0.1.2
           elided 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 {
             prove ∧ ∧ ∧ relation ≈ A reflexiveRelation ≈ A symmetricRelation ≈ A transitiveRelation ≈ A 2e0300afd503fc7842cd98e7cd1364d0c4b804563acdc3f63840cbbff1b1ef98 () (≈, A) p0
-            prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$0 $0 ≈ cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f () (≈, A) 3.0.1.2.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            prove → ∈ a A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$$0 $0 ≈) (a) 3.0.1.2.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
-            prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈) () 3.0.1.2.1.2 p1
-            prove → ∈ b A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$$0 ≈ ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair a $0 ≈) (b) 3.0.1.2.1.3
-            prove ∀ c → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, ∀ c → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈) () 3.0.1.2.1.4 p2
-            prove → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $$0 ≈ ∈ orderedPair a $$0 ≈) ($0) 3.0.1.2.1.5
-            prove → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈) () 3.0.1.2.1.6 3.0.1.0
-            prove ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈, ∈ orderedPair a $0 ≈) () 3.0.1.2.1.7 3.0.1.2.0
+            prove ∧ relation ≈ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$0 $0 ≈ cd4e11da0ca33ab0483d01ac0144578547598b152a351f8faf8de9609079981f () (≈, A) 4.0.1.3.1.0 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove → ∈ a A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair $$$$0 $0 ≈) (a) 4.0.1.3.1.1 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c
+            prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ a A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$0 ≈ ∈ orderedPair $$0 $0 ≈ ∈ orderedPair a $0 ≈) () 4.0.1.3.1.2 p1
+            prove → ∈ b A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair a $$$0 ≈ ∈ orderedPair $$$0 $0 ≈ ∈ orderedPair a $0 ≈) (b) 4.0.1.3.1.3
+            prove ∀ c → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ b A, ∀ c → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈) () 4.0.1.3.1.4 p2
+            prove → ∈ $0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (→ ∈ $$0 A → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $$0 ≈ ∈ orderedPair a $$0 ≈) ($0) 4.0.1.3.1.5
+            prove → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∈ $0 A, → ∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈ ∈ orderedPair a $0 ≈) () 4.0.1.3.1.6 4.0.1.1
+            prove ∈ orderedPair a $0 ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ orderedPair a b ≈ ∈ orderedPair b $0 ≈, ∈ orderedPair a $0 ≈) () 4.0.1.3.1.7 4.0.1.3.0
           }
         }
         elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-          prove ∧ ∈ $0 A ∈ orderedPair a $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 A, ∈ orderedPair a $0 ≈) () 3.0.1.0 3.0.1.2
+          prove ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (∈ $0 domain ≈, ∈ orderedPair a $0 ≈) () 4.0.1.0 4.0.1.3
           elided 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d {
-            prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $$0 ≈) (equivalenceClass a ≈, A) 0
-            prove ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 A ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass a ≈ ∧ ∈ $$0 A ∈ orderedPair a $$0 ≈) ($0) 3.0.1.3.1.0
-            prove → ∧ ∈ $0 A ∈ orderedPair a $0 ≈ ∈ $0 equivalenceClass a ≈ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 equivalenceClass a ≈, ∧ ∈ $0 A ∈ orderedPair a $0 ≈) () 3.0.1.3.1.1
-            prove ∈ $0 equivalenceClass a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 A ∈ orderedPair a $0 ≈, ∈ $0 equivalenceClass a ≈) () 3.0.1.3.1.2 3.0.1.3.0
+            prove ∀ y ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ 0b2d9903e9202c928baabe7ccf1a595df99610f3c1386d08ecd5e7198645045d (∈ orderedPair a $$0 ≈) (equivalenceClass a ≈, domain ≈) 1
+            prove ↔ ∈ $0 equivalenceClass a ≈ ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ 0cb17466105080c94fe8bcf5a03a3ce50923caf8e4503edd8cbeec53c98ed627 (↔ ∈ $$0 equivalenceClass a ≈ ∧ ∈ $$0 domain ≈ ∈ orderedPair a $$0 ≈) ($0) 4.0.1.4.1.0
+            prove → ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈ ∈ $0 equivalenceClass a ≈ 65429f3e8963218e6bd1b43bd33d6ada4d6eb6a7f09ffb2b180910917684f0d5 (∈ $0 equivalenceClass a ≈, ∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈) () 4.0.1.4.1.1
+            prove ∈ $0 equivalenceClass a ≈ fcb30f9b730a512f5115a87da8601fd980b1ac111cf3fdb118978263718c0066 (∧ ∈ $0 domain ≈ ∈ orderedPair a $0 ≈, ∈ $0 equivalenceClass a ≈) () 4.0.1.4.1.2 4.0.1.4.0
           }
         }
       }
-      prove ↔ ∈ $0 equivalenceClass a ≈ ∈ $0 equivalenceClass b ≈ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 equivalenceClass a ≈, ∈ $0 equivalenceClass b ≈) () 3.0.0 3.0.1
+      prove ↔ ∈ $0 equivalenceClass a ≈ ∈ $0 equivalenceClass b ≈ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (∈ $0 equivalenceClass a ≈, ∈ $0 equivalenceClass b ≈) () 4.0.0 4.0.1
     }
-    prove = equivalenceClass a ≈ equivalenceClass b ≈ 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (equivalenceClass a ≈, equivalenceClass b ≈) 3.0
+    prove = equivalenceClass a ≈ equivalenceClass b ≈ 5ee3f94c5dceb8f3cfef37bf6a9602ecfb53f7f7301f4686241ee6484251ed99 () (equivalenceClass a ≈, equivalenceClass b ≈) 4.0
   }
-  prove ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a b ≈ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= equivalenceClass a ≈ equivalenceClass b ≈, ∈ orderedPair a b ≈) () 2 3
+  prove ↔ = equivalenceClass a ≈ equivalenceClass b ≈ ∈ orderedPair a b ≈ 9e0a237dc75cb44e80e2401bebc55474cab9b9e31adef7f947be54b717825758 (= equivalenceClass a ≈ equivalenceClass b ≈, ∈ orderedPair a b ≈) () 3 4
 }
 
 comment If a function on a set is constant on the equivalence classes of a relation on that set, we can lift the function to one on the quotient.

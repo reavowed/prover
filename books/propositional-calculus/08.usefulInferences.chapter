@@ -187,16 +187,29 @@ conclusion ↔ ∧ φ ψ ∧ φ χ
 
 comment And removing them.
 
-theorem Remove Known Conjunct From Equivalence
-premise ↔ φ ∧ ψ χ
-premise χ
-conclusion ↔ φ ψ
+theorem Remove Known Left Conjunct From Equivalence
+premise φ
+conclusion ↔ ∧ φ ψ ψ
 {
-  elided 2ca7ed37a3468a129caccc521004ea96152f4ea4af73188ddaf790e90172876e {
-    prove → ψ χ 6ee39027f847a14ab4cebfaf1f4fabd1affab96c7ac5f3cea3dc9f40e10b587f (χ, ψ) () p1
-    prove ↔ ∧ ψ χ ψ 2ca7ed37a3468a129caccc521004ea96152f4ea4af73188ddaf790e90172876e (ψ, χ) () 0.0
+  assume ∧ φ ψ {
+    prove ψ 79dae0450feb7d61abde03d698bc79179fafbebf10d10717ec2b63db8402478c (φ, ψ) () 0a
   }
-  prove ↔ φ ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (φ, ∧ ψ χ, ψ) () p0 0
+  assume ψ {
+    prove ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (φ, ψ) () p0 1a
+  }
+  elided a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 {
+    prove ∧ → ∧ φ ψ ψ → ψ ∧ φ ψ bc1fc0568356141664497252cc943713e9412219fc93ad0255a3037abf24d00d (→ ∧ φ ψ ψ, → ψ ∧ φ ψ) () 0 1
+    prove ↔ ∧ φ ψ ψ a5b1b34dbb6635875a431384c84fc52ac5805cc1dfee9c585436daab34e46fb6 (∧ φ ψ, ψ) () 2.0
+  }
+}
+
+theorem Remove Known Right Conjunct From Equivalence
+premise φ
+conclusion ↔ ∧ ψ φ ψ
+{
+  prove ↔ ∧ ψ φ ∧ φ ψ ceda842906abdc74679aabcef2c6848746135351212be45dd529a31e12e21892 (ψ, φ) ()
+  prove ↔ ∧ φ ψ ψ 4b99767b8dc2cb07921bf81b7932158d803045759fc0924fc9b6b13d24638a7f (φ, ψ) () p0
+  prove ↔ ∧ ψ φ ψ e831334d732135d832bd3ac83e0dba8855e79c596c5b2642510c909e139d251c (∧ ψ φ, ∧ φ ψ, ψ) () 0 1
 }
 
 comment Adding extra disjunctions to equivalences.
