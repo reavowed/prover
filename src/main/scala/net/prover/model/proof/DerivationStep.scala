@@ -25,5 +25,9 @@ object DerivationStep {
     def deduplicate: Seq[DerivationStep] = premiseSteps.distinctBy(_.statement)
     def steps: Seq[Step] = premiseSteps.map(_.step)
     def inferences: Seq[Inference] = premiseSteps.map(_.inference)
+
+    def elideWithInference(inference: Inference): DerivationStep = {
+      DerivationStep(premiseSteps.last.statement, inference, Step.Elided.forInference(inference)(steps))
+    }
   }
 }
