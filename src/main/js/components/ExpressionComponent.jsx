@@ -49,12 +49,12 @@ function filterPathsMultiple(actions, initialPaths) {
   return result;
 }
 
-export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, entryContext}) {
+export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, entryContext, splitConjunction}) {
   entryContext = entryContext || useContext(EntryContext);
   const displayContext = useContext(DisplayContext);
   wrapBoundVariable = wrapBoundVariable || ((name) => formatHtml(name));
 
-  function renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets) {
+  function renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, splitConjunction = false) {
 
     function matchDisplayShorthand(expression) {
       for (const displayShorthand of _.reverse(entryContext.displayShorthands.slice())) {
@@ -118,7 +118,17 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         }
       }
 
-      return renderNormally();
+      function splitConjunctions(expression, path) {
+        if (expression instanceof DefinedExpression && _.includes(expression.definition.attributes, "conjunction")) {
+          return _.flatMap(expression.components, (e, i) => splitConjunctions(e, [...path, i]));
+        } else {
+          return [[expression, path]];
+        }
+      }
+
+      if (splitConjunction && !(displayContext && displayContext.disableShorthands)) {
+        return [joinAsList(splitConjunctions(expression, []).map(([e, p]) => renderChildExpression(e, p)))];
+      }
 
       function renderQualifier(qualifier, components, subpath = [], sharedPaths = []) {
         const formattedComponents = _.map(components, (component, i) => renderChildExpression(component, [...subpath, i + 1]));
@@ -147,109 +157,107 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         return result;
       }
 
-      function renderNormally() {
-        if (expression instanceof TypeExpression) {
-          const hasExplicitQualifier = !!expression.explicitQualifier;
-          function getPropertyPath(propertyIndex) {
-            const depth = numberOfObjectsAndProperties - 1 - propertyIndex;
-            return [..._.times(depth, _.constant(0)), 1];
-          }
-          function getObjectPath(objectIndex) {
-            const depth = expression.objects.length - 1 - objectIndex;
-            return [..._.times(depth, _.constant(0)), 1];
-          }
-
-          const numberOfObjectsAndProperties = expression.properties.length + expression.objects.length;
-          const typePath = _.times(expression.properties.length + (hasExplicitQualifier ? 1 : 0), _.constant(0));
-          const termPath = [...typePath, 0];
-          const qualifierPath =  [..._.times(expression.properties.length, _.constant(0)), 1];
-          const propertyPaths = _.map(_.range(expression.properties.length), getPropertyPath);
-          const objectPaths = _.map(_.range(expression.objects.length), getObjectPath);
-
-          const sharedTermHighlightPaths = [typePath, ...(hasExplicitQualifier ? [qualifierPath] : []), ...propertyPaths, ...objectPaths];
-          const formattedTerm = renderChildExpression(
-            expression.term,
-            termPath,
-            {
-              additionalActionHighlights: filterPathsMultiple(actionHighlights, sharedTermHighlightPaths),
-              additionalStaticHighlights: filterPathsMultiple(staticHighlights, sharedTermHighlightPaths)
-            });
-          const formattedIs = highlightSharedChild("is", sharedTermHighlightPaths);
-
-          const articleWord = expression.properties.length ? expression.properties[0].name : expression.definition.name;
-          const article = _.includes("aeiou", articleWord[0]) ? "an" : "a";
-          const formattedArticle = highlightSharedChild(article, [typePath]);
-          const formattedName = highlightSharedChild(expression.definition.name, [typePath]);
-
-          const formattedProperties = _.flatMap(expression.properties, (p, i) => {
-            const formattedProperty = highlightChild(p.name, getPropertyPath(i));
-            if (i === 0)
-              return [formattedProperty];
-            else
-              return [<>, </>, formattedProperty];
-          });
-
-          const result = [formattedTerm, <> </>, formattedIs, <> </>, formattedArticle, <> </>, ...formattedProperties, <> </>, formattedName];
-          if (expression.explicitQualifier) {
-            const propertyIndexesRequiringQualifier = _.chain(expression.properties).map((p, i) => (p.requiredParentQualifier === expression.explicitQualifier.symbol) ? i : null).filter(x => x !== null).value();
-            const objectIndexesRequiringQualifier = _.chain(expression.objects).map(([d, t], i) => (d.requiredParentQualifier === expression.explicitQualifier.symbol) ? i : null).filter(x => x !== null).value();
-            const qualifierHighlightPaths = [qualifierPath, ...propertyIndexesRequiringQualifier.map(getPropertyPath), objectIndexesRequiringQualifier.map(getObjectPath)];
-            const formattedQualifier = renderQualifier(expression.explicitQualifier.qualifier, expression.qualifierComponents, qualifierPath, qualifierHighlightPaths);
-            result.push(<> </>);
-            result.push(formattedQualifier);
-          } else if (expression.definition.defaultQualifier) {
-            const qualifierHighlightPaths = [typePath, ...propertyPaths, ...objectPaths];
-            const formattedQualifier = renderQualifier(expression.definition.defaultQualifier, expression.qualifierComponents, typePath, qualifierHighlightPaths);
-            result.push(<> </>);
-            result.push(formattedQualifier);
-          }
-          if (expression.objects.length) {
-            const formattedObjects = _.map(expression.objects, ([objectDefinition, objectTerm], index) => {
-              const termPath = [...getObjectPath(index), 0];
-              const renderedTerm = renderChildExpression(objectTerm, termPath);
-              return highlightSharedChild(<>{objectDefinition.name} {renderedTerm}</>, getObjectPath(index))
-            });
-            result.push(<> </>);
-            result.push(highlightSharedChild("with", _.range(expression.objects.length).map(getObjectPath)));
-            result.push(<> </>);
-            result.push(joinAsList(formattedObjects));
-          }
-          return addBrackets(result);
-        } else if (expression instanceof TypeQualifierExpression) {
-          const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
-          const formattedQualifier = renderQualifier(expression.definition.qualifier, expression.qualifierComponents);
-          return addBrackets([formattedTerm, <> is </>, formattedQualifier]);
-        } else if (expression instanceof PropertyExpression) {
-          const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
-          const result = [formattedTerm, <> is </>, expression.definition.name];
-          const qualifier = _.find(expression.typeDefinition.qualifiers, q => q.symbol === expression.definition.requiredParentQualifier)?.qualifier || expression.typeDefinition.defaultQualifier;
-          if (qualifier) {
-            const formattedQualifier = renderQualifier(qualifier, expression.qualifierComponents);
-            result.push(<> </>);
-            result.push(formattedQualifier);
-          }
-          return addBrackets(result);
-        } else if (expression instanceof RelatedObjectExpression) {
-          const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
-          const formattedParentTerm = renderChildExpression(expression.parentTerm, [...path, 1]);
-          const result = [formattedTerm, <> is {expression.definition.article} {expression.definition.name} for </>, formattedParentTerm];
-          const qualifier = _.find(expression.typeDefinition.qualifiers, q => q.symbol === expression.definition.requiredParentQualifier)?.qualifier || expression.typeDefinition.defaultQualifier;
-          if (qualifier) {
-            const formattedQualifier = renderQualifier(qualifier, expression.qualifierComponents);
-            result.push(<> </>);
-            result.push(formattedQualifier);
-          }
-          return addBrackets(result);
-        } else if (expression instanceof StandalonePropertyExpression) {
-          const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
-          return addBrackets([formattedTerm, <> is </>, expression.definition.name]);
-        } else if (expression.formatForHtml) {
-          return renderFormattableExpressionWithDisambiguator(expression.disambiguator);
-        } else if (expression.textForHtml) {
-          return formatHtmlWithoutWrapping(expression.textForHtml(boundVariableLists));
-        } else {
-          throw "Could not render expression " + expression;
+      if (expression instanceof TypeExpression) {
+        const hasExplicitQualifier = !!expression.explicitQualifier;
+        function getPropertyPath(propertyIndex) {
+          const depth = numberOfObjectsAndProperties - 1 - propertyIndex;
+          return [..._.times(depth, _.constant(0)), 1];
         }
+        function getObjectPath(objectIndex) {
+          const depth = expression.objects.length - 1 - objectIndex;
+          return [..._.times(depth, _.constant(0)), 1];
+        }
+
+        const numberOfObjectsAndProperties = expression.properties.length + expression.objects.length;
+        const typePath = _.times(expression.properties.length + (hasExplicitQualifier ? 1 : 0), _.constant(0));
+        const termPath = [...typePath, 0];
+        const qualifierPath =  [..._.times(expression.properties.length, _.constant(0)), 1];
+        const propertyPaths = _.map(_.range(expression.properties.length), getPropertyPath);
+        const objectPaths = _.map(_.range(expression.objects.length), getObjectPath);
+
+        const sharedTermHighlightPaths = [typePath, ...(hasExplicitQualifier ? [qualifierPath] : []), ...propertyPaths, ...objectPaths];
+        const formattedTerm = renderChildExpression(
+          expression.term,
+          termPath,
+          {
+            additionalActionHighlights: filterPathsMultiple(actionHighlights, sharedTermHighlightPaths),
+            additionalStaticHighlights: filterPathsMultiple(staticHighlights, sharedTermHighlightPaths)
+          });
+        const formattedIs = highlightSharedChild("is", sharedTermHighlightPaths);
+
+        const articleWord = expression.properties.length ? expression.properties[0].name : expression.definition.name;
+        const article = _.includes("aeiou", articleWord[0]) ? "an" : "a";
+        const formattedArticle = highlightSharedChild(article, [typePath]);
+        const formattedName = highlightSharedChild(expression.definition.name, [typePath]);
+
+        const formattedProperties = _.flatMap(expression.properties, (p, i) => {
+          const formattedProperty = highlightChild(p.name, getPropertyPath(i));
+          if (i === 0)
+            return [formattedProperty];
+          else
+            return [<>, </>, formattedProperty];
+        });
+
+        const result = [formattedTerm, <> </>, formattedIs, <> </>, formattedArticle, <> </>, ...formattedProperties, <> </>, formattedName];
+        if (expression.explicitQualifier) {
+          const propertyIndexesRequiringQualifier = _.chain(expression.properties).map((p, i) => (p.requiredParentQualifier === expression.explicitQualifier.symbol) ? i : null).filter(x => x !== null).value();
+          const objectIndexesRequiringQualifier = _.chain(expression.objects).map(([d, t], i) => (d.requiredParentQualifier === expression.explicitQualifier.symbol) ? i : null).filter(x => x !== null).value();
+          const qualifierHighlightPaths = [qualifierPath, ...propertyIndexesRequiringQualifier.map(getPropertyPath), objectIndexesRequiringQualifier.map(getObjectPath)];
+          const formattedQualifier = renderQualifier(expression.explicitQualifier.qualifier, expression.qualifierComponents, qualifierPath, qualifierHighlightPaths);
+          result.push(<> </>);
+          result.push(formattedQualifier);
+        } else if (expression.definition.defaultQualifier) {
+          const qualifierHighlightPaths = [typePath, ...propertyPaths, ...objectPaths];
+          const formattedQualifier = renderQualifier(expression.definition.defaultQualifier, expression.qualifierComponents, typePath, qualifierHighlightPaths);
+          result.push(<> </>);
+          result.push(formattedQualifier);
+        }
+        if (expression.objects.length) {
+          const formattedObjects = _.map(expression.objects, ([objectDefinition, objectTerm], index) => {
+            const termPath = [...getObjectPath(index), 0];
+            const renderedTerm = renderChildExpression(objectTerm, termPath);
+            return highlightSharedChild(<>{objectDefinition.name} {renderedTerm}</>, getObjectPath(index))
+          });
+          result.push(<> </>);
+          result.push(highlightSharedChild("with", _.range(expression.objects.length).map(getObjectPath)));
+          result.push(<> </>);
+          result.push(joinAsList(formattedObjects));
+        }
+        return addBrackets(result);
+      } else if (expression instanceof TypeQualifierExpression) {
+        const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
+        const formattedQualifier = renderQualifier(expression.definition.qualifier, expression.qualifierComponents);
+        return addBrackets([formattedTerm, <> is </>, formattedQualifier]);
+      } else if (expression instanceof PropertyExpression) {
+        const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
+        const result = [formattedTerm, <> is </>, expression.definition.name];
+        const qualifier = _.find(expression.typeDefinition.qualifiers, q => q.symbol === expression.definition.requiredParentQualifier)?.qualifier || expression.typeDefinition.defaultQualifier;
+        if (qualifier) {
+          const formattedQualifier = renderQualifier(qualifier, expression.qualifierComponents);
+          result.push(<> </>);
+          result.push(formattedQualifier);
+        }
+        return addBrackets(result);
+      } else if (expression instanceof RelatedObjectExpression) {
+        const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
+        const formattedParentTerm = renderChildExpression(expression.parentTerm, [...path, 1]);
+        const result = [formattedTerm, <> is {expression.definition.article} {expression.definition.name} for </>, formattedParentTerm];
+        const qualifier = _.find(expression.typeDefinition.qualifiers, q => q.symbol === expression.definition.requiredParentQualifier)?.qualifier || expression.typeDefinition.defaultQualifier;
+        if (qualifier) {
+          const formattedQualifier = renderQualifier(qualifier, expression.qualifierComponents);
+          result.push(<> </>);
+          result.push(formattedQualifier);
+        }
+        return addBrackets(result);
+      } else if (expression instanceof StandalonePropertyExpression) {
+        const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
+        return addBrackets([formattedTerm, <> is </>, expression.definition.name]);
+      } else if (expression.formatForHtml) {
+        return renderFormattableExpressionWithDisambiguator(expression.disambiguator);
+      } else if (expression.textForHtml) {
+        return formatHtmlWithoutWrapping(expression.textForHtml(boundVariableLists));
+      } else {
+        throw "Could not render expression " + expression;
       }
     }
 
@@ -286,7 +294,8 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         [...filterPaths(actionHighlights, subpath), ...additionalActionHighlights],
         [...filterPaths(staticHighlights, subpath), ...additionalStaticHighlights],
         [...boundVariableLists, ...additionalBoundVariables],
-        parentRequiresBrackets);
+        parentRequiresBrackets,
+        false);
     }
 
     return highlight(
@@ -299,32 +308,16 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
   actionHighlights = actionHighlights || [];
   staticHighlights = staticHighlights || [];
 
-  return renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets);
+  return renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, splitConjunction);
 }
 
 export const CopiableExpression = (props) => {
-  const displayContext = useContext(DisplayContext);
   const expressionToCopy = props.expressionToCopy || props.expression;
   const boundVariableLists = props.boundVariableLists || useContext(BoundVariableLists) || [];
   const {expression, ...otherProps} = props;
 
-  function splitConjunctions(expression) {
-    if (expression instanceof DefinedExpression && _.includes(expression.definition.attributes, "conjunction")) {
-      return _.flatMap(expression.components, splitConjunctions);
-    } else {
-      return [expression];
-    }
-  }
-  function toComponent(expression) {
-    return <ExpressionComponent expression={expression} {...otherProps} boundVariableLists={boundVariableLists}/>
-  }
-
-  const component = (props.splitConjunction && !(displayContext && displayContext.disableShorthands)) ?
-    joinAsList(splitConjunctions(expression).map(toComponent)) :
-    toComponent(expression);
-
   return <span onContextMenu={() => navigator.clipboard.writeText(expressionToCopy.serializeNicely(boundVariableLists))}>
-    {component}
+    <ExpressionComponent expression={expression} {...otherProps} boundVariableLists={boundVariableLists}/>
   </span>;
 };
 

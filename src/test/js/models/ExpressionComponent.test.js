@@ -1,127 +1,43 @@
-import "jest-styled-components";
-import * as _ from "lodash";
-import React from 'react'
-import renderer from 'react-test-renderer'
+import React from "react";
+import renderer from "react-test-renderer";
 import EntryContext from "../../../main/js/components/EntryContext";
 import {ExpressionComponent} from "../../../main/js/components/ExpressionComponent";
-import {TypeExpression} from "../../../main/js/models/Expression";
-import {
-  A,
-  B,
-  f,
-  functionDefinition,
-  functionFromDefinition,
-  injectiveDefinition,
-  surjectiveDefinition
-} from "./testDefinitions";
+import {DefinedExpression} from "../../../main/js/models/Expression";
+import {getWords, treeToString} from "./ExpressionComponent.helpers";
+import {conjunctionDefinition, equalityDefinition, A, B, C, D} from "./testDefinitions";
 
-const expression = new TypeExpression(functionDefinition, f, functionFromDefinition, [A, B], [injectiveDefinition, surjectiveDefinition], [], undefined)
+function and(...components) {
+  return new DefinedExpression(conjunctionDefinition, [], components);
+}
+function equals(a, b) {
+  return new DefinedExpression(equalityDefinition, [], [a, b])
+}
 
-function createComponent(pathsToHighlight) {
-  const actionHighlights = _.map(pathsToHighlight, path => {return {path}});
-  return <EntryContext.Provider value={{displayShorthands: [], disambiguatorAdders: []}}>
-    <ExpressionComponent expression={expression} actionHighlights={actionHighlights} />
+const doubleEqualityShorthand = {
+  "baseFormatString": "%0 = %2 = %1",
+  "requiresBrackets": true,
+  "conditions": [],
+  "template":  and(equals(A, C), equals(B, C))
+};
+
+function renderExpression(expression, otherProps = {}) {
+  const wrappedComponent = <EntryContext.Provider value={{displayShorthands: [doubleEqualityShorthand], disambiguatorAdders: []}}>
+    <ExpressionComponent expression={expression} {...otherProps} />
   </EntryContext.Provider>;
+  const tree = renderer.create(wrappedComponent).toJSON();
+  return treeToString(tree);
 }
 
-function renderExpression(pathsToHighlight) {
-  const component = createComponent(pathsToHighlight);
-  return renderer.create(component).toJSON();
-}
+describe('expression component', () => {
+  test("applies display shorthand that matches template", () => {
+    expect(renderExpression(and(equals(C, A), equals(B, A)))).toBe("C = B = A")
+  });
 
-function treeToString(tree) {
-  if (_.isString(tree)) {
-    return tree;
-  } else {
-    return _.map(tree.children, treeToString).join("")
-  }
-}
+  test("splits conjunction that doesn't match template", () => {
+    expect(renderExpression(and(equals(A, B), equals(C, D)), {splitConjunction: true})).toBe("A = B and C = D")
+  });
 
-function getHighlightedString(words) {
-  return _.chain(words)
-    .map(word => {
-      try {
-        expect(word).toBeHighlighted();
-        return treeToString(word)
-      } catch {
-        return null;
-      }
-    })
-    .filter()
-    .value()
-    .join(" ");
-}
-
-expect.extend({
-  toBeHighlighted(received) {
-    if (this.isNot) {
-      expect(received).not.toHaveStyleRule("color", "red");
-    } else {
-      expect(received).toHaveStyleRule("color", "red");
-    }
-    return { pass: !this.isNot }
-  }
+  test("doesn't split conjunction that matches template", () => {
+    expect(renderExpression(and(equals(C, A), equals(B, A)), {splitConjunction: true})).toBe("C = B = A")
+  });
 });
-
-test("doesn't highlight type expression with no paths", () => {
-  const tree = renderExpression([]);
-  const words = _.filter(tree.children, (c,i) => i%2 === 0);
-
-  expect(tree).not.toBeHighlighted();
-  expect(getHighlightedString(words)).toBe("");
-});
-
-test("highlights whole type expression with single outer path", () => {
-  const tree = renderExpression([[]]);
-  expect(tree).toBeHighlighted();
-});
-
-test("highlights only relevant words if inner expression without qualifier is highlighted", () => {
-  const tree = renderExpression([[0, 0, 0]]);
-  const words = _.filter(tree.children, (c,i) => i%2 === 0);
-
-  expect(tree).not.toBeHighlighted();
-  expect(getHighlightedString(words)).toBe("f is an function");
-});
-
-test("highlights only relevant words if only qualifier expression is highlighted", () => {
-  const tree = renderExpression([[0, 0, 1]]);
-  const words = _.filter(tree.children, (c,i) => i%2 === 0);
-
-  expect(tree).not.toBeHighlighted();
-  expect(getHighlightedString(words)).toBe("f is from A → B");
-});
-
-test("highlights only relevant words if expression with qualifier is highlighted", () => {
-  const tree = renderExpression([[0, 0]]);
-  const words = _.filter(tree.children, (c,i) => i%2 === 0);
-
-  expect(tree).not.toBeHighlighted();
-  expect(getHighlightedString(words)).toBe("f is an function from A → B");
-});
-
-test("highlights only relevant words if property expression that doesn't include qualifier is highlighted", () => {
-  const tree = renderExpression([[0, 1]]);
-  const words = _.filter(tree.children, (c,i) => i%2 === 0);
-
-  expect(tree).not.toBeHighlighted();
-  expect(getHighlightedString(words)).toBe("f is injective");
-});
-
-test("highlights only relevant words if property expression that doesn't include qualifier is highlighted", () => {
-  const tree = renderExpression([[1]]);
-  const words = _.filter(tree.children, (c,i) => i%2 === 0);
-
-  expect(tree).not.toBeHighlighted();
-  expect(getHighlightedString(words)).toBe("f is surjective from A → B");
-});
-
-test("highlights all relevant subcomponents when a single path in the conjunction tree is highlighted", () => {
-  const tree = renderExpression([[0]]);
-  const words = _.filter(tree.children, (c,i) => i%2 === 0);
-
-  expect(tree).not.toBeHighlighted();
-  expect(getHighlightedString(words)).toBe("f is an injective function from A → B");
-});
-
-

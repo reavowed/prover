@@ -53,6 +53,23 @@ export const conjunctionDefinition = {
   numberOfComponents: 2,
   attributes: ["conjunction"]
 };
+export const equalityDefinition = {
+  symbol: {
+    baseSymbol: "=",
+    disambiguator: null,
+    serialized: "=",
+    forDisplay: "="
+  },
+  baseFormatString: "%1 %0 %2",
+  requiresBrackets: true,
+  requiresComponentBrackets: false,
+  numberOfBoundVariables: 0,
+  numberOfComponents: 2,
+  attributes: [
+    "equality"
+  ],
+  disambiguatorAdders: []
+};
 
 export const associativeDefinition = {
   symbol: "associative",
@@ -100,3 +117,4 @@ export const S = new Variable("S", []);
 export const A = new Variable("A", []);
 export const B = new Variable("B", []);
 export const C = new Variable("C", []);
+export const D = new Variable("D", []);
