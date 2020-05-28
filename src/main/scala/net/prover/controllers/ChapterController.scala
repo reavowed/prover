@@ -297,7 +297,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         symbol <- getMandatoryString(newTypeQualifierDefinition.symbol, "Symbol")
         parentType <- entryContext.typeDefinitions.get(newTypeQualifierDefinition.parentType).orBadRequest(s"Unknown type '${newTypeQualifierDefinition.parentType}'")
         qualifier <- getQualifier(newTypeQualifierDefinition.qualifierTermNames, newTypeQualifierDefinition.qualifierFormat)
-        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: qualifier.termNames)
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.mainTermName +: qualifier.termNames)
         definition <- Statement.parser(expressionParsingContext).parseFromString(newTypeQualifierDefinition.definition, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newTypeQualifierDefinition = TypeQualifierDefinition(
@@ -327,7 +327,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         requiredParentObjects <- getParentObjects(parentType, newPropertyDefinition.requiredParentObjects)
         adapter <- getOptionalAdapter(newPropertyDefinition.ownTermNames, newPropertyDefinition.parentTerms, (requiredParentQualifier.map(_.qualifier) orElse parentType.qualifier).termNames)
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
-        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(PropertyDefinitionOnType.getParentConditionAndQualifierTermNames(parentType, adapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition )._2)
+        qualifierTermNames = PropertyDefinitionOnType.getParentConditionAndQualifierTermNames(parentType, adapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition )._2
+        expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(qualifierTermNames))
         definingStatement <- Statement.parser(expressionParsingContext).parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
         newPropertyDefinition = PropertyDefinitionOnType(
           symbol,
@@ -356,7 +357,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         defaultTermName <- getMandatoryString(newRelatedObjectDefinition.defaultTermName, "Default term name")
         parentType <- entryContext.typeDefinitions.get(newRelatedObjectDefinition.parentType).orBadRequest(s"Unknown type '${newRelatedObjectDefinition.parentType}'")
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newRelatedObjectDefinition.requiredParentQualifier)
-        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: requiredParentQualifier.map(_.qualifier).orElse(parentType.qualifier).termNames)
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.mainTermName +: requiredParentQualifier.map(_.qualifier).orElse(parentType.qualifier).termNames)
         definingStatement <- Statement.parser(expressionParsingContext).parseFromString(newRelatedObjectDefinition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newPropertyDefinition = RelatedObjectDefinition(

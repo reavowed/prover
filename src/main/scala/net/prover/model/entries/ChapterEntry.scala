@@ -35,6 +35,10 @@ object ChapterEntry {
   trait HasChangeableName extends ChapterEntry {
     def withName(newName: String): ChapterEntry
   }
+  trait HasMainTermName extends ChapterEntry {
+    def mainTermName: String
+    def withMainTermName(newMainTermName: String): ChapterEntry
+  }
   trait HasOptionalExplicitName extends ChapterEntry with HasSymbol {
     def explicitName: Option[String]
     override def name: String = explicitName.getOrElse(symbol)

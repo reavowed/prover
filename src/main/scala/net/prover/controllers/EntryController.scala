@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.util.{Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{entryKey}"))
@@ -44,21 +44,12 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @PathVariable("entryKey") entryKey: String,
     @RequestBody(required = false) newSymbol: String
   ): ResponseEntity[_] = {
-    (for {
-      book <- bookService.findBook(bookKey)
-      chapter <- bookService.findChapter(book, chapterKey)
-      entry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
-      (newEntry, newBooks) <- entry match {
-        case entry: ChapterEntry.HasSymbol =>
-          val newEntry = entry.withSymbol(newSymbol)
-          Success((newEntry, modifyEntryWithReplacement(entry, newEntry)))
-        case _ =>
-          Failure(BadRequestException(s"Cannot edit symbol of ${entry.getClass.getName}"))
-      }
-      newBook <- bookService.findBook(newBooks, bookKey)
-      newChapter <- bookService.findChapter(newBook, chapterKey)
-      newKey <- BookService.getEntriesWithKeys(newChapter).find(_._1 == newEntry).map(_._2).orException(new Exception("Couldn't find new entry"))
-    } yield BookService.getEntryUrl(bookKey, chapterKey, newKey)).toResponseEntity
+    modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
+      case entry: ChapterEntry.HasSymbol =>
+        Success(entry.withSymbol(newSymbol))
+      case entry =>
+        Failure(BadRequestException(s"Cannot edit symbol of ${entry.getClass.getName}"))
+    }
   }
 
   @PutMapping(value = Array("/disambiguator"), produces = Array("application/json;charset=UTF-8"))
@@ -68,22 +59,14 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @PathVariable("entryKey") entryKey: String,
     @RequestBody(required = false) newDisambiguator: String
   ): ResponseEntity[_] = {
-    (for {
-      book <- bookService.findBook(bookKey)
-      chapter <- bookService.findChapter(book, chapterKey)
-      entry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
-      disambiguator <- getOptionalSingleWord(newDisambiguator, "Disambiguator")
-      (newEntry, newBooks) <- entry match {
-        case definition: TermDefinitionEntry =>
-          val newDefinition = definition.withDisambiguator(disambiguator)
-          Success((newDefinition, modifyEntryWithReplacement(definition, newDefinition)))
-        case _ =>
-          Failure(BadRequestException(s"Cannot edit disambiguator of ${entry.getClass.getName}"))
-      }
-      newBook <- bookService.findBook(newBooks, bookKey)
-      newChapter <- bookService.findChapter(newBook, chapterKey)
-      newKey <- BookService.getEntriesWithKeys(newChapter).find(_._1 == newEntry).map(_._2).orException(new Exception("Couldn't find new entry"))
-    } yield BookService.getEntryUrl(bookKey, chapterKey, newKey)).toResponseEntity
+    modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
+      case definition: TermDefinitionEntry =>
+        for {
+          disambiguator <- getOptionalSingleWord(newDisambiguator, "Disambiguator")
+        } yield definition.withDisambiguator(disambiguator)
+      case entry =>
+        Failure(BadRequestException(s"Cannot edit symbol of ${entry.getClass.getName}"))
+    }
   }
 
   @PutMapping(value = Array("/disambiguatorAdders"), produces = Array("application/json;charset=UTF-8"))
@@ -146,6 +129,21 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     }).toEmptyResponseEntity
   }
 
+  @PutMapping(value = Array("/mainTermName"), produces = Array("application/json;charset=UTF-8"))
+  def editMainTermName(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String,
+    @RequestBody(required = false) newMainTermName: String
+  ): ResponseEntity[_] = {
+    modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
+      case entry: ChapterEntry.HasMainTermName =>
+        getMandatoryString(newMainTermName, "main term name").map(entry.withMainTermName)
+      case entry =>
+        Failure(BadRequestException(s"Cannot set main term name of ${entry.getClass.getName}"))
+    }
+  }
+
   private def modifyEntryWithReplacement(oldEntry: ChapterEntry, newEntry: ChapterEntry): Seq[Book] = {
     bookService.modifyBooks[Identity]((books, _) => {
       books.mapFoldWithPrevious[(Map[ChapterEntry, ChapterEntry], Map[ExpressionDefinition, ExpressionDefinition]), Book]((Map.empty, Map.empty)) { case ((chapterEntries, expressionDefinitions), previousBooks, bookToModify) =>
@@ -170,5 +168,18 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
         }.mapRight(newChapters => bookToModify.copy(chapters = newChapters)).mapLeft { case (_, a, b) => (a, b)}
       }._2
     })._1
+  }
+
+  private def modifyEntryWithReplacement(bookKey: String, chapterKey: String, entryKey: String)(f: ChapterEntry => Try[ChapterEntry]): ResponseEntity[_] = {
+    (for {
+      book <- bookService.findBook(bookKey)
+      chapter <- bookService.findChapter(book, chapterKey)
+      oldEntry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
+      newEntry <- f(oldEntry)
+      newBooks = modifyEntryWithReplacement(oldEntry, newEntry)
+      newBook <- bookService.findBook(newBooks, bookKey)
+      newChapter <- bookService.findChapter(newBook, chapterKey)
+      newKey <- BookService.getEntriesWithKeys(newChapter).find(_._1 == newEntry).map(_._2).orException(new Exception("Couldn't find new entry"))
+    } yield BookService.getEntryUrl(bookKey, chapterKey, newKey)).toResponseEntity
   }
 }

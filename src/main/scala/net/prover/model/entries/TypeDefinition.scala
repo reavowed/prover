@@ -9,11 +9,11 @@ import net.prover.model.expressions.Statement
 
 case class TypeDefinition(
     symbol: String,
-    defaultTermName: String,
+    mainTermName: String,
     qualifier: Option[Qualifier],
     explicitName: Option[String],
     definingStatement: Statement)
-  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle
+  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle with ChapterEntry.HasMainTermName
 {
   override val title: String = s"Definition: ${name.capitalizeWords}"
 
@@ -23,11 +23,12 @@ case class TypeDefinition(
   def withSymbol(newSymbol: String): TypeDefinition = copy(symbol = newSymbol)
   override def withName(newName: Option[String]): TypeDefinition = copy(explicitName = newName)
   def withFormat(newFormat: Format.Explicit): TypeDefinition = copy(qualifier = qualifier.map(_.withFormat(newFormat)))
+  def withMainTermName(newMainTermName: String): TypeDefinition = copy(mainTermName = newMainTermName)
 
-  def baseFormat = Format.Explicit(s"%1 is $article %0", s"$defaultTermName is $article $name", 2, true, true)
+  def baseFormat = Format.Explicit(s"%1 is $article %0", s"$mainTermName is $article $name", 2, true, true)
   def fullFormat = qualifier.prependFormat(baseFormat)
 
-  val allTermNames: Seq[String] = defaultTermName +: qualifier.termNames
+  val allTermNames: Seq[String] = mainTermName +: qualifier.termNames
   val allComponents: Seq[TermComponent] = allTermNames.map(ComponentType.TermComponent(_, Nil))
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
     symbol,
@@ -38,7 +39,7 @@ case class TypeDefinition(
     this)
   override def inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 
-  override def serializedLines: Seq[String] = Seq("type", symbol, defaultTermName).mkString(" ") +:
+  override def serializedLines: Seq[String] = Seq("type", symbol, mainTermName).mkString(" ") +:
       (qualifier.map("qualifier " + _.serialized).toSeq ++
         explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
         Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
@@ -51,7 +52,7 @@ case class TypeDefinition(
   ): TypeDefinition = {
     TypeDefinition(
       symbol,
-      defaultTermName,
+      mainTermName,
       qualifier,
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))

@@ -25,7 +25,7 @@ object TypeDefinitionSummary {
       typeDefinition.symbol,
       typeDefinition.name,
       typeDefinition.article,
-      typeDefinition.defaultTermName,
+      typeDefinition.mainTermName,
       typeDefinition.qualifier.map(getQualifierSummary),
       entryContext.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).map(getPropertyDefinitionSummary),
       entryContext.qualifiersByType.getOrElse(typeDefinition.symbol, Nil).map(qd => TypeQualifierDefinitionSummary(qd.symbol, qd.qualifiedSymbol, qd.name, getQualifierSummary(qd.qualifier))),

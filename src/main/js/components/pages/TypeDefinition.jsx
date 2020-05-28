@@ -20,6 +20,9 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
   const saveFormat = (newFormat) => {
     return window.fetchJson(path.join(url, "format"), {method: "PUT", body: newFormat});
   };
+  const saveMainTermName = (newMainTermName) => {
+    return window.fetchJson(path.join(url, "mainTermName"), {method: "PUT", body: newMainTermName});
+  };
 
   const serializedFormat = definition.qualifier?.format.originalValue ?
     "(" + definition.qualifier.format.originalValue + ")" + (definition.qualifier.format.requiresBrackets ? " requires-brackets" : "") + (definition.qualifier.format.requiresComponentBrackets ? "" : " no-component-brackets") :
@@ -33,7 +36,7 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
       <hr/>
       <EditableSymbol symbol={definition.symbol} url={url} />
       <EditableExplicitName name={definition.explicitName} url={url} />
-      <EditableProperty label="Main Term Name" initialValue={definition.defaultTermName} />
+      <EditableProperty label="Main Term Name" initialValue={definition.mainTermName} onSave={saveMainTermName} />
       {definition.qualifier && <EditableProperty label="Qualifier Term Names" initialValue={definition.qualifier.termNames.join(" ")} />}
       {definition.qualifier && <EditableProperty label="Qualifier Format" initialValue={serializedFormat} onSave={saveFormat} />}
       <StatementDefinitionUsages usages={usages} statementDefinition={definition.statementDefinition} />

@@ -24,7 +24,7 @@ case class RelatedObjectDefinition(
   override def withSymbol(newSymbol: String): RelatedObjectDefinition = copy(symbol = newSymbol)
   override def withName(newName: Option[String]): ChapterEntry = copy(explicitName = newName)
 
-  def baseFormat = Format.Explicit(s"%1 is $article %0 for %2", s"$defaultTermName is $article $name for ${parentType.defaultTermName}", 3, true, true)
+  def baseFormat = Format.Explicit(s"%1 is $article %0 for %2", s"$defaultTermName is $article $name for ${parentType.mainTermName}", 3, true, true)
   def fullFormat = parentType.qualifier.prependFormat(baseFormat)
   def parentTermNames = requiredParentQualifier.map(_.allTermNames) getOrElse parentType.allTermNames
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
