@@ -14,6 +14,11 @@ class PropertyDefinitionSpec extends Specification {
   val sequenceOnDefinition = TypeQualifierDefinition("on", sequenceDefinition, Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true)), None, φ, ConjunctionDefinition)
   val binaryOperationDefinition = TypeDefinition("binaryOperation", "f", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true))), None, φ)
   val identityDefinition = RelatedObjectDefinition("identity", binaryOperationDefinition, "e", None, None, φ, ConjunctionDefinition)
+  
+  val f = TermVariablePlaceholder("f", 0)
+  val A = TermVariablePlaceholder("A", 1)
+  val B = TermVariablePlaceholder("B", 2)
+  val R= TermVariablePlaceholder("R", 0)
 
   "defining statement" should {
     "add simple parent type condition with no qualifiers" in {

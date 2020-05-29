@@ -70,8 +70,9 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
         import replacementPossibility._
         for {
           substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
-          (_, substitutionsAfterPremises) <- PremiseFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.extractionOption.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
-          result <- termRewriteInference.rhs.applySubstitutions(substitutionsAfterPremises.stripApplications())(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
+          (_, substitutionsAfterPremises) <- PremiseFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceContext))
+          substitutions <- substitutionsAfterPremises.confirmTotality(termRewriteInference.variableDefinitions)
+          result <- termRewriteInference.rhs.applySubstitutions(substitutions)(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
         } yield (term, result, path)
       }
 
@@ -85,8 +86,8 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
             .sortBy(_._2.min)
             .map { case ((source, result), paths) =>
               InferenceRewriteSuggestion(
-                termRewriteInference.inferenceSummary,
-                termRewriteInference.extractionOption.extractionInferences.map(_.id),
+                termRewriteInference.derivedSummary,
+                termRewriteInference.extractionInferences.map(_.id),
                 source,
                 result,
                 paths)
@@ -103,7 +104,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
 
       val filter = inferenceFilter(searchText)
       stepProvingContext.provingContext.prospectiveTermRewriteInferences
-        .filter { case TermRewriteInference(i, _, _, _) => filter(i) }
+        .filter { termRewriteInference => filter(termRewriteInference.baseInference) }
         .groupBy(_.lhs.structuralComplexity).toSeq
         .sortBy(_._1)(Ordering[Int].reverse)
         .iterator
@@ -175,19 +176,19 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       } else {
         rewrite.extractionInferenceIds :+ equality.reversal.inference.id
       }
-      extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == extractionInferenceIds).orBadRequest(s"Could not find extraction for inference ${inference.id}")
-      (lhs, rhs) <- equality.unapply(extractionOption.conclusion).orBadRequest("Rewrite conclusion was not equality")
+      inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == extractionInferenceIds).orBadRequest(s"Could not find extraction for inference ${inference.id}")
+      (lhs, rhs) <- equality.unapply(inferenceExtraction.conclusion).orBadRequest("Rewrite conclusion was not equality")
       (sourceTemplate, targetTemplate) = direction.swapSourceAndResult(lhs, rhs)
       substitutions <- sourceTemplate.calculateSubstitutions(baseTerm).orBadRequest("Could not find substitutions")
-      (knownPremises, _) <- PremiseFinder.findDerivationsForStatementsBySubstituting(extractionOption.premises, substitutions)
+      (knownPremises, _) <- PremiseFinder.findDerivationsForStatementsBySubstituting(inferenceExtraction.premises, substitutions)
         .orBadRequest("Could not find premises")
       (removedUnwrappers, removedSource, removedPremises, removedWrapperExpression) = RewriteMethods[TExpression].removeUnwrappers(baseTerm, knownPremises.map(_.statement), wrapperExpression, unwrappers)
       removedUnwrappedStepContext = removedUnwrappers.enhanceContext(implicitly)
       finalSubstitutionsAfterSource <- sourceTemplate.calculateSubstitutions(removedSource)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions")
       finalSubstitutionsAfterPremises <- inference.premises.zip(removedPremises).foldLeft(Try(finalSubstitutionsAfterSource)) { case (s, (ip, p)) => s.flatMap(ip.calculateSubstitutions(p, _)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions"))}
-      finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality.orBadRequest("Substitutions were not complete")
+      finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inference.variableDefinitions).orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
-      extractionStep <- ExtractionHelper.getInferenceExtractionWithoutPremises(inference, finalSubstitutions, extractionOption).orBadRequest("Could not apply extraction")
+      extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
       elidedStep = Step.Elided.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).deduplicate.steps, inference).get
     } yield (removedSource, rewrittenTerm, Seq(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
   }

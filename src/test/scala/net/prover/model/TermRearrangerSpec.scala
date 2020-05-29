@@ -4,19 +4,25 @@ import net.prover.model.TestDefinitions.{a, b, _}
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{Step, TermRearranger}
 import net.prover.util.Direction
+import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 import org.specs2.specification.core.Fragments
 
 class TermRearrangerSpec extends Specification {
 
+  implicit val entryContext = defaultEntryContext
+  val e = TermVariablePlaceholder("e", 4)
+  val f = TermVariablePlaceholder("f", 5)
+  implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, e -> 0, f -> 0))
+
   "rearranging a statement" should {
-    def rearrange(targetStatement: Statement, premises: Seq[Statement]): Option[Step] = {
+    def rearrange(targetStatement: Statement, premises: Seq[Statement])(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Option[Step] = {
       implicit val stepContext = createBaseStepContext(premises, Seq(targetStatement))
       TermRearranger.rearrange(targetStatement)
         .map(_.recalculateReferences(stepContext, implicitly[ProvingContext])._1)
     }
 
-    def testRearranging(targetStatement: Statement, premises: Seq[Statement]) = {
+    def testRearranging(targetStatement: Statement, premises: Seq[Statement])(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
       implicit val stepContext = createBaseStepContext(premises, Seq(targetStatement))
       val step = rearrange(targetStatement, premises)
       step must beSome(beStepThatMakesValidTheorem(premises, targetStatement))
@@ -42,6 +48,8 @@ class TermRearrangerSpec extends Specification {
     }
 
     "rearrange inside a function" in {
+      val F = TermVariablePlaceholder("F", 4)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, F -> 2))
       val conclusion = Equals(F(add(add(a, b), add(c, d)), add(c, d)), F(add(add(a, c), add(b, d)), add(d, c)))
       testRearranging(conclusion, Nil)
     }

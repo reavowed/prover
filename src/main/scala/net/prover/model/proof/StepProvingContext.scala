@@ -22,9 +22,9 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
     val simplified = premisesAndSimplifications.flatMap(_._2).map(p => KnownStatement(p.statement, Nil))
     val extracted = for {
       premise <- premisesAndSimplifications.map(_._1)
-      extractionOption <- SubstatementExtractor.getExtractionOptions(premise.statement)(this)
-      if extractionOption.premises.isEmpty
-    } yield KnownStatement(extractionOption.conclusion, extractionOption.derivation)
+      extraction <- SubstatementExtractor.getPremiseExtractions(premise.statement)(this)
+      if extraction.premises.isEmpty
+    } yield KnownStatement(extraction.conclusion, extraction.innerExtraction.derivation)
 
     (given ++ simplified ++ extracted).deduplicate
   }

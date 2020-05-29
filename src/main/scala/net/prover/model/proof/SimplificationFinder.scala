@@ -6,7 +6,7 @@ import net.prover.model.expressions.Statement
 object SimplificationFinder {
   private def getSimplification(premise: Premise.SingleLinePremise, simplificationInference: Inference, inferencePremise: Statement)(implicit stepContext: StepContext): Option[Premise.Simplification] = {
     for {
-      substitutions <- inferencePremise.calculateSubstitutions(premise.statement).flatMap(_.confirmTotality)
+      substitutions <- inferencePremise.calculateSubstitutions(premise.statement).flatMap(_.confirmTotality(simplificationInference.variableDefinitions))
       simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions)
       path <- inferencePremise.findComponentPath(simplificationInference.conclusion)
     } yield {
@@ -32,7 +32,7 @@ object SimplificationFinder {
 
   private def getSimplification(statement: Statement, simplificationInference: Inference, inferencePremise: Statement)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {
     for {
-      substitutions <- inferencePremise.calculateSubstitutions(statement).flatMap(_.confirmTotality)
+      substitutions <- inferencePremise.calculateSubstitutions(statement).flatMap(_.confirmTotality(simplificationInference.variableDefinitions))
       simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions)
     } yield {
       simplifiedTarget

@@ -3,7 +3,7 @@ package net.prover.model
 import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.SubstatementExtractor.ExtractionOption
+import net.prover.model.proof.SubstatementExtractor.{Extraction, ExtractionFromSinglePremise, InferenceExtraction}
 import net.prover.model.proof.{DerivationStep, Step, StepProvingContext, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.util.Direction
@@ -53,7 +53,6 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableStep: Allowable[Step] = allowable(step => step.referencedInferenceIds.forall(entryContext.allInferenceIds.contains))
     implicit val allowableDerivationStep: Allowable[DerivationStep] = allowableGeneric(Generic[DerivationStep])
     implicit val allowableKnownStatement: Allowable[KnownStatement] = allowableGeneric(Generic[KnownStatement])
-    implicit val allowableExtractionOption: Allowable[ExtractionOption] = allowableGeneric(Generic[ExtractionOption])
     implicit def allowableDesimplifiedPremise: Allowable[DesimplifiedPremise] = allowableGeneric(Generic[DesimplifiedPremise])
     implicit def allowablePremiseDesimplification: Allowable[DerivedPremise] = allowable {
       case DirectPremise(_) => true
@@ -63,6 +62,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowableOperator: Allowable[Operator] = alwaysAllowable
     implicit val allowableEquality: Allowable[Equality] = allowableGeneric(Generic[Equality])
 
+    implicit val allowableExtractionFromSinglePremise: Allowable[ExtractionFromSinglePremise] = allowableGeneric(Generic[ExtractionFromSinglePremise])
+    implicit val allowableInferenceExtraction: Allowable[InferenceExtraction] = allowableGeneric(Generic[InferenceExtraction])
     implicit val allowableCommutativity: Allowable[Commutativity] = allowableGeneric(Generic[Commutativity])
     implicit val allowableAssociativity: Allowable[Associativity] = allowableGeneric(Generic[Associativity])
     implicit val allowableLeftIdentity: Allowable[LeftIdentity] = allowableGeneric(Generic[LeftIdentity])
@@ -143,7 +144,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   }
   def filter[T](t: T)(implicit replacable: Filterable[T]): T = replacable.replace(t)
 
-  lazy val extractionOptionsByInferenceId: Map[String, Seq[ExtractionOption]] = filter(definitions.extractionOptionsByInferenceId)
+  lazy val inferenceExtractionsByInferenceId: Map[String, Seq[InferenceExtraction]] = filter(definitions.inferenceExtractionsByInferenceId)
 
   lazy val deductionDefinitionOption: Option[DeductionDefinition] = entryContext.deductionDefinitionOption
   lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
@@ -151,7 +152,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   }
 
   lazy val generalizationDefinitionOption: Option[GeneralizationDefinition] = entryContext.generalizationDefinitionOption
-  lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
+  lazy val specificationInferenceOption: Option[(Inference, Statement)] = {
     filter(definitions.specificationInferenceOption)
   }
 
@@ -197,7 +198,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 
   lazy val conclusionRelationSimplificationInferences: Map[BinaryRelation, Seq[ConclusionRelationSimplificationInference]] = filter(definitions.conclusionRelationSimplificationInferences)
   lazy val conclusionSimplificationInferences: Seq[Inference] = filter(definitions.conclusionSimplificationInferences)
-  lazy val termDefinitionRemovals: Map[TermDefinition, Seq[ExtractionOption]] = filter(definitions.termDefinitionRemovals)
+  lazy val termDefinitionRemovals: Map[TermDefinition, Seq[InferenceExtraction]] = filter(definitions.termDefinitionRemovals)
 
   lazy val rewriteInferences: Seq[(Inference, Statement)] = {
     filter(definitions.rewriteInferences)
@@ -245,7 +246,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     } yield valueToProperty
   }
 
-  lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {
+  lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, Int, Int, Direction)] = {
     filter(definitions.statementDeductionInferences)
   }
   lazy val statementDefinitionIntroductionInferences: Seq[(Inference, Statement)] = {

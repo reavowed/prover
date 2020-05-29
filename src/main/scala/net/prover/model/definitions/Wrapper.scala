@@ -1,6 +1,5 @@
 package net.prover.model.definitions
 
-import net.prover.model.VariableDefinition
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
 
@@ -15,8 +14,8 @@ trait WrapperIdentity[T, S] {
   def isIdentity(wrapper: Wrapper[T, S], substitutionContext: SubstitutionContext): Boolean
 }
 object WrapperIdentity {
-  implicit def termIdentity: WrapperIdentity[Term, Term] = (wrapper, context) => wrapper(TermVariable("_"))(context) == TermVariable("_")
-  implicit def statementIdentity: WrapperIdentity[Statement, Statement] = (wrapper, context) => wrapper(StatementVariable("_"))(context) == StatementVariable("_")
+  implicit def termIdentity: WrapperIdentity[Term, Term] = (wrapper, context) => wrapper(TermVariable(Int.MaxValue))(context) == TermVariable(Int.MaxValue)
+  implicit def statementIdentity: WrapperIdentity[Statement, Statement] = (wrapper, context) => wrapper(StatementVariable(Int.MaxValue))(context) == StatementVariable(Int.MaxValue)
   def none[T, S]: WrapperIdentity[T, S] = (_, _) => false
 }
 

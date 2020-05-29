@@ -21,6 +21,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     components.map(_.definitionalComplexity).sum + definition.complexity
   }
 
+  override def usedVariables: UsedVariables = components.usedVariables
   override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, ExpressionType, Int, Seq[Int])] = {
     @scala.annotation.tailrec
     def helper(previous: Seq[Expression], next: Seq[Expression], acc: Seq[(Term, ExpressionType, Int, Seq[Int])]): Seq[(Term, ExpressionType, Int, Seq[Int])] = {
@@ -72,8 +73,18 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
       .map(_.specifyWithSubstitutions(targetArguments, substitutions, definition.increaseDepth(internalDepth), previousInternalDepth, externalDepth)).traverseOption
       .map(updateComponents)
   }
+  def trySpecifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions.Possible,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
+  ): Option[ExpressionType] = {
+    components
+      .map(_.trySpecifyWithSubstitutions(targetArguments, substitutions, definition.increaseDepth(internalDepth), previousInternalDepth, externalDepth)).traverseOption
+      .map(updateComponents)
+  }
 
-  override def requiredSubstitutions = components.requiredSubstitutions
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions.Possible,
@@ -89,6 +100,13 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     externalDepth: Int
   ): Option[ExpressionType] = {
     components.applySubstitutions(substitutions, definition.increaseDepth(internalDepth), externalDepth).map(updateComponents)
+  }
+  def tryApplySubstitutions(
+    substitutions: Substitutions.Possible,
+    internalDepth: Int,
+    externalDepth: Int
+  ): Option[ExpressionType] = {
+    components.tryApplySubstitutions(substitutions, definition.increaseDepth(internalDepth), externalDepth).map(updateComponents)
   }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
@@ -136,7 +154,5 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
     definition.format.formatText(boundVariableNames ++ components.map(_.safeToString), definition.symbol, parentRequiresBrackets = true)
   }
   override def serialized: String = (Seq(definition.disambiguatedSymbol.serialized) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
-  override def toStringForHash(variableDefinitions: VariableDefinitions): String = {
-    (Seq(definition.disambiguatedSymbol.serialized) ++ components.map(_.toStringForHash(variableDefinitions))).mkString(" ")
-  }
+  override def serializedForHash: String = (Seq(definition.disambiguatedSymbol.serialized) ++ components.map(_.serializedForHash)).mkString(" ")
 }

@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.proof.SubstitutionContext
-import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, VariableDefinitions}
+import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, UsedVariables, VariableDefinitions}
 
 @JsonSerialize(using = classOf[ExpressionSerializer])
 trait Expression extends TypedExpression[Expression]
@@ -17,6 +17,7 @@ trait TypedExpression[+ExpressionType <: Expression] {
   def definitionUsages: DefinitionUsages
   def referencedDefinitions: Set[ExpressionDefinition] = definitionUsages.map.keySet
 
+  def usedVariables: UsedVariables
   def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, ExpressionType, Int, Seq[Int])]
   def getTerms()(implicit substitutionContext: SubstitutionContext): Seq[(Term, ExpressionType, Int, Seq[Int])] = getTerms(0, substitutionContext.externalDepth)
   def getPredicateForTerm(term: Term, depth: Int): ExpressionType
@@ -62,8 +63,13 @@ trait TypedExpression[+ExpressionType <: Expression] {
     previousInternalDepth: Int,
     externalDepth: Int
   ): Option[ExpressionType]
-
-  def requiredSubstitutions: Substitutions.Required
+  def trySpecifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions.Possible,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
+  ): Option[ExpressionType]
 
   /**
     * Calculate all valid substitutions that can be applied to this to result in other,
@@ -104,6 +110,17 @@ trait TypedExpression[+ExpressionType <: Expression] {
     implicit substitutionContext: SubstitutionContext
   ): Option[ExpressionType] = {
     applySubstitutions(substitutions, 0, substitutionContext.externalDepth)
+  }
+  def tryApplySubstitutions(
+    substitutions: Substitutions.Possible,
+    internalDepth: Int,
+    externalDepth: Int
+  ): Option[ExpressionType]
+  def tryApplySubstitutions(
+    substitutions: Substitutions.Possible)(
+    implicit substitutionContext: SubstitutionContext
+  ): Option[ExpressionType] = {
+    tryApplySubstitutions(substitutions, 0, substitutionContext.externalDepth)
   }
 
   /**
@@ -155,7 +172,7 @@ trait TypedExpression[+ExpressionType <: Expression] {
   }
   def safeToString: String = toString
   def serialized: String
-  def toStringForHash(variableDefinitions: VariableDefinitions): String
+  def serializedForHash: String
 }
 
 object Expression {
@@ -164,7 +181,9 @@ object Expression {
   }
 
   implicit class ExpressionSeqOps(expressions: Seq[Expression]) {
-    def requiredSubstitutions: Substitutions.Required = expressions.map(_.requiredSubstitutions).foldTogether
+    def usedVariables: UsedVariables = {
+      expressions.map(_.usedVariables).foldTogether
+    }
     def calculateSubstitutions(
       otherExpressions: Seq[Expression],
       substitutions: Substitutions.Possible,
@@ -215,6 +234,13 @@ object Expression {
       externalDepth: Int
     ): Option[Seq[Expression]] = {
       expressions.map(_.applySubstitutions(substitutions, internalDepth, externalDepth)).traverseOption
+    }
+    def tryApplySubstitutions(
+      substitutions: Substitutions.Possible,
+      internalDepth: Int,
+      externalDepth: Int
+    ): Option[Seq[Expression]] = {
+      expressions.map(_.tryApplySubstitutions(substitutions, internalDepth, externalDepth)).traverseOption
     }
   }
 }

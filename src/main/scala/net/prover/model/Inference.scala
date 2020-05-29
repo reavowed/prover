@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.Inference._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
-import net.prover.model.entries.{ChapterEntry, ChapterEntryParser, StatementDefinitionEntry}
+import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
 import net.prover.model.expressions._
 import net.prover.model.proof.{StepContext, SubstitutionContext}
 
@@ -26,36 +26,19 @@ trait Inference {
 
   def summary: Summary = Summary(this)
 
-  val requiredSubstitutions: Substitutions.Required = {
-    (premises.map(_.requiredSubstitutions) :+ conclusion.requiredSubstitutions).foldTogether
-  }
-
   def substitutionsParser(implicit parsingContext: ExpressionParsingContext): Parser[Substitutions] = {
     for {
-      statements <- requiredSubstitutions.statements.mapWithIndex { case ((name, arity), index) =>
-        for {
-          _ <- if (index > 0) Parser.requiredWord(",") else Parser.constant(())
-          s <- Statement.parser(parsingContext.addInitialParameters(arity))
-        } yield name -> (arity -> s)
-      }.traverse.map(_.toMap).inParens
-      terms <- requiredSubstitutions.terms.mapWithIndex { case ((name, arity), index) =>
-        for {
-          _ <- if (index > 0) Parser.requiredWord(",") else Parser.constant(())
-          t <- Term.parser(parsingContext.addInitialParameters(arity))
-        } yield name -> (arity -> t)
-      }.traverse.map(_.toMap).inParens
+      statements <- variableDefinitions.statements.map(d => Statement.parser(parsingContext.addInitialParameters(d.arity))).inParens(Some(","))
+      terms <- variableDefinitions.terms.map(d => Term.parser(parsingContext.addInitialParameters(d.arity))).inParens(Some(","))
     } yield {
+      if (statements.length != variableDefinitions.statements.length) {
+        throw new Exception(s"Invalid number of statements in substitutions - expected ${variableDefinitions.statements.length}, got ${statements.length}")
+      }
+      if (terms.length != variableDefinitions.terms.length) {
+        throw new Exception(s"Invalid number of terms in substitutions - expected ${variableDefinitions.terms.length}, got ${terms.length}")
+      }
       Substitutions(statements, terms)
     }
-  }
-
-  def serializeSubstitutions(substitutions: Substitutions): String = {
-    Seq(
-      requiredSubstitutions.statements.map { case (name, arity) => substitutions.statements.get(name).filter(_._1 == arity).map(_._2)}.traverseOption,
-      requiredSubstitutions.terms.map { case (name, arity) => substitutions.terms.get(name).filter(_._1 == arity).map(_._2)}.traverseOption
-    ).traverseOption.get
-      .map(x => "(" + x.map(_.serialized).mkString(", ") + ")")
-      .mkString(" ")
   }
 
   def validatePremisesAndConclusion(expectedPremises: Seq[Statement], expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Option[Unit] = {
@@ -102,7 +85,7 @@ trait Inference {
 
 object Inference {
   trait WithCalculatedId extends Inference {
-    val id: String = Inference.calculateHash(premises, conclusion, variableDefinitions)
+    val id: String = Inference.calculateHash(premises, conclusion)
   }
   trait FromEntry extends WithCalculatedId {
     def isComplete(definitions: Definitions): Boolean
@@ -132,7 +115,7 @@ object Inference {
       val newConclusion = conclusion.replaceDefinitions(expressionDefinitionReplacements)
       Summary(
         name,
-        Inference.calculateHash(newPremises, newConclusion, variableDefinitions),
+        Inference.calculateHash(newPremises, newConclusion),
         variableDefinitions,
         newPremises,
         newConclusion)
@@ -172,8 +155,8 @@ object Inference {
     Some(inference.name, inference.premises, inference.conclusion)
   }
 
-  def calculateHash(premises: Seq[Statement], conclusion: Statement, variableDefinitions: VariableDefinitions): String = {
-    val serialized = (premises.map("premise " + _.toStringForHash(variableDefinitions)) :+ conclusion.toStringForHash(variableDefinitions)).mkString("\n")
+  def calculateHash(premises: Seq[Statement], conclusion: Statement): String = {
+    val serialized = (premises.map("premise " + _.serializedForHash) :+ conclusion.serializedForHash).mkString("\n")
     val sha = MessageDigest.getInstance("SHA-256")
     sha.update(serialized.getBytes("UTF-8"))
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))

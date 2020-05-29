@@ -33,7 +33,7 @@ case class DesimplifiedPremise(premise: Statement, inference: Inference, innerPr
   def getSubstitutedPremises(substitutions: Substitutions)(implicit stepProvingContext: StepProvingContext): Option[(Seq[Statement], Seq[DerivationStep])] = {
     for {
       substitutedPremise <- premise.applySubstitutions(substitutions)
-      inferenceSubstitutions <- inference.conclusion.calculateSubstitutions(substitutedPremise).flatMap(_.confirmTotality)
+      inferenceSubstitutions <- inference.conclusion.calculateSubstitutions(substitutedPremise).flatMap(_.confirmTotality(inference.variableDefinitions))
       assertionStep <- Step.Assertion.forInference(inference, inferenceSubstitutions)
       (innerPremises, innerSteps) <- innerPremises.getSubstitutedPremises(substitutions)
     } yield (innerPremises, innerSteps :+ DerivationStep.fromAssertion(assertionStep))

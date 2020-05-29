@@ -21,16 +21,16 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
   def rewrite(targetStatement: Statement): Option[Step] = {
     def findSimplificationsFromInferences(premiseTerm: Term, inferences: Seq[TermRewriteInference], direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
       for {
-        TermRewriteInference(inference, extractionOption, left, right) <- inferences
-        (inferenceSource, inferenceResult) = direction.swapSourceAndResult(left, right)
-        conclusionSubstitutions <- inferenceSource.calculateSubstitutions(premiseTerm).flatMap(_.confirmTotality)
-        simplifiedTerm <- inferenceResult.applySubstitutions(conclusionSubstitutions).flatMap(_.asOptionalInstanceOf[Term])
-        (premises, possibleFinalSubstitutions) <- PremiseFinder.findDerivationsForStatementsBySubstituting(extractionOption.premises, conclusionSubstitutions)
-        finalSubstitutions <- possibleFinalSubstitutions.confirmTotality
+        rewriteInference <- inferences
+        (inferenceSource, inferenceResult) = direction.swapSourceAndResult(rewriteInference.lhs, rewriteInference.rhs)
+        conclusionSubstitutions <- inferenceSource.calculateSubstitutions(premiseTerm)
+        (premises, possibleFinalSubstitutions) <- PremiseFinder.findDerivationsForStatementsBySubstituting(rewriteInference.premises, conclusionSubstitutions)
+        finalSubstitutions <- possibleFinalSubstitutions.confirmTotality(rewriteInference.variableDefinitions)
+        simplifiedTerm <- inferenceResult.applySubstitutions(finalSubstitutions)
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
-        extractionStep <- ExtractionHelper.getInferenceExtractionWithoutPremises(inference, finalSubstitutions, extractionOption)
+        extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
-      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation) :+ extractionStep).steps ++ expansionStep.toSeq, inference.summary), inference.summary)
+      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation) :+ extractionStep).steps ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
     }
 
     def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
@@ -313,7 +313,7 @@ object EqualityRewriter {
       override def getRewritePossibilitiesFromOuterExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepProvingContext: StepProvingContext): Seq[RewritePossibility[Statement]] = {
         def byGeneralization = for {
           generalizationDefinition <- stepProvingContext.provingContext.entryContext.generalizationDefinitionOption
-          (specificationInference, _, _, _) <- stepProvingContext.provingContext.specificationInferenceOption
+          (specificationInference, _) <- stepProvingContext.provingContext.specificationInferenceOption
           (variableName, predicate) <- generalizationDefinition.unapply(statement)
           unwrapper = GeneralizationUnwrapper(variableName, generalizationDefinition, specificationInference)
         } yield getRewritePossibilitiesFromOuterExpression(predicate, path :+ 0, unwrappers :+ unwrapper)(StepProvingContext.updateStepContext(unwrapper.enhanceContext))

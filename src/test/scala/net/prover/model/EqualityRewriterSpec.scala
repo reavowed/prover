@@ -7,8 +7,11 @@ import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
 class EqualityRewriterSpec extends Specification {
+  implicit val entryContext = defaultEntryContext
+  implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0))
+
   "rewriting a statement" should {
-    def testRewrite(premises: Seq[Statement], target: Statement) = {
+    def testRewrite(premises: Seq[Statement], target: Statement)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Result = {
       implicit val stepContext = createBaseStepContext(premises, Seq(target))
 
       val stepOption = EqualityRewriter.rewrite(target)
@@ -30,6 +33,12 @@ class EqualityRewriterSpec extends Specification {
     }
 
     "rewrite with a premise requiring complicated simplification" in {
+      val A = TermVariablePlaceholder("A", 1)
+      val B = TermVariablePlaceholder("B", 2)
+      val C = TermVariablePlaceholder("C", 3)
+      val D = TermVariablePlaceholder("D", 4)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, A -> 0, B -> 0, C -> 0, D -> 0))
+
       val premise = ElementOf(a, Product(Product(A, B), Product(C, D)))
       val target = Equals(a, Pair(Pair(First(First(a)), Second(First(a))), Pair(First(Second(a)), Second(Second(a)))))
       testRewrite(Seq(premise), target)
@@ -52,6 +61,8 @@ class EqualityRewriterSpec extends Specification {
     }
 
     "rewrite a function application inline" in {
+      val F = TermVariablePlaceholder("F", 2)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, F-> 1))
       val premises = Seq(Equals(a, b))
       val target = Equals(F(a), F(b))
       testRewrite(premises, target)

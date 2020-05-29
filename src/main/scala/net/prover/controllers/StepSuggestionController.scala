@@ -2,14 +2,12 @@ package net.prover.controllers
 
 import net.prover.controllers.models._
 import net.prover.model._
-import net.prover.model.definitions.BinaryJoiner
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.collection.{SeqLike, SortedSet, TraversableLike}
 import scala.util.Try
 
 @RestController
@@ -61,41 +59,13 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
               inference.summary,
               Seq(PossibleConclusionWithPremises(
                 inference.conclusion,
-                PossiblePremise.fromAvailablePremises(namingPremises, Some(s)),
-                Some(SuggestedSubstitutions(s)),
-                inference.requiredSubstitutions,
+                PossiblePremise.fromAvailablePremises(namingPremises, Some(s), inference.variableDefinitions),
+                Some(SuggestedSubstitutions(inference.variableDefinitions, s)),
+                inference.variableDefinitions,
                 Nil,
                 Nil))))
         }
         .take(10)
     }).toResponseEntity
   }
-
-  @PostMapping(value = Array("/suggestSubstitutions"), produces = Array("application/json;charset=UTF-8"))
-  def suggestSubstitutions(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("theoremKey") theoremKey: String,
-    @PathVariable("proofIndex") proofIndex: Int,
-    @PathVariable("stepPath") stepPath: PathData,
-    @RequestBody substitutionRequest: SubstitutionRequest
-  ): ResponseEntity[_] = {
-    (for {
-      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      inference <- findInference(substitutionRequest.inferenceId)(stepProvingContext)
-      premises <- substitutionRequest.serializedPremises.map { case (i, v) => Statement.parser(stepProvingContext).parseFromString(v, s"Premise $i").recoverWithBadRequest.map(i -> _) }.traverseTry.map(_.toMap)
-      conclusionSubstitutions <- if (substitutionRequest.withConclusion)
-        inference.conclusion.calculateSubstitutions(step.statement)(stepProvingContext.stepContext).orBadRequest("Could not calculate substitutions for inference conclusion")
-      else
-        Try(Substitutions.Possible.empty)
-      substitutions <- premises.foldLeft(Try(conclusionSubstitutions)) { case (substitutionsSoFarTry, (index, statement)) =>
-        for {
-          substitutionsSoFar <- substitutionsSoFarTry
-          premise <- inference.premises.lift(index.toInt).orBadRequest(s"Invalid premise index $index")
-          nextSubstitutions <- premise.calculateSubstitutions(statement, substitutionsSoFar)(stepProvingContext.stepContext).orBadRequest(s"Could not calculate substitutions for premise $statement")
-        } yield nextSubstitutions
-      }
-    } yield SuggestedSubstitutions(substitutions)(stepProvingContext.stepContext)).toResponseEntity
-  }
-
 }

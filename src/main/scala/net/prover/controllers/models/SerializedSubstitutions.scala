@@ -6,27 +6,26 @@ import net.prover.model.expressions.{Statement, Term}
 
 import scala.util.Try
 
-case class SerializedSubstitutions(
-  statements: Map[String, (Int, String)],
-  terms: Map[String, (Int, String)]
-) {
-  def parse()(implicit parsingContext: ExpressionParsingContext): Try[Substitutions] = {
+case class SerializedSubstitutions(statements: Seq[String], terms: Seq[String]) {
+  def parse(variableDefinitions: VariableDefinitions)(implicit parsingContext: ExpressionParsingContext): Try[Substitutions] = {
     def lookup[T](
-      source: Map[String, (Int, String)],
+      serializedValues: Seq[String],
+      definitions: Seq[VariableDefinition],
       parser: ExpressionParsingContext => Parser[T],
       description: String)(
       implicit parsingContext: ExpressionParsingContext
-    ): Try[Map[String, (Int, T)]] = {
-      source.map { case (name, (arity, serializedValue)) =>
-        for {
-          value <- Try(parser(parsingContext.withPlaceholderParameters(arity)).parseFromString(serializedValue, s"substitution $description")).orBadRequest(s"Invalid substitution $description $name '$serializedValue'")
-        } yield (name, (arity, value))
-      }.traverseTry.map(_.toMap)
+    ): Try[Seq[T]] = {
+      for {
+        serializedValuesWithDefinition <- serializedValues.zipStrict(definitions).orBadRequest(s"Invalid number of ${description}s - expected ${definitions.length}, got ${serializedValues.length}")
+        values <- serializedValuesWithDefinition.zipWithIndex.map { case ((value, definition), index) =>
+          parser(parsingContext.withPlaceholderParameters(definition.arity)).parseFromString(value, s"substitution $description $index").recoverWithBadRequest
+        }.traverseTry
+      } yield values
     }
 
     for {
-      statements <- lookup(statements, Statement.parser(_), "statement")
-      terms <- lookup(terms, Term.parser(_), "term")
+      statements <- lookup(statements, variableDefinitions.statements,  Statement.parser(_), "statement")
+      terms <- lookup(terms, variableDefinitions.terms, Term.parser(_), "term")
     } yield Substitutions(statements, terms)
   }
 }

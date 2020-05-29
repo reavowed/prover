@@ -32,7 +32,7 @@ case class RelatedObjectDefinition(
     (defaultTermName +: parentTermNames).map(ComponentType.TermComponent(_, Nil)),
     Some(name),
     fullFormat,
-    Some(conjunctionDefinition(parentType.statementDefinition(parentType.allTermNames.map(TermVariable(_, Nil)): _*), definingStatement)),
+    Some(conjunctionDefinition(parentType.statementDefinition(parentType.allTermNames.indices.map(i => TermVariable(i + 1, Nil)): _*), definingStatement)),
     this)
   override val inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 

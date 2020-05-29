@@ -1,13 +1,12 @@
 package net.prover.controllers.models
 
-import net.prover.model.definitions.{BinaryJoiner, DeductionDefinition, GeneralizationDefinition, StatementDefinition, Wrapper}
+import net.prover.controllers._
+import net.prover.model.definitions.{BinaryJoiner, DeductionDefinition, GeneralizationDefinition, Wrapper}
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import net.prover.model.{Inference, Substitutions}
-import net.prover.controllers._
 
 import scala.util.{Success, Try}
-
 
 sealed trait Unwrapper {
   def definitionSymbol: String
@@ -36,9 +35,8 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
   }
   def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     val parameter = FunctionParameter(0, depth)
-    val inferenceVariableName = specificationInference.requiredSubstitutions.terms.head._1
-    val predicate = result.calculateApplicatives(Seq(TermVariable(inferenceVariableName, Nil)), Substitutions(terms = Map(inferenceVariableName -> (0, parameter)))).next()._1
-    val substitutions = specificationInference.requiredSubstitutions.fill(Seq(predicate), Seq(parameter))
+    val predicate = result.calculateApplicatives(Seq(TermVariable(0, Nil)), Substitutions.Possible(Map.empty, Map(0 -> parameter))).next()._1
+    val substitutions = Substitutions(Seq(predicate), Seq(parameter))
     val baseAssertionStep = Step.Assertion.forInference(inference, substitutions).get
     baseAssertionStep.copy(premises = Seq(Premise.Pending(baseAssertionStep.premises.head.statement.asInstanceOf[DefinedStatement].updateBoundVariableNames(Seq(variableName)))))
   }
@@ -48,7 +46,7 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
   def rewrapWithDistribution(steps: Seq[Step], joiner: BinaryJoiner[Statement], source: Statement, result: Statement)(implicit stepProvingContext: StepProvingContext): Try[Seq[Step]] = {
     for {
       distributionInference <- stepProvingContext.provingContext.generalizationDistributions.get(joiner).orBadRequest(s"Could not find generalization distribution inference for ${joiner.symbol}")
-      distributionSubstitutions <- distributionInference.premises.head.calculateSubstitutions(addToStatement(joiner(source, result)(enhanceContext(implicitly)))).flatMap(_.confirmTotality)
+      distributionSubstitutions <- distributionInference.premises.head.calculateSubstitutions(addToStatement(joiner(source, result)(enhanceContext(implicitly)))).flatMap(_.confirmTotality(distributionInference.variableDefinitions))
         .orBadRequest("Could not calculate substitutions for generalization distribution inference")
       distributionStep <- Step.Assertion.forInference(distributionInference, distributionSubstitutions).orBadRequest("Could not apply generalization distribution inference")
       generalizationStep = rewrap(steps)
@@ -76,7 +74,7 @@ case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: Deduct
   }
   def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     val insertedAntecedent = antecedent.insertExternalParameters(depth)
-    val substitutions = deductionEliminationInference.requiredSubstitutions.fill(Seq(insertedAntecedent, result), Nil)
+    val substitutions = Substitutions(Seq(insertedAntecedent, result), Nil)
     Step.Assertion.forInference(deductionEliminationInference, substitutions).get
   }
   def rewrap(steps: Seq[Step]): Step = {
@@ -88,7 +86,7 @@ case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: Deduct
   def rewrapWithDistribution(steps: Seq[Step], joiner: BinaryJoiner[Statement], source: Statement, result: Statement)(implicit stepProvingContext: StepProvingContext): Try[Seq[Step]] = {
     for {
       distributionInference <- stepProvingContext.provingContext.deductionDistributions.get(joiner).orBadRequest(s"Could not find deduction distribution inference for ${joiner.symbol}")
-      distributionStep <- Step.Assertion.forInference(distributionInference, distributionInference.requiredSubstitutions.fill(Seq(antecedent, source, result), Nil)).orBadRequest("Could not apply deduction distribution inference")
+      distributionStep <- Step.Assertion.forInference(distributionInference, Substitutions(Seq(antecedent, source, result), Nil)).orBadRequest("Could not apply deduction distribution inference")
       deductionStep = rewrap(steps)
     } yield Seq(deductionStep, distributionStep)
   }

@@ -17,7 +17,7 @@ import scala.util.{Success, Try}
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepChainingController @Autowired() (val bookService: BookService) extends BookModification with ChainingStepEditing with InferenceSearch {
-  private def getSubstitutionsWithTermOrSubterm(source: Expression, result: Expression, baseSubstitutions: Substitutions.Possible = Substitutions.Possible.empty)(implicit substitutionContext: SubstitutionContext, stepContext: StepContext): Option[Substitutions.Possible] = {
+  private def getSubstitutionsWithTermOrSubterm(source: Expression, result: Expression, baseSubstitutions: Substitutions.Possible)(implicit substitutionContext: SubstitutionContext, stepContext: StepContext): Option[Substitutions.Possible] = {
     source.calculateSubstitutions(result, baseSubstitutions) orElse
       (result.getTerms().map(_._1).toSet diff result.asOptionalInstanceOf[Term].toSet).toSeq.mapCollect(source.calculateSubstitutions(_, baseSubstitutions)).single
   }
@@ -43,8 +43,8 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
         } yield substitutions
       }
       def getPossibleInference(inference: Inference): Option[PossibleInferenceWithTargets] = {
-        val possibleConclusions = stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id)
-          .mapCollect(PossibleConclusionWithPremises.fromExtractionOptionWithSubstitutions(_, getSubstitutions))
+        val possibleConclusions = stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
+          .mapCollect(PossibleConclusionWithPremises.fromExtractionWithSubstitutions(_, getSubstitutions))
         if (possibleConclusions.nonEmpty) {
           Some(PossibleInferenceWithTargets(inference.summary, Seq(PossibleTarget(targetSource, Nil, Nil, possibleConclusions))))
         } else {
@@ -99,8 +99,8 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     direction: Direction
   ): ResponseEntity[_] = {
     def getPremises[T <: Expression](joiner: BinaryJoiner[T], lhs: T, rhs: T, premise: Statement, baseSubstitutions: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Try[Seq[PossibleConclusionWithPremises]] = {
-      Success(SubstatementExtractor.getExtractionOptions(premise)
-        .flatMap(PossibleConclusionWithPremises.fromExtractionOptionWithSubstitutions(_, conclusion => for {
+      Success(SubstatementExtractor.getPremiseExtractions(premise)
+        .flatMap(PossibleConclusionWithPremises.fromExtractionWithSubstitutions(_, conclusion => for {
           (conclusionLhs, conclusionRhs) <- joiner.unapply(conclusion)
           substitutions <- getSubstitutionsWithTermOrSubterm(direction.getSource(conclusionLhs, conclusionRhs), direction.getSource(lhs, rhs), baseSubstitutions)
         } yield substitutions)))
@@ -179,12 +179,11 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
       ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
         val (targetSource, targetResult) = direction.swapSourceAndResult(targetLhs, targetRhs)
         def getResult(
-          applyExtractions: (Seq[Inference.Summary], Substitutions, ExpressionParsingContext => Try[Option[Statement]]) => Try[(Statement, Option[Step], Seq[Step.Target])]
+          applyExtractions: (Seq[Inference.Summary], (ExpressionParsingContext, Substitutions) => Try[Option[Statement]]) => Try[(Statement, Option[Step], Seq[Step.Target])]
         ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
           for {
             extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
-            substitutions <- definition.substitutions.parse()
-            getIntendedConclusion = (expressionParsingContext: ExpressionParsingContext) => definition.serializedIntendedConclusionStatement match {
+            getIntendedConclusion = (expressionParsingContext: ExpressionParsingContext, substitutions: Substitutions) => definition.serializedIntendedConclusionStatement match {
               case Some(serializedIntendedConclusionStatement) =>
                 for {
                   conclusionStatement <- Statement.parser(expressionParsingContext).parseFromString(serializedIntendedConclusionStatement, "intended conclusion").recoverWithBadRequest
@@ -193,7 +192,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
               case None =>
                 Success(None)
             }
-            (extractionResult, extractionStep, targets) <- applyExtractions(extractionInferences, substitutions, getIntendedConclusion)
+            (extractionResult, extractionStep, targets) <- applyExtractions(extractionInferences, getIntendedConclusion)
             (conclusionRelation, conclusionLhs, conclusionRhs) <- ChainingMethods.getJoiner[T](extractionResult).orBadRequest("Conclusion was not binary statement")
             conclusionSource = direction.getSource(conclusionLhs, conclusionRhs)
             rewriteChainingDefinition <- handle(conclusionSource, targetSource, conclusionRelation, conclusionLhs, conclusionRhs)
@@ -205,11 +204,13 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
         }
 
         def fromInference(inferenceId: String): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
-          getResult { (extractionInferences, substitutions, getIntendedTarget) =>
+          getResult { (extractionInferences, getIntendedTarget) =>
             for {
               inference <- findInference(inferenceId)
-              epc = ExpressionParsingContext.forInference(inference).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
-              intendedConclusionOption <- getIntendedTarget(epc)
+              inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId.get(inferenceId).flatMap(_.find(_.extractionInferences == extractionInferences)).orBadRequest("Could not find extraction with given inferences")
+              epc = ExpressionParsingContext.withDefinitions(inferenceExtraction.variableDefinitions)
+              substitutions <- definition.substitutions.parse(inferenceExtraction.variableDefinitions)
+              intendedConclusionOption <- getIntendedTarget(epc, substitutions)
               intendedPremiseStatementsOption <- definition.parseIntendedPremiseStatements(epc)
               (inferenceToApply, intendedExtractionPremisesOption) <- intendedPremiseStatementsOption match {
                 case Some(intendedPremiseStatements) =>
@@ -226,12 +227,14 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           }
         }
         def fromPremise(serializedPremiseStatement: String): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
-          getResult { (extractionInferences, substitutions, getIntendedConclusion) =>
+          getResult { (extractionInferences, getIntendedConclusion) =>
             for {
               premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
+              extraction <- SubstatementExtractor.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
               premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
-              epc = ExpressionParsingContext.atStep(stepProvingContext).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
-              intendedConclusionOption <- getIntendedConclusion(epc)
+              epc = ExpressionParsingContext.withDefinitions(extraction.variableDefinitions)
+              substitutions <- definition.substitutions.parse(extraction.variableDefinitions)
+              intendedConclusionOption <- getIntendedConclusion(epc, substitutions)
               intendedPremiseStatementsOption <- definition.parseIntendedPremiseStatements(epc)
               substitutedIntendedPremiseStatementsOption <- intendedPremiseStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to extraction premises")).swap
               (result, step, targets)  <- ExtractionHelper.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedIntendedPremiseStatementsOption, intendedConclusionOption)

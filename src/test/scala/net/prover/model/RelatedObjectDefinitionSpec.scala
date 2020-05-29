@@ -14,11 +14,15 @@ class RelatedObjectDefinitionSpec extends Specification {
     reparsedDefinition must beSome(relatedObjectDefinition)
   }
 
+  val e = TermVariablePlaceholder("e", 0)
+  val f = TermVariablePlaceholder("f", 1)
+  val A = TermVariablePlaceholder("A", 2)
+
   val binaryOperationDefinition = TypeDefinition("binaryOperation", "f", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true))), Some("binary Operation"), φ)
 
   "related object definition parser" should {
     "serialize and parse a definition correctly" in {
-      val e = TermVariablePlaceholder("e")
+
       val definition = RelatedObjectDefinition(
         "identity",
         binaryOperationDefinition,

@@ -30,7 +30,7 @@ case class TypeQualifierDefinition(
     allTermNames.map(ComponentType.TermComponent(_, Nil)),
     Some(name),
     fullFormat,
-    Some(conjunctionDefinition(parentType.statementDefinition(parentType.allTermNames.map(TermVariable(_, Nil)): _*), definingStatement)),
+    Some(conjunctionDefinition(parentType.statementDefinition(parentType.allTermNames.indices.map(TermVariable(_, Nil)): _*), definingStatement)),
     this)
 
   override val inferences: Seq[Inference.FromEntry] = statementDefinition.inferences

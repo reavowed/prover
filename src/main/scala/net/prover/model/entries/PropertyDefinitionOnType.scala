@@ -85,7 +85,7 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
     }
     def conditionConstructor(conjunctionDefinition: ConjunctionDefinition)(statement: Statement): Statement = {
       objectDefinitions.foldRight(statement) { (objectDefinition, currentStatement) =>
-        val objectCondition = objectDefinition.statementDefinition(FunctionParameter(0, 0) +: objectDefinition.parentTermNames.map(TermVariable(_, Nil)): _*)
+        val objectCondition = objectDefinition.statementDefinition(FunctionParameter(0, 0) +: objectDefinition.parentTermNames.indices.map(TermVariable(_)): _*)
         conjunctionDefinition(
           uniqueExistenceDefinition(objectDefinition.defaultTermName, objectCondition),
           generalizationDefinition(objectDefinition.defaultTermName, deductionDefinition(objectCondition, currentStatement)))
@@ -120,11 +120,10 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
     requiredParentObjects: Option[RequiredParentObjects],
     conjunctionDefinition: ConjunctionDefinition
   ): (Statement => Statement, Seq[String]) = {
-    val mainTermName = parentType.defaultTermName
-    val mainTerm = TermVariable(mainTermName, Nil)
+    val mainTerm = TermVariable(0, Nil)
     val (qualifierTerms, qualifierTermNames) = termListAdapter match {
       case Some(adapter) =>
-        val adapterTerms = adapter.termNames.map(TermVariable(_, Nil))
+        val adapterTerms = adapter.termNames.indices.map(i => TermVariable(i + 1, Nil))
         (adapter.templates.map(_.specify(adapterTerms)(SubstitutionContext.outsideProof).get), adapter.termNames)
       case None =>
         val termNames = requiredParentQualifier match {
@@ -133,7 +132,7 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
           case None =>
             parentType.qualifier.termNames
         }
-        (termNames.map(TermVariable(_, Nil)), termNames)
+        (termNames.indices.map(i => TermVariable(i + 1, Nil)), termNames)
     }
     val qualifierCondition = requiredParentQualifier match {
       case Some(qualifier) =>

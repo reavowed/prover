@@ -1,10 +1,9 @@
 package net.prover.model.definitions
 
-import net.prover.model.Inference
 import net.prover.model.expressions.Expression
-import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof._
+import net.prover.model.{ExpressionLenses, Inference}
 
-import scala.util.Try
 
 case class Transitivity[TComponent <: Expression](firstPremiseJoiner: BinaryJoiner[TComponent], secondPremiseJoiner: BinaryJoiner[TComponent], resultJoiner: BinaryJoiner[TComponent], inference: Inference.Summary) {
   def assertionStep(left: TComponent, middle: TComponent, right: TComponent)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
@@ -12,7 +11,7 @@ case class Transitivity[TComponent <: Expression](firstPremiseJoiner: BinaryJoin
       resultJoiner(left, right),
       inference,
       Seq(Premise.Pending(firstPremiseJoiner(left, middle)), Premise.Pending(secondPremiseJoiner(middle, right))),
-      resultJoiner.fillRequiredSubstitutions(inference.requiredSubstitutions, Seq(left, middle, right)))
+      resultJoiner.fillSubstitutions(Seq(left, middle, right)))
   }
 
   def addToRearrangement(base: TComponent, rearrangementSteps: Seq[RearrangementStep[TComponent]])(implicit stepContext: StepContext): Seq[Step] = {

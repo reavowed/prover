@@ -1,23 +1,25 @@
 package net.prover.model.definitions
 
-import net.prover.model.ProvingContext
+import net.prover.model.{ExpressionLenses, ProvingContext}
 import net.prover.model.expressions.Term
 import net.prover.model.proof.SubstitutionContext
 
 sealed trait Operator {
+  def arity: Int
   def template: Term
   protected def fill(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term = {
-    template.applySubstitutions(template.requiredSubstitutions.fill(Nil, terms)).get
+    template.applySubstitutions(ExpressionLenses.ForTerms.fillSubstitutions(terms)).get
   }
   protected def extract(t: Term)(implicit substitutionContext: SubstitutionContext): Option[Seq[Term]] = {
     for {
       substitutions <- template.calculateSubstitutions(t)
-      result <- template.requiredSubstitutions.terms.map { case (name, _) => substitutions.terms.get(name).map(_._2) }.traverseOption
-    } yield result
+      terms <- (0 until arity).map(substitutions.terms.get).traverseOption
+    } yield terms
   }
 }
 
 case class UnaryOperator(template: Term) extends Operator {
+  val arity = 1
   def apply(t: Term)(implicit substitutionContext: SubstitutionContext): Term = {
     fill(Seq(t))
   }
@@ -34,6 +36,7 @@ object UnaryOperator {
 }
 
 case class BinaryOperator(template: Term) extends Operator {
+  val arity = 2
   def apply(left: Term, right: Term)(implicit substitutionContext: SubstitutionContext): Term = {
     fill(Seq(left, right))
   }

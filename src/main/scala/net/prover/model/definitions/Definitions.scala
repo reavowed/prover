@@ -4,7 +4,7 @@ import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
-import net.prover.model.proof.SubstatementExtractor.ExtractionOption
+import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStep, Step, SubstatementExtractor, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
@@ -25,10 +25,16 @@ case class Definitions(rootEntryContext: EntryContext) {
     completenessByInference.getOrElseUpdate(inference.id, allInferences.find(_.id == inference.id).exists(_.isComplete(this)))
   }
 
-  lazy val extractionOptionsByInferenceId: Map[String, Seq[ExtractionOption]] = {
-    allInferences.map { i =>
-      (i.id, SubstatementExtractor.getExtractionOptions(i)(provingContext))
-    }.toMap
+  private lazy val inferencesWithExtractions: Seq[(Inference, Seq[InferenceExtraction])] = {
+    allInferences.map { i => i -> SubstatementExtractor.getInferenceExtractions(i)(provingContext) }
+  }
+
+  lazy val allInferenceExtractions: Seq[InferenceExtraction] = {
+    inferencesWithExtractions.flatMap(_._2).distinctBy(_.derivedSummary.id)
+  }
+
+  lazy val inferenceExtractionsByInferenceId: Map[String, Seq[InferenceExtraction]] = {
+    inferencesWithExtractions.map(_.mapLeft(_.id)).toMap
   }
 
   lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
@@ -44,15 +50,15 @@ case class Definitions(rootEntryContext: EntryContext) {
     }
   }
 
-  lazy val specificationInferenceOption: Option[(Inference, Statement, String, String)] = {
+  lazy val specificationInferenceOption: Option[(Inference, Statement)] = {
     rootEntryContext.generalizationDefinitionOption.flatMap { generalizationDefinition =>
       inferenceEntries.iterator.collect {
         case inference @ Inference(
-        _,
-        Seq(singlePremise @ generalizationDefinition(_, StatementVariable(premisePredicateName, Seq(FunctionParameter(0, 0))))),
-        StatementVariable(conclusionPredicateName, Seq(TermVariable(variableName, Nil)))
-        ) if premisePredicateName == conclusionPredicateName =>
-          (inference, singlePremise, premisePredicateName, variableName)
+          _,
+          Seq(singlePremise @ generalizationDefinition(_, StatementVariable(0, Seq(FunctionParameter(0, 0))))),
+          StatementVariable(0, Seq(TermVariable(0, Nil)))
+        ) =>
+          (inference, singlePremise)
       }.headOption
     }
   }
@@ -61,6 +67,10 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryStatements.ofType[BinaryConnective]
   lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
 
+  def findRelation(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryRelationStatement] = {
+    definedBinaryRelations.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => BinaryRelationStatement(relation, lhs, rhs)(statement) })
+  }
+
   lazy val reversals: Seq[Reversal[_ <: Expression]] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
@@ -68,10 +78,10 @@ case class Definitions(rootEntryContext: EntryContext) {
       relation <- definedBinaryStatements
       if (inference match {
         case Inference(
-        _,
-        Seq(relation(ExpressionVariable(a, Nil), ExpressionVariable(b, Nil))),
-        relation(ExpressionVariable(c, Nil), ExpressionVariable(d, Nil))
-        ) if a == d && b == c =>
+          _,
+          Seq(relation(ExpressionVariable(0, Nil), ExpressionVariable(1, Nil))),
+          relation(ExpressionVariable(1, Nil), ExpressionVariable(0, Nil))
+        ) =>
           true
         case _ =>
           false
@@ -82,18 +92,17 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val transitivities: Seq[Transitivity[_ <: Expression]] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
 
-    def find[T <: Expression](inference: Inference): Option[Transitivity[T]] = (for {
+    def find[T <: Expression : ExpressionLenses](inference: Inference): Option[Transitivity[T]] = (for {
       (firstPremise, secondPremise) <- inference.premises match {
         case Seq(a, b) => Seq((a, b))
         case _ => Nil
       }
       conclusionJoiner <- definedBinaryStatements.ofType[BinaryJoiner[T]]
-      (ExpressionVariable(conclusionLhs, Nil), ExpressionVariable(conclusionRhs, Nil)) <- conclusionJoiner.unapply(inference.conclusion).toSeq
+      (ExpressionVariable(0, Nil), ExpressionVariable(2, Nil)) <- conclusionJoiner.unapply(inference.conclusion).toSeq
       firstPremiseJoiner <- definedBinaryStatements.ofType[BinaryJoiner[T]]
-      (ExpressionVariable(firstPremiseLhs, Nil), ExpressionVariable(firstPremiseRhs, Nil)) <- firstPremiseJoiner.unapply(firstPremise).toSeq
+      (ExpressionVariable(0, Nil), ExpressionVariable(1, Nil)) <- firstPremiseJoiner.unapply(firstPremise).toSeq
       secondPremiseJoiner <- definedBinaryStatements.ofType[BinaryJoiner[T]]
-      (ExpressionVariable(secondPremiseLhs, Nil), ExpressionVariable(secondPremiseRhs, Nil)) <- secondPremiseJoiner.unapply(secondPremise).toSeq
-      if firstPremiseLhs == conclusionLhs && firstPremiseRhs == secondPremiseLhs && secondPremiseRhs == conclusionRhs
+      (ExpressionVariable(1, Nil), ExpressionVariable(2, Nil)) <- secondPremiseJoiner.unapply(secondPremise).toSeq
     } yield Transitivity[T](firstPremiseJoiner, secondPremiseJoiner, conclusionJoiner, inference.summary)).headOption
 
     for {
@@ -113,9 +122,9 @@ case class Definitions(rootEntryContext: EntryContext) {
       if (inference match {
         case Inference(
           _,
-          Seq(sourceRelation(TermVariable(a, Nil), TermVariable(b, Nil))),
-          targetRelation(ExpressionVariable(f, Seq(TermVariable(c, Nil))), ExpressionVariable(g, Seq(TermVariable(d, Nil))))
-        ) if a == c && b == d && f == g =>
+          Seq(sourceRelation(TermVariable(0, Nil), TermVariable(1, Nil))),
+          targetRelation(ExpressionVariable(0|2, Seq(TermVariable(0, Nil))), ExpressionVariable(0|2, Seq(TermVariable(1, Nil))))
+        ) =>
           true
         case _ =>
           false
@@ -177,81 +186,78 @@ case class Definitions(rootEntryContext: EntryContext) {
   }
 
   private lazy val rearrangementInferences = for {
-    inference <- allInferences
-    extractionOption <- extractionOptionsByInferenceId(inference.id)
-    substitutions = extractionOption.requiredSubstitutions
-    if substitutions.statements.isEmpty &&
-      substitutions.hasNoApplications &&
-      extractionOption.conclusion.requiredSubstitutions.isEquivalentTo(substitutions) &&
-      extractionOption.premises.forall { premise =>
+    inferenceExtraction <- allInferenceExtractions
+    if inferenceExtraction.variableDefinitions.statements.isEmpty &&
+      inferenceExtraction.variableDefinitions.hasNoApplications &&
+      inferenceExtraction.conclusion.usedVariables.usesAll(inferenceExtraction.variableDefinitions) &&
+      inferenceExtraction.premises.forall { premise =>
         findRelation(premise)(SubstitutionContext.outsideProof).exists { case BinaryRelationStatement(_, left, right) =>
           ExpressionUtils.isSimpleTermVariable(left) && ExpressionUtils.isCombinationOfTermConstants(right)
         }
       }
-  } yield (inference, extractionOption)
+  } yield inferenceExtraction
 
   lazy val rearrangeableOperators: Seq[RearrangeableOperator] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     def findCommutativities(equality: Equality): Seq[(BinaryOperator, Commutativity)] = {
       for {
-        (inference, extractionOption) <- rearrangementInferences
-        if !extractionOption.derivation.lastOption.exists(_.inference == equality.reversal.inference)
-        (l, r) <- equality.unapply(extractionOption.conclusion)
+        inferenceExtraction <- rearrangementInferences
+        if !inferenceExtraction.innerExtraction.derivation.lastOption.exists(_.inference == equality.reversal.inference)
+        (l, r) <- equality.unapply(inferenceExtraction.conclusion)
+        if ExpressionUtils.getCombinationOfSimpleTermVariables(l).contains(Seq(0, 1))
         operator = BinaryOperator(l)
-        (first: TermVariable, second: TermVariable) <- operator.unapply(l)
-        if r == operator(second, first)
-      } yield (operator, Commutativity(operator, inference.summary, extractionOption))
+        if r == operator(TermVariable(1), TermVariable(0))
+      } yield (operator, Commutativity(operator, inferenceExtraction))
     }
     def findAssociativity(operator: BinaryOperator, equality: Equality): Option[Associativity] = {
       rearrangementInferences
-        .mapFind { case (inference, extractionOption) =>
+        .mapFind { inferenceExtraction =>
           for {
-            (operator(a: TermVariable, operator(b: TermVariable, c: TermVariable)), rhs) <- equality.unapply(extractionOption.conclusion)
-            if rhs == operator(operator(a, b), c)
-          } yield Associativity(operator, inference.summary, extractionOption)
+            (operator(TermVariable(0, Nil), operator(TermVariable(1, Nil), TermVariable(2, Nil))), operator(operator(TermVariable(0, Nil), TermVariable(1, Nil)), TermVariable(2, Nil))) <- equality.unapply(inferenceExtraction.conclusion)
+          } yield Associativity(operator, inferenceExtraction)
         }
     }
     def getOperator(operator: BinaryOperator, commutativity: Commutativity, associativity: Associativity, equality: Equality): RearrangeableOperator = {
-      val leftIdentities = rearrangementInferences.mapCollect { case (inference, extractionOption) =>
+      val leftIdentities = rearrangementInferences.mapCollect { inferenceExtraction =>
         for {
-          (operator(identityConstant, variable: TermVariable), rhs) <- equality.unapply(extractionOption.conclusion)
-          if rhs == variable && ExpressionUtils.isCombinationOfTermConstants(identityConstant)
-        } yield LeftIdentity(operator, identityConstant, inference.summary, extractionOption)
+          (operator(identityConstant, TermVariable(0, Nil)), TermVariable(0, Nil)) <- equality.unapply(inferenceExtraction.conclusion)
+          if ExpressionUtils.isCombinationOfTermConstants(identityConstant)
+        } yield LeftIdentity(operator, identityConstant, inferenceExtraction)
       }
-      val rightIdentities = rearrangementInferences.mapCollect { case (inference, extractionOption) =>
+      val rightIdentities = rearrangementInferences.mapCollect { inferenceExtraction =>
         for {
-          (operator(variable: TermVariable, identityConstant), rhs) <- equality.unapply(extractionOption.conclusion)
-          if rhs == variable && ExpressionUtils.isCombinationOfTermConstants(identityConstant)
-        } yield RightIdentity(operator, identityConstant, inference.summary, extractionOption)
+          (operator(TermVariable(0, Nil), identityConstant), TermVariable(0, Nil)) <- equality.unapply(inferenceExtraction.conclusion)
+          if ExpressionUtils.isCombinationOfTermConstants(identityConstant)
+        } yield RightIdentity(operator, identityConstant, inferenceExtraction)
       }
-      val leftAbsorbers = rearrangementInferences.mapCollect { case (inference, extractionOption) =>
+      val leftAbsorbers = rearrangementInferences.mapCollect { inferenceExtraction =>
         for {
-          (operator(absorberConstant, _: TermVariable), rhs) <- equality.unapply(extractionOption.conclusion)
+          (operator(absorberConstant, TermVariable(0, Nil)), rhs) <- equality.unapply(inferenceExtraction.conclusion)
           if rhs == absorberConstant && ExpressionUtils.isCombinationOfTermConstants(absorberConstant)
-        } yield LeftAbsorber(operator, absorberConstant, inference.summary, extractionOption)
+        } yield LeftAbsorber(operator, absorberConstant, inferenceExtraction)
       }
-      val rightAbsorbers = rearrangementInferences.mapCollect { case (inference, extractionOption) =>
+      val rightAbsorbers = rearrangementInferences.mapCollect { inferenceExtraction =>
         for {
-          (operator(_: TermVariable, absorberConstant), rhs) <- equality.unapply(extractionOption.conclusion)
+          (operator(TermVariable(0, Nil), absorberConstant), rhs) <- equality.unapply(inferenceExtraction.conclusion)
           if rhs == absorberConstant && ExpressionUtils.isCombinationOfTermConstants(absorberConstant)
-        } yield RightAbsorber(operator, absorberConstant, inference.summary, extractionOption)
+        } yield RightAbsorber(operator, absorberConstant, inferenceExtraction)
       }
       val inverses = for {
         rightIdentity <- rightIdentities
         leftIdentity <- leftIdentities
         if rightIdentity.identityTerm == leftIdentity.identityTerm
         identityTerm = rightIdentity.identityTerm
-        (rightInverseInference, rightInverseExtractionOption) <- rearrangementInferences
-        (operator(TermVariable(v, Nil), inverseTerm), `identityTerm`) <- equality.unapply(rightInverseExtractionOption.conclusion).toSeq
-        if ExpressionUtils.getSingleSimpleTermVariable(inverseTerm).contains(v)
-        (leftInverseInference, leftInverseExtractionOption) <- rearrangementInferences
-        if leftInverseExtractionOption.conclusion == equality(operator(inverseTerm, TermVariable(v, Nil)), identityTerm)
+        rightInverseInferenceExtraction <- rearrangementInferences
+        (operator(TermVariable(0, Nil), inverseTerm), `identityTerm`) <- equality.unapply(rightInverseInferenceExtraction.conclusion).toSeq
+        if ExpressionUtils.getSingleSimpleTermVariable(inverseTerm).contains(0)
+        leftInverseInferenceExtraction <- rearrangementInferences
+        if leftInverseInferenceExtraction.conclusion == equality(operator(inverseTerm, TermVariable(0, Nil)), identityTerm)
         inverseOperator = UnaryOperator(inverseTerm)
       } yield DoubleSidedInverse(
         operator,
         inverseOperator,
-        RightInverse(operator, inverseOperator, identityTerm, rightInverseInference.summary, rightInverseExtractionOption),
-        LeftInverse(operator, inverseOperator, identityTerm, leftInverseInference.summary, leftInverseExtractionOption))
+        RightInverse(operator, inverseOperator, identityTerm, rightInverseInferenceExtraction),
+        LeftInverse(operator, inverseOperator, identityTerm, leftInverseInferenceExtraction))
       RearrangeableOperator(operator, commutativity, associativity, leftIdentities, rightIdentities, leftAbsorbers, rightAbsorbers, inverses)
     }
     for {
@@ -264,27 +270,27 @@ case class Definitions(rootEntryContext: EntryContext) {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
       equality <- equalityOption.toSeq
-      (inference, extractionOption) <- rearrangementInferences
-      (lhs, rhs) <- equality.unapply(extractionOption.conclusion).toSeq
+      inferenceExtraction <- rearrangementInferences
       distributor <- rearrangeableOperators
-      (TermVariable(a, Nil), lhsRhs) <- distributor.unapply(lhs).toSeq
       distributee <- rearrangeableOperators
-      (TermVariable(b, Nil), TermVariable(c, Nil)) <- distributee.unapply(lhsRhs).toSeq
-      if rhs == distributee(distributor(TermVariable(a, Nil), TermVariable(b, Nil)), distributor(TermVariable(a, Nil), TermVariable(c, Nil)))
-    } yield LeftDistributivity(distributor, distributee, inference.summary, extractionOption)
+      (
+        distributor(TermVariable(0, Nil), distributee(TermVariable(1, Nil), TermVariable(2, Nil))),
+        distributee(distributor(TermVariable(0, Nil), TermVariable(1, Nil)), distributor(TermVariable(0, Nil), TermVariable(2, Nil)))
+      ) <- equality.unapply(inferenceExtraction.conclusion).toSeq
+    } yield LeftDistributivity(distributor, distributee, inferenceExtraction)
   }
   lazy val rightDistributivities: Seq[RightDistributivity] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
       equality <- equalityOption.toSeq
-      (inference, extractionOption) <- rearrangementInferences
-      (lhs, rhs) <- equality.unapply(extractionOption.conclusion).toSeq
+      inferenceExtraction <- rearrangementInferences
       distributor <- rearrangeableOperators
-      (lhsLhs, TermVariable(c, Nil)) <- distributor.unapply(lhs).toSeq
       distributee <- rearrangeableOperators
-      (TermVariable(a, Nil), TermVariable(b, Nil)) <- distributee.unapply(lhsLhs).toSeq
-      if rhs == distributee(distributor(TermVariable(a, Nil), TermVariable(c, Nil)), distributor(TermVariable(b, Nil), TermVariable(c, Nil)))
-    } yield RightDistributivity(distributor, distributee, inference.summary, extractionOption)
+      (
+        distributor(distributee(TermVariable(0, Nil), TermVariable(1, Nil)), TermVariable(2, Nil)),
+        distributee(distributor(TermVariable(0, Nil), TermVariable(2, Nil)), distributor(TermVariable(1, Nil), TermVariable(2, Nil)))
+      ) <- equality.unapply(inferenceExtraction.conclusion).toSeq
+    } yield RightDistributivity(distributor, distributee, inferenceExtraction)
   }
 
   lazy val unaryOperators: Seq[UnaryOperator] = rearrangeableOperators.flatMap(_.inverses).map(_.inverseOperator)
@@ -295,10 +301,12 @@ case class Definitions(rootEntryContext: EntryContext) {
       unaryOperator <- unaryOperators
       rearrangeableOperator <- rearrangeableOperators
       binaryOperator = rearrangeableOperator.operator
-      (inference, extractionOption) <- rearrangementInferences
-      (binaryOperator(unaryOperator(TermVariable(a, Nil)), TermVariable(b, Nil)), rhs) <- equality.unapply(extractionOption.conclusion)
-      if rhs == unaryOperator(binaryOperator(TermVariable(a, Nil), TermVariable(b, Nil)))
-    } yield LeftOperatorExtraction(unaryOperator, binaryOperator, inference.summary, extractionOption)
+      inferenceExtraction <- rearrangementInferences
+      (
+        binaryOperator(unaryOperator(TermVariable(0, Nil)), TermVariable(1, Nil)),
+        unaryOperator(binaryOperator(TermVariable(0, Nil), TermVariable(1, Nil)))
+      ) <- equality.unapply(inferenceExtraction.conclusion)
+    } yield LeftOperatorExtraction(unaryOperator, binaryOperator, inferenceExtraction)
   }
   lazy val rightOperatorExtractions: Seq[RightOperatorExtraction] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
@@ -307,14 +315,12 @@ case class Definitions(rootEntryContext: EntryContext) {
       unaryOperator <- unaryOperators
       rearrangeableOperator <- rearrangeableOperators
       binaryOperator = rearrangeableOperator.operator
-      (inference, extractionOption) <- rearrangementInferences
-      (binaryOperator(TermVariable(a, Nil), unaryOperator(TermVariable(b, Nil))), rhs) <- equality.unapply(extractionOption.conclusion)
-      if rhs == unaryOperator(binaryOperator(TermVariable(a, Nil), TermVariable(b, Nil)))
-    } yield RightOperatorExtraction(unaryOperator, binaryOperator, inference.summary, extractionOption)
-  }
-
-  def findRelation(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryRelationStatement] = {
-    definedBinaryRelations.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => BinaryRelationStatement(relation, lhs, rhs)(statement) })
+      inferenceExtraction <- rearrangementInferences
+      (
+        binaryOperator(TermVariable(0, Nil), unaryOperator(TermVariable(1, Nil))),
+        unaryOperator(binaryOperator(TermVariable(0, Nil), TermVariable(1, Nil)))
+      ) <- equality.unapply(inferenceExtraction.conclusion)
+    } yield RightOperatorExtraction(unaryOperator, binaryOperator, inferenceExtraction)
   }
 
   lazy val premiseRelationSimplificationInferences: Map[BinaryRelation, Seq[PremiseRelationSimplificationInference]] = {
@@ -325,7 +331,7 @@ case class Definitions(rootEntryContext: EntryContext) {
       //   (a, b) -> a
       (ExpressionUtils.isSimpleTermVariable(premiseLhs) && premiseLhs == conclusionLhs) || // a -> a
         ExpressionUtils.getSimpleTermVariable(premiseLhs).exists(ExpressionUtils.getWrappedSimpleTermVariable(conclusionLhs).contains) || // a -> a_0
-        ExpressionUtils.getSimpleTermVariable(conclusionLhs).exists(premiseLhs.requiredSubstitutions.terms.map(_._1).contains) // (a, b) -> a
+        ExpressionUtils.getSimpleTermVariable(conclusionLhs).exists(premiseLhs.usedVariables.terms.variableIndices.contains) // (a, b) -> a
     }
     def checkRhsIsValidSimplification(premiseRhs: Term, conclusionRhs: Term): Boolean = {
       // valid examples:
@@ -333,25 +339,23 @@ case class Definitions(rootEntryContext: EntryContext) {
       //   A x B -> A
       //   ℤ+ -> ℤ
       premiseRhs.complexity > conclusionRhs.complexity &&
-        (ExpressionUtils.getSimpleTermVariable(conclusionRhs).exists(premiseRhs.requiredSubstitutions.terms.map(_._1).contains) ||
+        (ExpressionUtils.getSimpleTermVariable(conclusionRhs).exists(premiseRhs.usedVariables.terms.variableIndices.contains) ||
           ExpressionUtils.getTermConstantDefinition(conclusionRhs).exists(conclusionDefinition => ExpressionUtils.getTermConstantDefinition(premiseRhs).exists(premiseDefinition => premiseDefinition.definingStatement.referencedDefinitions.contains(conclusionDefinition))))
     }
-    def getSubstitutionTermNames(t: Term): Set[String] = t.requiredSubstitutions.terms.map(_._1).toSet
     def checkNoSubstitutionOverlap(premiseLhs: Term, conclusionRhs: Term): Boolean = {
-      (getSubstitutionTermNames(premiseLhs) intersect getSubstitutionTermNames(conclusionRhs)).isEmpty
+      (premiseLhs.usedVariables.terms.variableIndices.toSet intersect conclusionRhs.usedVariables.terms.variableIndices.toSet).isEmpty
     }
 
     implicit val substitutionContext = SubstitutionContext.outsideProof
     (for {
-      inference <- allInferences
-      extractionOption <- extractionOptionsByInferenceId(inference.id)
-      singlePremise <- extractionOption.premises.single.toSeq
-      if singlePremise.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
-      if extractionOption.requiredSubstitutions.statements.isEmpty && extractionOption.requiredSubstitutions.hasNoApplications
-      BinaryRelationStatement(_, conclusionLhs, conclusionRhs) <- findRelation(extractionOption.conclusion).toSeq
+      inferenceExtraction <- allInferenceExtractions
+      singlePremise <- inferenceExtraction.premises.single.toSeq
+      if singlePremise.usedVariables.contains(inferenceExtraction.conclusion.usedVariables)
+      if inferenceExtraction.variableDefinitions.statements.isEmpty && inferenceExtraction.variableDefinitions.hasNoApplications
+      BinaryRelationStatement(_, conclusionLhs, conclusionRhs) <- findRelation(inferenceExtraction.conclusion).toSeq
       BinaryRelationStatement(premiseRelation, premiseLhs, premiseRhs) <- findRelation(singlePremise).toSeq
       if checkLhsIsValid(premiseLhs, conclusionLhs) && checkRhsIsValidSimplification(premiseRhs, conclusionRhs) && checkNoSubstitutionOverlap(premiseLhs, conclusionRhs)
-    } yield premiseRelation -> PremiseRelationSimplificationInference(inference, singlePremise, extractionOption.conclusion, extractionOption)).toSeqMap
+    } yield premiseRelation -> PremiseRelationSimplificationInference(inferenceExtraction, singlePremise)).toSeqMap
   }
 
   lazy val relationRewriteInferences: Seq[RelationRewriteInference] = {
@@ -362,16 +366,16 @@ case class Definitions(rootEntryContext: EntryContext) {
         val generalTemplate = relation.shorthand.template.expand(
           Map.empty,
           Map(
-            relation.lhsVariableName -> TermVariable(relation.lhsVariableName),
-            relation.rhsVariableName -> TermVariable(relation.rhsVariableName),
-            relation.symbolVariableName -> TermVariable(relation.symbolVariableName))
+            relation.lhsVariableName -> TermVariable(0),
+            relation.rhsVariableName -> TermVariable(1),
+            relation.symbolVariableName -> TermVariable(2))
         ).asInstanceOf[Statement]
         for {
           substitutions <- generalTemplate.calculateSubstitutions(lastPremise)
-          lhsVariableName <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(relation.lhsVariableName)._2)
-          rhsVariableName <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(relation.rhsVariableName)._2)
-          symbolVariableName <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(relation.symbolVariableName)._2)
-        } yield (BinaryRelationStatement.construct(relation, TermVariable(lhsVariableName), TermVariable(rhsVariableName)), Substitutions.Possible(terms = Map(symbolVariableName -> (0, relation.definition()))))
+          lhsVariableIndex <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(0))
+          rhsVariableIndex <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(1))
+          symbolVariableIndex <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(2))
+        } yield (BinaryRelationStatement.construct(relation, TermVariable(lhsVariableIndex), TermVariable(rhsVariableIndex)), Substitutions.Possible(terms = Map(symbolVariableIndex -> relation.definition())))
       }
       if (relationsFromTemplate.nonEmpty)
         relationsFromTemplate
@@ -380,7 +384,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     }
     def areValidSecondaryComponents(premiseComponent: Term, conclusionComponent: Term): Boolean = {
       (ExpressionUtils.isSimpleTermVariable(premiseComponent) && ExpressionUtils.isSimpleTermVariable(conclusionComponent)) ||
-        (premiseComponent.requiredSubstitutions.isEmpty && conclusionComponent.requiredSubstitutions.isEmpty)
+        (ExpressionUtils.isCombinationOfTermConstants(premiseComponent) && ExpressionUtils.isCombinationOfTermConstants(conclusionComponent))
     }
     def isValidRewrite(premise: BinaryRelationStatement, conclusion: BinaryRelationStatement): Boolean = {
       // e.g. a ∈ A -> a ∈ B
@@ -412,19 +416,18 @@ case class Definitions(rootEntryContext: EntryContext) {
     }
 
     for {
-      inference <- allInferences
-      extractionOption <- extractionOptionsByInferenceId(inference.id)
-      (initialPremiseOption, mainPremiseStatement) <- extractionOption.premises match {
+      inferenceExtraction <- allInferenceExtractions
+      (initialPremiseOption, mainPremiseStatement) <- inferenceExtraction.premises match {
         case Seq(a) => Seq((None, a))
         case Seq(a, b) => Seq((Some(a), b))
         case _ => Nil
       }
-      if extractionOption.premises.map(_.requiredSubstitutions).foldTogether.contains(extractionOption.conclusion.requiredSubstitutions)
-      if (initialPremiseOption.toSeq :+ extractionOption.conclusion).map(_.requiredSubstitutions).foldTogether.contains(mainPremiseStatement.requiredSubstitutions)
-      conclusion <- findRelation(extractionOption.conclusion).toSeq
+      if inferenceExtraction.premises.usedVariables.contains(inferenceExtraction.conclusion.usedVariables)
+      if (initialPremiseOption.toSeq :+ inferenceExtraction.conclusion).usedVariables.contains(mainPremiseStatement.usedVariables)
+      conclusion <- findRelation(inferenceExtraction.conclusion).toSeq
       (mainPremise, initialSubstitutions) <- findPremiseRelation(mainPremiseStatement)
       if isValidRewrite(mainPremise, conclusion) && isValidInitialPremise(initialPremiseOption, conclusion)
-    } yield RelationRewriteInference(inference, extractionOption, initialPremiseOption, mainPremiseStatement, mainPremise.relation, conclusion.relation, initialSubstitutions)
+    } yield RelationRewriteInference(inferenceExtraction, initialPremiseOption, mainPremiseStatement, mainPremise.relation, conclusion.relation, initialSubstitutions)
   }
 
   def getPossiblePremiseDesimplifications(premise: Statement): Seq[DerivedPremise] = {
@@ -432,7 +435,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     def directly = DirectPremise(premise)
     def byDesimplifying = for {
       inference <- conclusionSimplificationInferences
-      substitutions <- inference.conclusion.calculateSubstitutions(premise).flatMap(_.confirmTotality).toSeq
+      substitutions <- inference.conclusion.calculateSubstitutions(premise).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
       substitutedInferencePremises <- inference.premises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
       innerDesimplifications <- getPossiblePremiseDesimplifications(substitutedInferencePremises)
     } yield DesimplifiedPremise(premise, inference, innerDesimplifications)
@@ -510,38 +513,37 @@ case class Definitions(rootEntryContext: EntryContext) {
     }
 
     (for {
-      inference <- allInferences
-      extractionOption <- extractionOptionsByInferenceId(inference.id)
-      if extractionOption.premises.nonEmpty && extractionOption.conclusion.requiredSubstitutions.contains(extractionOption.requiredSubstitutions)
-      (optionalTypeStatement, otherPremises) = breakOffTypeStatement(extractionOption.premises)
+      inferenceExtraction <- allInferenceExtractions
+      if inferenceExtraction.premises.nonEmpty && inferenceExtraction.conclusion.usedVariables.usesAll(inferenceExtraction.variableDefinitions)
+      (optionalTypeStatement, otherPremises) = breakOffTypeStatement(inferenceExtraction.premises)
       premiseDesimplifications <- getPossiblePremiseDesimplifications(otherPremises)
       premises <- premiseDesimplifications.flatMap(_.getRootPremises).map(findRelation).traverseOption.toSeq
-      conclusion <- findRelation(extractionOption.conclusion).toSeq
+      conclusion <- findRelation(inferenceExtraction.conclusion).toSeq
       if isValidSimplification(premises, conclusion, optionalTypeStatement)
-    } yield conclusion.relation -> ConclusionRelationSimplificationInference(inference, extractionOption, optionalTypeStatement, premiseDesimplifications)).toSeqMap
+    } yield conclusion.relation -> ConclusionRelationSimplificationInference(inferenceExtraction, optionalTypeStatement, premiseDesimplifications)).toSeqMap
   }
 
   lazy val conclusionSimplificationInferences: Seq[Inference] = allInferences.filter {
-    case inference @ Inference(_, premises, conclusion)
-      if premises.nonEmpty &&
-        premises.forall(_.complexity < conclusion.complexity) &&
-        conclusion.requiredSubstitutions.isEquivalentTo(inference.requiredSubstitutions) &&
-        inference.requiredSubstitutions.hasNoApplications &&
-        premises.forall(_.referencedDefinitions.subsetOf(conclusion.referencedDefinitions))
+    case inference
+      if inference.premises.nonEmpty &&
+        inference.premises.forall(_.complexity < inference.conclusion.complexity) &&
+        inference.conclusion.usedVariables.usesAll(inference.variableDefinitions) &&
+        inference.variableDefinitions.hasNoApplications &&
+        inference.premises.forall(_.referencedDefinitions.subsetOf(inference.conclusion.referencedDefinitions))
     =>
       true
     case _ =>
       false
   }
 
-  lazy val termDefinitionRemovals: Map[TermDefinition, Seq[ExtractionOption]] = {
+  lazy val termDefinitionRemovals: Map[TermDefinition, Seq[InferenceExtraction]] = {
     rootEntryContext.termDefinitions.map { termDefinition =>
       termDefinition -> (for {
-        extractionOption <- extractionOptionsByInferenceId(termDefinition.definitionInference.id)
-        if extractionOption.conclusion.referencedDefinitions.contains(termDefinition) &&
-          !extractionOption.premises.exists(_.referencedDefinitions.contains(termDefinition)) &&
-          extractionOption.conclusion.requiredSubstitutions.contains(extractionOption.requiredSubstitutions)
-      } yield extractionOption)
+        inferenceExtraction <- inferenceExtractionsByInferenceId(termDefinition.definitionInference.id)
+        if inferenceExtraction.conclusion.referencedDefinitions.contains(termDefinition) &&
+          !inferenceExtraction.premises.exists(_.referencedDefinitions.contains(termDefinition)) &&
+          inferenceExtraction.conclusion.usedVariables.usesAll(inferenceExtraction.variableDefinitions)
+      } yield inferenceExtraction)
     }.toMap
   }
 
@@ -549,8 +551,8 @@ case class Definitions(rootEntryContext: EntryContext) {
     inferenceEntries.collect {
       case inference @ Inference(_, Seq(singlePremise), conclusion)
         if conclusion.complexity == singlePremise.complexity &&
-          conclusion.requiredSubstitutions.isEquivalentTo(singlePremise.requiredSubstitutions) &&
-          inference.requiredSubstitutions.hasNoApplications &&
+          conclusion.usedVariables.isEquivalentTo(singlePremise.usedVariables) &&
+          inference.variableDefinitions.hasNoApplications &&
           conclusion != singlePremise
       => (inference, singlePremise)
     }
@@ -584,24 +586,23 @@ case class Definitions(rootEntryContext: EntryContext) {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     for {
       equality <- equalityOption.toSeq
-      inference <- allInferences
-      extractionOption <- extractionOptionsByInferenceId.get(inference.id).toSeq.flatten
-      (lhs, rhs) <- equality.unapply(extractionOption.conclusion)
-    } yield TermRewriteInference(inference, extractionOption, lhs, rhs)
+      inferenceExtraction <- allInferenceExtractions
+      (lhs, rhs) <- equality.unapply(inferenceExtraction.conclusion)
+    } yield TermRewriteInference(inferenceExtraction, lhs, rhs)
   }
   lazy val prospectiveTermRewriteInferences: Seq[TermRewriteInference] = {
-    termRewriteInferences.filter { case TermRewriteInference(_, extractionOption, left, right) =>
-      left.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
+    termRewriteInferences.filter { case TermRewriteInference(_, left, right) =>
+      left.usedVariables.contains(right.usedVariables)
     }
   }
   lazy val termSimplificationInferences: Seq[TermRewriteInference] = {
-    termRewriteInferences.filter { case TermRewriteInference(_, extractionOption, left, right) =>
-      left.complexity > right.complexity && left.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
+    termRewriteInferences.filter { case TermRewriteInference(_, left, right) =>
+      left.complexity > right.complexity && left.usedVariables.contains(right.usedVariables)
     }
   }
   lazy val termDesimplificationInferences: Seq[TermRewriteInference] = {
-    termRewriteInferences.filter { case TermRewriteInference(_, extractionOption, left, right) =>
-      left.complexity < right.complexity && right.requiredSubstitutions.contains(extractionOption.conclusion.requiredSubstitutions)
+    termRewriteInferences.filter { case TermRewriteInference(_, left, right) =>
+      left.complexity < right.complexity && right.usedVariables.contains(left.usedVariables)
     }
   }
 
@@ -614,7 +615,7 @@ case class Definitions(rootEntryContext: EntryContext) {
         =>
           true
         case (DefinedStatement(Seq(innerFirstPremise: Statement), firstDefinition), DefinedStatement(Seq(innerSecondPremise: Statement), secondDefinition), DefinedStatement(Seq(innerConclusion: Statement), conclusionDefinition))
-          if (firstDefinition == conclusionDefinition && secondDefinition == conclusionDefinition)
+          if firstDefinition == conclusionDefinition && secondDefinition == conclusionDefinition
         =>
           isBinaryDefinitionWithinUnaryDefinition(innerFirstPremise, innerSecondPremise, innerConclusion)
         case _ =>
@@ -640,14 +641,13 @@ case class Definitions(rootEntryContext: EntryContext) {
 
   lazy val facts: Seq[DerivationStep] = {
     for {
-      inference <- allInferences
-      extractionOption <- extractionOptionsByInferenceId(inference.id)
-      if extractionOption.premises.isEmpty && extractionOption.requiredSubstitutions.isEmpty
-      assertionStep = Step.Assertion(inference.conclusion, inference.summary, Nil, Substitutions.empty)
-    } yield SubstatementExtractor.createDerivationForInferenceExtraction(assertionStep, extractionOption.derivation)(provingContext)
+      inferenceExtraction <- allInferenceExtractions
+      if inferenceExtraction.premises.isEmpty && inferenceExtraction.variableDefinitions.isEmpty
+      assertionStep = Step.Assertion(inferenceExtraction.inference.conclusion, inferenceExtraction.inference.summary, Nil, Substitutions.empty)
+    } yield SubstatementExtractor.createDerivationForInferenceExtraction(assertionStep, inferenceExtraction.innerExtraction.derivation)(provingContext)
   }
 
-  lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, String, String, Direction)] = {
+  lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, Int, Int, Direction)] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
       deductionDefinition <- rootEntryContext.deductionDefinitionOption.toSeq
@@ -655,18 +655,18 @@ case class Definitions(rootEntryContext: EntryContext) {
         inference <- allInferences
         Seq(firstPremise @ deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
         swapper <- Seq(Direction.Forward, Direction.Reverse)
-        (premiseName, conclusionName) = swapper.swapSourceAndResult(a, b)
-        if inference.requiredSubstitutions.terms.isEmpty && inference.requiredSubstitutions.hasNoApplications
-        if otherPremise.requiredSubstitutions.statements.contains((premiseName, 0)) && inference.conclusion.requiredSubstitutions.statements.contains((conclusionName, 0))
-        if otherPremise.applySubstitutions(Substitutions(otherPremise.requiredSubstitutions.statements.map { case (n, a) => n -> (a, StatementVariable(if (n == premiseName) conclusionName else n))}.toMap)).contains(inference.conclusion)
-      } yield (inference, firstPremise, otherPremise, premiseName, conclusionName, swapper)
+        (premiseIndex, conclusionIndex) = swapper.swapSourceAndResult(a, b)
+        if inference.variableDefinitions.terms.isEmpty && inference.variableDefinitions.hasNoApplications
+        if otherPremise.usedVariables.statements.variableIndices.contains(premiseIndex) && inference.conclusion.usedVariables.statements.variableIndices.contains(conclusionIndex)
+        if otherPremise.applySubstitutions(Substitutions(inference.variableDefinitions.statements.indices.map { i => StatementVariable(if (i == premiseIndex) conclusionIndex else i)}, Nil)).contains(inference.conclusion)
+      } yield (inference, firstPremise, otherPremise, premiseIndex, conclusionIndex, swapper)
     } yield result
   }
 
   object WrappedStatementVariable {
-    def unapply(statement: Statement): Option[String] = statement match {
-      case DefinedStatement(Seq(StatementVariable(name, Nil)), _) => Some(name)
-      case DefinedStatement(Seq(WrappedStatementVariable(name)), _) => Some(name)
+    def unapply(statement: Statement): Option[Int] = statement match {
+      case DefinedStatement(Seq(StatementVariable(index, Nil)), _) => Some(index)
+      case DefinedStatement(Seq(WrappedStatementVariable(index)), _) => Some(index)
       case _ => None
     }
   }

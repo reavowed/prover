@@ -1,21 +1,22 @@
 package net.prover.model.definitions
 
 import net.prover.model.entries.DisplayShorthand
-import net.prover.model.expressions.{Expression, Statement, Term, TermVariable}
+import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
-import net.prover.model.{Inference, Substitutions}
+import net.prover.model.{ExpressionLenses, Inference}
 
-sealed trait BinaryJoiner[TComponent <: Expression] extends Substitutions.Lenses[TComponent] {
+sealed trait BinaryJoiner[TComponent <: Expression] extends ExpressionLenses[TComponent] {
   def symbol: String
   def template: Statement
   def attributes: Seq[String]
   def apply(left: TComponent, right: TComponent)(implicit substitutionContext: SubstitutionContext): Statement = {
-    template.applySubstitutions(fillRequiredSubstitutions(template.requiredSubstitutions, Seq(left, right))).get
+    template.applySubstitutions(fillSubstitutions(Seq(left, right))).get
   }
   def unapply(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(TComponent, TComponent)] = {
     for {
       substitutions <- template.calculateSubstitutions(statement)
-      Seq(left, right) <- getRequiredSubstitutions(substitutions, template.requiredSubstitutions)
+      left <- getSubstitutions(substitutions).get(0)
+      right <- getSubstitutions(substitutions).get(1)
     } yield (left, right)
   }
 
@@ -24,24 +25,29 @@ sealed trait BinaryJoiner[TComponent <: Expression] extends Substitutions.Lenses
 
 sealed trait BinaryJoinerFromDefinition[TComponent <: Expression] extends BinaryJoiner[TComponent] {
   def definition: StatementDefinition
+  def templateComponents: Seq[ExpressionVariable[TComponent]]
   override val symbol: String = definition.symbol
-  override val template: Statement = definition.defaultValue
+  override val template: Statement = definition(templateComponents:_*)
   override val attributes: Seq[String] = definition.attributes
 }
 
-case class BinaryConnective(definition: StatementDefinition) extends BinaryJoinerFromDefinition[Statement] with Substitutions.Lenses.ForStatements
+case class BinaryConnective(definition: StatementDefinition) extends BinaryJoinerFromDefinition[Statement] with ExpressionLenses.ForStatements {
+  override def templateComponents: Seq[StatementVariable] = Seq(StatementVariable(0), StatementVariable(1))
+}
 
-sealed trait BinaryRelation extends BinaryJoiner[Term] with Substitutions.Lenses.ForTerms
+sealed trait BinaryRelation extends BinaryJoiner[Term] with ExpressionLenses.ForTerms
 
-case class BinaryRelationFromDefinition(definition: StatementDefinition) extends BinaryRelation with BinaryJoinerFromDefinition[Term]
+case class BinaryRelationFromDefinition(definition: StatementDefinition) extends BinaryRelation with BinaryJoinerFromDefinition[Term] {
+  override def templateComponents: Seq[TermVariable] = Seq(TermVariable(0), TermVariable(1))
+}
 
 case class BinaryRelationFromGeneralShorthand(definition: TermDefinition, shorthand: DisplayShorthand, lhsVariableName: String, rhsVariableName: String, symbolVariableName: String) extends BinaryRelation {
   override val symbol: String = definition.symbol
   override val template: Statement = shorthand.template.expand(
     Map.empty,
     Map(
-      lhsVariableName -> TermVariable(lhsVariableName),
-      rhsVariableName -> TermVariable(rhsVariableName),
+      lhsVariableName -> TermVariable(0),
+      rhsVariableName -> TermVariable(1),
       symbolVariableName -> definition.defaultValue)
   ).asInstanceOf[Statement]
   override val attributes: Seq[String] = Nil
@@ -51,8 +57,8 @@ case class BinaryRelationFromSpecificShorthand(symbol: String, shorthand: Displa
   override val template: Statement = shorthand.template.expand(
     Map.empty,
     Map(
-      lhsVariableName -> TermVariable(lhsVariableName),
-      rhsVariableName -> TermVariable(rhsVariableName))
+      lhsVariableName -> TermVariable(0),
+      rhsVariableName -> TermVariable(1))
   ).asInstanceOf[Statement]
   override val attributes: Seq[String] = Nil
 }

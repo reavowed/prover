@@ -38,18 +38,21 @@ case class ExpressionParsingContext(
     copy(variableDefinitions = variableDefinitions.addSimpleTermVariables(additionalTermVariableNames))
   }
 
-  private def getVariable[T](name: String, arguments: Seq[Term], definitions: Seq[VariableDefinition], description: String, constructor: (String, Seq[Term]) => T): Option[T] = {
-    definitions.find(_.name == name).map { definition =>
+  private def getVariable[T](name: String, arguments: Seq[Term], definitions: Seq[VariableDefinition], prefix: String, description: String, constructor: (Int, Seq[Term]) => T): Option[T] = {
+    val definition = definitions.zipWithIndex.find { case (definition, _) => definition.name == name } orElse
+      s"$prefix(\\d+)".r.unapplySeq(name).flatMap(_.single).map(_.toInt).flatMap(i => definitions.lift(i).map(_ -> i))
+
+    definition.map { case (definition, index) =>
       if (definition.arity != arguments.length) throw new Exception(s"${description.capitalize} variable $name requires ${definition.arity} parameters")
-      constructor(definition.name, arguments)
+      constructor(index, arguments)
     }
   }
 
   def getStatementVariable(name: String, arguments: Seq[Term]): Option[StatementVariable] = {
-    getVariable(name, arguments, variableDefinitions.statementVariableDefinitions, "statement", StatementVariable.apply)
+    getVariable(name, arguments, variableDefinitions.statements, "s", "statement", StatementVariable.apply)
   }
   def getTermVariable(name: String, arguments: Seq[Term]): Option[TermVariable] = {
-    getVariable(name, arguments, variableDefinitions.termVariableDefinitions, "term", TermVariable.apply)
+    getVariable(name, arguments, variableDefinitions.terms, "t", "term", TermVariable.apply)
   }
 
   object SimpleStatementVariable {

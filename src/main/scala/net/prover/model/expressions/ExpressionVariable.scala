@@ -5,8 +5,8 @@ import net.prover.model.definitions.ExpressionDefinition
 
 import scala.reflect.ClassTag
 
-abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] with Substitutions.Lenses[ExpressionType] { this: ExpressionType =>
-  def name: String
+abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] extends Expression with TypedExpression[ExpressionType] with ExpressionLenses[ExpressionType] { this: ExpressionType =>
+  def index: Int
   def arguments: Seq[Term]
   val arity: Int = arguments.length
 
@@ -16,6 +16,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   override def structuralComplexity: Int = 0
   override def definitionalComplexity: Int = 0
 
+  override def usedVariables: UsedVariables = (usedVariablesLens.set(Seq(UsedVariable(index, arguments.length)))(UsedVariables.empty) +: arguments.map(_.usedVariables)).foldTogether
   override def definitionUsages: DefinitionUsages = arguments.map(_.definitionUsages).foldTogether
   override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {
     update(arguments.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)))
@@ -28,6 +29,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   }
 
   override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, ExpressionType, Int, Seq[Int])] = {
+    @scala.annotation.tailrec
     def helper(previous: Seq[Term], next: Seq[Term], acc: Seq[(Term, ExpressionType, Int, Seq[Int])]): Seq[(Term, ExpressionType, Int, Seq[Int])] = {
       next match {
         case current +: more =>
@@ -64,10 +66,16 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   ): Option[ExpressionType] = {
     arguments.map(_.specifyWithSubstitutions(targetArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)).traverseOption.map(update)
   }
-
-  override def requiredSubstitutions: Substitutions.Required = {
-    arguments.requiredSubstitutions ++ requiredSubstitutionsLens.set(Seq((name, arity)))(Substitutions.Required.empty)
+  def trySpecifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions.Possible,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
+  ): Option[ExpressionType] = {
+    arguments.map(_.trySpecifyWithSubstitutions(targetArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)).traverseOption.map(update)
   }
+
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions.Possible,
@@ -75,8 +83,8 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     externalDepth: Int
   ): Option[Substitutions.Possible] = {
     if (other.isRuntimeInstance[ExpressionType]) {
-      substitutionsLens.get(substitutions.stripApplications()).get(name) match {
-        case Some((`arity`, applicative)) =>
+      possibleSubstitutionsLens.get(substitutions).get(index) match {
+        case Some(applicative) =>
           applicative.calculateArguments(other, Map.empty, internalDepth, 0, externalDepth).flatMap { otherArguments =>
             (0 until arity).foldLeft(Option(substitutions)) { case (substitutionOptions, index) =>
               substitutionOptions.flatMap { substitutionsSoFar =>
@@ -86,19 +94,16 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
               }
             }
           }
-        case Some((otherArity, _)) =>
-          None
         case None =>
           if (arguments.isEmpty) {
             for {
               reducedOther <- other.removeExternalParameters(internalDepth)
-              result <- substitutions.update(name, arity, reducedOther.asInstanceOf[ExpressionType], possibleSubstitutionsLens)
+              result <- substitutions.update(index, reducedOther.asInstanceOf[ExpressionType], possibleSubstitutionsLens)
             } yield result
           } else {
             substitutions
               .updateAdd(
-                name,
-                arity,
+                index,
                 (arguments, other.asInstanceOf[ExpressionType], internalDepth),
                 possibleSubstitutionsApplicationsLens)
               .flatMap(_.clearApplicationsWherePossible(externalDepth))
@@ -108,9 +113,18 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   }
   override def applySubstitutions(substitutions: Substitutions, internalDepth: Int, externalDepth: Int): Option[ExpressionType] = {
     for {
-      (arity, predicate) <- substitutionsLens.get(substitutions).get(name)
-      if arity == this.arity
+      predicate <- substitutionsLens.get(substitutions).lift(index)
       result <- predicate.specifyWithSubstitutions(arguments, substitutions, 0, internalDepth, externalDepth)
+    } yield result.asInstanceOf[ExpressionType]
+  }
+  def tryApplySubstitutions(
+    substitutions: Substitutions.Possible,
+    internalDepth: Int,
+    externalDepth: Int
+  ): Option[ExpressionType] = {
+    for {
+      predicate <- possibleSubstitutionsLens.get(substitutions).get(index)
+      result <- predicate.trySpecifyWithSubstitutions(arguments, substitutions, 0, internalDepth, externalDepth)
     } yield result.asInstanceOf[ExpressionType]
   }
 
@@ -134,18 +148,17 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     getMatch(target).flatMap(targetComponents => arguments.calculateArguments(targetComponents, argumentsSoFar, previousInternalDepth, internalDepth, externalDepth))
   }
 
-  override def toString: String = name + (if (arguments.nonEmpty) "(" + arguments.map(_.toString).mkString(", ") + ")" else "")
-  override def serialized: String = (if (arguments.nonEmpty) "with (" + arguments.map(_.serialized).mkString(" ") + ") " else "") + name
-  override def toStringForHash(variableDefinitions: VariableDefinitions): String = {
-    (if (arguments.nonEmpty) "with (" + arguments.map(_.toStringForHash(variableDefinitions)).mkString(" ") + ") " else "") + getSymbolForHash(variableDefinitions)
-  }
-  def getSymbolForHash(variableDefinitions: VariableDefinitions): String
+  def serializationPrefix: String
+  def serializationSymbol: String = serializationPrefix + index
+  override def toString: String = serializationSymbol + (if (arguments.nonEmpty) "(" + arguments.map(_.toString).mkString(", ") + ")" else "")
+  override def serialized: String = (if (arguments.nonEmpty) "with (" + arguments.map(_.serialized).mkString(" ") + ") " else "") + serializationSymbol
+  override def serializedForHash: String = (if (arguments.nonEmpty) "with (" + arguments.map(_.serializedForHash).mkString(" ") + ") " else "") + serializationSymbol
 }
 
 object ExpressionVariable {
-  def unapply(expression: Expression): Option[(String, Seq[Term])] = expression match {
+  def unapply(expression: Expression): Option[(Int, Seq[Term])] = expression match {
     case expressionVariable: ExpressionVariable[_] =>
-      Some(expressionVariable.name, expressionVariable.arguments)
+      Some(expressionVariable.index, expressionVariable.arguments)
     case _ =>
       None
   }

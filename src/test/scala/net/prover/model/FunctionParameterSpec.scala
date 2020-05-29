@@ -8,7 +8,7 @@ class FunctionParameterSpec extends Specification {
 
   "a function parameter specified to a non-variable term should substitute that term" in {
     FunctionParameter(1, 2)
-      .specifyWithSubstitutions(Seq(a, b, c), Substitutions(terms = Map.apply(b -> (0, EmptySet))), 1, 1, 1)
+      .specifyWithSubstitutions(Seq(a, b, c), Substitutions(Nil, Seq(b, EmptySet, b)), 1, 1, 1)
       .must(beSome(EmptySet))
   }
 

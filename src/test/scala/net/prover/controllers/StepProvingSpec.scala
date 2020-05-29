@@ -1,13 +1,9 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.PathData
-import net.prover.model.Format
 import net.prover.model.TestDefinitions._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.Qualifier
-import net.prover.model.entries.{Axiom, TermDefinitionEntry, TypeDefinition, TypeQualifierDefinition}
 import net.prover.model.expressions.{DefinedStatement, TermVariable}
-import net.prover.model.proof.{Step, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof.Step
 import org.specs2.matcher.Matcher
 import org.springframework.http.ResponseEntity
 
@@ -22,7 +18,11 @@ class StepProvingSpec extends ControllerSpec {
 
   def beResponseEntity[T](matcher: Matcher[T]): Matcher[ResponseEntity[_]] = matcher ^^ { (responseEntity: ResponseEntity[_]) => responseEntity.getBody.asInstanceOf[T] }
 
+  implicit val entryContext = defaultEntryContext
+  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Seq(a -> 0, b -> 0))
+
   "proving a step" should {
+
     "suggest an extraction using modus tollens" in {
       val service = mock[BookService]
       val controller = new StepProvingController(service)
@@ -109,12 +109,13 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain conclusion bound variable names when proving target by inference inside extraction" in {
+      val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
+      implicit val entryContext = defaultEntryContext.addEntry(axiom)
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
+
       val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
-
-      val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
-      val entryContext = defaultEntryContext.copy(availableEntries = defaultEntryContext.availableEntries :+ axiom)
 
       val premise = φ(a)
       val statementToProve = Exists("z")(ψ(a, $))
@@ -139,11 +140,12 @@ class StepProvingSpec extends ControllerSpec {
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(0), Seq(0, 1))} and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(1), Seq(1))} and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(2), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(3), Nil)})(
-        entryContext)
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(3), Nil)})
     }
 
     "retain conclusion bound variable names when adding target by inference" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 0), Seq(a -> 0, b -> 0))
+
       val service = mock[BookService]
       mockReplaceStepsForInsertion(service)
       val controller = new StepProvingController(service)
@@ -160,12 +162,15 @@ class StepProvingSpec extends ControllerSpec {
 
       checkModifyStepsWithMatcher(
         service,
-        fillerSteps(stepIndex - 1) :+ target(premise) :+ target(φ),
-        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(existence, Seq(φ($)), Seq(b)) :+ target(φ)) and
+        fillerSteps(stepIndex - 1) :+ target(premise) :+ target(ψ),
+        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(existence, Seq(φ($)), Seq(b)) :+ target(ψ)) and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)})
     }
 
     "retain conclusion bound variable names when adding target by premise" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
+      val x = TermVariable(1, Nil)
+
       val service = mock[BookService]
       mockReplaceStepsForInsertion(service)
       val controller = new StepProvingController(service)
@@ -194,6 +199,7 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain premise bound variable names when proving target by inference" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0))
       val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
@@ -216,12 +222,14 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain bound variable names in extraction premise when proving target by inference" in {
+      val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
+      implicit val entryContext = defaultEntryContext.copy(availableEntries = defaultEntryContext.availableEntries :+ axiom)
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
+      val x = TermVariable(0, Nil) // variable that will be generated when specifying the axiom
+
       val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController(service)
-
-      val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
-      val entryContext = defaultEntryContext.copy(availableEntries = defaultEntryContext.availableEntries :+ axiom)
 
       val premise = Exists("z")(ψ(a, $))
       val statementToProve = φ(a)
@@ -232,7 +240,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(axiom, Seq(ψ($(0), $(1)), φ($)), Seq(a), Seq(specification, reverseImplicationFromEquivalence, modusPonens), premisesOption = Some(Seq(Exists("z")(ψ(x, $))))))
+        definitionWithInference(axiom, Seq(φ($), ψ($(0), $(1))), Seq(a), Seq(specification, reverseImplicationFromEquivalence, modusPonens), premisesOption = Some(Seq(Exists("z")(ψ(x, $))))))
 
       checkModifyStepsWithMatcher(
         service,
@@ -246,8 +254,7 @@ class StepProvingSpec extends ControllerSpec {
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)} and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(0), Seq(0, 1))} and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(1), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(2), Seq(0))})(
-        entryContext)
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(2), Seq(0))})
     }
 
     "prove a target inside a scoped deduction" in {
@@ -265,19 +272,19 @@ class StepProvingSpec extends ControllerSpec {
 
       checkModifySteps(
         service,
-        fillerSteps(stepIndex) :+ target(ForAll("x")(Implication(ElementOf($, A), ForAll("y")(Implication(ElementOf($, B), ElementOf(Successor(add($.^, $)), Naturals)))))),
+        fillerSteps(stepIndex) :+ target(ForAll("x")(Implication(ElementOf($, a), ForAll("y")(Implication(ElementOf($, b), ElementOf(Successor(add($.^, $)), Naturals)))))),
         fillerSteps(stepIndex) :+
-          target(ForAll("x")(Implication(ElementOf($, A), ForAll("y")(Implication(ElementOf($, B), ElementOf(add($.^, $), Naturals)))))) :+
+          target(ForAll("x")(Implication(ElementOf($, a), ForAll("y")(Implication(ElementOf($, b), ElementOf(add($.^, $), Naturals)))))) :+
           elided(successorOfNaturalIsNatural, Seq(
             generalization("x", Seq(
-              deduction(ElementOf($, A), Seq(
+              deduction(ElementOf($, a), Seq(
                 generalization("y", Seq(
-                  deduction(ElementOf($, B), Seq(
+                  deduction(ElementOf($, b), Seq(
                     elided("Extracted", Seq(
-                      assertion(specification, Seq(Implication(ElementOf($.^^, A), ForAll("y")(Implication(ElementOf($, B), ElementOf(add($.^^^, $), Naturals))))), Seq($.^)),
-                      assertion(modusPonens, Seq(ElementOf($.^, A), ForAll("y")(Implication(ElementOf($, B), ElementOf(add($.^^, $), Naturals)))), Nil),
-                      assertion(specification, Seq(Implication(ElementOf($.^^, B), ElementOf(add($.^, $.^^), Naturals))), Seq($)),
-                      assertion(modusPonens, Seq(ElementOf($, B), ElementOf(add($.^, $), Naturals)), Nil))),
+                      assertion(specification, Seq(Implication(ElementOf($.^^, a), ForAll("y")(Implication(ElementOf($, b), ElementOf(add($.^^^, $), Naturals))))), Seq($.^)),
+                      assertion(modusPonens, Seq(ElementOf($.^, a), ForAll("y")(Implication(ElementOf($, b), ElementOf(add($.^^, $), Naturals)))), Nil),
+                      assertion(specification, Seq(Implication(ElementOf($.^^, b), ElementOf(add($.^, $.^^), Naturals))), Seq($)),
+                      assertion(modusPonens, Seq(ElementOf($, b), ElementOf(add($.^, $), Naturals)), Nil))),
                     assertion(successorOfNaturalIsNatural, Nil, Seq(add($.^, $))))))))))))))
     }
 
@@ -293,6 +300,7 @@ class StepProvingSpec extends ControllerSpec {
             Function(Addition),
             FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)),
           additionProperty))
+      implicit val entryContext = defaultEntryContext.addEntry(axiom)
 
       val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
@@ -317,8 +325,7 @@ class StepProvingSpec extends ControllerSpec {
             elided(FunctionFrom.statementDefinition.deconstructionInference.get, Seq(
               assertion(FunctionFrom.statementDefinition.deconstructionInference.get, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
               assertion(extractRightConjunct, Seq(Function(Addition), Conjunction(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals))), Nil),
-              assertion(extractLeftConjunct, Seq(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals)), Nil))))))(
-        defaultEntryContext.addEntry(axiom))
+              assertion(extractLeftConjunct, Seq(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals)), Nil))))))
     }
   }
 }

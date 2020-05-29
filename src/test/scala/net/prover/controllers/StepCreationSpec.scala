@@ -5,6 +5,9 @@ import net.prover.model.TestDefinitions._
 
 class StepCreationSpec extends ControllerSpec {
 
+  implicit val entryContext = defaultEntryContext
+  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Nil)
+
   "adding a target" should {
     "insert the new step before any transitivity" in {
       val service = mock[BookService]

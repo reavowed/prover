@@ -8,7 +8,11 @@ import net.prover.model.TestDefinitions._
 class StepChainingSpec extends ControllerSpec {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
 
+  implicit val entryContext = defaultEntryContext
+  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Seq(a -> 0, b -> 0))
+
   "adding a target" should {
+
     "add new chain correctly" in {
       val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
@@ -77,6 +81,7 @@ class StepChainingSpec extends ControllerSpec {
   }
 
   "rewriting a component" should {
+
     "rewrite LHS using equality substitution" in {
       val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
@@ -113,6 +118,7 @@ class StepChainingSpec extends ControllerSpec {
     }
 
     "rewrite LHS using statement expansion" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 1), Seq(a -> 0))
       val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)
@@ -121,16 +127,17 @@ class StepChainingSpec extends ControllerSpec {
 
       checkModifySteps(
         service,
-        fillerSteps(stepIndex) :+ target(Equivalence(φ(a), ψ)),
+        fillerSteps(stepIndex) :+ target(Equivalence(ψ(a), φ)),
         fillerSteps(stepIndex) :+
           elided(zeroIsRightIdentityForAddition, Seq(
             assertion(zeroIsRightIdentityForAddition, Nil, Seq(a)),
-            assertion(equivalenceOfSubstitutedEquals, Seq(φ($)), Seq(a, add(a, Zero))))) :+
-          target(Equivalence(φ(add(a, Zero)), ψ)) :+
-          assertion(equivalenceIsTransitive, Seq(φ(a), φ(add(a, Zero)), ψ), Nil))
+            assertion(equivalenceOfSubstitutedEquals, Seq(ψ($)), Seq(a, add(a, Zero))))) :+
+          target(Equivalence(ψ(add(a, Zero)), φ)) :+
+          assertion(equivalenceIsTransitive, Seq(ψ(a), ψ(add(a, Zero)), φ), Nil))
     }
 
     "rewrite RHS using statement expansion" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 1), Seq(a -> 0))
       val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController(service)

@@ -174,7 +174,8 @@ object Step {
       val newInternalPremise = generalizationDefinition(variableName, deductionDefinition(assumption, newInternalConclusion))
       val newSubstitutions = inference.premises.zip(premises.map(_.statement) :+ newInternalPremise)
         .foldLeft(Substitutions.Possible.empty) { case (substitutions, (inferencePremise, premise)) => inferencePremise.calculateSubstitutions(premise, substitutions)(stepContext).getOrElse(throw new Exception("Could not calculate substitutions from naming premise"))}
-        .confirmTotality.getOrElse(throw new Exception("Naming substitutions were not total"))
+        .confirmTotality(inference.variableDefinitions)
+        .getOrElse(throw new Exception("Naming substitutions were not total"))
       Naming(
         variableName,
         assumption,
@@ -260,7 +261,7 @@ object Step {
     @JsonSerialize
     def referencedLinesForExtraction: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum + 1
-    override def serializedLines: Seq[String] = Seq(s"let $variableName ${assumption.serialized} ${inference.id} ${inference.serializeSubstitutions(substitutions)} {") ++
+    override def serializedLines: Seq[String] = Seq(s"let $variableName ${assumption.serialized} ${inference.id} ${substitutions.serialize} {") ++
       substeps.flatMap(_.serializedLines).indent ++
       Seq(Seq("}", Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
   }
@@ -478,14 +479,14 @@ object Step {
       implicit val spc = stepProvingContext
       if (inference == oldInference) {
         val substitutionsOption = (for {
-          extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(newInference.id)
-          substitutionsAfterConclusion <- extractionOption.conclusion.calculateSubstitutions(statement).toSeq
-          substitutionsAfterPremises <- extractionOption.premises.zipStrict(premises).flatMap(_.foldLeft(Option(substitutionsAfterConclusion)) { case (so, (ep, p)) => so.flatMap(s => ep.calculateSubstitutions(p.statement, s)) }).toSeq
-          substitutions <- substitutionsAfterPremises.confirmTotality.toSeq
-        } yield (extractionOption, substitutions)).headOption
+          inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(newInference.id)
+          substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(statement).toSeq
+          substitutionsAfterPremises <- inferenceExtraction.premises.zipStrict(premises).flatMap(_.foldLeft(Option(substitutionsAfterConclusion)) { case (so, (ep, p)) => so.flatMap(s => ep.calculateSubstitutions(p.statement, s)) }).toSeq
+          substitutions <- substitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).toSeq
+        } yield (inferenceExtraction, substitutions)).headOption
         for {
-          (extractionOption, substitutions) <- substitutionsOption.failIfUndefined(InferenceReplacementException.AtStep("Could not find extraction option")(stepProvingContext.stepContext))
-          extractionStep <- ExtractionHelper.getInferenceExtractionWithoutPremises(newInference, substitutions, extractionOption).failIfUndefined(InferenceReplacementException.AtStep("Could not apply extraction")(stepProvingContext.stepContext))
+          (inferenceExtraction, substitutions) <- substitutionsOption.failIfUndefined(InferenceReplacementException.AtStep("Could not find extraction option")(stepProvingContext.stepContext))
+          extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions).failIfUndefined(InferenceReplacementException.AtStep("Could not apply extraction")(stepProvingContext.stepContext))
         } yield extractionStep.step
       } else Success(this)
     }
@@ -516,7 +517,7 @@ object Step {
     override def recursivePremises: Seq[Premise] = premises
     override def length: Int = 1
     override def serializedLines: Seq[String] = {
-      Seq(Seq("prove", statement.serialized, inference.id, inference.serializeSubstitutions(substitutions), Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
+      Seq(Seq("prove", statement.serialized, inference.id, substitutions.serialize, Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
     }
     def pendingPremises: Map[Seq[Int], Premise.Pending] = {
       premises.flatMapWithIndex((p, i) => p.getPendingPremises(Seq(i)).toSeq).toMap
@@ -540,7 +541,7 @@ object Step {
       for {
         premises <- inference.substitutePremises(substitutions)
         conclusion <- inference.substituteConclusion(substitutions)
-      } yield Assertion(conclusion, inference.summary, premises.map(Premise.Pending), inference.requiredSubstitutions.filterSubstitutions(substitutions))
+      } yield Assertion(conclusion, inference.summary, premises.map(Premise.Pending), substitutions.restrictTo(inference.variableDefinitions))
     }
   }
 

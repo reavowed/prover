@@ -29,7 +29,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         variableName <- Option(definition.variableName.trim).filter(_.nonEmpty).orBadRequest("Variable name must be provided")
         inference <- findInference(definition.inferenceId)
         (namingPremises, assumption, generalizationDefinition, deductionDefinition) <- ProofHelper.getNamingPremisesAndAssumption(inference).orBadRequest(s"Inference ${definition.inferenceId} is not a naming inference")
-        substitutions <- definition.substitutions.parse()
+        substitutions <- definition.substitutions.parse(inference.variableDefinitions)
         _ <- inference.substituteConclusion(substitutions).filter(_ == step.statement).orBadRequest("Conclusion was incorrect")
         premiseStatements <- namingPremises.map(inference.substituteStatement(_, substitutions)).traverseOption.orBadRequest("Could not substitute premises")
         substitutedAssumption <- assumption.applySubstitutions(substitutions, 1, stepProvingContext.stepContext.externalDepth).orBadRequest("Could not substitute assumption")
@@ -72,7 +72,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
             None
         }.orBadRequest("Could not find naming inference matching premise")
         substitutionsAfterConclusion <- namingInference.conclusion.calculateSubstitutions(targetStep.statement, substitutionsAfterPremise).orBadRequest("Could not calculate substitutions for conclusion")
-        substitutions <- substitutionsAfterConclusion.confirmTotality.orBadRequest("Substitutions for naming inference were not total")
+        substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.variableDefinitions).orBadRequest("Substitutions for naming inference were not total")
         substitutedAssumption <- namingInferenceAssumption.applySubstitutions(substitutions, 1, stepProvingContext.stepContext.externalDepth).orBadRequest("Could not substitute assumption")
       } yield {
         Seq(Step.Naming(

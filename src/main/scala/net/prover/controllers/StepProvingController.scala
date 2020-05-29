@@ -25,12 +25,13 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
-        substitutions <- definition.substitutions.parse()
-        epc = ExpressionParsingContext.atStep(stepProvingContext).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
+        extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
+        extraction <- SubstatementExtractor.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
+        substitutions <- definition.substitutions.parse(extraction.variableDefinitions)
+        epc = ExpressionParsingContext.withDefinitions(extraction.variableDefinitions)
         conclusionOption <- getConclusionOption(epc, substitutions)
         newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
         substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to intended new targets")).swap
-        extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
         (result, stepOption, extractionTargets) <- ExtractionHelper.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
         step <- stepOption.orBadRequest("At least one step must be present")
       } yield (result, step, extractionTargets)
@@ -48,9 +49,9 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
 
       def byGeneralization = for {
         generalizationDefinition <- provingContext.generalizationDefinitionOption
-        (specificationInference, _, _, _) <- provingContext.specificationInferenceOption
+        (specificationInference, _) <- provingContext.specificationInferenceOption
         (variableName, predicate) <- generalizationDefinition.unapply(currentUnwrappedStatement.statement)
-        (uniqueVariableName, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(variableName)
+        (uniqueVariableName, _, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(variableName)
         newUnwrappedStatement = UnwrappedStatement(predicate, currentUnwrappedStatement.unwrappers :+ GeneralizationUnwrapper(uniqueVariableName, generalizationDefinition, specificationInference))
       } yield (newUnwrappedStatement, newVariableTracker)
 
@@ -91,7 +92,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       def findPossibleInference(inference: Inference): Option[PossibleInferenceWithTargets] = {
         val possibleTargets = for {
           possibleUnwrappedTargetStatement <- possibleUnwrappedTargetStatements
-          possibleConclusions = spc.provingContext.extractionOptionsByInferenceId(inference.id)
+          possibleConclusions = spc.provingContext.inferenceExtractionsByInferenceId(inference.id)
             .filter(_.conclusion.calculateSubstitutions(possibleUnwrappedTargetStatement.statement).nonEmpty)
             .map(e => PossibleConclusionWithoutPremises(e.conclusion, e.extractionInferences.map(_.id), e.additionalVariableNames))
           if possibleConclusions.nonEmpty
@@ -131,8 +132,8 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       inference <- findInference(inferenceId)(stepProvingContext)
       possibleTarget <- getPossibleTargets(step.statement)(stepProvingContext).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
-      extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == conclusionExtractionInferenceIds.toSeq).orBadRequest(s"Could not find extraction option with inference ids ${conclusionExtractionInferenceIds.mkString(", ")}")
-    } yield PossibleConclusionWithPremises.fromExtractionOptionWithTarget(extractionOption, possibleTarget.statement)(stepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceContext))).toResponseEntity
+      inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == conclusionExtractionInferenceIds.toSeq).orBadRequest(s"Could not find extraction option with inference ids ${conclusionExtractionInferenceIds.mkString(", ")}")
+    } yield PossibleConclusionWithPremises.fromExtractionWithTarget(inferenceExtraction, possibleTarget.statement)(stepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceContext))).toResponseEntity
   }
 
   @GetMapping(value = Array("/possibleInferencesForNewTarget"), produces = Array("application/json;charset=UTF-8"))
@@ -152,8 +153,8 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         .reverse
         .take(10)
         .map { inference =>
-          val possibleConclusions = spc.provingContext.extractionOptionsByInferenceId(inference.id)
-            .map(PossibleConclusionWithPremises.fromExtractionOption(_, None))
+          val possibleConclusions = spc.provingContext.inferenceExtractionsByInferenceId(inference.id)
+            .map(PossibleConclusionWithPremises.fromExtraction(_, None))
           PossibleInferenceWithConclusions(inference.summary, possibleConclusions)
         }
     }).toResponseEntity
@@ -175,8 +176,8 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '${premise.statement}'")
     } yield {
       implicit val spc = stepProvingContext
-      SubstatementExtractor.getExtractionOptions(premise.statement)
-        .flatMap(PossibleConclusionWithPremises.fromExtractionOptionWithSubstitutions(_, _.calculateSubstitutions(step.statement, baseSubstitutions)))
+      SubstatementExtractor.getPremiseExtractions(premise.statement)
+        .flatMap(PossibleConclusionWithPremises.fromExtractionWithSubstitutions(_, _.calculateSubstitutions(step.statement, baseSubstitutions)))
     }).toResponseEntity
   }
 
@@ -196,8 +197,8 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '$premiseStatement'")
     } yield {
       implicit val spc = stepProvingContext
-      SubstatementExtractor.getExtractionOptions(premise.statement)
-        .map(PossibleConclusionWithPremises.fromExtractionOption(_, Some(baseSubstitutions))(stepProvingContext))
+      SubstatementExtractor.getPremiseExtractions(premise.statement)
+        .map(PossibleConclusionWithPremises.fromExtraction(_, Some(baseSubstitutions))(stepProvingContext))
     }).toResponseEntity
   }
 

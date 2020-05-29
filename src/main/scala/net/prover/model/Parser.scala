@@ -42,28 +42,9 @@ case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
       _ <- Parser.requiredWord(closeBracket)
     } yield t
   }
+
   private def listInBrackets(openBracket: String, closeBracket: String, separatorOption: Option[String]): Parser[Seq[T]] = {
-    def parseNext(tokenStream: TokenStream, acc: Seq[T] = Nil): (Seq[T], TokenStream) = {
-      if (tokenStream.currentToken.text == closeBracket) {
-        (acc, tokenStream.advance())
-      } else {
-        val tokenStreamToUse = separatorOption match {
-          case Some(separator) if acc.nonEmpty =>
-            if (tokenStream.currentToken.text == separator)
-              tokenStream.advance()
-            else
-              throw new Exception("Expected separator or close bracket after list item")
-          case _ =>
-            tokenStream
-        }
-        val (next, remainingTokenStream) = parse(tokenStreamToUse)
-        parseNext(remainingTokenStream, acc :+ next)
-      }
-    }
-    for {
-      _ <- Parser.requiredWord(openBracket)
-      list <- Parser(parseNext(_, Nil))
-    } yield list
+    Parser.inBrackets(Iterator.continually(this), openBracket, closeBracket, separatorOption, isInfinite = true)
   }
 
   def inParens: Parser[T] = inBrackets("(", ")")
@@ -179,6 +160,32 @@ object Parser {
     }
   }
 
+  private def inBrackets[T](parsers: Iterator[Parser[T]], openBracket: String, closeBracket: String, separatorOption: Option[String], isInfinite: Boolean): Parser[Seq[T]] = {
+    def parseNext(tokenStream: TokenStream, acc: Seq[T] = Nil): (Seq[T], TokenStream) = {
+      if (tokenStream.currentToken.text == closeBracket) {
+        (acc, tokenStream.advance())
+      } else if (!parsers.hasNext) {
+        throw new Exception("Expected close bracket at end of list")
+      } else {
+        val tokenStreamToUse = separatorOption match {
+          case Some(separator) if acc.nonEmpty =>
+            if (tokenStream.currentToken.text == separator)
+              tokenStream.advance()
+            else
+              throw new Exception(s"Expected separator${if (isInfinite) " or close bracket" else ""} after list item")
+          case _ =>
+            tokenStream
+        }
+        val (next, remainingTokenStream) = parsers.next().parse(tokenStreamToUse)
+        parseNext(remainingTokenStream, acc :+ next)
+      }
+    }
+    for {
+      _ <- Parser.requiredWord(openBracket)
+      list <- Parser(parseNext(_, Nil))
+    } yield list
+  }
+
   def int: Parser[Int] = Parser.singleWord.map(_.toInt)
 
   def allInParens: Parser[String] = Parser(_.untilCloseParen()).inParens
@@ -237,14 +244,18 @@ object Parser {
     }
   }
 
-  implicit class SeqOps[T](parsers: Seq[Parser[T]]) {
+  implicit class SeqParserOps[T](parsers: Seq[Parser[T]]) {
     def traverse: Parser[Seq[T]] = Parser { initialTokenStream =>
       parsers.foldLeft((Seq.empty[T], initialTokenStream)) { case ((valuesSoFar, tokenStream), parser) =>
         val (value, newTokenStream) = parser.parse(tokenStream)
         (valuesSoFar :+ value, newTokenStream)
       }
     }
+    def inParens(separatorOption: Option[String]): Parser[Seq[T]] = {
+      Parser.inBrackets(parsers.iterator, "(", ")", separatorOption, isInfinite = false)
+    }
   }
+
 
   implicit class SeqParserTupleOps[S, T](x: Seq[(S, Parser[T])]) {
     def traverseParserMap: Parser[Map[S, T]] = {

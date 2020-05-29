@@ -51,9 +51,7 @@ object ProofHelper {
         conclusion,
         inference.summary,
         premiseStatements.map(Premise.Pending),
-        substitutions.copy(
-          statements = substitutions.statements.filterKeys(s => inference.requiredSubstitutions.statements.exists(_._1 == s)),
-          terms = substitutions.terms.filterKeys(t => inference.requiredSubstitutions.terms.exists(_._1 == t))))
+        substitutions.restrictTo(inference.variableDefinitions))
     } yield (assertionStep, premiseSteps, targetSteps)
   }
 

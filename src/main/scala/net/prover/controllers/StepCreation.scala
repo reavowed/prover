@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models.{StepDefinition, Unwrapper}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, StepProvingContext}
+import net.prover.model.proof.{Step, StepProvingContext, SubstatementExtractor}
 import net.prover.model.{ExpressionParsingContext, Substitutions}
 
 import scala.util.{Success, Try}
@@ -17,9 +17,10 @@ trait StepCreation extends BookModification {
   ): Try[(Statement, Step, Seq[Step.Target])] = {
     for {
       inference <- findInference(inferenceId)
-      wrappedStepProvingContext = StepProvingContext.updateStepContext(unwrappers.enhanceContext)
-      substitutions <- definition.substitutions.parse()(ExpressionParsingContext.atStep(wrappedStepProvingContext))
       extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
+      extraction <- SubstatementExtractor.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
+      wrappedStepProvingContext = StepProvingContext.updateStepContext(unwrappers.enhanceContext)
+      substitutions <- definition.substitutions.parse(extraction.variableDefinitions)(ExpressionParsingContext.atStep(wrappedStepProvingContext))
       epc = ExpressionParsingContext.forInference(inference).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
       conclusionOption <- getConclusionOption(epc, substitutions)
       newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)

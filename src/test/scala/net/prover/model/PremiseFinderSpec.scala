@@ -11,6 +11,8 @@ import org.specs2.mutable.Specification
 
 class PremiseFinderSpec extends Specification {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
+  implicit val entryContext = defaultEntryContext
+  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "premise finder" should {
     def getStepContext(premises: Seq[Statement], target: Statement, depth: Int): StepContext = {
@@ -21,8 +23,8 @@ class PremiseFinderSpec extends Specification {
       }
     }
 
-    def checkFindPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): MatchResult[Any] = {
-      findPremise(target, premises, depth)(entryContext) must beSome(beStepsThatMakeValidTheorem(premises, target, depth)(entryContext))
+    def checkFindPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
+      findPremise(target, premises, depth)(entryContext) must beSome(beStepsThatMakeValidTheorem(premises, target, depth))
     }
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
@@ -78,11 +80,17 @@ class PremiseFinderSpec extends Specification {
 
     "find premise by simplification" in {
       checkFindPremise(
-        ElementOf(a, A),
-        Seq(ElementOf(Pair(a, b), Product(A, B))))
+        ElementOf(a, c),
+        Seq(ElementOf(Pair(a, b), Product(c, d))))
     }
 
     "find premise by double simplification" in {
+      val A = TermVariablePlaceholder("A", 4)
+      val B = TermVariablePlaceholder("B", 5)
+      val C = TermVariablePlaceholder("C", 6)
+      val D = TermVariablePlaceholder("D", 7)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, A -> 0, B -> 0, C -> 0, D -> 0))
+
       checkFindPremise(
         ElementOf(a, A),
         Seq(ElementOf(Pair(Pair(a, b), Pair(c, d)), Product(Product(A, B), Product(C, D)))))
@@ -101,31 +109,37 @@ class PremiseFinderSpec extends Specification {
         None,
         Nil,
         Nil)
-      val entryContextWithDefinition = defaultEntryContext.addEntry(Negated)
+      implicit val entryContext = defaultEntryContext.addEntry(Negated)
 
       checkFindPremise(
         ElementOf(Negated(a), Naturals),
-        Seq(ElementOf(a, Naturals)))(
-        entryContextWithDefinition)
+        Seq(ElementOf(a, Naturals)))
     }
 
     "find a premise by a conclusion simplification from extracting a term definition with multiple premises" in {
       val PairIsInteger = createInference("Pair Is Integer", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(Pair(a, b), Integers))
-      val entryContextWithDefinitions = defaultEntryContext.addEntry(PairIsInteger)
+      implicit val entryContext = defaultEntryContext.addEntry(PairIsInteger)
 
       checkFindPremise(
         ElementOf(Pair(a, b), Integers),
-        Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)))(
-        entryContextWithDefinitions)
+        Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)))
     }
 
     "chain conclusion relation simplification definitions using premise substitutions" in {
+      val A = TermVariablePlaceholder("A", 2)
+      val B = TermVariablePlaceholder("B", 3)
+      val C = TermVariablePlaceholder("C", 4)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, A -> 0, B -> 0, C -> 0))
       checkFindPremise(
         ElementOf(Pair(a, b), Product(A, B)),
         Seq(ElementOf(a, A), ElementOf(b, C), Subset(C, B)))
     }
 
     "chain conclusion relation simplification definitions using premise substitutions first" in {
+      val A = TermVariablePlaceholder("A", 1)
+      val B = TermVariablePlaceholder("B", 2)
+      val C = TermVariablePlaceholder("C", 3)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, A -> 0, B -> 0, C -> 0))
       checkFindPremise(
         ElementOf(First(a), C),
         Seq(Subset(A, C), ElementOf(a, Product(A, B))))
@@ -150,14 +164,13 @@ class PremiseFinderSpec extends Specification {
       val PositiveNaturals = PositiveNaturalsDefinition()
       val DefinitionOfPositiveNatural = createInference("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
 
-      val entryContextWithDefinitions = defaultEntryContext
+      implicit val entryContext = defaultEntryContext
         .addEntry(PositiveNaturalsDefinition)
         .addEntry(DefinitionOfPositiveNatural)
 
       checkFindPremise(
         ElementOf(add(a, b), Naturals),
-        Seq(ElementOf(a, Naturals), ElementOf(b, PositiveNaturals)))(
-        entryContextWithDefinitions)
+        Seq(ElementOf(a, Naturals), ElementOf(b, PositiveNaturals)))
     }
 
     "rewrite a premise using a fact" in {
@@ -165,14 +178,13 @@ class PremiseFinderSpec extends Specification {
       val PositiveNaturals = PositiveNaturalsDefinition()
       val PositiveNaturalsAreASubsetOfTheNaturals = createInference("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
 
-      val entryContextWithDefinitions = defaultEntryContext
+      implicit val entryContext = defaultEntryContext
         .addEntry(PositiveNaturalsDefinition)
         .addEntry(PositiveNaturalsAreASubsetOfTheNaturals)
 
       checkFindPremise(
         ElementOf(Pair(a, b), Product(Naturals, Naturals)),
-        Seq(ElementOf(a, Naturals), ElementOf(b, PositiveNaturals)))(
-        entryContextWithDefinitions)
+        Seq(ElementOf(a, Naturals), ElementOf(b, PositiveNaturals)))
     }
 
     "find a premise using an or condition" in {
@@ -182,10 +194,10 @@ class PremiseFinderSpec extends Specification {
     "find a premise using chained simplifications requiring other premises" in {
       val SetDifference = simpleTermDefinition(
         "diff",
-        Seq(A, B),
+        Seq(a, b),
         Format.Explicit("%1/%2", "A/B", 3, false, true),
         Nil,
-        ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, A), Negation(ElementOf($, B))))))
+        ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, a), Negation(ElementOf($, b))))))
       val ToInteger = simpleTermDefinition(
         "toZ",
         Seq(a),
@@ -194,7 +206,7 @@ class PremiseFinderSpec extends Specification {
       val EmbeddedNaturalIsInteger = createInference("Embedded Natural Is Integer", Seq(ElementOf(a, Naturals)), ElementOf(ToInteger(a), Integers))
       val OneIsNotZero = createInference("One Is Not Zero", Nil, Negation(Equals(Zero, One)))
 
-      val entryContextWithDefinitions = defaultEntryContext
+      implicit val entryContext = defaultEntryContext
         .addEntry(SetDifference)
         .addEntry(ToInteger)
         .addEntry(EqualityConditionForEmbeddedNaturals)
@@ -203,8 +215,7 @@ class PremiseFinderSpec extends Specification {
 
       checkFindPremise(
         ElementOf(ToInteger(One), SetDifference(Integers, Singleton(ToInteger(Zero)))),
-        Nil)(
-        entryContextWithDefinitions)
+        Nil)
     }
 
     "find a premise using a rewrite that needs to substitute a term definition to get a valid relation" in {
@@ -217,11 +228,11 @@ class PremiseFinderSpec extends Specification {
       val DefinitionOfPositiveNatural = createInference("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Inject(Zero), $)))))
       val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, false))), None, BlankDefinition)
       val Irreflexive = PropertyDefinitionOnType("irreflexive", Relation, None, None, None, None, BlankDefinition, ConjunctionDefinition)
-      val elementsRelatedByIrreflexiveNotEqual = createInference("Elements Related by an Irreflexive Relation Are Not Equal", Seq(Irreflexive.statementDefinition(A, B), ElementOf(Pair(a, b), A)), Negation(Equals(a, b)))
-      val lessThanIsIrreflexive = createInference("< Is Irreflexive", Nil, Irreflexive.statementDefinition(LessThan, Naturals))
+      val elementsRelatedByIrreflexiveNotEqual = createInference("Elements Related by an Irreflexive Relation Are Not Equal", Seq(Irreflexive(a, b), ElementOf(Pair(c, d), a)), Negation(Equals(c, d)))
+      val lessThanIsIrreflexive = createInference("< Is Irreflexive", Nil, Irreflexive(LessThan, Naturals))
       val injectedNaturalIsNatural = createInference("Injected Natural Is Natural", Seq(ElementOf(a, Naturals)), ElementOf(Inject(a), Naturals))
 
-      val entryContextWithDefinitions = defaultEntryContext
+      implicit val entryContext = defaultEntryContext
         .addEntry(PositiveNaturalsDefinition)
         .addEntry(Inject)
         .addEntry(DefinitionOfPositiveNatural)
@@ -233,11 +244,11 @@ class PremiseFinderSpec extends Specification {
 
       checkFindPremise(
         Negation(Equals(a, Inject(Zero))),
-        Seq(ElementOf(a, PositiveNaturals)))(
-        entryContextWithDefinitions)
+        Seq(ElementOf(a, PositiveNaturals)))
     }
 
     "find premise by equality substitution for variable" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0, b -> 0))
       checkFindPremise(
         φ(a),
         Seq(φ(b), Equals(a, b)))
@@ -276,6 +287,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "replace terms in a target using a fact" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 2), Nil)
       val axiom = createInference(
         "Function Properties of Natural Addition",
         Nil,
@@ -308,6 +320,11 @@ class PremiseFinderSpec extends Specification {
       // f(a) ∈ range(f)    via  range(f) ⊆ B     (Definition of From)
       // a ∈ domain(f)      via  f is a function  (Function Application Is Element of Range)
       // a ∈ A              via  domain(f) = A    (Definition of From)
+      val f = TermVariablePlaceholder("f", 0)
+      val A = TermVariablePlaceholder("A", 1)
+      val B = TermVariablePlaceholder("B", 2)
+      val a = TermVariablePlaceholder("a", 3)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(f -> 0, A -> 0, B -> 0, a -> 0))
 
       checkFindPremise(
         ElementOf(Apply(f, a), B),
@@ -324,17 +341,15 @@ class PremiseFinderSpec extends Specification {
 
       checkFindPremise(
         ElementOf(Apply(IntegerEmbedding, a), BaseSet(IntegerAddition)),
-        Seq(ElementOf(a, Naturals)))(
-        defaultEntryContext.addEntry(IntegerEmbeddingDefinition))
+        Seq(ElementOf(a, Naturals)))
     }
 
     "find a premise using double simplification of a function application" in {
       val IntegerEmbeddingIsUnique = createInference("Integer Embedding Is Unique", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(toZ(a), toZ(b)), Equals(a, b)))
-
+      implicit val entryContext = defaultEntryContext.addEntry(IntegerEmbeddingIsUnique)
       checkFindPremise(
         Negation(Equals(toZ(Zero), toZ(a))),
-        Seq(Negation(Equals(a, Zero)), ElementOf(a, Naturals)))(
-        defaultEntryContext.addEntry(IntegerEmbeddingIsUnique))
+        Seq(Negation(Equals(a, Zero)), ElementOf(a, Naturals)))
     }
 
     "find a premise by equality substitution using a fact" in {

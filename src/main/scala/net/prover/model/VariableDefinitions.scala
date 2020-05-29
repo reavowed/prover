@@ -4,9 +4,9 @@ import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.expressions.Statement
 
-case class VariableDefinitions(statementVariableDefinitions: Seq[VariableDefinition], termVariableDefinitions: Seq[VariableDefinition]) {
+case class VariableDefinitions(statements: Seq[VariableDefinition], terms: Seq[VariableDefinition]) {
   def addSimpleTermVariables(variableNames: Seq[String]): VariableDefinitions = {
-    copy(termVariableDefinitions = termVariableDefinitions ++ variableNames.map(VariableDefinition(_, 0, Nil)))
+    copy(terms = terms ++ variableNames.map(VariableDefinition(_, 0, Nil)))
   }
 
   def serializedLines: Seq[String] = {
@@ -17,9 +17,12 @@ case class VariableDefinitions(statementVariableDefinitions: Seq[VariableDefinit
         None
       }
     }
-    serialize(statementVariableDefinitions, "statementVariables").toSeq ++
-      serialize(termVariableDefinitions, "termVariables").toSeq
+    serialize(statements, "statementVariables").toSeq ++
+      serialize(terms, "termVariables").toSeq
   }
+
+  def isEmpty: Boolean = statements.isEmpty && terms.isEmpty
+  def hasNoApplications: Boolean = (statements ++ terms).forall(_.arity == 0)
 }
 
 object VariableDefinitions {
@@ -29,12 +32,6 @@ object VariableDefinitions {
     VariableDefinitions(
       componentTypes.ofType[StatementComponent].map(c => VariableDefinition(c.name, c.arguments.length, Nil)),
       componentTypes.ofType[TermComponent].map(c => VariableDefinition(c.name, c.arguments.length, Nil)))
-  }
-  def fromStatements(statements: Seq[Statement]): VariableDefinitions = {
-    val requiredSubstitutions = statements.map(_.requiredSubstitutions).foldTogether
-    VariableDefinitions(
-      requiredSubstitutions.statements.map { case (name, arity) => VariableDefinition(name, arity, Nil) },
-      requiredSubstitutions.terms.map { case (name, arity) => VariableDefinition(name, arity, Nil) })
   }
 
   def parser: Parser[VariableDefinitions] = {

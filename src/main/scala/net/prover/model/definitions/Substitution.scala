@@ -1,6 +1,6 @@
 package net.prover.model.definitions
 
-import net.prover.model.Inference
+import net.prover.model.{Inference, Substitutions}
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{Premise, Step, SubstitutionContext}
 
@@ -12,6 +12,6 @@ case class Substitution(relation: BinaryJoiner[Term], inference: Inference.Summa
       Seq(
         Premise.Pending(relation(premiseTerm, targetTerm)),
         Premise.Pending(wrapper(premiseTerm))),
-      inference.requiredSubstitutions.fill(Seq(wrapper.template), Seq(premiseTerm, targetTerm)))
+      Substitutions(Seq(wrapper.template), Seq(premiseTerm, targetTerm)))
   }
 }

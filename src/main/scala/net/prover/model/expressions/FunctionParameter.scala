@@ -1,12 +1,13 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Substitutions, VariableDefinitions}
+import net.prover.model.{Substitutions, UsedVariables}
 import net.prover.model.definitions.ExpressionDefinition
 
 case class FunctionParameter(index: Int, level: Int) extends Term {
   override def structuralComplexity: Int = 1
   override def definitionalComplexity: Int = 1
   override def definitionUsages: DefinitionUsages = DefinitionUsages.empty
+  override def usedVariables: UsedVariables = UsedVariables.empty
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = {
     if (level >= internalDepth) {
@@ -55,8 +56,19 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     else
       Some(this.insertExternalParameters(previousInternalDepth, internalDepth))
   }
+  def trySpecifyWithSubstitutions(
+    targetArguments: Seq[Term],
+    substitutions: Substitutions.Possible,
+    internalDepth: Int,
+    previousInternalDepth: Int,
+    externalDepth: Int
+  ) = {
+    if (level == internalDepth + externalDepth)
+      targetArguments(index).tryApplySubstitutions(substitutions, previousInternalDepth, externalDepth).map(_.insertExternalParameters(internalDepth))
+    else
+      Some(this.insertExternalParameters(previousInternalDepth, internalDepth))
+  }
 
-  override def requiredSubstitutions = Substitutions.Required.empty
   override def calculateSubstitutions(
     other: Expression,
     substitutions: Substitutions.Possible,
@@ -72,6 +84,13 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
   }
   override def applySubstitutions(
     substitutions: Substitutions,
+    internalDepth: Int,
+    externalDepth: Int
+  ) = {
+    Some(this)
+  }
+  override def tryApplySubstitutions(
+    substitutions: Substitutions.Possible,
     internalDepth: Int,
     externalDepth: Int
   ) = {
@@ -116,7 +135,7 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     }
   }
 
-  override def serialized = (0 to level).map(_ => "$").mkString("") + index
-  override def toString = serialized
-  override def toStringForHash(variableDefinitions: VariableDefinitions): String = serialized
+  override def toString: String = (0 to level).map(_ => "$").mkString("") + index
+  override def serialized: String = toString
+  override def serializedForHash: String = toString
 }

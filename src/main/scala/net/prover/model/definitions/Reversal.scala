@@ -10,7 +10,7 @@ case class Reversal[TComponent <: Expression](joiner: BinaryJoiner[TComponent], 
       joiner(left, right),
       inference,
       Seq(Premise.Pending(joiner(right, left))),
-      joiner.fillRequiredSubstitutions(inference.requiredSubstitutions, Seq(right, left)))
+      joiner.fillSubstitutions(Seq(right, left)))
   }
 }
 

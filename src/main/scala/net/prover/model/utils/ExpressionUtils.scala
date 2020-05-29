@@ -112,22 +112,22 @@ object ExpressionUtils {
   }
 
 
-  def getSimpleStatementVariable(statement: Statement): Option[String] = {
-    statement.asOptionalInstanceOf[StatementVariable].filter(_.arguments.isEmpty).map(_.name)
+  def getSimpleStatementVariable(statement: Statement): Option[Int] = {
+    statement.asOptionalInstanceOf[StatementVariable].filter(_.arguments.isEmpty).map(_.index)
   }
   def isSimpleStatementVariable(statement: Statement): Boolean = {
     getSimpleStatementVariable(statement).isDefined
   }
-  def getWrappedSimpleStatementVariable(statement: Statement): Option[String] = {
+  def getWrappedSimpleStatementVariable(statement: Statement): Option[Int] = {
     getSimpleStatementVariable(statement) orElse getFromUnaryStatement(statement, getWrappedSimpleStatementVariable)
   }
-  def getWrappedBinaryStatementVariables(statement: Statement): Option[(String, String)] = {
+  def getWrappedBinaryStatementVariables(statement: Statement): Option[(Int, Int)] = {
     getFromUnaryStatement(statement, getWrappedBinaryStatementVariables) orElse getFromBinaryStatement(statement, getWrappedSimpleStatementVariable, getWrappedSimpleStatementVariable)
   }
 
 
-  def getSimpleTermVariable(term: Term): Option[String] = {
-    term.asOptionalInstanceOf[TermVariable].filter(_.arguments.isEmpty).map(_.name)
+  def getSimpleTermVariable(term: Term): Option[Int] = {
+    term.asOptionalInstanceOf[TermVariable].filter(_.arguments.isEmpty).map(_.index)
   }
   def isSimpleTermVariable(term: Term): Boolean = {
     getSimpleTermVariable(term).isDefined
@@ -138,7 +138,7 @@ object ExpressionUtils {
   def isTermConstant(term: Term): Boolean = {
     getTermConstantDefinition(term).isDefined
   }
-  def getCombinationOfSimpleTermVariables(term: Term): Option[Seq[String]] = {
+  def getCombinationOfSimpleTermVariables(term: Term): Option[Seq[Int]] = {
     recurseOnTerms(term, getSimpleTermVariable)
   }
   def isCombinationOfTermConstants(t: Term): Boolean = {
@@ -152,11 +152,11 @@ object ExpressionUtils {
         false
     }
   }
-  def getWrappedSimpleTermVariable(term: Term): Option[String] = {
+  def getWrappedSimpleTermVariable(term: Term): Option[Int] = {
     getSimpleTermVariable(term) orElse
       term.asOptionalInstanceOf[DefinedTerm].filter(_.boundVariableNames.isEmpty).flatMap(_.components.single).flatMap(_.asOptionalInstanceOf[Term]).flatMap(getWrappedSimpleTermVariable)
   }
-  def getSingleSimpleTermVariable(term: Term): Option[String] = {
+  def getSingleSimpleTermVariable(term: Term): Option[Int] = {
     getSimpleTermVariable(term) orElse
       getFromUnaryTerm(term, getSingleSimpleTermVariable) orElse
       getFromBinaryTerm(term, getTermConstantDefinition, getSingleSimpleTermVariable).map(_._2)

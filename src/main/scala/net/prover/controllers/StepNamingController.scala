@@ -29,11 +29,11 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
           .iterator
           .mapCollect { inference =>
             val conclusions = for {
-              extractionOption <- stepProvingContext.provingContext.extractionOptionsByInferenceId(inference.id)
+              inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
               if ProofHelper.findNamingInferences.exists { case (_, initialPremises, _, _, _) =>
-                initialPremises.single.exists(_.calculateSubstitutions(extractionOption.conclusion)(SubstitutionContext.outsideProof).nonEmpty)
+                initialPremises.single.exists(_.calculateSubstitutions(inferenceExtraction.conclusion)(SubstitutionContext.outsideProof).nonEmpty)
               }
-            } yield PossibleConclusionWithPremises.fromExtractionOption(extractionOption, None)
+            } yield PossibleConclusionWithPremises.fromExtraction(inferenceExtraction, None)
             if (conclusions.nonEmpty) {
               Some(PossibleInferenceWithConclusions(inference.summary, conclusions))
             } else {
@@ -67,7 +67,7 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
               None
           }
           substitutionsAfterConclusion <- namingInference.conclusion.calculateSubstitutions(resultStatement, substitutionsAfterPremise)
-          substitutions <- substitutionsAfterConclusion.confirmTotality
+          substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.variableDefinitions)
           substitutedAssumption <- namingInferenceAssumption.applySubstitutions(substitutions, 1, substitutionContext.externalDepth)
           substitutedConclusion <- namingInference.conclusion.applySubstitutions(substitutions, 1, substitutionContext.externalDepth)
         } yield (

@@ -15,6 +15,12 @@ trait ExpressionDefinition {
   def name: String = explicitName.getOrElse(disambiguatedSymbol.forDisplay)
   def boundVariableNames: Seq[String]
   def componentTypes: Seq[ComponentType]
+  def expressions: Seq[ExpressionVariable[_]] = componentTypes.mapFold((0, 0)) {
+    case ((s, t), ComponentType.StatementComponent(_, arguments)) =>
+      ((s + 1, t), StatementVariable(s, arguments.map(a => FunctionParameter(a.index, 0))))
+    case ((s, t), ComponentType.TermComponent(_, arguments)) =>
+      ((s, t + 1), TermVariable(t, arguments.map(a => FunctionParameter(a.index, 0))))
+  }._2
   def format: Format
   def shorthand: Option[String]
   def defaultValue: Expression
@@ -55,8 +61,6 @@ object ExpressionDefinition {
   case class ComponentArgument(name: String, index: Int)
   sealed trait ComponentType {
     def name: String
-    def withName(newName: String): ComponentType
-    def expression: Expression
     def arguments: Seq[ComponentArgument]
     def expressionParser(implicit context: ExpressionParsingContext): Parser[Expression]
     def templateParser(implicit context: TemplateParsingContext): Parser[Template]
@@ -104,8 +108,6 @@ object ExpressionDefinition {
     }
 
     case class StatementComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-      override def withName(newName: String): StatementComponent = copy(name = newName)
-      override def expression = StatementVariable(name, arguments.map(a => FunctionParameter(a.index, 0)))
       override def expressionParser(implicit context: ExpressionParsingContext) = Statement.parser
       override def templateParser(implicit context: TemplateParsingContext) = Statement.templateParser
       override def serialized = arguments match {
@@ -115,8 +117,6 @@ object ExpressionDefinition {
       }
     }
     case class TermComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-      override def withName(newName: String): TermComponent = copy(name = newName)
-      override def expression = TermVariable(name, arguments.map(a => FunctionParameter(a.index, 0)))
       override def expressionParser(implicit context: ExpressionParsingContext) = Term.parser
       override def templateParser(implicit context: TemplateParsingContext) = Term.templateParser
       override def serialized = arguments match {
@@ -131,7 +131,7 @@ object ExpressionDefinition {
 trait StatementDefinition extends ExpressionDefinition {
   def definingStatement: Option[Statement]
   val disambiguator: Option[String] = None
-  val defaultValue: DefinedStatement = DefinedStatement(componentTypes.map(_.expression), this)(boundVariableNames)
+  val defaultValue: DefinedStatement = DefinedStatement(expressions, this)(boundVariableNames)
   val constructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, variableDefinitions,  _, defaultValue))
   val deconstructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, variableDefinitions, defaultValue, _))
   def inferences: Seq[Inference.FromEntry] = constructionInference.toSeq ++ deconstructionInference.toSeq
@@ -184,7 +184,7 @@ object StatementDefinition {
 trait TermDefinition extends ExpressionDefinition {
   def premises: Seq[Statement]
   def definitionPredicate: Statement
-  val defaultValue: DefinedTerm = DefinedTerm(componentTypes.map(_.expression), this)(boundVariableNames)
+  val defaultValue: DefinedTerm = DefinedTerm(expressions, this)(boundVariableNames)
   val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0).get
   val definitionInference: Inference.Definition = Inference.TermDefinition(name, variableDefinitions, premises, definingStatement)
   def inferences: Seq[Inference.FromEntry] = Seq(definitionInference)

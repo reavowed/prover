@@ -1,9 +1,9 @@
 package net.prover.controllers.models
 
-import net.prover.model.{Inference, Substitutions}
+import net.prover.model.{Inference, Substitutions, VariableDefinitions}
 import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.StepProvingContext
-import net.prover.model.proof.SubstatementExtractor.ExtractionOption
+import net.prover.model.proof.SubstatementExtractor.Extraction
 
 sealed trait PossibleInference {
   def inference: Inference.Summary
@@ -44,26 +44,26 @@ case class PossibleConclusionWithPremises(
   conclusion: Statement,
   possiblePremises: Seq[PossiblePremise],
   substitutions: Option[SuggestedSubstitutions],
-  requiredSubstitutions: Substitutions.Required,
+  variableDefinitions: VariableDefinitions,
   extractionInferenceIds: Seq[String],
   additionalVariableNames: Seq[String]
 ) extends PossibleConclusion
 
 object PossibleConclusionWithPremises {
-  def fromExtractionOptionWithTarget(extractionOption: ExtractionOption, target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
-    fromExtractionOptionWithSubstitutions(extractionOption, _.calculateSubstitutions(target))
+  def fromExtractionWithTarget(extraction: Extraction, target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
+    fromExtractionWithSubstitutions(extraction, _.calculateSubstitutions(target))
   }
-  def fromExtractionOptionWithSubstitutions(extractionOption: ExtractionOption, getSubstitutions: Statement => Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
-    getSubstitutions(extractionOption.conclusion).map(s => fromExtractionOption(extractionOption, Some(s)))
+  def fromExtractionWithSubstitutions(extraction: Extraction, getSubstitutions: Statement => Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
+    getSubstitutions(extraction.conclusion).map(s => fromExtraction(extraction, Some(s)))
   }
-  def fromExtractionOption(extractionOption: ExtractionOption, substitutions: Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): PossibleConclusionWithPremises = {
+  def fromExtraction(extraction: Extraction, substitutions: Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): PossibleConclusionWithPremises = {
     PossibleConclusionWithPremises(
-      extractionOption.conclusion,
-      PossiblePremise.fromAvailablePremises(extractionOption.premises, substitutions),
-      substitutions.map(SuggestedSubstitutions(_)),
-      extractionOption.requiredSubstitutions,
-      extractionOption.extractionInferences.map(_.id),
-      extractionOption.additionalVariableNames)
+      extraction.conclusion,
+      PossiblePremise.fromAvailablePremises(extraction.premises, substitutions, extraction.variableDefinitions),
+      substitutions.map(SuggestedSubstitutions(extraction.variableDefinitions, _)),
+      extraction.variableDefinitions,
+      extraction.extractionInferences.map(_.id),
+      extraction.additionalVariableNames)
   }
 }
 
@@ -74,13 +74,14 @@ case class PossiblePremise(
 object PossiblePremise {
   def fromAvailablePremises(
     premises: Seq[Statement],
-    substitutions: Option[Substitutions.Possible])(
+    substitutions: Option[Substitutions.Possible],
+    variableDefinitions: VariableDefinitions)(
     implicit stepProvingContext: StepProvingContext
   ): Seq[PossiblePremise] = {
     premises.map { premise =>
       val matches = (stepProvingContext.allPremises.map(_.statement) ++ stepProvingContext.provingContext.facts.map(_.statement)).mapCollect { availablePremise =>
         premise.calculateSubstitutions(availablePremise, substitutions.getOrElse(Substitutions.Possible.empty))
-          .map(s => PossiblePremiseMatch(availablePremise, SuggestedSubstitutions(s)))
+          .map(s => PossiblePremiseMatch(availablePremise, SuggestedSubstitutions(variableDefinitions, s)))
       }
       PossiblePremise(premise, matches)
     }

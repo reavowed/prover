@@ -10,36 +10,40 @@ import net.prover.model.expressions._
 import net.prover.model.proof._
 import org.specs2.matcher.Matcher
 
+trait Placeholder[T <: ExpressionVariable[_ <: Expression]] {
+  def name: String
+  def index: Int
+  def toVariable: T
+}
+case class StatementVariablePlaceholder(name: String, index: Int) extends Placeholder[StatementVariable] {
+  def apply(terms: Term*) = StatementVariable(index, terms)
+  override def toVariable = apply()
+  def toComponent(arguments: ComponentArgument*): StatementComponent = StatementComponent(name, arguments)
+  def ->(statement: Statement): (Statement, Statement) = toVariable -> statement
+}
+case class TermVariablePlaceholder(name: String, index: Int) extends Placeholder[TermVariable] {
+  def apply(terms: Term*) = TermVariable(index, terms)
+  override def toVariable = apply()
+  def template: Template = TermVariableTemplate(name)
+  def ->(term: Term): (Term, Term) = toVariable -> term
+}
+
 trait TestVariableDefinitions {
-  trait Placeholder[T <: ExpressionVariable[_ <: Expression]] {
-    def name: String
-    def toVariable: T
-    def ->[B, A1, B1](b: B)(implicit f1: Placeholder[T] => A1, f2: B => B1): (A1, B1) = (f1(this), f2(b))
-    def ->[B, A1, B1](i: Int, b: B)(implicit f1: Placeholder[T] => A1, f2: B => B1): (A1, (Int, B1)) = (f1(this), (i, f2(b)))
-  }
 
-  case class StatementVariablePlaceholder(name: String) extends Placeholder[StatementVariable] {
-    def apply(terms: Term*) = StatementVariable(name, terms)
-    override def toVariable = apply()
-  }
-  implicit def placeholderToStatementComponent(placeholder: StatementVariablePlaceholder): StatementComponent = StatementComponent(placeholder.name, Nil)
+  implicit def placeholderToStatementComponent(placeholder: StatementVariablePlaceholder): StatementComponent = placeholder.toComponent()
 
-  val φ = StatementVariablePlaceholder("φ")
-  val ψ = StatementVariablePlaceholder("ψ")
-  val χ = StatementVariablePlaceholder("χ")
-  val ω = StatementVariablePlaceholder("ω")
+  val φ = StatementVariablePlaceholder("φ", 0)
+  val ψ = StatementVariablePlaceholder("ψ", 1)
+  val χ = StatementVariablePlaceholder("χ", 2)
+  val ω = StatementVariablePlaceholder("ω", 3)
 
-  case class TermVariablePlaceholder(name: String) extends Placeholder[TermVariable] {
-    def apply(terms: Term*) = TermVariable(name, terms)
-    override def toVariable = apply()
-    def template: Template = TermVariableTemplate(name)
-  }
   implicit def placeholderToTermComponent(placeholder: TermVariablePlaceholder): TermComponent = TermComponent(placeholder.name, Nil)
 
   case object $ {
     def template: Template = FunctionParameterTemplate($ToFunctionParameter(this))
     def apply(index: Int) = FunctionParameter(index, 0)
     def ^ : FunctionParameter = FunctionParameter(0, 1)
+    def ^(index: Int) : FunctionParameter = FunctionParameter(index, 1)
     def ^^ : FunctionParameter = ^^(0)
     def ^^(index: Int) : FunctionParameter = FunctionParameter(index, 2)
     def ^^^ : FunctionParameter = FunctionParameter(0, 3)
@@ -61,27 +65,39 @@ trait TestVariableDefinitions {
     def apply(components: Expression*) = hasStatementDefinition.statementDefinition(components: _*)
   }
 
-  val a = TermVariablePlaceholder("a")
-  val b = TermVariablePlaceholder("b")
-  val c = TermVariablePlaceholder("c")
-  val d = TermVariablePlaceholder("d")
-  val e = TermVariablePlaceholder("e")
-  val f = TermVariablePlaceholder("f")
-  val A = TermVariablePlaceholder("A")
-  val B = TermVariablePlaceholder("B")
-  val C = TermVariablePlaceholder("C")
-  val D = TermVariablePlaceholder("D")
-  val R = TermVariablePlaceholder("R")
-  val X = TermVariablePlaceholder("X")
-  val n = TermVariablePlaceholder("n")
-  val F = TermVariablePlaceholder("F")
-  val x = TermVariablePlaceholder("x")
+  val a = TermVariablePlaceholder("a", 0)
+  val b = TermVariablePlaceholder("b", 1)
+  val c = TermVariablePlaceholder("c", 2)
+  val d = TermVariablePlaceholder("d", 3)
+
+  protected val R = TermVariablePlaceholder("R", 0)
+  protected val f = TermVariablePlaceholder("f", 0)
+  protected val A = TermVariablePlaceholder("A", 1)
+  protected val B = TermVariablePlaceholder("B", 2)
 
   implicit def placeholderToVariable[T <: ExpressionVariable[_ <: Expression]](placeholder: Placeholder[T]): T = placeholder.toVariable
-  implicit def placeholderToString(placeholder: Placeholder[_]): String = placeholder.name
+
+  def getVariableDefinitionsFromStatements(statements: Seq[Statement]): VariableDefinitions = {
+    val usedVariables = statements.usedVariables
+    val statementVariableDefinitions = Seq(φ, ψ, χ, ω).take((usedVariables.statements.variableIndices.map(_ + 1) :+ 0).max).map { p =>
+      val arity = usedVariables.statements.find(_.index == p.index).map(_.arity).getOrElse(0)
+      VariableDefinition(p.name, arity, Nil)
+    }
+    val termVariableDefinitions = Seq(a, b, c, d).take((usedVariables.terms.variableIndices.map(_ + 1) :+ 0).max).map { p =>
+      val arity = usedVariables.terms.find(_.index == p.index).map(_.arity).getOrElse(0)
+      VariableDefinition(p.name, arity, Nil)
+    }
+    VariableDefinitions(statementVariableDefinitions, termVariableDefinitions)
+  }
+  def getVariableDefinitions(statements: Seq[(StatementVariablePlaceholder, Int)], terms: Seq[(TermVariablePlaceholder, Int)]): VariableDefinitions = {
+    VariableDefinitions(
+      statements.map { case (v, arity) => VariableDefinition(v.name, arity, Nil) },
+      terms.map { case (v, arity) => VariableDefinition(v.name, arity, Nil) })
+  }
 }
 
 trait TestExpressionDefinitions extends TestVariableDefinitions {
+
   private def connective(
     symbol: String,
     size: Int,
@@ -140,7 +156,15 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
     format: Format.Basic,
     premises: Seq[Statement],
     definition: Statement
-  ): TermDefinitionEntry = TermDefinitionEntry(symbol, Nil, components, None, None, format, premises, definition, None, Nil, Nil)
+  ): TermDefinitionEntry = simpleTermDefinition(symbol, Nil, components, format, premises, definition)
+  def simpleTermDefinition(
+    symbol: String,
+    boundVariables: Seq[String],
+    components: Seq[ComponentType],
+    format: Format.Basic,
+    premises: Seq[Statement],
+    definition: Statement
+  ): TermDefinitionEntry = TermDefinitionEntry(symbol, boundVariables, components, None, None, format, premises, definition, None, Nil, Nil)
 
   val Implication = connective("→", 2, None).copy(attributes = Seq("deduction"))
   val DeductionDefinition = definitions.DeductionDefinition(Implication)
@@ -166,7 +190,7 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
 
 
   val BlankDefinition = DefinedStatement(Nil, connective("false", 0, None))(Nil)
-  val EmptySetDefinition = simpleTermDefinition("∅", Nil, Format.default(0), Nil, ForAll("x")(Negation(ElementOf(FunctionParameter(0, 0), FunctionParameter(0, 1)))))
+  val EmptySetDefinition = simpleTermDefinition("∅", Nil, Format.default(0), Nil, ForAll("x")(Negation(ElementOf($, $.^))))
   val EmptySet = DefinedTerm(Nil, EmptySetDefinition)(Nil)
 
   val PowerSet = simpleTermDefinition("powerSet", Seq(a), Format.Explicit("𝒫%1", "𝒫a", 2, false, true), Nil, ForAll("y")(Equivalence(ElementOf($, $.^), Subset($, a)))).copy(explicitName = Some("Power Set"))
@@ -178,85 +202,36 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
   val First = simpleTermDefinition("first", Seq(a), Format.Explicit("%1_0", "a_0", 2, requiresBrackets = false, requiresComponentBrackets = true))
   val Second = simpleTermDefinition("second", Seq(a), Format.Explicit("%1_1", "a_10", 2, requiresBrackets = false, requiresComponentBrackets = true))
 
-  val Union = simpleTermDefinition("union", Seq(A), Format.Explicit("⋃A", Seq("union", "A"), false, true))
+  val Union = simpleTermDefinition("union", Seq(a), Format.Explicit("⋃a", Seq("union", "a"), false, true))
 
-  val Comprehension = TermDefinitionEntry(
+  val Comprehension = simpleTermDefinition(
     "comprehension",
-    Seq("a"),
-    Seq(ComponentType.TermComponent("A", Nil), ComponentType.StatementComponent("φ", Seq(ComponentArgument("a", 0)))),
-    None,
-    None,
-    Format.Explicit("{ a ∈ A | φ }", Seq("comprehension", "a", "A", "φ"), false, true),
+    Seq("x"),
+    Seq(a, φ.toComponent(ComponentArgument("x", 0))),
+    Format.Explicit("{ x ∈ a | φ }", Seq("comprehension", "x", "a", "φ"), false, true),
     Nil,
-    ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, A), φ($)))),
-    None,
-    Nil,
-    Nil)
+    ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, a), φ($)))))
 
-  val PairSet = TypeDefinition("pairSet", "X", None, None, ForAllIn("x", X)(Exists("a")(Exists("b")(Equals($.^^, Pair($.^, $))))))
-  val Domain = simpleTermDefinition("domain", Seq(X), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(X)), Exists("b")(ElementOf(Pair($.^, $), X)))))
-  val Range = simpleTermDefinition("range", Seq(X), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(X)), Exists("a")(ElementOf(Pair($, $.^), X)))))
+  val PairSet = TypeDefinition("pairSet", "a", None, None, ForAllIn("x", a)(Exists("a")(Exists("b")(Equals($.^^, Pair($.^, $))))))
+  val Domain = simpleTermDefinition("domain", Seq(a), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(a)), Exists("b")(ElementOf(Pair($.^, $), a)))))
+  val Range = simpleTermDefinition("range", Seq(a), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(a)), Exists("a")(ElementOf(Pair($, $.^), a)))))
   val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true))), None, Subset(R, Product(A, A)))
   val Function = TypeDefinition("function", "f", None, None, Conjunction(PairSet(f), ForAllIn("a", Domain(f))(ExistsUnique("b")(ElementOf(Pair($.^, $), f)))))
   val FunctionFrom = TypeQualifierDefinition("from", Function, Qualifier(Seq("A", "B"), Format.Explicit("from A B", Seq("A", "B"), true, true)), None, Conjunction(Equals(Domain(f), A), Subset(Range(f), B)), ConjunctionDefinition)
-  val BaseSet = simpleTermDefinition("baseSet", Seq(X), Format.default(1), Nil, Equals($, Domain(Domain(X))))
+  val BaseSet = simpleTermDefinition("baseSet", Seq(a), Format.default(1), Nil, Equals($, Domain(Domain(a))))
   val BinaryOperation = TypeDefinition("binaryOperation", "f", None, None, BlankDefinition)
   val BinaryOperationOn = TypeQualifierDefinition("on", BinaryOperation, Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true)), None, Equals(BaseSet(f), A), ConjunctionDefinition)
 
-  val NaturalsDefinition = TermDefinitionEntry(
-    "ℕ",
-    Nil,
-    Nil,
-    None,
-    None,
-    Format.default(Nil, Nil),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
+  val NaturalsDefinition = simpleTermDefinition("ℕ", Nil, Format.default(0))
   val Naturals = DefinedTerm(Nil, NaturalsDefinition)(Nil)
-  val Successor = TermDefinitionEntry(
-    "successor",
-    Nil,
-    Seq(a),
-    None,
-    None,
-    Format.Explicit("a^+", Seq("successor", "a"), requiresBrackets = false, requiresComponentBrackets = true),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
-  val ZeroDefinition = TermDefinitionEntry(
-    "0",
-    Nil,
-    Nil,
-    Some("ℕ"),
-    None,
-    Format.default(Nil, Nil),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
+  val Successor = simpleTermDefinition("successor", Seq(a), Format.Explicit("a^+", Seq("successor", "a"), requiresBrackets = false, requiresComponentBrackets = true))
+  val ZeroDefinition = simpleTermDefinition("0", Nil, Format.default(Nil, Nil)).withDisambiguator(Some("ℕ"))
   val Zero = DefinedTerm(Nil, ZeroDefinition)(Nil)
-  val OneDefinition = TermDefinitionEntry(
-    "1",
-    Nil,
-    Nil,
-    Some("ℕ"),
-    None,
-    Format.default(Nil, Nil),
-    Nil,
-    Equals($, Successor(Zero)),
-    None,
-    Nil,
-    Nil)
+  val OneDefinition = simpleTermDefinition("1", Nil, Format.default(Nil, Nil)).withDisambiguator(Some("ℕ"))
   val One = DefinedTerm(Nil, OneDefinition)(Nil)
-  val AdditionDefinition = simpleTermDefinition("+", Nil, Format.default(0)).copy(disambiguator = Some("ℕ"))
+  val AdditionDefinition = simpleTermDefinition("+", Nil, Format.default(0)).withDisambiguator(Some("ℕ"))
   val Addition = DefinedTerm(Nil, AdditionDefinition)(Nil)
-  val MultiplicationDefinition = simpleTermDefinition("×", Nil, Format.default(0), Nil, BlankDefinition).copy(disambiguator = Some("ℕ"))
+  val MultiplicationDefinition = simpleTermDefinition("×", Nil, Format.default(0), Nil, BlankDefinition).withDisambiguator(Some("ℕ"))
   val Multiplication = DefinedTerm(Nil, MultiplicationDefinition)(Nil)
   val Apply = TermDefinitionEntry(
     "apply",
@@ -320,7 +295,7 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
 
 trait TestInferenceDefinitions extends TestExpressionDefinitions {
   def createInference(name: String, premises: Seq[Statement], conclusion: Statement): Axiom = {
-    Axiom(name, VariableDefinitions.fromStatements(premises :+ conclusion), premises, conclusion)
+    Axiom(name, getVariableDefinitionsFromStatements(premises :+ conclusion), premises, conclusion)
   }
 
   val specification = createInference("Specification", Seq(ForAll("x")(φ($))), φ(a))
@@ -350,18 +325,18 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
   val reverseNegatedEquality = createInference("Reverse Negated Equality", Seq(Negation(Equals(a, b))), Negation(Equals(b, a)))
   val equalityIsTransitive = createInference("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
   val substitutionOfEquals = createInference("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
-  val substitutionOfEqualsIntoFunction = createInference("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(F(a), F(b)))
+  val substitutionOfEqualsIntoFunction = createInference("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(c(a), c(b)))
   val equivalenceOfSubstitutedEquals = createInference("Equivalence of Substituted Equals", Seq(Equals(a, b)), Equivalence(φ(a), φ(b)))
 
   val membershipConditionForSingleton = createInference("Membership Condition for Singleton", Nil, ForAll("x")(Equivalence(ElementOf($, Singleton(a)), Equals($, a))))
-  val elementOfCartesianProductFromCoordinates = createInference("Element of Cartesian Product from Coordinates", Seq(ElementOf(a, Product(A, B))), Equals(a, Pair(First(a), Second(a))))
-  val firstCoordinateOfOrderedPairInCartesianProduct = createInference("First Coordinate of Ordered Pair in Cartesian Product", Seq(ElementOf(Pair(a, b), Product(A, B))), ElementOf(a, A))
-  val firstCoordinateOfElementOfCartesianProduct = createInference("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(First(a), A))
-  val secondCoordinateOfElementOfCartesianProduct = createInference("Second Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(A, B))), ElementOf(Second(a), B))
-  val orderedPairIsElementOfCartesianProduct = createInference("Ordered Pair Is Element of Cartesian Product", Seq(ElementOf(a, A), ElementOf(b, B)), ElementOf(Pair(a, b), Product(A, B)))
+  val elementOfCartesianProductFromCoordinates = createInference("Element of Cartesian Product from Coordinates", Seq(ElementOf(a, Product(b, c))), Equals(a, Pair(First(a), Second(a))))
+  val firstCoordinateOfOrderedPairInCartesianProduct = createInference("First Coordinate of Ordered Pair in Cartesian Product", Seq(ElementOf(Pair(a, b), Product(c, d))), ElementOf(a, c))
+  val firstCoordinateOfElementOfCartesianProduct = createInference("First Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(b, c))), ElementOf(First(a), b))
+  val secondCoordinateOfElementOfCartesianProduct = createInference("Second Coordinate of Element of Cartesian Product", Seq(ElementOf(a, Product(b, c))), ElementOf(Second(a), c))
+  val orderedPairIsElementOfCartesianProduct = createInference("Ordered Pair Is Element of Cartesian Product", Seq(ElementOf(a, b), ElementOf(c, d)), ElementOf(Pair(a, c), Product(b, d)))
   val firstElement = createInference("First Element", Nil, Equals(First(Pair(a, b)), a))
 
-  val functionApplicationIsElementOfRange = createInference("Function Application Is Element of Range", Seq(Function(f), ElementOf(a, Domain(f))), ElementOf(Apply(f, a), Range(f)))
+  val functionApplicationIsElementOfRange = createInference("Function Application Is Element of Range", Seq(Function(f), ElementOf(A, Domain(f))), ElementOf(Apply(f, A), Range(f)))
 
   val zeroIsANaturalNumber = createInference("0 Is a Natural Number", Nil, ElementOf(Zero, Naturals))
   val oneIsANaturalNumber = createInference("1 Is a Natural Number", Nil, ElementOf(One, Naturals))
@@ -394,7 +369,7 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
 trait StepHelpers extends TestVariableDefinitions {
 
   def assertion(inference: Inference, statements: Seq[Statement], terms: Seq[Term]): SubstitutionContext => Step.Assertion = { substitutionContext =>
-    Step.Assertion.forInference(inference, inference.requiredSubstitutions.fill(statements, terms))(substitutionContext).get
+    Step.Assertion.forInference(inference, Substitutions(statements, terms))(substitutionContext).get
   }
   def generalization(variableName: String, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Generalization = sc => Step.Generalization(variableName, steps(SubstitutionContext.withExtraParameter(sc)), GeneralizationDefinition)
   def deduction(antecedent: Statement, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Deduction = sc => Step.Deduction(antecedent, steps(sc), DeductionDefinition)
@@ -402,7 +377,7 @@ trait StepHelpers extends TestVariableDefinitions {
   def elided(inference: Inference, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Elided = sc => Step.Elided(steps(sc), Some(inference.summary), None)
   def elided(description: String, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Elided = sc => Step.Elided(steps(sc), None, Some(description))
 
-  def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = _ => (0 until number).map(i => Step.Target(StatementVariable(s"φ_$i")))
+  def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = _ => (0 until number).map(i => Step.Target(StatementVariable(i)))
 
   implicit class StepsConstructor(createSteps: SubstitutionContext => Seq[Step]) {
     def :+(other: SubstitutionContext => Step): SubstitutionContext => Seq[Step] = { sc =>
@@ -417,7 +392,7 @@ trait StepHelpers extends TestVariableDefinitions {
 object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with StepHelpers {
   import org.specs2.matcher.Matchers._
   import org.specs2.matcher.MustExpectations._
-  implicit val defaultEntryContext: EntryContext = EntryContext(
+  val defaultEntryContext: EntryContext = EntryContext(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAllDefinition, ExistsDefinition, ExistsUniqueDefinition,
@@ -454,8 +429,8 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
   }
 
-  def createBaseStepContext(premises: Seq[Statement], otherStatements: Seq[Statement]): StepContext = {
-    StepContext.withPremisesAndVariables(premises, VariableDefinitions.fromStatements(premises ++ otherStatements))
+  def createBaseStepContext(premises: Seq[Statement], otherStatements: Seq[Statement])(implicit variableDefinitions: VariableDefinitions): StepContext = {
+    StepContext.withPremisesAndVariables(premises, variableDefinitions)
   }
 
   def beValidTheorem(implicit entryContext: EntryContext): Matcher[Theorem] = (theorem: Theorem) => {
@@ -465,24 +440,24 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     parsedTheorem.isComplete(new Definitions(entryContext)) must beTrue
   }
 
-  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement)(implicit entryContext: EntryContext): Matcher[Seq[Step]] = {
+  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
     beValidTheorem(entryContext) ^^ { steps: Seq[Step] => {
       Theorem(
         "Test Theorem",
-        VariableDefinitions.fromStatements(premises :+ conclusion),
+        variableDefinitions,
         premises,
         conclusion,
         Seq(Theorem.Proof(steps)))
     }}
   }
 
-  def beStepThatMakesValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int = 0)(implicit stepContext: StepContext): Matcher[Step] = {
+  def beStepThatMakesValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int = 0)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Matcher[Step] = {
     beStepsThatMakeValidTheorem(premises, conclusion, depth) ^^ { step: Step => Seq(step) }
   }
 
-  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit entryContext: EntryContext): Matcher[Seq[Step]] = {
+  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
     if (depth == 0)
-      beStepsThatMakeValidTheorem(premises, conclusion)(entryContext)
+      beStepsThatMakeValidTheorem(premises, conclusion)
     else {
       def generalizeOnce(statement: Statement, i: Int): Statement = ForAll(s"x_$i")(statement)
       def generalizeToDepth(statement: Statement, parameterDepth: Int): Statement = (0 until parameterDepth).foldLeft(statement)(generalizeOnce)
@@ -491,9 +466,9 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
           statement,
           specification.summary,
           Seq(Premise.Pending(generalizeOnce(statement, parameterDepth).insertExternalParameters(1))),
-          Substitutions(statements = Map(φ -> (1, statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get)), terms = Map(a -> (0, FunctionParameter(0, 0)))))
+          Substitutions(Seq(statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get), Seq($)))
       }
-      beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth))(entryContext) ^^ { steps: Seq[Step] =>
+      beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>
         (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.Generalization(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, GeneralizationDefinition))}
       }
     }
