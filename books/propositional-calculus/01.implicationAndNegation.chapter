@@ -2,8 +2,8 @@ We start by introducing our two fundamental connectives, → and ¬, and proving
 
 axiom Repetition
 statementVariables(φ 0)
-premise φ
-conclusion φ
+premise s0
+conclusion s0
 
 statement → (φ ψ)
   shorthand (imp)
@@ -11,28 +11,28 @@ statement → (φ ψ)
 
 theorem Implication Is Reflexive
 statementVariables(φ 0)
-conclusion → φ φ
+conclusion → s0 s0
 {
-  assume φ {
-    prove φ 99c9b30776361008f1532f8942d7a8bd8c54fa9a4c4784fd0b91d73187974c76 (φ) () 0a
+  assume s0 {
+    prove s0 99c9b30776361008f1532f8942d7a8bd8c54fa9a4c4784fd0b91d73187974c76 (s0) () 0a
   }
 }
 
 axiom Modus Ponens
 statementVariables(φ 0, ψ 0)
-premise → φ ψ
-premise φ
-conclusion ψ
+premise → s0 s1
+premise s0
+conclusion s1
 
 theorem Implication Is Transitive
 statementVariables(φ 0, ψ 0, χ 0)
-premise → φ ψ
-premise → ψ χ
-conclusion → φ χ
+premise → s0 s1
+premise → s1 s2
+conclusion → s0 s2
 {
-  assume φ {
-    prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ψ) () p0 0a
-    prove χ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (ψ, χ) () p1 0.0
+  assume s0 {
+    prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s1) () p0 0a
+    prove s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s1, s2) () p1 0.0
   }
 }
 
@@ -40,196 +40,196 @@ statement ⊥ ()
   shorthand (false)
 
 statement ¬ (φ)
-  definition (→ φ ⊥)
+  definition (→ s0 ⊥)
   shorthand (not)
 
 axiom Remove Double Negative
 statementVariables(φ 0)
-premise ¬ ¬ φ
-conclusion φ
+premise ¬ ¬ s0
+conclusion s0
 
 theorem Self-Contradiction
 statementVariables(φ 0)
-premise → ¬ φ ⊥
-conclusion φ
+premise → ¬ s0 ⊥
+conclusion s0
 {
-  prove ¬ ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (¬ φ) () p0
-  prove φ 3d58b767b02b9b674b7902caa2ce63a1d81229ec46a079313659f847b3689d92 (φ) () 0
+  prove ¬ ¬ s0 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (¬ s0) () p0
+  prove s0 3d58b767b02b9b674b7902caa2ce63a1d81229ec46a079313659f847b3689d92 (s0) () 0
 }
 
 theorem Contradiction
 statementVariables(φ 0)
-premise φ
-premise ¬ φ
+premise s0
+premise ¬ s0
 conclusion ⊥
 {
-  prove → φ ⊥ 1e5738d7b76cfb85f824e6d7bc266b9a30a8a10276d00741a9ae3ed364cf321e (φ) () p1
-  prove ⊥ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ⊥) () 0 p0
+  prove → s0 ⊥ 1e5738d7b76cfb85f824e6d7bc266b9a30a8a10276d00741a9ae3ed364cf321e (s0) () p1
+  prove ⊥ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, ⊥) () 0 p0
 }
 
 theorem Principle of Explosion
 statementVariables(φ 0)
 premise ⊥
-conclusion φ
+conclusion s0
 {
-  assume ¬ φ {
+  assume ¬ s0 {
     prove ⊥ 99c9b30776361008f1532f8942d7a8bd8c54fa9a4c4784fd0b91d73187974c76 (⊥) () p0
   }
-  prove φ e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (φ) () 0
+  prove s0 e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (s0) () 0
 }
 
 theorem Principle of Explosion
 statementVariables(φ 0, ψ 0)
-premise φ
-premise ¬ φ
-conclusion ψ
+premise s0
+premise ¬ s0
+conclusion s1
 {
-  prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (φ) () p0 p1
-  prove ψ 71bab335d63296a8d7be6c522edb7ab345d5178314b0f34e68931b80634f0ce7 (ψ) () 0
+  prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (s0) () p0 p1
+  prove s1 71bab335d63296a8d7be6c522edb7ab345d5178314b0f34e68931b80634f0ce7 (s1) () 0
 }
 
 theorem Add Double Negative
 statementVariables(φ 0)
-premise φ
-conclusion ¬ ¬ φ
+premise s0
+conclusion ¬ ¬ s0
 {
-  assume ¬ φ {
-    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (φ) () p0 0a
+  assume ¬ s0 {
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (s0) () p0 0a
   }
-  prove ¬ ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (¬ φ) () 0
+  prove ¬ ¬ s0 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (¬ s0) () 0
 }
 
 theorem Proof by Self-Contradiction
 statementVariables(φ 0)
-premise → φ ¬ φ
-conclusion ¬ φ
+premise → s0 ¬ s0
+conclusion ¬ s0
 {
-  assume φ {
-    prove ¬ φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ¬ φ) () p0 0a
-    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (φ) () 0a 0.0
+  assume s0 {
+    prove ¬ s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, ¬ s0) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (s0) () 0a 0.0
   }
-  prove ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (φ) () 0
+  prove ¬ s0 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (s0) () 0
 }
 
 theorem Proof by Self-Contradiction
 statementVariables(φ 0)
-premise → ¬ φ φ
-conclusion φ
+premise → ¬ s0 s0
+conclusion s0
 {
-  assume ¬ φ {
-    prove φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ φ, φ) () p0 0a
-    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (φ) () 0.0 0a
+  assume ¬ s0 {
+    prove s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ s0, s0) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (s0) () 0.0 0a
   }
-  prove φ e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (φ) () 0
+  prove s0 e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (s0) () 0
 }
 
 theorem Modus Tollens
 statementVariables(φ 0, ψ 0)
-premise → φ ψ
-premise ¬ ψ
-conclusion ¬ φ
+premise → s0 s1
+premise ¬ s1
+conclusion ¬ s0
 {
-  assume φ {
-    prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ψ) () p0 0a
-    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (ψ) () 0.0 p1
+  assume s0 {
+    prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s1) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (s1) () 0.0 p1
   }
-  prove ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (φ) () 0
+  prove ¬ s0 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (s0) () 0
 }
 
 theorem Modus Tollens
 statementVariables(φ 0, ψ 0)
-premise → φ ¬ ψ
-premise ψ
-conclusion ¬ φ
+premise → s0 ¬ s1
+premise s1
+conclusion ¬ s0
 {
-  assume φ {
-    prove ¬ ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ¬ ψ) () p0 0a
-    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (ψ) () p1 0.0
+  assume s0 {
+    prove ¬ s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, ¬ s1) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (s1) () p1 0.0
   }
-  prove ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (φ) () 0
+  prove ¬ s0 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (s0) () 0
 }
 
 theorem Modus Tollens
 statementVariables(φ 0, ψ 0)
-premise → ¬ φ ψ
-premise ¬ ψ
-conclusion φ
+premise → ¬ s0 s1
+premise ¬ s1
+conclusion s0
 {
-  assume ¬ φ {
-    prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ φ, ψ) () p0 0a
-    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (ψ) () 0.0 p1
+  assume ¬ s0 {
+    prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ s0, s1) () p0 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (s1) () 0.0 p1
   }
-  prove φ e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (φ) () 0
+  prove s0 e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (s0) () 0
 }
 
 theorem Proof by Exclusive Cases
 statementVariables(φ 0, ψ 0)
-premise → φ ψ
-premise → ¬ φ ψ
-conclusion ψ
+premise → s0 s1
+premise → ¬ s0 s1
+conclusion s1
 {
-  assume ¬ ψ {
-    prove ¬ φ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (φ, ψ) () p0 0a
-    prove ¬ ¬ φ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (¬ φ, ψ) () p1 0a
-    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (¬ φ) () 0.0 0.1
+  assume ¬ s1 {
+    prove ¬ s0 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (s0, s1) () p0 0a
+    prove ¬ ¬ s0 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (¬ s0, s1) () p1 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (¬ s0) () 0.0 0.1
   }
-  prove ψ e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (ψ) () 0
+  prove s1 e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (s1) () 0
 }
 
 theorem Anything Implies A True Statement
 statementVariables(φ 0, ψ 0)
-premise φ
-conclusion → ψ φ
+premise s0
+conclusion → s1 s0
 {
-  assume ψ {
-    prove φ 99c9b30776361008f1532f8942d7a8bd8c54fa9a4c4784fd0b91d73187974c76 (φ) () p0
+  assume s1 {
+    prove s0 99c9b30776361008f1532f8942d7a8bd8c54fa9a4c4784fd0b91d73187974c76 (s0) () p0
   }
 }
 
 theorem A False Statement Implies Anything
 statementVariables(φ 0, ψ 0)
-premise ¬ φ
-conclusion → φ ψ
+premise ¬ s0
+conclusion → s0 s1
 {
-  assume φ {
-    prove ψ 56ea0c2f6150a1c8039e028ea603ffd99cd1c5d6c0825b24f59c86a3e3ced6a1 (φ, ψ) () 0a p0
+  assume s0 {
+    prove s1 56ea0c2f6150a1c8039e028ea603ffd99cd1c5d6c0825b24f59c86a3e3ced6a1 (s0, s1) () 0a p0
   }
 }
 
 theorem A False Statement Implies Anything
 statementVariables(φ 0, ψ 0)
-premise φ
-conclusion → ¬ φ ψ
+premise s0
+conclusion → ¬ s0 s1
 {
-  assume ¬ φ {
-    prove ψ 56ea0c2f6150a1c8039e028ea603ffd99cd1c5d6c0825b24f59c86a3e3ced6a1 (φ, ψ) () p0 0a
+  assume ¬ s0 {
+    prove s1 56ea0c2f6150a1c8039e028ea603ffd99cd1c5d6c0825b24f59c86a3e3ced6a1 (s0, s1) () p0 0a
   }
 }
 
 theorem Add Contraposition
 statementVariables(φ 0, ψ 0)
-premise → φ ψ
-conclusion → ¬ ψ ¬ φ
+premise → s0 s1
+conclusion → ¬ s1 ¬ s0
 {
-  assume ¬ ψ {
-    assume φ {
-      prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ψ) () p0 0.0a
-      prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (ψ) () 0.0.0 0a
+  assume ¬ s1 {
+    assume s0 {
+      prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s1) () p0 0.0a
+      prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (s1) () 0.0.0 0a
     }
-    prove ¬ φ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (φ) () 0.0
+    prove ¬ s0 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (s0) () 0.0
   }
 }
 
 theorem Remove Contraposition
 statementVariables(φ 0, ψ 0)
-premise → ¬ φ ¬ ψ
-conclusion → ψ φ
+premise → ¬ s0 ¬ s1
+conclusion → s1 s0
 {
-  assume ψ {
-    assume ¬ φ {
-      prove ¬ ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ φ, ¬ ψ) () p0 0.0a
-      prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (ψ) () 0a 0.0.0
+  assume s1 {
+    assume ¬ s0 {
+      prove ¬ s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ s0, ¬ s1) () p0 0.0a
+      prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (s1) () 0a 0.0.0
     }
-    prove φ e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (φ) () 0.0
+    prove s0 e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (s0) () 0.0
   }
 }

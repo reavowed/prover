@@ -2,60 +2,60 @@ Define the power set of a set - the set of all its subsets.
 
 axiom Axiom of Power Set
 termVariables(a 0)
-conclusion ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a
+conclusion ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 t0
 
 theorem Power Sets Are Unique
 termVariables(a 0)
-conclusion ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a
+conclusion ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 t0
 {
-  prove ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a 1e3d00be51177230dc14fbd10a0e4332044f9b0e4d262c86abeedc12024722d2 () (a)
-  prove ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 a 288a339c30f6b561d0a86d8a4ad51c2acccaa964cc586fd001f47dde466ba92c (⊆ $0 a) () 0
+  prove ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 t0 1e3d00be51177230dc14fbd10a0e4332044f9b0e4d262c86abeedc12024722d2 () (t0)
+  prove ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 t0 288a339c30f6b561d0a86d8a4ad51c2acccaa964cc586fd001f47dde466ba92c (⊆ $0 t0) () 0
 }
 
 term powerSet (a)
   name (Power Set)
   format (𝒫a)
-  (∀ x ↔ ∈ $0 $$0 ⊆ $0 a)
+  (∀ x ↔ ∈ $0 $$0 ⊆ $0 t0)
   shorthand (power)
 
 theorem Subset Is in Power Set
 termVariables(b 0, a 0)
-premise ⊆ b a
-conclusion ∈ b powerSet a
+premise ⊆ t0 t1
+conclusion ∈ t0 powerSet t1
 {
-  prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a ab22215b9e9ab2f32e4fdd795de72aa621ea1c776d69a6d5d3692469ba4ecdcf () (a)
+  prove ∀ x ↔ ∈ $0 powerSet t1 ⊆ $0 t1 ab22215b9e9ab2f32e4fdd795de72aa621ea1c776d69a6d5d3692469ba4ecdcf () (t1)
   elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-    prove ↔ ∈ b powerSet a ⊆ b a b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 powerSet a ⊆ $0 a) (b) 0
-    prove → ⊆ b a ∈ b powerSet a 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ b powerSet a, ⊆ b a) () 1.0
-    prove ∈ b powerSet a 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (⊆ b a, ∈ b powerSet a) () 1.1 p0
+    prove ↔ ∈ t0 powerSet t1 ⊆ t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 powerSet t1 ⊆ $0 t1) (t0) 0
+    prove → ⊆ t0 t1 ∈ t0 powerSet t1 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 powerSet t1, ⊆ t0 t1) () 1.0
+    prove ∈ t0 powerSet t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (⊆ t0 t1, ∈ t0 powerSet t1) () 1.1 p0
   }
 }
 
 theorem Element of Power Set Is Subset
 termVariables(b 0, a 0)
-premise ∈ b powerSet a
-conclusion ⊆ b a
+premise ∈ t0 powerSet t1
+conclusion ⊆ t0 t1
 {
-  prove ∀ x ↔ ∈ $0 powerSet a ⊆ $0 a ab22215b9e9ab2f32e4fdd795de72aa621ea1c776d69a6d5d3692469ba4ecdcf () (a)
+  prove ∀ x ↔ ∈ $0 powerSet t1 ⊆ $0 t1 ab22215b9e9ab2f32e4fdd795de72aa621ea1c776d69a6d5d3692469ba4ecdcf () (t1)
   elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-    prove ↔ ∈ b powerSet a ⊆ b a b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 powerSet a ⊆ $0 a) (b) 0
-    prove → ∈ b powerSet a ⊆ b a 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ b powerSet a, ⊆ b a) () 1.0
-    prove ⊆ b a 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ b powerSet a, ⊆ b a) () 1.1 p0
+    prove ↔ ∈ t0 powerSet t1 ⊆ t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 powerSet t1 ⊆ $0 t1) (t0) 0
+    prove → ∈ t0 powerSet t1 ⊆ t0 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ t0 powerSet t1, ⊆ t0 t1) () 1.0
+    prove ⊆ t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 powerSet t1, ⊆ t0 t1) () 1.1 p0
   }
 }
 
 theorem ∅ Is in Any Power Set
 termVariables(a 0)
-conclusion ∈ ∅ powerSet a
+conclusion ∈ ∅ powerSet t0
 {
-  prove ⊆ ∅ a e80dbd150e124b5ae524c59ff43b8233ff5c3e64ab4b90b524f50be0c81732c9 () (a)
-  prove ∈ ∅ powerSet a 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (∅, a) 0
+  prove ⊆ ∅ t0 e80dbd150e124b5ae524c59ff43b8233ff5c3e64ab4b90b524f50be0c81732c9 () (t0)
+  prove ∈ ∅ powerSet t0 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (∅, t0) 0
 }
 
 theorem Any Set Is in Its Own Power Set
 termVariables(a 0)
-conclusion ∈ a powerSet a
+conclusion ∈ t0 powerSet t0
 {
-  prove ⊆ a a fff98b9c0fc51a3a1b88a451546bf03f8a2295c91df4fb09494bfedf71c31a8b () (a)
-  prove ∈ a powerSet a 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (a, a) 0
+  prove ⊆ t0 t0 fff98b9c0fc51a3a1b88a451546bf03f8a2295c91df4fb09494bfedf71c31a8b () (t0)
+  prove ∈ t0 powerSet t0 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (t0, t0) 0
 }

@@ -4,39 +4,39 @@ comment A set of more complicated structural facts that are surprisingly useful 
 
 theorem First Part of Disjoined Conjunct Equivalence
 statementVariables(φ 0, χ 0, ψ 0, ω 0)
-premise φ
-premise ¬ χ
-conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ψ
+premise s0
+premise ¬ s1
+conclusion ↔ ∨ ∧ s0 s2 ∧ s1 s3 s2
 {
-  assume ∧ φ ψ {
-    prove ψ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (φ, ψ) () 0a
+  assume ∧ s0 s2 {
+    prove s2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (s0, s2) () 0a
   }
-  assume ∧ χ ω {
-    prove ψ 56ea0c2f6150a1c8039e028ea603ffd99cd1c5d6c0825b24f59c86a3e3ced6a1 (χ, ψ) () 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p1
+  assume ∧ s1 s3 {
+    prove s2 56ea0c2f6150a1c8039e028ea603ffd99cd1c5d6c0825b24f59c86a3e3ced6a1 (s1, s2) () 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p1
   }
-  assume ∨ ∧ φ ψ ∧ χ ω {
-    prove ψ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∧ φ ψ, ∧ χ ω, ψ) () 2a 0 1
+  assume ∨ ∧ s0 s2 ∧ s1 s3 {
+    prove s2 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∧ s0 s2, ∧ s1 s3, s2) () 2a 0 1
   }
-  assume ψ {
+  assume s2 {
     elided 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 {
-      prove ∧ φ ψ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (φ, ψ) () p0 3a
-      prove ∨ ∧ φ ψ ∧ χ ω 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ φ ψ, ∧ χ ω) () 3.0.0
+      prove ∧ s0 s2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s2) () p0 3a
+      prove ∨ ∧ s0 s2 ∧ s1 s3 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ s0 s2, ∧ s1 s3) () 3.0.0
     }
   }
-  prove ↔ ∨ ∧ φ ψ ∧ χ ω ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ ∧ φ ψ ∧ χ ω, ψ) () 2 3
+  prove ↔ ∨ ∧ s0 s2 ∧ s1 s3 s2 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ ∧ s0 s2 ∧ s1 s3, s2) () 2 3
 }
 
 theorem Second Part of Disjoined Conjunct Equivalence
 statementVariables(φ 0, χ 0, ψ 0, ω 0)
-premise ¬ φ
-premise χ
-conclusion ↔ ∨ ∧ φ ψ ∧ χ ω ω
+premise ¬ s0
+premise s1
+conclusion ↔ ∨ ∧ s0 s2 ∧ s1 s3 s3
 {
-  prove ↔ ∨ ∧ χ ω ∧ φ ψ ω bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 (χ, φ, ω, ψ) () p1 p0
-  prove ↔ ∨ ∧ χ ω ∧ φ ψ ∨ ∧ φ ψ ∧ χ ω 6a69a6d59764ffe4b9a2eeacc0888588de474f47ce04d36054eebbb1c3156ec2 (∧ χ ω, ∧ φ ψ) ()
+  prove ↔ ∨ ∧ s1 s3 ∧ s0 s2 s3 bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 (s1, s0, s3, s2) () p1 p0
+  prove ↔ ∨ ∧ s1 s3 ∧ s0 s2 ∨ ∧ s0 s2 ∧ s1 s3 6a69a6d59764ffe4b9a2eeacc0888588de474f47ce04d36054eebbb1c3156ec2 (∧ s1 s3, ∧ s0 s2) ()
   elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
-    prove ↔ ∨ ∧ φ ψ ∧ χ ω ∨ ∧ χ ω ∧ φ ψ aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∨ ∧ χ ω ∧ φ ψ, ∨ ∧ φ ψ ∧ χ ω) () 1
-    prove ↔ ∨ ∧ φ ψ ∧ χ ω ω cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∨ ∧ φ ψ ∧ χ ω, ∨ ∧ χ ω ∧ φ ψ, ω) () 2.0 0
+    prove ↔ ∨ ∧ s0 s2 ∧ s1 s3 ∨ ∧ s1 s3 ∧ s0 s2 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∨ ∧ s1 s3 ∧ s0 s2, ∨ ∧ s0 s2 ∧ s1 s3) () 1
+    prove ↔ ∨ ∧ s0 s2 ∧ s1 s3 s3 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∨ ∧ s0 s2 ∧ s1 s3, ∨ ∧ s1 s3 ∧ s0 s2, s3) () 2.0 0
   }
 }
 
@@ -44,257 +44,257 @@ comment Some tricks to simplify redundant statements.
 
 theorem Remove Redundant Left Conjunct from Equivalence
 statementVariables(φ 0, ψ 0)
-premise → φ ψ
-conclusion ↔ ∧ φ ψ φ
+premise → s0 s1
+conclusion ↔ ∧ s0 s1 s0
 {
-  assume ∧ φ ψ {
-    prove φ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (φ, ψ) () 0a
+  assume ∧ s0 s1 {
+    prove s0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (s0, s1) () 0a
   }
-  assume φ {
-    prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ψ) () p0 1a
-    prove ∧ φ ψ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (φ, ψ) () 1a 1.0
+  assume s0 {
+    prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s1) () p0 1a
+    prove ∧ s0 s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s1) () 1a 1.0
   }
-  prove ↔ ∧ φ ψ φ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ φ ψ, φ) () 0 1
+  prove ↔ ∧ s0 s1 s0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ s0 s1, s0) () 0 1
 }
 
 theorem Remove Redundant Right Conjunct from Equivalence
 statementVariables(φ 0, ψ 0)
-premise → φ ψ
-conclusion ↔ ∧ ψ φ φ
+premise → s0 s1
+conclusion ↔ ∧ s1 s0 s0
 {
-  prove ↔ ∧ φ ψ φ 68984f94705d131cfdb0fcdf9e394d64ef1e83d0ac7e92ef3fe54003f7c6b9e3 (φ, ψ) () p0
-  prove ↔ ∧ φ ψ ∧ ψ φ b356169c385355e0eba377b961d4c0bbbeb649b0834fc1324faa9e712d4db587 (φ, ψ) ()
+  prove ↔ ∧ s0 s1 s0 68984f94705d131cfdb0fcdf9e394d64ef1e83d0ac7e92ef3fe54003f7c6b9e3 (s0, s1) () p0
+  prove ↔ ∧ s0 s1 ∧ s1 s0 b356169c385355e0eba377b961d4c0bbbeb649b0834fc1324faa9e712d4db587 (s0, s1) ()
   elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
-    prove ↔ ∧ ψ φ ∧ φ ψ aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∧ φ ψ, ∧ ψ φ) () 1
-    prove ↔ ∧ ψ φ φ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∧ ψ φ, ∧ φ ψ, φ) () 2.0 0
+    prove ↔ ∧ s1 s0 ∧ s0 s1 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∧ s0 s1, ∧ s1 s0) () 1
+    prove ↔ ∧ s1 s0 s0 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∧ s1 s0, ∧ s0 s1, s0) () 2.0 0
   }
 }
 
 theorem Remove Redundant Left Disjunct from Equivalence
 statementVariables(φ 0, ψ 0)
-premise → φ ψ
-conclusion ↔ ∨ φ ψ ψ
+premise → s0 s1
+conclusion ↔ ∨ s0 s1 s1
 {
-  assume ∨ φ ψ {
-    prove ψ 94a09a0b02449696854fb3127e2d7d09e0aa3166ae4882ec9f7b5ca335baf226 (φ, ψ) () 0a p0
+  assume ∨ s0 s1 {
+    prove s1 94a09a0b02449696854fb3127e2d7d09e0aa3166ae4882ec9f7b5ca335baf226 (s0, s1) () 0a p0
   }
-  assume ψ {
-    prove ∨ φ ψ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (ψ, φ) () 1a
+  assume s1 {
+    prove ∨ s0 s1 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (s1, s0) () 1a
   }
-  prove ↔ ∨ φ ψ ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ φ ψ, ψ) () 0 1
+  prove ↔ ∨ s0 s1 s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ s0 s1, s1) () 0 1
 }
 
 theorem Remove Redundant Right Disjunct from Equivalence
 statementVariables(φ 0, ψ 0)
-premise → φ ψ
-conclusion ↔ ∨ ψ φ ψ
+premise → s0 s1
+conclusion ↔ ∨ s1 s0 s1
 {
-  assume ∨ ψ φ {
-    prove ψ 2b091d19f0efaa3166139e97ec8857e4c44527e25720731f37e4c494b9bfcb69 (ψ, φ) () 0a p0
+  assume ∨ s1 s0 {
+    prove s1 2b091d19f0efaa3166139e97ec8857e4c44527e25720731f37e4c494b9bfcb69 (s1, s0) () 0a p0
   }
-  assume ψ {
-    prove ∨ ψ φ 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (ψ, φ) () 1a
+  assume s1 {
+    prove ∨ s1 s0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (s1, s0) () 1a
   }
-  prove ↔ ∨ ψ φ ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ ψ φ, ψ) () 0 1
+  prove ↔ ∨ s1 s0 s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ s1 s0, s1) () 0 1
 }
 
 theorem Remove False Left Disjunct from Equivalence
 statementVariables(φ 0, ψ 0)
-premise ¬ φ
-conclusion ↔ ∨ φ ψ ψ
+premise ¬ s0
+conclusion ↔ ∨ s0 s1 s1
 {
-  assume ∨ φ ψ {
-    prove ψ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (φ, ψ) () 0a p0
+  assume ∨ s0 s1 {
+    prove s1 f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (s0, s1) () 0a p0
   }
-  assume ψ {
-    prove ∨ φ ψ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (ψ, φ) () 1a
+  assume s1 {
+    prove ∨ s0 s1 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (s1, s0) () 1a
   }
-  prove ↔ ∨ φ ψ ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ φ ψ, ψ) () 0 1
+  prove ↔ ∨ s0 s1 s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ s0 s1, s1) () 0 1
 }
 
 theorem Remove False Right Disjunct From Equivalence
 statementVariables(φ 0, ψ 0)
-premise ¬ φ
-conclusion ↔ ∨ ψ φ ψ
+premise ¬ s0
+conclusion ↔ ∨ s1 s0 s1
 {
-  assume ∨ ψ φ {
-    prove ψ ff2f6dbf1f9d72bed232823eeca33745970df4eadd4712ff5dcc9db8d7b5ad1f (ψ, φ) () 0a p0
+  assume ∨ s1 s0 {
+    prove s1 ff2f6dbf1f9d72bed232823eeca33745970df4eadd4712ff5dcc9db8d7b5ad1f (s1, s0) () 0a p0
   }
-  assume ψ {
-    prove ∨ ψ φ 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (ψ, φ) () 1a
+  assume s1 {
+    prove ∨ s1 s0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (s1, s0) () 1a
   }
-  prove ↔ ∨ ψ φ ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ ψ φ, ψ) () 0 1
+  prove ↔ ∨ s1 s0 s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ s1 s0, s1) () 0 1
 }
 
 comment Adding extra conjunctions to equivalences.
 
 theorem Add Left Conjunction to Equivalence
 statementVariables(φ 0, ψ 0, χ 0)
-premise ↔ φ ψ
-conclusion ↔ ∧ χ φ ∧ χ ψ
+premise ↔ s0 s1
+conclusion ↔ ∧ s2 s0 ∧ s2 s1
 {
-  assume ∧ χ φ {
+  assume ∧ s2 s0 {
     elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-      prove → φ ψ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (φ, ψ) () p0
-      prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ψ) () 0.0.0 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove → s0 s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s0, s1) () p0
+      prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s1) () 0.0.0 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     }
-    prove ∧ χ ψ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (χ, ψ) () 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0
+    prove ∧ s2 s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s2, s1) () 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0
   }
-  assume ∧ χ ψ {
+  assume ∧ s2 s1 {
     elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-      prove → ψ φ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (φ, ψ) () p0
-      prove φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (ψ, φ) () 1.0.0 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove → s1 s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s0, s1) () p0
+      prove s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s1, s0) () 1.0.0 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     }
-    prove ∧ χ φ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (χ, φ) () 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0
+    prove ∧ s2 s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s2, s0) () 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0
   }
-  prove ↔ ∧ χ φ ∧ χ ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ χ φ, ∧ χ ψ) () 0 1
+  prove ↔ ∧ s2 s0 ∧ s2 s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ s2 s0, ∧ s2 s1) () 0 1
 }
 
 theorem Add Right Conjunction to Equivalence
 statementVariables(φ 0, ψ 0, χ 0)
-premise ↔ φ ψ
-conclusion ↔ ∧ φ χ ∧ ψ χ
+premise ↔ s0 s1
+conclusion ↔ ∧ s0 s2 ∧ s1 s2
 {
-  assume ∧ φ χ {
+  assume ∧ s0 s2 {
     elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-      prove → φ ψ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (φ, ψ) () p0
-      prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ψ) () 0.0.0 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      prove → s0 s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s0, s1) () p0
+      prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s1) () 0.0.0 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
     }
-    prove ∧ ψ χ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (ψ, χ) () 0.0 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove ∧ s1 s2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s1, s2) () 0.0 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   }
-  assume ∧ ψ χ {
+  assume ∧ s1 s2 {
     elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-      prove → ψ φ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (φ, ψ) () p0
-      prove φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (ψ, φ) () 1.0.0 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      prove → s1 s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s0, s1) () p0
+      prove s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s1, s0) () 1.0.0 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
     }
-    prove ∧ φ χ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (φ, χ) () 1.0 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove ∧ s0 s2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s2) () 1.0 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   }
-  prove ↔ ∧ φ χ ∧ ψ χ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ φ χ, ∧ ψ χ) () 0 1
+  prove ↔ ∧ s0 s2 ∧ s1 s2 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ s0 s2, ∧ s1 s2) () 0 1
 }
 
 theorem Distribute Implication over Equivalence
 statementVariables(φ 0, ψ 0, χ 0)
-premise → φ ↔ ψ χ
-conclusion ↔ ∧ φ ψ ∧ φ χ
+premise → s0 ↔ s1 s2
+conclusion ↔ ∧ s0 s1 ∧ s0 s2
 {
-  assume ∧ φ ψ {
+  assume ∧ s0 s1 {
     elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-      prove ↔ ψ χ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ↔ ψ χ) () p0 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-      prove → ψ χ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (ψ, χ) () 0.0.0
-      prove χ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (ψ, χ) () 0.0.1 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ↔ s1 s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, ↔ s1 s2) () p0 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      prove → s1 s2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s1, s2) () 0.0.0
+      prove s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s1, s2) () 0.0.1 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     }
-    prove ∧ φ χ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (φ, χ) () 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0
+    prove ∧ s0 s2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s2) () 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0
   }
-  assume ∧ φ χ {
+  assume ∧ s0 s2 {
     elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-      prove ↔ ψ χ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ↔ ψ χ) () p0 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-      prove → χ ψ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (ψ, χ) () 1.0.0
-      prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (χ, ψ) () 1.0.1 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ↔ s1 s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, ↔ s1 s2) () p0 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      prove → s2 s1 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s1, s2) () 1.0.0
+      prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s2, s1) () 1.0.1 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     }
-    prove ∧ φ ψ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (φ, ψ) () 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0
+    prove ∧ s0 s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s1) () 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0
   }
-  prove ↔ ∧ φ ψ ∧ φ χ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ φ ψ, ∧ φ χ) () 0 1
+  prove ↔ ∧ s0 s1 ∧ s0 s2 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ s0 s1, ∧ s0 s2) () 0 1
 }
 
 comment And removing them.
 
 theorem Remove Known Left Conjunct From Equivalence
 statementVariables(φ 0, ψ 0)
-premise φ
-conclusion ↔ ∧ φ ψ ψ
+premise s0
+conclusion ↔ ∧ s0 s1 s1
 {
-  assume ∧ φ ψ {
-    prove ψ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (φ, ψ) () 0a
+  assume ∧ s0 s1 {
+    prove s1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (s0, s1) () 0a
   }
-  assume ψ {
-    prove ∧ φ ψ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (φ, ψ) () p0 1a
+  assume s1 {
+    prove ∧ s0 s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s1) () p0 1a
   }
   elided fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c {
-    prove ∧ → ∧ φ ψ ψ → ψ ∧ φ ψ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∧ φ ψ ψ, → ψ ∧ φ ψ) () 0 1
-    prove ↔ ∧ φ ψ ψ fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (∧ φ ψ, ψ) () 2.0
+    prove ∧ → ∧ s0 s1 s1 → s1 ∧ s0 s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∧ s0 s1 s1, → s1 ∧ s0 s1) () 0 1
+    prove ↔ ∧ s0 s1 s1 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (∧ s0 s1, s1) () 2.0
   }
 }
 
 theorem Remove Known Right Conjunct From Equivalence
 statementVariables(φ 0, ψ 0)
-premise φ
-conclusion ↔ ∧ ψ φ ψ
+premise s0
+conclusion ↔ ∧ s1 s0 s1
 {
-  prove ↔ ∧ ψ φ ∧ φ ψ b356169c385355e0eba377b961d4c0bbbeb649b0834fc1324faa9e712d4db587 (ψ, φ) ()
-  prove ↔ ∧ φ ψ ψ 512d5bbfe69a0994b1bae6993c6524ccd3afee79d3a75436a959b60f136b06eb (φ, ψ) () p0
-  prove ↔ ∧ ψ φ ψ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∧ ψ φ, ∧ φ ψ, ψ) () 0 1
+  prove ↔ ∧ s1 s0 ∧ s0 s1 b356169c385355e0eba377b961d4c0bbbeb649b0834fc1324faa9e712d4db587 (s1, s0) ()
+  prove ↔ ∧ s0 s1 s1 512d5bbfe69a0994b1bae6993c6524ccd3afee79d3a75436a959b60f136b06eb (s0, s1) () p0
+  prove ↔ ∧ s1 s0 s1 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∧ s1 s0, ∧ s0 s1, s1) () 0 1
 }
 
 comment Adding extra disjunctions to equivalences.
 
 theorem Add Left Disjunction to Equivalence
 statementVariables(φ 0, ψ 0, χ 0)
-premise ↔ φ ψ
-conclusion ↔ ∨ χ φ ∨ χ ψ
+premise ↔ s0 s1
+conclusion ↔ ∨ s2 s0 ∨ s2 s1
 {
-  assume ∨ χ φ {
-    prove → φ ψ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (φ, ψ) () p0
-    prove ∨ χ ψ 248476159b47ac04f4372eb3da2ea80598a55590337f781b1e6082ad4f70c003 (χ, φ, ψ) () 0a 0.0
+  assume ∨ s2 s0 {
+    prove → s0 s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s0, s1) () p0
+    prove ∨ s2 s1 248476159b47ac04f4372eb3da2ea80598a55590337f781b1e6082ad4f70c003 (s2, s0, s1) () 0a 0.0
   }
-  assume ∨ χ ψ {
-    prove → ψ φ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (φ, ψ) () p0
-    prove ∨ χ φ 248476159b47ac04f4372eb3da2ea80598a55590337f781b1e6082ad4f70c003 (χ, ψ, φ) () 1a 1.0
+  assume ∨ s2 s1 {
+    prove → s1 s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s0, s1) () p0
+    prove ∨ s2 s0 248476159b47ac04f4372eb3da2ea80598a55590337f781b1e6082ad4f70c003 (s2, s1, s0) () 1a 1.0
   }
-  prove ↔ ∨ χ φ ∨ χ ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ χ φ, ∨ χ ψ) () 0 1
+  prove ↔ ∨ s2 s0 ∨ s2 s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ s2 s0, ∨ s2 s1) () 0 1
 }
 
 theorem Add Right Disjunction to Equivalence
 statementVariables(φ 0, ψ 0, χ 0)
-premise ↔ φ ψ
-conclusion ↔ ∨ φ χ ∨ ψ χ
+premise ↔ s0 s1
+conclusion ↔ ∨ s0 s2 ∨ s1 s2
 {
-  prove ↔ ∨ φ χ ∨ χ φ 6a69a6d59764ffe4b9a2eeacc0888588de474f47ce04d36054eebbb1c3156ec2 (φ, χ) ()
-  prove ↔ ∨ χ φ ∨ χ ψ 1b7969e87a9c1eab289c104a9e0ea652ae32bad8750357952a18b758c54c1df0 (φ, ψ, χ) () p0
-  prove ↔ ∨ φ χ ∨ χ ψ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∨ φ χ, ∨ χ φ, ∨ χ ψ) () 0 1
-  prove ↔ ∨ χ ψ ∨ ψ χ 6a69a6d59764ffe4b9a2eeacc0888588de474f47ce04d36054eebbb1c3156ec2 (χ, ψ) ()
-  prove ↔ ∨ φ χ ∨ ψ χ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∨ φ χ, ∨ χ ψ, ∨ ψ χ) () 2 3
+  prove ↔ ∨ s0 s2 ∨ s2 s0 6a69a6d59764ffe4b9a2eeacc0888588de474f47ce04d36054eebbb1c3156ec2 (s0, s2) ()
+  prove ↔ ∨ s2 s0 ∨ s2 s1 1b7969e87a9c1eab289c104a9e0ea652ae32bad8750357952a18b758c54c1df0 (s0, s1, s2) () p0
+  prove ↔ ∨ s0 s2 ∨ s2 s1 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∨ s0 s2, ∨ s2 s0, ∨ s2 s1) () 0 1
+  prove ↔ ∨ s2 s1 ∨ s1 s2 6a69a6d59764ffe4b9a2eeacc0888588de474f47ce04d36054eebbb1c3156ec2 (s2, s1) ()
+  prove ↔ ∨ s0 s2 ∨ s1 s2 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∨ s0 s2, ∨ s2 s1, ∨ s1 s2) () 2 3
 }
 
 theorem Disjunction of Equivalences
 statementVariables(φ 0, ψ 0, χ 0, ω 0)
-premise ↔ φ ψ
-premise ↔ χ ω
-conclusion ↔ ∨ φ χ ∨ ψ ω
+premise ↔ s0 s1
+premise ↔ s2 s3
+conclusion ↔ ∨ s0 s2 ∨ s1 s3
 {
-  assume ∨ φ χ {
-    prove → φ ψ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (φ, ψ) () p0
-    prove → χ ω 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (χ, ω) () p1
-    prove ∨ ψ ω 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (φ, χ, ψ, ω) () 0a 0.0 0.1
+  assume ∨ s0 s2 {
+    prove → s0 s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s0, s1) () p0
+    prove → s2 s3 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s2, s3) () p1
+    prove ∨ s1 s3 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (s0, s2, s1, s3) () 0a 0.0 0.1
   }
-  assume ∨ ψ ω {
-    prove → ψ φ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (φ, ψ) () p0
-    prove → ω χ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (χ, ω) () p1
-    prove ∨ φ χ 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (ψ, ω, φ, χ) () 1a 1.0 1.1
+  assume ∨ s1 s3 {
+    prove → s1 s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s0, s1) () p0
+    prove → s3 s2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s2, s3) () p1
+    prove ∨ s0 s2 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (s1, s3, s0, s2) () 1a 1.0 1.1
   }
-  prove ↔ ∨ φ χ ∨ ψ ω df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ φ χ, ∨ ψ ω) () 0 1
+  prove ↔ ∨ s0 s2 ∨ s1 s3 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ s0 s2, ∨ s1 s3) () 0 1
 }
 
 comment Extend a disjunction to conjunction.
 
 theorem Extend Disjunction of Equivalents to Conjunction
 statementVariables(φ 0, ψ 0)
-premise ∨ φ ψ
-premise ↔ φ ψ
-conclusion ∧ φ ψ
+premise ∨ s0 s1
+premise ↔ s0 s1
+conclusion ∧ s0 s1
 {
-  assume φ {
+  assume s0 {
     elided (Extracted) {
-      prove → φ ψ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (φ, ψ) () p1
-      prove ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (φ, ψ) () 0.0.0 0a
+      prove → s0 s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s0, s1) () p1
+      prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s1) () 0.0.0 0a
     }
-    prove ∧ φ ψ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (φ, ψ) () 0a 0.0
+    prove ∧ s0 s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s1) () 0a 0.0
   }
-  assume ψ {
+  assume s1 {
     elided (Extracted) {
-      prove → ψ φ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (φ, ψ) () p1
-      prove φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (ψ, φ) () 1.0.0 1a
+      prove → s1 s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s0, s1) () p1
+      prove s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s1, s0) () 1.0.0 1a
     }
-    prove ∧ φ ψ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (φ, ψ) () 1.0 1a
+    prove ∧ s0 s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s1) () 1.0 1a
   }
-  prove ∧ φ ψ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (φ, ψ, ∧ φ ψ) () p0 0 1
+  prove ∧ s0 s1 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (s0, s1, ∧ s0 s1) () p0 0 1
 }

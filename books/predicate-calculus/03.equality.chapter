@@ -10,218 +10,218 @@ display ∧ = a c = b c as (a = b = c) requires-brackets
 
 axiom Equality Is Reflexive
 termVariables(a 0)
-conclusion = a a
+conclusion = t0 t0
 
 axiom Substitution of Equals
 statementVariables(φ 1)
 termVariables(a 0, b 0)
-premise = a b
-premise with (a) φ
-conclusion with (b) φ
+premise = t0 t1
+premise with (t0) s0
+conclusion with (t1) s0
 
 comment We first have to prove that equality is symmetric before we can prove the reversed version of the second axiom.
 
 theorem Reverse Equality
 termVariables(a 0, b 0)
-premise = a b
-conclusion = b a
+premise = t0 t1
+conclusion = t1 t0
 {
-  prove = a a 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (a)
-  prove = b a 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $0 a) (a, b) p0 0
+  prove = t0 t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (t0)
+  prove = t1 t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $0 t0) (t0, t1) p0 0
 }
 
 theorem Substitution of Equals (Reversed)
 statementVariables(φ 1)
 termVariables(a 0, b 0)
-premise = a b
-premise with (b) φ
-conclusion with (a) φ
+premise = t0 t1
+premise with (t1) s0
+conclusion with (t0) s0
 {
-  prove = b a da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (a, b) p0
-  prove with (a) φ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0) φ) (b, a) 0 p1
+  prove = t1 t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, t1) p0
+  prove with (t0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0) s0) (t1, t0) 0 p1
 }
 
 comment Now we can also prove that the substitution axiom works when substituting into equal terms.
 
 theorem Substitution of Equals into Function
 termVariables(a 0, b 0, F 1)
-premise = a b
-conclusion = with (a) F with (b) F
+premise = t0 t1
+conclusion = with (t0) t2 with (t1) t2
 {
-  prove = with (a) F with (a) F 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (with (a) F)
-  prove = with (a) F with (b) F 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= with (a) F with ($0) F) (a, b) p0 0
+  prove = with (t0) t2 with (t0) t2 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (with (t0) t2)
+  prove = with (t0) t2 with (t1) t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= with (t0) t2 with ($0) t2) (t0, t1) p0 0
 }
 
 theorem Substitution of Equals into Function (Reversed)
 termVariables(a 0, b 0, F 1)
-premise = a b
-conclusion = with (b) F with (a) F
+premise = t0 t1
+conclusion = with (t1) t2 with (t0) t2
 {
-  prove = with (a) F with (b) F b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (a, b, with ($0) F) p0
-  prove = with (b) F with (a) F da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (with (a) F, with (b) F) 0
+  prove = with (t0) t2 with (t1) t2 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (t0, t1, with ($0) t2) p0
+  prove = with (t1) t2 with (t0) t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (with (t0) t2, with (t1) t2) 0
 }
 
 comment Basic facts about equality.
 
 theorem Equality Is Symmetric
 termVariables(a 0, b 0)
-conclusion ↔ = a b = b a
+conclusion ↔ = t0 t1 = t1 t0
 {
-  assume = a b {
-    prove = b a da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (a, b) 0a
+  assume = t0 t1 {
+    prove = t1 t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, t1) 0a
   }
-  assume = b a {
-    prove = a b da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (b, a) 1a
+  assume = t1 t0 {
+    prove = t0 t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, t0) 1a
   }
-  prove ↔ = a b = b a df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (= a b, = b a) () 0 1
+  prove ↔ = t0 t1 = t1 t0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (= t0 t1, = t1 t0) () 0 1
 }
 
 theorem Equality Is Transitive
 termVariables(a 0, b 0, c 0)
-premise = a b
-premise = b c
-conclusion = a c
+premise = t0 t1
+premise = t1 t2
+conclusion = t0 t2
 {
-  prove = a c 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= a $0) (b, c) p1 p0
+  prove = t0 t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (t1, t2) p1 p0
 }
 
 theorem Equality by Equaling the Same Thing (Left)
 termVariables(a 0, x 0, b 0)
-premise = a x
-premise = b x
-conclusion = a b
+premise = t0 t1
+premise = t2 t1
+conclusion = t0 t2
 {
-  prove = x b da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (b, x) p1
-  prove = a b 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (a, x, b) p0 0
+  prove = t1 t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t2, t1) p1
+  prove = t0 t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (t0, t1, t2) p0 0
 }
 
 theorem Equality by Equaling the Same Thing (Right)
 termVariables(x 0, a 0, b 0)
-premise = x a
-premise = x b
-conclusion = a b
+premise = t0 t1
+premise = t0 t2
+conclusion = t1 t2
 {
-  prove = a x da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (x, a) p0
-  prove = a b 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (a, x, b) 0 p1
+  prove = t1 t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, t1) p0
+  prove = t1 t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (t1, t0, t2) 0 p1
 }
 
 theorem Equivalence of Substituted Equals
 statementVariables(φ 1)
 termVariables(a 0, b 0)
-premise = a b
-conclusion ↔ with (a) φ with (b) φ
+premise = t0 t1
+conclusion ↔ with (t0) s0 with (t1) s0
 {
-  assume with (a) φ {
-    prove with (b) φ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0) φ) (a, b) p0 0a
+  assume with (t0) s0 {
+    prove with (t1) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0) s0) (t0, t1) p0 0a
   }
-  assume with (b) φ {
-    prove with (a) φ 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (with ($0) φ) (a, b) p0 1a
+  assume with (t1) s0 {
+    prove with (t0) s0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (with ($0) s0) (t0, t1) p0 1a
   }
-  prove ↔ with (a) φ with (b) φ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (with (a) φ, with (b) φ) () 0 1
+  prove ↔ with (t0) s0 with (t1) s0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (with (t0) s0, with (t1) s0) () 0 1
 }
 
 theorem Distinguishable Terms Are Not Equal
 statementVariables(φ 1)
 termVariables(a 0, b 0)
-premise with (a) φ
-premise ¬ with (b) φ
-conclusion ¬ = a b
+premise with (t0) s0
+premise ¬ with (t1) s0
+conclusion ¬ = t0 t1
 {
-  assume = a b {
-    prove with (b) φ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0) φ) (a, b) 0a p0
+  assume = t0 t1 {
+    prove with (t1) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0) s0) (t0, t1) 0a p0
   }
-  prove ¬ = a b f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= a b, with (b) φ) () 0 p1
+  prove ¬ = t0 t1 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= t0 t1, with (t1) s0) () 0 p1
 }
 
 theorem Every Set Exists
 termVariables(a 0)
-conclusion ∃ x = $0 a
+conclusion ∃ x = $0 t0
 {
-  prove = a a 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (a)
-  prove ∃ x = $0 a 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= $0 a) (a) 0
+  prove = t0 t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (t0)
+  prove ∃ x = $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= $0 t0) (t0) 0
 }
 
 theorem Renamed Set
 statementVariables(φ 0)
 termVariables(a 0)
-premise ∀ x → = $0 a φ
-conclusion φ
+premise ∀ x → = $0 t0 s0
+conclusion s0
 {
-  prove ∃ x = $0 a de7d43f826cdb2f5dca088f82e26c2c2da96c6b591905920625cbb14c4189f91 () (a)
-  prove φ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= $0 a, φ) () 0 p0
+  prove ∃ x = $0 t0 de7d43f826cdb2f5dca088f82e26c2c2da96c6b591905920625cbb14c4189f91 () (t0)
+  prove s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= $0 t0, s0) () 0 p0
 }
 
 theorem Exclusive Or for Equality
 termVariables(a 0, b 0, c 0)
-premise ∨ = a b = a c
-premise ¬ = b c
-conclusion ⊕ = a b = a c
+premise ∨ = t0 t1 = t0 t2
+premise ¬ = t1 t2
+conclusion ⊕ = t0 t1 = t0 t2
 {
-  assume ∧ = a b = a c {
-    prove = b c 17ea1189d21985c734cf2ff359fbe657b6f31d5a78f5d8746e6b5e2b5c2f39e3 () (a, b, c) 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+  assume ∧ = t0 t1 = t0 t2 {
+    prove = t1 t2 17ea1189d21985c734cf2ff359fbe657b6f31d5a78f5d8746e6b5e2b5c2f39e3 () (t0, t1, t2) 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   }
-  prove ¬ ∧ = a b = a c f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∧ = a b = a c, = b c) () 0 p1
-  prove ⊕ = a b = a c 0a82459ebe034f7992dbb07895dd1e871151bab63aa1400f4eecd9d0554d240f (= a b, = a c) () p0 1
+  prove ¬ ∧ = t0 t1 = t0 t2 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∧ = t0 t1 = t0 t2, = t1 t2) () 0 p1
+  prove ⊕ = t0 t1 = t0 t2 0a82459ebe034f7992dbb07895dd1e871151bab63aa1400f4eecd9d0554d240f (= t0 t1, = t0 t2) () p0 1
 }
 
 theorem Equivalence of Generalised Equals
 statementVariables(φ 1, ψ 2)
 termVariables(G 1, H 1)
-premise ∀ x → with ($0) φ = with ($0) G with ($0) H
-conclusion ↔ ∀ x → with ($0) φ with ($0 with ($0) G) ψ ∀ x → with ($0) φ with ($0 with ($0) H) ψ
+premise ∀ x → with ($0) s0 = with ($0) t0 with ($0) t1
+conclusion ↔ ∀ x → with ($0) s0 with ($0 with ($0) t0) s1 ∀ x → with ($0) s0 with ($0 with ($0) t1) s1
 {
-  assume ∀ x → with ($0) φ with ($0 with ($0) G) ψ {
+  assume ∀ x → with ($0) s0 with ($0 with ($0) t0) s1 {
     take x {
-      assume with ($0) φ {
+      assume with ($0) s0 {
         elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-          prove → with ($0) φ = with ($0) G with ($0) H b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) φ = with ($$0) G with ($$0) H) ($0) p0
-          prove = with ($0) G with ($0) H 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) φ, = with ($0) G with ($0) H) () 0.0.0.0.0 0.0.0a
+          prove → with ($0) s0 = with ($0) t0 with ($0) t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) s0 = with ($$0) t0 with ($$0) t1) ($0) p0
+          prove = with ($0) t0 with ($0) t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s0, = with ($0) t0 with ($0) t1) () 0.0.0.0.0 0.0.0a
         }
         elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-          prove → with ($0) φ with ($0 with ($0) G) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) φ with ($$0 with ($$0) G) ψ) ($0) 0a
-          prove with ($0 with ($0) G) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) φ, with ($0 with ($0) G) ψ) () 0.0.0.1.0 0.0.0a
+          prove → with ($0) s0 with ($0 with ($0) t0) s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) s0 with ($$0 with ($$0) t0) s1) ($0) 0a
+          prove with ($0 with ($0) t0) s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s0, with ($0 with ($0) t0) s1) () 0.0.0.1.0 0.0.0a
         }
-        prove with ($0 with ($0) H) ψ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0 $$0) ψ) (with ($0) G, with ($0) H) 0.0.0.0 0.0.0.1
+        prove with ($0 with ($0) t1) s1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0 $$0) s1) (with ($0) t0, with ($0) t1) 0.0.0.0 0.0.0.1
       }
     }
   }
-  assume ∀ x → with ($0) φ with ($0 with ($0) H) ψ {
+  assume ∀ x → with ($0) s0 with ($0 with ($0) t1) s1 {
     take x {
-      assume with ($0) φ {
+      assume with ($0) s0 {
         elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-          prove → with ($0) φ = with ($0) G with ($0) H b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) φ = with ($$0) G with ($$0) H) ($0) p0
-          prove = with ($0) G with ($0) H 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) φ, = with ($0) G with ($0) H) () 1.0.0.0.0 1.0.0a
+          prove → with ($0) s0 = with ($0) t0 with ($0) t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) s0 = with ($$0) t0 with ($$0) t1) ($0) p0
+          prove = with ($0) t0 with ($0) t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s0, = with ($0) t0 with ($0) t1) () 1.0.0.0.0 1.0.0a
         }
         elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-          prove → with ($0) φ with ($0 with ($0) H) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) φ with ($$0 with ($$0) H) ψ) ($0) 1a
-          prove with ($0 with ($0) H) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) φ, with ($0 with ($0) H) ψ) () 1.0.0.1.0 1.0.0a
+          prove → with ($0) s0 with ($0 with ($0) t1) s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) s0 with ($$0 with ($$0) t1) s1) ($0) 1a
+          prove with ($0 with ($0) t1) s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s0, with ($0 with ($0) t1) s1) () 1.0.0.1.0 1.0.0a
         }
-        prove with ($0 with ($0) G) ψ 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (with ($0 $$0) ψ) (with ($0) G, with ($0) H) 1.0.0.0 1.0.0.1
+        prove with ($0 with ($0) t0) s1 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (with ($0 $$0) s1) (with ($0) t0, with ($0) t1) 1.0.0.0 1.0.0.1
       }
     }
   }
-  prove ↔ ∀ x → with ($0) φ with ($0 with ($0) G) ψ ∀ x → with ($0) φ with ($0 with ($0) H) ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∀ x → with ($0) φ with ($0 with ($0) G) ψ, ∀ x → with ($0) φ with ($0 with ($0) H) ψ) () 0 1
+  prove ↔ ∀ x → with ($0) s0 with ($0 with ($0) t0) s1 ∀ x → with ($0) s0 with ($0 with ($0) t1) s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∀ x → with ($0) s0 with ($0 with ($0) t0) s1, ∀ x → with ($0) s0 with ($0 with ($0) t1) s1) () 0 1
 }
 
 theorem Reverse Negated Equality
 termVariables(a 0, b 0)
-premise ¬ = a b
-conclusion ¬ = b a
+premise ¬ = t0 t1
+conclusion ¬ = t1 t0
 {
-  assume = b a {
-    prove = a b da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (b, a) 0a
-    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (= a b) () 0.0 p0
+  assume = t1 t0 {
+    prove = t0 t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, t0) 0a
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (= t0 t1) () 0.0 p0
   }
-  prove ¬ = b a f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (= b a) () 0
+  prove ¬ = t1 t0 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (= t1 t0) () 0
 }
 
 theorem Function Equality Equivalence
 termVariables(a 0, F 1, b 0)
-premise → = with (a) F with (b) F = a b
-conclusion ↔ = with (a) F with (b) F = a b
+premise → = with (t0) t1 with (t2) t1 = t0 t2
+conclusion ↔ = with (t0) t1 with (t2) t1 = t0 t2
 {
-  assume = a b {
-    prove = with (a) F with (b) F b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (a, b, with ($0) F) 0a
+  assume = t0 t2 {
+    prove = with (t0) t1 with (t2) t1 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (t0, t2, with ($0) t1) 0a
   }
-  prove ↔ = with (a) F with (b) F = a b df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (= with (a) F with (b) F, = a b) () p0 0
+  prove ↔ = with (t0) t1 with (t2) t1 = t0 t2 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (= with (t0) t1 with (t2) t1, = t0 t2) () p0 0
 }

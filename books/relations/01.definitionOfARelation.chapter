@@ -2,7 +2,7 @@ Define an relation between two sets.
 
 type relation R
   qualifier (A) (on A)
-  definition (⊆ R product A A)
+  definition (⊆ t0 product t1 t1)
 
 display ∈ orderedPair a b R as (a R b) requires-brackets if R infix-relation
 
@@ -17,168 +17,168 @@ write ∈ orderedPair orderedPair a b orderedPair c d R as in4
 write orderedPair orderedPair a b orderedPair c d as pair4
 
 property reflexive on relation
-  definition (∀ a → ∈ $0 A ∈ orderedPair $0 $0 R)
+  definition (∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0)
 
 property irreflexive on relation
-  definition (∀ a → ∈ $0 A ¬ ∈ orderedPair $0 $0 R)
+  definition (∀ a → ∈ $0 t1 ¬ ∈ orderedPair $0 $0 t0)
 
 property symmetric on relation
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 R ∈ orderedPair $0 $$0 R)
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0)
 
 property asymmetric on relation
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 R ¬ ∈ orderedPair $0 $$0 R)
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0)
 
 property antisymmetric on relation
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∧ ∈ orderedPair $$0 $0 R ∈ orderedPair $0 $$0 R = $$0 $0)
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∧ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0 = $$0 $0)
 
 property transitive on relation
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$0 $0 R)
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$0 $0 t0)
 
 property complete on relation
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 R ∈ orderedPair $0 $$0 R)
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0)
 
 property semicomplete on relation
   name (semi-complete)
-  definition (∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 R ∨ = $$0 $0 ∈ orderedPair $0 $$0 R)
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t0 ∨ = $$0 $0 ∈ orderedPair $0 $$0 t0)
 
 theorem Antisymmetric Relation from Extended Asymmetric Relation
 termVariables(R 0, A 0, S 0)
-premise ∧ relation R A asymmetricRelation R A
-premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
-conclusion ∧ relation S A antisymmetricRelation S A
+premise ∧ relation t0 t1 asymmetricRelation t0 t1
+premise = t2 productComprehension a b product t1 t1 ∨ ∈ orderedPair $0 $1 t0 = $0 $1
+conclusion ∧ relation t2 t1 antisymmetricRelation t2 t1
 {
   subproof (Relation) {
-    prove ⊆ S product A A 81b5dbe32279dbd5d93496d0e9d0489e46443ce8779f383a18c2222e389730ce (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, product A A) p1
-    prove relation S A ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (S, A) 0.0
+    prove ⊆ t2 product t1 t1 81b5dbe32279dbd5d93496d0e9d0489e46443ce8779f383a18c2222e389730ce (∨ ∈ orderedPair $0 $1 t0 = $0 $1) (t2, product t1 t1) p1
+    prove relation t2 t1 ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (t2, t1) 0.0
   }
   subproof (Antisymmetric) {
     take a {
-      assume ∈ $0 A {
+      assume ∈ $0 t1 {
         take b {
-          assume ∈ $0 A {
-            assume ∧ ∈ orderedPair $$0 $0 S ∈ orderedPair $0 $$0 S {
+          assume ∈ $0 t1 {
+            assume ∧ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2 {
               elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
-                prove → ∈ $$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) ($$0) 1.0.0.0.0.0.0.0
-                prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0) () 1.0.0.0.0.0.0.1 1.0.0a
-                prove → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ↔ ∈ orderedPair $$0 $$$0 S ∨ ∈ orderedPair $$0 $$$0 R = $$0 $$$0) ($0) 1.0.0.0.0.0.0.2
-                prove ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.0.0.3 1.0.0.0.0a
-                prove → ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 S, ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.0.0.4
-                prove ∨ ∈ orderedPair $$0 $0 R = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 S, ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.0.0.5 1.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                prove ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$0 $$$1 t0 = $$$0 $$$1) (t2, t1, t1) p1
+                prove → ∈ $$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0) ($$0) 1.0.0.0.0.0.0.0
+                prove ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t1, ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0) () 1.0.0.0.0.0.0.1 1.0.0a
+                prove → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ↔ ∈ orderedPair $$0 $$$0 t2 ∨ ∈ orderedPair $$0 $$$0 t0 = $$0 $$$0) ($0) 1.0.0.0.0.0.0.2
+                prove ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.0.0.3 1.0.0.0.0a
+                prove → ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 t2, ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.0.0.4
+                prove ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t2, ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.0.0.5 1.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
               }
-              assume ∈ orderedPair $$0 $0 R {
+              assume ∈ orderedPair $$0 $0 t0 {
                 elided d0c44f4a2e491bbf3b1a889c3dd4e29f32a8bd4e6d0bd0236d799093ea2a0971 {
-                  prove ∧ relation R A ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 R ¬ ∈ orderedPair $0 $$0 R d0c44f4a2e491bbf3b1a889c3dd4e29f32a8bd4e6d0bd0236d799093ea2a0971 () (R, A) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                  prove → ∈ $$0 A ∀ b → ∈ $0 A → ∈ orderedPair $$$0 $0 R ¬ ∈ orderedPair $0 $$$0 R b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ∀ b → ∈ $0 A → ∈ orderedPair $$$$0 $0 R ¬ ∈ orderedPair $0 $$$$0 R) ($$0) 1.0.0.0.0.0.1.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                  prove ∀ b → ∈ $0 A → ∈ orderedPair $$$0 $0 R ¬ ∈ orderedPair $0 $$$0 R 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 A, ∀ b → ∈ $0 A → ∈ orderedPair $$$0 $0 R ¬ ∈ orderedPair $0 $$$0 R) () 1.0.0.0.0.0.1.0.1 1.0.0a
-                  prove → ∈ $0 A → ∈ orderedPair $$0 $0 R ¬ ∈ orderedPair $0 $$0 R b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A → ∈ orderedPair $$0 $$$0 R ¬ ∈ orderedPair $$$0 $$0 R) ($0) 1.0.0.0.0.0.1.0.2
-                  prove → ∈ orderedPair $$0 $0 R ¬ ∈ orderedPair $0 $$0 R 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, → ∈ orderedPair $$0 $0 R ¬ ∈ orderedPair $0 $$0 R) () 1.0.0.0.0.0.1.0.3 1.0.0.0.0a
-                  prove ¬ ∈ orderedPair $0 $$0 R 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 R, ¬ ∈ orderedPair $0 $$0 R) () 1.0.0.0.0.0.1.0.4 1.0.0.0.0.0.1a
+                  prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0 d0c44f4a2e491bbf3b1a889c3dd4e29f32a8bd4e6d0bd0236d799093ea2a0971 () (t0, t1) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                  prove → ∈ $$0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$$0 $0 t0 ¬ ∈ orderedPair $0 $$$0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$$$0 $0 t0 ¬ ∈ orderedPair $0 $$$$0 t0) ($$0) 1.0.0.0.0.0.1.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                  prove ∀ b → ∈ $0 t1 → ∈ orderedPair $$$0 $0 t0 ¬ ∈ orderedPair $0 $$$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t1, ∀ b → ∈ $0 t1 → ∈ orderedPair $$$0 $0 t0 ¬ ∈ orderedPair $0 $$$0 t0) () 1.0.0.0.0.0.1.0.1 1.0.0a
+                  prove → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 → ∈ orderedPair $$0 $$$0 t0 ¬ ∈ orderedPair $$$0 $$0 t0) ($0) 1.0.0.0.0.0.1.0.2
+                  prove → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0) () 1.0.0.0.0.0.1.0.3 1.0.0.0.0a
+                  prove ¬ ∈ orderedPair $0 $$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t0, ¬ ∈ orderedPair $0 $$0 t0) () 1.0.0.0.0.0.1.0.4 1.0.0.0.0.0.1a
                 }
                 elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
-                  prove → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) ($0) 1.0.0.0.0.0.1.1.0
-                  prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.0.1.1.1 1.0.0.0.0a
-                  prove → ∈ $$0 A ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ↔ ∈ orderedPair $0 $$$0 S ∨ ∈ orderedPair $0 $$$0 R = $0 $$$0) ($$0) 1.0.0.0.0.0.1.1.2
-                  prove ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 A, ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0) () 1.0.0.0.0.0.1.1.3 1.0.0a
-                  prove → ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $0 $$0 S, ∨ ∈ orderedPair $0 $$0 R = $0 $$0) () 1.0.0.0.0.0.1.1.4
-                  prove ∨ ∈ orderedPair $0 $$0 R = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 $$0 S, ∨ ∈ orderedPair $0 $$0 R = $0 $$0) () 1.0.0.0.0.0.1.1.5 1.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                  prove ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$0 $$$1 t0 = $$$0 $$$1) (t2, t1, t1) p1
+                  prove → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0) ($0) 1.0.0.0.0.0.1.1.0
+                  prove ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.0.1.1.1 1.0.0.0.0a
+                  prove → ∈ $$0 t1 ↔ ∈ orderedPair $0 $$0 t2 ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ↔ ∈ orderedPair $0 $$$0 t2 ∨ ∈ orderedPair $0 $$$0 t0 = $0 $$$0) ($$0) 1.0.0.0.0.0.1.1.2
+                  prove ↔ ∈ orderedPair $0 $$0 t2 ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t1, ↔ ∈ orderedPair $0 $$0 t2 ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0) () 1.0.0.0.0.0.1.1.3 1.0.0a
+                  prove → ∈ orderedPair $0 $$0 t2 ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $0 $$0 t2, ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0) () 1.0.0.0.0.0.1.1.4
+                  prove ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 $$0 t2, ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0) () 1.0.0.0.0.0.1.1.5 1.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                 }
                 elided (Extracted) {
-                  prove = $0 $$0 f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (∈ orderedPair $0 $$0 R, = $0 $$0) () 1.0.0.0.0.0.1.1 1.0.0.0.0.0.1.0
+                  prove = $0 $$0 f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (∈ orderedPair $0 $$0 t0, = $0 $$0) () 1.0.0.0.0.0.1.1 1.0.0.0.0.0.1.0
                   prove = $$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, $$0) 1.0.0.0.0.0.1.2.0
                 }
               }
-              prove = $$0 $0 94a09a0b02449696854fb3127e2d7d09e0aa3166ae4882ec9f7b5ca335baf226 (∈ orderedPair $$0 $0 R, = $$0 $0) () 1.0.0.0.0.0.0 1.0.0.0.0.0.1
+              prove = $$0 $0 94a09a0b02449696854fb3127e2d7d09e0aa3166ae4882ec9f7b5ca335baf226 (∈ orderedPair $$0 $0 t0, = $$0 $0) () 1.0.0.0.0.0.0 1.0.0.0.0.0.1
             }
           }
         }
       }
     }
     elided cb1284569ffa347649446660d990757db547f1d23030fe98d48880bf8873e698 {
-      prove ∧ relation S A ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∧ ∈ orderedPair $$0 $0 S ∈ orderedPair $0 $$0 S = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation S A, ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∧ ∈ orderedPair $$0 $0 S ∈ orderedPair $0 $$0 S = $$0 $0) () 0 1.0
-      prove antisymmetricRelation S A cb1284569ffa347649446660d990757db547f1d23030fe98d48880bf8873e698 () (S, A) 1.1.0
+      prove ∧ relation t2 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∧ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∧ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2 = $$0 $0) () 0 1.0
+      prove antisymmetricRelation t2 t1 cb1284569ffa347649446660d990757db547f1d23030fe98d48880bf8873e698 () (t2, t1) 1.1.0
     }
   }
-  prove ∧ relation S A antisymmetricRelation S A 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation S A, antisymmetricRelation S A) () 0 1
+  prove ∧ relation t2 t1 antisymmetricRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, antisymmetricRelation t2 t1) () 0 1
 }
 
 theorem Transitive Relation from Extended Transitive Relation
 termVariables(R 0, A 0, S 0)
-premise ∧ relation R A transitiveRelation R A
-premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
-conclusion ∧ relation S A transitiveRelation S A
+premise ∧ relation t0 t1 transitiveRelation t0 t1
+premise = t2 productComprehension a b product t1 t1 ∨ ∈ orderedPair $0 $1 t0 = $0 $1
+conclusion ∧ relation t2 t1 transitiveRelation t2 t1
 {
   subproof (Relation) {
-    prove ⊆ S product A A 81b5dbe32279dbd5d93496d0e9d0489e46443ce8779f383a18c2222e389730ce (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, product A A) p1
-    prove relation S A ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (S, A) 0.0
+    prove ⊆ t2 product t1 t1 81b5dbe32279dbd5d93496d0e9d0489e46443ce8779f383a18c2222e389730ce (∨ ∈ orderedPair $0 $1 t0 = $0 $1) (t2, product t1 t1) p1
+    prove relation t2 t1 ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (t2, t1) 0.0
   }
   subproof (Transitive) {
     take a {
-      assume ∈ $0 A {
+      assume ∈ $0 t1 {
         take b {
-          assume ∈ $0 A {
+          assume ∈ $0 t1 {
             take c {
-              assume ∈ $0 A {
-                assume ∧ ∈ orderedPair $$$0 $$0 S ∈ orderedPair $$0 $0 S {
+              assume ∈ $0 t1 {
+                assume ∧ ∈ orderedPair $$$0 $$0 t2 ∈ orderedPair $$0 $0 t2 {
                   elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                    prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$$0 $$$$1 R = $$$$0 $$$$1) (S, A, A) p1
-                    prove → ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$$0 $0 S ∨ ∈ orderedPair $$$$$0 $0 R = $$$$$0 $0) ($$$0) 1.0.0.0.0.0.0.0.0.0
-                    prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) () 1.0.0.0.0.0.0.0.0.1 1.0.0a
-                    prove → ∈ $$0 A ↔ ∈ orderedPair $$$0 $$0 S ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 A ↔ ∈ orderedPair $$$0 $$$$0 S ∨ ∈ orderedPair $$$0 $$$$0 R = $$$0 $$$$0) ($$0) 1.0.0.0.0.0.0.0.0.2
-                    prove ↔ ∈ orderedPair $$$0 $$0 S ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 A, ↔ ∈ orderedPair $$$0 $$0 S ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0) () 1.0.0.0.0.0.0.0.0.3 1.0.0.0.0a
-                    prove → ∈ orderedPair $$$0 $$0 S ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$$0 $$0 S, ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0) () 1.0.0.0.0.0.0.0.0.4
-                    prove ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$$0 $$0 S, ∨ ∈ orderedPair $$$0 $$0 R = $$$0 $$0) () 1.0.0.0.0.0.0.0.0.5 1.0.0.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                    prove ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$$0 $$$$1 t0 = $$$$0 $$$$1) (t2, t1, t1) p1
+                    prove → ∈ $$$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$$0 $0 t2 ∨ ∈ orderedPair $$$$$0 $0 t0 = $$$$$0 $0) ($$$0) 1.0.0.0.0.0.0.0.0.0
+                    prove ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$0 t1, ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0) () 1.0.0.0.0.0.0.0.0.1 1.0.0a
+                    prove → ∈ $$0 t1 ↔ ∈ orderedPair $$$0 $$0 t2 ∨ ∈ orderedPair $$$0 $$0 t0 = $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 ↔ ∈ orderedPair $$$0 $$$$0 t2 ∨ ∈ orderedPair $$$0 $$$$0 t0 = $$$0 $$$$0) ($$0) 1.0.0.0.0.0.0.0.0.2
+                    prove ↔ ∈ orderedPair $$$0 $$0 t2 ∨ ∈ orderedPair $$$0 $$0 t0 = $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t1, ↔ ∈ orderedPair $$$0 $$0 t2 ∨ ∈ orderedPair $$$0 $$0 t0 = $$$0 $$0) () 1.0.0.0.0.0.0.0.0.3 1.0.0.0.0a
+                    prove → ∈ orderedPair $$$0 $$0 t2 ∨ ∈ orderedPair $$$0 $$0 t0 = $$$0 $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$$0 $$0 t2, ∨ ∈ orderedPair $$$0 $$0 t0 = $$$0 $$0) () 1.0.0.0.0.0.0.0.0.4
+                    prove ∨ ∈ orderedPair $$$0 $$0 t0 = $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$$0 $$0 t2, ∨ ∈ orderedPair $$$0 $$0 t0 = $$$0 $$0) () 1.0.0.0.0.0.0.0.0.5 1.0.0.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                   }
                   elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                    prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$$0 $$$$1 R = $$$$0 $$$$1) (S, A, A) p1
-                    prove → ∈ $$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$$0 $0 S ∨ ∈ orderedPair $$$$$0 $0 R = $$$$$0 $0) ($$0) 1.0.0.0.0.0.0.0.1.0
-                    prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0) () 1.0.0.0.0.0.0.0.1.1 1.0.0.0.0a
-                    prove → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 A ↔ ∈ orderedPair $$0 $$$$0 S ∨ ∈ orderedPair $$0 $$$$0 R = $$0 $$$$0) ($0) 1.0.0.0.0.0.0.0.1.2
-                    prove ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.0.0.0.1.3 1.0.0.0.0.0.0a
-                    prove → ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 S, ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.0.0.0.1.4
-                    prove ∨ ∈ orderedPair $$0 $0 R = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 S, ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.0.0.0.1.5 1.0.0.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                    prove ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$$0 $$$$1 t0 = $$$$0 $$$$1) (t2, t1, t1) p1
+                    prove → ∈ $$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$$0 $0 t2 ∨ ∈ orderedPair $$$$$0 $0 t0 = $$$$$0 $0) ($$0) 1.0.0.0.0.0.0.0.1.0
+                    prove ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t1, ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0) () 1.0.0.0.0.0.0.0.1.1 1.0.0.0.0a
+                    prove → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 ↔ ∈ orderedPair $$0 $$$$0 t2 ∨ ∈ orderedPair $$0 $$$$0 t0 = $$0 $$$$0) ($0) 1.0.0.0.0.0.0.0.1.2
+                    prove ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.0.0.0.1.3 1.0.0.0.0.0.0a
+                    prove → ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 t2, ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.0.0.0.1.4
+                    prove ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t2, ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.0.0.0.1.5 1.0.0.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   }
-                  assume ∈ orderedPair $$$0 $$0 R {
-                    assume ∈ orderedPair $$0 $0 R {
+                  assume ∈ orderedPair $$$0 $$0 t0 {
+                    assume ∈ orderedPair $$0 $0 t0 {
                       elided cb8e0b640eea706781148c47a28077ca99b5e7bdfa096ca8d53dc922f6c67dee {
-                        prove ∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $0 R 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $$$0 $$0 R, ∈ orderedPair $$0 $0 R) () 1.0.0.0.0.0.0.0.2a 1.0.0.0.0.0.0.0.2.0a
+                        prove ∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $$$0 $$0 t0, ∈ orderedPair $$0 $0 t0) () 1.0.0.0.0.0.0.0.2a 1.0.0.0.0.0.0.0.2.0a
                         elided cb8e0b640eea706781148c47a28077ca99b5e7bdfa096ca8d53dc922f6c67dee {
-                          prove ∧ relation R A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$0 $0 R cb8e0b640eea706781148c47a28077ca99b5e7bdfa096ca8d53dc922f6c67dee () (R, A) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                          prove → ∈ $$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$$$0 $0 R b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$$$$0 $0 R) ($$$0) 1.0.0.0.0.0.0.0.2.0.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                          prove ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$$$0 $0 R 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$0 A, ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$$$0 $0 R) () 1.0.0.0.0.0.0.0.2.0.0.1.1 1.0.0a
-                          prove → ∈ $$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$$0 R ∈ orderedPair $$$0 $0 R ∈ orderedPair $$$$0 $0 R b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$$$$0 R ∈ orderedPair $$$$$0 $0 R ∈ orderedPair $$$$0 $0 R) ($$0) 1.0.0.0.0.0.0.0.2.0.0.1.2
-                          prove ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$$0 R ∈ orderedPair $$$0 $0 R ∈ orderedPair $$$$0 $0 R 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 A, ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$$0 $$$0 R ∈ orderedPair $$$0 $0 R ∈ orderedPair $$$$0 $0 R) () 1.0.0.0.0.0.0.0.2.0.0.1.3 1.0.0.0.0a
-                          prove → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$0 $0 R b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 A → ∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $$$$0 R ∈ orderedPair $$$0 $$$$0 R) ($0) 1.0.0.0.0.0.0.0.2.0.0.1.4
-                          prove → ∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$0 $0 R 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, → ∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $0 R ∈ orderedPair $$$0 $0 R) () 1.0.0.0.0.0.0.0.2.0.0.1.5 1.0.0.0.0.0.0a
-                          prove ∈ orderedPair $$$0 $0 R 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ orderedPair $$$0 $$0 R ∈ orderedPair $$0 $0 R, ∈ orderedPair $$$0 $0 R) () 1.0.0.0.0.0.0.0.2.0.0.1.6 1.0.0.0.0.0.0.0.2.0.0.0
+                          prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$0 $0 t0 cb8e0b640eea706781148c47a28077ca99b5e7bdfa096ca8d53dc922f6c67dee () (t0, t1) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                          prove → ∈ $$$0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$$$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$$$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$$$$0 $0 t0) ($$$0) 1.0.0.0.0.0.0.0.2.0.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                          prove ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$$$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$0 t1, ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$$$0 $0 t0) () 1.0.0.0.0.0.0.0.2.0.0.1.1 1.0.0a
+                          prove → ∈ $$0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$$0 $$$0 t0 ∈ orderedPair $$$0 $0 t0 ∈ orderedPair $$$$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$$0 $$$$$0 t0 ∈ orderedPair $$$$$0 $0 t0 ∈ orderedPair $$$$0 $0 t0) ($$0) 1.0.0.0.0.0.0.0.2.0.0.1.2
+                          prove ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$$0 $$$0 t0 ∈ orderedPair $$$0 $0 t0 ∈ orderedPair $$$$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t1, ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$$0 $$$0 t0 ∈ orderedPair $$$0 $0 t0 ∈ orderedPair $$$$0 $0 t0) () 1.0.0.0.0.0.0.0.2.0.0.1.3 1.0.0.0.0a
+                          prove → ∈ $0 t1 → ∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 → ∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $$$$0 t0 ∈ orderedPair $$$0 $$$$0 t0) ($0) 1.0.0.0.0.0.0.0.2.0.0.1.4
+                          prove → ∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, → ∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$0 $0 t0) () 1.0.0.0.0.0.0.0.2.0.0.1.5 1.0.0.0.0.0.0a
+                          prove ∈ orderedPair $$$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $0 t0, ∈ orderedPair $$$0 $0 t0) () 1.0.0.0.0.0.0.0.2.0.0.1.6 1.0.0.0.0.0.0.0.2.0.0.0
                         }
                       }
                       elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                        prove ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ orderedPair $$$0 $0 R, = $$$0 $0) () 1.0.0.0.0.0.0.0.2.0.0
+                        prove ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ orderedPair $$$0 $0 t0, = $$$0 $0) () 1.0.0.0.0.0.0.0.2.0.0
                         elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                          prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$$0 $$$$1 R = $$$$0 $$$$1) (S, A, A) p1
-                          prove → ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$$0 $0 S ∨ ∈ orderedPair $$$$$0 $0 R = $$$$$0 $0) ($$$0) 1.0.0.0.0.0.0.0.2.0.1.1.0
-                          prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) () 1.0.0.0.0.0.0.0.2.0.1.1.1 1.0.0a
-                          prove → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 A ↔ ∈ orderedPair $$$0 $$$$0 S ∨ ∈ orderedPair $$$0 $$$$0 R = $$$0 $$$$0) ($0) 1.0.0.0.0.0.0.0.2.0.1.1.2
-                          prove ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0) () 1.0.0.0.0.0.0.0.2.0.1.1.3 1.0.0.0.0.0.0a
-                          prove → ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 ∈ orderedPair $$$0 $0 S 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $$$0 $0 S, ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0) () 1.0.0.0.0.0.0.0.2.0.1.1.4
-                          prove ∈ orderedPair $$$0 $0 S 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $$$0 $0 R = $$$0 $0, ∈ orderedPair $$$0 $0 S) () 1.0.0.0.0.0.0.0.2.0.1.1.5 1.0.0.0.0.0.0.0.2.0.1.0
+                          prove ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$$0 $$$$1 t0 = $$$$0 $$$$1) (t2, t1, t1) p1
+                          prove → ∈ $$$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$$0 $0 t2 ∨ ∈ orderedPair $$$$$0 $0 t0 = $$$$$0 $0) ($$$0) 1.0.0.0.0.0.0.0.2.0.1.1.0
+                          prove ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$0 t1, ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0) () 1.0.0.0.0.0.0.0.2.0.1.1.1 1.0.0a
+                          prove → ∈ $0 t1 ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 ↔ ∈ orderedPair $$$0 $$$$0 t2 ∨ ∈ orderedPair $$$0 $$$$0 t0 = $$$0 $$$$0) ($0) 1.0.0.0.0.0.0.0.2.0.1.1.2
+                          prove ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0) () 1.0.0.0.0.0.0.0.2.0.1.1.3 1.0.0.0.0.0.0a
+                          prove → ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0 ∈ orderedPair $$$0 $0 t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $$$0 $0 t2, ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0) () 1.0.0.0.0.0.0.0.2.0.1.1.4
+                          prove ∈ orderedPair $$$0 $0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0, ∈ orderedPair $$$0 $0 t2) () 1.0.0.0.0.0.0.0.2.0.1.1.5 1.0.0.0.0.0.0.0.2.0.1.0
                         }
                       }
                     }
                     assume = $$0 $0 {
-                      prove ∈ orderedPair $$$0 $0 S 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$0 $$$$0 S) ($$0, $0) 1.0.0.0.0.0.0.0.2.1a 1.0.0.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                      prove ∈ orderedPair $$$0 $0 t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$0 $$$$0 t2) ($$0, $0) 1.0.0.0.0.0.0.0.2.1a 1.0.0.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     }
-                    prove ∈ orderedPair $$$0 $0 S 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair $$0 $0 R, = $$0 $0, ∈ orderedPair $$$0 $0 S) () 1.0.0.0.0.0.0.0.1 1.0.0.0.0.0.0.0.2.0 1.0.0.0.0.0.0.0.2.1
+                    prove ∈ orderedPair $$$0 $0 t2 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair $$0 $0 t0, = $$0 $0, ∈ orderedPair $$$0 $0 t2) () 1.0.0.0.0.0.0.0.1 1.0.0.0.0.0.0.0.2.0 1.0.0.0.0.0.0.0.2.1
                   }
                   assume = $$$0 $$0 {
                     elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
                       prove = $$0 $$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$0, $$0) 1.0.0.0.0.0.0.0.3a
-                      prove ∈ orderedPair $$$0 $0 S 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$0 $0 S) ($$0, $$$0) 1.0.0.0.0.0.0.0.3.0.0 1.0.0.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                      prove ∈ orderedPair $$$0 $0 t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$0 $0 t2) ($$0, $$$0) 1.0.0.0.0.0.0.0.3.0.0 1.0.0.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                     }
                   }
-                  prove ∈ orderedPair $$$0 $0 S 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair $$$0 $$0 R, = $$$0 $$0, ∈ orderedPair $$$0 $0 S) () 1.0.0.0.0.0.0.0.0 1.0.0.0.0.0.0.0.2 1.0.0.0.0.0.0.0.3
+                  prove ∈ orderedPair $$$0 $0 t2 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair $$$0 $$0 t0, = $$$0 $$0, ∈ orderedPair $$$0 $0 t2) () 1.0.0.0.0.0.0.0.0 1.0.0.0.0.0.0.0.2 1.0.0.0.0.0.0.0.3
                 }
               }
             }
@@ -187,167 +187,167 @@ conclusion ∧ relation S A transitiveRelation S A
       }
     }
     elided 115591d2ccba7063ade6115245528c0b261bd8f4455e320187d22c48d5955a92 {
-      prove ∧ relation S A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 S ∈ orderedPair $$0 $0 S ∈ orderedPair $$$0 $0 S 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation S A, ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∀ c → ∈ $0 A → ∧ ∈ orderedPair $$$0 $$0 S ∈ orderedPair $$0 $0 S ∈ orderedPair $$$0 $0 S) () 0 1.0
-      prove transitiveRelation S A 115591d2ccba7063ade6115245528c0b261bd8f4455e320187d22c48d5955a92 () (S, A) 1.1.0
+      prove ∧ relation t2 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$0 $$0 t2 ∈ orderedPair $$0 $0 t2 ∈ orderedPair $$$0 $0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$0 $$0 t2 ∈ orderedPair $$0 $0 t2 ∈ orderedPair $$$0 $0 t2) () 0 1.0
+      prove transitiveRelation t2 t1 115591d2ccba7063ade6115245528c0b261bd8f4455e320187d22c48d5955a92 () (t2, t1) 1.1.0
     }
   }
-  prove ∧ relation S A transitiveRelation S A 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation S A, transitiveRelation S A) () 0 1
+  prove ∧ relation t2 t1 transitiveRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, transitiveRelation t2 t1) () 0 1
 }
 
 theorem Complete Relation from Extended Semi-Complete Relation
 termVariables(R 0, A 0, S 0)
-premise ∧ relation R A semicompleteRelation R A
-premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
-conclusion ∧ relation S A completeRelation S A
+premise ∧ relation t0 t1 semicompleteRelation t0 t1
+premise = t2 productComprehension a b product t1 t1 ∨ ∈ orderedPair $0 $1 t0 = $0 $1
+conclusion ∧ relation t2 t1 completeRelation t2 t1
 {
   subproof (Relation) {
-    prove ⊆ S product A A 81b5dbe32279dbd5d93496d0e9d0489e46443ce8779f383a18c2222e389730ce (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, product A A) p1
-    prove relation S A ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (S, A) 0.0
+    prove ⊆ t2 product t1 t1 81b5dbe32279dbd5d93496d0e9d0489e46443ce8779f383a18c2222e389730ce (∨ ∈ orderedPair $0 $1 t0 = $0 $1) (t2, product t1 t1) p1
+    prove relation t2 t1 ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (t2, t1) 0.0
   }
   subproof (Complete) {
     take a {
-      assume ∈ $0 A {
+      assume ∈ $0 t1 {
         take b {
-          assume ∈ $0 A {
+          assume ∈ $0 t1 {
             elided 26ecf966f6277ba1610988bfbdc58adf42a06d99e0007d50b14e1e223f384ae3 {
-              prove ∧ relation R A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 R ∨ = $$0 $0 ∈ orderedPair $0 $$0 R 26ecf966f6277ba1610988bfbdc58adf42a06d99e0007d50b14e1e223f384ae3 () (R, A) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove → ∈ $$0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$$0 $0 R ∨ = $$$0 $0 ∈ orderedPair $0 $$$0 R b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$$$0 $0 R ∨ = $$$$0 $0 ∈ orderedPair $0 $$$$0 R) ($$0) 1.0.0.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove ∀ b → ∈ $0 A ∨ ∈ orderedPair $$$0 $0 R ∨ = $$$0 $0 ∈ orderedPair $0 $$$0 R 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 A, ∀ b → ∈ $0 A ∨ ∈ orderedPair $$$0 $0 R ∨ = $$$0 $0 ∈ orderedPair $0 $$$0 R) () 1.0.0.0.0.0.1 1.0.0a
-              prove → ∈ $0 A ∨ ∈ orderedPair $$0 $0 R ∨ = $$0 $0 ∈ orderedPair $0 $$0 R b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ∨ ∈ orderedPair $$0 $$$0 R ∨ = $$0 $$$0 ∈ orderedPair $$$0 $$0 R) ($0) 1.0.0.0.0.0.2
-              prove ∨ ∈ orderedPair $$0 $0 R ∨ = $$0 $0 ∈ orderedPair $0 $$0 R 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ∨ ∈ orderedPair $$0 $0 R ∨ = $$0 $0 ∈ orderedPair $0 $$0 R) () 1.0.0.0.0.0.3 1.0.0.0.0a
+              prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t0 ∨ = $$0 $0 ∈ orderedPair $0 $$0 t0 26ecf966f6277ba1610988bfbdc58adf42a06d99e0007d50b14e1e223f384ae3 () (t0, t1) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              prove → ∈ $$0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$$0 $0 t0 ∨ = $$$0 $0 ∈ orderedPair $0 $$$0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$$$0 $0 t0 ∨ = $$$$0 $0 ∈ orderedPair $0 $$$$0 t0) ($$0) 1.0.0.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              prove ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$$0 $0 t0 ∨ = $$$0 $0 ∈ orderedPair $0 $$$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t1, ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$$0 $0 t0 ∨ = $$$0 $0 ∈ orderedPair $0 $$$0 t0) () 1.0.0.0.0.0.1 1.0.0a
+              prove → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t0 ∨ = $$0 $0 ∈ orderedPair $0 $$0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ∨ ∈ orderedPair $$0 $$$0 t0 ∨ = $$0 $$$0 ∈ orderedPair $$$0 $$0 t0) ($0) 1.0.0.0.0.0.2
+              prove ∨ ∈ orderedPair $$0 $0 t0 ∨ = $$0 $0 ∈ orderedPair $0 $$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∨ ∈ orderedPair $$0 $0 t0 ∨ = $$0 $0 ∈ orderedPair $0 $$0 t0) () 1.0.0.0.0.0.3 1.0.0.0.0a
             }
-            assume ∈ orderedPair $$0 $0 R {
+            assume ∈ orderedPair $$0 $0 t0 {
               elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                prove ∨ ∈ orderedPair $$0 $0 R = $$0 $0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ orderedPair $$0 $0 R, = $$0 $0) () 1.0.0.0.0.1a
+                prove ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ orderedPair $$0 $0 t0, = $$0 $0) () 1.0.0.0.0.1a
                 elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
-                  prove → ∈ $$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) ($$0) 1.0.0.0.0.1.0.1.0
-                  prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$0 $0 S ∨ ∈ orderedPair $$$0 $0 R = $$$0 $0) () 1.0.0.0.0.1.0.1.1 1.0.0a
-                  prove → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ↔ ∈ orderedPair $$0 $$$0 S ∨ ∈ orderedPair $$0 $$$0 R = $$0 $$$0) ($0) 1.0.0.0.0.1.0.1.2
-                  prove ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.1.0.1.3 1.0.0.0.0a
-                  prove → ∨ ∈ orderedPair $$0 $0 R = $$0 $0 ∈ orderedPair $$0 $0 S 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $$0 $0 S, ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.1.0.1.4
-                  prove ∈ orderedPair $$0 $0 S 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $$0 $0 R = $$0 $0, ∈ orderedPair $$0 $0 S) () 1.0.0.0.0.1.0.1.5 1.0.0.0.0.1.0.0
+                  prove ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$0 $$$1 t0 = $$$0 $$$1) (t2, t1, t1) p1
+                  prove → ∈ $$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0) ($$0) 1.0.0.0.0.1.0.1.0
+                  prove ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t1, ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$0 $0 t2 ∨ ∈ orderedPair $$$0 $0 t0 = $$$0 $0) () 1.0.0.0.0.1.0.1.1 1.0.0a
+                  prove → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ↔ ∈ orderedPair $$0 $$$0 t2 ∨ ∈ orderedPair $$0 $$$0 t0 = $$0 $$$0) ($0) 1.0.0.0.0.1.0.1.2
+                  prove ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.1.0.1.3 1.0.0.0.0a
+                  prove → ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 ∈ orderedPair $$0 $0 t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $$0 $0 t2, ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.1.0.1.4
+                  prove ∈ orderedPair $$0 $0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $$0 $0 t0 = $$0 $0, ∈ orderedPair $$0 $0 t2) () 1.0.0.0.0.1.0.1.5 1.0.0.0.0.1.0.0
                 }
               }
             }
             assume = $$0 $0 {
               elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
                 prove = $0 $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$0, $0) 1.0.0.0.0.2a
-                prove ∨ ∈ orderedPair $0 $$0 R = $0 $$0 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (= $0 $$0, ∈ orderedPair $0 $$0 R) () 1.0.0.0.0.2.0.0
+                prove ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (= $0 $$0, ∈ orderedPair $0 $$0 t0) () 1.0.0.0.0.2.0.0
                 elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
-                  prove → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) ($0) 1.0.0.0.0.2.0.2.0
-                  prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.2.0.2.1 1.0.0.0.0a
-                  prove → ∈ $$0 A ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ↔ ∈ orderedPair $0 $$$0 S ∨ ∈ orderedPair $0 $$$0 R = $0 $$$0) ($$0) 1.0.0.0.0.2.0.2.2
-                  prove ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 A, ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0) () 1.0.0.0.0.2.0.2.3 1.0.0a
-                  prove → ∨ ∈ orderedPair $0 $$0 R = $0 $$0 ∈ orderedPair $0 $$0 S 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $0 $$0 S, ∨ ∈ orderedPair $0 $$0 R = $0 $$0) () 1.0.0.0.0.2.0.2.4
-                  prove ∈ orderedPair $0 $$0 S 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $0 $$0 R = $0 $$0, ∈ orderedPair $0 $$0 S) () 1.0.0.0.0.2.0.2.5 1.0.0.0.0.2.0.1
+                  prove ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$0 $$$1 t0 = $$$0 $$$1) (t2, t1, t1) p1
+                  prove → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0) ($0) 1.0.0.0.0.2.0.2.0
+                  prove ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.2.0.2.1 1.0.0.0.0a
+                  prove → ∈ $$0 t1 ↔ ∈ orderedPair $0 $$0 t2 ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ↔ ∈ orderedPair $0 $$$0 t2 ∨ ∈ orderedPair $0 $$$0 t0 = $0 $$$0) ($$0) 1.0.0.0.0.2.0.2.2
+                  prove ↔ ∈ orderedPair $0 $$0 t2 ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t1, ↔ ∈ orderedPair $0 $$0 t2 ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0) () 1.0.0.0.0.2.0.2.3 1.0.0a
+                  prove → ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 ∈ orderedPair $0 $$0 t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $0 $$0 t2, ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0) () 1.0.0.0.0.2.0.2.4
+                  prove ∈ orderedPair $0 $$0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $0 $$0 t0 = $0 $$0, ∈ orderedPair $0 $$0 t2) () 1.0.0.0.0.2.0.2.5 1.0.0.0.0.2.0.1
                 }
               }
             }
-            assume ∈ orderedPair $0 $$0 R {
+            assume ∈ orderedPair $0 $$0 t0 {
               elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                prove ∨ ∈ orderedPair $0 $$0 R = $0 $$0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ orderedPair $0 $$0 R, = $0 $$0) () 1.0.0.0.0.3a
+                prove ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ orderedPair $0 $$0 t0, = $0 $$0) () 1.0.0.0.0.3a
                 elided c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 {
-                  prove ∀ a → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$0 $$$1 R = $$$0 $$$1) (S, A, A) p1
-                  prove → ∈ $0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ∀ b → ∈ $0 A ↔ ∈ orderedPair $$$$0 $0 S ∨ ∈ orderedPair $$$$0 $0 R = $$$$0 $0) ($0) 1.0.0.0.0.3.0.1.0
-                  prove ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ∀ b → ∈ $0 A ↔ ∈ orderedPair $$0 $0 S ∨ ∈ orderedPair $$0 $0 R = $$0 $0) () 1.0.0.0.0.3.0.1.1 1.0.0.0.0a
-                  prove → ∈ $$0 A ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 A ↔ ∈ orderedPair $0 $$$0 S ∨ ∈ orderedPair $0 $$$0 R = $0 $$$0) ($$0) 1.0.0.0.0.3.0.1.2
-                  prove ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 A, ↔ ∈ orderedPair $0 $$0 S ∨ ∈ orderedPair $0 $$0 R = $0 $$0) () 1.0.0.0.0.3.0.1.3 1.0.0a
-                  prove → ∨ ∈ orderedPair $0 $$0 R = $0 $$0 ∈ orderedPair $0 $$0 S 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $0 $$0 S, ∨ ∈ orderedPair $0 $$0 R = $0 $$0) () 1.0.0.0.0.3.0.1.4
-                  prove ∈ orderedPair $0 $$0 S 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $0 $$0 R = $0 $$0, ∈ orderedPair $0 $$0 S) () 1.0.0.0.0.3.0.1.5 1.0.0.0.0.3.0.0
+                  prove ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $$$0 $$$1 t0 = $$$0 $$$1) (t2, t1, t1) p1
+                  prove → ∈ $0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$$$0 $0 t2 ∨ ∈ orderedPair $$$$0 $0 t0 = $$$$0 $0) ($0) 1.0.0.0.0.3.0.1.0
+                  prove ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∀ b → ∈ $0 t1 ↔ ∈ orderedPair $$0 $0 t2 ∨ ∈ orderedPair $$0 $0 t0 = $$0 $0) () 1.0.0.0.0.3.0.1.1 1.0.0.0.0a
+                  prove → ∈ $$0 t1 ↔ ∈ orderedPair $0 $$0 t2 ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ↔ ∈ orderedPair $0 $$$0 t2 ∨ ∈ orderedPair $0 $$$0 t0 = $0 $$$0) ($$0) 1.0.0.0.0.3.0.1.2
+                  prove ↔ ∈ orderedPair $0 $$0 t2 ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t1, ↔ ∈ orderedPair $0 $$0 t2 ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0) () 1.0.0.0.0.3.0.1.3 1.0.0a
+                  prove → ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0 ∈ orderedPair $0 $$0 t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $0 $$0 t2, ∨ ∈ orderedPair $0 $$0 t0 = $0 $$0) () 1.0.0.0.0.3.0.1.4
+                  prove ∈ orderedPair $0 $$0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $0 $$0 t0 = $0 $$0, ∈ orderedPair $0 $$0 t2) () 1.0.0.0.0.3.0.1.5 1.0.0.0.0.3.0.0
                 }
               }
             }
             elided 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 {
-              prove → ∨ = $$0 $0 ∈ orderedPair $0 $$0 R ∈ orderedPair $0 $$0 S d5ae154dc36200c1ad1fefe3cb0c30a20b73733c5a8fc1c3f892825368309ad9 (= $$0 $0, ∈ orderedPair $0 $$0 S, ∈ orderedPair $0 $$0 R) () 1.0.0.0.0.2 1.0.0.0.0.3
-              prove ∨ ∈ orderedPair $$0 $0 S ∈ orderedPair $0 $$0 S 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (∈ orderedPair $$0 $0 R, ∨ = $$0 $0 ∈ orderedPair $0 $$0 R, ∈ orderedPair $$0 $0 S, ∈ orderedPair $0 $$0 S) () 1.0.0.0.0.0 1.0.0.0.0.1 1.0.0.0.0.4.0
+              prove → ∨ = $$0 $0 ∈ orderedPair $0 $$0 t0 ∈ orderedPair $0 $$0 t2 d5ae154dc36200c1ad1fefe3cb0c30a20b73733c5a8fc1c3f892825368309ad9 (= $$0 $0, ∈ orderedPair $0 $$0 t2, ∈ orderedPair $0 $$0 t0) () 1.0.0.0.0.2 1.0.0.0.0.3
+              prove ∨ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (∈ orderedPair $$0 $0 t0, ∨ = $$0 $0 ∈ orderedPair $0 $$0 t0, ∈ orderedPair $$0 $0 t2, ∈ orderedPair $0 $$0 t2) () 1.0.0.0.0.0 1.0.0.0.0.1 1.0.0.0.0.4.0
             }
           }
         }
       }
     }
     elided 6334cac2fe4a1ec106de1e8aa16aa0ad40f094d94780559ae3836b0109c2f981 {
-      prove ∧ relation S A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 S ∈ orderedPair $0 $$0 S 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation S A, ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 S ∈ orderedPair $0 $$0 S) () 0 1.0
-      prove completeRelation S A 6334cac2fe4a1ec106de1e8aa16aa0ad40f094d94780559ae3836b0109c2f981 () (S, A) 1.1.0
+      prove ∧ relation t2 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2) () 0 1.0
+      prove completeRelation t2 t1 6334cac2fe4a1ec106de1e8aa16aa0ad40f094d94780559ae3836b0109c2f981 () (t2, t1) 1.1.0
     }
   }
-  prove ∧ relation S A completeRelation S A 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation S A, completeRelation S A) () 0 1
+  prove ∧ relation t2 t1 completeRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, completeRelation t2 t1) () 0 1
 }
 
 theorem Asymmetric Relation Is Irreflexive
 termVariables(~ 0, A 0)
-premise ∧ relation ~ A asymmetricRelation ~ A
-conclusion irreflexiveRelation ~ A
+premise ∧ relation t0 t1 asymmetricRelation t0 t1
+conclusion irreflexiveRelation t0 t1
 {
   take a {
-    assume ∈ $0 A {
-      assume ∈ orderedPair $0 $0 ~ {
+    assume ∈ $0 t1 {
+      assume ∈ orderedPair $0 $0 t0 {
         elided d0c44f4a2e491bbf3b1a889c3dd4e29f32a8bd4e6d0bd0236d799093ea2a0971 {
-          prove ∧ relation ~ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ¬ ∈ orderedPair $0 $$0 ~ d0c44f4a2e491bbf3b1a889c3dd4e29f32a8bd4e6d0bd0236d799093ea2a0971 () (~, A) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          prove → ∈ $0 A ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ¬ ∈ orderedPair $0 $$0 ~ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 A ∀ b → ∈ $0 A → ∈ orderedPair $$$0 $0 ~ ¬ ∈ orderedPair $0 $$$0 ~) ($0) 0.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          prove ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ¬ ∈ orderedPair $0 $$0 ~ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ∀ b → ∈ $0 A → ∈ orderedPair $$0 $0 ~ ¬ ∈ orderedPair $0 $$0 ~) () 0.0.0.0.1 0.0a
-          prove → ∈ $0 A → ∈ orderedPair $0 $0 ~ ¬ ∈ orderedPair $0 $0 ~ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 A → ∈ orderedPair $0 $$0 ~ ¬ ∈ orderedPair $$0 $0 ~) ($0) 0.0.0.0.2
-          prove → ∈ orderedPair $0 $0 ~ ¬ ∈ orderedPair $0 $0 ~ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, → ∈ orderedPair $0 $0 ~ ¬ ∈ orderedPair $0 $0 ~) () 0.0.0.0.3 0.0a
-          prove ¬ ∈ orderedPair $0 $0 ~ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 $0 ~, ¬ ∈ orderedPair $0 $0 ~) () 0.0.0.0.4 0.0.0a
+          prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0 d0c44f4a2e491bbf3b1a889c3dd4e29f32a8bd4e6d0bd0236d799093ea2a0971 () (t0, t1) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$$0 $0 t0 ¬ ∈ orderedPair $0 $$$0 t0) ($0) 0.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0) () 0.0.0.0.1 0.0a
+          prove → ∈ $0 t1 → ∈ orderedPair $0 $0 t0 ¬ ∈ orderedPair $0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 → ∈ orderedPair $0 $$0 t0 ¬ ∈ orderedPair $$0 $0 t0) ($0) 0.0.0.0.2
+          prove → ∈ orderedPair $0 $0 t0 ¬ ∈ orderedPair $0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, → ∈ orderedPair $0 $0 t0 ¬ ∈ orderedPair $0 $0 t0) () 0.0.0.0.3 0.0a
+          prove ¬ ∈ orderedPair $0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 $0 t0, ¬ ∈ orderedPair $0 $0 t0) () 0.0.0.0.4 0.0.0a
         }
       }
-      prove ¬ ∈ orderedPair $0 $0 ~ 9bd9d3d3908033785d819d3b9887c5fa62d1af459ce843247ede345f9b666894 (∈ orderedPair $0 $0 ~) () 0.0.0
+      prove ¬ ∈ orderedPair $0 $0 t0 9bd9d3d3908033785d819d3b9887c5fa62d1af459ce843247ede345f9b666894 (∈ orderedPair $0 $0 t0) () 0.0.0
     }
   }
   elided d728a8db1a4be817a3987286c0987af086dee55fa299757ca65276b0c5f5c76b {
-    prove ∧ relation ~ A ∀ a → ∈ $0 A ¬ ∈ orderedPair $0 $0 ~ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ~ A, ∀ a → ∈ $0 A ¬ ∈ orderedPair $0 $0 ~) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0
-    prove irreflexiveRelation ~ A d728a8db1a4be817a3987286c0987af086dee55fa299757ca65276b0c5f5c76b () (~, A) 1.0
+    prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ¬ ∈ orderedPair $0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t0 t1, ∀ a → ∈ $0 t1 ¬ ∈ orderedPair $0 $0 t0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0
+    prove irreflexiveRelation t0 t1 d728a8db1a4be817a3987286c0987af086dee55fa299757ca65276b0c5f5c76b () (t0, t1) 1.0
   }
 }
 
 theorem Complete Relation Is Reflexive
 termVariables(~ 0, A 0)
-premise ∧ relation ~ A completeRelation ~ A
-conclusion reflexiveRelation ~ A
+premise ∧ relation t0 t1 completeRelation t0 t1
+conclusion reflexiveRelation t0 t1
 {
   take a {
-    assume ∈ $0 A {
+    assume ∈ $0 t1 {
       elided efc8a8fab5710dc659c194c157e920d36c2ce470acce1196955beb0c5079aed4 {
-        prove ∧ relation ~ A ∀ a → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~ efc8a8fab5710dc659c194c157e920d36c2ce470acce1196955beb0c5079aed4 () (~, A) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        prove → ∈ $0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 A ∀ b → ∈ $0 A ∨ ∈ orderedPair $$$0 $0 ~ ∈ orderedPair $0 $$$0 ~) ($0) 0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        prove ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ∀ b → ∈ $0 A ∨ ∈ orderedPair $$0 $0 ~ ∈ orderedPair $0 $$0 ~) () 0.0.0.1 0.0a
-        prove → ∈ $0 A ∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 A ∨ ∈ orderedPair $0 $$0 ~ ∈ orderedPair $$0 $0 ~) ($0) 0.0.0.2
-        prove ∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 A, ∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~) () 0.0.0.3 0.0a
+        prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0 efc8a8fab5710dc659c194c157e920d36c2ce470acce1196955beb0c5079aed4 () (t0, t1) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$$0 $0 t0 ∈ orderedPair $0 $$$0 t0) ($0) 0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0) () 0.0.0.1 0.0a
+        prove → ∈ $0 t1 ∨ ∈ orderedPair $0 $0 t0 ∈ orderedPair $0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∨ ∈ orderedPair $0 $$0 t0 ∈ orderedPair $$0 $0 t0) ($0) 0.0.0.2
+        prove ∨ ∈ orderedPair $0 $0 t0 ∈ orderedPair $0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∨ ∈ orderedPair $0 $0 t0 ∈ orderedPair $0 $0 t0) () 0.0.0.3 0.0a
       }
       elided 11a0ceaf18ce26a8380b755e6169f709d48f0f3e341fcbf15a9f2b9854aaa95c {
-        prove ↔ ∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ 11a0ceaf18ce26a8380b755e6169f709d48f0f3e341fcbf15a9f2b9854aaa95c (∈ orderedPair $0 $0 ~) ()
-        prove → ∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~, ∈ orderedPair $0 $0 ~) () 0.0.1.0
-        prove ∈ orderedPair $0 $0 ~ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $0 $0 ~ ∈ orderedPair $0 $0 ~, ∈ orderedPair $0 $0 ~) () 0.0.1.1 0.0.0
+        prove ↔ ∨ ∈ orderedPair $0 $0 t0 ∈ orderedPair $0 $0 t0 ∈ orderedPair $0 $0 t0 11a0ceaf18ce26a8380b755e6169f709d48f0f3e341fcbf15a9f2b9854aaa95c (∈ orderedPair $0 $0 t0) ()
+        prove → ∨ ∈ orderedPair $0 $0 t0 ∈ orderedPair $0 $0 t0 ∈ orderedPair $0 $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∨ ∈ orderedPair $0 $0 t0 ∈ orderedPair $0 $0 t0, ∈ orderedPair $0 $0 t0) () 0.0.1.0
+        prove ∈ orderedPair $0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $0 $0 t0 ∈ orderedPair $0 $0 t0, ∈ orderedPair $0 $0 t0) () 0.0.1.1 0.0.0
       }
     }
   }
   elided c02d593cb92d673b7e9416e2da9b7cc3c19eda2afa0034be887cbab716a7e40c {
-    prove ∧ relation ~ A ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ~ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ~ A, ∀ a → ∈ $0 A ∈ orderedPair $0 $0 ~) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0
-    prove reflexiveRelation ~ A c02d593cb92d673b7e9416e2da9b7cc3c19eda2afa0034be887cbab716a7e40c () (~, A) 1.0
+    prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t0 t1, ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0
+    prove reflexiveRelation t0 t1 c02d593cb92d673b7e9416e2da9b7cc3c19eda2afa0034be887cbab716a7e40c () (t0, t1) 1.0
   }
 }
 
 theorem Elements Related by an Irreflexive Relation Are Not Equal
 termVariables(~ 0, A 0, a 0, b 0)
-premise ∧ relation ~ A irreflexiveRelation ~ A
-premise ∈ orderedPair a b ~
-conclusion ¬ = a b
+premise ∧ relation t0 t1 irreflexiveRelation t0 t1
+premise ∈ orderedPair t2 t3 t0
+conclusion ¬ = t2 t3
 {
-  prove ⊆ ~ product A A e3a7e3f727ccfe95728f3df8bab36dc71f8f578c1df1cabdf75f51ddfe4baaa2 () (~, A) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-  prove ∈ orderedPair a b product A A f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (~, product A A, orderedPair a b) 0 p1
-  prove ∈ a A d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () (a, b, A, A) 1
-  assume = a b {
+  prove ⊆ t0 product t1 t1 e3a7e3f727ccfe95728f3df8bab36dc71f8f578c1df1cabdf75f51ddfe4baaa2 () (t0, t1) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+  prove ∈ orderedPair t2 t3 product t1 t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t0, product t1 t1, orderedPair t2 t3) 0 p1
+  prove ∈ t2 t1 d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () (t2, t3, t1, t1) 1
+  assume = t2 t3 {
     elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-      prove = b a da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (a, b) 3a
-      prove ∈ orderedPair a a ~ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair a $0 ~) (b, a) 3.0.0 p1
+      prove = t3 t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t2, t3) 3a
+      prove ∈ orderedPair t2 t2 t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair t2 $0 t0) (t3, t2) 3.0.0 p1
     }
     elided 53d28d71f5bce6c5f88168e17bbb622c7e9f01586b05290613d6a4206cfad5e2 {
-      prove ∧ relation ~ A ∀ a → ∈ $0 A ¬ ∈ orderedPair $0 $0 ~ 53d28d71f5bce6c5f88168e17bbb622c7e9f01586b05290613d6a4206cfad5e2 () (~, A) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove → ∈ a A ¬ ∈ orderedPair a a ~ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 A ¬ ∈ orderedPair $0 $0 ~) (a) 3.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove ¬ ∈ orderedPair a a ~ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ a A, ¬ ∈ orderedPair a a ~) () 3.1.1 2
+      prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ¬ ∈ orderedPair $0 $0 t0 53d28d71f5bce6c5f88168e17bbb622c7e9f01586b05290613d6a4206cfad5e2 () (t0, t1) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove → ∈ t2 t1 ¬ ∈ orderedPair t2 t2 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 t1 ¬ ∈ orderedPair $0 $0 t0) (t2) 3.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ¬ ∈ orderedPair t2 t2 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t2 t1, ¬ ∈ orderedPair t2 t2 t0) () 3.1.1 2
     }
-    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∈ orderedPair a a ~) () 3.0 3.1
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∈ orderedPair t2 t2 t0) () 3.0 3.1
   }
-  prove ¬ = a b f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (= a b) () 3
+  prove ¬ = t2 t3 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (= t2 t3) () 3
 }

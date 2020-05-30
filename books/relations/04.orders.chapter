@@ -3,56 +3,56 @@ Define partial and total orders on a set
 type strictTotalOrder <
   qualifier (A) (on A)
   name (strict total order)
-  definition (∧ ∧ ∧ relation < A asymmetricRelation < A transitiveRelation < A semicompleteRelation < A)
+  definition (∧ ∧ ∧ relation t0 t1 asymmetricRelation t0 t1 transitiveRelation t0 t1 semicompleteRelation t0 t1)
 
 type totalOrder <
   qualifier (A) (on A)
   name (total order)
-  definition (∧ ∧ ∧ relation < A antisymmetricRelation < A transitiveRelation < A completeRelation < A)
+  definition (∧ ∧ ∧ relation t0 t1 antisymmetricRelation t0 t1 transitiveRelation t0 t1 completeRelation t0 t1)
 
 theorem Total Order from Extended Strict Total Order
 termVariables(R 0, A 0, S 0)
-premise strictTotalOrder R A
-premise = S productComprehension a b product A A ∨ ∈ orderedPair $0 $1 R = $0 $1
-conclusion totalOrder S A
+premise strictTotalOrder t0 t1
+premise = t2 productComprehension a b product t1 t1 ∨ ∈ orderedPair $0 $1 t0 = $0 $1
+conclusion totalOrder t2 t1
 {
-  prove ∧ ∧ ∧ relation R A asymmetricRelation R A transitiveRelation R A semicompleteRelation R A 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (R, A) p0
-  prove ⊆ S product A A 81b5dbe32279dbd5d93496d0e9d0489e46443ce8779f383a18c2222e389730ce (∨ ∈ orderedPair $0 $1 R = $0 $1) (S, product A A) p1
-  prove relation S A ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (S, A) 1
+  prove ∧ ∧ ∧ relation t0 t1 asymmetricRelation t0 t1 transitiveRelation t0 t1 semicompleteRelation t0 t1 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (t0, t1) p0
+  prove ⊆ t2 product t1 t1 81b5dbe32279dbd5d93496d0e9d0489e46443ce8779f383a18c2222e389730ce (∨ ∈ orderedPair $0 $1 t0 = $0 $1) (t2, product t1 t1) p1
+  prove relation t2 t1 ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (t2, t1) 1
   elided e02ee971f0e615f484605fc0a46f005d4906da9cf4f7fbefebbc0e61ec327ef7 {
-    prove ∧ ∧ ∧ relation R A asymmetricRelation R A transitiveRelation R A semicompleteRelation R A 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (R, A) p0
+    prove ∧ ∧ ∧ relation t0 t1 asymmetricRelation t0 t1 transitiveRelation t0 t1 semicompleteRelation t0 t1 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (t0, t1) p0
     elided e02ee971f0e615f484605fc0a46f005d4906da9cf4f7fbefebbc0e61ec327ef7 {
-      prove ∧ relation S A antisymmetricRelation S A e02ee971f0e615f484605fc0a46f005d4906da9cf4f7fbefebbc0e61ec327ef7 () (R, A, S) 3.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p1
-      prove antisymmetricRelation S A 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation S A, antisymmetricRelation S A) () 3.1.0
+      prove ∧ relation t2 t1 antisymmetricRelation t2 t1 e02ee971f0e615f484605fc0a46f005d4906da9cf4f7fbefebbc0e61ec327ef7 () (t0, t1, t2) 3.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p1
+      prove antisymmetricRelation t2 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation t2 t1, antisymmetricRelation t2 t1) () 3.1.0
     }
   }
   elided 48849cbfe0ad269763645985404582597384e13180b082a6ebff1177c5b97e73 {
-    prove ∧ ∧ ∧ relation R A asymmetricRelation R A transitiveRelation R A semicompleteRelation R A 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (R, A) p0
-    prove ∧ ∧ ∧ relation R A asymmetricRelation R A transitiveRelation R A semicompleteRelation R A 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (R, A) p0
-    prove ∧ relation R A transitiveRelation R A 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation R A, transitiveRelation R A) () 4.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 4.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove ∧ ∧ ∧ relation t0 t1 asymmetricRelation t0 t1 transitiveRelation t0 t1 semicompleteRelation t0 t1 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (t0, t1) p0
+    prove ∧ ∧ ∧ relation t0 t1 asymmetricRelation t0 t1 transitiveRelation t0 t1 semicompleteRelation t0 t1 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (t0, t1) p0
+    prove ∧ relation t0 t1 transitiveRelation t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t0 t1, transitiveRelation t0 t1) () 4.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 4.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     elided 48849cbfe0ad269763645985404582597384e13180b082a6ebff1177c5b97e73 {
-      prove ∧ relation S A transitiveRelation S A 48849cbfe0ad269763645985404582597384e13180b082a6ebff1177c5b97e73 () (R, A, S) 4.2 p1
-      prove transitiveRelation S A 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation S A, transitiveRelation S A) () 4.3.0
+      prove ∧ relation t2 t1 transitiveRelation t2 t1 48849cbfe0ad269763645985404582597384e13180b082a6ebff1177c5b97e73 () (t0, t1, t2) 4.2 p1
+      prove transitiveRelation t2 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation t2 t1, transitiveRelation t2 t1) () 4.3.0
     }
   }
   elided 083ed663db0b048c46f2a7b9cd6a0da7ba5df33acb163f1a4d82ddfff73d8008 {
-    prove ∧ ∧ ∧ relation R A asymmetricRelation R A transitiveRelation R A semicompleteRelation R A 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (R, A) p0
-    prove ∧ ∧ ∧ relation R A asymmetricRelation R A transitiveRelation R A semicompleteRelation R A 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (R, A) p0
-    prove ∧ relation R A semicompleteRelation R A 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation R A, semicompleteRelation R A) () 5.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 5.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove ∧ ∧ ∧ relation t0 t1 asymmetricRelation t0 t1 transitiveRelation t0 t1 semicompleteRelation t0 t1 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (t0, t1) p0
+    prove ∧ ∧ ∧ relation t0 t1 asymmetricRelation t0 t1 transitiveRelation t0 t1 semicompleteRelation t0 t1 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (t0, t1) p0
+    prove ∧ relation t0 t1 semicompleteRelation t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t0 t1, semicompleteRelation t0 t1) () 5.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 5.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     elided 083ed663db0b048c46f2a7b9cd6a0da7ba5df33acb163f1a4d82ddfff73d8008 {
-      prove ∧ relation S A completeRelation S A 083ed663db0b048c46f2a7b9cd6a0da7ba5df33acb163f1a4d82ddfff73d8008 () (R, A, S) 5.2 p1
-      prove completeRelation S A 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation S A, completeRelation S A) () 5.3.0
+      prove ∧ relation t2 t1 completeRelation t2 t1 083ed663db0b048c46f2a7b9cd6a0da7ba5df33acb163f1a4d82ddfff73d8008 () (t0, t1, t2) 5.2 p1
+      prove completeRelation t2 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation t2 t1, completeRelation t2 t1) () 5.3.0
     }
   }
   elided c50cf7c7bef655b9875977b4f21d4e01014eba560ce91428ae39dcb6691118d1 {
-    prove ∧ relation S A antisymmetricRelation S A 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation S A, antisymmetricRelation S A) () 2 3
-    prove ∧ ∧ relation S A antisymmetricRelation S A transitiveRelation S A 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ relation S A antisymmetricRelation S A, transitiveRelation S A) () 6.0 4
-    prove ∧ ∧ ∧ relation S A antisymmetricRelation S A transitiveRelation S A completeRelation S A 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ ∧ relation S A antisymmetricRelation S A transitiveRelation S A, completeRelation S A) () 6.1 5
-    prove totalOrder S A c50cf7c7bef655b9875977b4f21d4e01014eba560ce91428ae39dcb6691118d1 () (S, A) 6.2
+    prove ∧ relation t2 t1 antisymmetricRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, antisymmetricRelation t2 t1) () 2 3
+    prove ∧ ∧ relation t2 t1 antisymmetricRelation t2 t1 transitiveRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ relation t2 t1 antisymmetricRelation t2 t1, transitiveRelation t2 t1) () 6.0 4
+    prove ∧ ∧ ∧ relation t2 t1 antisymmetricRelation t2 t1 transitiveRelation t2 t1 completeRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ ∧ relation t2 t1 antisymmetricRelation t2 t1 transitiveRelation t2 t1, completeRelation t2 t1) () 6.1 5
+    prove totalOrder t2 t1 c50cf7c7bef655b9875977b4f21d4e01014eba560ce91428ae39dcb6691118d1 () (t2, t1) 6.2
   }
 }
 
 type wellOrder ≤
   qualifier (A) (on A)
   name (well-order)
-  definition (∧ totalOrder ≤ A ∀ S → ⊆ $0 A → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤)
+  definition (∧ totalOrder t0 t1 ∀ S → ⊆ $0 t1 → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 t0)

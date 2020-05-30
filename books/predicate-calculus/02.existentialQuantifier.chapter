@@ -2,172 +2,172 @@ Introduce the existential quantifier, ∃.
 
 statement ∃ ($x with x φ)
   format ((∃x)φ)
-  definition (¬ ∀ x ¬ with ($0) φ)
+  definition (¬ ∀ x ¬ with ($0) s0)
   shorthand (ex)
 
 theorem Existence by Exhibiting Value
 statementVariables(φ 1)
 termVariables(a 0)
-premise with (a) φ
-conclusion ∃ x with ($0) φ
+premise with (t0) s0
+conclusion ∃ x with ($0) s0
 {
-  assume ∀ x ¬ with ($0) φ {
-    prove ¬ with (a) φ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ with ($0) φ) (a) 0a
+  assume ∀ x ¬ with ($0) s0 {
+    prove ¬ with (t0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ with ($0) s0) (t0) 0a
   }
-  prove ¬ ∀ x ¬ with ($0) φ c6b6030434c95c400a4957ceb07ae21ea196cdb331dff0f66919e9330fb24450 (∀ x ¬ with ($0) φ, with (a) φ) () 0 p0
-  prove ∃ x with ($0) φ 7c67fca879124a338176eb03fbda9f990805ad1799293565b5163d1bbed9d63c (with ($0) φ) () 1
+  prove ¬ ∀ x ¬ with ($0) s0 c6b6030434c95c400a4957ceb07ae21ea196cdb331dff0f66919e9330fb24450 (∀ x ¬ with ($0) s0, with (t0) s0) () 0 p0
+  prove ∃ x with ($0) s0 7c67fca879124a338176eb03fbda9f990805ad1799293565b5163d1bbed9d63c (with ($0) s0) () 1
 }
 
 comment If something exists, we can name that something with an arbitrary variable for free.
 
 theorem Value for Existence
 statementVariables(φ 1, ψ 0)
-premise ∃ x with ($0) φ
-premise ∀ x → with ($0) φ ψ
-conclusion ψ
+premise ∃ x with ($0) s0
+premise ∀ x → with ($0) s0 s1
+conclusion s1
 {
-  prove ¬ ∀ x ¬ with ($0) φ 05f66fc1d7ca1416b6e82d594ee494b31a64c9398f0dc6bc6c70c60b89088696 (with ($0) φ) () p0
-  assume ¬ ψ {
+  prove ¬ ∀ x ¬ with ($0) s0 05f66fc1d7ca1416b6e82d594ee494b31a64c9398f0dc6bc6c70c60b89088696 (with ($0) s0) () p0
+  assume ¬ s1 {
     elided f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b {
       take x {
-        prove → with ($0) φ ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) φ ψ) ($0) p1
-        prove ¬ with ($0) φ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (with ($0) φ, ψ) () 1.0.0.0 1a
+        prove → with ($0) s0 s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) s0 s1) ($0) p1
+        prove ¬ with ($0) s0 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (with ($0) s0, s1) () 1.0.0.0 1a
       }
     }
   }
-  prove ψ b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (ψ, ∀ x ¬ with ($0) φ) () 1 0
+  prove s1 b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (s1, ∀ x ¬ with ($0) s0) () 1 0
 }
 
 comment Swapping an existence condition with an equivalent one.
 
 theorem Existence Equivalence
 statementVariables(φ 1, ψ 1)
-premise ∀ x ↔ with ($0) φ with ($0) ψ
-conclusion ↔ ∃ x with ($0) φ ∃ x with ($0) ψ
+premise ∀ x ↔ with ($0) s0 with ($0) s1
+conclusion ↔ ∃ x with ($0) s0 ∃ x with ($0) s1
 {
-  assume ∃ x with ($0) φ {
-    let x with ($0) φ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0) φ, ∃ x with ($0) ψ) () {
+  assume ∃ x with ($0) s0 {
+    let x with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0) s0, ∃ x with ($0) s1) () {
       elided (Extracted) {
-        prove ↔ with ($0) φ with ($0) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$0) φ with ($$0) ψ) ($0) p0
-        prove → with ($0) φ with ($0) ψ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (with ($0) φ, with ($0) ψ) () 0.0.0.0
-        prove with ($0) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) φ, with ($0) ψ) () 0.0.0.1 0.0a
+        prove ↔ with ($0) s0 with ($0) s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$0) s0 with ($$0) s1) ($0) p0
+        prove → with ($0) s0 with ($0) s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (with ($0) s0, with ($0) s1) () 0.0.0.0
+        prove with ($0) s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s0, with ($0) s1) () 0.0.0.1 0.0a
       }
-      prove ∃ x with ($0) ψ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0) ψ) ($0) 0.0.0
+      prove ∃ x with ($0) s1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0) s1) ($0) 0.0.0
     } 0a
   }
-  assume ∃ x with ($0) ψ {
-    let x with ($0) ψ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0) ψ, ∃ x with ($0) φ) () {
+  assume ∃ x with ($0) s1 {
+    let x with ($0) s1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0) s1, ∃ x with ($0) s0) () {
       elided (Extracted) {
-        prove ↔ with ($0) φ with ($0) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$0) φ with ($$0) ψ) ($0) p0
-        prove → with ($0) ψ with ($0) φ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (with ($0) φ, with ($0) ψ) () 1.0.0.0
-        prove with ($0) φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) ψ, with ($0) φ) () 1.0.0.1 1.0a
+        prove ↔ with ($0) s0 with ($0) s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$0) s0 with ($$0) s1) ($0) p0
+        prove → with ($0) s1 with ($0) s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (with ($0) s0, with ($0) s1) () 1.0.0.0
+        prove with ($0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s1, with ($0) s0) () 1.0.0.1 1.0a
       }
-      prove ∃ x with ($0) φ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0) φ) ($0) 1.0.0
+      prove ∃ x with ($0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0) s0) ($0) 1.0.0
     } 1a
   }
-  prove ↔ ∃ x with ($0) φ ∃ x with ($0) ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∃ x with ($0) φ, ∃ x with ($0) ψ) () 0 1
+  prove ↔ ∃ x with ($0) s0 ∃ x with ($0) s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∃ x with ($0) s0, ∃ x with ($0) s1) () 0 1
 }
 
 theorem Quantified Existence Equivalence
 statementVariables(χ 1, φ 1, ψ 1)
-premise ∀ x → with ($0) χ ↔ with ($0) φ with ($0) ψ
-conclusion ↔ ∃ x ∧ with ($0) χ with ($0) φ ∃ x ∧ with ($0) χ with ($0) ψ
+premise ∀ x → with ($0) s0 ↔ with ($0) s1 with ($0) s2
+conclusion ↔ ∃ x ∧ with ($0) s0 with ($0) s1 ∃ x ∧ with ($0) s0 with ($0) s2
 {
-  assume ∃ x ∧ with ($0) χ with ($0) φ {
-    let x ∧ with ($0) χ with ($0) φ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) χ with ($0) φ, ∃ x ∧ with ($0) χ with ($0) ψ) () {
+  assume ∃ x ∧ with ($0) s0 with ($0) s1 {
+    let x ∧ with ($0) s0 with ($0) s1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) s0 with ($0) s1, ∃ x ∧ with ($0) s0 with ($0) s2) () {
       elided (Extracted) {
-        prove → with ($0) χ ↔ with ($0) φ with ($0) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) χ ↔ with ($$0) φ with ($$0) ψ) ($0) p0
-        prove ↔ with ($0) φ with ($0) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) χ, ↔ with ($0) φ with ($0) ψ) () 0.0.0.0 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-        prove → with ($0) φ with ($0) ψ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (with ($0) φ, with ($0) ψ) () 0.0.0.1
-        prove with ($0) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) φ, with ($0) ψ) () 0.0.0.2 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove → with ($0) s0 ↔ with ($0) s1 with ($0) s2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) s0 ↔ with ($$0) s1 with ($$0) s2) ($0) p0
+        prove ↔ with ($0) s1 with ($0) s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s0, ↔ with ($0) s1 with ($0) s2) () 0.0.0.0 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        prove → with ($0) s1 with ($0) s2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (with ($0) s1, with ($0) s2) () 0.0.0.1
+        prove with ($0) s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s1, with ($0) s2) () 0.0.0.2 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       }
       elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-        prove ∧ with ($0) χ with ($0) ψ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) χ, with ($0) ψ) () 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0
-        prove ∃ x ∧ with ($0) χ with ($0) ψ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ with ($$0) χ with ($$0) ψ) ($0) 0.0.1.0
+        prove ∧ with ($0) s0 with ($0) s2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) s0, with ($0) s2) () 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0
+        prove ∃ x ∧ with ($0) s0 with ($0) s2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ with ($$0) s0 with ($$0) s2) ($0) 0.0.1.0
       }
     } 0a
   }
-  assume ∃ x ∧ with ($0) χ with ($0) ψ {
-    let x ∧ with ($0) χ with ($0) ψ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) χ with ($0) ψ, ∃ x ∧ with ($0) χ with ($0) φ) () {
+  assume ∃ x ∧ with ($0) s0 with ($0) s2 {
+    let x ∧ with ($0) s0 with ($0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) s0 with ($0) s2, ∃ x ∧ with ($0) s0 with ($0) s1) () {
       elided (Extracted) {
-        prove → with ($0) χ ↔ with ($0) φ with ($0) ψ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) χ ↔ with ($$0) φ with ($$0) ψ) ($0) p0
-        prove ↔ with ($0) φ with ($0) ψ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) χ, ↔ with ($0) φ with ($0) ψ) () 1.0.0.0 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-        prove → with ($0) ψ with ($0) φ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (with ($0) φ, with ($0) ψ) () 1.0.0.1
-        prove with ($0) φ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) ψ, with ($0) φ) () 1.0.0.2 1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove → with ($0) s0 ↔ with ($0) s1 with ($0) s2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) s0 ↔ with ($$0) s1 with ($$0) s2) ($0) p0
+        prove ↔ with ($0) s1 with ($0) s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s0, ↔ with ($0) s1 with ($0) s2) () 1.0.0.0 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        prove → with ($0) s2 with ($0) s1 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (with ($0) s1, with ($0) s2) () 1.0.0.1
+        prove with ($0) s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s2, with ($0) s1) () 1.0.0.2 1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       }
       elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-        prove ∧ with ($0) χ with ($0) φ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) χ, with ($0) φ) () 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0
-        prove ∃ x ∧ with ($0) χ with ($0) φ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ with ($$0) χ with ($$0) φ) ($0) 1.0.1.0
+        prove ∧ with ($0) s0 with ($0) s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) s0, with ($0) s1) () 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0
+        prove ∃ x ∧ with ($0) s0 with ($0) s1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ with ($$0) s0 with ($$0) s1) ($0) 1.0.1.0
       }
     } 1a
   }
-  prove ↔ ∃ x ∧ with ($0) χ with ($0) φ ∃ x ∧ with ($0) χ with ($0) ψ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∃ x ∧ with ($0) χ with ($0) φ, ∃ x ∧ with ($0) χ with ($0) ψ) () 0 1
+  prove ↔ ∃ x ∧ with ($0) s0 with ($0) s1 ∃ x ∧ with ($0) s0 with ($0) s2 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∃ x ∧ with ($0) s0 with ($0) s1, ∃ x ∧ with ($0) s0 with ($0) s2) () 0 1
 }
 
 comment Swapping between universal and existential quantifiers.
 
 theorem Not Exists Not Is For All
 statementVariables(φ 1)
-premise ¬ ∃ x ¬ with ($0) φ
-conclusion ∀ x with ($0) φ
+premise ¬ ∃ x ¬ with ($0) s0
+conclusion ∀ x with ($0) s0
 {
   take x {
-    assume ¬ with ($0) φ {
-      prove ∃ y ¬ with ($0) φ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (¬ with ($$0) φ) ($0) 0.0a
+    assume ¬ with ($0) s0 {
+      prove ∃ y ¬ with ($0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (¬ with ($$0) s0) ($0) 0.0a
     }
-    prove with ($0) φ b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (with ($0) φ, ∃ y ¬ with ($0) φ) () 0.0 p0
+    prove with ($0) s0 b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (with ($0) s0, ∃ y ¬ with ($0) s0) () 0.0 p0
   }
 }
 
 theorem Not Exists Is For All Not
 statementVariables(φ 1)
-premise ¬ ∃ x with ($0) φ
-conclusion ∀ x ¬ with ($0) φ
+premise ¬ ∃ x with ($0) s0
+conclusion ∀ x ¬ with ($0) s0
 {
-  assume ¬ ∀ x ¬ with ($0) φ {
-    prove ∃ x with ($0) φ 7c67fca879124a338176eb03fbda9f990805ad1799293565b5163d1bbed9d63c (with ($0) φ) () 0a
+  assume ¬ ∀ x ¬ with ($0) s0 {
+    prove ∃ x with ($0) s0 7c67fca879124a338176eb03fbda9f990805ad1799293565b5163d1bbed9d63c (with ($0) s0) () 0a
   }
-  prove ∀ x ¬ with ($0) φ b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (∀ x ¬ with ($0) φ, ∃ x with ($0) φ) () 0 p0
+  prove ∀ x ¬ with ($0) s0 b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (∀ x ¬ with ($0) s0, ∃ x with ($0) s0) () 0 p0
 }
 
 theorem For All Not Is Not Exists
 statementVariables(φ 1)
-premise ∀ x ¬ with ($0) φ
-conclusion ¬ ∃ x with ($0) φ
+premise ∀ x ¬ with ($0) s0
+conclusion ¬ ∃ x with ($0) s0
 {
-  assume ∃ x with ($0) φ {
-    prove ¬ ∀ x ¬ with ($0) φ 05f66fc1d7ca1416b6e82d594ee494b31a64c9398f0dc6bc6c70c60b89088696 (with ($0) φ) () 0a
+  assume ∃ x with ($0) s0 {
+    prove ¬ ∀ x ¬ with ($0) s0 05f66fc1d7ca1416b6e82d594ee494b31a64c9398f0dc6bc6c70c60b89088696 (with ($0) s0) () 0a
   }
-  prove ¬ ∃ x with ($0) φ c6b6030434c95c400a4957ceb07ae21ea196cdb331dff0f66919e9330fb24450 (∃ x with ($0) φ, ∀ x ¬ with ($0) φ) () 0 p0
+  prove ¬ ∃ x with ($0) s0 c6b6030434c95c400a4957ceb07ae21ea196cdb331dff0f66919e9330fb24450 (∃ x with ($0) s0, ∀ x ¬ with ($0) s0) () 0 p0
 }
 
 theorem Swap Existential Quantifiers
 statementVariables(φ 2)
-premise ∃ a ∃ b with ($$0 $0) φ
-conclusion ∃ b ∃ a with ($0 $$0) φ
+premise ∃ a ∃ b with ($$0 $0) s0
+conclusion ∃ b ∃ a with ($0 $$0) s0
 {
-  let a' ∃ b with ($$0 $0) φ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∃ b with ($$0 $0) φ, ∃ b ∃ a with ($0 $$0) φ) () {
-    let b' with ($$0 $0) φ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0 $$0) φ, ∃ b ∃ a with ($0 $$0) φ) () {
-      prove ∃ a with ($0 $$0) φ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$$0 $0) φ) ($$0) 0.0a
-      prove ∃ b ∃ a with ($0 $$0) φ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ a with ($0 $$$$0) φ) ($0) 0.0.0
+  let a' ∃ b with ($$0 $0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∃ b with ($$0 $0) s0, ∃ b ∃ a with ($0 $$0) s0) () {
+    let b' with ($$0 $0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0 $$0) s0, ∃ b ∃ a with ($0 $$0) s0) () {
+      prove ∃ a with ($0 $$0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$$0 $0) s0) ($$0) 0.0a
+      prove ∃ b ∃ a with ($0 $$0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ a with ($0 $$$$0) s0) ($0) 0.0.0
     } 0a
   } p0
 }
 
 theorem Swap Restricted Existential Quantifiers
 statementVariables(φ 1, ψ 1, χ 2)
-premise ∃ a ∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ
-conclusion ∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ
+premise ∃ a ∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2
+conclusion ∃ b ∧ with ($0) s1 ∃ a ∧ with ($0) s0 with ($0 $$0) s2
 {
-  let a' ∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ, ∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ) () {
-    let b' ∧ with ($0) ψ with ($$0 $0) χ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($$0) ψ with ($0 $$0) χ, ∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ) () {
+  let a' ∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2, ∃ b ∧ with ($0) s1 ∃ a ∧ with ($0) s0 with ($0 $$0) s2) () {
+    let b' ∧ with ($0) s1 with ($$0 $0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($$0) s1 with ($0 $$0) s2, ∃ b ∧ with ($0) s1 ∃ a ∧ with ($0) s0 with ($0 $$0) s2) () {
       elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-        prove ∧ with ($$0) φ with ($$0 $0) χ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($$0) φ, with ($$0 $0) χ) () 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        prove ∃ a ∧ with ($0) φ with ($0 $$0) χ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ with ($$$0) φ with ($$$0 $0) χ) ($$0) 0.0.0.0
+        prove ∧ with ($$0) s0 with ($$0 $0) s2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($$0) s0, with ($$0 $0) s2) () 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove ∃ a ∧ with ($0) s0 with ($0 $$0) s2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ with ($$$0) s0 with ($$$0 $0) s2) ($$0) 0.0.0.0
       }
       elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-        prove ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) ψ, ∃ a ∧ with ($0) φ with ($0 $$0) χ) () 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0
-        prove ∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ with ($$$0) ψ ∃ a ∧ with ($0) φ with ($0 $$$$0) χ) ($0) 0.0.1.0
+        prove ∧ with ($0) s1 ∃ a ∧ with ($0) s0 with ($0 $$0) s2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) s1, ∃ a ∧ with ($0) s0 with ($0 $$0) s2) () 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0
+        prove ∃ b ∧ with ($0) s1 ∃ a ∧ with ($0) s0 with ($0 $$0) s2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ with ($$$0) s1 ∃ a ∧ with ($0) s0 with ($0 $$$$0) s2) ($0) 0.0.1.0
       }
     } 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   } p0
@@ -175,23 +175,23 @@ conclusion ∃ b ∧ with ($0) ψ ∃ a ∧ with ($0) φ with ($0 $$0) χ
 
 theorem Remove Existential Quantifier Restriction
 statementVariables(φ 1, ψ 1)
-premise ∃ a ∧ with ($0) φ with ($0) ψ
-conclusion ∃ a with ($0) ψ
+premise ∃ a ∧ with ($0) s0 with ($0) s1
+conclusion ∃ a with ($0) s1
 {
-  let a' ∧ with ($0) φ with ($0) ψ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) φ with ($0) ψ, ∃ a with ($0) ψ) () {
-    prove ∃ a with ($0) ψ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0) ψ) ($0) 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+  let a' ∧ with ($0) s0 with ($0) s1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) s0 with ($0) s1, ∃ a with ($0) s1) () {
+    prove ∃ a with ($0) s1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0) s1) ($0) 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   } p0
 }
 
 theorem Remove Two Existential Quantifier Restrictions
 statementVariables(φ 1, ψ 1, χ 2)
-premise ∃ a ∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ
-conclusion ∃ a ∃ b with ($$0 $0) χ
+premise ∃ a ∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2
+conclusion ∃ a ∃ b with ($$0 $0) s2
 {
-  let a' ∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) φ ∃ b ∧ with ($0) ψ with ($$0 $0) χ, ∃ a ∃ b with ($$0 $0) χ) () {
-    let b' ∧ with ($0) ψ with ($$0 $0) χ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($$0) ψ with ($0 $$0) χ, ∃ a ∃ b with ($$0 $0) χ) () {
-      prove ∃ b with ($$$0 $0) χ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0 $$$0) χ) ($0) 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove ∃ a ∃ b with ($$0 $0) χ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ b with ($$$$0 $0) χ) ($$0) 0.0.0
+  let a' ∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2, ∃ a ∃ b with ($$0 $0) s2) () {
+    let b' ∧ with ($0) s1 with ($$0 $0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($$0) s1 with ($0 $$0) s2, ∃ a ∃ b with ($$0 $0) s2) () {
+      prove ∃ b with ($$$0 $0) s2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0 $$$0) s2) ($0) 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ∃ a ∃ b with ($$0 $0) s2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ b with ($$$$0 $0) s2) ($$0) 0.0.0
     } 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   } p0
 }

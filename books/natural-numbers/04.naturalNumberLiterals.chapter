@@ -20,13 +20,13 @@ conclusion ∈ 0ℕ ℕ
 
 theorem 0 Is Not the Successor of Any Natural Number
 termVariables(n 0)
-conclusion ¬ = successor n 0ℕ
+conclusion ¬ = successor t0 0ℕ
 {
-  prove ∈ n successor n fe3e3ed1a695fe6d7d69ea9843ee5b5a2ad74543046fa92c170ced1188ee5964 () (n)
-  prove ¬ = successor n ∅ d197f0469101dba16f72c9b3e6c622698a14a37bfe377f0d1e1e06962e7f87ec () (n, successor n) 0
+  prove ∈ t0 successor t0 fe3e3ed1a695fe6d7d69ea9843ee5b5a2ad74543046fa92c170ced1188ee5964 () (t0)
+  prove ¬ = successor t0 ∅ d197f0469101dba16f72c9b3e6c622698a14a37bfe377f0d1e1e06962e7f87ec () (t0, successor t0) 0
   elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
     prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
-    prove ¬ = successor n 0ℕ 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (¬ = successor n $0) (0ℕ, ∅) 2.0 1
+    prove ¬ = successor t0 0ℕ 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (¬ = successor t0 $0) (0ℕ, ∅) 2.0 1
   }
 }
 

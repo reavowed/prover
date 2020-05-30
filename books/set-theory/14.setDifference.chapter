@@ -2,12 +2,12 @@ The difference of two sets.
 
 term diff (A B)
   format (A/B) requires-brackets
-  (= $0 comprehension x A ¬ ∈ $0 B)
+  (= $0 comprehension x t0 ¬ ∈ $0 t1)
 
 theorem Element Condition for Set Difference
 termVariables(A 0, B 0)
-conclusion ∀ a ↔ ∈ $0 diff A B ∧ ∈ $0 A ¬ ∈ $0 B
+conclusion ∀ a ↔ ∈ $0 diff t0 t1 ∧ ∈ $0 t0 ¬ ∈ $0 t1
 {
-  prove = diff A B comprehension x A ¬ ∈ $0 B 83d7b519293e1925860ea978f52bedf6d2284faafcb822dd15f3e320dd769ac4 () (A, B)
-  prove ∀ y ↔ ∈ $0 diff A B ∧ ∈ $0 A ¬ ∈ $0 B 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (¬ ∈ $0 B) (diff A B, A) 0
+  prove = diff t0 t1 comprehension x t0 ¬ ∈ $0 t1 83d7b519293e1925860ea978f52bedf6d2284faafcb822dd15f3e320dd769ac4 () (t0, t1)
+  prove ∀ y ↔ ∈ $0 diff t0 t1 ∧ ∈ $0 t0 ¬ ∈ $0 t1 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (¬ ∈ $0 t1) (diff t0 t1, t0) 0
 }

@@ -3,119 +3,119 @@ Establish the existence of the ordered pair (a, b).
 term orderedPair (a b)
   name (Ordered Pair)
   format ((a, b)) no-component-brackets
-  (= $0 pair singleton a pair a b)
+  (= $0 pair singleton t0 pair t0 t1)
   shorthand (op)
 
 theorem Elements of Ordered Pair
 termVariables(c 0, a 0, b 0)
-premise ∈ c orderedPair a b
-conclusion ∨ = c singleton a = c pair a b
+premise ∈ t0 orderedPair t1 t2
+conclusion ∨ = t0 singleton t1 = t0 pair t1 t2
 {
-  prove = orderedPair a b pair singleton a pair a b 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 () (a, b)
-  prove ∈ c pair singleton a pair a b 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ c $0) (orderedPair a b, pair singleton a pair a b) 0 p0
-  prove ∨ = c singleton a = c pair a b 755a6dbda3a9a8372094e25f348a7578c296526a74ba5c52b062566f67761637 () (c, singleton a, pair a b) 1
+  prove = orderedPair t1 t2 pair singleton t1 pair t1 t2 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 () (t1, t2)
+  prove ∈ t0 pair singleton t1 pair t1 t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ t0 $0) (orderedPair t1 t2, pair singleton t1 pair t1 t2) 0 p0
+  prove ∨ = t0 singleton t1 = t0 pair t1 t2 755a6dbda3a9a8372094e25f348a7578c296526a74ba5c52b062566f67761637 () (t0, singleton t1, pair t1 t2) 1
 }
 
 theorem Singleton of First Coordinate Is Element of Ordered Pair
 termVariables(a 0, b 0)
-conclusion ∈ singleton a orderedPair a b
+conclusion ∈ singleton t0 orderedPair t0 t1
 {
-  prove ∈ singleton a pair singleton a pair a b 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b72df9639e () (singleton a, pair a b)
+  prove ∈ singleton t0 pair singleton t0 pair t0 t1 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b72df9639e () (singleton t0, pair t0 t1)
   elided 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 {
-    prove = orderedPair a b pair singleton a pair a b 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 () (a, b)
-    prove ∈ singleton a orderedPair a b 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ singleton a $0) (orderedPair a b, pair singleton a pair a b) 1.0 0
+    prove = orderedPair t0 t1 pair singleton t0 pair t0 t1 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 () (t0, t1)
+    prove ∈ singleton t0 orderedPair t0 t1 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ singleton t0 $0) (orderedPair t0 t1, pair singleton t0 pair t0 t1) 1.0 0
   }
 }
 
 theorem Pair Is Element of Ordered Pair
 termVariables(a 0, b 0)
-conclusion ∈ pair a b orderedPair a b
+conclusion ∈ pair t0 t1 orderedPair t0 t1
 {
-  prove ∈ pair a b pair singleton a pair a b 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (pair a b, singleton a)
+  prove ∈ pair t0 t1 pair singleton t0 pair t0 t1 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (pair t0 t1, singleton t0)
   elided 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 {
-    prove = orderedPair a b pair singleton a pair a b 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 () (a, b)
-    prove ∈ pair a b orderedPair a b 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ pair a b $0) (orderedPair a b, pair singleton a pair a b) 1.0 0
+    prove = orderedPair t0 t1 pair singleton t0 pair t0 t1 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 () (t0, t1)
+    prove ∈ pair t0 t1 orderedPair t0 t1 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ pair t0 t1 $0) (orderedPair t0 t1, pair singleton t0 pair t0 t1) 1.0 0
   }
 }
 
 theorem Ordered Pair with Same Coordinates Is Double Singleton
 termVariables(a 0)
-conclusion = orderedPair a a singleton singleton a
+conclusion = orderedPair t0 t0 singleton singleton t0
 {
-  prove = pair a a singleton a 64de403e4942050cb040a1d4e32ff457145018d47f77d608398b385d06804ed9 () (a)
-  prove = orderedPair a a pair singleton a pair a a 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 () (a, a)
-  prove = pair singleton a pair a a pair singleton a singleton a b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (pair a a, singleton a, pair singleton a $0) 0
-  prove = orderedPair a a pair singleton a singleton a 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (orderedPair a a, pair singleton a pair a a, pair singleton a singleton a) 1 2
-  prove = pair singleton a singleton a singleton singleton a 64de403e4942050cb040a1d4e32ff457145018d47f77d608398b385d06804ed9 () (singleton a)
-  prove = orderedPair a a singleton singleton a 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (orderedPair a a, pair singleton a singleton a, singleton singleton a) 3 4
+  prove = pair t0 t0 singleton t0 64de403e4942050cb040a1d4e32ff457145018d47f77d608398b385d06804ed9 () (t0)
+  prove = orderedPair t0 t0 pair singleton t0 pair t0 t0 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 () (t0, t0)
+  prove = pair singleton t0 pair t0 t0 pair singleton t0 singleton t0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (pair t0 t0, singleton t0, pair singleton t0 $0) 0
+  prove = orderedPair t0 t0 pair singleton t0 singleton t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (orderedPair t0 t0, pair singleton t0 pair t0 t0, pair singleton t0 singleton t0) 1 2
+  prove = pair singleton t0 singleton t0 singleton singleton t0 64de403e4942050cb040a1d4e32ff457145018d47f77d608398b385d06804ed9 () (singleton t0)
+  prove = orderedPair t0 t0 singleton singleton t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (orderedPair t0 t0, pair singleton t0 singleton t0, singleton singleton t0) 3 4
 }
 
 theorem First Coordinates of Equal Ordered Pairs Are Equal
 termVariables(a 0, b 0, c 0, d 0)
-premise = orderedPair a b orderedPair c d
-conclusion = a c
+premise = orderedPair t0 t1 orderedPair t2 t3
+conclusion = t0 t2
 {
-  prove ∈ singleton a orderedPair a b d08a6801a2b9b1e224b5d767de23883380c6ce09e5f2c069261de00a4e9a2fa8 () (a, b)
-  prove ∈ singleton a orderedPair c d 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ singleton a $0) (orderedPair a b, orderedPair c d) p0 0
-  prove ∨ = singleton a singleton c = singleton a pair c d 83ec046daec13a9f63167db62849e99d77e053a3d9bd0fd4bbe48c98efe9b63e () (singleton a, c, d) 1
-  assume = singleton a singleton c {
-    prove = a c 62a31e869c36337e95e31ecbac09fb20633ec7fdeda937e8f6ceb969002e9fee () (a, c) 3a
+  prove ∈ singleton t0 orderedPair t0 t1 d08a6801a2b9b1e224b5d767de23883380c6ce09e5f2c069261de00a4e9a2fa8 () (t0, t1)
+  prove ∈ singleton t0 orderedPair t2 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ singleton t0 $0) (orderedPair t0 t1, orderedPair t2 t3) p0 0
+  prove ∨ = singleton t0 singleton t2 = singleton t0 pair t2 t3 83ec046daec13a9f63167db62849e99d77e053a3d9bd0fd4bbe48c98efe9b63e () (singleton t0, t2, t3) 1
+  assume = singleton t0 singleton t2 {
+    prove = t0 t2 62a31e869c36337e95e31ecbac09fb20633ec7fdeda937e8f6ceb969002e9fee () (t0, t2) 3a
   }
-  assume = singleton a pair c d {
+  assume = singleton t0 pair t2 t3 {
     elided 375d79dbf74ac2bec7b558a826a3456fa0b610880a86fb4c3c485f47845c3bad {
-      prove = pair c d singleton a da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (singleton a, pair c d) 4a
-      prove = c a 375d79dbf74ac2bec7b558a826a3456fa0b610880a86fb4c3c485f47845c3bad () (c, d, a) 4.0.0
-      prove = a c da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (c, a) 4.0.1
+      prove = pair t2 t3 singleton t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (singleton t0, pair t2 t3) 4a
+      prove = t2 t0 375d79dbf74ac2bec7b558a826a3456fa0b610880a86fb4c3c485f47845c3bad () (t2, t3, t0) 4.0.0
+      prove = t0 t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t2, t0) 4.0.1
     }
   }
-  prove = a c 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= singleton a singleton c, = singleton a pair c d, = a c) () 2 3 4
+  prove = t0 t2 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= singleton t0 singleton t2, = singleton t0 pair t2 t3, = t0 t2) () 2 3 4
 }
 
 theorem Second Coordinates of Equal Ordered Pairs Are Equal
 termVariables(a 0, b 0, c 0, d 0)
-premise = orderedPair a b orderedPair c d
-conclusion = b d
+premise = orderedPair t0 t1 orderedPair t2 t3
+conclusion = t1 t3
 {
-  prove = a c 8977209a710a2fb4f728d3cb71cb83d4362a8863f78e362c0e63185d93e510d1 () (a, b, c, d) p0
-  assume = b a {
-    prove = orderedPair a b orderedPair a d 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (= orderedPair a b orderedPair $0 d) (a, c) 0 p0
-    prove = orderedPair a a singleton singleton a e6b3480cc04825361914320115744c89df9aa9fe0ca08d7a7c32dc8e577caa15 () (a)
-    prove = orderedPair a b singleton singleton a 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (= orderedPair a $0 singleton singleton a) (b, a) 1a 1.1
-    prove = orderedPair a d singleton singleton a 17ea1189d21985c734cf2ff359fbe657b6f31d5a78f5d8746e6b5e2b5c2f39e3 () (orderedPair a b, orderedPair a d, singleton singleton a) 1.0 1.2
-    prove ∈ pair a d orderedPair a d f2a60db8a25b3c04e10af80da554bbaedd995c76335ec7ad6118c272d80b0060 () (a, d)
-    prove ∈ pair a d singleton singleton a 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ pair a d $0) (orderedPair a d, singleton singleton a) 1.3 1.4
-    prove = pair a d singleton a 6acf06be48fa49ac292909853e78fdb76495f5eee6ccc72143d1c51f5f3e56d4 () (pair a d, singleton a) 1.5
-    prove = a d ca996ef8055b9be7e2536bc2659ff2d8cd214ffa2e12cc6239fc7aadbe822117 () (a, d, a) 1.6
-    prove = b d 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (b, a, d) 1a 1.7
+  prove = t0 t2 8977209a710a2fb4f728d3cb71cb83d4362a8863f78e362c0e63185d93e510d1 () (t0, t1, t2, t3) p0
+  assume = t1 t0 {
+    prove = orderedPair t0 t1 orderedPair t0 t3 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (= orderedPair t0 t1 orderedPair $0 t3) (t0, t2) 0 p0
+    prove = orderedPair t0 t0 singleton singleton t0 e6b3480cc04825361914320115744c89df9aa9fe0ca08d7a7c32dc8e577caa15 () (t0)
+    prove = orderedPair t0 t1 singleton singleton t0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (= orderedPair t0 $0 singleton singleton t0) (t1, t0) 1a 1.1
+    prove = orderedPair t0 t3 singleton singleton t0 17ea1189d21985c734cf2ff359fbe657b6f31d5a78f5d8746e6b5e2b5c2f39e3 () (orderedPair t0 t1, orderedPair t0 t3, singleton singleton t0) 1.0 1.2
+    prove ∈ pair t0 t3 orderedPair t0 t3 f2a60db8a25b3c04e10af80da554bbaedd995c76335ec7ad6118c272d80b0060 () (t0, t3)
+    prove ∈ pair t0 t3 singleton singleton t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ pair t0 t3 $0) (orderedPair t0 t3, singleton singleton t0) 1.3 1.4
+    prove = pair t0 t3 singleton t0 6acf06be48fa49ac292909853e78fdb76495f5eee6ccc72143d1c51f5f3e56d4 () (pair t0 t3, singleton t0) 1.5
+    prove = t0 t3 ca996ef8055b9be7e2536bc2659ff2d8cd214ffa2e12cc6239fc7aadbe822117 () (t0, t3, t0) 1.6
+    prove = t1 t3 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (t1, t0, t3) 1a 1.7
   }
-  prove = orderedPair a b orderedPair a d 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (= orderedPair a b orderedPair $0 d) (a, c) 0 p0
-  prove ∈ pair a b orderedPair a b f2a60db8a25b3c04e10af80da554bbaedd995c76335ec7ad6118c272d80b0060 () (a, b)
-  prove ∈ pair a b orderedPair a d 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ pair a b $0) (orderedPair a b, orderedPair a d) 2 3
-  prove ∨ = pair a b singleton a = pair a b pair a d 83ec046daec13a9f63167db62849e99d77e053a3d9bd0fd4bbe48c98efe9b63e () (pair a b, a, d) 4
-  assume = pair a b singleton a {
-    prove = b a 6d97a7c220fd2caf5e244edb8384ca1ecdd6297b237692029c0b01304a7b6782 () (a, b, a) 6a
-    prove = b d 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= b a, = b d) () 1 6.0
+  prove = orderedPair t0 t1 orderedPair t0 t3 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (= orderedPair t0 t1 orderedPair $0 t3) (t0, t2) 0 p0
+  prove ∈ pair t0 t1 orderedPair t0 t1 f2a60db8a25b3c04e10af80da554bbaedd995c76335ec7ad6118c272d80b0060 () (t0, t1)
+  prove ∈ pair t0 t1 orderedPair t0 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ pair t0 t1 $0) (orderedPair t0 t1, orderedPair t0 t3) 2 3
+  prove ∨ = pair t0 t1 singleton t0 = pair t0 t1 pair t0 t3 83ec046daec13a9f63167db62849e99d77e053a3d9bd0fd4bbe48c98efe9b63e () (pair t0 t1, t0, t3) 4
+  assume = pair t0 t1 singleton t0 {
+    prove = t1 t0 6d97a7c220fd2caf5e244edb8384ca1ecdd6297b237692029c0b01304a7b6782 () (t0, t1, t0) 6a
+    prove = t1 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= t1 t0, = t1 t3) () 1 6.0
   }
-  assume = pair a b pair a d {
-    prove ∈ b pair a b 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (b, a)
-    prove ∈ b pair a d 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ b $0) (pair a b, pair a d) 7a 7.0
-    prove ∨ = b a = b d 755a6dbda3a9a8372094e25f348a7578c296526a74ba5c52b062566f67761637 () (b, a, d) 7.1
-    prove = b d 94a09a0b02449696854fb3127e2d7d09e0aa3166ae4882ec9f7b5ca335baf226 (= b a, = b d) () 7.2 1
+  assume = pair t0 t1 pair t0 t3 {
+    prove ∈ t1 pair t0 t1 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (t1, t0)
+    prove ∈ t1 pair t0 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ t1 $0) (pair t0 t1, pair t0 t3) 7a 7.0
+    prove ∨ = t1 t0 = t1 t3 755a6dbda3a9a8372094e25f348a7578c296526a74ba5c52b062566f67761637 () (t1, t0, t3) 7.1
+    prove = t1 t3 94a09a0b02449696854fb3127e2d7d09e0aa3166ae4882ec9f7b5ca335baf226 (= t1 t0, = t1 t3) () 7.2 1
   }
-  prove = b d 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= pair a b singleton a, = pair a b pair a d, = b d) () 5 6 7
+  prove = t1 t3 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= pair t0 t1 singleton t0, = pair t0 t1 pair t0 t3, = t1 t3) () 5 6 7
 }
 
 theorem Uniqueness of First Coordinate of Ordered Pair
 termVariables(x 0)
-premise ∃ a ∃ b = x orderedPair $$0 $0
-conclusion ∃! a ∃ b = x orderedPair $$0 $0
+premise ∃ a ∃ b = t0 orderedPair $$0 $0
+conclusion ∃! a ∃ b = t0 orderedPair $$0 $0
 {
   take a_1 {
     take a_2 {
-      assume ∧ ∃ b = x orderedPair $$$0 $0 ∃ b = x orderedPair $$0 $0 {
-        let b_1 = x orderedPair $$$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= x orderedPair $$0 $$$0, = $$0 $0) () {
-          let b_2 = x orderedPair $$$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= x orderedPair $$0 $$$$0, = $$$0 $$0) () {
-            prove = orderedPair $$$$0 $$0 orderedPair $$$0 $0 17ea1189d21985c734cf2ff359fbe657b6f31d5a78f5d8746e6b5e2b5c2f39e3 () (x, orderedPair $$$$0 $$0, orderedPair $$$0 $0) 0.0.0.0a 0.0.0.0.0a
+      assume ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 {
+        let b_1 = t0 orderedPair $$$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $$0 $$$0, = $$0 $0) () {
+          let b_2 = t0 orderedPair $$$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $$0 $$$$0, = $$$0 $$0) () {
+            prove = orderedPair $$$$0 $$0 orderedPair $$$0 $0 17ea1189d21985c734cf2ff359fbe657b6f31d5a78f5d8746e6b5e2b5c2f39e3 () (t0, orderedPair $$$$0 $$0, orderedPair $$$0 $0) 0.0.0.0a 0.0.0.0.0a
             prove = $$$$0 $$$0 8977209a710a2fb4f728d3cb71cb83d4362a8863f78e362c0e63185d93e510d1 () ($$$$0, $$0, $$$0, $0) 0.0.0.0.0.0
           } 0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         } 0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -123,23 +123,23 @@ conclusion ∃! a ∃ b = x orderedPair $$0 $0
     }
   }
   elided 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 {
-    prove ∧ ∃ a ∃ b = x orderedPair $$0 $0 ∀ a_1 ∀ a_2 → ∧ ∃ b = x orderedPair $$$0 $0 ∃ b = x orderedPair $$0 $0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ a ∃ b = x orderedPair $$0 $0, ∀ a_1 ∀ a_2 → ∧ ∃ b = x orderedPair $$$0 $0 ∃ b = x orderedPair $$0 $0 = $$0 $0) () p0 0
-    prove ∃! a ∃ b = x orderedPair $$0 $0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∃ b = x orderedPair $$0 $0) () 1.0
+    prove ∧ ∃ a ∃ b = t0 orderedPair $$0 $0 ∀ a_1 ∀ a_2 → ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ a ∃ b = t0 orderedPair $$0 $0, ∀ a_1 ∀ a_2 → ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 = $$0 $0) () p0 0
+    prove ∃! a ∃ b = t0 orderedPair $$0 $0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∃ b = t0 orderedPair $$0 $0) () 1.0
   }
 }
 
 theorem Uniqueness of Second Coordinate of Ordered Pair
 termVariables(x 0)
-premise ∃ a ∃ b = x orderedPair $$0 $0
-conclusion ∃! b ∃ a = x orderedPair $0 $$0
+premise ∃ a ∃ b = t0 orderedPair $$0 $0
+conclusion ∃! b ∃ a = t0 orderedPair $0 $$0
 {
-  prove ∃ b ∃ a = x orderedPair $0 $$0 089db608f66b0d3d28865a12a6f14788a7399a0cec644a871fe9da2fb24fa3cb (= x orderedPair $0 $1) () p0
+  prove ∃ b ∃ a = t0 orderedPair $0 $$0 089db608f66b0d3d28865a12a6f14788a7399a0cec644a871fe9da2fb24fa3cb (= t0 orderedPair $0 $1) () p0
   take b_1 {
     take b_2 {
-      assume ∧ ∃ a = x orderedPair $0 $$$0 ∃ a = x orderedPair $0 $$0 {
-        let a_1 = x orderedPair $0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= x orderedPair $$$0 $$0, = $$0 $0) () {
-          let a_2 = x orderedPair $0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= x orderedPair $$$$0 $$0, = $$$0 $$0) () {
-            prove = orderedPair $$0 $$$$0 orderedPair $0 $$$0 17ea1189d21985c734cf2ff359fbe657b6f31d5a78f5d8746e6b5e2b5c2f39e3 () (x, orderedPair $$0 $$$$0, orderedPair $0 $$$0) 1.0.0.0a 1.0.0.0.0a
+      assume ∧ ∃ a = t0 orderedPair $0 $$$0 ∃ a = t0 orderedPair $0 $$0 {
+        let a_1 = t0 orderedPair $0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $$$0 $$0, = $$0 $0) () {
+          let a_2 = t0 orderedPair $0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $$$$0 $$0, = $$$0 $$0) () {
+            prove = orderedPair $$0 $$$$0 orderedPair $0 $$$0 17ea1189d21985c734cf2ff359fbe657b6f31d5a78f5d8746e6b5e2b5c2f39e3 () (t0, orderedPair $$0 $$$$0, orderedPair $0 $$$0) 1.0.0.0a 1.0.0.0.0a
             prove = $$$$0 $$$0 19a66c6e2472407a6bc0db6ef3785ff4af4337ccc0c3ee8053164db261062df3 () ($$0, $$$$0, $0, $$$0) 1.0.0.0.0.0
           } 1.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         } 1.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -147,46 +147,46 @@ conclusion ∃! b ∃ a = x orderedPair $0 $$0
     }
   }
   elided 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 {
-    prove ∧ ∃ b ∃ a = x orderedPair $0 $$0 ∀ x ∀ y → ∧ ∃ a = x orderedPair $0 $$$0 ∃ a = x orderedPair $0 $$0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x ∃ a = x orderedPair $0 $$0, ∀ x ∀ y → ∧ ∃ a = x orderedPair $0 $$$0 ∃ a = x orderedPair $0 $$0 = $$0 $0) () 0 1
-    prove ∃! b ∃ a = x orderedPair $0 $$0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∃ a = x orderedPair $0 $$0) () 2.0
+    prove ∧ ∃ b ∃ a = t0 orderedPair $0 $$0 ∀ x ∀ y → ∧ ∃ a = t0 orderedPair $0 $$$0 ∃ a = t0 orderedPair $0 $$0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x ∃ a = t0 orderedPair $0 $$0, ∀ x ∀ y → ∧ ∃ a = t0 orderedPair $0 $$$0 ∃ a = t0 orderedPair $0 $$0 = $$0 $0) () 0 1
+    prove ∃! b ∃ a = t0 orderedPair $0 $$0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∃ a = t0 orderedPair $0 $$0) () 2.0
   }
 }
 
 term first (x)
   name (First Element of Ordered Pair)
   format (x_0)
-  premises (∃ a ∃ b = x orderedPair $$0 $0)
-  (∃ b = x orderedPair $$0 $0)
+  premises (∃ a ∃ b = t0 orderedPair $$0 $0)
+  (∃ b = t0 orderedPair $$0 $0)
 
 term second (x)
   name (Second Element of Ordered Pair)
   format (x_1)
-  premises (∃ a ∃ b = x orderedPair $$0 $0)
-  (∃ a = x orderedPair $0 $$0)
+  premises (∃ a ∃ b = t0 orderedPair $$0 $0)
+  (∃ a = t0 orderedPair $0 $$0)
 
 write orderedPair first a second a as expandPair
 
 theorem Ordered Pair from Coordinates
 termVariables(x 0)
-premise ∃ a ∃ b = x orderedPair $$0 $0
-conclusion = x orderedPair first x second x
+premise ∃ a ∃ b = t0 orderedPair $$0 $0
+conclusion = t0 orderedPair first t0 second t0
 {
-  let a' ∃ b = x orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∃ b = x orderedPair $$0 $0, = x orderedPair first x second x) () {
-    let b' = x orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= x orderedPair $0 $$0, = x orderedPair first x second x) () {
-      prove ∃ a = x orderedPair $0 $$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= x orderedPair $$$0 $0) ($$0) 0.0a
+  let a' ∃ b = t0 orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∃ b = t0 orderedPair $$0 $0, = t0 orderedPair first t0 second t0) () {
+    let b' = t0 orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $0 $$0, = t0 orderedPair first t0 second t0) () {
+      prove ∃ a = t0 orderedPair $0 $$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= t0 orderedPair $$$0 $0) ($$0) 0.0a
       elided 612f42a32ed48c046b6b6218e8af87fab20b39b998283327366a591871805394 {
-        prove ∃! a ∃ b = x orderedPair $$0 $0 612f42a32ed48c046b6b6218e8af87fab20b39b998283327366a591871805394 () (x) p0
-        prove ∃ b = x orderedPair first x $0 42e1743439c10d376487e853e872a3ef82d4745abd8f77dfb88542c261df885c () (x) p0
-        prove = $$0 first x 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ b = x orderedPair $$$$0 $0) ($$0, first x) 0.0.1.0 0a 0.0.1.1
+        prove ∃! a ∃ b = t0 orderedPair $$0 $0 612f42a32ed48c046b6b6218e8af87fab20b39b998283327366a591871805394 () (t0) p0
+        prove ∃ b = t0 orderedPair first t0 $0 42e1743439c10d376487e853e872a3ef82d4745abd8f77dfb88542c261df885c () (t0) p0
+        prove = $$0 first t0 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ b = t0 orderedPair $$$$0 $0) ($$0, first t0) 0.0.1.0 0a 0.0.1.1
       }
       elided 02f42cedcfe11c54fb2e8062e25d54b9db41940ffc3c8bc09dcf5c93627b2dac {
-        prove ∃! b ∃ a = x orderedPair $0 $$0 02f42cedcfe11c54fb2e8062e25d54b9db41940ffc3c8bc09dcf5c93627b2dac () (x) p0
-        prove ∃ a = x orderedPair $0 second x c14edf76b6364ae3dc2af1590340e017789f9fc579e6c9a042bb21ac7bbd68f7 () (x) p0
-        prove = $0 second x 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ a = x orderedPair $0 $$$$0) ($0, second x) 0.0.2.0 0.0.0 0.0.2.1
+        prove ∃! b ∃ a = t0 orderedPair $0 $$0 02f42cedcfe11c54fb2e8062e25d54b9db41940ffc3c8bc09dcf5c93627b2dac () (t0) p0
+        prove ∃ a = t0 orderedPair $0 second t0 c14edf76b6364ae3dc2af1590340e017789f9fc579e6c9a042bb21ac7bbd68f7 () (t0) p0
+        prove = $0 second t0 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ a = t0 orderedPair $0 $$$$0) ($0, second t0) 0.0.2.0 0.0.0 0.0.2.1
       }
       elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-        prove = x orderedPair $$0 second x 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= x orderedPair $$0 $$$0) ($0, second x) 0.0.2 0.0a
-        prove = x orderedPair first x second x 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= x orderedPair $$$0 second x) ($$0, first x) 0.0.1 0.0.3.0
+        prove = t0 orderedPair $$0 second t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 orderedPair $$0 $$$0) ($0, second t0) 0.0.2 0.0a
+        prove = t0 orderedPair first t0 second t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 orderedPair $$$0 second t0) ($$0, first t0) 0.0.1 0.0.3.0
       }
     } 0a
   } p0
@@ -194,227 +194,227 @@ conclusion = x orderedPair first x second x
 
 theorem First Coordinate of Ordered Pair
 termVariables(a 0, b 0)
-conclusion = first orderedPair a b a
+conclusion = first orderedPair t0 t1 t0
 {
   elided 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 {
-    prove = orderedPair a b orderedPair a b 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (orderedPair a b)
-    prove ∃ b' = orderedPair a b orderedPair a $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= orderedPair a b orderedPair a $0) (b) 0.0
-    prove ∃ a' ∃ b' = orderedPair a b orderedPair $$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ b' = orderedPair a b orderedPair $$0 $0) (a) 0.1
+    prove = orderedPair t0 t1 orderedPair t0 t1 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (orderedPair t0 t1)
+    prove ∃ b' = orderedPair t0 t1 orderedPair t0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= orderedPair t0 t1 orderedPair t0 $0) (t1) 0.0
+    prove ∃ a' ∃ b' = orderedPair t0 t1 orderedPair $$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ b' = orderedPair t0 t1 orderedPair $$0 $0) (t0) 0.1
   }
-  prove ∃! a' ∃ b' = orderedPair a b orderedPair $$0 $0 612f42a32ed48c046b6b6218e8af87fab20b39b998283327366a591871805394 () (orderedPair a b) 0
-  prove ∃ b' = orderedPair a b orderedPair first orderedPair a b $0 42e1743439c10d376487e853e872a3ef82d4745abd8f77dfb88542c261df885c () (orderedPair a b) 0
+  prove ∃! a' ∃ b' = orderedPair t0 t1 orderedPair $$0 $0 612f42a32ed48c046b6b6218e8af87fab20b39b998283327366a591871805394 () (orderedPair t0 t1) 0
+  prove ∃ b' = orderedPair t0 t1 orderedPair first orderedPair t0 t1 $0 42e1743439c10d376487e853e872a3ef82d4745abd8f77dfb88542c261df885c () (orderedPair t0 t1) 0
   elided 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 {
-    prove = orderedPair a b orderedPair a b 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (orderedPair a b)
-    prove ∃ b' = orderedPair a b orderedPair a $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= orderedPair a b orderedPair a $0) (b) 3.0
+    prove = orderedPair t0 t1 orderedPair t0 t1 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (orderedPair t0 t1)
+    prove ∃ b' = orderedPair t0 t1 orderedPair t0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= orderedPair t0 t1 orderedPair t0 $0) (t1) 3.0
   }
-  prove = first orderedPair a b a 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ b' = orderedPair a b orderedPair $$0 $0) (first orderedPair a b, a) 1 2 3
+  prove = first orderedPair t0 t1 t0 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ b' = orderedPair t0 t1 orderedPair $$0 $0) (first orderedPair t0 t1, t0) 1 2 3
 }
 
 theorem Second Coordinate of Ordered Pair
 termVariables(a 0, b 0)
-conclusion = second orderedPair a b b
+conclusion = second orderedPair t0 t1 t1
 {
   elided 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 {
-    prove = orderedPair a b orderedPair a b 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (orderedPair a b)
-    prove ∃ b' = orderedPair a b orderedPair a $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= orderedPair a b orderedPair a $0) (b) 0.0
-    prove ∃ a' ∃ b' = orderedPair a b orderedPair $$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ b = orderedPair a b orderedPair $$0 $0) (a) 0.1
+    prove = orderedPair t0 t1 orderedPair t0 t1 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (orderedPair t0 t1)
+    prove ∃ b' = orderedPair t0 t1 orderedPair t0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= orderedPair t0 t1 orderedPair t0 $0) (t1) 0.0
+    prove ∃ a' ∃ b' = orderedPair t0 t1 orderedPair $$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ b = orderedPair t0 t1 orderedPair $$0 $0) (t0) 0.1
   }
-  prove ∃! b' ∃ a' = orderedPair a b orderedPair $0 $$0 02f42cedcfe11c54fb2e8062e25d54b9db41940ffc3c8bc09dcf5c93627b2dac () (orderedPair a b) 0
-  prove ∃ a' = orderedPair a b orderedPair $0 second orderedPair a b c14edf76b6364ae3dc2af1590340e017789f9fc579e6c9a042bb21ac7bbd68f7 () (orderedPair a b) 0
+  prove ∃! b' ∃ a' = orderedPair t0 t1 orderedPair $0 $$0 02f42cedcfe11c54fb2e8062e25d54b9db41940ffc3c8bc09dcf5c93627b2dac () (orderedPair t0 t1) 0
+  prove ∃ a' = orderedPair t0 t1 orderedPair $0 second orderedPair t0 t1 c14edf76b6364ae3dc2af1590340e017789f9fc579e6c9a042bb21ac7bbd68f7 () (orderedPair t0 t1) 0
   elided 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 {
-    prove = orderedPair a b orderedPair a b 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (orderedPair a b)
-    prove ∃ a' = orderedPair a b orderedPair $0 b 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= orderedPair a b orderedPair $0 b) (a) 3.0
+    prove = orderedPair t0 t1 orderedPair t0 t1 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (orderedPair t0 t1)
+    prove ∃ a' = orderedPair t0 t1 orderedPair $0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= orderedPair t0 t1 orderedPair $0 t1) (t0) 3.0
   }
-  prove = second orderedPair a b b 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ a' = orderedPair a b orderedPair $0 $$0) (second orderedPair a b, b) 1 2 3
+  prove = second orderedPair t0 t1 t1 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ a' = orderedPair t0 t1 orderedPair $0 $$0) (second orderedPair t0 t1, t1) 1 2 3
 }
 
 theorem Double Union Contains Elements of Ordered Pair
 termVariables(a 0, b 0, X 0)
-premise ∈ orderedPair a b X
-conclusion ∧ ∈ a union union X ∈ b union union X
+premise ∈ orderedPair t0 t1 t2
+conclusion ∧ ∈ t0 union union t2 ∈ t1 union union t2
 {
-  prove ∈ a pair a b 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b72df9639e () (a, b)
-  prove ∈ b pair a b 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (b, a)
-  prove ∈ pair a b orderedPair a b f2a60db8a25b3c04e10af80da554bbaedd995c76335ec7ad6118c272d80b0060 () (a, b)
+  prove ∈ t0 pair t0 t1 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b72df9639e () (t0, t1)
+  prove ∈ t1 pair t0 t1 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (t1, t0)
+  prove ∈ pair t0 t1 orderedPair t0 t1 f2a60db8a25b3c04e10af80da554bbaedd995c76335ec7ad6118c272d80b0060 () (t0, t1)
   elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
     elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-      prove ∧ ∈ pair a b orderedPair a b ∈ orderedPair a b X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ pair a b orderedPair a b, ∈ orderedPair a b X) () 2 p0
-      prove ∃ y ∧ ∈ pair a b $0 ∈ $0 X 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ pair a b $0 ∈ $0 X) (orderedPair a b) 3.0.0
+      prove ∧ ∈ pair t0 t1 orderedPair t0 t1 ∈ orderedPair t0 t1 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ pair t0 t1 orderedPair t0 t1, ∈ orderedPair t0 t1 t2) () 2 p0
+      prove ∃ y ∧ ∈ pair t0 t1 $0 ∈ $0 t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ pair t0 t1 $0 ∈ $0 t2) (orderedPair t0 t1) 3.0.0
     }
     elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
-      prove ∀ x ↔ ∈ $0 union X ∃ y ∧ ∈ $$0 $0 ∈ $0 X 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (X)
-      prove ↔ ∈ pair a b union X ∃ y ∧ ∈ pair a b $0 ∈ $0 X b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 union X ∃ y ∧ ∈ $$0 $0 ∈ $0 X) (pair a b) 3.1.0
-      prove → ∃ y ∧ ∈ pair a b $0 ∈ $0 X ∈ pair a b union X 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ pair a b union X, ∃ y ∧ ∈ pair a b $0 ∈ $0 X) () 3.1.1
-      prove ∈ pair a b union X 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ y ∧ ∈ pair a b $0 ∈ $0 X, ∈ pair a b union X) () 3.1.2 3.0
+      prove ∀ x ↔ ∈ $0 union t2 ∃ y ∧ ∈ $$0 $0 ∈ $0 t2 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (t2)
+      prove ↔ ∈ pair t0 t1 union t2 ∃ y ∧ ∈ pair t0 t1 $0 ∈ $0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 union t2 ∃ y ∧ ∈ $$0 $0 ∈ $0 t2) (pair t0 t1) 3.1.0
+      prove → ∃ y ∧ ∈ pair t0 t1 $0 ∈ $0 t2 ∈ pair t0 t1 union t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ pair t0 t1 union t2, ∃ y ∧ ∈ pair t0 t1 $0 ∈ $0 t2) () 3.1.1
+      prove ∈ pair t0 t1 union t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ y ∧ ∈ pair t0 t1 $0 ∈ $0 t2, ∈ pair t0 t1 union t2) () 3.1.2 3.0
     }
   }
   elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
     elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-      prove ∧ ∈ a pair a b ∈ pair a b union X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ a pair a b, ∈ pair a b union X) () 0 3
-      prove ∃ y ∧ ∈ a $0 ∈ $0 union X 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ a $0 ∈ $0 union X) (pair a b) 4.0.0
+      prove ∧ ∈ t0 pair t0 t1 ∈ pair t0 t1 union t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 pair t0 t1, ∈ pair t0 t1 union t2) () 0 3
+      prove ∃ y ∧ ∈ t0 $0 ∈ $0 union t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ t0 $0 ∈ $0 union t2) (pair t0 t1) 4.0.0
     }
     elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
-      prove ∀ x ↔ ∈ $0 union union X ∃ y ∧ ∈ $$0 $0 ∈ $0 union X 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (union X)
-      prove ↔ ∈ a union union X ∃ y ∧ ∈ a $0 ∈ $0 union X b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 union union X ∃ y ∧ ∈ $$0 $0 ∈ $0 union X) (a) 4.1.0
-      prove → ∃ y ∧ ∈ a $0 ∈ $0 union X ∈ a union union X 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ a union union X, ∃ y ∧ ∈ a $0 ∈ $0 union X) () 4.1.1
-      prove ∈ a union union X 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ y ∧ ∈ a $0 ∈ $0 union X, ∈ a union union X) () 4.1.2 4.0
+      prove ∀ x ↔ ∈ $0 union union t2 ∃ y ∧ ∈ $$0 $0 ∈ $0 union t2 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (union t2)
+      prove ↔ ∈ t0 union union t2 ∃ y ∧ ∈ t0 $0 ∈ $0 union t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 union union t2 ∃ y ∧ ∈ $$0 $0 ∈ $0 union t2) (t0) 4.1.0
+      prove → ∃ y ∧ ∈ t0 $0 ∈ $0 union t2 ∈ t0 union union t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 union union t2, ∃ y ∧ ∈ t0 $0 ∈ $0 union t2) () 4.1.1
+      prove ∈ t0 union union t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ y ∧ ∈ t0 $0 ∈ $0 union t2, ∈ t0 union union t2) () 4.1.2 4.0
     }
   }
   elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
     elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-      prove ∧ ∈ b pair a b ∈ pair a b union X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ b pair a b, ∈ pair a b union X) () 1 3
-      prove ∃ y ∧ ∈ b $0 ∈ $0 union X 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ b $0 ∈ $0 union X) (pair a b) 5.0.0
+      prove ∧ ∈ t1 pair t0 t1 ∈ pair t0 t1 union t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t1 pair t0 t1, ∈ pair t0 t1 union t2) () 1 3
+      prove ∃ y ∧ ∈ t1 $0 ∈ $0 union t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ t1 $0 ∈ $0 union t2) (pair t0 t1) 5.0.0
     }
     elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
-      prove ∀ x ↔ ∈ $0 union union X ∃ y ∧ ∈ $$0 $0 ∈ $0 union X 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (union X)
-      prove ↔ ∈ b union union X ∃ y ∧ ∈ b $0 ∈ $0 union X b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 union union X ∃ y ∧ ∈ $$0 $0 ∈ $0 union X) (b) 5.1.0
-      prove → ∃ y ∧ ∈ b $0 ∈ $0 union X ∈ b union union X 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ b union union X, ∃ y ∧ ∈ b $0 ∈ $0 union X) () 5.1.1
-      prove ∈ b union union X 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ y ∧ ∈ b $0 ∈ $0 union X, ∈ b union union X) () 5.1.2 5.0
+      prove ∀ x ↔ ∈ $0 union union t2 ∃ y ∧ ∈ $$0 $0 ∈ $0 union t2 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (union t2)
+      prove ↔ ∈ t1 union union t2 ∃ y ∧ ∈ t1 $0 ∈ $0 union t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 union union t2 ∃ y ∧ ∈ $$0 $0 ∈ $0 union t2) (t1) 5.1.0
+      prove → ∃ y ∧ ∈ t1 $0 ∈ $0 union t2 ∈ t1 union union t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t1 union union t2, ∃ y ∧ ∈ t1 $0 ∈ $0 union t2) () 5.1.1
+      prove ∈ t1 union union t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ y ∧ ∈ t1 $0 ∈ $0 union t2, ∈ t1 union union t2) () 5.1.2 5.0
     }
   }
-  prove ∧ ∈ a union union X ∈ b union union X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ a union union X, ∈ b union union X) () 4 5
+  prove ∧ ∈ t0 union union t2 ∈ t1 union union t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 union union t2, ∈ t1 union union t2) () 4 5
 }
 
 comment Define the concept of a set of ordered pairs, which will be useful later for functions and relations.
 
 type pairSet X
   name (pair-set)
-  definition (∀ x → ∈ $0 X ∃ a ∃ b = $$$0 orderedPair $$0 $0)
+  definition (∀ x → ∈ $0 t0 ∃ a ∃ b = $$$0 orderedPair $$0 $0)
 
 term domain (X)
   format (domain(X)) no-component-brackets
-  (= $0 comprehension a union union X ∃ b ∈ orderedPair $$0 $0 X)
+  (= $0 comprehension a union union t0 ∃ b ∈ orderedPair $$0 $0 t0)
 
 term codomain (X)
   format (codomain(X)) no-component-brackets
-  (= $0 comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X)
+  (= $0 comprehension b union union t0 ∃ a ∈ orderedPair $0 $$0 t0)
 
 theorem Coordinates of Element Are Elements of Domain and Codomain
 termVariables(a 0, b 0, X 0)
-premise ∈ orderedPair a b X
-conclusion ∧ ∈ a domain X ∈ b codomain X
+premise ∈ orderedPair t0 t1 t2
+conclusion ∧ ∈ t0 domain t2 ∈ t1 codomain t2
 {
-  prove = domain X comprehension a union union X ∃ b ∈ orderedPair $$0 $0 X 4186f8707db1f2ca1e4bd5932d08070b74f53eb3890a58ab44d0100457e2c4c7 () (X)
-  prove = codomain X comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X 9e67beca6b16a63bad776aa0c81f01a6a3df4e9bace0478e3b94b529431b22cb () (X)
-  prove ∧ ∈ a union union X ∈ b union union X d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 () (a, b, X) p0
+  prove = domain t2 comprehension a union union t2 ∃ b ∈ orderedPair $$0 $0 t2 4186f8707db1f2ca1e4bd5932d08070b74f53eb3890a58ab44d0100457e2c4c7 () (t2)
+  prove = codomain t2 comprehension b union union t2 ∃ a ∈ orderedPair $0 $$0 t2 9e67beca6b16a63bad776aa0c81f01a6a3df4e9bace0478e3b94b529431b22cb () (t2)
+  prove ∧ ∈ t0 union union t2 ∈ t1 union union t2 d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 () (t0, t1, t2) p0
   elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-    prove ∃ b ∈ orderedPair a $0 X 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair a $0 X) (b) p0
+    prove ∃ b ∈ orderedPair t0 $0 t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair t0 $0 t2) (t1) p0
     elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-      prove ∧ ∈ a union union X ∃ b ∈ orderedPair a $0 X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ a union union X, ∃ b ∈ orderedPair a $0 X) () 2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 3.0
+      prove ∧ ∈ t0 union union t2 ∃ b ∈ orderedPair t0 $0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 union union t2, ∃ b ∈ orderedPair t0 $0 t2) () 2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 3.0
       elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-        prove ∀ y ↔ ∈ $0 domain X ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ b ∈ orderedPair $$0 $0 X) (domain X, union union X) 0
-        prove ↔ ∈ a domain X ∧ ∈ a union union X ∃ b ∈ orderedPair a $0 X b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 domain X ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X) (a) 3.1.1.0
-        prove → ∧ ∈ a union union X ∃ b ∈ orderedPair a $0 X ∈ a domain X 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ a domain X, ∧ ∈ a union union X ∃ b ∈ orderedPair a $0 X) () 3.1.1.1
-        prove ∈ a domain X 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ a union union X ∃ b ∈ orderedPair a $0 X, ∈ a domain X) () 3.1.1.2 3.1.0
+        prove ∀ y ↔ ∈ $0 domain t2 ∧ ∈ $0 union union t2 ∃ b ∈ orderedPair $$0 $0 t2 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ b ∈ orderedPair $$0 $0 t2) (domain t2, union union t2) 0
+        prove ↔ ∈ t0 domain t2 ∧ ∈ t0 union union t2 ∃ b ∈ orderedPair t0 $0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 domain t2 ∧ ∈ $0 union union t2 ∃ b ∈ orderedPair $$0 $0 t2) (t0) 3.1.1.0
+        prove → ∧ ∈ t0 union union t2 ∃ b ∈ orderedPair t0 $0 t2 ∈ t0 domain t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 domain t2, ∧ ∈ t0 union union t2 ∃ b ∈ orderedPair t0 $0 t2) () 3.1.1.1
+        prove ∈ t0 domain t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ t0 union union t2 ∃ b ∈ orderedPair t0 $0 t2, ∈ t0 domain t2) () 3.1.1.2 3.1.0
       }
     }
   }
   elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-    prove ∃ a ∈ orderedPair $0 b X 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair $0 b X) (a) p0
+    prove ∃ a ∈ orderedPair $0 t1 t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair $0 t1 t2) (t0) p0
     elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-      prove ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ b union union X, ∃ a ∈ orderedPair $0 b X) () 2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 4.0
+      prove ∧ ∈ t1 union union t2 ∃ a ∈ orderedPair $0 t1 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t1 union union t2, ∃ a ∈ orderedPair $0 t1 t2) () 2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 4.0
       elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-        prove ∀ y ↔ ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ a ∈ orderedPair $0 $$0 X) (codomain X, union union X) 1
-        prove ↔ ∈ b codomain X ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X) (b) 4.1.1.0
-        prove → ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X ∈ b codomain X 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ b codomain X, ∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X) () 4.1.1.1
-        prove ∈ b codomain X 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ b union union X ∃ a ∈ orderedPair $0 b X, ∈ b codomain X) () 4.1.1.2 4.1.0
+        prove ∀ y ↔ ∈ $0 codomain t2 ∧ ∈ $0 union union t2 ∃ a ∈ orderedPair $0 $$0 t2 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ a ∈ orderedPair $0 $$0 t2) (codomain t2, union union t2) 1
+        prove ↔ ∈ t1 codomain t2 ∧ ∈ t1 union union t2 ∃ a ∈ orderedPair $0 t1 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 codomain t2 ∧ ∈ $0 union union t2 ∃ a ∈ orderedPair $0 $$0 t2) (t1) 4.1.1.0
+        prove → ∧ ∈ t1 union union t2 ∃ a ∈ orderedPair $0 t1 t2 ∈ t1 codomain t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t1 codomain t2, ∧ ∈ t1 union union t2 ∃ a ∈ orderedPair $0 t1 t2) () 4.1.1.1
+        prove ∈ t1 codomain t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ t1 union union t2 ∃ a ∈ orderedPair $0 t1 t2, ∈ t1 codomain t2) () 4.1.1.2 4.1.0
       }
     }
   }
-  prove ∧ ∈ a domain X ∈ b codomain X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ a domain X, ∈ b codomain X) () 3 4
+  prove ∧ ∈ t0 domain t2 ∈ t1 codomain t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 domain t2, ∈ t1 codomain t2) () 3 4
 }
 
 theorem Membership Condition for Domain
 termVariables(X 0)
-conclusion ∀ a ↔ ∈ $0 domain X ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X
+conclusion ∀ a ↔ ∈ $0 domain t0 ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0
 {
-  prove = domain X comprehension a union union X ∃ b ∈ orderedPair $$0 $0 X 4186f8707db1f2ca1e4bd5932d08070b74f53eb3890a58ab44d0100457e2c4c7 () (X)
+  prove = domain t0 comprehension a union union t0 ∃ b ∈ orderedPair $$0 $0 t0 4186f8707db1f2ca1e4bd5932d08070b74f53eb3890a58ab44d0100457e2c4c7 () (t0)
   take a {
-    assume ∈ $0 domain X {
+    assume ∈ $0 domain t0 {
       elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-        prove ∀ y ↔ ∈ $0 domain X ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ b ∈ orderedPair $$$0 $0 X) (domain X, union union X) 0
-        prove ↔ ∈ $0 domain X ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 domain X ∧ ∈ $$0 union union X ∃ b ∈ orderedPair $$$0 $0 X) ($0) 1.0.0.0
-        prove → ∈ $0 domain X ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 domain X, ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X) () 1.0.0.1
-        prove ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 domain X, ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X) () 1.0.0.2 1.0a
-        prove ∃ b ∈ orderedPair $$0 $0 X 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 union union X, ∃ b ∈ orderedPair $$0 $0 X) () 1.0.0.3
+        prove ∀ y ↔ ∈ $0 domain t0 ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ b ∈ orderedPair $$$0 $0 t0) (domain t0, union union t0) 0
+        prove ↔ ∈ $0 domain t0 ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 domain t0 ∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0) ($0) 1.0.0.0
+        prove → ∈ $0 domain t0 ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 domain t0, ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0) () 1.0.0.1
+        prove ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 domain t0, ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0) () 1.0.0.2 1.0a
+        prove ∃ b ∈ orderedPair $$0 $0 t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 union union t0, ∃ b ∈ orderedPair $$0 $0 t0) () 1.0.0.3
       }
-      let b ∈ orderedPair $$0 $0 X 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ orderedPair $0 $$0 X, ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X) () {
+      let b ∈ orderedPair $$0 $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ orderedPair $0 $$0 t0, ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0) () {
         elided 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a {
-          prove ∧ ∈ $$0 domain X ∈ $0 codomain X 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a () ($$0, $0, X) 1.0.1a
-          prove ∈ $0 codomain X 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$0 domain X, ∈ $0 codomain X) () 1.0.1.0.0
+          prove ∧ ∈ $$0 domain t0 ∈ $0 codomain t0 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a () ($$0, $0, t0) 1.0.1a
+          prove ∈ $0 codomain t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$0 domain t0, ∈ $0 codomain t0) () 1.0.1.0.0
         }
         elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-          prove ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 codomain X, ∈ orderedPair $$0 $0 X) () 1.0.1.0 1.0.1a
-          prove ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$$0 $0 X 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 codomain X ∈ orderedPair $$0 $$$0 X) ($0) 1.0.1.1.0
+          prove ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 codomain t0, ∈ orderedPair $$0 $0 t0) () 1.0.1.0 1.0.1a
+          prove ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$$0 $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 codomain t0 ∈ orderedPair $$0 $$$0 t0) ($0) 1.0.1.1.0
         }
       } 1.0.0
     }
-    assume ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X {
-      let b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 codomain X ∈ orderedPair $0 $$0 X, ∈ $0 domain X) () {
+    assume ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 {
+      let b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 codomain t0 ∈ orderedPair $0 $$0 t0, ∈ $0 domain t0) () {
         elided d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 {
-          prove ∧ ∈ $$0 union union X ∈ $0 union union X d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 () ($$0, $0, X) 1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          prove ∈ $$0 union union X 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $$0 union union X, ∈ $0 union union X) () 1.1.0.0.0
+          prove ∧ ∈ $$0 union union t0 ∈ $0 union union t0 d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 () ($$0, $0, t0) 1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove ∈ $$0 union union t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $$0 union union t0, ∈ $0 union union t0) () 1.1.0.0.0
         }
         elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-          prove ∃ b ∈ orderedPair $$$0 $0 X 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair $$0 $$$0 X) ($0) 1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          prove ∧ ∈ $$0 union union X ∃ b ∈ orderedPair $$$0 $0 X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 union union X, ∃ b ∈ orderedPair $$$0 $0 X) () 1.1.0.0 1.1.0.1.0
+          prove ∃ b ∈ orderedPair $$$0 $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair $$0 $$$0 t0) ($0) 1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove ∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 union union t0, ∃ b ∈ orderedPair $$$0 $0 t0) () 1.1.0.0 1.1.0.1.0
           elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-            prove ∀ y ↔ ∈ $0 domain X ∧ ∈ $0 union union X ∃ b ∈ orderedPair $$0 $0 X 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ b ∈ orderedPair $$$$0 $0 X) (domain X, union union X) 0
-            prove ↔ ∈ $$0 domain X ∧ ∈ $$0 union union X ∃ b ∈ orderedPair $$$0 $0 X b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 domain X ∧ ∈ $$$0 union union X ∃ b ∈ orderedPair $$$$0 $0 X) ($$0) 1.1.0.1.2.0
-            prove → ∧ ∈ $$0 union union X ∃ b ∈ orderedPair $$$0 $0 X ∈ $$0 domain X 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $$0 domain X, ∧ ∈ $$0 union union X ∃ b ∈ orderedPair $$$0 $0 X) () 1.1.0.1.2.1
-            prove ∈ $$0 domain X 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ $$0 union union X ∃ b ∈ orderedPair $$$0 $0 X, ∈ $$0 domain X) () 1.1.0.1.2.2 1.1.0.1.1
+            prove ∀ y ↔ ∈ $0 domain t0 ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ b ∈ orderedPair $$$$0 $0 t0) (domain t0, union union t0) 0
+            prove ↔ ∈ $$0 domain t0 ∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 domain t0 ∧ ∈ $$$0 union union t0 ∃ b ∈ orderedPair $$$$0 $0 t0) ($$0) 1.1.0.1.2.0
+            prove → ∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0 ∈ $$0 domain t0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $$0 domain t0, ∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0) () 1.1.0.1.2.1
+            prove ∈ $$0 domain t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0, ∈ $$0 domain t0) () 1.1.0.1.2.2 1.1.0.1.1
           }
         }
       } 1.1a
     }
-    prove ↔ ∈ $0 domain X ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ $0 domain X, ∃ b ∧ ∈ $0 codomain X ∈ orderedPair $$0 $0 X) () 1.0 1.1
+    prove ↔ ∈ $0 domain t0 ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ $0 domain t0, ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0) () 1.0 1.1
   }
 }
 
 theorem Membership Condition for Codomain
 termVariables(X 0)
-conclusion ∀ b ↔ ∈ $0 codomain X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X
+conclusion ∀ b ↔ ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0
 {
-  prove = codomain X comprehension b union union X ∃ a ∈ orderedPair $0 $$0 X 9e67beca6b16a63bad776aa0c81f01a6a3df4e9bace0478e3b94b529431b22cb () (X)
+  prove = codomain t0 comprehension b union union t0 ∃ a ∈ orderedPair $0 $$0 t0 9e67beca6b16a63bad776aa0c81f01a6a3df4e9bace0478e3b94b529431b22cb () (t0)
   take b {
-    assume ∈ $0 codomain X {
+    assume ∈ $0 codomain t0 {
       elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-        prove ∀ y ↔ ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ a ∈ orderedPair $0 $$$0 X) (codomain X, union union X) 0
-        prove ↔ ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 codomain X ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X) ($0) 1.0.0.0
-        prove → ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 codomain X, ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X) () 1.0.0.1
-        prove ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 codomain X, ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X) () 1.0.0.2 1.0a
-        prove ∃ a ∈ orderedPair $0 $$0 X 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 union union X, ∃ a ∈ orderedPair $0 $$0 X) () 1.0.0.3
+        prove ∀ y ↔ ∈ $0 codomain t0 ∧ ∈ $0 union union t0 ∃ a ∈ orderedPair $0 $$0 t0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ a ∈ orderedPair $0 $$$0 t0) (codomain t0, union union t0) 0
+        prove ↔ ∈ $0 codomain t0 ∧ ∈ $0 union union t0 ∃ a ∈ orderedPair $0 $$0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 codomain t0 ∧ ∈ $$0 union union t0 ∃ a ∈ orderedPair $0 $$$0 t0) ($0) 1.0.0.0
+        prove → ∈ $0 codomain t0 ∧ ∈ $0 union union t0 ∃ a ∈ orderedPair $0 $$0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 codomain t0, ∧ ∈ $0 union union t0 ∃ a ∈ orderedPair $0 $$0 t0) () 1.0.0.1
+        prove ∧ ∈ $0 union union t0 ∃ a ∈ orderedPair $0 $$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 codomain t0, ∧ ∈ $0 union union t0 ∃ a ∈ orderedPair $0 $$0 t0) () 1.0.0.2 1.0a
+        prove ∃ a ∈ orderedPair $0 $$0 t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 union union t0, ∃ a ∈ orderedPair $0 $$0 t0) () 1.0.0.3
       }
-      let a ∈ orderedPair $0 $$0 X 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ orderedPair $$0 $0 X, ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X) () {
+      let a ∈ orderedPair $0 $$0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ orderedPair $$0 $0 t0, ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0) () {
         elided 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a {
-          prove ∧ ∈ $0 domain X ∈ $$0 codomain X 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a () ($0, $$0, X) 1.0.1a
-          prove ∈ $0 domain X 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $0 domain X, ∈ $$0 codomain X) () 1.0.1.0.0
+          prove ∧ ∈ $0 domain t0 ∈ $$0 codomain t0 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a () ($0, $$0, t0) 1.0.1a
+          prove ∈ $0 domain t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $0 domain t0, ∈ $$0 codomain t0) () 1.0.1.0.0
         }
         elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-          prove ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 domain X, ∈ orderedPair $0 $$0 X) () 1.0.1.0 1.0.1a
-          prove ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$$0 X 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 domain X ∈ orderedPair $$$0 $$0 X) ($0) 1.0.1.1.0
+          prove ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 domain t0, ∈ orderedPair $0 $$0 t0) () 1.0.1.0 1.0.1a
+          prove ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$$0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 domain t0 ∈ orderedPair $$$0 $$0 t0) ($0) 1.0.1.1.0
         }
       } 1.0.0
     }
-    assume ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X {
-      let a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 domain X ∈ orderedPair $$0 $0 X, ∈ $0 codomain X) () {
+    assume ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 {
+      let a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 domain t0 ∈ orderedPair $$0 $0 t0, ∈ $0 codomain t0) () {
         elided d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 {
-          prove ∧ ∈ $0 union union X ∈ $$0 union union X d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 () ($0, $$0, X) 1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          prove ∈ $$0 union union X 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 union union X, ∈ $$0 union union X) () 1.1.0.0.0
+          prove ∧ ∈ $0 union union t0 ∈ $$0 union union t0 d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 () ($0, $$0, t0) 1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove ∈ $$0 union union t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 union union t0, ∈ $$0 union union t0) () 1.1.0.0.0
         }
         elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-          prove ∃ a ∈ orderedPair $0 $$$0 X 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair $$$0 $$0 X) ($0) 1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          prove ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 union union X, ∃ a ∈ orderedPair $0 $$$0 X) () 1.1.0.0 1.1.0.1.0
+          prove ∃ a ∈ orderedPair $0 $$$0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair $$$0 $$0 t0) ($0) 1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove ∧ ∈ $$0 union union t0 ∃ a ∈ orderedPair $0 $$$0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 union union t0, ∃ a ∈ orderedPair $0 $$$0 t0) () 1.1.0.0 1.1.0.1.0
           elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
-            prove ∀ y ↔ ∈ $0 codomain X ∧ ∈ $0 union union X ∃ a ∈ orderedPair $0 $$0 X 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ a ∈ orderedPair $0 $$$$0 X) (codomain X, union union X) 0
-            prove ↔ ∈ $$0 codomain X ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 codomain X ∧ ∈ $$$0 union union X ∃ a ∈ orderedPair $0 $$$$0 X) ($$0) 1.1.0.1.2.0
-            prove → ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X ∈ $$0 codomain X 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $$0 codomain X, ∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X) () 1.1.0.1.2.1
-            prove ∈ $$0 codomain X 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ $$0 union union X ∃ a ∈ orderedPair $0 $$$0 X, ∈ $$0 codomain X) () 1.1.0.1.2.2 1.1.0.1.1
+            prove ∀ y ↔ ∈ $0 codomain t0 ∧ ∈ $0 union union t0 ∃ a ∈ orderedPair $0 $$0 t0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ a ∈ orderedPair $0 $$$$0 t0) (codomain t0, union union t0) 0
+            prove ↔ ∈ $$0 codomain t0 ∧ ∈ $$0 union union t0 ∃ a ∈ orderedPair $0 $$$0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 codomain t0 ∧ ∈ $$$0 union union t0 ∃ a ∈ orderedPair $0 $$$$0 t0) ($$0) 1.1.0.1.2.0
+            prove → ∧ ∈ $$0 union union t0 ∃ a ∈ orderedPair $0 $$$0 t0 ∈ $$0 codomain t0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $$0 codomain t0, ∧ ∈ $$0 union union t0 ∃ a ∈ orderedPair $0 $$$0 t0) () 1.1.0.1.2.1
+            prove ∈ $$0 codomain t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ $$0 union union t0 ∃ a ∈ orderedPair $0 $$$0 t0, ∈ $$0 codomain t0) () 1.1.0.1.2.2 1.1.0.1.1
           }
         }
       } 1.1a
     }
-    prove ↔ ∈ $0 codomain X ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ $0 codomain X, ∃ a ∧ ∈ $0 domain X ∈ orderedPair $0 $$0 X) () 1.0 1.1
+    prove ↔ ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ $0 codomain t0, ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0) () 1.0 1.1
   }
 }
 

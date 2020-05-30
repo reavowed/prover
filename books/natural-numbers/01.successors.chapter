@@ -3,7 +3,7 @@ Define the successor pseudo-function which will form the basis of our inductive 
 term successor (n)
   name (a Successor)
   format (n^+)
-  (= $0 ∪ n singleton n)
+  (= $0 ∪ t0 singleton t0)
 
 theorem Membership Condition for Successor
 conclusion ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0
@@ -33,40 +33,40 @@ conclusion ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0
 
 theorem A Set Is an Element of Its Successor
 termVariables(n 0)
-conclusion ∈ n successor n
+conclusion ∈ t0 successor t0
 {
-  prove = n n 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (n)
+  prove = t0 t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (t0)
   elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
-    prove ∨ ∈ n n = n n e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (= n n, ∈ n n) () 0
+    prove ∨ ∈ t0 t0 = t0 t0 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (= t0 t0, ∈ t0 t0) () 0
     elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
       prove ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 () ()
-      prove ∀ m ↔ ∈ $0 successor n ∨ ∈ $0 n = $0 n b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0) (n) 1.1.0
-      prove ↔ ∈ n successor n ∨ ∈ n n = n n b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 successor n ∨ ∈ $0 n = $0 n) (n) 1.1.1
-      prove → ∨ ∈ n n = n n ∈ n successor n 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ n successor n, ∨ ∈ n n = n n) () 1.1.2
-      prove ∈ n successor n 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ n n = n n, ∈ n successor n) () 1.1.3 1.0
+      prove ∀ m ↔ ∈ $0 successor t0 ∨ ∈ $0 t0 = $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0) (t0) 1.1.0
+      prove ↔ ∈ t0 successor t0 ∨ ∈ t0 t0 = t0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 successor t0 ∨ ∈ $0 t0 = $0 t0) (t0) 1.1.1
+      prove → ∨ ∈ t0 t0 = t0 t0 ∈ t0 successor t0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 successor t0, ∨ ∈ t0 t0 = t0 t0) () 1.1.2
+      prove ∈ t0 successor t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ t0 t0 = t0 t0, ∈ t0 successor t0) () 1.1.3 1.0
     }
   }
 }
 
 theorem A Set Is a Subset of Its Successor
 termVariables(n 0)
-conclusion ⊆ n successor n
+conclusion ⊆ t0 successor t0
 {
   take x {
-    assume ∈ $0 n {
+    assume ∈ $0 t0 {
       elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
-        prove ∨ ∈ $0 n = $0 n 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ $0 n, = $0 n) () 0.0a
+        prove ∨ ∈ $0 t0 = $0 t0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ $0 t0, = $0 t0) () 0.0a
         elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
           prove ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 () ()
-          prove ∀ m ↔ ∈ $0 successor n ∨ ∈ $0 n = $0 n b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ ∈ $0 successor $$$0 ∨ ∈ $0 $$$0 = $0 $$$0) (n) 0.0.0.1.0
-          prove ↔ ∈ $0 successor n ∨ ∈ $0 n = $0 n b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 successor n ∨ ∈ $$0 n = $$0 n) ($0) 0.0.0.1.1
-          prove → ∨ ∈ $0 n = $0 n ∈ $0 successor n 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $0 successor n, ∨ ∈ $0 n = $0 n) () 0.0.0.1.2
-          prove ∈ $0 successor n 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ $0 n = $0 n, ∈ $0 successor n) () 0.0.0.1.3 0.0.0.0
+          prove ∀ m ↔ ∈ $0 successor t0 ∨ ∈ $0 t0 = $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ ∈ $0 successor $$$0 ∨ ∈ $0 $$$0 = $0 $$$0) (t0) 0.0.0.1.0
+          prove ↔ ∈ $0 successor t0 ∨ ∈ $0 t0 = $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 successor t0 ∨ ∈ $$0 t0 = $$0 t0) ($0) 0.0.0.1.1
+          prove → ∨ ∈ $0 t0 = $0 t0 ∈ $0 successor t0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $0 successor t0, ∨ ∈ $0 t0 = $0 t0) () 0.0.0.1.2
+          prove ∈ $0 successor t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ $0 t0 = $0 t0, ∈ $0 successor t0) () 0.0.0.1.3 0.0.0.0
         }
       }
     }
   }
-  prove ⊆ n successor n ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (n, successor n) 0
+  prove ⊆ t0 successor t0 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (t0, successor t0) 0
 }
 
 theorem Successors Are Unique
@@ -118,8 +118,8 @@ conclusion ∀ n ∀ m ↔ = successor $$0 successor $0 = $$0 $0
 
 theorem Nothing Equals Its Successor
 termVariables(n 0)
-conclusion ¬ = n successor n
+conclusion ¬ = t0 successor t0
 {
-  prove ∈ n successor n fe3e3ed1a695fe6d7d69ea9843ee5b5a2ad74543046fa92c170ced1188ee5964 () (n)
-  prove ¬ = n successor n 4a21af24ab1ccb5ee0732fa6b030513f8e5dd37d694260dbf17a4b5e082ee8c9 () (n, successor n) 0
+  prove ∈ t0 successor t0 fe3e3ed1a695fe6d7d69ea9843ee5b5a2ad74543046fa92c170ced1188ee5964 () (t0)
+  prove ¬ = t0 successor t0 4a21af24ab1ccb5ee0732fa6b030513f8e5dd37d694260dbf17a4b5e082ee8c9 () (t0, successor t0) 0
 }

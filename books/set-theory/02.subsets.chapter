@@ -1,7 +1,7 @@
 Introduce the subset relation, ⊆.
 
 statement ⊆ (A B)
-  definition (∀ x → ∈ $0 A ∈ $0 B)
+  definition (∀ x → ∈ $0 t0 ∈ $0 t1)
   shorthand (sub)
 
 display ∀ A → ⊆ $0 B φ as ((∀A ⊆ B)φ)
@@ -10,81 +10,81 @@ display ∃ A ∧ ⊆ $0 B φ as ((∀A ⊆ B)φ)
 
 theorem Element of Subset Is Element of Set
 termVariables(A 0, B 0, a 0)
-premise ⊆ A B
-premise ∈ a A
-conclusion ∈ a B
+premise ⊆ t0 t1
+premise ∈ t2 t0
+conclusion ∈ t2 t1
 {
-  prove ∀ x → ∈ $0 A ∈ $0 B 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (A, B) p0
+  prove ∀ x → ∈ $0 t0 ∈ $0 t1 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, t1) p0
   elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-    prove → ∈ a A ∈ a B b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 A ∈ $0 B) (a) 0
-    prove ∈ a B 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ a A, ∈ a B) () 1.0 p1
+    prove → ∈ t2 t0 ∈ t2 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 t0 ∈ $0 t1) (t2) 0
+    prove ∈ t2 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t2 t0, ∈ t2 t1) () 1.0 p1
   }
 }
 
 theorem Subset Is Antisymmetric
 termVariables(A 0, B 0)
-premise ⊆ A B
-premise ⊆ B A
-conclusion = A B
+premise ⊆ t0 t1
+premise ⊆ t1 t0
+conclusion = t0 t1
 {
-  prove ∀ x → ∈ $0 A ∈ $0 B 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (A, B) p0
-  prove ∀ x → ∈ $0 B ∈ $0 A 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (B, A) p1
+  prove ∀ x → ∈ $0 t0 ∈ $0 t1 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, t1) p0
+  prove ∀ x → ∈ $0 t1 ∈ $0 t0 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t1, t0) p1
   elided df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 {
     take x {
-      prove → ∈ $0 A ∈ $0 B b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 A ∈ $$0 B) ($0) 0
-      prove → ∈ $0 B ∈ $0 A b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 B ∈ $$0 A) ($0) 1
-      prove ↔ ∈ $0 A ∈ $0 B df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ $0 A, ∈ $0 B) () 2.0.0 2.0.1
+      prove → ∈ $0 t0 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t0 ∈ $$0 t1) ($0) 0
+      prove → ∈ $0 t1 ∈ $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∈ $$0 t0) ($0) 1
+      prove ↔ ∈ $0 t0 ∈ $0 t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ $0 t0, ∈ $0 t1) () 2.0.0 2.0.1
     }
   }
-  prove = A B 65dcb85d85a1b0c0107a9c47ec499c5d9828ccf4b6880d399f0b456d994b576b () (A, B) 2
+  prove = t0 t1 65dcb85d85a1b0c0107a9c47ec499c5d9828ccf4b6880d399f0b456d994b576b () (t0, t1) 2
 }
 
 theorem Subset Is Transitive
 termVariables(A 0, B 0, C 0)
-premise ⊆ A B
-premise ⊆ B C
-conclusion ⊆ A C
+premise ⊆ t0 t1
+premise ⊆ t1 t2
+conclusion ⊆ t0 t2
 {
   take x {
-    assume ∈ $0 A {
-      prove ∈ $0 B f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (A, B, $0) p0 0.0a
-      prove ∈ $0 C f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (B, C, $0) p1 0.0.0
+    assume ∈ $0 t0 {
+      prove ∈ $0 t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t0, t1, $0) p0 0.0a
+      prove ∈ $0 t2 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t1, t2, $0) p1 0.0.0
     }
   }
-  prove ⊆ A C ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (A, C) 0
+  prove ⊆ t0 t2 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (t0, t2) 0
 }
 
 theorem Any Set Is a Subset of Itself
 termVariables(A 0)
-conclusion ⊆ A A
+conclusion ⊆ t0 t0
 {
   elided 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b {
     take x {
-      prove → ∈ $0 A ∈ $0 A 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (∈ $0 A) ()
+      prove → ∈ $0 t0 ∈ $0 t0 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (∈ $0 t0) ()
     }
   }
-  prove ⊆ A A ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (A, A) 0
+  prove ⊆ t0 t0 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (t0, t0) 0
 }
 
 theorem Uniqueness Condition from Subset Condition
 statementVariables(φ 1)
-premise ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ ⊆ $$0 $0
-conclusion ∀ x ∀ y → ∧ with ($$0) φ with ($0) φ = $$0 $0
+premise ∀ x ∀ y → ∧ with ($$0) s0 with ($0) s0 ⊆ $$0 $0
+conclusion ∀ x ∀ y → ∧ with ($$0) s0 with ($0) s0 = $$0 $0
 {
   take x {
     take y {
-      assume ∧ with ($$0) φ with ($0) φ {
+      assume ∧ with ($$0) s0 with ($0) s0 {
         elided (Extracted) {
-          prove ∀ y → ∧ with ($$$0) φ with ($0) φ ⊆ $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ y → ∧ with ($$$$0) φ with ($0) φ ⊆ $$$$0 $0) ($$0) p0
-          prove → ∧ with ($$0) φ with ($0) φ ⊆ $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∧ with ($$0) φ with ($$$0) φ ⊆ $$0 $$$0) ($0) 0.0.0.0.0
-          prove ⊆ $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ with ($$0) φ with ($0) φ, ⊆ $$0 $0) () 0.0.0.0.1 0.0.0a
+          prove ∀ y → ∧ with ($$$0) s0 with ($0) s0 ⊆ $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ y → ∧ with ($$$$0) s0 with ($0) s0 ⊆ $$$$0 $0) ($$0) p0
+          prove → ∧ with ($$0) s0 with ($0) s0 ⊆ $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∧ with ($$0) s0 with ($$$0) s0 ⊆ $$0 $$$0) ($0) 0.0.0.0.0
+          prove ⊆ $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ with ($$0) s0 with ($0) s0, ⊆ $$0 $0) () 0.0.0.0.1 0.0.0a
         }
         elided (Extracted) {
-          prove ∧ with ($0) φ with ($$0) φ 8584d0863e2899efd18c2fe95bafea9d2d79f82bbc22dc480c474086c866b70c (with ($$0) φ, with ($0) φ) () 0.0.0a
+          prove ∧ with ($0) s0 with ($$0) s0 8584d0863e2899efd18c2fe95bafea9d2d79f82bbc22dc480c474086c866b70c (with ($$0) s0, with ($0) s0) () 0.0.0a
           elided (Extracted) {
-            prove ∀ y → ∧ with ($$0) φ with ($0) φ ⊆ $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ y → ∧ with ($$$$0) φ with ($0) φ ⊆ $$$$0 $0) ($0) p0
-            prove → ∧ with ($0) φ with ($$0) φ ⊆ $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∧ with ($0) φ with ($$$0) φ ⊆ $0 $$$0) ($$0) 0.0.0.1.1.0
-            prove ⊆ $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ with ($0) φ with ($$0) φ, ⊆ $0 $$0) () 0.0.0.1.1.1 0.0.0.1.0
+            prove ∀ y → ∧ with ($$0) s0 with ($0) s0 ⊆ $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ y → ∧ with ($$$$0) s0 with ($0) s0 ⊆ $$$$0 $0) ($0) p0
+            prove → ∧ with ($0) s0 with ($$0) s0 ⊆ $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∧ with ($0) s0 with ($$$0) s0 ⊆ $0 $$$0) ($$0) 0.0.0.1.1.0
+            prove ⊆ $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ with ($0) s0 with ($$0) s0, ⊆ $0 $$0) () 0.0.0.1.1.1 0.0.0.1.0
           }
         }
         prove = $$0 $0 9f48c2bb0ba338d6e4e1a339ac98f11e5822b9a48ce717c13e45c6046c6798b2 () ($$0, $0) 0.0.0.0 0.0.0.1

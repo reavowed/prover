@@ -2,53 +2,53 @@ Having established the basic properties of all our connectives, we can now prove
 
 theorem And Is Symmetric
 statementVariables(φ 0, ψ 0)
-conclusion ↔ ∧ φ ψ ∧ ψ φ
+conclusion ↔ ∧ s0 s1 ∧ s1 s0
 {
-  assume ∧ φ ψ {
-    prove ∧ ψ φ 8584d0863e2899efd18c2fe95bafea9d2d79f82bbc22dc480c474086c866b70c (φ, ψ) () 0a
+  assume ∧ s0 s1 {
+    prove ∧ s1 s0 8584d0863e2899efd18c2fe95bafea9d2d79f82bbc22dc480c474086c866b70c (s0, s1) () 0a
   }
-  assume ∧ ψ φ {
-    prove ∧ φ ψ 8584d0863e2899efd18c2fe95bafea9d2d79f82bbc22dc480c474086c866b70c (ψ, φ) () 1a
+  assume ∧ s1 s0 {
+    prove ∧ s0 s1 8584d0863e2899efd18c2fe95bafea9d2d79f82bbc22dc480c474086c866b70c (s1, s0) () 1a
   }
-  prove ↔ ∧ φ ψ ∧ ψ φ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ φ ψ, ∧ ψ φ) () 0 1
+  prove ↔ ∧ s0 s1 ∧ s1 s0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ s0 s1, ∧ s1 s0) () 0 1
 }
 
 theorem Or Is Symmetric
 statementVariables(φ 0, ψ 0)
-conclusion ↔ ∨ φ ψ ∨ ψ φ
+conclusion ↔ ∨ s0 s1 ∨ s1 s0
 {
-  assume ∨ φ ψ {
-    prove ∨ ψ φ b134472f96d09743ef31ae01b078b0eb39e40cae7af88a3daa98c677ba777f89 (φ, ψ) () 0a
+  assume ∨ s0 s1 {
+    prove ∨ s1 s0 b134472f96d09743ef31ae01b078b0eb39e40cae7af88a3daa98c677ba777f89 (s0, s1) () 0a
   }
-  assume ∨ ψ φ {
-    prove ∨ φ ψ b134472f96d09743ef31ae01b078b0eb39e40cae7af88a3daa98c677ba777f89 (ψ, φ) () 1a
+  assume ∨ s1 s0 {
+    prove ∨ s0 s1 b134472f96d09743ef31ae01b078b0eb39e40cae7af88a3daa98c677ba777f89 (s1, s0) () 1a
   }
-  prove ↔ ∨ φ ψ ∨ ψ φ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ φ ψ, ∨ ψ φ) () 0 1
+  prove ↔ ∨ s0 s1 ∨ s1 s0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ s0 s1, ∨ s1 s0) () 0 1
 }
 
 theorem And Is Idempotent
 statementVariables(φ 0)
-conclusion ↔ ∧ φ φ φ
+conclusion ↔ ∧ s0 s0 s0
 {
-  assume ∧ φ φ {
-    prove φ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (φ, φ) () 0a
+  assume ∧ s0 s0 {
+    prove s0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (s0, s0) () 0a
   }
-  assume φ {
-    prove ∧ φ φ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (φ, φ) () 1a 1a
+  assume s0 {
+    prove ∧ s0 s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s0) () 1a 1a
   }
-  prove ↔ ∧ φ φ φ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ φ φ, φ) () 0 1
+  prove ↔ ∧ s0 s0 s0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ s0 s0, s0) () 0 1
 }
 
 theorem Or Is Idempotent
 statementVariables(φ 0)
-conclusion ↔ ∨ φ φ φ
+conclusion ↔ ∨ s0 s0 s0
 {
-  assume ∨ φ φ {
-    prove → φ φ 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (φ) ()
-    prove φ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (φ, φ, φ) () 0a 0.0 0.0
+  assume ∨ s0 s0 {
+    prove → s0 s0 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (s0) ()
+    prove s0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (s0, s0, s0) () 0a 0.0 0.0
   }
-  assume φ {
-    prove ∨ φ φ 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (φ, φ) () 1a
+  assume s0 {
+    prove ∨ s0 s0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (s0, s0) () 1a
   }
-  prove ↔ ∨ φ φ φ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ φ φ, φ) () 0 1
+  prove ↔ ∨ s0 s0 s0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ s0 s0, s0) () 0 1
 }
