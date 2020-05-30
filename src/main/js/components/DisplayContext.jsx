@@ -48,29 +48,46 @@ function getDisambiguatorsForExpression(expression, entryContext) {
   return {};
 }
 
-DisplayContext.fromDisambiguators = function(disambiguators) {
+DisplayContext.construct = function(variableDefinitions, disambiguators) {
   return {
     disableChaining: false,
     disableShorthands: false,
     disableAssumptionCollapse: false,
+    variableDefinitions,
     disambiguators
   };
 };
 
 DisplayContext.forExpressionDefinition = function(definition, entryContext) {
-  const relevantStatements = _.filter([definition.definingStatement, ...(definition.premises || [])]);
+  definition = entryContext.definitions[definition.symbol];
 
+  const variableDefinitions = {
+    statements: _.filter(definition.components, c => c.type === "statement"),
+    terms: _.filter(definition.components, c => c.type === "term")
+  };
+
+  const relevantStatements = _.filter([definition.definingStatement, ...(definition.premises || [])]);
   const statementDisambiguators = getDisambiguatorsForExpressions(relevantStatements, entryContext);
   const disambiguators = definition.disambiguator ?
     mergeDisambiguators([{[definition.symbol]: [definition.disambiguator]}, statementDisambiguators]):
     statementDisambiguators;
-  return DisplayContext.fromDisambiguators(disambiguators);
+
+  return DisplayContext.construct(variableDefinitions, disambiguators);
 };
 
 DisplayContext.forDefinitionWithDefiningStatement = function(definition, entryContext) {
   const disambiguators = getDisambiguatorsForExpression(definition.definingStatement, entryContext);
-  return DisplayContext.fromDisambiguators(disambiguators);
+  return DisplayContext.construct(null, disambiguators);
 };
+
+DisplayContext.forTypeLikeDefinition = function(definingStatement, termNames, entryContext) {
+  const variableDefinitions = {
+    statements: [],
+    terms: termNames.map(name => { return {name, arity: 0}})
+  };
+  const disambiguators = getDisambiguatorsForExpression(definingStatement, entryContext);
+  return DisplayContext.construct(variableDefinitions, disambiguators);
+}
 
 DisplayContext.disambiguatorsForInferenceSummary = function(inference, entryContext) {
   const expressions = [...inference.premises, inference.conclusion];
@@ -79,7 +96,7 @@ DisplayContext.disambiguatorsForInferenceSummary = function(inference, entryCont
 
 DisplayContext.forInferenceSummary = function(inference, entryContext) {
   const disambiguators = DisplayContext.disambiguatorsForInferenceSummary(inference, entryContext);
-  return DisplayContext.fromDisambiguators(disambiguators);
+  return DisplayContext.construct(inference.variableDefinitions, disambiguators);
 };
 
 DisplayContext.AddSteps = function({steps, children}) {

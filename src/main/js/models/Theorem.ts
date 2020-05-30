@@ -1,24 +1,27 @@
-import {Expression} from "./Expression";
+import {Expression, VariableDefinitions} from "./Expression";
 import {Step} from "./Step";
 import {flatMapAtIndex, mapAtIndex} from "./Helpers";
 import * as _ from "lodash";
 
+
 export class Theorem {
-    constructor(public name: string, public id: string, public key: string, public premises: any[], public conclusion: Expression, public proofs: Step[][]) {}
+    constructor(public name: string, public id: string, public key: string, public variableDefinitions: VariableDefinitions, public premises: any[], public conclusion: Expression, public proofs: Step[][]) {}
     updateProof(proofIndex: number, newProof: Step[]): Theorem {
         return new Theorem(
             this.name,
             this.id,
             this.key,
+            this.variableDefinitions,
             this.premises,
             this.conclusion,
-            mapAtIndex(this.proofs, proofIndex, _ => newProof))
+            mapAtIndex(this.proofs, proofIndex, _ => newProof),)
     }
     updateStep(proofIndex: number, stepPath: number[], newStep: Step): Theorem {
         return new Theorem(
             this.name,
             this.id,
             this.key,
+            this.variableDefinitions,
             this.premises,
             this.conclusion,
             mapAtIndex(this.proofs, proofIndex, proof => mapAtIndex(proof, stepPath[0], step => step.updateStep(stepPath.slice(1), newStep))))
@@ -28,6 +31,7 @@ export class Theorem {
             this.name,
             this.id,
             this.key,
+            this.variableDefinitions,
             this.premises,
             this.conclusion,
             mapAtIndex(this.proofs, proofIndex, proof => flatMapAtIndex(proof, stepPath[0], step => step.replaceStep(stepPath.slice(1), newSteps))))
@@ -43,6 +47,7 @@ export class Theorem {
             this.name,
             this.id,
             this.key,
+            this.variableDefinitions,
             this.premises,
             this.conclusion,
             mapAtIndex(this.proofs, proofIndex, proof =>

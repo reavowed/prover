@@ -46,7 +46,8 @@ export class Theorem extends React.Component {
       disableChaining,
       disableShorthands,
       disableAssumptionCollapse,
-      disambiguators
+      disambiguators,
+      variableDefinitions: theorem.variableDefinitions
     };
     const theoremContext = {
       entryContext: this.entryContext,

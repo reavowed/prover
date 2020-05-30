@@ -7,7 +7,7 @@ import {
   PropertyExpression, RelatedObjectExpression,
   StandalonePropertyExpression,
   TypeExpression,
-  TypeQualifierExpression
+  TypeQualifierExpression, Variable
 } from "../models/Expression";
 import DisplayContext from "./DisplayContext";
 import EntryContext from "./EntryContext";
@@ -135,7 +135,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         return highlightSharedChild(formatHtmlWithoutWrapping(qualifier.format, s => replacePlaceholders(s, formattedComponents)), sharedPaths);
       }
 
-      function renderFormattableExpressionWithDisambiguator(disambiguator) {
+      function renderFormattableExpressionWithDisambiguator(disambiguator, symbol) {
         const format = expression.formatForHtml(parentRequiresBrackets);
         const boundVariables = expression.boundVariableNames || [];
         const innerBoundVariables = boundVariables.length ? [...boundVariableLists, boundVariables] : boundVariableLists;
@@ -252,6 +252,34 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       } else if (expression instanceof StandalonePropertyExpression) {
         const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
         return addBrackets([formattedTerm, <> is </>, expression.definition.name]);
+      } else if (expression instanceof Variable) {
+        if (displayContext && displayContext.variableDefinitions) {
+          const statementVariableRegex = /^s(\d+)$/;
+          const termVariableRegex = /^t(\d+)$/;
+          let match, name;
+          if (match = expression.name.match(statementVariableRegex)) {
+            const index = parseInt(match[1]);
+            name = displayContext.variableDefinitions.statements[index].name;
+          } else if (match = expression.name.match(termVariableRegex)) {
+            const index = parseInt(match[1]);
+            name = displayContext.variableDefinitions.terms[index].name;
+          } else {
+            throw "Unrecognised variable " + expression.name;
+          }
+          const result = formatHtmlWithoutWrapping(name);
+          if (expression.components.length > 0) {
+            result.push("(");
+            result.push(renderChildExpression(expression.components[0], [0]));
+            for (let i = 1; i < expression.components.length; ++i) {
+              result.push(", ");
+              result.push(renderChildExpression(expression.components[i], [i]));
+            }
+            result.push(")");
+          }
+          return result;
+        } else {
+          return formatHtmlWithoutWrapping(expression.name);
+        }
       } else if (expression.formatForHtml) {
         return renderFormattableExpressionWithDisambiguator(expression.disambiguator);
       } else if (expression.textForHtml) {

@@ -1,4 +1,5 @@
 import React, {useContext} from "react";
+import DisplayContext from "../../DisplayContext";
 import EntryContext from "../../EntryContext";
 import {CopiableExpression} from "../../ExpressionComponent";
 import {formatQualifier} from "../../helpers/Formatter";
@@ -17,10 +18,13 @@ export default function PropertyOnTypeDefinitionDescription({symbol, parentTypeS
     <>with {joinAsList(requiredObjects.map(o => o.name + " " + o.defaultTermName))}</> :
     "";
   const requiredObjectVariableNames = _.map(requiredObjects, o => o.defaultTermName);
+  const termNames = [typeDefinition.defaultTermName, ...[qualifier ? qualifier.defaultTermNames : []]];
 
   const definingStatementElement = <BoundVariableLists.AddMultiple variables={_.map(requiredObjectVariableNames, n => [n])}>
     <CopiableExpression expression={definingStatement} splitConjunction/>
   </BoundVariableLists.AddMultiple>;
 
-  return <>{typeDefinition.article.capitalize()} {typeDefinition.name} {typeDefinition.defaultTermName} {formatQualifier(qualifier)} {requiredObjectsText} is <u>{propertyDefinition.name}</u> if {definingStatementElement}.</>;
+  return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(definingStatement, termNames, entryContext)}>
+    {typeDefinition.article.capitalize()} {typeDefinition.name} {typeDefinition.defaultTermName} {formatQualifier(qualifier)} {requiredObjectsText} is <u>{propertyDefinition.name}</u> if {definingStatementElement}.
+  </DisplayContext.Provider>;
 }

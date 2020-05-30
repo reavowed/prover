@@ -14,6 +14,16 @@ export interface DisambiguatedSymbol {
   serialized: string;
 }
 
+export interface VariableDefinition {
+  name: string;
+  arity: number;
+}
+
+export interface VariableDefinitions {
+  statements: VariableDefinition[];
+  terms: VariableDefinition[];
+}
+
 export interface ExpressionDefinition {
   symbol: DisambiguatedSymbol;
   baseFormatString: string;

@@ -1,8 +1,7 @@
 package net.prover.controllers.models
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import net.prover.model.DisambiguatedSymbol
-import net.prover.model.definitions.Qualifier
+import net.prover.model.{DisambiguatedSymbol, VariableDefinitions}
 import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions.{Statement, Term}
 
@@ -27,16 +26,16 @@ object ChapterProps {
     @JsonSerialize
     val url: String
   }
-  case class AxiomPropsForChapter(name: String, url: String, premises: Seq[Statement], conclusion: Statement) extends EntryProps {
+  case class AxiomPropsForChapter(name: String, url: String, variableDefinitions: VariableDefinitions, premises: Seq[Statement], conclusion: Statement) extends EntryProps {
     override val `type`: String = "axiom"
   }
-  case class TheoremPropsForChapter(name: String, url: String, premises: Seq[Statement], conclusion: Statement, isComplete: Boolean) extends EntryProps {
+  case class TheoremPropsForChapter(name: String, url: String, variableDefinitions: VariableDefinitions, premises: Seq[Statement], conclusion: Statement, isComplete: Boolean) extends EntryProps {
     override val `type`: String = "theorem"
   }
-  case class StatementDefinitionPropsForChapter(defaultValue: Statement, url: String, shorthand: Option[String], definingStatement: Option[Statement]) extends EntryProps {
+  case class StatementDefinitionPropsForChapter(symbol: String, defaultValue: Statement, url: String, shorthand: Option[String], definingStatement: Option[Statement]) extends EntryProps {
     override val `type`: String = "statementDefinition"
   }
-  case class TermDefinitionPropsForChapter(defaultValue: Term, url: String, shorthand: Option[String], definingStatement: Statement, premises: Seq[Statement]) extends EntryProps {
+  case class TermDefinitionPropsForChapter(symbol: String, defaultValue: Term, url: String, shorthand: Option[String], definingStatement: Statement, premises: Seq[Statement]) extends EntryProps {
     override val `type`: String = "termDefinition"
   }
   case class TypeDefinitionPropsForChapter(symbol: String, url: String, title: String, definingStatement: Statement) extends EntryProps {

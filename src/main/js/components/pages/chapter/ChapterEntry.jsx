@@ -3,7 +3,7 @@ import {DefinedExpression} from "../../../models/Expression";
 import DisplayContext from "../../DisplayContext";
 import EntryContext from "../../EntryContext";
 import {CopiableExpression} from "../../ExpressionComponent";
-import {formatHtml, formatQualifier, replacePlaceholders} from "../../helpers/Formatter";
+import {formatHtml} from "../../helpers/Formatter";
 import {ResultWithPremises} from "../../ResultWithPremises";
 import PropertyOnTypeDefinitionDescription from "../components/PropertyOnTypeDefinitionDescription";
 import RelatedObjectDefinitionDescription from "../components/RelatedObjectDefinitionDescription";
@@ -45,50 +45,27 @@ export default function ChapterEntry({entry}) {
         </DefinitionEntry>
       </DisplayContext.Provider>;
     case "typeDefinition":
-      return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(entry, entryContext)}>
-        <ChapterEntryWrapper title={entry.title}
-                             url={entry.url}
-                             key={entry.url}>
-          <TypeDefinitionDescription symbol={entry.symbol} definingStatement={entry.definingStatement} />
-        </ChapterEntryWrapper>
-      </DisplayContext.Provider>;
+      return <ChapterEntryWrapper title={entry.title} url={entry.url} key={entry.url}>
+        <TypeDefinitionDescription symbol={entry.symbol} definingStatement={entry.definingStatement} />
+      </ChapterEntryWrapper>;
     case "typeQualifierDefinition":
-      return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(entry, entryContext)}>
-        <ChapterEntryWrapper
-          title={entry.title}
-          url={entry.url}
-          key={entry.url}>
-          <TypeQualifierDefinitionDescription symbol={entry.symbol} parentTypeSymbol={entry.parentTypeSymbol} definingStatement={entry.definingStatement} />
-        </ChapterEntryWrapper>
-      </DisplayContext.Provider>;
+      return <ChapterEntryWrapper title={entry.title} url={entry.url} key={entry.url}>
+        <TypeQualifierDefinitionDescription symbol={entry.symbol} parentTypeSymbol={entry.parentTypeSymbol} definingStatement={entry.definingStatement} />
+      </ChapterEntryWrapper>;
     case "propertyDefinition": {
-      return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(entry, entryContext)}>
-        <ChapterEntryWrapper
-          title={entry.title}
-          url={entry.url}
-          key={entry.url}>
-          <PropertyOnTypeDefinitionDescription symbol={entry.symbol} parentTypeSymbol={entry.parentTypeSymbol} definingStatement={entry.definingStatement} />
-        </ChapterEntryWrapper>
-      </DisplayContext.Provider>;
+      return <ChapterEntryWrapper title={entry.title} url={entry.url} key={entry.url}>
+        <PropertyOnTypeDefinitionDescription symbol={entry.symbol} parentTypeSymbol={entry.parentTypeSymbol} definingStatement={entry.definingStatement} />
+      </ChapterEntryWrapper>;
     }
     case "relatedObjectDefinition": {
-      return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(entry, entryContext)}>
-        <ChapterEntryWrapper
-          title={entry.title}
-          url={entry.url}
-          key={entry.url}>
-          <RelatedObjectDefinitionDescription symbol={entry.symbol} parentTypeSymbol={entry.parentTypeSymbol} definingStatement={entry.definingStatement} />
-        </ChapterEntryWrapper>
-      </DisplayContext.Provider>;
+      return <ChapterEntryWrapper title={entry.title} url={entry.url} key={entry.url}>
+        <RelatedObjectDefinitionDescription symbol={entry.symbol} parentTypeSymbol={entry.parentTypeSymbol} definingStatement={entry.definingStatement} />
+      </ChapterEntryWrapper>;
     }
     case "standalonePropertyDefinition":
-      return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(entry, entryContext)}>
-        <ChapterEntryWrapper title={entry.title}
-                             url={entry.url}
-                             key={entry.url}>
-          <StandalonePropertyDescription symbol={entry.symbol} definingStatement={entry.definingStatement} />
-        </ChapterEntryWrapper>
-      </DisplayContext.Provider>;
+      return <ChapterEntryWrapper title={entry.title} url={entry.url} key={entry.url}>
+        <StandalonePropertyDescription symbol={entry.symbol} definingStatement={entry.definingStatement} />
+      </ChapterEntryWrapper>;
     case "comment":
       const chapterContext = useContext(ChapterContext);
       return <p key={entry.url}>

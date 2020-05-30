@@ -1,6 +1,7 @@
 package net.prover.model.definitions
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions._
@@ -10,6 +11,7 @@ trait ExpressionDefinition {
   def baseSymbol: String
   def disambiguator: Option[String]
   def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(baseSymbol, disambiguator)
+  @JsonSerialize
   def symbol: String = disambiguatedSymbol.serialized
   def explicitName: Option[String]
   def name: String = explicitName.getOrElse(disambiguatedSymbol.forDisplay)

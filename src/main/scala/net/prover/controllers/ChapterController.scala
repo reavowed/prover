@@ -32,16 +32,16 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         entry match {
           case axiom: Axiom =>
             import axiom._
-            Some(AxiomPropsForChapter(name, url, premises, conclusion))
+            Some(AxiomPropsForChapter(name, url, variableDefinitions, premises, conclusion))
           case theorem: Theorem =>
             import theorem._
-            Some(TheoremPropsForChapter(name, url, premises, conclusion, definitions.isInferenceComplete(theorem)))
+            Some(TheoremPropsForChapter(name, url, variableDefinitions, premises, conclusion, definitions.isInferenceComplete(theorem)))
           case statementDefinition: StatementDefinitionEntry =>
             import statementDefinition._
-            Some(StatementDefinitionPropsForChapter(defaultValue, url, shorthand, definingStatement))
+            Some(StatementDefinitionPropsForChapter(symbol, defaultValue, url, shorthand, definingStatement))
           case termDefinition: TermDefinitionEntry =>
             import termDefinition._
-            Some(TermDefinitionPropsForChapter(defaultValue, url, shorthand, definingStatement, premises))
+            Some(TermDefinitionPropsForChapter(symbol, defaultValue, url, shorthand, definingStatement, premises))
           case typeDefinition: TypeDefinition =>
             import typeDefinition._
             Some(TypeDefinitionPropsForChapter(symbol, url, title, definingStatement))

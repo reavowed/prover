@@ -71,7 +71,7 @@ export class Parser {
         const standalonePropertyDefinition = self.standalonePropertyDefinitions[firstToken];
         if (expressionDefinition) {
           const boundVariables = tokensAfterFirst.slice(0, expressionDefinition.numberOfBoundVariables);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterFirst.slice(expressionDefinition.numberOfBoundVariables), expressionDefinition.numberOfComponents);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterFirst.slice(expressionDefinition.numberOfBoundVariables), expressionDefinition.components.length);
           if (_.includes(expressionDefinition.attributes, "conjunction")) {
             const [firstComponent, secondComponent] = components;
             if (firstComponent instanceof TypeExpression && secondComponent instanceof TypeQualifierExpression && _.includes(firstComponent.definition.qualifiers, secondComponent.definition)) {
@@ -239,6 +239,7 @@ export class Parser {
       theoremJson.name,
       theoremJson.id,
       theoremJson.key,
+      theoremJson.variableDefinitions,
       theoremJson.premises.map(this.parseExpression),
       this.parseExpression(theoremJson.conclusion),
       theoremJson.proofs.map(proof => this.parseSteps(proof.steps, inferences)));

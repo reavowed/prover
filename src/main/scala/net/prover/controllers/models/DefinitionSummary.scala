@@ -1,6 +1,7 @@
 package net.prover.controllers.models
 
 import net.prover.model._
+import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.entries.{ExpressionDefinitionEntry, TermDefinitionEntry}
 import net.prover.model.expressions.{DefinedTermTemplate, Template}
 
@@ -12,9 +13,11 @@ case class DefinitionSummary(
   requiresBrackets: Boolean,
   requiresComponentBrackets: Boolean,
   numberOfBoundVariables: Int,
-  numberOfComponents: Int,
+  components: Seq[ComponentSummary],
   attributes: Seq[String],
   disambiguatorAdders: Seq[DisambiguatorAdderSummary])
+
+case class ComponentSummary(`type`: String, name: String, arity: Int)
 
 object DefinitionSummary {
   def getAllFromContext(entryContext: EntryContext): Map[String, DefinitionSummary] = {
@@ -26,7 +29,7 @@ object DefinitionSummary {
           d.format.requiresBrackets,
           d.format.requiresComponentBrackets,
           d.boundVariableNames.length,
-          d.componentTypes.length,
+          getComponentSummaries(d.componentTypes),
           d.attributes,
           getDisambiguatorAdderSummaries(d)))
       .toMap
@@ -38,5 +41,13 @@ object DefinitionSummary {
       }
     }
     case _ => Nil
+  }
+  def getComponentSummaries(componentTypes: Seq[ComponentType]): Seq[ComponentSummary] = {
+    componentTypes map {
+      case ComponentType.StatementComponent(name, arguments) =>
+        ComponentSummary("statement", name, arguments.length)
+      case ComponentType.TermComponent(name, arguments) =>
+        ComponentSummary("term", name, arguments.length)
+    }
   }
 }

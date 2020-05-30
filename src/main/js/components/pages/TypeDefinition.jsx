@@ -25,20 +25,18 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
     "(" + definition.qualifier.format.originalValue + ")" + (definition.qualifier.format.requiresBrackets ? " requires-brackets" : "") + (definition.qualifier.format.requiresComponentBrackets ? "" : " no-component-brackets") :
     "";
 
-  return <DisplayContext.Provider value={DisplayContext.forDefinitionWithDefiningStatement(definition, entryContext)}>
-    <EntryContext.Provider value={entryContext}>
-      <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
-        <NavLinks previous={previous} next={next} />
-        <h3>{definition.title.capitalize()}</h3>
-        <TypeDefinitionDescription symbol={definition.symbol} definingStatement={definition.definingStatement} />
-        <hr/>
-        <EditableSymbol symbol={definition.symbol} url={url} />
-        <EditableExplicitName name={definition.explicitName} url={url} />
-        <EditableProperty label="Main Term Name" initialValue={definition.defaultTermName} />
-        {definition.qualifier && <EditableProperty label="Qualifier Term Names" initialValue={definition.qualifier.termNames.join(" ")} />}
-        {definition.qualifier && <EditableProperty label="Qualifier Format" initialValue={serializedFormat} onSave={saveFormat} />}
-        <StatementDefinitionUsages usages={usages} statementDefinition={definition.statementDefinition} />
-      </Page>
-    </EntryContext.Provider>
-  </DisplayContext.Provider>;
+  return <EntryContext.Provider value={entryContext}>
+    <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
+      <NavLinks previous={previous} next={next} />
+      <h3>{definition.title.capitalize()}</h3>
+      <TypeDefinitionDescription symbol={definition.symbol} definingStatement={definition.definingStatement} />
+      <hr/>
+      <EditableSymbol symbol={definition.symbol} url={url} />
+      <EditableExplicitName name={definition.explicitName} url={url} />
+      <EditableProperty label="Main Term Name" initialValue={definition.defaultTermName} />
+      {definition.qualifier && <EditableProperty label="Qualifier Term Names" initialValue={definition.qualifier.termNames.join(" ")} />}
+      {definition.qualifier && <EditableProperty label="Qualifier Format" initialValue={serializedFormat} onSave={saveFormat} />}
+      <StatementDefinitionUsages usages={usages} statementDefinition={definition.statementDefinition} />
+    </Page>
+  </EntryContext.Provider>;
 }

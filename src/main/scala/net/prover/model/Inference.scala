@@ -20,8 +20,7 @@ trait Inference {
   def premises: Seq[Statement]
   @JsonSerialize
   def conclusion: Statement
-
-  @JsonIgnore
+  @JsonSerialize
   def variableDefinitions: VariableDefinitions
 
   def summary: Summary = Summary(this)
