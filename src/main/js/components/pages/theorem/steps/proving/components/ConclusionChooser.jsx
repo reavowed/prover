@@ -5,6 +5,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {replaceAtIndex} from "../../../../../../models/Helpers";
+import DisplayContext from "../../../../../DisplayContext";
 import EntryContext from "../../../../../EntryContext";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
 import {InlineTextEditor} from "../../../../../helpers/InlineTextEditor";
@@ -14,18 +15,18 @@ import BoundVariableLists from "../../BoundVariableLists";
 
 function substitutionGetter(type, applicationType, name) {
   return substitutions => {
-    const baseValue = substitutions[type][name] && substitutions[type][name][1];
+    const baseValue = substitutions[type][name];
     if (!_.isUndefined(baseValue)) {
       return baseValue;
     } else {
-      return substitutions[applicationType] && substitutions[applicationType][name] && substitutions[applicationType][name][1];
+      return substitutions[applicationType] && substitutions[applicationType][name];
     }
   };
 }
 
-function buildSubstitutionMap(requiredSubstitutions, f) {
+function buildSubstitutionMap(variableDefinitions, f) {
   function callOnValues(type, applicationType) {
-    return {[type]: _.fromPairs(requiredSubstitutions[type].map(([name, arity]) => [name, [arity, f(substitutionGetter(type, applicationType, name), arity)]]))};
+    return {[type]: _.range(variableDefinitions[type].length).map(i => f(substitutionGetter(type, applicationType, i)))};
   }
   return {
     ...callOnValues("statements", "statementApplications"),
@@ -33,9 +34,9 @@ function buildSubstitutionMap(requiredSubstitutions, f) {
   };
 }
 
-function getAllRequiredPaths(requiredSubstitutions) {
+function getAllRequiredPaths(variableDefinitions) {
   function getPaths(type, applicationType) {
-    return _.map(requiredSubstitutions[type], ([name, ]) => substitutionGetter(type, applicationType, name));
+    return _.range(variableDefinitions[type].length).map(i => substitutionGetter(type, applicationType, i));
   }
   return [
     ...getPaths("statements", "statementApplications"),
@@ -83,7 +84,7 @@ export default class ConclusionChooser extends React.Component {
         const premiseStatements = selectedConclusion.possiblePremises.map(p => p.premise);
         const conclusionStatement = selectedConclusion.conclusion;
         const selectedPremises = selectedConclusion.possiblePremises.map(p => ["", null]);
-        const selectedSubstitutionValues = buildSubstitutionMap(selectedConclusion.requiredSubstitutions, () => "");
+        const selectedSubstitutionValues = buildSubstitutionMap(selectedConclusion.variableDefinitions, () => "");
         this.setStatePromise({selectedConclusion, selectedConclusionIndex, premiseStatements, conclusionStatement, selectedPremises, selectedSubstitutionValues})
           .then(() => this.ref.current.scrollIntoView());
         if (this.props.allowAutoSubmit && this.areSubstitutionValuesSufficient(selectedConclusion, selectedPremises, selectedSubstitutionValues)) {
@@ -110,7 +111,7 @@ export default class ConclusionChooser extends React.Component {
 
   getValidSubstitutionValues = (getter) => {
     const applicableSubstitutions = this.getApplicableSubstitutions(this.state.selectedConclusion, this.state.selectedPremises);
-    const selectableSubstitutionValues = this.getAllSelectableSubstitutionValues(applicableSubstitutions, this.state.selectedConclusion.requiredSubstitutions);
+    const selectableSubstitutionValues = this.getAllSelectableSubstitutionValues(applicableSubstitutions, this.state.selectedConclusion.variableDefinitions);
     return getter(selectableSubstitutionValues);
   };
 
@@ -118,13 +119,13 @@ export default class ConclusionChooser extends React.Component {
     return _.filter([selectedConclusion.substitutions, ..._.map(selectedPremises, s => s[1])])
   };
 
-  getAllSelectableSubstitutionValues = (applicableSubstitutions, requiredSubstitutions) => {
-    return buildSubstitutionMap(requiredSubstitutions, getter => {
+  getAllSelectableSubstitutionValues = (applicableSubstitutions, variableDefinitions) => {
+    return buildSubstitutionMap(variableDefinitions, getter => {
       const allowedValuesLists = _.map(applicableSubstitutions, substitutions => {
         const value = getter(substitutions);
-        return (_.isUndefined(value) || _.isArray(value)) ? value : [value];
+        return (_.isNull(value) || _.isArray(value)) ? value : [value];
       });
-      const allowAnything = _.every(allowedValuesLists, _.isUndefined);
+      const allowAnything = _.every(allowedValuesLists, _.isNull);
       return allowAnything ? null : _.intersectionBy(..._.filter(allowedValuesLists), x => x.serialize());
     });
   };
@@ -139,8 +140,8 @@ export default class ConclusionChooser extends React.Component {
 
   getSubstitutionValuesToSubmit = (selectedConclusion, selectedPremises, selectedSubstitutionValues) => {
     const applicableSubstitutions = this.getApplicableSubstitutions(selectedConclusion, selectedPremises);
-    const selectableSubstitutionValues = this.getAllSelectableSubstitutionValues(applicableSubstitutions, selectedConclusion.requiredSubstitutions);
-    return buildSubstitutionMap(selectedConclusion.requiredSubstitutions, getter => {
+    const selectableSubstitutionValues = this.getAllSelectableSubstitutionValues(applicableSubstitutions, selectedConclusion.variableDefinitions);
+    return buildSubstitutionMap(selectedConclusion.variableDefinitions, getter => {
       const selectedValue = getter(selectedSubstitutionValues);
       const selectableValues = getter(selectableSubstitutionValues);
       return selectedValue || (selectableValues && selectableValues.length === 1 && selectableValues[0].serialize());
@@ -151,7 +152,7 @@ export default class ConclusionChooser extends React.Component {
     if (!selectedConclusion) return false;
     const valuesToSubmit = this.getSubstitutionValuesToSubmit(selectedConclusion, selectedPremises, selectedSubstitutionValues);
     return _.every(
-      getAllRequiredPaths(selectedConclusion.requiredSubstitutions),
+      getAllRequiredPaths(selectedConclusion.variableDefinitions),
       getter => getter(valuesToSubmit));
   };
 
@@ -165,7 +166,7 @@ export default class ConclusionChooser extends React.Component {
   };
 
   render() {
-    const {possibleConclusions, hideSummary, disabled, boundVariableListsForPremises, boundVariableListsForSubstitutions} = this.props;
+    const {possibleConclusions, hideSummary, disabled, boundVariableListsForPremises, boundVariableListsForSubstitutions, conclusionVariableDefinitions} = this.props;
     const {selectedConclusion, selectedConclusionIndex, premiseStatements, conclusionStatement} = this.state;
 
     const wrapPremiseBoundVariable = (premiseIndex) => (name, index, boundVariablePath) => {
@@ -184,37 +185,38 @@ export default class ConclusionChooser extends React.Component {
       return <InlineTextEditor text={name} callback={callback} />;
     };
 
-    return <EntryContext.Consumer>{entryContext => {
-
-      let PremiseSuggestions = () => {
-        const boundVariableLists = useContext(BoundVariableLists) || [];
-        return <Form.Group>
-          <Form.Label><strong>Premises</strong></Form.Label>
-          {selectedConclusion.possiblePremises.map(({premise, possibleMatches}, i) =>
-            <Form.Group as={Form.Row} key={i}>
-              <Col xs={4}>
-                <CopiableExpression expression={premise} boundVariableLists={boundVariableListsForPremises}/>
-              </Col>
-              <Col>
-                <Form.Control as="select" value={this.state.selectedPremises[i][0]} onChange={(e) => this.setSelectedPremise(i, e.target.value)} readOnly={disabled}>
-                  <option value="" />
-                  {possibleMatches.map(({matchingPremise}, i) =>
-                    <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                        <ExpressionComponent expression={matchingPremise} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} entryContext={entryContext} />
-                      )}}/>
-                  )}
-                </Form.Control>
-              </Col>
-            </Form.Group>
-          )}
-        </Form.Group>
-      };
-      let showSubstitutionOptions = (name, validValues, getter, setter) => {
-        const selectionElement = !validValues ?
-          <InputWithShorthandReplacement value={getter(this.state.selectedSubstitutionValues)}
-                                         readOnly={disabled}
-                                         onChange={(value, callback) => this.setSelectedSubstitutionValue(setter, value, callback)}
-                                         onKeyDown={this.onInputKeyDown} /> :
+    return <EntryContext.Consumer>{entryContext =>
+      <DisplayContext.Consumer>{displayContext => {
+        const conclusionDisplayContext = displayContext.withVariableDefinitions(conclusionVariableDefinitions);
+        const PremiseSuggestions = () => {
+          const boundVariableLists = useContext(BoundVariableLists) || [];
+          return <Form.Group>
+            <Form.Label><strong>Premises</strong></Form.Label>
+            {selectedConclusion.possiblePremises.map(({premise, possibleMatches}, i) =>
+              <Form.Group as={Form.Row} key={i}>
+                <Col xs={4}>
+                  <CopiableExpression expression={premise} boundVariableLists={boundVariableListsForPremises} displayContext={conclusionDisplayContext.addTermVariables(selectedConclusion.additionalVariableNames)}/>
+                </Col>
+                <Col>
+                  <Form.Control as="select" value={this.state.selectedPremises[i][0]} onChange={(e) => this.setSelectedPremise(i, e.target.value)} readOnly={disabled}>
+                    <option value="" />
+                    {possibleMatches.map(({matchingPremise}, i) =>
+                      <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
+                          <ExpressionComponent expression={matchingPremise} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} entryContext={entryContext} displayContext={displayContext} />
+                        )}}/>
+                    )}
+                  </Form.Control>
+                </Col>
+              </Form.Group>
+            )}
+          </Form.Group>
+        };
+        let showSubstitutionOptions = (name, validValues, getter, setter) => {
+          const selectionElement = !validValues ?
+            <InputWithShorthandReplacement value={getter(this.state.selectedSubstitutionValues)}
+                                           readOnly={disabled}
+                                           onChange={(value, callback) => this.setSelectedSubstitutionValue(setter, value, callback)}
+                                           onKeyDown={this.onInputKeyDown} /> :
             <BoundVariableLists.Consumer>{ boundVariableLists =>
               validValues.length === 1 ?
                 <Form.Label column><CopiableExpression expression={validValues[0]} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} /></Form.Label> :
@@ -224,72 +226,75 @@ export default class ConclusionChooser extends React.Component {
                     <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
                         <ExpressionComponent expression={v} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} entryContext={entryContext}/>
                       )}}/>
-                )}
-              </Form.Control>
+                  )}
+                </Form.Control>
             }</BoundVariableLists.Consumer>;
 
-        return <Form.Group as={Form.Row}>
-          <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}}/></Form.Label>
-          <Form.Label column xs={1}>&rarr;</Form.Label>
-          <Col>{selectionElement}</Col>
-        </Form.Group>
-      };
-      let showSubstitutions = (key) => {
-        const requiredSubstitutions = selectedConclusion.requiredSubstitutions[key];
-        return requiredSubstitutions.length > 0 && requiredSubstitutions.map(([name, arity]) => {
-          const getter = x => x[key][name][1];
-          const setter = (x, y) => x[key][name][1] = y;
-          const validValues = this.getValidSubstitutionValues(getter, setter);
-          const newVariableList = arity === 0 ? null :
-            arity === 1 ? ["$"] :
-            _.map(_.range(arity), x => "$_" + (x+1));
-          return newVariableList ?
-            <BoundVariableLists.AddParameters variables={newVariableList} key={`${key} ${name}`}>
-              {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, getter, setter)}
-            </BoundVariableLists.AddParameters> :
-            <React.Fragment key={`${key} ${name}`}>
-              {showSubstitutionOptions(name, validValues, getter, setter)}
-            </React.Fragment>;
-        });
-      };
+          return <Form.Group as={Form.Row}>
+            <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}}/></Form.Label>
+            <Form.Label column xs={1}>&rarr;</Form.Label>
+            <Col>{selectionElement}</Col>
+          </Form.Group>
+        };
+        let showSubstitutions = (key) => {
+          const variableDefinitions = selectedConclusion.variableDefinitions[key];
+          return variableDefinitions.length > 0 && variableDefinitions.map(({name, arity}, index) => {
+            const getter = x => x[key][index];
+            const setter = (x, y) => x[key][index] = y;
+            const validValues = this.getValidSubstitutionValues(getter, setter);
+            const newVariableList = arity === 0 ? null :
+              arity === 1 ? ["$"] :
+                _.map(_.range(arity), x => "$_" + (x+1));
+            return newVariableList ?
+              <BoundVariableLists.AddParameters variables={newVariableList} key={`${key} ${index}`}>
+                {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, getter, setter)}
+              </BoundVariableLists.AddParameters> :
+              <React.Fragment key={`${key} ${index}`}>
+                {showSubstitutionOptions(name, validValues, getter, setter)}
+              </React.Fragment>;
+          });
+        };
 
-      return <div ref={this.ref}>
-        {possibleConclusions.length > 1 && <Form.Group>
-          <Form.Label><strong>Choose conclusion</strong></Form.Label>
-          <Form.Control as="select"
-                        value={selectedConclusion ? selectedConclusionIndex : ""}
-                        onChange={e => this.setSelectedConclusion(possibleConclusions[e.target.value], e.target.value)} readOnly={disabled}>
-            <option value="" />
-            {possibleConclusions.map(({conclusion}, index) =>
-              <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(
-                  <ExpressionComponent expression={conclusion} boundVariableLists={boundVariableListsForPremises} entryContext={entryContext}/>
-                )}}/>
-            )}
-          </Form.Control>
-        </Form.Group>}
-        {selectedConclusion && <>
-          {!hideSummary && <Form.Group>
-            <ResultWithPremises premises={premiseStatements}
-                                createPremiseElement={(p, i) => <CopiableExpression key={p.serialize()} expression={p} wrapBoundVariable={wrapPremiseBoundVariable(i)}  />}
-                                result={<CopiableExpression expression={conclusionStatement} wrapBoundVariable={wrapConclusionBoundVariable}/>}/>
+        return <div ref={this.ref}>
+          {possibleConclusions.length > 1 && <Form.Group>
+            <Form.Label><strong>Choose conclusion</strong></Form.Label>
+            <Form.Control as="select"
+                          value={selectedConclusion ? selectedConclusionIndex : ""}
+                          onChange={e => this.setSelectedConclusion(possibleConclusions[e.target.value], e.target.value)} readOnly={disabled}>
+              <option value="" />
+              {possibleConclusions.map(({conclusion, additionalVariableNames}, index) => {
+                return <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(
+                    <ExpressionComponent expression={conclusion} boundVariableLists={boundVariableListsForPremises} entryContext={entryContext} displayContext={conclusionDisplayContext.addTermVariables(additionalVariableNames)}/>
+                  )}}/>
+              })}
+            </Form.Control>
           </Form.Group>}
-          {getAllRequiredPaths(selectedConclusion.requiredSubstitutions).length > 0 && <>
-            {selectedConclusion.possiblePremises.length !== 0 && <PremiseSuggestions/>}
-            <Form.Group>
-              <Form.Label><strong>Substitutions</strong></Form.Label>
-              {_.flatten([
-                showSubstitutions("statements"),
-                showSubstitutions("terms")
-              ])}
-            </Form.Group>
+          {selectedConclusion && <>
+            {!hideSummary && <DisplayContext.Provider value={conclusionDisplayContext.addTermVariables(selectedConclusion.additionalVariableNames)}>
+              <Form.Group>
+                <ResultWithPremises premises={premiseStatements}
+                                    createPremiseElement={(p, i) => <CopiableExpression key={p.serialize()} expression={p} wrapBoundVariable={wrapPremiseBoundVariable(i)}  />}
+                                    result={<CopiableExpression expression={conclusionStatement} wrapBoundVariable={wrapConclusionBoundVariable}/>}/>
+              </Form.Group>
+            </DisplayContext.Provider>}
+            {getAllRequiredPaths(selectedConclusion.variableDefinitions).length > 0 && <>
+              {selectedConclusion.possiblePremises.length !== 0 && <PremiseSuggestions/>}
+              <Form.Group>
+                <Form.Label><strong>Substitutions</strong></Form.Label>
+                {_.flatten([
+                  showSubstitutions("statements"),
+                  showSubstitutions("terms")
+                ])}
+              </Form.Group>
+            </>}
           </>}
-        </>}
-        <div className="text-center">
-          <Button variant="primary" onClick={this.submit} disabled={!this.readyToSubmit() || disabled}>
-            {disabled ? <span className="fas fa-spin fa-spinner"/> : "Save Changes"}
-          </Button>
+          <div className="text-center">
+            <Button variant="primary" onClick={this.submit} disabled={!this.readyToSubmit() || disabled}>
+              {disabled ? <span className="fas fa-spin fa-spinner"/> : "Save Changes"}
+            </Button>
+          </div>
         </div>
-      </div>
-    }}</EntryContext.Consumer>
+      }}</DisplayContext.Consumer>
+    }</EntryContext.Consumer>
   }
 }

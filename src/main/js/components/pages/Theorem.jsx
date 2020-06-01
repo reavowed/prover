@@ -42,16 +42,11 @@ export class Theorem extends React.Component {
     const self = this;
     const {url} = this.props;
     const {theorem, inferences, highlighting, disableChaining, disableShorthands, disableAssumptionCollapse, disambiguators} = this.state;
-    const displayContext = {
-      disableChaining,
-      disableShorthands,
-      disableAssumptionCollapse,
-      disambiguators,
-      variableDefinitions: theorem.variableDefinitions
-    };
+    const displayContext = DisplayContext.construct(theorem.variableDefinitions, disambiguators, disableChaining, disableShorthands, disableAssumptionCollapse);
     const theoremContext = {
       entryContext: this.entryContext,
       parser: this.parser,
+      variableDefinitions: theorem.variableDefinitions,
       displayContext,
       fetchJson(subpath,  options) {
         return window.fetchJson(path.join(url, subpath), options);

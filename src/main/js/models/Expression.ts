@@ -154,6 +154,11 @@ export abstract class Expression {
   abstract getDisambiguators(): string[]
 }
 
+export abstract class TypeLikeExpression extends Expression {
+  abstract term: Expression;
+  abstract qualifierComponents: Expression[];
+}
+
 export class Variable extends Expression {
   constructor(public name: string, public components: Expression[]) { super(); }
   symbol: string = this.name;
@@ -235,7 +240,7 @@ export class DefinedExpression extends Expression {
   }
 }
 
-export class TypeExpression extends Expression {
+export class TypeExpression extends TypeLikeExpression {
   constructor(
       public definition: TypeDefinition,
       public term: Expression,
@@ -405,7 +410,7 @@ export class TypeExpression extends Expression {
   }
 }
 
-export class TypeQualifierExpression extends Expression {
+export class TypeQualifierExpression extends TypeLikeExpression {
   constructor(public definition: TypeQualifierDefinition, public typeDefinition: TypeDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
@@ -444,7 +449,7 @@ export class TypeQualifierExpression extends Expression {
   }
 }
 
-export class PropertyExpression extends Expression {
+export class PropertyExpression extends TypeLikeExpression {
   constructor(public definition: PropertyDefinition, public typeDefinition: TypeDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
@@ -463,7 +468,7 @@ export class PropertyExpression extends Expression {
   }
 }
 
-export class RelatedObjectExpression extends Expression {
+export class RelatedObjectExpression extends TypeLikeExpression {
   constructor(public definition: RelatedObjectDefinition, public typeDefinition: TypeDefinition, public term: Expression, public parentTerm: Expression, public qualifierComponents: Expression[]) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), this.parentTerm.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
@@ -482,7 +487,7 @@ export class RelatedObjectExpression extends Expression {
   }
 }
 
-export class StandalonePropertyExpression extends Expression {
+export class StandalonePropertyExpression extends TypeLikeExpression {
   constructor(public definition: StandalonePropertyDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")

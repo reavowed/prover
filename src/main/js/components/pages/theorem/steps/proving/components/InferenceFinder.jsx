@@ -2,6 +2,7 @@ import _ from "lodash";
 import React from "react";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
+import DisplayContext from "../../../../../DisplayContext";
 import EntryContext from "../../../../../EntryContext";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
 import ProofContext from "../../../ProofContext";
@@ -69,7 +70,11 @@ export class InferenceFinder extends React.Component {
     let getSuggestionValue = s => s.inference.name;
     let renderSuggestion = s => <SuggestionDropdownElement
       mainElement={getSuggestionValue(s)}
-      hoverElement={<CopiableExpression expression={s.inference.conclusion} />} />;
+      hoverElement={<EntryContext.Consumer>{entryContext =>
+        <DisplayContext.Provider value={DisplayContext.forInferenceSummary(s.inference, entryContext)}>
+          <CopiableExpression expression={s.inference.conclusion}/>
+        </DisplayContext.Provider>
+      }</EntryContext.Consumer>} />;
 
     const possibleTargets = selectedInference && selectedInference.possibleTargets;
     const possibleConclusions = (selectedInference && selectedInference.possibleConclusions) || (selectedTarget && selectedTarget.possibleConclusions);
@@ -110,6 +115,7 @@ export class InferenceFinder extends React.Component {
         }</EntryContext.Consumer>
       }</BoundVariableLists.Consumer>}
       {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
+                                                 conclusionVariableDefinitions={selectedInference.inference.variableDefinitions}
                                                  defaultConclusionStatement={selectedInference.inference.conclusion}
                                                  fetchPossiblePremises={(selectedConclusion) => this.props.fetchPossiblePremises(selectedInference.inference, selectedTarget.wrappingDefinitions, selectedConclusion.extractionInferenceIds)}
                                                  submit={this.submit}

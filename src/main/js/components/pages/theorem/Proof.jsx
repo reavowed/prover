@@ -42,6 +42,7 @@ export default class Proof extends React.Component {
     return <TheoremContext.Consumer>{theoremContext => {
       const proofContext = {
         parser: theoremContext.parser,
+        variableDefinitions: theoremContext.variableDefinitions,
         registerStep: this.registerStep,
         unregisterStep: this.unregisterStep,
         callOnStep: this.callOnStep,

@@ -1,10 +1,41 @@
 import _ from "lodash";
 import {useContext} from "react";
 import * as React from "react";
-import {matchTemplate} from "../models/Expression";
+import {matchTemplate, VariableDefinitions} from "../models/Expression";
 import EntryContext from "./EntryContext";
 
 const DisplayContext = React.createContext();
+
+const DisplayContextClass = class DisplayContext {
+  constructor(variableDefinitions, disambiguators, disableChaining, disableShorthands, disableAssumptionCollapse) {
+    this.variableDefinitions = variableDefinitions;
+    this.disambiguators = disambiguators;
+    this.disableChaining = disableChaining;
+    this.disableShorthands = disableShorthands;
+    this.disableAssumptionCollapse = disableAssumptionCollapse;
+  }
+
+  withVariableDefinitions = (newVariableDefinitions) => {
+    return new DisplayContextClass(
+      newVariableDefinitions,
+      this.disambiguators,
+      this.disableChaining,
+      this.disableShorthands,
+      this.disableAssumptionCollapse);
+  };
+
+  addTermVariables = (termVariableNames) => {
+    return this.withVariableDefinitions(
+      {
+        statements: this.variableDefinitions.statements,
+        terms: [...this.variableDefinitions.terms, ...termVariableNames.map(name => {return {name, arity: 0}})]
+      });
+  };
+};
+
+DisplayContext.construct = function(variableDefinitions, disambiguators, disableChaining = false, disableShorthands = false, disableAssumptionCollapse = false) {
+  return new DisplayContextClass(variableDefinitions, disambiguators, disableChaining, disableShorthands, disableAssumptionCollapse)
+};
 
 function mergeDisambiguators(results) {
   const keys = _.uniq(_.flatMap(results, r => _.keys(r)));
@@ -48,16 +79,6 @@ function getDisambiguatorsForExpression(expression, entryContext) {
   return {};
 }
 
-DisplayContext.construct = function(variableDefinitions, disambiguators) {
-  return {
-    disableChaining: false,
-    disableShorthands: false,
-    disableAssumptionCollapse: false,
-    variableDefinitions,
-    disambiguators
-  };
-};
-
 DisplayContext.forExpressionDefinition = function(definition, entryContext) {
   definition = entryContext.definitions[definition.symbol];
 
@@ -87,7 +108,7 @@ DisplayContext.forTypeLikeDefinition = function(definingStatement, termNames, en
   };
   const disambiguators = getDisambiguatorsForExpression(definingStatement, entryContext);
   return DisplayContext.construct(variableDefinitions, disambiguators);
-}
+};
 
 DisplayContext.disambiguatorsForInferenceSummary = function(inference, entryContext) {
   const expressions = [...inference.premises, inference.conclusion];

@@ -284,10 +284,10 @@ export class Parser {
     return definition;
   };
   parseSubstitutions = (substitutions) => {
-    const statements = _.mapValues(substitutions.statements, ([i, s]) => [i, this.parseExpression(s)]);
-    const terms = _.mapValues(substitutions.terms, ([i, t]) => [i, this.parseExpression(t)]);
-    const statementApplications = _.mapValues(substitutions.statementApplications, ([i, e]) => [i, e.map(this.parseExpression)]);
-    const termApplications = _.mapValues(substitutions.termApplications, ([i, e]) => [i, e.map(this.parseExpression)]);
+    const statements = _.map(substitutions.statements, s => s && this.parseExpression(s));
+    const terms = _.map(substitutions.terms, t => t && this.parseExpression(t));
+    const statementApplications = _.mapValues(substitutions.statementApplications, ss => _.map(ss, this.parseExpression));
+    const termApplications = _.mapValues(substitutions.termApplications, ts => _.map(ts, this.parseExpression));
     return {statements, terms, statementApplications, termApplications};
   };
   parsePossibleInferences = (possibleInferences) => {

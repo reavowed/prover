@@ -49,9 +49,9 @@ function filterPathsMultiple(actions, initialPaths) {
   return result;
 }
 
-export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, entryContext, splitConjunction}) {
+export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, entryContext, displayContext, splitConjunction}) {
   entryContext = entryContext || useContext(EntryContext);
-  const displayContext = useContext(DisplayContext);
+  displayContext = displayContext || useContext(DisplayContext);
   wrapBoundVariable = wrapBoundVariable || ((name) => formatHtml(name));
 
   function renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, splitConjunction = false) {
@@ -256,16 +256,11 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         if (displayContext && displayContext.variableDefinitions) {
           const statementVariableRegex = /^s(\d+)$/;
           const termVariableRegex = /^t(\d+)$/;
-          let match, name;
-          if (match = expression.name.match(statementVariableRegex)) {
-            const index = parseInt(match[1]);
-            name = displayContext.variableDefinitions.statements[index].name;
-          } else if (match = expression.name.match(termVariableRegex)) {
-            const index = parseInt(match[1]);
-            name = displayContext.variableDefinitions.terms[index].name;
-          } else {
-            throw "Unrecognised variable " + expression.name;
-          }
+          const statementMatch = expression.name.match(statementVariableRegex);
+          const termMatch = expression.name.match(termVariableRegex);
+          const name = statementMatch ? displayContext.variableDefinitions.statements[parseInt(statementMatch[1])].name :
+            termMatch ? displayContext.variableDefinitions.terms[parseInt(termMatch[1])].name :
+            throw new Error("Unrecognised variable " + expression.name);
           const result = formatHtmlWithoutWrapping(name);
           if (expression.components.length > 0) {
             result.push("(");

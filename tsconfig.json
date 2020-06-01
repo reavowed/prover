@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "allowJs": true,
+        "allowJs": false,
         "target": "es6",
-        "jsx": "react",
+        "jsx": "preserve",
         "moduleResolution": "node",
         "noImplicitThis": true,
         "noImplicitReturns": true,
