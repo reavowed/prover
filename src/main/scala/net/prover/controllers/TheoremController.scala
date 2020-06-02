@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
-import net.prover.model.ExpressionParsingContext
+import net.prover.model.{ExpressionParsingContext, VariableDefinitions}
 import net.prover.model.entries.Theorem
 import net.prover.model.proof.Step
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,6 +14,22 @@ import scala.util.{Failure, Success}
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}"))
 class TheoremController @Autowired() (val bookService: BookService) extends BookModification with ParameterValidation {
 
+  @PutMapping(value = Array("/variables"))
+  def updateVariables(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @RequestBody serializedNewVariables: String
+  ): ResponseEntity[_] = {
+    bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+      implicit val expressionParsingContext = ExpressionParsingContext.forInference(theorem)(provingContext.entryContext)
+      for {
+        newVariables <- VariableDefinitions.parser.parseFromString(serializedNewVariables, "variables").recoverWithBadRequest
+        _ <- (newVariables.statements.length == theorem.variableDefinitions.statements.length).orBadRequest("Cannot change number of statement variables")
+        _ <- (newVariables.terms.length == theorem.variableDefinitions.terms.length).orBadRequest("Cannot change number of term variables")
+      } yield theorem.copy(variableDefinitions = newVariables)
+    }.toResponseEntity
+  }
   @PutMapping(value = Array("/premises"))
   def updatePremises(
     @PathVariable("bookKey") bookKey: String,

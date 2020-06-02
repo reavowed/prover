@@ -28,6 +28,17 @@ export function Inference({inference, title, url, bookLink, chapterLink, previou
     return window.fetchJson(path.join(url, "conclusion"), {method: "PUT", body: newConclusion})
       .then(() => window.location.reload());
   };
+  const updateVariables = (newVariables) => {
+    return window.fetchJson(path.join(url, "variables"), {method: "PUT", body: newVariables})
+      .then(() => window.location.reload());
+  };
+  function serializeVariables(prefix, variables) {
+    if (variables.length > 0) {
+      return prefix + " (" + variables.map(v => _.filter([v.name, v.arity, v.attributes.length ? ("(" + v.attributes.join(" ") + ")") : null], x => !_.isNull(x)).join(" ")).join(", ") + ")"
+    }
+  }
+  const initialVariablesText = _.filter([serializeVariables("statementVariables", inference.variableDefinitions.statements), serializeVariables("termVariables", inference.variableDefinitions.terms)]).join("\n");
+
   return <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: inference.name, url}]}/>}>
     <NavLinks previous={previous} next={next}/>
     <h3 className="text-center mb-0">
@@ -40,6 +51,7 @@ export function Inference({inference, title, url, bookLink, chapterLink, previou
         <>
           <Button variant="primary" size="sm" className="float-right ml-1 mb-1" onClick={() => setEditing(false)}>Cancel</Button>
           <ErrorAlert error={error} setError={setError} />
+          <EditableProperty label="Variables" initialValue={initialVariablesText} onSave={updateVariables} onError={setError} inputType={InputWithShorthandReplacement} inputProps={{as: "textarea"}} />
           <EditableProperty label="Premises" initialValue={_.map(inference.premises, p => p.serialize()).join("\n")} onSave={updatePremises} onError={setError} inputType={InputWithShorthandReplacement} inputProps={{as: "textarea"}} />
           <EditableProperty label="Conclusion" initialValue={inference.conclusion.serialize()} onSave={updateConclusion} onError={setError} inputType={InputWithShorthandReplacement} />
         </> :

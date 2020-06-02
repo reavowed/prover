@@ -13,7 +13,7 @@ qualifier on on binaryOperation (A) (on A)
   definition (= baseSet t0 t1)
 
 theorem Alternative Definition for Binary Operation on a Set
-termVariables(f 0, A 0)
+termVariables(∘ 0 (infix-function), A 0)
 conclusion ↔ ∧ binaryOperation t0 binaryOperationOn t0 t1 ∧ function t0 functionFrom t0 product t1 t1 t1
 {
   assume ∧ binaryOperation t0 binaryOperationOn t0 t1 {
@@ -108,7 +108,7 @@ relatedObject identity e for binaryOperation
   definition (∧ ∈ t0 baseSet t1 ∀ a → ∈ $0 baseSet t1 ∧ = apply t1 orderedPair $0 t0 $0 = apply t1 orderedPair t0 $0 $0)
 
 theorem Identities are Unique
-termVariables(f 0, e_1 0, e_2 0)
+termVariables(∘ 0 (infix-function), e_1 0, e_2 0)
 premise binaryOperation t0
 premise identityBinaryOperation t1 t0
 premise identityBinaryOperation t2 t0
@@ -158,7 +158,7 @@ property cancellable on binaryOperation
   definition (∧ leftCancellableBinaryOperation t0 rightCancellableBinaryOperation t0)
 
 theorem A Commutative Operator Is Cancellable If It Is Cancellable on One Side
-termVariables(f 0)
+termVariables(∘ 0 (infix-function))
 premise ∧ binaryOperation t0 commutativeBinaryOperation t0
 premise ∨ leftCancellableBinaryOperation t0 rightCancellableBinaryOperation t0
 conclusion cancellableBinaryOperation t0
@@ -304,7 +304,7 @@ property invertible on binaryOperation
   definition (∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0)
 
 theorem An Invertible Binary Operation Is Cancellable
-termVariables(f 0)
+termVariables(∘ 0 (infix-function))
 premise ∧ ∧ binaryOperation t0 associativeBinaryOperation t0 invertibleBinaryOperation t0
 conclusion cancellableBinaryOperation t0
 {
@@ -463,7 +463,7 @@ conclusion cancellableBinaryOperation t0
 }
 
 theorem Direct Invertibility Condition for Binary Operator
-termVariables(f 0, e 0)
+termVariables(∘ 0 (infix-function), e 0)
 premise ∧ binaryOperation t0 identityBinaryOperation t1 t0
 premise ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 t1 = apply t0 orderedPair $0 $$0 t1
 conclusion invertibleBinaryOperation t0
