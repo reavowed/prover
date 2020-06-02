@@ -1414,8 +1414,8 @@ premise ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ
 conclusion ∃! n ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0
 {
   prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 () ()
-  elided 6a8452942f15d0869b853dc4f4754a264095496238ae065e1acae9cf8e60acb7 {
-    elided 6a8452942f15d0869b853dc4f4754a264095496238ae065e1acae9cf8e60acb7 {
+  elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
+    elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
       prove bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, bijectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0
       elided ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd {
         prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (⍳_ℤ, ℕ, ℤ^≥0) 1.0.0
@@ -1423,9 +1423,9 @@ conclusion ∃! n ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0
         prove injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (injectiveFunction ⍳_ℤ, surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 1.0.1.1
       }
       prove ∧ function ⍳_ℤ injectiveFunction ⍳_ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function ⍳_ℤ, injectiveFunction ⍳_ℤ) () 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1
-      elided 6a8452942f15d0869b853dc4f4754a264095496238ae065e1acae9cf8e60acb7 {
-        prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ bijectiveFunction inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction domain ⍳_ℤ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction codomain ⍳_ℤ 6a8452942f15d0869b853dc4f4754a264095496238ae065e1acae9cf8e60acb7 () (⍳_ℤ) 1.0.2
-        prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ bijectiveFunction inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ bijectiveFunction inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ, ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction domain ⍳_ℤ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction codomain ⍳_ℤ) () 1.0.3.0
+      elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
+        prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ bijectiveFunction inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction domain ⍳_ℤ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction codomain ⍳_ℤ 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 () (⍳_ℤ) 1.0.2
+        prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ bijectiveFunction inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ bijectiveFunction inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ, ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction domain ⍳_ℤ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction codomain ⍳_ℤ) () 1.0.3.0
       }
     }
     elided b9d58423774e4a0aef310597d6a0e5886341830a3a2ebe49b8bdf308447be856 {

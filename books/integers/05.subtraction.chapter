@@ -1698,9 +1698,9 @@ conclusion ∃ b ∧ ∈ $0 t0 ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ
         prove ⊆ $0 ℤ^≥0 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () ($0, ℤ^≥0) 0.0.0.0
       }
       prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 () ()
-      elided daeab4ba1051812f6df688c0c7ada08bda210b0f0c351c6f033422052714b15d {
-        prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0 daeab4ba1051812f6df688c0c7ada08bda210b0f0c351c6f033422052714b15d () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.1
-        prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ, ∧ = ∘ inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = ∘ ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0) () 0.0.2.0
+      elided 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df {
+        prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.1
+        prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ, ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0) () 0.0.2.0
       }
       prove ⊆ applySet inverseFunction ⍳_ℤ $0 ℕ 3ef2af93629640049e93b8506346d0907585c5856cb1daf63cf4e190c250d6f7 () (inverseFunction ⍳_ℤ, ℤ^≥0, ℕ, $0) 0.0.2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0
       subproof (Inverse image of S^+ is non-empty) {
