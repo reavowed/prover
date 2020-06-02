@@ -7,7 +7,7 @@ import net.prover.model.expressions.Statement
 
 case class StandalonePropertyDefinition(
     symbol: String,
-    defaultTermName: String,
+    mainVariableDefinition: SimpleVariableDefinition,
     explicitName: Option[String],
     definingStatement: Statement)
   extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition
@@ -21,17 +21,17 @@ case class StandalonePropertyDefinition(
   override def withSymbol(newSymbol: String): StandalonePropertyDefinition = copy(symbol = newSymbol)
   override def withName(newName: Option[String]): ChapterEntry = copy(explicitName = newName)
 
-  def fullFormat: Format = Format.Explicit(s"$defaultTermName is $name", Seq(defaultTermName), requiresBrackets = false, requiresComponentBrackets = true)
+  def fullFormat: Format = Format.Explicit(s"%1 is %0", s"${mainVariableDefinition.name} is $name", 2, requiresBrackets = false, requiresComponentBrackets = true)
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
     qualifiedSymbol,
-    Seq(ComponentType.TermComponent(defaultTermName, Nil)),
+    Seq(ComponentType.TermComponent(mainVariableDefinition.name, Nil)),
     explicitName.orElse(Some(symbol)),
     fullFormat,
     Some(definingStatement),
     this)
   override val inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 
-  override def serializedLines: Seq[String] = Seq(StandalonePropertyDefinition.name, symbol, defaultTermName).mkString(" ") +:
+  override def serializedLines: Seq[String] = Seq(StandalonePropertyDefinition.name, symbol, mainVariableDefinition.serialized).mkString(" ") +:
     (explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
       Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
     ).indent
@@ -43,7 +43,7 @@ case class StandalonePropertyDefinition(
   ): StandalonePropertyDefinition = {
     StandalonePropertyDefinition(
       symbol,
-      defaultTermName,
+      mainVariableDefinition,
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))
   }
@@ -54,11 +54,11 @@ object StandalonePropertyDefinition extends ChapterEntryParser {
   override def parser(implicit context: EntryContext): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
-      defaultTermName <- Parser.singleWord
-      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(Seq(defaultTermName))
+      mainVariableDefinition <- SimpleVariableDefinition.parser
+      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(Seq(mainVariableDefinition))
       explicitName <- Parser.optional("name", Parser.allInParens)
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
-    } yield StandalonePropertyDefinition(symbol, defaultTermName, explicitName, definingStatement)
+    } yield StandalonePropertyDefinition(symbol, mainVariableDefinition, explicitName, definingStatement)
   }
 }
 

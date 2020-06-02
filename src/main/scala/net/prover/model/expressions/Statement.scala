@@ -40,13 +40,13 @@ object Statement {
     def qualifierParser: Parser[(Option[TypeQualifierDefinition], Seq[Term])] = {
       typeDefinition.defaultQualifier match {
         case Some(qualifier) =>
-          qualifier.defaultTermNames.map(_ => Term.parser).traverse.map(None -> _)
+          qualifier.variableDefinitions.map(_ => Term.parser).traverse.map(None -> _)
         case None =>
           for {
             qualifierOption <- Parser.optional(qualifierSymbol => context.entryContext.qualifiersByType.get(typeDefinition.symbol).flatMap(_.find(_.symbol == qualifierSymbol)))
             qualifierTerms <- qualifierOption match {
               case Some(qualifier) =>
-                qualifier.qualifier.defaultTermNames.map(_ => Term.parser).traverse
+                qualifier.qualifier.variableDefinitions.map(_ => Term.parser).traverse
               case None =>
                 Parser.constant(Nil)
             }
@@ -122,14 +122,14 @@ object Statement {
     for {
       Seq(typeSymbol, propertySymbol) <- "^(\\w+)\\.(\\w+)$".r.unapplySeq(symbol)
       propertyDefinition <- context.entryContext.propertyDefinitionsByType.getOrElse(typeSymbol, Nil).find(_.symbol == propertySymbol)
-    } yield propertyDefinition.qualifierTermNames.map(_ => Term.parser).traverse.map(qualifierTerms => propertyDefinition.statementDefinition(mainTerm +: qualifierTerms:_*))
+    } yield propertyDefinition.qualifierVariableDefinitions.map(_ => Term.parser).traverse.map(qualifierTerms => propertyDefinition.statementDefinition(mainTerm +: qualifierTerms:_*))
   }
 
   def typeObjectStatementParser(mainTerm: Term, symbol: String)(implicit context: ExpressionParsingContext): Option[Parser[Statement]] = {
     for {
       Seq(typeSymbol, objectSymbol) <- "^(\\w+)\\.(\\w+)$".r.unapplySeq(symbol)
       objectDefinition <- context.entryContext.relatedObjectsByType.getOrElse(typeSymbol, Nil).find(_.symbol == objectSymbol)
-    } yield objectDefinition.parentTermNames.map(_ => Term.parser).traverse.map(parentTerms => objectDefinition.statementDefinition(mainTerm +: parentTerms:_*))
+    } yield objectDefinition.parentVariableDefinitions.map(_ => Term.parser).traverse.map(parentTerms => objectDefinition.statementDefinition(mainTerm +: parentTerms:_*))
   }
 
   def listParser(implicit context: ExpressionParsingContext): Parser[Seq[Statement]] = parser.listInParens(Some(","))

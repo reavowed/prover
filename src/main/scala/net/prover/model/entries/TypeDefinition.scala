@@ -8,11 +8,11 @@ import net.prover.model.expressions.Statement
 
 case class TypeDefinition(
     symbol: String,
-    defaultTermName: String,
+    mainVariableDefinition: SimpleVariableDefinition,
     defaultQualifier: Option[Qualifier],
     explicitName: Option[String],
     definingStatement: Statement)
-  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle with ChapterEntry.HasDefaultTermName
+  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle with ChapterEntry.HasMainVariable
 {
   override val title: String = s"Definition: ${name.capitalizeWords}"
 
@@ -22,13 +22,14 @@ case class TypeDefinition(
   def withSymbol(newSymbol: String): TypeDefinition = copy(symbol = newSymbol)
   override def withName(newName: Option[String]): TypeDefinition = copy(explicitName = newName)
   def withFormat(newFormat: Format.Explicit): TypeDefinition = copy(defaultQualifier = defaultQualifier.map(_.withFormat(newFormat)))
-  def withDefaultTermName(newDefaultTermName: String): TypeDefinition = copy(defaultTermName = newDefaultTermName)
+  def withMainVariableDefinition(newMainVariableDefinition: SimpleVariableDefinition): TypeDefinition = copy(mainVariableDefinition = newMainVariableDefinition)
 
-  def baseFormat = Format.Explicit(s"%1 is $article %0", s"$defaultTermName is $article $name", 2, true, true)
+  def baseFormat = Format.Explicit(s"%1 is $article %0", s"${mainVariableDefinition.name} is $article $name", 2, true, true)
   def fullFormat = defaultQualifier.prependFormat(baseFormat)
 
-  val allTermNames: Seq[String] = defaultTermName +: defaultQualifier.defaultTermNames
-  val allComponents: Seq[TermComponent] = allTermNames.map(ComponentType.TermComponent(_, Nil))
+  val allVariableDefinitions: Seq[SimpleVariableDefinition] = mainVariableDefinition +: defaultQualifier.variableDefinitions
+  val allVariableNames: Seq[String] = allVariableDefinitions.map(_.name)
+  val allComponents: Seq[TermComponent] = allVariableNames.map(ComponentType.TermComponent(_, Nil))
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
     symbol,
     allComponents,
@@ -38,7 +39,7 @@ case class TypeDefinition(
     this)
   override def inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 
-  override def serializedLines: Seq[String] = Seq("type", symbol, defaultTermName).mkString(" ") +:
+  override def serializedLines: Seq[String] = Seq("type", symbol, mainVariableDefinition.serialized).mkString(" ") +:
       (defaultQualifier.map("qualifier " + _.serialized).toSeq ++
         explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
         Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
@@ -51,7 +52,7 @@ case class TypeDefinition(
   ): TypeDefinition = {
     TypeDefinition(
       symbol,
-      defaultTermName,
+      mainVariableDefinition,
       defaultQualifier,
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))
@@ -67,11 +68,11 @@ object TypeDefinition extends ChapterEntryParser {
   override def parser(implicit context: EntryContext): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
-      defaultTermName <- Parser.singleWord
+      mainVariableDefinition <- SimpleVariableDefinition.parser
       qualifier <- Parser.optional("qualifier", Qualifier.parser)
       explicitName <- Parser.optional("name", Parser.allInParens)
-      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(defaultTermName +: qualifier.defaultTermNames)
+      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(mainVariableDefinition +: qualifier.variableDefinitions)
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
-    } yield TypeDefinition(symbol, defaultTermName, qualifier, explicitName, definingStatement)
+    } yield TypeDefinition(symbol, mainVariableDefinition, qualifier, explicitName, definingStatement)
   }
 }

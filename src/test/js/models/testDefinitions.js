@@ -17,7 +17,7 @@ export const functionFromDefinition = {
   qualifiedSymbol: "functionFrom",
   name: "from",
   qualifier: {
-    defaultTermNames: ["A", "B"],
+    variableDefinitions: [{name: "A"}, {name: "B"}],
     format: "from %0 → %1"
   }
 };
@@ -33,7 +33,7 @@ export const relationDefinition = {
   symbol: "relation",
   name: "relation",
   defaultQualifier: {
-    defaultTermNames: ["A"],
+    variableDefinitions: [{name: "A"}],
     format: "on %0"
   },
   properties: [],
@@ -88,7 +88,7 @@ export const identityDefinition = {
   qualifiedSymbol: "binaryOperationIdentity",
   name: "identity",
   article: "an",
-  defaultTermName: "e",
+  mainVariableDefinition: {name: "e"},
   requiredParentQualifier: null
 };
 export const binaryOperationOnDefinition = {
@@ -96,7 +96,7 @@ export const binaryOperationOnDefinition = {
   qualifiedSymbol: "binaryOperationOn",
   name: "on",
   qualifier: {
-    defaultTermNames: ["A"],
+    variableDefinitions: [{name: "A"}],
     format: "on %0"
   }
 };

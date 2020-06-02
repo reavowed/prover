@@ -11,7 +11,7 @@ const values = [
   {key: "parentType", title: "Parent Type", inputType: TypeAutocomplete},
   {key: "requiredParentQualifier", title: "Required Parent Qualifier", inputType: TypeQualifierAutocomplete, inputProps: obj => {return {typeSymbol: obj.parentType}}},
   {key: "name", title: "Explicit name (if different from symbol)"},
-  {key: "defaultTermName", title: "Default term name"},
+  {key: "mainVariableDefinition", title: "Main variable"},
   {key: "definingStatement", title: "Defining Statement", inputType: InputWithShorthandReplacement}
 ];
 

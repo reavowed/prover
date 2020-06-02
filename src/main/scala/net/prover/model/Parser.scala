@@ -49,6 +49,14 @@ case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
 
   def inParens: Parser[T] = inBrackets("(", ")")
   def listInParens(separatorOption: Option[String]): Parser[Seq[T]] = listInBrackets("(", ")", separatorOption)
+  def optionalListInParens(separatorOption: Option[String]): Parser[Seq[T]] = {
+    Parser.optionalWord("(").flatMap {
+      case Some(_) =>
+        Parser.allInOpenBrackets(Iterator.continually(this), ")", separatorOption, isInfinite = true)
+      case None =>
+        Parser.constant(Nil)
+    }
+  }
 
   def inBraces: Parser[T] = inBrackets("{", "}")
   def listInBraces(separatorOption: Option[String]): Parser[Seq[T]] = listInBrackets("{", "}", separatorOption)
@@ -160,7 +168,7 @@ object Parser {
     }
   }
 
-  private def inBrackets[T](parsers: Iterator[Parser[T]], openBracket: String, closeBracket: String, separatorOption: Option[String], isInfinite: Boolean): Parser[Seq[T]] = {
+  private def allInOpenBrackets[T](parsers: Iterator[Parser[T]], closeBracket: String, separatorOption: Option[String], isInfinite: Boolean): Parser[Seq[T]] = {
     def parseNext(tokenStream: TokenStream, acc: Seq[T] = Nil): (Seq[T], TokenStream) = {
       if (tokenStream.currentToken.text == closeBracket) {
         (acc, tokenStream.advance())
@@ -180,9 +188,13 @@ object Parser {
         parseNext(remainingTokenStream, acc :+ next)
       }
     }
+    Parser(parseNext(_, Nil))
+  }
+
+  private def inBrackets[T](parsers: Iterator[Parser[T]], openBracket: String, closeBracket: String, separatorOption: Option[String], isInfinite: Boolean): Parser[Seq[T]] = {
     for {
       _ <- Parser.requiredWord(openBracket)
-      list <- Parser(parseNext(_, Nil))
+      list <- allInOpenBrackets(parsers, closeBracket, separatorOption, isInfinite)
     } yield list
   }
 

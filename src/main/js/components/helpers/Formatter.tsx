@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as _ from "lodash";
+import {SimpleVariableDefinition} from "../../models/Expression";
 
 type Match = {index: number, [key: number]: string}
 
@@ -54,12 +55,12 @@ interface Format {
 }
 interface Qualifier {
   format: Format;
-  defaultTermNames: string[]
+  variableDefinitions: SimpleVariableDefinition[]
 }
 
 export function formatQualifier(qualifier: Qualifier | undefined): JSX.Element[] | null {
   if (qualifier) {
-    return formatHtml(qualifier.format.baseFormatString, s => replacePlaceholders(s, qualifier.defaultTermNames))
+    return formatHtml(qualifier.format.baseFormatString, s => replacePlaceholders(s, qualifier.variableDefinitions.map(d => d.name)))
   } else {
     return null;
   }

@@ -2,6 +2,7 @@ package net.prover.model.entries
 
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
+import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
 import net.prover.model.definitions._
 import net.prover.model.entries.PropertyDefinitionOnType.RequiredParentObjects
 import net.prover.model.expressions.{FunctionParameter, Statement, TermVariable}
@@ -27,15 +28,17 @@ case class PropertyDefinitionOnType(
   override def withSymbol(newSymbol: String): PropertyDefinitionOnType = copy(symbol = newSymbol)
   override def withName(newName: Option[String]): PropertyDefinitionOnType = copy(explicitName = newName)
 
-  def baseFormat = Format.Explicit(s"%1 is %0", s"${parentType.defaultTermName} is $name", 2, true, true)
+  def baseFormat = Format.Explicit(s"%1 is %0", s"${parentType.mainVariableDefinition.name} is $name", 2, true, true)
   def fullFormat = parentType.defaultQualifier.prependFormat(baseFormat)
 
-  val (parentTypeConditionConstructor, qualifierTermNames) = PropertyDefinitionOnType.getParentConditionAndQualifierTermNames(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
-  val allTermNames = parentType.defaultTermName +: qualifierTermNames
+  val (parentTypeConditionConstructor, qualifierVariableDefinitions) = PropertyDefinitionOnType.getParentConditionAndQualifierVariableDefinitions(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
+  val allVariableDefinitions: Seq[SimpleVariableDefinition] = parentType.mainVariableDefinition +: qualifierVariableDefinitions
+  val allVariableNames: Seq[String] = allVariableDefinitions.map(_.name)
+  def allComponents: Seq[TermComponent] = allVariableNames.map(ComponentType.TermComponent(_, Nil))
 
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
     qualifiedSymbol,
-    allTermNames.map(ComponentType.TermComponent(_, Nil)),
+    allComponents,
     Some(name),
     fullFormat,
     Some(parentTypeConditionConstructor(definingStatement)),
@@ -85,10 +88,10 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
     }
     def conditionConstructor(conjunctionDefinition: ConjunctionDefinition)(statement: Statement): Statement = {
       objectDefinitions.foldRight(statement) { (objectDefinition, currentStatement) =>
-        val objectCondition = objectDefinition.statementDefinition(FunctionParameter(0, 0) +: objectDefinition.parentTermNames.indices.map(TermVariable(_)): _*)
+        val objectCondition = objectDefinition.statementDefinition(FunctionParameter(0, 0) +: objectDefinition.parentVariableDefinitions.indices.map(TermVariable(_)): _*)
         conjunctionDefinition(
-          uniqueExistenceDefinition(objectDefinition.defaultTermName, objectCondition),
-          generalizationDefinition(objectDefinition.defaultTermName, deductionDefinition(objectCondition, currentStatement)))
+          uniqueExistenceDefinition(objectDefinition.mainVariableDefinition.name, objectCondition),
+          generalizationDefinition(objectDefinition.mainVariableDefinition.name, deductionDefinition(objectCondition, currentStatement)))
       }
     }
     def serialized: String = Seq("parentObjects", objectDefinitions.map(_.symbol).mkString(" ").inParens).mkString(" ")
@@ -97,7 +100,7 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
     implicit class OptionOps(option: Option[RequiredParentObjects]) {
       def objectDefinitions: Seq[RelatedObjectDefinition] = option.map(_.objectDefinitions).getOrElse(Nil)
       def addParametersToParsingContext(expressionParsingContext: ExpressionParsingContext): ExpressionParsingContext = {
-        option.map(_.objectDefinitions.foldRight(expressionParsingContext) { (d, c) => c.addInitialParameter(d.defaultTermName) })
+        option.map(_.objectDefinitions.foldRight(expressionParsingContext) { (d, c) => c.addInitialParameter(d.mainVariableDefinition.name) })
           .getOrElse(expressionParsingContext)
       }
     }
@@ -113,26 +116,26 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
     }
   }
 
-  def getParentConditionAndQualifierTermNames(
+  def getParentConditionAndQualifierVariableDefinitions(
     parentType: TypeDefinition,
     termListAdapter: Option[TermListAdapter],
     requiredParentQualifier: Option[TypeQualifierDefinition],
     requiredParentObjects: Option[RequiredParentObjects],
     conjunctionDefinition: ConjunctionDefinition
-  ): (Statement => Statement, Seq[String]) = {
+  ): (Statement => Statement, Seq[SimpleVariableDefinition]) = {
     val mainTerm = TermVariable(0, Nil)
-    val (qualifierTerms, qualifierTermNames) = termListAdapter match {
+    val (qualifierTerms, qualifierVariableDefinitions) = termListAdapter match {
       case Some(adapter) =>
-        val adapterTerms = adapter.termNames.indices.map(i => TermVariable(i + 1, Nil))
-        (adapter.templates.map(_.specify(adapterTerms)(SubstitutionContext.outsideProof).get), adapter.termNames)
+        val adapterTerms = adapter.variableDefinitions.indices.map(i => TermVariable(i + 1, Nil))
+        (adapter.templates.map(_.specify(adapterTerms)(SubstitutionContext.outsideProof).get), adapter.variableDefinitions)
       case None =>
-        val termNames = requiredParentQualifier match {
+        val variableDefinitions = requiredParentQualifier match {
           case Some(qualifier) =>
-            qualifier.qualifier.defaultTermNames
+            qualifier.qualifier.variableDefinitions
           case None =>
-            parentType.defaultQualifier.defaultTermNames
+            parentType.defaultQualifier.variableDefinitions
         }
-        (termNames.indices.map(i => TermVariable(i + 1, Nil)), termNames)
+        (variableDefinitions.indices.map(i => TermVariable(i + 1, Nil)), variableDefinitions)
     }
     val qualifierCondition = requiredParentQualifier match {
       case Some(qualifier) =>
@@ -143,7 +146,7 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
         parentType.statementDefinition(mainTerm +: qualifierTerms: _*)
     }
     val qualifierConstructor = requiredParentObjects.map(rpo => rpo.conditionConstructor(conjunctionDefinition)(_)).getOrElse(identity[Statement](_))
-    ((statement: Statement) => conjunctionDefinition(qualifierCondition, qualifierConstructor(statement)), qualifierTermNames)
+    ((statement: Statement) => conjunctionDefinition(qualifierCondition, qualifierConstructor(statement)), qualifierVariableDefinitions)
   }
 
   override def name: String = "property"
@@ -156,8 +159,8 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
       termListAdapter <- Parser.optional("termListAdapter", TermListAdapter.parser)
       explicitName <- Parser.optional("name", Parser.allInParens)
       conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create property definition without conjunction"))
-      (_, qualifierTermNames) = getParentConditionAndQualifierTermNames(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
-      expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: qualifierTermNames))
+      (_, qualifierVariableDefinitions) = getParentConditionAndQualifierVariableDefinitions(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
+      expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(parentType.mainVariableDefinition +: qualifierVariableDefinitions))
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
     } yield PropertyDefinitionOnType(symbol, parentType, requiredParentQualifier, requiredParentObjects, termListAdapter, explicitName, definingStatement, conjunctionDefinition)
   }

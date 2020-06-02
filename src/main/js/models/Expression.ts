@@ -14,6 +14,10 @@ export interface DisambiguatedSymbol {
   serialized: string;
 }
 
+export interface SimpleVariableDefinition {
+  name: string;
+}
+
 export interface VariableDefinition {
   name: string;
   arity: number;
@@ -35,7 +39,7 @@ export interface ExpressionDefinition {
 }
 
 export interface QualifierDefinition {
-  defaultTermNames: string[];
+  variableDefinitions: SimpleVariableDefinition[];
   format: string;
 }
 
@@ -67,7 +71,7 @@ export interface RelatedObjectDefinition {
   qualifiedSymbol: string;
   name: string;
   article: string;
-  defaultTermName: string;
+  mainVariableDefinition: SimpleVariableDefinition;
   requiredParentQualifier: string | undefined;
 }
 
@@ -75,7 +79,7 @@ export interface StandalonePropertyDefinition {
   symbol: string;
   qualifiedSymbol: string;
   name: string;
-  defaultTermName: string;
+  mainVariableDefinition: SimpleVariableDefinition;
 }
 
 export class ExpressionMatchResult {

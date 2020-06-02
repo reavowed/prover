@@ -8,9 +8,9 @@ import ChapterEntryWrapper from "../chapter/ChapterEntryWrapper";
 export default function TypeQualifierDefinitionDescription({typeQualifierDefinition}) {
   const entryContext = useContext(EntryContext);
   const typeDefinition = typeQualifierDefinition.parentType;
-  const termNames = [typeQualifierDefinition.parentType.defaultTermName, ...typeQualifierDefinition.qualifier.defaultTermNames];
+  const termNames = [typeQualifierDefinition.parentType.mainVariableDefinition.name, ...typeQualifierDefinition.qualifier.variableDefinitions.map(d => d.name)];
 
   return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(typeQualifierDefinition.definingStatement, termNames, entryContext)}>
-    {typeDefinition.article.capitalize()} <u>{typeDefinition.name} {formatQualifier(typeQualifierDefinition.qualifier)}</u> is a {typeDefinition.name} {typeDefinition.defaultTermName} such that <CopiableExpression expression={typeQualifierDefinition.definingStatement} splitConjunction/>.
+    {typeDefinition.article.capitalize()} <u>{typeDefinition.name} {formatQualifier(typeQualifierDefinition.qualifier)}</u> is a {typeDefinition.name} {typeDefinition.mainVariableDefinition.name} such that <CopiableExpression expression={typeQualifierDefinition.definingStatement} splitConjunction/>.
   </DisplayContext.Provider>;
 }

@@ -31,13 +31,15 @@ case class TermVariablePlaceholder(name: String, index: Int) extends Placeholder
 trait TestVariableDefinitions {
 
   implicit def placeholderToStatementComponent(placeholder: StatementVariablePlaceholder): StatementComponent = placeholder.toComponent()
+  implicit def placeholderToTermComponent(placeholder: TermVariablePlaceholder): TermComponent = TermComponent(placeholder.name, Nil)
+  implicit def placeholderToVariable[T <: ExpressionVariable[_ <: Expression]](placeholder: Placeholder[T]): T = placeholder.toVariable
+  implicit def stringToVariableDefinition(name: String): SimpleVariableDefinition = SimpleVariableDefinition(name, Nil)
 
   val φ = StatementVariablePlaceholder("φ", 0)
   val ψ = StatementVariablePlaceholder("ψ", 1)
   val χ = StatementVariablePlaceholder("χ", 2)
   val ω = StatementVariablePlaceholder("ω", 3)
 
-  implicit def placeholderToTermComponent(placeholder: TermVariablePlaceholder): TermComponent = TermComponent(placeholder.name, Nil)
 
   case object $ {
     def template: Template = FunctionParameterTemplate($ToFunctionParameter(this))
@@ -75,7 +77,6 @@ trait TestVariableDefinitions {
   protected val A = TermVariablePlaceholder("A", 1)
   protected val B = TermVariablePlaceholder("B", 2)
 
-  implicit def placeholderToVariable[T <: ExpressionVariable[_ <: Expression]](placeholder: Placeholder[T]): T = placeholder.toVariable
 
   def getVariableDefinitionsFromStatements(statements: Seq[Statement]): VariableDefinitions = {
     val usedVariables = statements.usedVariables
@@ -219,7 +220,7 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
   val Function = TypeDefinition("function", "f", None, None, Conjunction(PairSet(f), ForAllIn("a", Domain(f))(ExistsUnique("b")(ElementOf(Pair($.^, $), f)))))
   val FunctionFrom = TypeQualifierDefinition("from", Function, Qualifier(Seq("A", "B"), Format.Explicit("from A B", Seq("A", "B"), true, true)), None, Conjunction(Equals(Domain(f), A), Subset(Range(f), B)), ConjunctionDefinition)
   val BaseSet = simpleTermDefinition("baseSet", Seq(a), Format.default(1), Nil, Equals($, Domain(Domain(a))))
-  val BinaryOperation = TypeDefinition("binaryOperation", "f", None, None, BlankDefinition)
+  val BinaryOperation = TypeDefinition("binaryOperation", SimpleVariableDefinition("f", Seq("infix-function")), None, None, Conjunction(Function(f), FunctionFrom(f, Product(BaseSet(f), BaseSet(f)), BaseSet(f))))
   val BinaryOperationOn = TypeQualifierDefinition("on", BinaryOperation, Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true)), None, Equals(BaseSet(f), A), ConjunctionDefinition)
 
   val NaturalsDefinition = simpleTermDefinition("ℕ", Nil, Format.default(0))

@@ -37,20 +37,24 @@ trait ParameterValidation {
       .getOrElse(Format.default(boundVariableNames, componentTypes))
       .recoverWithBadRequest
   }
-  def getQualifier(termNamesText: String, serializedFormat: String): Try[Qualifier] = {
-    val termNames = getWords(termNamesText)
-    for {
-      _ <- termNames.nonEmpty.orBadRequest("At least one term name must be provided")
-      format <- Format.parser(termNames).parseFromString(serializedFormat, "format").recoverWithBadRequest
-    } yield Qualifier(termNames, format)
+  def getSimpleVariableDefinition(text: String, description: String): Try[SimpleVariableDefinition] = {
+    SimpleVariableDefinition.parser.parseFromString(text, description).recoverWithBadRequest
   }
-  def getOptionalQualifier(termNamesText: String, serializedFormat: String): Try[Option[Qualifier]] = {
-    (getWords(termNamesText), getOptionalString(serializedFormat)) match {
-      case (otherTermNames, Some(serializedFormat)) if otherTermNames.nonEmpty =>
-        for {
-          format <- Format.parser(otherTermNames).parseFromString(serializedFormat, "format").recoverWithBadRequest
-        } yield Some(Qualifier(otherTermNames, format))
-      case (Nil, None) =>
+  def getSimpleVariableDefinitions(text: String, description: String): Try[Seq[SimpleVariableDefinition]] = {
+    SimpleVariableDefinition.parser.toEndOfFile.parseFromString(text, description).recoverWithBadRequest
+  }
+  def getQualifier(variableDefinitionsText: String, serializedFormat: String): Try[Qualifier] = {
+    for {
+      variableDefinitions <- getSimpleVariableDefinitions(variableDefinitionsText, "qualifier variable definitions")
+      _ <- variableDefinitions.nonEmpty.orBadRequest("At least one qualifier variable must be provided")
+      format <- Format.parserForTypeDefinition(variableDefinitions).parseFromString(serializedFormat, "qualifier format").recoverWithBadRequest
+    } yield Qualifier(variableDefinitions, format)
+  }
+  def getOptionalQualifier(variableDefinitionsText: String, serializedFormat: String): Try[Option[Qualifier]] = {
+    (getOptionalString(variableDefinitionsText), getOptionalString(serializedFormat)) match {
+      case (Some(variableDefinitionsText), Some(serializedFormat)) =>
+        getQualifier(variableDefinitionsText, serializedFormat).map(Some(_))
+      case (None, None) =>
         Success(None)
       case _ =>
         Failure(BadRequestException("Both format and term names must be provided for qualifier"))
@@ -76,14 +80,14 @@ trait ParameterValidation {
         } yield Some(PropertyDefinitionOnType.RequiredParentObjects(objectDefinitions, uniquenessDefinition, generalizationDefinition, deductionDefinition))
     }
   }
-  def getOptionalAdapter(termNamesText: String, possibleSerializedTemplates: String, qualifierTermNames: Seq[String])(implicit entryContext: EntryContext): Try[Option[TermListAdapter]] = {
+  def getOptionalAdapter(variableDefinitionsText: String, possibleSerializedTemplates: String, qualifierVariableDefinitions: Seq[SimpleVariableDefinition])(implicit entryContext: EntryContext): Try[Option[TermListAdapter]] = {
     getOptionalString(possibleSerializedTemplates) match {
       case Some(serializedTemplates) =>
-        val termNames = getWords(termNamesText)
-        implicit val epc = ExpressionParsingContext.forTypeDefinition(termNames)
         for {
-          templates <- qualifierTermNames.indices.map(_ => Term.parser).traverse.parseFromString(serializedTemplates, "templates").recoverWithBadRequest
-        } yield Some(TermListAdapter(termNames, templates))
+          variableDefinitions <- getSimpleVariableDefinitions(variableDefinitionsText, "adapter variable definitions")
+          epc = ExpressionParsingContext.forTypeDefinition(variableDefinitions)
+          templates <- qualifierVariableDefinitions.indices.map(_ => Term.parser(epc)).traverse.parseFromString(serializedTemplates, "templates").recoverWithBadRequest
+        } yield Some(TermListAdapter(variableDefinitions, templates))
       case None =>
         Success(None)
     }

@@ -196,25 +196,25 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
         for {
           newFormatText <- getMandatoryString(rawNewFormatText, "format")
           qualifier <- definition.defaultQualifier.orBadRequest("Cannot update format on type with no qualifier")
-          format <- Format.parser(qualifier.defaultTermNames).parseFromString(newFormatText, "format").recoverWithBadRequest
+          format <- Format.parserForTypeDefinition(qualifier.variableDefinitions).parseFromString(newFormatText, "format").recoverWithBadRequest
         } yield definition.withFormat(format)
       case (entry, _) =>
         Failure(BadRequestException(s"Cannot set attributes of ${entry.getClass.getName}"))
     }
   }
 
-  @PutMapping(value = Array("/defaultTermName"), produces = Array("application/json;charset=UTF-8"))
-  def editMainTermName(
+  @PutMapping(value = Array("/mainVariableDefinition"), produces = Array("application/json;charset=UTF-8"))
+  def editMainVariableDefinition(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String,
-    @RequestBody(required = false) newDefaultTermName: String
+    @RequestBody(required = false) newMainVariableDefinitionText: String
   ): ResponseEntity[_] = {
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
-      case (entry: ChapterEntry.HasDefaultTermName, _) =>
-        getMandatoryString(newDefaultTermName, "default term name").map(entry.withDefaultTermName)
+      case (entry: ChapterEntry.HasMainVariable, _) =>
+        getSimpleVariableDefinition(newMainVariableDefinitionText, "main variable definition").map(entry.withMainVariableDefinition)
       case (entry, _) =>
-        Failure(BadRequestException(s"Cannot set default term name of ${entry.getClass.getName}"))
+        Failure(BadRequestException(s"Cannot set main term variable of ${entry.getClass.getName}"))
     }
   }
 

@@ -114,18 +114,18 @@ export class Parser {
           return [new DefinedExpression(expressionDefinition, boundVariables, components), tokensAfterComponents];
         } else if (typeDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, typeDefinition.defaultQualifier?.defaultTermNames.length ?? 0);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, typeDefinition.defaultQualifier?.variableDefinitions.length ?? 0);
           return [new TypeExpression(typeDefinition, term, null, components, [], [], null), tokensAfterComponents];
         } else if (qualifierAndParentType) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifierAndParentType.qualifierDefinition.qualifier.defaultTermNames.length);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifierAndParentType.qualifierDefinition.qualifier.variableDefinitions.length);
           return [new TypeQualifierExpression(qualifierAndParentType.qualifierDefinition, qualifierAndParentType.parentType, term, components), tokensAfterComponents];
         } else if (propertyAndParentType) {
           const {property, parentType} = propertyAndParentType;
           const requiredParentQualifier = property.requiredParentQualifier ? _.find(parentType.qualifiers, q => q.symbol === property.requiredParentQualifier) : null;
           const qualifier = requiredParentQualifier?.qualifier || parentType.defaultQualifier;
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifier?.defaultTermNames.length ?? 0);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifier?.variableDefinitions.length ?? 0);
           return [new PropertyExpression(property, parentType, term, components), tokensAfterComponents];
         } else if (objectAndParentType) {
           const {object, parentType} = objectAndParentType;
@@ -133,7 +133,7 @@ export class Parser {
           const [parentTerm, tokensAfterParentTerm] = parseExpressionFromTokens(tokensAfterTerm);
           const requiredParentQualifier = object.requiredParentQualifier ? _.find(parentType.qualifiers, q => q.symbol === object.requiredParentQualifier) : null;
           const qualifier = requiredParentQualifier?.qualifier || parentType.defaultQualifier;
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterParentTerm, qualifier?.defaultTermNames.length ?? 0);
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterParentTerm, qualifier?.variableDefinitions.length ?? 0);
           return [new RelatedObjectExpression(object, parentType, term, parentTerm, components), tokensAfterComponents];
         } else if (standalonePropertyDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);

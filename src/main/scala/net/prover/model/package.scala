@@ -545,6 +545,9 @@ package object model {
 
   implicit class SeqStringOps(seq: Seq[String]) {
     def indent: Seq[String] = seq.map("  " + _)
+    def optionalListInParens(separator: String): Option[String] = {
+      Some(seq).filter(_.nonEmpty).map(_.mkString(separator).inParens)
+    }
   }
 
   implicit class MapOps[S, T](map: Map[S, T]) {

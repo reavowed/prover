@@ -2,11 +2,13 @@ package net.prover.model
 
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
-import net.prover.model.expressions.Statement
 
 case class VariableDefinitions(statements: Seq[VariableDefinition], terms: Seq[VariableDefinition]) {
-  def addSimpleTermVariables(variableNames: Seq[String]): VariableDefinitions = {
-    copy(terms = terms ++ variableNames.map(VariableDefinition(_, 0, Nil)))
+  def addSimpleTermVariables(newTermVariableDefinitions: Seq[SimpleVariableDefinition]): VariableDefinitions = {
+    copy(terms = terms ++ newTermVariableDefinitions.map(_.toFullVariableDefinition))
+  }
+  def addSimpleTermVariableNames(newTermVariableNames: Seq[String]): VariableDefinitions = {
+    addSimpleTermVariables(newTermVariableNames.map(SimpleVariableDefinition(_, Nil)))
   }
 
   def serializedLines: Seq[String] = {

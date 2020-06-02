@@ -5,7 +5,7 @@ term baseSet (X)
   format (baseSet(X))
   (= $0 domain domain t0)
 
-type binaryOperation f
+type binaryOperation ∘ (infix-function)
   name (binary operation)
   definition (∧ function t0 functionFrom t0 product baseSet t0 baseSet t0 baseSet t0)
 

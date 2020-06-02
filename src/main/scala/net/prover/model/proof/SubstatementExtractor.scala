@@ -18,7 +18,7 @@ object SubstatementExtractor {
   case class InferenceExtraction(inference: Inference.Summary, innerExtraction: ExtractionFromSinglePremise) extends Extraction {
     def premises: Seq[Statement] = inference.premises ++ innerExtraction.premises
     def conclusion: Statement = innerExtraction.conclusion
-    def variableDefinitions: VariableDefinitions = inference.variableDefinitions.addSimpleTermVariables(innerExtraction.additionalVariableNames)
+    def variableDefinitions: VariableDefinitions = inference.variableDefinitions.addSimpleTermVariableNames(innerExtraction.additionalVariableNames)
     def extractionInferences: Seq[Inference.Summary] = innerExtraction.extractionInferences
     def additionalVariableNames: Seq[String] = innerExtraction.additionalVariableNames
     def derivedSummary: Inference.Summary = Inference.Summary(inference.name, Inference.calculateHash(premises, conclusion), variableDefinitions, premises, conclusion)
@@ -26,7 +26,7 @@ object SubstatementExtractor {
   case class PremiseExtraction(innerExtraction: ExtractionFromSinglePremise, stepContext: StepContext) extends Extraction {
     def premises: Seq[Statement] = innerExtraction.premises
     def conclusion: Statement = innerExtraction.conclusion
-    def variableDefinitions: VariableDefinitions = stepContext.variableDefinitions.addSimpleTermVariables(innerExtraction.additionalVariableNames)
+    def variableDefinitions: VariableDefinitions = stepContext.variableDefinitions.addSimpleTermVariableNames(innerExtraction.additionalVariableNames)
     def extractionInferences: Seq[Inference.Summary] = innerExtraction.extractionInferences
     def additionalVariableNames: Seq[String] = innerExtraction.additionalVariableNames
   }

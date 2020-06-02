@@ -17,11 +17,19 @@ export function TypeDefinition({definition: definitionJson, definitions, typeDef
   const serializedFormat = definition.qualifier?.format.originalValue ?
     "(" + definition.qualifier.format.originalValue + ")" + (definition.qualifier.format.requiresBrackets ? " requires-brackets" : "") + (definition.qualifier.format.requiresComponentBrackets ? "" : " no-component-brackets") :
     "";
+  function serializeVariableDefinition(variableDefinition) {
+    if (variableDefinition.attributes.length > 0) {
+      return variableDefinition.name + " (" + variableDefinition.attributes.join(", ") + ")"
+    } else {
+      return variableDefinition.name
+    }
+  }
+
   const editableProperties = [
     {label: "Symbol", initialValue: definition.symbol, endpointName: "symbol"},
     {label: "Explicit Name", initialValue: definition.explicitName, endpointName: "name"},
-    {label: "Default Term Name", initialValue: definition.defaultTermName, endpointName: "defaultTermName"},
-    definition.qualifier && {label: "Qualifier Term Names", initialValue: definition.qualifier.termNames.join(" ")},
+    {label: "Main Variable", initialValue: serializeVariableDefinition(definition.mainVariableDefinition), endpointName: "mainVariableDefinition"},
+    definition.qualifier && {label: "Qualifier Variables", initialValue: definition.qualifier.variableDefinitions.map(serializeVariableDefinition).join(" ")},
     definition.qualifier && {label: "Qualifier Format", initialValue: serializedFormat, endpointName: "format"},
   ];
 

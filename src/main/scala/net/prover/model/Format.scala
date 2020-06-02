@@ -1,6 +1,6 @@
 package net.prover.model
 
-import java.util.regex.{Matcher, Pattern}
+import java.util.regex.Pattern
 
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 
@@ -92,6 +92,10 @@ object Format {
 
   def parserForExpressionDefinition(symbol: String, boundVariableNames: Seq[String], componentTypes: Seq[ComponentType]): Parser[Format.Explicit] = {
     parser((symbol +: boundVariableNames) ++ componentTypes.map(_.name))
+  }
+
+  def parserForTypeDefinition(simpleVariableDefinitions: Seq[SimpleVariableDefinition]): Parser[Format.Explicit] = {
+    parser(simpleVariableDefinitions.map(_.name))
   }
 
   def parser(replacementNames: Seq[String]): Parser[Format.Explicit] = {

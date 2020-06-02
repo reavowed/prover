@@ -35,7 +35,7 @@ case class ExpressionParsingContext(
   }
 
   def addSimpleTermVariables(additionalTermVariableNames: Seq[String]): ExpressionParsingContext = {
-    copy(variableDefinitions = variableDefinitions.addSimpleTermVariables(additionalTermVariableNames))
+    copy(variableDefinitions = variableDefinitions.addSimpleTermVariableNames(additionalTermVariableNames))
   }
 
   private def getVariable[T](name: String, arguments: Seq[Term], definitions: Seq[VariableDefinition], prefix: String, description: String, constructor: (Int, Seq[Term]) => T): Option[T] = {
@@ -84,8 +84,8 @@ object ExpressionParsingContext {
   def forComponentTypes(componentTypes: Seq[ComponentType])(implicit entryContext: EntryContext): ExpressionParsingContext = {
     withDefinitions(VariableDefinitions.fromComponentTypes(componentTypes))
   }
-  def forTypeDefinition(termNames: Seq[String])(implicit entryContext: EntryContext): ExpressionParsingContext = {
-    withDefinitions(VariableDefinitions.empty.addSimpleTermVariables(termNames))
+  def forTypeDefinition(termVariableDefinitions: Seq[SimpleVariableDefinition])(implicit entryContext: EntryContext): ExpressionParsingContext = {
+    withDefinitions(VariableDefinitions.empty.addSimpleTermVariables(termVariableDefinitions))
   }
 
   def withDefinitions(variableDefinitions: VariableDefinitions)(implicit entryContext: EntryContext): ExpressionParsingContext = {

@@ -9,9 +9,9 @@ export default function RelatedObjectDefinitionDescription({relatedObjectDefinit
   const entryContext = useContext(EntryContext);
   const typeDefinition = relatedObjectDefinition.parentType;
   const qualifier = relatedObjectDefinition.requiredParentQualifier || typeDefinition.defaultQualifier;
-  const termNames = [relatedObjectDefinition.defaultTermName, typeDefinition.defaultTermName, ...[qualifier ? qualifier.defaultTermNames : []]];
+  const termNames = [relatedObjectDefinition.mainVariableDefinition.name, typeDefinition.mainVariableDefinition.name, ...[qualifier ? qualifier.variableDefinitions.map(d => d.name) : []]];
 
   return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(relatedObjectDefinition.definingStatement, termNames, entryContext)}>
-    {relatedObjectDefinition.article.capitalize()} <u>{relatedObjectDefinition.name}</u> for {typeDefinition.article} {typeDefinition.name} {typeDefinition.defaultTermName} {formatQualifier(qualifier)} is an object {relatedObjectDefinition.defaultTermName} such that <CopiableExpression expression={relatedObjectDefinition.definingStatement} splitConjunction/>.
+    {relatedObjectDefinition.article.capitalize()} <u>{relatedObjectDefinition.name}</u> for {typeDefinition.article} {typeDefinition.name} {typeDefinition.mainVariableDefinition.name} {formatQualifier(qualifier)} is an object {relatedObjectDefinition.mainVariableDefinition.name} such that <CopiableExpression expression={relatedObjectDefinition.definingStatement} splitConjunction/>.
   </DisplayContext.Provider>;
 }
