@@ -50,4 +50,11 @@ object DefinitionSummary {
         ComponentSummary("term", name, arguments.length)
     }
   }
+  def getDefinitionShorthandsFromContext(entryContext: EntryContext): Map[String, DisambiguatedSymbol] = {
+    val shorthandsFromDefinitions = entryContext.availableEntries.ofType[ExpressionDefinitionEntry].mapCollect(d => d.shorthand.map(_ -> d.disambiguatedSymbol)).toMap
+    val greekLetterShorthands = 'α'.to('ω')
+      .map(c => Character.getName(c).splitByWhitespace().last.toLowerCase -> DisambiguatedSymbol(c.toString, None))
+      .toMap
+    shorthandsFromDefinitions ++ greekLetterShorthands
+  }
 }

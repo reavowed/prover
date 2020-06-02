@@ -31,37 +31,27 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       .mapCollect { case (entry, url) =>
         entry match {
           case axiom: Axiom =>
-            import axiom._
-            Some(AxiomPropsForChapter(name, url, variableDefinitions, premises, conclusion))
+            Some(EntryProps("axiom", url, axiom.title, ChapterProps.InferenceSummaryForChapter(axiom, definitions)))
           case theorem: Theorem =>
-            import theorem._
-            Some(TheoremPropsForChapter(name, url, variableDefinitions, premises, conclusion, definitions.isInferenceComplete(theorem)))
+            Some(EntryProps("theorem", url, theorem.title, ChapterProps.InferenceSummaryForChapter(theorem, definitions)))
           case statementDefinition: StatementDefinitionEntry =>
-            import statementDefinition._
-            Some(StatementDefinitionPropsForChapter(symbol, defaultValue, url, shorthand, definingStatement))
+            Some(EntryProps("statementDefinition", url, statementDefinition.title, statementDefinition))
           case termDefinition: TermDefinitionEntry =>
-            import termDefinition._
-            Some(TermDefinitionPropsForChapter(symbol, defaultValue, url, shorthand, definingStatement, premises))
+            Some(EntryProps("statementDefinition", url, termDefinition.title, termDefinition))
           case typeDefinition: TypeDefinition =>
-            import typeDefinition._
-            Some(TypeDefinitionPropsForChapter(symbol, url, title, definingStatement))
+            Some(EntryProps("typeDefinition", url, typeDefinition.title, typeDefinition))
           case typeQualifierDefinition: TypeQualifierDefinition =>
-            import typeQualifierDefinition._
-            Some(TypeQualifierDefinitionPropsForChapter(symbol, url, parentType.symbol, title, definingStatement))
+            Some(EntryProps("typeQualifierDefinition", url, typeQualifierDefinition.title, typeQualifierDefinition))
           case propertyDefinition: PropertyDefinitionOnType =>
-            import propertyDefinition._
-            Some(PropertyDefinitionPropsForChapter(symbol, url, parentType.symbol, title, definingStatement))
+            Some(EntryProps("propertyDefinition", url, propertyDefinition.title, propertyDefinition))
           case relatedObjectDefinition: RelatedObjectDefinition =>
-            import relatedObjectDefinition._
-            Some(RelatedObjectDefinitionPropsForChapter(symbol, url, parentType.symbol, title, definingStatement))
+            Some(EntryProps("relatedObjectDefinition", url, relatedObjectDefinition.title, relatedObjectDefinition))
           case standalonePropertyDefinition: StandalonePropertyDefinition =>
-            import standalonePropertyDefinition._
-            Some(StandalonePropertyDefinitionPropsForChapter(symbol, url, title, definingStatement))
+            Some(EntryProps("standalonePropertyDefinition", url, standalonePropertyDefinition.title, standalonePropertyDefinition))
           case comment: Comment =>
-            import comment._
-            Some(CommentPropsForChapter(text, url))
+            Some(EntryProps("comment", url, None, comment.text))
           case _ =>
-            Some(PlaceholderPropsForChapter(url))
+            Some(EntryProps("placeholder", url, None, None))
         }
       }
     ChapterProps(
@@ -76,7 +66,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       TypeDefinitionSummary.getAllFromContext(entryContext),
       StandalonePropertyDefinitionSummary.getAllFromContext(entryContext),
       entryContext.availableEntries.ofType[DisplayShorthand],
-      getDefinitionShorthands(entryContext))
+      DefinitionSummary.getDefinitionShorthandsFromContext(entryContext))
   }
 
   @GetMapping(produces = Array("text/html;charset=UTF-8"))
@@ -99,64 +89,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
     bookService.modifyChapter[Identity](bookKey, chapterKey, (_, _, _, chapter) => {
       Success(chapter.copy(title = newTitle))
     }).map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, BookService.getChaptersWithKeys(book).find(_._1.title == newTitle).get._2) }.toResponseEntity
-  }
-
-  @GetMapping(value = Array("/{entryKey}"), produces = Array("text/html;charset=UTF-8"))
-  def getEntry(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("entryKey") entryKey: String
-  ): ResponseEntity[_] = {
-    val (books, definitions) = bookService.booksAndDefinitions
-    (for {
-      book <- bookService.findBook(books, bookKey)
-      chapter <- bookService.findChapter(book, chapterKey)
-      entriesWithKeys = BookService.getEntriesWithKeys(chapter).mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[ChapterEntry.Standalone]))
-      entry <- bookService.findEntry[ChapterEntry](entriesWithKeys, entryKey)
-      entryContext = EntryContext.forEntry(books, book, chapter, entry).addEntry(entry)
-      (viewName, baseProps) <- entry match {
-        case axiom: Axiom =>
-          Success(("Axiom", Map("axiom" -> axiom)))
-        case theorem: Theorem =>
-          Success(("Theorem", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(theorem.referencedInferenceIds, books, definitions))))
-        case statementDefinition: StatementDefinitionEntry =>
-          Success(("StatementDefinition", Map("definition" -> statementDefinition)))
-        case termDefinition: TermDefinitionEntry =>
-          Success(("TermDefinition", Map("definition" -> termDefinition)))
-        case typeDefinition: TypeDefinition =>
-          Success(("TypeDefinition", Map("definition" -> typeDefinition)))
-        case typeQualifierDefinition: TypeQualifierDefinition =>
-          Success(("TypeQualifierDefinition", Map("definition" -> typeQualifierDefinition)))
-        case propertyDefinitionOnType: PropertyDefinitionOnType =>
-          Success(("PropertyDefinitionOnType", Map("definition" -> propertyDefinitionOnType)))
-        case relatedObjectDefinition: RelatedObjectDefinition =>
-          Success(("RelatedObjectDefinition", Map("definition" -> relatedObjectDefinition)))
-        case standalonePropertyDefinition: StandalonePropertyDefinition =>
-          Success(("StandalonePropertyDefinition", Map("definition" -> standalonePropertyDefinition)))
-        case _ =>
-          Failure(BadRequestException(s"Cannot view ${entry.getClass.getSimpleName}"))
-      }
-    } yield {
-      val provingContext = ProvingContext(entryContext, definitions)
-      val index = entriesWithKeys.findIndexWhere(_._1 == entry).getOrElse(throw new Exception("Book somehow didn't exist"))
-      val previous = entriesWithKeys.lift(index - 1).map { case (c, key) => LinkSummary(c.title, key) }
-      val next = entriesWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, key) }
-      createReactView(
-        viewName,
-        baseProps ++ Map(
-          "url" -> BookService.getEntryUrl(bookKey, chapterKey, entryKey),
-          "bookLink" -> LinkSummary(book.title, BookService.getBookUrl(bookKey)),
-          "chapterLink" -> LinkSummary(chapter.title, BookService.getChapterUrl(bookKey, chapterKey)),
-          "previous" -> previous,
-          "next" -> next,
-          "usages" -> getInferenceUsages(entry, books),
-          "definitions" -> DefinitionSummary.getAllFromContext(entryContext),
-          "typeDefinitions" -> TypeDefinitionSummary.getAllFromContext(entryContext),
-          "standalonePropertyDefinitions" -> StandalonePropertyDefinitionSummary.getAllFromContext(entryContext),
-          "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
-          "binaryRelations" -> getBinaryRelations(provingContext),
-          "definitionShorthands" -> getDefinitionShorthands(entryContext)))
-    }).toResponseEntity
   }
 
   @PostMapping(value = Array("/theorems"), produces = Array("application/json;charset=UTF-8"))
@@ -272,7 +204,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         symbol <- getMandatoryString(newTypeDefinition.symbol, "Symbol")
         defaultTermName <- getMandatoryString(newTypeDefinition.defaultTermName, "Default term name")
         qualifier <- getOptionalQualifier(newTypeDefinition.qualifierTermNames, newTypeDefinition.qualifierFormat)
-        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(defaultTermName +: qualifier.termNames)
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(defaultTermName +: qualifier.defaultTermNames)
         definition <- Statement.parser(expressionParsingContext).parseFromString(newTypeDefinition.definition, "definition").recoverWithBadRequest
         newTypeDefinition = TypeDefinition(
           symbol,
@@ -297,7 +229,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         symbol <- getMandatoryString(newTypeQualifierDefinition.symbol, "Symbol")
         parentType <- entryContext.typeDefinitions.get(newTypeQualifierDefinition.parentType).orBadRequest(s"Unknown type '${newTypeQualifierDefinition.parentType}'")
         qualifier <- getQualifier(newTypeQualifierDefinition.qualifierTermNames, newTypeQualifierDefinition.qualifierFormat)
-        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.mainTermName +: qualifier.termNames)
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: qualifier.defaultTermNames)
         definition <- Statement.parser(expressionParsingContext).parseFromString(newTypeQualifierDefinition.definition, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newTypeQualifierDefinition = TypeQualifierDefinition(
@@ -325,7 +257,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         parentType <- entryContext.typeDefinitions.get(newPropertyDefinition.parentType).orBadRequest(s"Unknown type '${newPropertyDefinition.parentType}'")
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newPropertyDefinition.requiredParentQualifier)
         requiredParentObjects <- getParentObjects(parentType, newPropertyDefinition.requiredParentObjects)
-        adapter <- getOptionalAdapter(newPropertyDefinition.ownTermNames, newPropertyDefinition.parentTerms, (requiredParentQualifier.map(_.qualifier) orElse parentType.qualifier).termNames)
+        adapter <- getOptionalAdapter(newPropertyDefinition.ownTermNames, newPropertyDefinition.parentTerms, (requiredParentQualifier.map(_.qualifier) orElse parentType.defaultQualifier).defaultTermNames)
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         qualifierTermNames = PropertyDefinitionOnType.getParentConditionAndQualifierTermNames(parentType, adapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition )._2
         expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(qualifierTermNames))
@@ -357,7 +289,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         defaultTermName <- getMandatoryString(newRelatedObjectDefinition.defaultTermName, "Default term name")
         parentType <- entryContext.typeDefinitions.get(newRelatedObjectDefinition.parentType).orBadRequest(s"Unknown type '${newRelatedObjectDefinition.parentType}'")
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newRelatedObjectDefinition.requiredParentQualifier)
-        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.mainTermName +: requiredParentQualifier.map(_.qualifier).orElse(parentType.qualifier).termNames)
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: requiredParentQualifier.map(_.qualifier).orElse(parentType.defaultQualifier).defaultTermNames)
         definingStatement <- Statement.parser(expressionParsingContext).parseFromString(newRelatedObjectDefinition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newPropertyDefinition = RelatedObjectDefinition(
@@ -451,34 +383,6 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       } yield updatedChapter
     ).map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
-
-  @PutMapping(value = Array("/{entryKey}/shorthand"), produces = Array("application/json;charset=UTF-8"))
-  def editShorthand(
-    @PathVariable("bookKey") bookKey: String,
-    @PathVariable("chapterKey") chapterKey: String,
-    @PathVariable("entryKey") entryKey: String,
-    @RequestBody(required = false) newShorthand: String
-  ): ResponseEntity[_] = {
-    bookService.modifyEntry[ExpressionDefinitionEntry, Identity](bookKey, chapterKey, entryKey, (_, _, _, _, definition) =>
-      Success(definition.withShorthand(Option(newShorthand).filter(_.nonEmpty)))
-    ).map{ case (books, definitions, book, chapter, _) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
-  }
-
-  private def getDefinitionShorthands(entryContext: EntryContext): Map[String, DisambiguatedSymbol] = {
-    val shorthandsFromDefinitions = entryContext.availableEntries.ofType[ExpressionDefinitionEntry].mapCollect(d => d.shorthand.map(_ -> d.disambiguatedSymbol)).toMap
-    val greekLetterShorthands = 'α'.to('ω')
-      .map(c => Character.getName(c).splitByWhitespace().last.toLowerCase -> DisambiguatedSymbol(c.toString, None))
-      .toMap
-    shorthandsFromDefinitions ++ greekLetterShorthands
-  }
-
-  case class BinaryStatementSummary(symbol: String, template: Statement, attributes: Seq[String], isTransitive: Boolean)
-  private def getBinaryRelations(provingContext: ProvingContext): Seq[BinaryStatementSummary] = {
-    provingContext.definedBinaryJoiners.map { relation =>
-      BinaryStatementSummary(relation.symbol, relation.template, relation.attributes, provingContext.transitivities.exists(_.isTransitivityForJoiner(relation)))
-    }
-  }
-
 }
 
 object ChapterController {

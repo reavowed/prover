@@ -16,7 +16,7 @@ export function StandalonePropertyDefinition({definition: definitionJson, defini
     <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <h3>{definition.title.capitalize()}</h3>
-      <StandalonePropertyDescription symbol={definition.symbol} definingStatement={definition.definingStatement} />
+      <StandalonePropertyDescription standalonePropertyDefinition={definition} />
       <StatementDefinitionUsages usages={usages} statementDefinition={definition.statementDefinition} />
     </Page>
   </EntryContext.Provider>;

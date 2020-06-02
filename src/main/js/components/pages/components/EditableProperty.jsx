@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, {useState} from "react";
+import React from "react";
 import {Button, InputGroup} from "react-bootstrap";
 import SimpleTextControl from "../../helpers/SimpleTextControl";
 
@@ -40,14 +40,14 @@ export default class EditableProperty extends React.Component {
       inputType || SimpleTextControl, {
         value: currentValue,
         onChange: (newValue) => this.setState({currentValue: newValue}),
-        readOnly: saving,
+        readOnly: !onSave || saving,
         ...(inputProps || {})
       });
 
     return <InputGroup className="mb-2">
       <InputGroup.Prepend><InputGroup.Text>{label}</InputGroup.Text></InputGroup.Prepend>
       {input}
-      <InputGroup.Append><Button variant="success" disabled={saving} onClick={save}><span className={saving ? "fas fa-spin fa-spinner" : "fas fa-check"}/></Button></InputGroup.Append>
+      {onSave && <InputGroup.Append><Button variant="success" disabled={saving} onClick={save}><span className={saving ? "fas fa-spin fa-spinner" : "fas fa-check"}/></Button></InputGroup.Append>}
     </InputGroup>
   }
 }

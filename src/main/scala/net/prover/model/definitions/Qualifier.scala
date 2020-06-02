@@ -2,22 +2,22 @@ package net.prover.model.definitions
 
 import net.prover.model._
 
-case class Qualifier(termNames: Seq[String], format: Format.Explicit) {
+case class Qualifier(defaultTermNames: Seq[String], format: Format.Explicit) {
   def prependFormat(formatToPrepend: Format): Format = Format.Concatenated(formatToPrepend, format)
   def withFormat(newFormat: Format.Explicit): Qualifier = {
-    Qualifier(termNames, newFormat)
+    Qualifier(defaultTermNames, newFormat)
   }
-  def serialized: String = termNames.mkString(" ").inParens + " " + format.serializedWithoutPrefix
+  def serialized: String = defaultTermNames.mkString(" ").inParens + " " + format.serializedWithoutPrefix
 }
 
 object Qualifier {
   def parser: Parser[Qualifier] = for {
-    termNames <- Parser.singleWord.listInParens(None)
-    format <- Format.parser(termNames)
-  } yield Qualifier(termNames, format)
+    defaultTermNames <- Parser.singleWord.listInParens(None)
+    format <- Format.parser(defaultTermNames)
+  } yield Qualifier(defaultTermNames, format)
 
   implicit class OptionOps(optionalQualifier: Option[Qualifier]) {
-    def termNames: Seq[String] = optionalQualifier.map(_.termNames).getOrElse(Nil)
+    def defaultTermNames: Seq[String] = optionalQualifier.map(_.defaultTermNames).getOrElse(Nil)
     def prependFormat(format: Format): Format = optionalQualifier.map(_.prependFormat(format)).getOrElse(format)
   }
 }

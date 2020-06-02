@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as _ from "lodash";
-import {QualifierDefinition} from "../../models/Expression";
 
 type Match = {index: number, [key: number]: string}
 
@@ -50,9 +49,17 @@ export function replacePlaceholders(text: String, components: React.ReactNode[])
   });
 }
 
-export function formatQualifier(qualifier: QualifierDefinition | undefined): JSX.Element[] | null {
+interface Format {
+  baseFormatString: string;
+}
+interface Qualifier {
+  format: Format;
+  defaultTermNames: string[]
+}
+
+export function formatQualifier(qualifier: Qualifier | undefined): JSX.Element[] | null {
   if (qualifier) {
-    return formatHtml(qualifier.format, s => replacePlaceholders(s, qualifier.defaultTermNames))
+    return formatHtml(qualifier.format.baseFormatString, s => replacePlaceholders(s, qualifier.defaultTermNames))
   } else {
     return null;
   }

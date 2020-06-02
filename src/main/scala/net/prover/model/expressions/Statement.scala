@@ -38,15 +38,15 @@ object Statement {
 
   def typeStatementParser(term: Term, typeDefinition: TypeDefinition)(implicit context: ExpressionParsingContext): Parser[Statement] = {
     def qualifierParser: Parser[(Option[TypeQualifierDefinition], Seq[Term])] = {
-      typeDefinition.qualifier match {
+      typeDefinition.defaultQualifier match {
         case Some(qualifier) =>
-          qualifier.termNames.map(_ => Term.parser).traverse.map(None -> _)
+          qualifier.defaultTermNames.map(_ => Term.parser).traverse.map(None -> _)
         case None =>
           for {
             qualifierOption <- Parser.optional(qualifierSymbol => context.entryContext.qualifiersByType.get(typeDefinition.symbol).flatMap(_.find(_.symbol == qualifierSymbol)))
             qualifierTerms <- qualifierOption match {
               case Some(qualifier) =>
-                qualifier.qualifier.termNames.map(_ => Term.parser).traverse
+                qualifier.qualifier.defaultTermNames.map(_ => Term.parser).traverse
               case None =>
                 Parser.constant(Nil)
             }
@@ -68,7 +68,7 @@ object Statement {
             else
               throw new Exception(s"$description on ${typeDefinition.symbol} requires qualifier ${requiredQualifier.symbol}")
           case None =>
-            if (typeDefinition.qualifier.nonEmpty)
+            if (typeDefinition.defaultQualifier.nonEmpty)
               mainTerm +: qualifierTerms
             else
               Seq(mainTerm)
@@ -98,7 +98,7 @@ object Statement {
     for {
       qualifierAndTerms <- qualifierParser
       (qualifierOption, qualifierTerms) = qualifierAndTerms
-      defaultQualifierComponents = if (typeDefinition.qualifier.isDefined) qualifierTerms else Nil
+      defaultQualifierComponents = if (typeDefinition.defaultQualifier.isDefined) qualifierTerms else Nil
         qualifierStatementOption = qualifierOption.map(q => q.statementDefinition(term +: qualifierTerms: _*))
       propertiesAndObjectStatements <- Parser.optional("with", propertiesAndObjectStatementsParser(qualifierOption, term, qualifierTerms), Nil)
     } yield {

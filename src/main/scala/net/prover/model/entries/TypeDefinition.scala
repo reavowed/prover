@@ -1,6 +1,5 @@
 package net.prover.model.entries
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
@@ -9,11 +8,11 @@ import net.prover.model.expressions.Statement
 
 case class TypeDefinition(
     symbol: String,
-    mainTermName: String,
-    qualifier: Option[Qualifier],
+    defaultTermName: String,
+    defaultQualifier: Option[Qualifier],
     explicitName: Option[String],
     definingStatement: Statement)
-  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle with ChapterEntry.HasMainTermName
+  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle with ChapterEntry.HasDefaultTermName
 {
   override val title: String = s"Definition: ${name.capitalizeWords}"
 
@@ -22,13 +21,13 @@ case class TypeDefinition(
 
   def withSymbol(newSymbol: String): TypeDefinition = copy(symbol = newSymbol)
   override def withName(newName: Option[String]): TypeDefinition = copy(explicitName = newName)
-  def withFormat(newFormat: Format.Explicit): TypeDefinition = copy(qualifier = qualifier.map(_.withFormat(newFormat)))
-  def withMainTermName(newMainTermName: String): TypeDefinition = copy(mainTermName = newMainTermName)
+  def withFormat(newFormat: Format.Explicit): TypeDefinition = copy(defaultQualifier = defaultQualifier.map(_.withFormat(newFormat)))
+  def withDefaultTermName(newDefaultTermName: String): TypeDefinition = copy(defaultTermName = newDefaultTermName)
 
-  def baseFormat = Format.Explicit(s"%1 is $article %0", s"$mainTermName is $article $name", 2, true, true)
-  def fullFormat = qualifier.prependFormat(baseFormat)
+  def baseFormat = Format.Explicit(s"%1 is $article %0", s"$defaultTermName is $article $name", 2, true, true)
+  def fullFormat = defaultQualifier.prependFormat(baseFormat)
 
-  val allTermNames: Seq[String] = mainTermName +: qualifier.termNames
+  val allTermNames: Seq[String] = defaultTermName +: defaultQualifier.defaultTermNames
   val allComponents: Seq[TermComponent] = allTermNames.map(ComponentType.TermComponent(_, Nil))
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
     symbol,
@@ -39,8 +38,8 @@ case class TypeDefinition(
     this)
   override def inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
 
-  override def serializedLines: Seq[String] = Seq("type", symbol, mainTermName).mkString(" ") +:
-      (qualifier.map("qualifier " + _.serialized).toSeq ++
+  override def serializedLines: Seq[String] = Seq("type", symbol, defaultTermName).mkString(" ") +:
+      (defaultQualifier.map("qualifier " + _.serialized).toSeq ++
         explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq ++
         Seq(Seq("definition", definingStatement.serialized.inParens).mkString(" "))
       ).indent
@@ -52,8 +51,8 @@ case class TypeDefinition(
   ): TypeDefinition = {
     TypeDefinition(
       symbol,
-      mainTermName,
-      qualifier,
+      defaultTermName,
+      defaultQualifier,
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))
   }
@@ -71,7 +70,7 @@ object TypeDefinition extends ChapterEntryParser {
       defaultTermName <- Parser.singleWord
       qualifier <- Parser.optional("qualifier", Qualifier.parser)
       explicitName <- Parser.optional("name", Parser.allInParens)
-      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(defaultTermName +: qualifier.termNames)
+      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(defaultTermName +: qualifier.defaultTermNames)
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
     } yield TypeDefinition(symbol, defaultTermName, qualifier, explicitName, definingStatement)
   }

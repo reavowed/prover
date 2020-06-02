@@ -1,16 +1,16 @@
 package net.prover.controllers.models
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import net.prover.model.{DisambiguatedSymbol, VariableDefinitions}
+import net.prover.model.definitions.Definitions
+import net.prover.model.{DisambiguatedSymbol, Inference, VariableDefinitions}
 import net.prover.model.entries.DisplayShorthand
-import net.prover.model.expressions.{Statement, Term}
+import net.prover.model.expressions.Statement
 
 case class ChapterProps(
   title: String,
   url: String,
   bookLink: LinkSummary,
   summary: String,
-  entries: Seq[ChapterProps.EntryProps],
+  entries: Seq[ChapterProps.EntryProps[_]],
   previous: Option[LinkSummary],
   next: Option[LinkSummary],
   definitions: Map[String, DefinitionSummary],
@@ -20,43 +20,13 @@ case class ChapterProps(
   definitionShorthands: Map[String, DisambiguatedSymbol])
 
 object ChapterProps {
-  sealed trait EntryProps {
-    @JsonSerialize
-    val `type`: String
-    @JsonSerialize
-    val url: String
+  case class EntryProps[T](`type`: String, url: String, title: Option[String], entry: T)
+  object EntryProps {
+    def apply[T](`type`: String, url: String, title: String, entry: T): EntryProps[T] = EntryProps(`type`, url, Some(title), entry)
   }
-  case class AxiomPropsForChapter(name: String, url: String, variableDefinitions: VariableDefinitions, premises: Seq[Statement], conclusion: Statement) extends EntryProps {
-    override val `type`: String = "axiom"
-  }
-  case class TheoremPropsForChapter(name: String, url: String, variableDefinitions: VariableDefinitions, premises: Seq[Statement], conclusion: Statement, isComplete: Boolean) extends EntryProps {
-    override val `type`: String = "theorem"
-  }
-  case class StatementDefinitionPropsForChapter(symbol: String, defaultValue: Statement, url: String, shorthand: Option[String], definingStatement: Option[Statement]) extends EntryProps {
-    override val `type`: String = "statementDefinition"
-  }
-  case class TermDefinitionPropsForChapter(symbol: String, defaultValue: Term, url: String, shorthand: Option[String], definingStatement: Statement, premises: Seq[Statement]) extends EntryProps {
-    override val `type`: String = "termDefinition"
-  }
-  case class TypeDefinitionPropsForChapter(symbol: String, url: String, title: String, definingStatement: Statement) extends EntryProps {
-    override val `type`: String = "typeDefinition"
-  }
-  case class TypeQualifierDefinitionPropsForChapter(symbol: String, url: String, parentTypeSymbol: String, title: String, definingStatement: Statement) extends EntryProps {
-    override val `type`: String = "typeQualifierDefinition"
-  }
-  case class PropertyDefinitionPropsForChapter(symbol: String, url: String, parentTypeSymbol: String, title: String, definingStatement: Statement) extends EntryProps {
-    override val `type`: String = "propertyDefinition"
-  }
-  case class RelatedObjectDefinitionPropsForChapter(symbol: String, url: String, parentTypeSymbol: String, title: String, definingStatement: Statement) extends EntryProps {
-    override val `type`: String = "relatedObjectDefinition"
-  }
-  case class StandalonePropertyDefinitionPropsForChapter(symbol: String, url: String, title: String, definingStatement: Statement) extends EntryProps {
-    override val `type`: String = "standalonePropertyDefinition"
-  }
-  case class CommentPropsForChapter(text: String, url: String) extends EntryProps {
-    override val `type`: String = "comment"
-  }
-  case class PlaceholderPropsForChapter(url: String) extends EntryProps {
-    override val `type`: String = "placeholder"
+
+  case class InferenceSummaryForChapter(name: String, variableDefinitions: VariableDefinitions, premises: Seq[Statement], conclusion: Statement, isComplete: Boolean)
+  object InferenceSummaryForChapter {
+    def apply(inference: Inference, definitions: Definitions): InferenceSummaryForChapter = InferenceSummaryForChapter(inference.name, inference.variableDefinitions, inference.premises, inference.conclusion, definitions.isInferenceComplete(inference))
   }
 }

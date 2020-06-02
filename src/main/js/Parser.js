@@ -340,14 +340,15 @@ export class Parser {
       return suggestion;
     })
   };
-  parseEntries = (entriesJson) => {
-    return entriesJson.map(entryJson => {
-      const entry = _.cloneDeep(entryJson);
-      entry.premises && (entry.premises = entry.premises.map(this.parseExpression));
-      entry.conclusion && (entry.conclusion = this.parseExpression(entry.conclusion));
-      entry.defaultValue && (entry.defaultValue = this.parseExpression(entry.defaultValue));
-      entry.definingStatement && (entry.definingStatement = this.parseExpression(entry.definingStatement));
-      return entry;
+  parseEntries = (entryWrappers) => {
+    return entryWrappers.map(entryWrapper => {
+      entryWrapper = _.cloneDeep(entryWrapper);
+      let entry = entryWrapper.entry;
+      entry?.premises && (entry.premises = entry.premises.map(this.parseExpression));
+      entry?.conclusion && (entry.conclusion = this.parseExpression(entry.conclusion));
+      entry?.defaultValue && (entry.defaultValue = this.parseExpression(entry.defaultValue));
+      entry?.definingStatement && (entry.definingStatement = this.parseExpression(entry.definingStatement));
+      return entryWrapper;
     });
   };
   parseDisplayShorthand = (json) => {

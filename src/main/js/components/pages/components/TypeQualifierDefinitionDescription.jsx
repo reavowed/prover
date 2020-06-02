@@ -5,13 +5,12 @@ import {CopiableExpression} from "../../ExpressionComponent";
 import {formatQualifier} from "../../helpers/Formatter";
 import ChapterEntryWrapper from "../chapter/ChapterEntryWrapper";
 
-export default function TypeQualifierDefinitionDescription({symbol, parentTypeSymbol, definingStatement}) {
+export default function TypeQualifierDefinitionDescription({typeQualifierDefinition}) {
   const entryContext = useContext(EntryContext);
-  const typeDefinition = entryContext.typeDefinitions[parentTypeSymbol];
-  const qualifierDefinition = _.find(typeDefinition.qualifiers, q => q.symbol === symbol);
-  const termNames = [typeDefinition.defaultTermName, ...qualifierDefinition.qualifier.defaultTermNames];
+  const typeDefinition = typeQualifierDefinition.parentType;
+  const termNames = [typeQualifierDefinition.parentType.defaultTermName, ...typeQualifierDefinition.qualifier.defaultTermNames];
 
-  return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(definingStatement, termNames, entryContext)}>
-    {typeDefinition.article.capitalize()} <u>{typeDefinition.name} {formatQualifier(qualifierDefinition.qualifier)}</u> is a {typeDefinition.name} {typeDefinition.defaultTermName} such that <CopiableExpression expression={definingStatement} splitConjunction/>.
+  return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(typeQualifierDefinition.definingStatement, termNames, entryContext)}>
+    {typeDefinition.article.capitalize()} <u>{typeDefinition.name} {formatQualifier(typeQualifierDefinition.qualifier)}</u> is a {typeDefinition.name} {typeDefinition.defaultTermName} such that <CopiableExpression expression={typeQualifierDefinition.definingStatement} splitConjunction/>.
   </DisplayContext.Provider>;
 }

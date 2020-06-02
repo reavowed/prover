@@ -8,7 +8,6 @@ case class TypeDefinitionSummary(
   symbol: String,
   name: String,
   article: String,
-  defaultTermName: String,
   defaultQualifier: Option[QualifierSummary],
   properties: Seq[PropertyDefinitionSummary],
   qualifiers: Seq[TypeQualifierDefinitionSummary],
@@ -25,14 +24,13 @@ object TypeDefinitionSummary {
       typeDefinition.symbol,
       typeDefinition.name,
       typeDefinition.article,
-      typeDefinition.mainTermName,
-      typeDefinition.qualifier.map(getQualifierSummary),
+      typeDefinition.defaultQualifier.map(getQualifierSummary),
       entryContext.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).map(getPropertyDefinitionSummary),
       entryContext.qualifiersByType.getOrElse(typeDefinition.symbol, Nil).map(qd => TypeQualifierDefinitionSummary(qd.symbol, qd.qualifiedSymbol, qd.name, getQualifierSummary(qd.qualifier))),
       entryContext.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).map(rod => RelatedObjectDefinitionSummary(rod.symbol, rod.qualifiedSymbol, rod.name, rod.article, rod.defaultTermName, rod.requiredParentQualifier.map(_.symbol))))
   }
   def getQualifierSummary(qualifier: Qualifier): QualifierSummary = {
-    QualifierSummary(qualifier.format.baseFormatString, qualifier.termNames)
+    QualifierSummary(qualifier.format.baseFormatString, qualifier.defaultTermNames)
   }
   def getPropertyDefinitionSummary(pd: PropertyDefinitionOnType): PropertyDefinitionSummary = {
     PropertyDefinitionSummary(pd.symbol, pd.qualifiedSymbol, pd.name, pd.requiredParentQualifier.map(_.symbol), pd.requiredParentObjects.objectDefinitions.map(_.symbol))

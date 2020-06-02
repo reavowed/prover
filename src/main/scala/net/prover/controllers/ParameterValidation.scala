@@ -12,7 +12,7 @@ import scala.util.{Failure, Success, Try}
 trait ParameterValidation {
 
   def getOptionalString(source: String): Option[String] = {
-    Option(source.trim()).filter(_.nonEmpty)
+    Option(source).map(_.trim()).filter(_.nonEmpty)
   }
   def getOptionalSingleWord(source: String, name: String): Try[Option[String]] = {
     getOptionalString(source) match {

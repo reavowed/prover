@@ -23,8 +23,8 @@ case class TypeQualifierDefinition(
   override def withSymbol(newSymbol: String): TypeQualifierDefinition = copy(symbol = newSymbol)
   def withName(newName: Option[String]): TypeQualifierDefinition = copy(explicitName = newName)
 
-  def fullFormat = qualifier.prependFormat(Format.Explicit(s"%1 is", s"${parentType.mainTermName} is", 2, true, true))
-  def allTermNames = parentType.mainTermName +: qualifier.termNames
+  def fullFormat = qualifier.prependFormat(Format.Explicit(s"%1 is", s"${parentType.defaultTermName} is", 2, true, true))
+  def allTermNames = parentType.defaultTermName +: qualifier.defaultTermNames
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
     qualifiedSymbol,
     allTermNames.map(ComponentType.TermComponent(_, Nil)),
@@ -62,7 +62,7 @@ object TypeQualifierDefinition extends ChapterEntryParser {
       symbol <- Parser.singleWord
       parentType <- Parser.required("on", context.typeDefinitionParser)
       qualifier <- Qualifier.parser
-      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.mainTermName +: qualifier.termNames)
+      expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: qualifier.defaultTermNames)
       explicitName <- Parser.optional("name", Parser.allInParens)
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
       conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))

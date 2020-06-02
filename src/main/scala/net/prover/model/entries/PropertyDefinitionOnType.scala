@@ -27,11 +27,11 @@ case class PropertyDefinitionOnType(
   override def withSymbol(newSymbol: String): PropertyDefinitionOnType = copy(symbol = newSymbol)
   override def withName(newName: Option[String]): PropertyDefinitionOnType = copy(explicitName = newName)
 
-  def baseFormat = Format.Explicit(s"%1 is %0", s"${parentType.mainTermName} is $name", 2, true, true)
-  def fullFormat = parentType.qualifier.prependFormat(baseFormat)
+  def baseFormat = Format.Explicit(s"%1 is %0", s"${parentType.defaultTermName} is $name", 2, true, true)
+  def fullFormat = parentType.defaultQualifier.prependFormat(baseFormat)
 
   val (parentTypeConditionConstructor, qualifierTermNames) = PropertyDefinitionOnType.getParentConditionAndQualifierTermNames(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
-  val allTermNames = parentType.mainTermName +: qualifierTermNames
+  val allTermNames = parentType.defaultTermName +: qualifierTermNames
 
   val statementDefinition: StatementDefinition = StatementDefinition.Derived(
     qualifiedSymbol,
@@ -128,9 +128,9 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
       case None =>
         val termNames = requiredParentQualifier match {
           case Some(qualifier) =>
-            qualifier.qualifier.termNames
+            qualifier.qualifier.defaultTermNames
           case None =>
-            parentType.qualifier.termNames
+            parentType.defaultQualifier.defaultTermNames
         }
         (termNames.indices.map(i => TermVariable(i + 1, Nil)), termNames)
     }
@@ -157,7 +157,7 @@ object PropertyDefinitionOnType extends ChapterEntryParser {
       explicitName <- Parser.optional("name", Parser.allInParens)
       conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create property definition without conjunction"))
       (_, qualifierTermNames) = getParentConditionAndQualifierTermNames(parentType, termListAdapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition)
-      expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(parentType.mainTermName +: qualifierTermNames))
+      expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(parentType.defaultTermName +: qualifierTermNames))
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
     } yield PropertyDefinitionOnType(symbol, parentType, requiredParentQualifier, requiredParentObjects, termListAdapter, explicitName, definingStatement, conjunctionDefinition)
   }

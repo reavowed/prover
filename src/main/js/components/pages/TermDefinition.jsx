@@ -6,10 +6,11 @@ import EntryContext from "../EntryContext";
 import {CopiableExpression} from "../ExpressionComponent";
 import {ExpressionDefinition} from "../ExpressionDefinition";
 import {ResultWithPremises} from "../ResultWithPremises";
+import {useMappedState} from "./utils/entryFunctions";
 
 export function TermDefinition({definition: definitionJson, definitions, typeDefinitions, standalonePropertyDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, ...otherProps}) {
   const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
-  const definition = parser.parseTermDefinition(definitionJson);
+  const [definition, setDefinition] = useMappedState(definitionJson, parser.parseTermDefinition);
   const entryContext = EntryContext.create(parser, definitions, typeDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 
   const equality = _.find(entryContext.definitions, d => _.includes(d.attributes, "equality"));
@@ -18,7 +19,7 @@ export function TermDefinition({definition: definitionJson, definitions, typeDef
     <><CopiableExpression expression={definition.defaultValue}/> is defined such that <CopiableExpression expression={definition.definingStatement} splitConjunction /></>;
 
   return <DisplayContext.Provider value={DisplayContext.forExpressionDefinition(definition, entryContext)}>
-    <ExpressionDefinition title="Term Definition" definition={definition} entryContext={entryContext} parser={parser} hasDisambiguator {...otherProps}>
+    <ExpressionDefinition title="Term Definition" definition={definition} setDefinition={setDefinition} entryContext={entryContext} parser={parser} hasDisambiguator {...otherProps}>
       <ResultWithPremises premises={definition.premises}
                           result={result}/>
     </ExpressionDefinition>

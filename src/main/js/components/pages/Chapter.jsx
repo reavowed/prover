@@ -94,7 +94,7 @@ export class Chapter extends React.Component {
               type="ChapterEntry"
               enabled={editing}
               onDrop={this.onDropEntry}
-              entries={entries.map((entry, index) => {return {key: entry.url, data: {url: entry.url, index}, element: <ChapterEntry entry={entry} />}})}
+              entries={entries.map(({entry, url, type, title}, index) => {return {key: url, data: {url, index}, element: <ChapterEntry entry={entry} url={url} type={type} title={title} />}})}
             />
           </DndProvider>
           <hr/>
