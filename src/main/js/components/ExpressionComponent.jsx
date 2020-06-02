@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, {useContext} from "react";
 import styled from "styled-components";
 import {
-  DefinedExpression,
+  DefinedExpression, getVariableDefinition,
   matchTemplate,
   PropertyExpression, RelatedObjectExpression,
   StandalonePropertyExpression,
@@ -62,7 +62,13 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         if (matches) {
           const matchesConditions = _.every(displayShorthand.conditions, condition => {
             const match = _.find(matches, match => match.matchedVariable === condition[0]);
-            return match && match.expression.definition && _.includes(match.expression.definition.attributes, condition[1]);
+            if (match && match.expression instanceof DefinedExpression) {
+              return _.includes(match.expression.definition.attributes, condition[1]);
+            } else if (match && match.expression instanceof Variable) {
+              return _.includes(getVariableDefinition(match.expression, displayContext.variableDefinitions).attributes, condition[1]);
+            } else {
+              return false;
+            }
           });
           if (matchesConditions) return {displayShorthand, matches};
         }
@@ -254,13 +260,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         return addBrackets([formattedTerm, <> is </>, expression.definition.name]);
       } else if (expression instanceof Variable) {
         if (displayContext && displayContext.variableDefinitions) {
-          const statementVariableRegex = /^s(\d+)$/;
-          const termVariableRegex = /^t(\d+)$/;
-          const statementMatch = expression.name.match(statementVariableRegex);
-          const termMatch = expression.name.match(termVariableRegex);
-          const name = statementMatch ? displayContext.variableDefinitions.statements[parseInt(statementMatch[1])].name :
-            termMatch ? displayContext.variableDefinitions.terms[parseInt(termMatch[1])].name :
-            throw new Error("Unrecognised variable " + expression.name);
+          const name = getVariableDefinition(expression, displayContext.variableDefinitions).name;
           const result = formatHtmlWithoutWrapping(name);
           if (expression.components.length > 0) {
             result.push("(");

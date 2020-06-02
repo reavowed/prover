@@ -150,6 +150,20 @@ export function matchTemplate(template: Expression, expression: Expression, path
   return undefined;
 }
 
+export function getVariableDefinition(variable: Variable, variableDefinitions: VariableDefinitions): VariableDefinition {
+  const statementVariableRegex = /^s(\d+)$/;
+  const termVariableRegex = /^t(\d+)$/;
+  const statementMatch = variable.name.match(statementVariableRegex);
+  const termMatch = variable.name.match(termVariableRegex);
+  const definition = statementMatch ? variableDefinitions.statements[parseInt(statementMatch[1])] :
+      termMatch ? variableDefinitions.terms[parseInt(termMatch[1])] :
+          null;
+  if (!definition) {
+    throw new Error("Unrecognised variable " + variable.name)
+  }
+  return definition;
+}
+
 export abstract class Expression {
   abstract serialize(): string
   abstract serializeNicely(boundVariableLists: string[][]): string

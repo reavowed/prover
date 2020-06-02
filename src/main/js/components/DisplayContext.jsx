@@ -101,10 +101,10 @@ DisplayContext.forDefinitionWithDefiningStatement = function(definition, entryCo
   return DisplayContext.construct(null, disambiguators);
 };
 
-DisplayContext.forTypeLikeDefinition = function(definingStatement, termNames, entryContext) {
+DisplayContext.forTypeLikeDefinition = function(definingStatement, termVariableDefinitions, entryContext) {
   const variableDefinitions = {
     statements: [],
-    terms: termNames.map(name => { return {name, arity: 0}})
+    terms: termVariableDefinitions.map(d => { return {...d, arity: 0}})
   };
   const disambiguators = getDisambiguatorsForExpression(definingStatement, entryContext);
   return DisplayContext.construct(variableDefinitions, disambiguators);
