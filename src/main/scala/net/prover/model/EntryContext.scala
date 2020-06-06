@@ -15,6 +15,7 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
   lazy val qualifiersByType: Map[String, Seq[TypeQualifierDefinition]] = availableEntries.ofType[TypeQualifierDefinition].groupBy(_.parentType.symbol)
   lazy val relatedObjectsByType: Map[String, Seq[RelatedObjectDefinition]] = availableEntries.ofType[RelatedObjectDefinition].groupBy(_.parentType.symbol)
   lazy val standalonePropertyDefinitions: Seq[StandalonePropertyDefinition] = availableEntries.ofType[StandalonePropertyDefinition]
+  lazy val typeRelationDefinitions: Seq[TypeRelationDefinition] = availableEntries.ofType[TypeRelationDefinition]
   lazy val displayShorthands: Seq[DisplayShorthand] = availableEntries.ofType[DisplayShorthand]
   lazy val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]
 
@@ -36,7 +37,7 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
       t.statementDefinition +: (qualifiersByType.getOrElse(t.symbol, Nil) ++ propertyDefinitionsByType.getOrElse(t.symbol, Nil) ++ relatedObjectsByType.getOrElse(t.symbol, Nil)).map(_.statementDefinition)
     }
   }
-  lazy val typeStatementDefinitions: Seq[StatementDefinition] = typeStatementDefinitionsByType.values.flatten.toSeq
+  lazy val typeStatementDefinitions: Seq[StatementDefinition] = typeStatementDefinitionsByType.values.flatten.toSeq ++ typeRelationDefinitions.map(_.statementDefinition)
 
   def addEntry(entry: ChapterEntry): EntryContext = {
     addEntries(Seq(entry))

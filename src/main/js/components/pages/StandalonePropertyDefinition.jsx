@@ -7,10 +7,10 @@ import StandalonePropertyDescription from "./components/StandalonePropertyDescri
 import StatementDefinitionUsages from "./components/StatementDefinitionUsages";
 import {Page} from "./Page";
 
-export function StandalonePropertyDefinition({definition: definitionJson, definitions, typeDefinitions, standalonePropertyDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, bookLink, chapterLink, url, previous, next, usages}) {
-  const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
+export function StandalonePropertyDefinition(props) {
+  const {definition: definitionJson, bookLink, chapterLink, url, previous, next, usages} = props;
+  const [parser, entryContext] = EntryContext.fromEntryProps(props);
   const definition = parser.parseDefinitionWithDefiningStatement(definitionJson);
-  const entryContext = EntryContext.create(parser, definitions, typeDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 
   return <EntryContext.Provider value={entryContext}>
     <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>

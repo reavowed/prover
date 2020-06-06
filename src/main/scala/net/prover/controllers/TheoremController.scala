@@ -24,7 +24,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Book
     bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
       implicit val expressionParsingContext = ExpressionParsingContext.forInference(theorem)(provingContext.entryContext)
       for {
-        newVariables <- VariableDefinitions.parser.parseFromString(serializedNewVariables, "variables").recoverWithBadRequest
+        newVariables <- getVariableDefinitions(serializedNewVariables)
         _ <- (newVariables.statements.length == theorem.variableDefinitions.statements.length).orBadRequest("Cannot change number of statement variables")
         _ <- (newVariables.terms.length == theorem.variableDefinitions.terms.length).orBadRequest("Cannot change number of term variables")
       } yield theorem.copy(variableDefinitions = newVariables)

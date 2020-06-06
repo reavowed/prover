@@ -224,7 +224,7 @@ export default class ConclusionChooser extends React.Component {
                   <option value="" />
                   {validValues.map(v =>
                     <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                        <ExpressionComponent expression={v} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} entryContext={entryContext}/>
+                        <ExpressionComponent expression={v} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} entryContext={entryContext} displayContext={displayContext}/>
                       )}}/>
                   )}
                 </Form.Control>

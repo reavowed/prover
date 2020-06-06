@@ -79,7 +79,8 @@ class TermRearrangerSpec extends Specification {
       }
     }
 
-    testReversableOperationMultipleWays("distributivity", multiply, a, add(b, c), add(multiply(c, a), multiply(a, b)))
+    testReversableOperationMultipleWays("natural distributivity", multiply, a, add(b, c), add(multiply(c, a), multiply(a, b)))
+    testReversableOperationMultipleWays("integer distributivity", multiplyZ, a, addZ(b, c), addZ(multiplyZ(c, a), multiplyZ(a, b)), Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)))
 
     "rearrange using multiple distributivities" in {
       // a(bc) + d(ec + f) = (ab + de)c + df

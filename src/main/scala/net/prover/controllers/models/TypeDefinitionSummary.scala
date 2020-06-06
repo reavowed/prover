@@ -17,6 +17,7 @@ case class TypeQualifierDefinitionSummary(symbol: String, qualifiedSymbol: Strin
 case class RelatedObjectDefinitionSummary(symbol: String, qualifiedSymbol: String, name: String, article: String, mainVariableDefinition: SimpleVariableDefinition, requiredParentQualifier: Option[String])
 case class StandalonePropertyDefinitionSummary(symbol: String, qualifiedSymbol: String, name: String, mainVariableDefinition: SimpleVariableDefinition)
 case class QualifierSummary(format: String, variableDefinitions: Seq[SimpleVariableDefinition])
+case class TypeRelationDefinitionSummary(symbol: String, linkingPhrase: String)
 
 object TypeDefinitionSummary {
   def getSummary(typeDefinition: TypeDefinition)(implicit entryContext: EntryContext): TypeDefinitionSummary = {
@@ -49,5 +50,11 @@ object StandalonePropertyDefinitionSummary {
         d.name,
         d.mainVariableDefinition))
       .toMap
+  }
+}
+
+object TypeRelationDefinitionSummary {
+  def getAllFromContext(entryContext: EntryContext): Map[String, TypeRelationDefinitionSummary] = {
+    entryContext.typeRelationDefinitions.map(d => d.symbol -> TypeRelationDefinitionSummary(d.symbol, d.linkingPhrase)).toMap
   }
 }

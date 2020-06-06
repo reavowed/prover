@@ -36,7 +36,6 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
       <NavLinks previous={previous} next={next} />
       <h3>{title}:  <CopiableExpression expression={definition.defaultValue} /></h3>
       {children}
-      <hr/>
       <EditableProperties url={url} updateEntry={setDefinition} definitions={editableProperties} />
       {definition.definitionInference && <Usages.ForInference usages={usages} inferenceId={definition.definitionInference.id} />}
       {definition.constructionInference && <Usages.ForInference usages={usages} inferenceId={definition.constructionInference.id} title="Construction" />}

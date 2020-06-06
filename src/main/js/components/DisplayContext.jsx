@@ -1,7 +1,7 @@
 import _ from "lodash";
-import {useContext} from "react";
 import * as React from "react";
-import {matchTemplate, VariableDefinitions} from "../models/Expression";
+import {useContext} from "react";
+import {DefinedExpression, matchTemplate, TypeLikeExpression, TypeRelationExpression} from "../models/Expression";
 import EntryContext from "./EntryContext";
 
 const DisplayContext = React.createContext();
@@ -66,15 +66,17 @@ function getDisambiguatorsForExpression(expression, entryContext) {
   const base = getBaseDisambiguator(expression, entryContext);
   if (base) {
     return {[base.symbol]: [base.disambiguator]}
-  } else if (!_.isUndefined(expression.components)) {
+  } else if (expression instanceof DefinedExpression) {
     const componentDisambiguators = getDisambiguatorsForExpressions(expression.components, entryContext);
     if (expression.symbol && expression.disambiguator) {
       return mergeDisambiguators([{[expression.symbol]: [expression.disambiguator]}, componentDisambiguators]);
     } else {
       return componentDisambiguators;
     }
-  } else if (expression.term && expression.qualifierComponents) {
+  } else if (expression instanceof TypeLikeExpression) {
     return getDisambiguatorsForExpressions([expression.term, ...expression.qualifierComponents], entryContext);
+  } else if (expression instanceof TypeRelationExpression) {
+    return getDisambiguatorsForExpressions([expression.firstTerm, expression.secondTerm], entryContext);
   }
   return {};
 }

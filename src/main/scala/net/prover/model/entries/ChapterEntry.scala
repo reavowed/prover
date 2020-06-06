@@ -7,7 +7,7 @@ import net.prover.model.{EntryContext, Inference, Parser, SimpleVariableDefiniti
 trait ChapterEntry {
   @JsonSerialize
   def name: String
-  def inferences: Seq[Inference.FromEntry] = Nil
+  def inferences: Seq[Inference.FromEntry]
   def serializedLines: Seq[String]
   def referencedInferenceIds: Set[String]
   def referencedEntries: Set[ChapterEntry]
@@ -17,6 +17,8 @@ trait ChapterEntry {
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): ChapterEntry
+
+  def validate(): Unit = {}
 }
 
 object ChapterEntry {
@@ -60,6 +62,7 @@ object ChapterEntry {
     TypeQualifierDefinition,
     PropertyDefinitionOnType,
     RelatedObjectDefinition,
+    TypeRelationDefinition,
     StandalonePropertyDefinition,
     Axiom,
     Theorem,

@@ -59,6 +59,11 @@ export interface TypeQualifierDefinition {
   qualifier: QualifierDefinition;
 }
 
+export interface TypeRelationDefinition {
+  symbol: string;
+  linkingPhrase: string;
+}
+
 export interface PropertyDefinition {
   symbol: string;
   qualifiedSymbol: string;
@@ -95,22 +100,6 @@ export interface BoundVariableMatchResult {
 }
 
 type MatchResult = ExpressionMatchResult | BoundVariableMatchResult;
-
-export function tokenize(str: string): string[]  {
-  function splitToken(word: string): string[] {
-    const firstSingleCharacterIndex = _.findIndex(word, x => _.includes("(){}", x));
-    if (firstSingleCharacterIndex === 0) {
-      return [word[0], ...splitToken(word.substring(1))];
-    } else if (firstSingleCharacterIndex > 0) {
-      return [word.substring(0, firstSingleCharacterIndex), word[firstSingleCharacterIndex], ...splitToken(word.substring(firstSingleCharacterIndex + 1))];
-    } else if (word.length) {
-      return [word];
-    } else {
-      return [];
-    }
-  }
-  return _.flatMap(str.split(' '), splitToken);
-}
 
 function checkComponentsMatch(matchResults: MatchResult[]): MatchResult[] | undefined {
   const expressionMatchResults = <ExpressionMatchResult[]>matchResults.filter(a => a instanceof ExpressionMatchResult);
@@ -169,7 +158,6 @@ export abstract class Expression {
   abstract serializeNicely(boundVariableLists: string[][]): string
   abstract setBoundVariableName(newName: string, index: number, path: number[]): Expression
   abstract replaceAtPath(path: number[], expression: Expression): [Expression, number[][]]
-  abstract getDisambiguators(): string[]
 }
 
 export abstract class TypeLikeExpression extends Expression {
@@ -209,12 +197,6 @@ export class Variable extends Expression {
       return [new Variable(this.name, newComponents), replacementPaths.map(p => [first, ...p])];
     }
   }
-  getDisambiguators(): string[] {
-    const componentDisambiguators = _.uniq(_.flatMap(this.components, x => x.getDisambiguators()));
-    return this.disambiguator ?
-        _.uniq([this.disambiguator, ...componentDisambiguators]) :
-        componentDisambiguators;
-  }
 }
 
 export class DefinedExpression extends Expression {
@@ -249,12 +231,6 @@ export class DefinedExpression extends Expression {
       const newComponents = [...this.components.slice(0, first), replacedComponent, ... this.components.slice(first + 1)];
       return [new DefinedExpression(this.definition, this.boundVariableNames, newComponents), replacedPaths.map(p => [first, ...p])];
     }
-  }
-  getDisambiguators(): string[] {
-    const componentDisambiguators = _.uniq(_.flatMap(this.components, x => x.getDisambiguators()));
-    return this.disambiguator ?
-      _.uniq([this.disambiguator, ...componentDisambiguators]) :
-      componentDisambiguators;
   }
 }
 
@@ -423,9 +399,6 @@ export class TypeExpression extends TypeLikeExpression {
       return replaceInMainExpression(pathAfterProperties);
     }
   }
-  getDisambiguators(): string[] {
-    return _.uniq(_.flatMap([this.term, ...this.qualifierComponents], x => x.getDisambiguators()));
-  }
 }
 
 export class TypeQualifierExpression extends TypeLikeExpression {
@@ -462,9 +435,6 @@ export class TypeQualifierExpression extends TypeLikeExpression {
       }
     }
   }
-  getDisambiguators(): string[] {
-    return _.uniq(_.flatMap([this.term, ...this.qualifierComponents], x => x.getDisambiguators()));
-  }
 }
 
 export class PropertyExpression extends TypeLikeExpression {
@@ -480,9 +450,6 @@ export class PropertyExpression extends TypeLikeExpression {
   }
   replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
     throw "Cannot replace in property expression"
-  }
-  getDisambiguators(): string[] {
-    return _.uniq(_.flatMap([this.term, ...this.qualifierComponents], x => x.getDisambiguators()));
   }
 }
 
@@ -500,8 +467,21 @@ export class RelatedObjectExpression extends TypeLikeExpression {
   replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
     throw "Cannot replace in related object expression"
   }
-  getDisambiguators(): string[] {
-    return _.uniq(_.flatMap([this.term, this.parentTerm, ...this.qualifierComponents], x => x.getDisambiguators()));
+}
+
+export class TypeRelationExpression extends Expression {
+  constructor(public definition: TypeRelationDefinition, public firstTerm: Expression, public secondTerm: Expression) { super(); }
+  serialize(): string {
+    return [this.definition.symbol, this.firstTerm.serialize(), this.secondTerm.serialize()].join(" ")
+  }
+  serializeNicely(boundVariableLists: string[][]): string {
+    return [this.definition.symbol, this.firstTerm.serializeNicely(boundVariableLists), this.secondTerm.serializeNicely(boundVariableLists)].join(" ")
+  }
+  setBoundVariableName(): Expression {
+    throw "Cannot set bound variable name in type relation expression"
+  }
+  replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
+    throw "Cannot replace in type relation expression"
   }
 }
 
@@ -518,9 +498,6 @@ export class StandalonePropertyExpression extends TypeLikeExpression {
   }
   replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
     throw "Cannot replace in property expression"
-  }
-  getDisambiguators(): string[] {
-    return _.uniq(_.flatMap([this.term, ...this.qualifierComponents], x => x.getDisambiguators()));
   }
 }
 
@@ -553,8 +530,5 @@ export class FunctionParameter extends Expression {
     } else {
       throw "Cannot replace subexpression of function parameter"
     }
-  }
-  getDisambiguators(): string[] {
-    return [];
   }
 }

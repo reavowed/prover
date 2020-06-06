@@ -9,10 +9,10 @@ import StatementDefinitionUsages from "./components/StatementDefinitionUsages";
 import {Page} from "./Page";
 import {useMappedState} from "./utils/entryFunctions";
 
-export function RelatedObjectDefinition({definition: definitionJson, definitions, typeDefinitions, standalonePropertyDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, bookLink, chapterLink, url, previous, next, usages}) {
-  const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
+export function RelatedObjectDefinition(props) {
+  const {definition: definitionJson, bookLink, chapterLink, url, previous, next, usages} = props;
+  const [parser, entryContext] = EntryContext.fromEntryProps(props);
   const [definition, setDefinition] = useMappedState(definitionJson, parser.parseDefinitionWithDefiningStatement);
-  const entryContext = EntryContext.create(parser, definitions, typeDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 
   const editableProperties = [
     {label: "Symbol", initialValue: definition.symbol, endpointName: "symbol"},
@@ -24,7 +24,6 @@ export function RelatedObjectDefinition({definition: definitionJson, definitions
       <NavLinks previous={previous} next={next} />
       <h3>{definition.title.capitalize()}</h3>
       <RelatedObjectDefinitionDescription relatedObjectDefinition={definition} />
-      <hr/>
       <EditableProperties url={url} updateEntry={setDefinition} definitions={editableProperties} />
       <StatementDefinitionUsages usages={usages} statementDefinition={definition.statementDefinition} />
     </Page>

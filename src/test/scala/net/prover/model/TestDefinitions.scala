@@ -219,9 +219,26 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
   val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true))), None, Subset(R, Product(A, A)))
   val Function = TypeDefinition("function", "f", None, None, Conjunction(PairSet(f), ForAllIn("a", Domain(f))(ExistsUnique("b")(ElementOf(Pair($.^, $), f)))))
   val FunctionFrom = TypeQualifierDefinition("from", Function, Qualifier(Seq("A", "B"), Format.Explicit("from A B", Seq("A", "B"), true, true)), None, Conjunction(Equals(Domain(f), A), Subset(Range(f), B)), ConjunctionDefinition)
+  val Apply = simpleTermDefinition("apply", Seq(a, b), Format.Explicit("%1(%2)", "a(b)", 3, requiresBrackets = false, requiresComponentBrackets = true))
+
   val BaseSet = simpleTermDefinition("baseSet", Seq(a), Format.default(1), Nil, Equals($, Domain(Domain(a))))
   val BinaryOperation = TypeDefinition("binaryOperation", SimpleVariableDefinition("f", Seq("infix-function")), None, None, Conjunction(Function(f), FunctionFrom(f, Product(BaseSet(f), BaseSet(f)), BaseSet(f))))
   val BinaryOperationOn = TypeQualifierDefinition("on", BinaryOperation, Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true)), None, Equals(BaseSet(f), A), ConjunctionDefinition)
+  val Distributivity = TypeRelationDefinition(
+    "distributes",
+    BinaryOperation,
+    BinaryOperation,
+    "∘",
+    "∗",
+    "distributes over",
+    Some("distributivity"),
+    Conjunction(
+      Equals(BaseSet(a), BaseSet(b)),
+      ForAllIn("a", BaseSet(f))(ForAllIn("b", BaseSet(f))(ForAllIn("c", BaseSet(f))(
+        Conjunction(
+          Equals(Apply(a, Pair($.^^, Apply(b, Pair($.^, $)))), Apply(b, Pair(Apply(a, Pair($.^^, $.^)), Apply(a, Pair($.^^, $))))),
+          Equals(Apply(a, Pair(Apply(b, Pair($.^^, $.^)), $)), Apply(b, Pair(Apply(a, Pair($.^^, $)), Apply(a, Pair($.^, $)))))))))),
+    ConjunctionDefinition)
 
   val NaturalsDefinition = simpleTermDefinition("ℕ", Nil, Format.default(0))
   val Naturals = DefinedTerm(Nil, NaturalsDefinition)(Nil)
@@ -234,18 +251,6 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
   val Addition = DefinedTerm(Nil, AdditionDefinition)(Nil)
   val MultiplicationDefinition = simpleTermDefinition("×", Nil, Format.default(0), Nil, BlankDefinition).withDisambiguator(Some("ℕ"))
   val Multiplication = DefinedTerm(Nil, MultiplicationDefinition)(Nil)
-  val Apply = TermDefinitionEntry(
-    "apply",
-    Nil,
-    Seq(a, b),
-    None,
-    None,
-    Format.Explicit("%1(%2)", "a(b)", 3, requiresBrackets = false, requiresComponentBrackets = true),
-    Nil,
-    BlankDefinition,
-    None,
-    Nil,
-    Nil)
   val LessThanDefinition = TermDefinitionEntry(
     "<",
     Nil,
@@ -360,7 +365,7 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
   val integerMultiplicationIsClosed = createInference("Integer Multiplication Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(multiplyZ(a, b), Integers))
   val integerMultiplicationIsAssociative = createInference("Integer Multiplication Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(multiplyZ(a, multiplyZ(b, c)), multiplyZ(multiplyZ(a, b), c)))
   val integerMultiplicationIsCommutative = createInference("Integer Multiplication Is Commutative", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Equals(multiplyZ(a, b), multiplyZ(b, a)))
-  val integerMultiplicationDistributesOverAddition = createInference("Integer Multiplication Distributes over Addition", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Conjunction(Equals(multiplyZ(a, addZ(b, c)), addZ(multiplyZ(a, b), multiplyZ(a, c))), Equals(multiplyZ(addZ(a, b), c), addZ(multiplyZ(a, c), multiplyZ(b, c)))))
+  val integerMultiplicationDistributesOverAddition = createInference("Integer Multiplication Distributes over Addition", Nil, Distributivity(IntegerMultiplication, IntegerAddition))
 
   val identityForIntegerMultiplication = createInference("Identity for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(One)), a), Equals(multiplyZ(toZ(One), a), a)))
   val absorberForIntegerMultiplication = createInference("Absorber for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(Zero)), toZ(Zero)), Equals(multiplyZ(toZ(Zero), a), toZ(Zero))))
@@ -400,7 +405,8 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
       ElementOf, Equals, Subset) ++
     Seq(
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Union, Comprehension,
-      PairSet, Domain, Range, Relation, Function, FunctionFrom, BaseSet, BinaryOperation, BinaryOperationOn,
+      PairSet, Domain, Range, Relation, Function, FunctionFrom,
+      BaseSet, BinaryOperation, BinaryOperationOn, Distributivity,
       NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, MultiplicationDefinition, Apply, LessThanDefinition,
       IntegersDefinition, IntegerEmbeddingDefinition, IntegerAdditionDefinition, IntegerNegation, IntegerMultiplicationDefinition) ++
     Seq(

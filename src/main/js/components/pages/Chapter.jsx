@@ -18,15 +18,22 @@ export class Chapter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      ...this.getStateFromProps(props),
+      editing: false
+    };
+  }
+
+  getStateFromProps = (props) => {
+    return {
       title: props.title,
       url: props.url,
       definitions: props.definitions,
       typeDefinitions: props.typeDefinitions,
+      typeRelationDefinitions: props.typeRelationDefinitions,
       standalonePropertyDefinitions: props.standalonePropertyDefinitions,
-      entries: new Parser(props.definitions, props.typeDefinitions, props.standalonePropertyDefinitions).parseEntries(props.entries),
-      editing: false
-    };
-  }
+      entries: new Parser(props.definitions, props.typeDefinitions, props.typeRelationDefinitions, props.standalonePropertyDefinitions).parseEntries(props.entries),
+    }
+  };
 
   onKeyDown = (event) => {
     if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLInputElement) {
@@ -47,14 +54,7 @@ export class Chapter extends React.Component {
   updateChapter = (fetchUrl, fetchData) => {
     return window.fetchJson(fetchUrl, fetchData)
       .then(newProps => {
-        this.setState({
-          title: newProps.title,
-          url: newProps.url,
-          definitions: newProps.definitions,
-          typeDefinitions: newProps.typeDefinitions,
-          standalonePropertyDefinitions: newProps.standalonePropertyDefinitions,
-          entries: new Parser(newProps.definitions, newProps.typeDefinitions, newProps.standalonePropertyDefinitions).parseEntries(newProps.entries)
-        });
+        this.setState(this.getStateFromProps(newProps));
         if (window.location.pathname !== newProps.url) {
           history.replaceState({}, "", newProps.url);
         }
@@ -77,11 +77,11 @@ export class Chapter extends React.Component {
 
   render() {
     const {bookLink, summary, previous, next, displayShorthands, definitionShorthands} = this.props;
-    const {title, url, entries, editing, definitions, typeDefinitions, standalonePropertyDefinitions} = this.state;
+    const {title, url, entries, editing, definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions} = this.state;
 
     const context = {updateChapter: this.updateChapter, url, editing};
-    const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
-    const entryContext = EntryContext.create(parser, definitions, typeDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands);
+    const parser = new Parser(definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions);
+    const entryContext = EntryContext.create(parser, definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands);
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <ChapterContext.Provider value={context}>

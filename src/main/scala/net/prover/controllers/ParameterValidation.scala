@@ -37,6 +37,9 @@ trait ParameterValidation {
       .getOrElse(Format.default(boundVariableNames, componentTypes))
       .recoverWithBadRequest
   }
+  def getTypeDefinition(symbol: String)(implicit entryContext: EntryContext): Try[TypeDefinition] = {
+    entryContext.typeDefinitions.get(symbol).orBadRequest(s"Unknown type '$symbol'")
+  }
   def getSimpleVariableDefinition(text: String, description: String): Try[SimpleVariableDefinition] = {
     SimpleVariableDefinition.parser.parseFromString(text, description).recoverWithBadRequest
   }
@@ -100,11 +103,8 @@ trait ParameterValidation {
     strs.mapWithIndex((str, index) =>  parse(parser, str, s"$description ${index + 1}")).traverseTry
   }
 
-  def getVariableDefinitions(statementVariableDefinitionsText: Seq[String], termVariableDefinitionsText: Seq[String]): Try[VariableDefinitions] = {
-    for {
-      statementVariableDefinitions <- parseAll(VariableDefinition.parser, statementVariableDefinitionsText.flatMap(getOptionalString), "statement variable definition")
-      termVariableDefinitions <- parseAll(VariableDefinition.parser, termVariableDefinitionsText.flatMap(getOptionalString), "term variable definition")
-    } yield VariableDefinitions(statementVariableDefinitions, termVariableDefinitions)
+  def getVariableDefinitions(serializedVariableDefinitions: String): Try[VariableDefinitions] = {
+    VariableDefinitions.parser.parseFromString(serializedVariableDefinitions, "variables").recoverWithBadRequest
   }
 
   def getPremises(serializedPremises: Seq[String])(implicit expressionParsingContext: ExpressionParsingContext): Try[Seq[Statement]] = {

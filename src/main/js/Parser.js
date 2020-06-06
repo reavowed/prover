@@ -5,7 +5,7 @@ import {
   FunctionParameter,
   PropertyExpression,
   TypeExpression,
-  tokenize, StandalonePropertyExpression, TypeQualifierExpression, RelatedObjectExpression,
+  StandalonePropertyExpression, TypeQualifierExpression, RelatedObjectExpression, TypeRelationExpression,
 } from "./models/Expression";
 import {
   AssertionStep,
@@ -28,10 +28,27 @@ function serializeReference(reference) {
   return main + internalPath + suffix;
 }
 
+function tokenize(str)  {
+  function splitToken(word) {
+    const firstSingleCharacterIndex = _.findIndex(word, x => _.includes("(){}", x));
+    if (firstSingleCharacterIndex === 0) {
+      return [word[0], ...splitToken(word.substring(1))];
+    } else if (firstSingleCharacterIndex > 0) {
+      return [word.substring(0, firstSingleCharacterIndex), word[firstSingleCharacterIndex], ...splitToken(word.substring(firstSingleCharacterIndex + 1))];
+    } else if (word.length) {
+      return [word];
+    } else {
+      return [];
+    }
+  }
+  return _.flatMap(str.split(' '), splitToken);
+}
+
 export class Parser {
-  constructor(definitions, typeDefinitions, standalonePropertyDefinitions) {
+  constructor(definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions) {
     this.definitions = definitions;
     this.typeDefinitions = typeDefinitions;
+    this.typeRelationDefinitions = typeRelationDefinitions;
     this.standalonePropertyDefinitions = standalonePropertyDefinitions;
     this.stepCounter = 0;
   }
@@ -68,6 +85,7 @@ export class Parser {
         const qualifierAndParentType = _.chain(self.typeDefinitions).map(d => { return {qualifierDefinition: _.find(d.qualifiers, q => q.qualifiedSymbol === firstToken), parentType: d}}).filter("qualifierDefinition").find().value();
         const propertyAndParentType = _.chain(self.typeDefinitions).map(d => { return {property: _.find(d.properties, p => p.qualifiedSymbol === firstToken), parentType: d}}).filter("property").find().value();
         const objectAndParentType = _.chain(self.typeDefinitions).map(d => { return {object: _.find(d.relatedObjects, o => o.qualifiedSymbol === firstToken), parentType: d}}).filter("object").find().value();
+        const typeRelationDefinition = self.typeRelationDefinitions[firstToken];
         const standalonePropertyDefinition = self.standalonePropertyDefinitions[firstToken];
         if (expressionDefinition) {
           const boundVariables = tokensAfterFirst.slice(0, expressionDefinition.numberOfBoundVariables);
@@ -135,7 +153,11 @@ export class Parser {
           const qualifier = requiredParentQualifier?.qualifier || parentType.defaultQualifier;
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterParentTerm, qualifier?.variableDefinitions.length ?? 0);
           return [new RelatedObjectExpression(object, parentType, term, parentTerm, components), tokensAfterComponents];
-        } else if (standalonePropertyDefinition) {
+        } else if (typeRelationDefinition) {
+          const [firstTerm, tokensAfterFirstTerm] = parseExpressionFromTokens(tokensAfterFirst);
+          const [secondTerm, tokensAfterSecondTerm] = parseExpressionFromTokens(tokensAfterFirstTerm);
+          return [new TypeRelationExpression(typeRelationDefinition, firstTerm, secondTerm), tokensAfterSecondTerm];
+        }else if (standalonePropertyDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, standalonePropertyDefinition.numberOfComponents);
           return [new StandalonePropertyExpression(standalonePropertyDefinition, term, components), tokensAfterComponents];

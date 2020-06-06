@@ -1,6 +1,5 @@
 import React, {useContext} from "react";
 import {DefinedExpression} from "../../../models/Expression";
-import DisplayContext from "../../DisplayContext";
 import EntryContext from "../../EntryContext";
 import {CopiableExpression} from "../../ExpressionComponent";
 import {formatHtml} from "../../helpers/Formatter";
@@ -10,6 +9,7 @@ import RelatedObjectDefinitionDescription from "../components/RelatedObjectDefin
 import StandalonePropertyDescription from "../components/StandalonePropertyDescription";
 import TypeDefinitionDescription from "../components/TypeDefinitionDescription";
 import TypeQualifierDefinitionDescription from "../components/TypeQualifierDefinitionDescription";
+import TypeRelationDefinitionDescription from "../components/TypeRelationDefinitionDescription";
 import ChapterContext from "./ChapterContext";
 import ChapterEntryWrapper from "./ChapterEntryWrapper";
 import DefinitionEntry from "./DefinitionEntry";
@@ -52,6 +52,11 @@ export default function ChapterEntry({entry, url, type, title}) {
     case "relatedObjectDefinition": {
       return <ChapterEntryWrapper title={title} url={url}>
         <RelatedObjectDefinitionDescription relatedObjectDefinition={entry} />
+      </ChapterEntryWrapper>;
+    }
+    case "typeRelationDefinition": {
+      return <ChapterEntryWrapper title={title} url={url}>
+        <TypeRelationDefinitionDescription typeRelationDefinition={entry} />
       </ChapterEntryWrapper>;
     }
     case "standalonePropertyDefinition":

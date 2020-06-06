@@ -18,3 +18,7 @@ export function useMappedState(initialValue, mappingFunction) {
   const [value, setValue] = useState(mappingFunction(initialValue));
   return [value, newRawValue => setValue(mappingFunction(newRawValue))]
 }
+
+export function serializeVariable(variableDefinition) {
+  return _.filter([variableDefinition.name, variableDefinition.arity, variableDefinition.attributes.length ? ("(" + variableDefinition.attributes.join(" ") + ")") : null], x => !_.isNull(x) && !_.isUndefined(x)).join(" ")
+}

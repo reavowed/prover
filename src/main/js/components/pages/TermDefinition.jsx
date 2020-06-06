@@ -8,10 +8,10 @@ import {ExpressionDefinition} from "../ExpressionDefinition";
 import {ResultWithPremises} from "../ResultWithPremises";
 import {useMappedState} from "./utils/entryFunctions";
 
-export function TermDefinition({definition: definitionJson, definitions, typeDefinitions, standalonePropertyDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, ...otherProps}) {
-  const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
+export function TermDefinition(props) {
+  const {definition: definitionJson, ...otherProps} = props;
+  const [parser, entryContext] = EntryContext.fromEntryProps(props);
   const [definition, setDefinition] = useMappedState(definitionJson, parser.parseTermDefinition);
-  const entryContext = EntryContext.create(parser, definitions, typeDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 
   const equality = _.find(entryContext.definitions, d => _.includes(d.attributes, "equality"));
   const result = (equality && definition.definingStatement instanceof DefinedExpression && definition.definingStatement.definition === equality && definition.definingStatement.components[0].serialize() === definition.defaultValue.serialize()) ?

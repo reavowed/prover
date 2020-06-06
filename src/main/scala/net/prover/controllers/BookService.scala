@@ -84,12 +84,6 @@ class BookService @Autowired() (bookRepository: BookRepository) {
     ).map(_.map { case ((books, definitions, book), chapter) => (books, definitions, book, chapter)})
   }
 
-  def addChapterEntry(bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => Try[ChapterEntry]): Try[(Seq[Book], Definitions, Book, Chapter)] = {
-    modifyChapter[Identity](bookKey, chapterKey, (books, _, book, chapter) =>
-      f(books, book, chapter).map(chapter.addEntry)
-    )
-  }
-
   def modifyEntry[TEntry <: ChapterEntry : ClassTag, F[_] : Functor](bookKey: String, chapterKey: String, entryKey: String, f: (Seq[Book], Definitions, Book, Chapter, TEntry) => Try[F[TEntry]]): Try[F[(Seq[Book], Definitions, Book, Chapter, TEntry)]] = {
     modifyChapter[FWithValue[F, TEntry]#Type](bookKey, chapterKey, (books, definitions, book, chapter) =>
       for {

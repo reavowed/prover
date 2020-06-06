@@ -6,6 +6,7 @@ import ChapterContext from "./ChapterContext";
 
 const values = [
   {key: "name", title: "Name"},
+  {key: "variableDefinitions", title: "Variables", inputProps: {as: "textarea"}},
   {key: "premises", title: "Premises", inputType: InputWithShorthandReplacement, inputProps: {as: "textarea"}},
   {key: "conclusion", title: "Conclusion", inputType: InputWithShorthandReplacement},
 ];

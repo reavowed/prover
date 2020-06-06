@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{DefinitionSummary, LinkSummary, StandalonePropertyDefinitionSummary, TypeDefinitionSummary}
+import net.prover.controllers.models.{DefinitionSummary, LinkSummary, StandalonePropertyDefinitionSummary, TypeDefinitionSummary, TypeRelationDefinitionSummary}
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition
@@ -42,6 +42,8 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
           Success(("TypeDefinition", Map("definition" -> typeDefinition)))
         case typeQualifierDefinition: TypeQualifierDefinition =>
           Success(("TypeQualifierDefinition", Map("definition" -> typeQualifierDefinition)))
+        case typeRelationDefinition: TypeRelationDefinition =>
+          Success(("TypeRelationDefinition", Map("definition" -> typeRelationDefinition)))
         case propertyDefinitionOnType: PropertyDefinitionOnType =>
           Success(("PropertyDefinitionOnType", Map("definition" -> propertyDefinitionOnType)))
         case relatedObjectDefinition: RelatedObjectDefinition =>
@@ -64,12 +66,8 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
         "previous" -> previous,
         "next" -> next,
         "usages" -> getInferenceUsages(entry, books),
-        "definitions" -> DefinitionSummary.getAllFromContext(entryContext),
-        "typeDefinitions" -> TypeDefinitionSummary.getAllFromContext(entryContext),
-        "standalonePropertyDefinitions" -> StandalonePropertyDefinitionSummary.getAllFromContext(entryContext),
-        "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
-        "binaryRelations" -> getBinaryRelations(provingContext),
-        "definitionShorthands" -> DefinitionSummary.getDefinitionShorthandsFromContext(entryContext)))
+        "binaryRelations" -> getBinaryRelations(provingContext)) ++
+        getGeneralDisplayProps(entryContext))
     }).toResponseEntity
   }
 
@@ -213,6 +211,36 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
       case (entry: ChapterEntry.HasMainVariable, _) =>
         getSimpleVariableDefinition(newMainVariableDefinitionText, "main variable definition").map(entry.withMainVariableDefinition)
+      case (entry, _) =>
+        Failure(BadRequestException(s"Cannot set main term variable of ${entry.getClass.getName}"))
+    }
+  }
+
+  @PutMapping(value = Array("/firstVariable"), produces = Array("application/json;charset=UTF-8"))
+  def editFirstVariableDefinition(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String,
+    @RequestBody(required = false) newVariableDefinitionText: String
+  ): ResponseEntity[_] = {
+    modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
+      case (entry: TypeRelationDefinition, _) =>
+        getSimpleVariableDefinition(newVariableDefinitionText, "main variable definition").map(d => entry.copy(firstVariable = d))
+      case (entry, _) =>
+        Failure(BadRequestException(s"Cannot set main term variable of ${entry.getClass.getName}"))
+    }
+  }
+
+  @PutMapping(value = Array("/secondVariable"), produces = Array("application/json;charset=UTF-8"))
+  def editSecondVariableDefinition(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String,
+    @RequestBody(required = false) newVariableDefinitionText: String
+  ): ResponseEntity[_] = {
+    modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
+      case (entry: TypeRelationDefinition, _) =>
+        getSimpleVariableDefinition(newVariableDefinitionText, "main variable definition").map(d => entry.copy(secondVariable = d))
       case (entry, _) =>
         Failure(BadRequestException(s"Cannot set main term variable of ${entry.getClass.getName}"))
     }

@@ -8,10 +8,10 @@ import TypeQualifierDefinitionDescription from "./components/TypeQualifierDefini
 import {Page} from "./Page";
 import {useMappedState} from "./utils/entryFunctions";
 
-export function TypeQualifierDefinition({definition: definitionJson, definitions, typeDefinitions, standalonePropertyDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, bookLink, chapterLink, url, previous, next, usages}) {
-  const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
+export function TypeQualifierDefinition(props) {
+  const {definition: definitionJson, bookLink, chapterLink, url, previous, next, usages} = props;
+  const [parser, entryContext] = EntryContext.fromEntryProps(props);
   const [definition, setDefinition] = useMappedState(definitionJson, parser.parseDefinitionWithDefiningStatement);
-  const entryContext = EntryContext.create(parser, definitions, typeDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
 
   return <EntryContext.Provider value={entryContext}>
     <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>

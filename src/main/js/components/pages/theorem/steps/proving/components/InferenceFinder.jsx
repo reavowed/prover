@@ -100,6 +100,7 @@ export class InferenceFinder extends React.Component {
       }
       {possibleTargets && possibleTargets.length > 1 && <BoundVariableLists.Consumer>{boundVariableLists =>
         <EntryContext.Consumer>{entryContext =>
+          <DisplayContext.Consumer>{displayContext =>
           <Form.Group>
             <Form.Label><strong>Choose target</strong></Form.Label>
             <Form.Control as="select"
@@ -108,10 +109,11 @@ export class InferenceFinder extends React.Component {
                           readOnly={disabled}>
               <option value=""/>
               {possibleTargets.map(({target, additionalBoundVariables}, index) =>
-                <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(<ExpressionComponent expression={target} boundVariableLists={[...boundVariableLists, ...additionalBoundVariables]} entryContext={entryContext}/>)}}/>
+                <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(<ExpressionComponent expression={target} boundVariableLists={[...boundVariableLists, ...additionalBoundVariables]} entryContext={entryContext} displayContext={displayContext}/>)}}/>
               )}
             </Form.Control>
           </Form.Group>
+          }</DisplayContext.Consumer>
         }</EntryContext.Consumer>
       }</BoundVariableLists.Consumer>}
       {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}

@@ -9,6 +9,7 @@ import TermDefinitionInput from "./TermDefinitionInput";
 import TheoremInput from "./TheoremInput";
 import TypeDefinitionInput from "./TypeDefinitionInput";
 import TypeQualifierInput from "./TypeQualifierInput";
+import TypeRelationDefinitionInput from "./TypeRelationDefinitionInput";
 
 export default function ChapterEntryAdder() {
   const [entryBeingAdded, setEntryBeingAdded] = useState(null);
@@ -21,6 +22,7 @@ export default function ChapterEntryAdder() {
     {name: "Type Qualifier", element: <TypeQualifierInput onCancel={onCancel}/>},
     {name: "Property Definition", element: <PropertyDefinitionInput onCancel={onCancel}/>},
     {name: "Related Object Definition", element: <RelatedObjectDefinitionInput onCancel={onCancel}/>},
+    {name: "Type Relation Definition", element: <TypeRelationDefinitionInput onCancel={onCancel}/>},
     {name: "Standalone Property Definition", element: <StandalonePropertyDefinitionInput onCancel={onCancel}/>},
     {name: "Comment", element: <CommentInput onCancel={onCancel}/>}
   ];

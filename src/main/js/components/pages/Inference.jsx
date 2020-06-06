@@ -12,6 +12,7 @@ import {NavLinks} from "./components/NavLinks";
 import {Page} from "./Page";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import {Usages} from "./components/Usages";
+import {serializeVariable} from "./utils/entryFunctions";
 
 export function Inference({inference, title, url, bookLink, chapterLink, previous, next, usages, children, buttons, createPremiseElement, editable}) {
   const [editing, setEditing] = useState(false);
@@ -34,7 +35,7 @@ export function Inference({inference, title, url, bookLink, chapterLink, previou
   };
   function serializeVariables(prefix, variables) {
     if (variables.length > 0) {
-      return prefix + " (" + variables.map(v => _.filter([v.name, v.arity, v.attributes.length ? ("(" + v.attributes.join(" ") + ")") : null], x => !_.isNull(x)).join(" ")).join(", ") + ")"
+      return prefix + " (" + variables.map(serializeVariable).join(", ") + ")"
     }
   }
   const initialVariablesText = _.filter([serializeVariables("statementVariables", inference.variableDefinitions.statements), serializeVariables("termVariables", inference.variableDefinitions.terms)]).join("\n");

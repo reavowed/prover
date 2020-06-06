@@ -6,10 +6,9 @@ import {Inference} from "./Inference";
 
 export class Axiom extends React.Component {
   render() {
-    const {axiom: axiomJson, definitions, typeDefinitions, standalonePropertyDefinitions, displayShorthands, definitionShorthands, inferences, binaryRelations, ...otherProps} = this.props;
-    const parser = new Parser(definitions, typeDefinitions, standalonePropertyDefinitions);
+    const {axiom: axiomJson, ...otherProps} = this.props;
+    const [parser, entryContext] = EntryContext.fromEntryProps(this.props);
     const axiom = parser.parseInference(axiomJson);
-    const entryContext = EntryContext.create(parser, definitions, typeDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands, inferences, binaryRelations);
     return <EntryContext.Provider value={entryContext}>
       <DisplayContext.Provider value={DisplayContext.forInferenceSummary(axiom, entryContext)}>
         <Inference inference={axiom} title="Axiom" {...otherProps}/>

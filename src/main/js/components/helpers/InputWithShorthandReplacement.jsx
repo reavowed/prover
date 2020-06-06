@@ -42,15 +42,19 @@ export default function InputWithShorthandReplacement({value, onChange, ...input
         .filter((value, key) => isMatch(key, lastWord))
         .map((value) => value.symbol.serialized)
         .value();
-      const matchingShorthands = _.chain(context.definitionShorthands)
+      const matchingTypeRelationDefinitions = _.chain(context.typeRelationDefinitions)
         .filter((value, key) => isMatch(key, lastWord))
-        .map(symbol => symbol.serialized)
+        .map((value) => value.symbol)
         .value();
       const matchingTypes = _.chain(context.typeDefinitions)
         .flatMap((value, key) => [key, ..._.values(value.properties).map(p => p.symbol)])
         .filter(key => isMatch(key, lastWord))
         .value();
-      return _.chain([...matchingDefinitions, ...matchingShorthands, ...matchingTypes]).uniq().sortBy().value().slice(0, 10);
+      const matchingShorthands = _.chain(context.definitionShorthands)
+        .filter((value, key) => isMatch(key, lastWord))
+        .map(symbol => symbol.serialized)
+        .value();
+      return _.chain([...matchingDefinitions, ...matchingTypes, ...matchingTypeRelationDefinitions, ...matchingShorthands]).uniq().sortBy().value().slice(0, 10);
     } else {
       return [];
     }

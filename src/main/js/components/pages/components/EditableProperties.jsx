@@ -19,6 +19,7 @@ export default function EditableProperties({url, updateEntry, definitions}) {
     setErrorMessage(message);
   };
   return <>
+    <hr/>
     {errorMessage && <Alert variant="danger" className="mt-2" onClose={() => setErrorMessage(null)} dismissible>{errorMessage}</Alert>}
     {_.chain(definitions)
       .filter()

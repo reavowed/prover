@@ -7,7 +7,7 @@ import {
   PropertyExpression, RelatedObjectExpression,
   StandalonePropertyExpression,
   TypeExpression,
-  TypeQualifierExpression, Variable
+  TypeQualifierExpression, TypeRelationExpression, Variable
 } from "../models/Expression";
 import DisplayContext from "./DisplayContext";
 import EntryContext from "./EntryContext";
@@ -201,21 +201,21 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
           if (i === 0)
             return [formattedProperty];
           else
-            return [<>, </>, formattedProperty];
+            return [", ", formattedProperty];
         });
 
-        const result = [formattedTerm, <> </>, formattedIs, <> </>, formattedArticle, <> </>, ...formattedProperties, <> </>, formattedName];
+        const result = [formattedTerm, " ", formattedIs, " ", formattedArticle, " ", ...formattedProperties, " ", formattedName];
         if (expression.explicitQualifier) {
           const propertyIndexesRequiringQualifier = _.chain(expression.properties).map((p, i) => (p.requiredParentQualifier === expression.explicitQualifier.symbol) ? i : null).filter(x => x !== null).value();
           const objectIndexesRequiringQualifier = _.chain(expression.objects).map(([d, t], i) => (d.requiredParentQualifier === expression.explicitQualifier.symbol) ? i : null).filter(x => x !== null).value();
           const qualifierHighlightPaths = [qualifierPath, ...propertyIndexesRequiringQualifier.map(getPropertyPath), objectIndexesRequiringQualifier.map(getObjectPath)];
           const formattedQualifier = renderQualifier(expression.explicitQualifier.qualifier, expression.qualifierComponents, qualifierPath, qualifierHighlightPaths);
-          result.push(<> </>);
+          result.push(" ");
           result.push(formattedQualifier);
         } else if (expression.definition.defaultQualifier) {
           const qualifierHighlightPaths = [typePath, ...propertyPaths, ...objectPaths];
           const formattedQualifier = renderQualifier(expression.definition.defaultQualifier, expression.qualifierComponents, typePath, qualifierHighlightPaths);
-          result.push(<> </>);
+          result.push(" ");
           result.push(formattedQualifier);
         }
         if (expression.objects.length) {
@@ -224,40 +224,44 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
             const renderedTerm = renderChildExpression(objectTerm, termPath);
             return highlightSharedChild(<>{objectDefinition.name} {renderedTerm}</>, getObjectPath(index))
           });
-          result.push(<> </>);
+          result.push(" ");
           result.push(highlightSharedChild("with", _.range(expression.objects.length).map(getObjectPath)));
-          result.push(<> </>);
+          result.push(" ");
           result.push(joinAsList(formattedObjects));
         }
         return addBrackets(result);
       } else if (expression instanceof TypeQualifierExpression) {
         const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
         const formattedQualifier = renderQualifier(expression.definition.qualifier, expression.qualifierComponents);
-        return addBrackets([formattedTerm, <> is </>, formattedQualifier]);
+        return addBrackets([formattedTerm, " is ", formattedQualifier]);
       } else if (expression instanceof PropertyExpression) {
         const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
-        const result = [formattedTerm, <> is </>, expression.definition.name];
+        const result = [formattedTerm, " is ", expression.definition.name];
         const qualifier = _.find(expression.typeDefinition.qualifiers, q => q.symbol === expression.definition.requiredParentQualifier)?.qualifier || expression.typeDefinition.defaultQualifier;
         if (qualifier) {
           const formattedQualifier = renderQualifier(qualifier, expression.qualifierComponents);
-          result.push(<> </>);
+          result.push(" ");
           result.push(formattedQualifier);
         }
         return addBrackets(result);
       } else if (expression instanceof RelatedObjectExpression) {
         const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
         const formattedParentTerm = renderChildExpression(expression.parentTerm, [...path, 1]);
-        const result = [formattedTerm, <> is {expression.definition.article} {expression.definition.name} for </>, formattedParentTerm];
+        const result = [formattedTerm, ` is ${expression.definition.article} {expression.definition.name} for `, formattedParentTerm];
         const qualifier = _.find(expression.typeDefinition.qualifiers, q => q.symbol === expression.definition.requiredParentQualifier)?.qualifier || expression.typeDefinition.defaultQualifier;
         if (qualifier) {
           const formattedQualifier = renderQualifier(qualifier, expression.qualifierComponents);
-          result.push(<> </>);
+          result.push(" ");
           result.push(formattedQualifier);
         }
         return addBrackets(result);
+      } else if (expression instanceof TypeRelationExpression) {
+        const formattedFirstTerm = renderChildExpression(expression.firstTerm, [0]);
+        const formattedSecondTerm = renderChildExpression(expression.secondTerm, [0]);
+        return addBrackets([formattedFirstTerm, " " + expression.definition.linkingPhrase + " ", formattedSecondTerm]);
       } else if (expression instanceof StandalonePropertyExpression) {
         const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
-        return addBrackets([formattedTerm, <> is </>, expression.definition.name]);
+        return addBrackets([formattedTerm, " is ", expression.definition.name]);
       } else if (expression instanceof Variable) {
         if (displayContext && displayContext.variableDefinitions) {
           const name = getVariableDefinition(expression, displayContext.variableDefinitions).name;
