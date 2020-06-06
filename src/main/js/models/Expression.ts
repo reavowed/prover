@@ -139,23 +139,9 @@ export function matchTemplate(template: Expression, expression: Expression, path
   return undefined;
 }
 
-export function getVariableDefinition(variable: Variable, variableDefinitions: VariableDefinitions): VariableDefinition {
-  const statementVariableRegex = /^s(\d+)$/;
-  const termVariableRegex = /^t(\d+)$/;
-  const statementMatch = variable.name.match(statementVariableRegex);
-  const termMatch = variable.name.match(termVariableRegex);
-  const definition = statementMatch ? variableDefinitions.statements[parseInt(statementMatch[1])] :
-      termMatch ? variableDefinitions.terms[parseInt(termMatch[1])] :
-          null;
-  if (!definition) {
-    throw new Error("Unrecognised variable " + variable.name)
-  }
-  return definition;
-}
-
 export abstract class Expression {
   abstract serialize(): string
-  abstract serializeNicely(boundVariableLists: string[][]): string
+  abstract serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string
   abstract setBoundVariableName(newName: string, index: number, path: number[]): Expression
   abstract replaceAtPath(path: number[], expression: Expression): [Expression, number[][]]
 }
@@ -174,10 +160,11 @@ export class Variable extends Expression {
         this.name :
         `with (${this.components.map(a => a.serialize()).join(" ")}) ${this.name}`;
   }
-  serializeNicely(boundVariableLists: string[][]): string {
+  serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
+    const name = this.getDefinition(variableDefinitions).name;
     return this.components.length == 0 ?
-        this.name :
-        `with (${this.components.map(a => a.serializeNicely(boundVariableLists)).join(" ")}) ${this.name}`;
+        name :
+        `with (${this.components.map(a => a.serializeNicely(boundVariableLists, variableDefinitions)).join(" ")}) ${name}`;
   }
   formatForHtml() {
     return this.components.length == 0 ?
@@ -197,6 +184,19 @@ export class Variable extends Expression {
       return [new Variable(this.name, newComponents), replacementPaths.map(p => [first, ...p])];
     }
   }
+  getDefinition(variableDefinitions: VariableDefinitions): VariableDefinition {
+    const statementVariableRegex = /^s(\d+)$/;
+    const termVariableRegex = /^t(\d+)$/;
+    const statementMatch = this.name.match(statementVariableRegex);
+    const termMatch = this.name.match(termVariableRegex);
+    const definition = statementMatch ? variableDefinitions.statements[parseInt(statementMatch[1])] :
+        termMatch ? variableDefinitions.terms[parseInt(termMatch[1])] :
+            null;
+    if (!definition) {
+      throw new Error("Unrecognised variable " + this.name)
+    }
+    return definition;
+  }
 }
 
 export class DefinedExpression extends Expression {
@@ -206,9 +206,9 @@ export class DefinedExpression extends Expression {
   serialize() {
     return [this.definition.symbol.serialized, ...this.boundVariableNames, ...this.components.map(c => c.serialize())].join(" ")
   }
-  serializeNicely(boundVariableLists: string[][]): string {
+  serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
     const innerBoundVariables = this.boundVariableNames.length ? [...boundVariableLists, this.boundVariableNames] : boundVariableLists;
-    return [this.definition.symbol.serialized, ...this.boundVariableNames, ...this.components.map(c => c.serializeNicely(innerBoundVariables))].join(" ");
+    return [this.definition.symbol.serialized, ...this.boundVariableNames, ...this.components.map(c => c.serializeNicely(innerBoundVariables, variableDefinitions))].join(" ");
   }
   formatForHtml(parentRequiresBrackets: boolean) {
     return (parentRequiresBrackets && this.definition.requiresBrackets) ?
@@ -287,11 +287,11 @@ export class TypeExpression extends TypeLikeExpression {
         wordsAfterProperties);
     return wordsAfterObjects.join(" ")
   }
-  serializeNicely(boundVariableLists: string[][]): string {
-    const baseWords = ["is", this.term.serializeNicely(boundVariableLists), this.definition.symbol]
+  serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
+    const baseWords = ["is", this.term.serializeNicely(boundVariableLists, variableDefinitions), this.definition.symbol]
     const worldsWithQualifier = this.explicitQualifier ?
-        [...baseWords, this.explicitQualifier.symbol, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))] :
-        [...baseWords, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))];
+        [...baseWords, this.explicitQualifier.symbol, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists, variableDefinitions))] :
+        [...baseWords, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists, variableDefinitions))];
     const propertyAndObjectWords = [
         ...this.properties.map(p => p.symbol),
         ..._.flatMap(this.objects, ([objectDefinition, objectTerm]) => [objectDefinition.symbol, ...objectTerm.serialize()])
@@ -406,8 +406,8 @@ export class TypeQualifierExpression extends TypeLikeExpression {
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
-  serializeNicely(boundVariableLists: string[][]): string {
-    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+  serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
+    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists, variableDefinitions))].join(" ")
   }
   setBoundVariableName(newName: string, variableIndex: number, path: number[]): Expression {
     if (path.length == 0) {
@@ -442,8 +442,12 @@ export class PropertyExpression extends TypeLikeExpression {
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
-  serializeNicely(boundVariableLists: string[][]): string {
-    return [this.definition.qualifiedSymbol, this.term.serializeNicely(boundVariableLists), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+  serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
+    return [
+      this.definition.qualifiedSymbol,
+      this.term.serializeNicely(boundVariableLists, variableDefinitions),
+      ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists, variableDefinitions))
+    ].join(" ")
   }
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in property expression"
@@ -458,8 +462,13 @@ export class RelatedObjectExpression extends TypeLikeExpression {
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), this.parentTerm.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
-  serializeNicely(boundVariableLists: string[][]): string {
-    return [this.definition.qualifiedSymbol, this.term.serializeNicely(boundVariableLists), this.parentTerm.serializeNicely(boundVariableLists), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+  serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
+    return [
+      this.definition.qualifiedSymbol,
+      this.term.serializeNicely(boundVariableLists, variableDefinitions),
+      this.parentTerm.serializeNicely(boundVariableLists, variableDefinitions),
+      ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists, variableDefinitions))
+    ].join(" ")
   }
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in related object expression"
@@ -474,8 +483,12 @@ export class TypeRelationExpression extends Expression {
   serialize(): string {
     return [this.definition.symbol, this.firstTerm.serialize(), this.secondTerm.serialize()].join(" ")
   }
-  serializeNicely(boundVariableLists: string[][]): string {
-    return [this.definition.symbol, this.firstTerm.serializeNicely(boundVariableLists), this.secondTerm.serializeNicely(boundVariableLists)].join(" ")
+  serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
+    return [
+      this.definition.symbol,
+      this.firstTerm.serializeNicely(boundVariableLists, variableDefinitions),
+      this.secondTerm.serializeNicely(boundVariableLists, variableDefinitions)
+    ].join(" ")
   }
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in type relation expression"
@@ -490,8 +503,12 @@ export class StandalonePropertyExpression extends TypeLikeExpression {
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
-  serializeNicely(boundVariableLists: string[][]): string {
-    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists))].join(" ")
+  serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
+    return [
+      this.definition.qualifiedSymbol,
+      this.term.serialize(),
+      ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists, variableDefinitions))
+    ].join(" ")
   }
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in property expression"
@@ -510,7 +527,7 @@ export class FunctionParameter extends Expression {
   serialize() {
     return "$".repeat(this.level + 1) + this.index;
   }
-  serializeNicely(boundVariableLists: string[][]): string {
+  serializeNicely(boundVariableLists: string[][], _: VariableDefinitions): string {
     return this.textForHtml(boundVariableLists);
   }
   textForHtml(boundVariableLists: string[][]) {

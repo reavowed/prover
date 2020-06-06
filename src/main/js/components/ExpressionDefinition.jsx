@@ -1,4 +1,5 @@
 import React from "react";
+import DisplayContext from "./DisplayContext";
 import EntryContext from "./EntryContext";
 import {CopiableExpression} from "./ExpressionComponent";
 import InputWithShorthandReplacement from "./helpers/InputWithShorthandReplacement";
@@ -9,7 +10,7 @@ import {Usages} from "./pages/components/Usages";
 import {Page} from "./pages/Page";
 
 export function ExpressionDefinition({url, title, definition, setDefinition, bookLink, chapterLink, previous, next, usages, hasDisambiguator, children, entryContext}) {
-
+  const displayContext = DisplayContext.forExpressionDefinition(definition, entryContext);
   const serializedFormat = definition.format.originalValue ?
     "(" + definition.format.originalValue + ")" + (definition.format.requiresBrackets ? " requires-brackets" : "") + (definition.format.requiresComponentBrackets ? "" : " no-component-brackets") :
     "";
@@ -24,7 +25,7 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
     {label: "Attributes", initialValue: definition.attributes.join(" "), endpointName: "attributes", process: newAttributesText => newAttributesText.split(" ")},
     hasDisambiguator && {
       label: "Disambiguator Adders",
-      initialValue: definition.disambiguatorAdders.map(d => d.template.serializeNicely([["_"]]) + " " + d.disambiguator).join("\n"),
+      initialValue: definition.disambiguatorAdders.map(d => d.template.serializeNicely([["_"]], displayContext.variableDefinitions) + " " + d.disambiguator).join("\n"),
       endpointName: "disambiguator",
       process: newDisambiguatorAddersText => _.filter(newDisambiguatorAddersText.split(/\r?\n/).map(_.trim), s => s.length),
       inputType: InputWithShorthandReplacement,
@@ -32,14 +33,16 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
   ];
 
   return <EntryContext.Provider value={entryContext}>
-    <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
-      <NavLinks previous={previous} next={next} />
-      <h3>{title}:  <CopiableExpression expression={definition.defaultValue} /></h3>
-      {children}
-      <EditableProperties url={url} updateEntry={setDefinition} definitions={editableProperties} />
-      {definition.definitionInference && <Usages.ForInference usages={usages} inferenceId={definition.definitionInference.id} />}
-      {definition.constructionInference && <Usages.ForInference usages={usages} inferenceId={definition.constructionInference.id} title="Construction" />}
-      {definition.deconstructionInference && <Usages.ForInference usages={usages} inferenceId={definition.deconstructionInference.id} title="Deconstruction" />}
-    </Page>
+    <DisplayContext.Provider value={displayContext}>
+      <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
+        <NavLinks previous={previous} next={next} />
+        <h3>{title}:  <CopiableExpression expression={definition.defaultValue} /></h3>
+        {children}
+        <EditableProperties url={url} updateEntry={setDefinition} definitions={editableProperties} />
+        {definition.definitionInference && <Usages.ForInference usages={usages} inferenceId={definition.definitionInference.id} />}
+        {definition.constructionInference && <Usages.ForInference usages={usages} inferenceId={definition.constructionInference.id} title="Construction" />}
+        {definition.deconstructionInference && <Usages.ForInference usages={usages} inferenceId={definition.deconstructionInference.id} title="Deconstruction" />}
+      </Page>
+    </DisplayContext.Provider>
   </EntryContext.Provider>;
 }

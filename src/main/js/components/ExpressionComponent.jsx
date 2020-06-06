@@ -2,7 +2,7 @@ import _ from "lodash";
 import React, {useContext} from "react";
 import styled from "styled-components";
 import {
-  DefinedExpression, getVariableDefinition,
+  DefinedExpression,
   matchTemplate,
   PropertyExpression, RelatedObjectExpression,
   StandalonePropertyExpression,
@@ -65,7 +65,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
             if (match && match.expression instanceof DefinedExpression) {
               return _.includes(match.expression.definition.attributes, condition[1]);
             } else if (match && match.expression instanceof Variable) {
-              return _.includes(getVariableDefinition(match.expression, displayContext.variableDefinitions).attributes, condition[1]);
+              return _.includes(match.expression.getDefinition(displayContext.variableDefinitions).attributes, condition[1]);
             } else {
               return false;
             }
@@ -264,7 +264,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         return addBrackets([formattedTerm, " is ", expression.definition.name]);
       } else if (expression instanceof Variable) {
         if (displayContext && displayContext.variableDefinitions) {
-          const name = getVariableDefinition(expression, displayContext.variableDefinitions).name;
+          const name = expression.getDefinition(displayContext.variableDefinitions).name;
           const result = formatHtmlWithoutWrapping(name);
           if (expression.components.length > 0) {
             result.push("(");
@@ -341,9 +341,10 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
 export const CopiableExpression = (props) => {
   const expressionToCopy = props.expressionToCopy || props.expression;
   const boundVariableLists = props.boundVariableLists || useContext(BoundVariableLists) || [];
+  const variableDefinitions = (props.displayContext || useContext(DisplayContext))?.variableDefinitions;
   const {expression, ...otherProps} = props;
 
-  return <span onContextMenu={() => navigator.clipboard.writeText(expressionToCopy.serializeNicely(boundVariableLists))}>
+  return <span onContextMenu={() => navigator.clipboard.writeText(expressionToCopy.serializeNicely(boundVariableLists, variableDefinitions))}>
     <ExpressionComponent expression={expression} {...otherProps} boundVariableLists={boundVariableLists}/>
   </span>;
 };

@@ -1,7 +1,5 @@
 import React from "react";
 import {DefinedExpression} from "../../models/Expression";
-import {Parser} from "../../Parser";
-import DisplayContext from "../DisplayContext";
 import EntryContext from "../EntryContext";
 import {CopiableExpression} from "../ExpressionComponent";
 import {ExpressionDefinition} from "../ExpressionDefinition";
@@ -18,10 +16,8 @@ export function TermDefinition(props) {
     <><CopiableExpression expression={definition.defaultValue}/> is defined to be equal to <CopiableExpression expression={definition.definingStatement.components[1]}/></> :
     <><CopiableExpression expression={definition.defaultValue}/> is defined such that <CopiableExpression expression={definition.definingStatement} splitConjunction /></>;
 
-  return <DisplayContext.Provider value={DisplayContext.forExpressionDefinition(definition, entryContext)}>
-    <ExpressionDefinition title="Term Definition" definition={definition} setDefinition={setDefinition} entryContext={entryContext} parser={parser} hasDisambiguator {...otherProps}>
-      <ResultWithPremises premises={definition.premises}
-                          result={result}/>
-    </ExpressionDefinition>
-  </DisplayContext.Provider>;
+  return <ExpressionDefinition title="Term Definition" definition={definition} setDefinition={setDefinition} entryContext={entryContext} parser={parser} hasDisambiguator {...otherProps}>
+    <ResultWithPremises premises={definition.premises}
+                        result={result}/>
+  </ExpressionDefinition>;
 }
