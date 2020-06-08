@@ -65,6 +65,7 @@ trait TestVariableDefinitions {
   }
   implicit class HasStatementDefinitionOps(hasStatementDefinition: HasStatementDefinition) {
     def apply(components: Expression*) = hasStatementDefinition.statementDefinition(components: _*)
+    def deconstructionInference: Inference.StatementDefinition = hasStatementDefinition.statementDefinition.deconstructionInference.get
   }
 
   val a = TermVariablePlaceholder("a", 0)
@@ -214,14 +215,14 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
     ForAll("a")(Equivalence(ElementOf($, $.^), Conjunction(ElementOf($, a), φ($)))))
 
   val PairSet = TypeDefinition("pairSet", "a", None, None, ForAllIn("x", a)(Exists("a")(Exists("b")(Equals($.^^, Pair($.^, $))))))
-  val Domain = simpleTermDefinition("domain", Seq(a), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(a)), Exists("b")(ElementOf(Pair($.^, $), a)))))
-  val Range = simpleTermDefinition("range", Seq(a), Format.default(1), Nil, Equals($, Comprehension.bind("x")(Union(Union(a)), Exists("a")(ElementOf(Pair($, $.^), a)))))
+  val Domain = simpleTermDefinition("domain", Seq(a), Format.Explicit("%0(%1)", "domain(a)", 2, false, false), Nil, Equals($, Comprehension.bind("x")(Union(Union(a)), Exists("b")(ElementOf(Pair($.^, $), a)))))
+  val Range = simpleTermDefinition("range", Seq(a), Format.Explicit("%0(%1)", "range(a)", 2, false, false), Nil, Equals($, Comprehension.bind("x")(Union(Union(a)), Exists("a")(ElementOf(Pair($, $.^), a)))))
   val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true))), None, Subset(R, Product(A, A)))
   val Function = TypeDefinition("function", "f", None, None, Conjunction(PairSet(f), ForAllIn("a", Domain(f))(ExistsUnique("b")(ElementOf(Pair($.^, $), f)))))
   val FunctionFrom = TypeQualifierDefinition("from", Function, Qualifier(Seq("A", "B"), Format.Explicit("from A B", Seq("A", "B"), true, true)), None, Conjunction(Equals(Domain(f), A), Subset(Range(f), B)), ConjunctionDefinition)
   val Apply = simpleTermDefinition("apply", Seq(a, b), Format.Explicit("%1(%2)", "a(b)", 3, requiresBrackets = false, requiresComponentBrackets = true))
 
-  val BaseSet = simpleTermDefinition("baseSet", Seq(a), Format.default(1), Nil, Equals($, Domain(Domain(a))))
+  val BaseSet = simpleTermDefinition("baseSet", Seq(a), Format.Explicit("%0(%1)", "baseSet(a)", 2, false, false), Nil, Equals($, Domain(Domain(a))))
   val BinaryOperation = TypeDefinition("binaryOperation", SimpleVariableDefinition("f", Seq("infix-function")), None, None, Conjunction(Function(f), FunctionFrom(f, Product(BaseSet(f), BaseSet(f)), BaseSet(f))))
   val BinaryOperationOn = TypeQualifierDefinition("on", BinaryOperation, Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true)), None, Equals(BaseSet(f), A), ConjunctionDefinition)
   val Distributivity = TypeRelationDefinition(
@@ -234,7 +235,7 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
     Some("distributivity"),
     Conjunction(
       Equals(BaseSet(a), BaseSet(b)),
-      ForAllIn("a", BaseSet(f))(ForAllIn("b", BaseSet(f))(ForAllIn("c", BaseSet(f))(
+      ForAllIn("a", BaseSet(a))(ForAllIn("b", BaseSet(a))(ForAllIn("c", BaseSet(a))(
         Conjunction(
           Equals(Apply(a, Pair($.^^, Apply(b, Pair($.^, $)))), Apply(b, Pair(Apply(a, Pair($.^^, $.^)), Apply(a, Pair($.^^, $))))),
           Equals(Apply(a, Pair(Apply(b, Pair($.^^, $.^)), $)), Apply(b, Pair(Apply(a, Pair($.^^, $)), Apply(a, Pair($.^, $)))))))))),

@@ -1,9 +1,10 @@
 package net.prover.model.proof
 
 import net.prover.controllers.ExtractionHelper
-import net.prover.model.{Inference, Substitutions}
-import net.prover.model.definitions.{BinaryRelationStatement, KnownStatement, TermDefinition, ValueToPropertyDerivation, Wrapper}
+import net.prover.model.definitions.{BinaryRelationStatement, KnownStatement, TermDefinition, Wrapper}
 import net.prover.model.expressions._
+import net.prover.model.proof.StepProvingContext.KnownEquality
+import net.prover.model.{Inference, Substitutions}
 
 object PremiseFinder {
 
@@ -29,8 +30,8 @@ object PremiseFinder {
   ): Option[Seq[DerivationStep]] = {
     stepProvingContext.provingContext.findRelation(targetStatement).map(findDirectDerivationForBinaryRelationStatement)
       .getOrElse(findDirectDerivationForStatement(targetStatement))
+      .map(_.deduplicate)
   }
-
 
   private def findDerivationForStatementFromFacts(
     targetStatement: Statement)(
@@ -111,12 +112,14 @@ object PremiseFinder {
         } yield innerDerivation ++ rewriteDerivation).headOption
       }
     }
-    withoutRenaming(binaryRelationStatement) orElse {
+    withoutRenaming(binaryRelationStatement) orElse
+    {
       (for {
-        ValueToPropertyDerivation(valueTerm, propertyTerm, valueToPropertyDerivation, equality) <- stepProvingContext.knownValuesToProperties.filter(_.propertyTerm == binaryRelationStatement.right)
-        innerDerivation <- withoutRenaming(binaryRelationStatement.withNewRight(valueTerm))
-        renameStep = DerivationStep.fromAssertion(equality.substitution.assertionStep(valueTerm, propertyTerm, new Wrapper[Term, Statement]((t, c) => binaryRelationStatement.relation(binaryRelationStatement.left, t)(c))))
-      } yield innerDerivation ++ valueToPropertyDerivation :+ renameStep).headOption
+        KnownEquality(source, result, equality, equalityDerivation) <- stepProvingContext.knownEqualities
+        if result == binaryRelationStatement.right
+        innerDerivation <- withoutRenaming(binaryRelationStatement.withNewRight(source))
+        renameStep = DerivationStep.fromAssertion(equality.substitution.assertionStep(source, result, new Wrapper[Term, Statement]((t, c) => binaryRelationStatement.relation(binaryRelationStatement.left, t)(c))))
+      } yield innerDerivation ++ equalityDerivation :+ renameStep).headOption
     }
   }
 
@@ -125,7 +128,7 @@ object PremiseFinder {
     implicit stepProvingContext: StepProvingContext
   ): (Seq[DerivationStep], Step.Target) = {
     stepProvingContext.knownValuesToProperties.foldLeft((premiseStatement, Seq.empty[DerivationStep])) { case ((currentStatement, currentDerivation), propertyValue) =>
-      EqualityRewriter.getReverseReplacements(currentStatement, propertyValue.valueTerm, propertyValue.propertyTerm, propertyValue.equality) match {
+      EqualityRewriter.getReverseReplacements(currentStatement, propertyValue.lhs, propertyValue.rhs, propertyValue.equality) match {
         case Some((result, derivationStep)) =>
           (result, currentDerivation ++ propertyValue.derivation :+ derivationStep)
         case None =>

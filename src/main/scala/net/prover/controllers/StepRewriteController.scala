@@ -133,7 +133,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       implicit val spc = stepProvingContext
       val replacementPossibilities = getRewritePossibilities(expression, pathsAlreadyRewrittenText)
       val premisesWithReferencedLines = stepProvingContext.allPremises.map(p => (p.statement, Some(p.referencedLine)))
-      val extractedPremises = stepProvingContext.allPremiseExtractions.map(_.statement).filter(s => !premisesWithReferencedLines.exists(_._1 == s)).map(_ -> None)
+      val extractedPremises = stepProvingContext.knownStatementsFromPremises.map(_.statement).filter(s => !premisesWithReferencedLines.exists(_._1 == s)).map(_ -> None)
       (premisesWithReferencedLines ++ extractedPremises).mapCollect { case (statement, reference) =>
         for {
           (lhs, rhs) <- equality.unapply(statement)

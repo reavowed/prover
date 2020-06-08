@@ -5,7 +5,7 @@ trait SubstitutionContext {
 }
 
 object SubstitutionContext {
-  private def withDepth(depth: Int) = new SubstitutionContext {
+  def withDepth(depth: Int) = new SubstitutionContext {
     override def externalDepth: Int = depth
   }
   def withExtraParameter(implicit substitutionContext: SubstitutionContext): SubstitutionContext = withExtraParameters(1)

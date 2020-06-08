@@ -167,7 +167,7 @@ object SubstatementExtractor {
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[ExtractionFromSinglePremise] = {
-    getExtractionsRecursive(sourceStatement, variableTracker).map(o => o.copy(derivation = groupStepsByDefinition(o.derivation, None)))
+    getExtractionsRecursive(sourceStatement, variableTracker)
   }
 
   def getInferenceExtractions(inference: Inference)(implicit provingContext: ProvingContext): Seq[InferenceExtraction] = {
@@ -192,76 +192,47 @@ object SubstatementExtractor {
   }
 
   def groupStepsByDefinition(steps: Seq[DerivationStep], initialMainStep: Option[DerivationStep])(implicit provingContext: ProvingContext): Seq[DerivationStep] = {
+    val deconstructionInferenceIds = provingContext.entryContext.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
     val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
 
     var currentMainStep: Option[DerivationStep] = initialMainStep
     val currentUngroupedSteps = Seq.newBuilder[DerivationStep]
     val stepsToReturn = Seq.newBuilder[DerivationStep]
 
-    def removeUnnecessarySimplifications(steps: Seq[DerivationStep], typeSymbol: String): Seq[DerivationStep] = {
-      val definitions = provingContext.entryContext.typeStatementDefinitionsByType(typeSymbol)
-      def isTypeStatement(statement: Statement): Boolean = {
-        statement.asOptionalInstanceOf[DefinedStatement].map(_.definition).contains(provingContext.entryContext.typeDefinitions(typeSymbol).statementDefinition)
-      }
-      def isAccompanyingStatement(statement: Statement): Boolean = {
-        statement.asOptionalInstanceOf[DefinedStatement].map(_.definition).exists(definitions.contains)
-      }
-      def isCombinedTypeStatement(statement: Statement): Boolean = {
-        isTypeStatement(statement) ||
-          provingContext.entryContext.conjunctionDefinitionOption.exists { conjunction =>
-            conjunction.unapply(statement).exists { case (a, b) => isCombinedTypeStatement(a) && isAccompanyingStatement(b) }
-          }
-      }
-      @scala.annotation.tailrec
-      def helper(cleared: Seq[DerivationStep], remaining: Seq[DerivationStep]): Seq[DerivationStep] = {
-        remaining match {
-          case Nil =>
-            cleared
-          case head +: tail =>
-            if (isCombinedTypeStatement(head.statement) && tail.forall(s => structuralSimplificationIds.contains(s.inference.id)))
-              cleared :+ head
-            else
-              helper(cleared :+ head, tail)
-        }
-      }
-      helper(Nil, steps)
+    def removeStructuralSimplifications(steps: Seq[DerivationStep]): Seq[DerivationStep] = {
+      steps.filter(s => !structuralSimplificationIds.contains(s.inference.id))
     }
     def removeNonEndStructuralSimplifications(steps: Seq[DerivationStep]): Seq[DerivationStep] = {
       @scala.annotation.tailrec
-      def helper(remainingAssertions: Seq[DerivationStep], filteredAssertions: Seq[DerivationStep]): Seq[DerivationStep] = {
-        remainingAssertions match {
-          case head +: tail if structuralSimplificationIds.contains(head.inference.id) && tail.exists(a => !structuralSimplificationIds.contains(a.inference.id)) =>
-            helper(tail, filteredAssertions)
-          case head +: tail =>
-            helper(tail, filteredAssertions :+ head)
-          case Nil =>
-            filteredAssertions
+      def whileStructuralAtEnd(current: Seq[DerivationStep], end: Seq[DerivationStep]): Seq[DerivationStep] = {
+        current match {
+          case init :+ tail if structuralSimplificationIds.contains(tail.inference.id) =>
+            whileStructuralAtEnd(init, tail +: end)
+          case _ =>
+            removeStructuralSimplifications(current) ++ end
         }
       }
-      helper(steps, Nil)
+      whileStructuralAtEnd(steps, Nil)
     }
-    def groupSteps(steps: Seq[DerivationStep]): Unit = {
+    def groupSteps(steps: Seq[DerivationStep], retainEndSimplifications: Boolean): Unit = {
       currentMainStep match {
         case Some(step) =>
-          stepsToReturn += step.elideWithFollowingSteps(steps)
+          stepsToReturn += step.elideWithFollowingSteps(removeNonEndStructuralSimplifications(steps))
         case None =>
-          stepsToReturn ++= removeNonEndStructuralSimplifications(steps)
+          stepsToReturn ++= (if (retainEndSimplifications) removeNonEndStructuralSimplifications(steps) else removeStructuralSimplifications(steps))
       }
     }
 
     for (currentStep <- steps) {
-      provingContext.entryContext.typeStatementDefinitionsByType.find { case (_, definitions) =>
-        definitions.mapCollect(_.deconstructionInference).map(_.id).contains(currentStep.inference.id)
-      } match {
-        case Some((typeSymbol, _)) =>
-          groupSteps(removeUnnecessarySimplifications(currentUngroupedSteps.result(), typeSymbol))
-          currentMainStep = Some(currentStep)
-          currentUngroupedSteps.clear()
-        case None =>
-          currentUngroupedSteps += currentStep
+      if (deconstructionInferenceIds.contains(currentStep.inference.id)) {
+        groupSteps(currentUngroupedSteps.result(), false)
+        currentMainStep = Some(currentStep)
+        currentUngroupedSteps.clear()
+      } else {
+        currentUngroupedSteps += currentStep
       }
     }
-    groupSteps(currentUngroupedSteps.result())
+    groupSteps(currentUngroupedSteps.result(), true)
     stepsToReturn.result()
   }
 }

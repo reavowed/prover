@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.{f, _}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
 import net.prover.model.entries.{PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
@@ -21,6 +21,12 @@ class PremiseFinderSpec extends Specification {
       premises.zipWithIndex.foldLeft(contextWithDepth) { case (context, (premise, index)) =>
         context.addStatement(premise, PremiseReference(index))
       }
+    }
+
+    def checkFindPremiseSteps(target: Statement, premises: Seq[Statement], steps: SubstitutionContext => Seq[Step], depth: Int = 0)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
+      findPremise(target, premises, depth)(entryContext) must beSome(
+        beStepsThatMakeValidTheorem(premises, target, depth) and beEqualTo(steps(SubstitutionContext.withDepth(depth)))
+      )
     }
 
     def checkFindPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
@@ -103,7 +109,7 @@ class PremiseFinderSpec extends Specification {
         Seq(ComponentType.TermComponent("a", Nil)),
         None,
         Some("negated integer"),
-        Format.Explicit("-a", Seq("a"), false, true),
+        Format.Explicit("-%1", "-a", 2, false, true),
         Seq(ElementOf(a, Naturals)),
         Conjunction(ElementOf($, Naturals), Equals(add($, a), Zero)),
         None,
@@ -247,24 +253,6 @@ class PremiseFinderSpec extends Specification {
         Seq(ElementOf(a, PositiveNaturals)))
     }
 
-    "find premise by equality substitution for variable" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0, b -> 0))
-      checkFindPremise(
-        φ(a),
-        Seq(φ(b), Equals(a, b)))
-      checkFindPremise(
-        φ(a),
-        Seq(φ(b), Equals(b, a)))
-      checkFindPremise(
-        φ($),
-        Seq(φ($.^), Equals($, $.^)),
-        2)
-      checkFindPremise(
-        φ($),
-        Seq(φ($.^), Equals($.^, $)),
-        2)
-    }
-
     "find a premise from a fact using the first possible extraction" in {
       // If the latest extraction is used, the premise finder can actually extract that + is a function from the definition of FunctionFrom, which is not the best way of doing it
       val additionProperty = Conjunction(
@@ -305,10 +293,8 @@ class PremiseFinderSpec extends Specification {
             elided(axiom, Seq(
               assertion(axiom, Nil, Nil),
               assertion(extractRightConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))),
-            elided(FunctionFrom.statementDefinition.deconstructionInference.get, Seq(
-              assertion(FunctionFrom.statementDefinition.deconstructionInference.get, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
-              assertion(extractRightConjunct, Seq(Function(Addition), Conjunction(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals))), Nil),
-              assertion(extractLeftConjunct, Seq(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals)), Nil),
+            elided(FunctionFrom.deconstructionInference, Seq(
+              assertion(FunctionFrom.deconstructionInference, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
               assertion(reverseEquality, Nil, Seq(Domain(Addition), Product(Naturals, Naturals))))))),
           assertion(substitutionOfEquals, Seq(ForAllIn("x", $.^)(ForAllIn("y", $.^^)(φ($.^, $)))), Seq(Product(Naturals, Naturals), Domain(Addition))))(SubstitutionContext.outsideProof),
         Seq(ForAllIn("x", Product(Naturals, Naturals))(ForAllIn("y", Product(Naturals, Naturals))(φ($.^, $)))))
@@ -356,6 +342,71 @@ class PremiseFinderSpec extends Specification {
       checkFindPremise(
         ElementOf(add(a, b), Naturals),
         Seq(ElementOf(a, Naturals), ElementOf(b, Domain(IntegerEmbedding))))
+    }
+
+    "show that the result of a binary operation application is a member of the named base set" in {
+      val ∗ = TermVariablePlaceholder("∗", 0)
+      val A = TermVariablePlaceholder("A", 1)
+      val a = TermVariablePlaceholder("a", 2)
+      val b = TermVariablePlaceholder("b", 3)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(∗ -> 0, A -> 0, a -> 0, b -> 0))
+
+      // a ∗ b ∈ A
+      // a ∗ b ∈ baseSet(∗)                 (via BinaryOperationOn(∗, A) -> baseSet(∗) = A)
+      // a ∗ b ∈ range(∗)                   (via BinaryOperation(∗) -> FunctionFrom(∗, BaseSet(∗) × BaseSet(∗), BaseSet(∗)) -> Range(∗) ⊆ BaseSet(∗))
+      // (a, b) ∈ domain(∗)                 (via BinaryOperation(∗) -> Function(∗) -> Function Application Is Element of Range)
+      // (a, b) ∈ baseSet(∗) × baseSet(∗)   (via BinaryOperation(∗) -> FunctionFrom(∗, BaseSet(∗) × BaseSet(∗), BaseSet(∗)) -> Range(∗) ⊆ BaseSet(∗))
+      // a ∈ baseSet(∗)
+      // a ∈ A
+      checkFindPremiseSteps(
+        ElementOf(Apply(∗, Pair(a , b)), A),
+        Seq(Conjunction(BinaryOperation(∗), BinaryOperationOn(∗, A)), ElementOf(a, A), ElementOf(b, A)),
+        Seq(
+          elided(BinaryOperation.deconstructionInference, Seq(
+            assertion(BinaryOperation.deconstructionInference, Nil, Seq(∗)),
+            assertion(extractLeftConjunct, Seq(Function(∗), FunctionFrom(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))), Nil))), // ∗ is a function
+          elided(BinaryOperationOn.deconstructionInference, Seq(
+            assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(∗, A)),
+            assertion(reverseEquality, Nil, Seq(BaseSet(∗), A)))),                                                                  // A = BaseSet(∗)
+          assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(A, BaseSet(∗))),                                                // a ∈ baseSet(∗)
+          assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(A, BaseSet(∗))),                                                // b ∈ baseSet(∗)
+          assertion(orderedPairIsElementOfCartesianProduct, Nil, Seq(a, BaseSet(∗), b, BaseSet(∗))),                                // (a, b) ∈ baseSet(∗) × baseSet(∗)
+          elided(BinaryOperation.deconstructionInference, Seq(
+            assertion(BinaryOperation.deconstructionInference, Nil, Seq(∗)),
+            assertion(extractRightConjunct, Seq(Function(∗), FunctionFrom(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))), Nil))),  // ∗ is from baseSet(∗) × baseSet(∗) to baseSet(∗)
+          elided(FunctionFrom.deconstructionInference, Seq(
+            assertion(FunctionFrom.deconstructionInference, Nil, Seq(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))),
+            assertion(reverseEquality, Nil, Seq(Domain(∗), Product(BaseSet(∗), BaseSet(∗)))))),                                      // baseSet(∗) × baseSet(∗) = domain(∗)
+          assertion(substitutionOfEquals, Seq(ElementOf(Pair(a, b), $)), Seq(Product(BaseSet(∗), BaseSet(∗)), Domain(∗))),           // (a, b) ∈ domain(∗)
+          assertion(functionApplicationIsElementOfRange, Nil, Seq(∗, Pair(a, b))),                                                   // (a ∗ b) ∈ codomain(∗)
+          elided(FunctionFrom.deconstructionInference, Seq(
+            assertion(FunctionFrom.deconstructionInference, Nil, Seq(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))),
+            assertion(extractRightConjunct, Seq(Function(∗), Conjunction(Equals(Domain(∗), Product(BaseSet(∗), BaseSet(∗))), Subset(Range(∗), BaseSet(∗)))), Nil),
+            assertion(extractRightConjunct, Seq(Equals(Domain(∗), Product(BaseSet(∗), BaseSet(∗))), Subset(Range(∗), BaseSet(∗))), Nil))), // codomain(∗) ⊆ baseSet(∗)
+          elided(Subset.deconstructionInference.get, Seq(
+            assertion(Subset.deconstructionInference.get, Nil, Seq(Range(∗), BaseSet(∗))),
+            assertion(specification, Seq(Implication(ElementOf($, Range(∗)), ElementOf($, BaseSet(∗)))), Seq(Apply(∗, Pair(a, b)))),
+            assertion(modusPonens, Seq(ElementOf(Apply(∗, Pair(a, b)), Range(∗)), ElementOf(Apply(∗, Pair(a, b)), BaseSet(∗))), Nil))), // (a ∗ b) ∈ baseSet(∗)
+          elided(BinaryOperationOn.deconstructionInference, Seq(
+            assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(∗, A)),
+            assertion(extractRightConjunct, Seq(BinaryOperation(∗), Equals(BaseSet(∗), A)), Nil))),                                  // BaseSet(∗) = A
+          assertion(substitutionOfEquals, Seq(ElementOf(Apply(∗, Pair(a, b)), $)), Seq(BaseSet(∗), A))))
+    }
+
+    "group type relation statements appropriately" in {
+      val ∗ = TermVariablePlaceholder("∗", 0)
+      val ∘ = TermVariablePlaceholder("∘", 1)
+      val a = TermVariablePlaceholder("a", 2)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(∗ -> 0, ∘ -> 0, a -> 0))
+
+      checkFindPremiseSteps(
+        ElementOf(a, BaseSet(∗)),
+        Seq(Distributivity(∗, ∘), ElementOf(a, BaseSet(∘))),
+        Seq(
+          elided(Distributivity.deconstructionInference, Seq(
+            assertion(Distributivity.deconstructionInference, Nil, Seq(∗, ∘)),
+            assertion(reverseEquality, Nil, Seq(BaseSet(∗), BaseSet(∘))))),
+          assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(BaseSet(∘), BaseSet(∗)))))
     }
   }
 }

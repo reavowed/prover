@@ -229,22 +229,6 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val factsBySerializedStatement: Map[String, DerivationStep] = {
     facts.map { fact => fact.statement.serialized -> fact }.toMapPreservingEarliest
   }
-  lazy val factValuesToProperties: Seq[ValueToPropertyDerivation] = {
-    implicit val substitutionContext = SubstitutionContext.outsideProof
-    for {
-      equality <- equalityOption.toSeq
-      fact <- facts
-      valueToProperty <- ValueToPropertyDerivation.getFromKnownStatement(KnownStatement.fromSingleStep(fact), equality)
-    } yield valueToProperty
-  }
-  lazy val factPropertiesToValues: Seq[PropertyToValueDerivation] = {
-    implicit val substitutionContext = SubstitutionContext.outsideProof
-    for {
-      equality <- equalityOption.toSeq
-      fact <- facts
-      valueToProperty <- PropertyToValueDerivation.getFromKnownStatement(KnownStatement.fromSingleStep(fact), equality)
-    } yield valueToProperty
-  }
 
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, Int, Int, Direction)] = {
     filter(definitions.statementDeductionInferences)
