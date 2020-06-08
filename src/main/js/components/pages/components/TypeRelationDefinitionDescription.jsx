@@ -20,6 +20,6 @@ export default function TypeRelationDefinitionDescription({typeRelationDefinitio
   ];
 
   return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(typeRelationDefinition.definingStatement, variableDefinitions, entryContext)}>
-    {joinWordElements(words)}
+    {joinWordElements(words)}.
   </DisplayContext.Provider>;
 }
