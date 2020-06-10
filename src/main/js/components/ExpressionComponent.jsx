@@ -247,7 +247,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       } else if (expression instanceof RelatedObjectExpression) {
         const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
         const formattedParentTerm = renderChildExpression(expression.parentTerm, [...path, 1]);
-        const result = [formattedTerm, ` is ${expression.definition.article} {expression.definition.name} for `, formattedParentTerm];
+        const result = [formattedTerm, ` is ${expression.definition.article} ${expression.definition.name} for `, formattedParentTerm];
         const qualifier = _.find(expression.typeDefinition.qualifiers, q => q.symbol === expression.definition.requiredParentQualifier)?.qualifier || expression.typeDefinition.defaultQualifier;
         if (qualifier) {
           const formattedQualifier = renderQualifier(qualifier, expression.qualifierComponents);
