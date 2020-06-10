@@ -401,10 +401,10 @@ class PremiseFinderSpec extends Specification {
 
       checkFindPremiseSteps(
         ElementOf(a, BaseSet(∗)),
-        Seq(Distributivity(∗, ∘), ElementOf(a, BaseSet(∘))),
+        Seq(Distributive(∗, ∘), ElementOf(a, BaseSet(∘))),
         Seq(
-          elided(Distributivity.deconstructionInference, Seq(
-            assertion(Distributivity.deconstructionInference, Nil, Seq(∗, ∘)),
+          elided(Distributive.deconstructionInference, Seq(
+            assertion(Distributive.deconstructionInference, Nil, Seq(∗, ∘)),
             assertion(reverseEquality, Nil, Seq(BaseSet(∗), BaseSet(∘))))),
           assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(BaseSet(∘), BaseSet(∗)))))
     }

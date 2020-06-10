@@ -225,7 +225,8 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
   val BaseSet = simpleTermDefinition("baseSet", Seq(a), Format.Explicit("%0(%1)", "baseSet(a)", 2, false, false), Nil, Equals($, Domain(Domain(a))))
   val BinaryOperation = TypeDefinition("binaryOperation", SimpleVariableDefinition("f", Seq("infix-function")), None, None, Conjunction(Function(f), FunctionFrom(f, Product(BaseSet(f), BaseSet(f)), BaseSet(f))))
   val BinaryOperationOn = TypeQualifierDefinition("on", BinaryOperation, Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true)), None, Equals(BaseSet(f), A), ConjunctionDefinition)
-  val Distributivity = TypeRelationDefinition(
+  val Commutative = PropertyDefinitionOnType("commutative", BinaryOperation, None, None, None, None, ForAllIn("a", BaseSet(f))(ForAllIn("b", BaseSet(f))(Equals(Apply(f, Pair($.^, $)), Apply(f, Pair($, $.^))))), ConjunctionDefinition)
+  val Distributive = TypeRelationDefinition(
     "distributes",
     BinaryOperation,
     BinaryOperation,
@@ -361,12 +362,12 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
 
   val integerAdditionIsClosed = createInference("Integer Addition Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(addZ(a, b), Integers))
   val integerAdditionIsAssociative = createInference("Integer Addition Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(addZ(a, addZ(b, c)), addZ(addZ(a, b), c)))
-  val integerAdditionIsCommutative = createInference("Integer Addition Is Commutative", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Equals(addZ(a, b), addZ(b, a)))
+  val integerAdditionIsCommutative = createInference("Integer Addition Is Commutative", Nil, Commutative(IntegerAddition))
   val identityForIntegerAddition = createInference("Identity for Integer Addition", Seq(ElementOf(a, Integers)), Conjunction(Equals(addZ(a, toZ(Zero)), a), Equals(addZ(toZ(Zero), a), a)))
   val integerMultiplicationIsClosed = createInference("Integer Multiplication Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(multiplyZ(a, b), Integers))
   val integerMultiplicationIsAssociative = createInference("Integer Multiplication Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(multiplyZ(a, multiplyZ(b, c)), multiplyZ(multiplyZ(a, b), c)))
-  val integerMultiplicationIsCommutative = createInference("Integer Multiplication Is Commutative", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Equals(multiplyZ(a, b), multiplyZ(b, a)))
-  val integerMultiplicationDistributesOverAddition = createInference("Integer Multiplication Distributes over Addition", Nil, Distributivity(IntegerMultiplication, IntegerAddition))
+  val integerMultiplicationIsCommutative = createInference("Integer Multiplication Is Commutative", Nil, Commutative(IntegerMultiplication))
+  val integerMultiplicationDistributesOverAddition = createInference("Integer Multiplication Distributes over Addition", Nil, Distributive(IntegerMultiplication, IntegerAddition))
 
   val identityForIntegerMultiplication = createInference("Identity for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(One)), a), Equals(multiplyZ(toZ(One), a), a)))
   val absorberForIntegerMultiplication = createInference("Absorber for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(Zero)), toZ(Zero)), Equals(multiplyZ(toZ(Zero), a), toZ(Zero))))
@@ -407,7 +408,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     Seq(
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Union, Comprehension,
       PairSet, Domain, Range, Relation, Function, FunctionFrom,
-      BaseSet, BinaryOperation, BinaryOperationOn, Distributivity,
+      BaseSet, BinaryOperation, BinaryOperationOn, Commutative, Distributive,
       NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, MultiplicationDefinition, Apply, LessThanDefinition,
       IntegersDefinition, IntegerEmbeddingDefinition, IntegerAdditionDefinition, IntegerNegation, IntegerMultiplicationDefinition) ++
     Seq(

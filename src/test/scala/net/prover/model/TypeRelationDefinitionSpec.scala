@@ -17,7 +17,7 @@ class TypeRelationDefinitionSpec extends Specification {
 
   "type relation definition parser" should {
     "serialize and parse a definition correctly" in {
-      testParsingAndSerialization(Distributivity)
+      testParsingAndSerialization(Distributive)
     }
   }
 }

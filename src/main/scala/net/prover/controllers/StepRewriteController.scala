@@ -86,7 +86,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
             .sortBy(_._2.min)
             .map { case ((source, result), paths) =>
               InferenceRewriteSuggestion(
-                termRewriteInference.derivedSummary,
+                termRewriteInference.baseInference.summary,
                 termRewriteInference.extractionInferences.map(_.id),
                 source,
                 result,
@@ -186,7 +186,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       removedUnwrappedStepContext = removedUnwrappers.enhanceContext(implicitly)
       finalSubstitutionsAfterSource <- sourceTemplate.calculateSubstitutions(removedSource)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions")
       finalSubstitutionsAfterPremises <- inference.premises.zip(removedPremises).foldLeft(Try(finalSubstitutionsAfterSource)) { case (s, (ip, p)) => s.flatMap(ip.calculateSubstitutions(p, _)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions"))}
-      finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inference.variableDefinitions).orBadRequest("Substitutions were not complete")
+      finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
       extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
       elidedStep = Step.Elided.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).deduplicate.steps, inference).get

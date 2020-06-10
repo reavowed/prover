@@ -602,5 +602,76 @@ class StepRewriteSpec extends ControllerSpec {
           assertion(substitutionOfEquals, Seq(ForAllIn("x", a)(φ($, $.^^^))), Seq($.^, $)))),
         boundVariables)
     }
+
+    "rewrite using an inference extraction with new variables" in {
+      val e = TermVariablePlaceholder("e", 4)
+      val F = TermVariablePlaceholder("F", 5)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, e -> 0, F -> 2))
+
+      val service = mock[BookService]
+      mockReplaceStepsForInsertionAndMultipleReplacement(service)
+      val controller = new StepRewriteController(service)
+
+      val statement = Equals(F(addZ(a, b), addZ(c, d)), e)
+      controller.rewriteLeft(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        Seq(Seq(
+          rewrite(integerAdditionIsCommutative, Seq(0), Seq(Commutative.deconstructionInference, extractRightConjunct, specification, modusPonens, specification, modusPonens)),
+          rewrite(integerAdditionIsCommutative, Seq(1), Seq(Commutative.deconstructionInference, extractRightConjunct, specification, modusPonens, specification, modusPonens)))))
+
+        checkModifyStepsWithoutProps(
+          service,
+          fillerSteps(stepIndex - 4) :+ target(ElementOf(a, Integers)) :+ target(ElementOf(b, Integers)) :+ target(ElementOf(c, Integers)) :+ target(ElementOf(d, Integers)) :+ target(statement),
+          fillerSteps(stepIndex - 4) :+ target(ElementOf(a, Integers)) :+ target(ElementOf(b, Integers)) :+ target(ElementOf(c, Integers)) :+ target(ElementOf(d, Integers)) :+
+            elided(integerAdditionIsCommutative, Seq(
+              elided(integerAdditionIsCommutative, Seq(
+                elided(integerAdditionIsCommutative, Seq(
+                  elided(IntegerAdditionDefinition.definitionInference, Seq(
+                    elided(IntegerAdditionDefinition.definitionInference, Seq(
+                      assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
+                      assertion(extractRightConjunct, Seq(BinaryOperation(IntegerAddition), BinaryOperationOn(IntegerAddition, Integers)), Nil))),
+                    elided(BinaryOperationOn.deconstructionInference, Seq(
+                      assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
+                      assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
+                  assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(Integers, BaseSet(IntegerAddition))),
+                  assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(Integers, BaseSet(IntegerAddition))),
+                  elided(integerAdditionIsCommutative, Seq(
+                    assertion(integerAdditionIsCommutative, Nil, Nil),
+                    elided(Commutative.deconstructionInference, Seq(
+                      assertion(Commutative.deconstructionInference, Nil, Seq(IntegerAddition)),
+                      assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(addZ($.^, $), addZ($, $.^))))), Seq(a)),
+                      assertion(modusPonens, Seq(ElementOf(a, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(addZ(a, $), addZ($, a)))), Nil),
+                      assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), Equals(addZ(a, $), addZ($, a)))), Seq(b)),
+                      assertion(modusPonens, Seq(ElementOf(b, BaseSet(IntegerAddition)), Equals(addZ(a, b), addZ(b, a))), Nil))))))),
+                assertion(substitutionOfEqualsIntoFunction, Nil, Seq(addZ(a, b), addZ(b, a), F($, addZ(c, d)))))),
+
+              elided(integerAdditionIsCommutative, Seq(
+                elided(integerAdditionIsCommutative, Seq(
+                  elided(IntegerAdditionDefinition.definitionInference, Seq(
+                    elided(IntegerAdditionDefinition.definitionInference, Seq(
+                      assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
+                      assertion(extractRightConjunct, Seq(BinaryOperation(IntegerAddition), BinaryOperationOn(IntegerAddition, Integers)), Nil))),
+                    elided(BinaryOperationOn.deconstructionInference, Seq(
+                      assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
+                      assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
+                  assertion(substitutionOfEquals, Seq(ElementOf(c, $)), Seq(Integers, BaseSet(IntegerAddition))),
+                  assertion(substitutionOfEquals, Seq(ElementOf(d, $)), Seq(Integers, BaseSet(IntegerAddition))),
+                  elided(integerAdditionIsCommutative, Seq(
+                    assertion(integerAdditionIsCommutative, Nil, Nil),
+                    elided(Commutative.deconstructionInference, Seq(
+                      assertion(Commutative.deconstructionInference, Nil, Seq(IntegerAddition)),
+                      assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(addZ($.^, $), addZ($, $.^))))), Seq(c)),
+                      assertion(modusPonens, Seq(ElementOf(c, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(addZ(c, $), addZ($, c)))), Nil),
+                      assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), Equals(addZ(c, $), addZ($, c)))), Seq(d)),
+                      assertion(modusPonens, Seq(ElementOf(d, BaseSet(IntegerAddition)), Equals(addZ(c, d), addZ(d, c))), Nil))))))),
+                assertion(substitutionOfEqualsIntoFunction, Nil, Seq(addZ(c, d), addZ(d, c), F(addZ(b, a), $))))),
+              assertion(equalityIsTransitive, Nil, Seq(F(addZ(a, b), addZ(c, d)), F(addZ(b, a), addZ(c, d)), F(addZ(b, a), addZ(d, c)))))) :+
+            target(Equals(F(addZ(b, a), addZ(d, c)), e)) :+
+            assertion(equalityIsTransitive, Nil, Seq(F(addZ(a, b), addZ(c, d)), F(addZ(b, a), addZ(d, c)), e)))
+    }
   }
 }
