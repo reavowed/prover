@@ -28,7 +28,7 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
     stepContext.addBoundVariable(variableName).atIndex(0)
   }
   def enhanceWrapper(wrapper: Wrapper[Term, Statement]): Wrapper[Term, Statement] = {
-    new Wrapper((t, sc) => addToStatement(wrapper(t)(SubstitutionContext.withExtraParameter(sc))))
+    Wrapper((t, sc) => addToStatement(wrapper(t)(SubstitutionContext.withExtraParameter(sc))))
   }
   def addToStatement(statement: Statement): Statement = {
     generalizationDefinition(variableName, statement)
@@ -67,7 +67,7 @@ case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: Deduct
     stepContext.addStatement(antecedent, "a").atIndex(0)
   }
   def enhanceWrapper(wrapper: Wrapper[Term, Statement]): Wrapper[Term, Statement] = {
-    new Wrapper((t, sc) => addToStatement(wrapper(t)(sc)))
+    Wrapper((t, sc) => addToStatement(wrapper(t)(sc)))
   }
   def addToStatement(statement: Statement): Statement = {
     deductionDefinition(antecedent, statement)

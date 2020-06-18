@@ -5,12 +5,13 @@ import net.prover.model.{Inference, Substitutions}
 import net.prover.model.expressions.{Expression, Term}
 import net.prover.model.proof.SubstatementExtractor.{Extraction, InferenceExtraction}
 import net.prover.model.proof.{StepProvingContext, SubstitutionContext}
+import net.prover.util.Direction
 
 sealed trait RearrangementOperation {
   def inferenceExtraction: InferenceExtraction
   def inference: Inference = inferenceExtraction.inference
-  protected def source(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term
-  protected def result(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term
+  def source(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term
+  def result(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term
   def rearrangementStep[T <: Expression](terms: Seq[Term], wrapper: Wrapper[Term, T], expansion: Expansion[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = {
     for {
       (assertionStep, targetSteps) <- ExtractionHelper.getInferenceExtractionWithPremises(
@@ -30,6 +31,11 @@ sealed trait RearrangementOperation {
       reversalStep = reversal.assertionStep(wrapper(result(terms)), wrapper(source(terms)))
     } yield RearrangementStep(wrapper(source(terms)), forwardStep.substeps :+ reversalStep, inference.summary)
   }
+  def rearrangementStep[T <: Expression](terms: Seq[Term], direction: Direction, wrapper: Wrapper[Term, T], expansion: Expansion[T], reversal: Reversal[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = {
+    direction.getSource(
+      rearrangementStep(terms, wrapper, expansion),
+      reversedRearrangementStep(terms, wrapper, expansion, reversal))
+  }
 }
 object RearrangementOperation {
   trait Unary extends RearrangementOperation {
@@ -39,6 +45,7 @@ object RearrangementOperation {
     override def result(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term = result(terms(0))
     def rearrangementStep[T <: Expression](a: Term, wrapper: Wrapper[Term, T], expansion: Expansion[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = rearrangementStep(Seq(a), wrapper, expansion)
     def reversedRearrangementStep[T <: Expression](a: Term, wrapper: Wrapper[Term, T], expansion: Expansion[T], reversal: Reversal[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = reversedRearrangementStep(Seq(a), wrapper, expansion, reversal)
+    def rearrangementStep[T <: Expression](a: Term, direction: Direction, wrapper: Wrapper[Term, T], expansion: Expansion[T], reversal: Reversal[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = rearrangementStep(Seq(a), direction, wrapper, expansion, reversal)
   }
   trait Binary extends RearrangementOperation {
     def source(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term
@@ -47,6 +54,7 @@ object RearrangementOperation {
     override def result(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term = result(terms(0), terms(1))
     def rearrangementStep[T <: Expression](a: Term, b: Term, wrapper: Wrapper[Term, T], expansion: Expansion[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = rearrangementStep(Seq(a, b), wrapper, expansion)
     def reversedRearrangementStep[T <: Expression](a: Term, b: Term, wrapper: Wrapper[Term, T], expansion: Expansion[T], reversal: Reversal[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = reversedRearrangementStep(Seq(a, b), wrapper, expansion, reversal)
+    def rearrangementStep[T <: Expression](a: Term, b: Term, direction: Direction, wrapper: Wrapper[Term, T], expansion: Expansion[T], reversal: Reversal[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = rearrangementStep(Seq(a, b), direction, wrapper, expansion, reversal)
   }
   trait Ternary extends RearrangementOperation {
     def source(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term
@@ -55,6 +63,7 @@ object RearrangementOperation {
     override def result(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term = result(terms(0), terms(1), terms(2))
     def rearrangementStep[T <: Expression](a: Term, b: Term, c: Term, wrapper: Wrapper[Term, T], expansion: Expansion[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = rearrangementStep(Seq(a, b, c), wrapper, expansion)
     def reversedRearrangementStep[T <: Expression](a: Term, b: Term, c: Term, wrapper: Wrapper[Term, T], expansion: Expansion[T], reversal: Reversal[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = reversedRearrangementStep(Seq(a, b, c), wrapper, expansion, reversal)
+    def rearrangementStep[T <: Expression](a: Term, b: Term, c: Term, direction: Direction, wrapper: Wrapper[Term, T], expansion: Expansion[T], reversal: Reversal[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = rearrangementStep(Seq(a, b, c), direction, wrapper, expansion, reversal)
   }
 }
 
@@ -66,11 +75,15 @@ case class Commutativity(operator: BinaryOperator, inferenceExtraction: Inferenc
   override def source(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(a, b)
   override def result(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(b, a)
 }
-case class LeftDistributivity(distributor: RearrangeableOperator, distributee: RearrangeableOperator, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Ternary {
+trait Distributivity extends RearrangementOperation.Ternary {
+  def distributor: RearrangeableOperator
+  def distributee: RearrangeableOperator
+}
+case class LeftDistributivity(distributor: RearrangeableOperator, distributee: RearrangeableOperator, inferenceExtraction: InferenceExtraction) extends Distributivity {
   override def source(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = distributor(a, distributee(b, c))
   override def result(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = distributee(distributor(a, b), distributor(a, c))
 }
-case class RightDistributivity(distributor: RearrangeableOperator, distributee: RearrangeableOperator, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Ternary {
+case class RightDistributivity(distributor: RearrangeableOperator, distributee: RearrangeableOperator, inferenceExtraction: InferenceExtraction) extends Distributivity {
   override def source(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = distributor(distributee(a, b), c)
   override def result(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = distributee(distributor(a, c), distributor(b, c))
 }

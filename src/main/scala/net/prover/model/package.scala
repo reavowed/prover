@@ -77,6 +77,7 @@ package object model {
   implicit class Tuple3Ops[S,T,U](tuple: (S, T, U)) {
     def map1[R](f: S => R): (R, T, U) = (f(tuple._1), tuple._2, tuple._3)
     def map2[R](f: T => R): (S, R, U) = (tuple._1, f(tuple._2), tuple._3)
+    def map3[R](f: U => R): (S, T, R) = (tuple._1, tuple._2, f(tuple._3))
     def optionMap2[R](f: T => Option[R]): Option[(S, R, U)] = f(tuple._2).map((tuple._1, _, tuple._3))
   }
   implicit class Tuple4Ops[T1, T2, T3, T4](tuple: (T1, T2, T3, T4)) {

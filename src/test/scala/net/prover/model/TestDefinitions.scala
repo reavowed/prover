@@ -298,7 +298,7 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
 
   def toZ(t: Term) = Apply(IntegerEmbedding, t)
   def addZ(l: Term, r: Term) = Apply(IntegerAddition, Pair(l, r))
-  def multiplyZ(l: Term, r: Term) = Apply(IntegerMultiplication, Pair(l, r))
+  def mulZ(l: Term, r: Term) = Apply(IntegerMultiplication, Pair(l, r))
 }
 
 trait TestInferenceDefinitions extends TestExpressionDefinitions {
@@ -364,14 +364,14 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
   val integerAdditionIsAssociative = createInference("Integer Addition Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(addZ(a, addZ(b, c)), addZ(addZ(a, b), c)))
   val integerAdditionIsCommutative = createInference("Integer Addition Is Commutative", Nil, Commutative(IntegerAddition))
   val identityForIntegerAddition = createInference("Identity for Integer Addition", Seq(ElementOf(a, Integers)), Conjunction(Equals(addZ(a, toZ(Zero)), a), Equals(addZ(toZ(Zero), a), a)))
-  val integerMultiplicationIsClosed = createInference("Integer Multiplication Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(multiplyZ(a, b), Integers))
-  val integerMultiplicationIsAssociative = createInference("Integer Multiplication Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(multiplyZ(a, multiplyZ(b, c)), multiplyZ(multiplyZ(a, b), c)))
+  val integerMultiplicationIsClosed = createInference("Integer Multiplication Is Closed", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), ElementOf(mulZ(a, b), Integers))
+  val integerMultiplicationIsAssociative = createInference("Integer Multiplication Is Associative", Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)), Equals(mulZ(a, mulZ(b, c)), mulZ(mulZ(a, b), c)))
   val integerMultiplicationIsCommutative = createInference("Integer Multiplication Is Commutative", Nil, Commutative(IntegerMultiplication))
   val integerMultiplicationDistributesOverAddition = createInference("Integer Multiplication Distributes over Addition", Nil, Distributive(IntegerMultiplication, IntegerAddition))
 
-  val identityForIntegerMultiplication = createInference("Identity for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(One)), a), Equals(multiplyZ(toZ(One), a), a)))
-  val absorberForIntegerMultiplication = createInference("Absorber for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(multiplyZ(a, toZ(Zero)), toZ(Zero)), Equals(multiplyZ(toZ(Zero), a), toZ(Zero))))
-  val negationOfIntegerMultiplication = createInference("Negation of Integer Multipliciation", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Conjunction(Equals(multiplyZ(a, IntegerNegation(b)), IntegerNegation(multiplyZ(a, b))), Equals(multiplyZ(IntegerNegation(a), b), IntegerNegation(multiplyZ(a, b)))))
+  val identityForIntegerMultiplication = createInference("Identity for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(mulZ(a, toZ(One)), a), Equals(mulZ(toZ(One), a), a)))
+  val absorberForIntegerMultiplication = createInference("Absorber for Integer Multiplication", Seq(ElementOf(a, Integers)), Conjunction(Equals(mulZ(a, toZ(Zero)), toZ(Zero)), Equals(mulZ(toZ(Zero), a), toZ(Zero))))
+  val negationOfIntegerMultiplication = createInference("Negation of Integer Multipliciation", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Conjunction(Equals(mulZ(a, IntegerNegation(b)), IntegerNegation(mulZ(a, b))), Equals(mulZ(IntegerNegation(a), b), IntegerNegation(mulZ(a, b)))))
 }
 
 trait StepHelpers extends TestVariableDefinitions {

@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.model.TestDefinitions.{a, b, _}
+import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{Step, TermRearranger}
 import net.prover.util.Direction
@@ -80,7 +80,8 @@ class TermRearrangerSpec extends Specification {
     }
 
     testReversableOperationMultipleWays("natural distributivity", multiply, a, add(b, c), add(multiply(c, a), multiply(a, b)))
-    testReversableOperationMultipleWays("integer distributivity", multiplyZ, a, addZ(b, c), addZ(multiplyZ(c, a), multiplyZ(a, b)), Seq(ElementOf(a, Integers), ElementOf(b, Integers), ElementOf(c, Integers)))
+    testReversableOperationMultipleWays("integer distributivity", mulZ, a, addZ(b, c), addZ(mulZ(c, a), mulZ(a, b)), Seq(a, b, c).map(ElementOf(_, Integers)))
+    testReversableOperationMultipleWays("integer distributivity on each side", mulZ, a, addZ(mulZ(b, c), mulZ(d, b)), mulZ(b, addZ(mulZ(a, c), mulZ(d, a))), Seq(a, b, c, d).map(ElementOf(_, Integers)))
 
     "rearrange using multiple distributivities" in {
       // a(bc) + d(ec + f) = (ab + de)c + df
@@ -102,10 +103,52 @@ class TermRearrangerSpec extends Specification {
     }
 
     testReversableOperationMultipleWays("inverse", addZ, a, IntegerNegation(a), toZ(Zero), Seq(ElementOf(a, Integers)))
-    testReversableOperationMultipleWays("inverse extraction", multiplyZ, a, IntegerNegation(b), IntegerNegation(multiplyZ(a, b)), Seq(ElementOf(a, Integers), ElementOf(b, Integers)))
+    testReversableOperationMultipleWays("inverse extraction", mulZ, a, IntegerNegation(b), IntegerNegation(mulZ(a, b)), Seq(ElementOf(a, Integers), ElementOf(b, Integers)))
 
     "rearrange using inverse with extraction" in {
-      testRearranging(Equals(addZ(multiplyZ(a, b), multiplyZ(b, IntegerNegation(a))), toZ(Zero)), Seq(ElementOf(a, Integers), ElementOf(b, Integers)))
+      testRearranging(Equals(addZ(mulZ(a, b), mulZ(b, IntegerNegation(a))), toZ(Zero)), Seq(ElementOf(a, Integers), ElementOf(b, Integers)))
+    }
+
+    "rearrange using an inner distributivity" in {
+      // a(b(c+d)) = a(bc) + (ab)d
+      testRearranging(
+        Equals(
+          mulZ(a, mulZ(b, addZ(c, d))),
+          addZ(mulZ(a, mulZ(b, c)), mulZ(mulZ(a, b), d))),
+        Seq(a, b, c, d).map(ElementOf(_, Integers)))
+    }
+
+    "rearrange using an inner distributivity but backwards" in {
+      // a(bc) + (ab)d = a(b(c+d))
+      testRearranging(
+        Equals(
+          addZ(mulZ(a, mulZ(b, c)), mulZ(mulZ(a, b), d)),
+          mulZ(a, mulZ(b, addZ(c, d)))),
+        Seq(a, b, c, d).map(ElementOf(_, Integers)))
+    }
+
+    "rearrange using two distributivities" in {
+      // (a+b)(c+d) = (ad + ca) + (d+c)b
+      testRearranging(
+        Equals(
+          mulZ(addZ(a, b), addZ(c, d)),
+          addZ(addZ(mulZ(a, d), mulZ(c, a)), mulZ(addZ(d, c), b))),
+        Seq(a, b, c, d).map(ElementOf(_, Integers)))
+    }
+
+    "complex distributivity" in {
+      //  (a(cf + de))((bd)(bf)) = (b(df))((ac)(bf) + (bd)(ae))
+
+      // b(a(cf+de)) = (ac)(bf) + (bd)(ae)
+      testRearranging(
+        Equals(
+          mulZ(
+            mulZ(a, addZ(mulZ(c, f), mulZ(d, e))),
+            mulZ(mulZ(b, d), mulZ(b, f))),
+          mulZ(
+            mulZ(b, mulZ(d, f)),
+            addZ(mulZ(mulZ(a, c), mulZ(b, f)), mulZ(mulZ(b, d), mulZ(a, e))))),
+        Seq(a, b, c, d, e, f).map(ElementOf(_, Integers)))
     }
   }
 }

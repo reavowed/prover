@@ -54,11 +54,11 @@ object ChainingMethods {
       } yield {
         secondRelation -> Step.Elided.forInference(substitution.inference)(Seq(
           reversal.assertionStep(intermediate, source),
-          substitution.assertionStep(intermediate, source, new Wrapper(secondRelation(_, target)(_)))))
+          substitution.assertionStep(intermediate, source, Wrapper(secondRelation(_, target)(_)))))
       }
       def bySubstitutionFromSecond = for {
         substitution <- provingContext.substitutions.find(_.relation == secondRelation)
-      } yield firstRelation -> substitution.assertionStep(intermediate, target, new Wrapper(firstRelation(source, _)(_)))
+      } yield firstRelation -> substitution.assertionStep(intermediate, target, Wrapper(firstRelation(source, _)(_)))
       super.getChainingStep(source, intermediate, target, firstRelation, secondRelation) orElse bySubstitutionFromFirst orElse bySubstitutionFromSecond
     }
     override def parser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Term] = Term.parser

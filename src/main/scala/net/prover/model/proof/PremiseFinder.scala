@@ -118,7 +118,7 @@ object PremiseFinder {
         KnownEquality(source, result, equality, equalityDerivation) <- stepProvingContext.knownEqualities
         if result == binaryRelationStatement.right
         innerDerivation <- withoutRenaming(binaryRelationStatement.withNewRight(source))
-        renameStep = DerivationStep.fromAssertion(equality.substitution.assertionStep(source, result, new Wrapper[Term, Statement]((t, c) => binaryRelationStatement.relation(binaryRelationStatement.left, t)(c))))
+        renameStep = DerivationStep.fromAssertion(equality.substitution.assertionStep(source, result, Wrapper[Term, Statement]((t, c) => binaryRelationStatement.relation(binaryRelationStatement.left, t)(c))))
       } yield innerDerivation ++ equalityDerivation :+ renameStep).headOption
     }
   }
