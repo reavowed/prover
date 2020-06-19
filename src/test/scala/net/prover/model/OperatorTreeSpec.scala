@@ -51,5 +51,13 @@ class OperatorTreeSpec extends Specification {
     "collapse absorbers as identity" in {
       testCanonicalForm(add(multiply(c, a), multiply(Zero, d)), multiply(a, c))
     }
+
+    "eliminate inverses" in {
+      testCanonicalForm(addZ(addZ(c, IntegerNegation(b)), addZ(b, a)), addZ(a, c))
+    }
+
+    "replace fully eliminated inverses with identity" in {
+      testCanonicalForm(addZ(addZ(a, IntegerNegation(b)), addZ(b, IntegerNegation(a))), toZ(Zero))
+    }
   }
 }

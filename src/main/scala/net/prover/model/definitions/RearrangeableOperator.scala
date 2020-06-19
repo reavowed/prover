@@ -12,7 +12,7 @@ case class RearrangeableOperator(
   rightIdentities: Seq[RightIdentity],
   leftAbsorbers: Seq[LeftAbsorber],
   rightAbsorbers: Seq[RightAbsorber],
-  inverses: Seq[DoubleSidedInverse]
+  inverse: Option[DoubleSidedInverse]
 ) {
   def apply(left: Term, right: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(left, right)
   def unapply(term: Term)(implicit substitutionContext: SubstitutionContext): Option[(Term, Term)] = operator.unapply(term)

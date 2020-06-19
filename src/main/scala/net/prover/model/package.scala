@@ -311,17 +311,12 @@ package object model {
         } yield map + (key -> value)
       }
     }
-    def removeAtIndex(index: Int): Seq[T] = {
-      if (index >= 0)
-        seq.take(index) ++ seq.drop(index + 1)
+    def removeSingleValue(t: T): Option[Seq[T]] = {
+      val index = seq.indexOf(t)
+      if (index == -1)
+        None
       else
-        seq
-    }
-    def removeSingleValue(t: T): Seq[T] = {
-      removeAtIndex(seq.indexOf(t))
-    }
-    def removeWhere(f: T => Boolean): Seq[T] = {
-      removeAtIndex(seq.indexWhere(f))
+        Some(seq.take(index) ++ seq.drop(index + 1))
     }
 
     def dropUntil(p: T => Boolean): Seq[T] = {

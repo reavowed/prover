@@ -242,7 +242,7 @@ case class Definitions(rootEntryContext: EntryContext) {
           if rhs == absorberConstant && ExpressionUtils.isCombinationOfTermConstants(absorberConstant)
         } yield RightAbsorber(operator, absorberConstant, inferenceExtraction)
       }
-      val inverses = for {
+      val inverse = (for {
         rightIdentity <- rightIdentities
         leftIdentity <- leftIdentities
         if rightIdentity.identityTerm == leftIdentity.identityTerm
@@ -257,8 +257,8 @@ case class Definitions(rootEntryContext: EntryContext) {
         operator,
         inverseOperator,
         RightInverse(operator, inverseOperator, identityTerm, rightInverseInferenceExtraction),
-        LeftInverse(operator, inverseOperator, identityTerm, leftInverseInferenceExtraction))
-      RearrangeableOperator(operator, commutativity, associativity, leftIdentities, rightIdentities, leftAbsorbers, rightAbsorbers, inverses)
+        LeftInverse(operator, inverseOperator, identityTerm, leftInverseInferenceExtraction))).headOption
+      RearrangeableOperator(operator, commutativity, associativity, leftIdentities, rightIdentities, leftAbsorbers, rightAbsorbers, inverse)
     }
     for {
       equality <- equalityOption.toSeq
@@ -293,7 +293,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     } yield RightDistributivity(distributor, distributee, inferenceExtraction)
   }
 
-  lazy val unaryOperators: Seq[UnaryOperator] = rearrangeableOperators.flatMap(_.inverses).map(_.inverseOperator)
+  lazy val unaryOperators: Seq[UnaryOperator] = rearrangeableOperators.flatMap(_.inverse).map(_.inverseOperator)
   lazy val leftOperatorExtractions: Seq[LeftOperatorExtraction] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {

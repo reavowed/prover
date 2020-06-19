@@ -66,10 +66,45 @@ case class BinaryOperatorTree(operator: RearrangeableOperator, left: OperatorTre
   override def canonicalForm(implicit provingContext: ProvingContext): OperatorTree = {
     val (canonicalOperator, canonicalComponents) = OperatorTree.getComponentsOfCanonicalForm(operator, Nil, Seq(left.canonicalForm, right.canonicalForm))
     val absorbers = canonicalOperator.leftAbsorbers.map(a => OperatorTree.parse(a.absorberTerm))
-    absorbers.find(canonicalComponents.contains) getOrElse {
+
+    def removeIdentities(components: Seq[OperatorTree]): Seq[OperatorTree] = {
       val identities = canonicalOperator.leftIdentities.map(i => OperatorTree.parse(i.identityTerm))
-      val canonicalComponentsWithoutIdentities = canonicalComponents.filter(c => !identities.contains(c))
-      OperatorTree.rebuild(canonicalOperator, canonicalComponentsWithoutIdentities.sortBy(_.term.serialized))
+      components.filter(c => !identities.contains(c))
+    }
+    def collapseInverses(components: Seq[OperatorTree]): Seq[OperatorTree] = {
+      canonicalOperator.inverse match {
+        case Some(inverse) =>
+          def helper(previous: Seq[OperatorTree], next: Seq[OperatorTree]): Seq[OperatorTree] = next match {
+            case (current @ UnaryOperatorTree(inverse.inverseOperator, inner)) +: tail =>
+              previous.removeSingleValue(inner) match {
+                case Some(newPrevious) =>
+                  helper(newPrevious, tail)
+                case None =>
+                  tail.removeSingleValue(inner) match {
+                    case Some(newTail) =>
+                      helper(previous, newTail)
+                    case None =>
+                      helper(previous :+ current, tail)
+                  }
+              }
+            case current +: tail =>
+              helper(previous :+ current, tail)
+            case Nil =>
+              previous match {
+                case Nil =>
+                  Seq(OperatorTree.parse(inverse.leftInverse.identityTerm))
+                case _ =>
+                  previous
+              }
+          }
+          helper(Nil, components)
+        case None =>
+          components
+      }
+    }
+
+    absorbers.find(canonicalComponents.contains) getOrElse {
+      OperatorTree.rebuild(canonicalOperator, collapseInverses(removeIdentities(canonicalComponents)).sortBy(_.term.serialized))
     }
   }
 }

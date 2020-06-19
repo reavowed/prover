@@ -119,7 +119,7 @@ trait ChainingStepEditing extends BookModification {
                 followingStepPath = outerStepContext.atIndex(last + 1).stepReference.stepPath
                 followingPremises = followingStep.recursivePremises.filter(p => !p.asOptionalInstanceOf[SingleLinePremise].flatMap(_.referencedLine.asOptionalInstanceOf[StepReference]).exists(_.stepPath.startsWith(followingStepPath)))
                 if followingPremises.exists(p => p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath)))
-                otherPremise <- followingPremises.removeWhere(p => p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath))).single
+                otherPremise <- followingPremises.filter(p => !p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath))).single
                 (initialRelation, initialLhs, _) <- ChainingMethods.getJoiner(otherPremise.statement)
                 if (initialLhs == followingLhs)
               } yield {

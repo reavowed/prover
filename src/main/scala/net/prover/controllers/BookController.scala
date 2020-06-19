@@ -55,7 +55,7 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
       val entriesAfterInThisBook = BookService.getChaptersWithKeys(book).view
         .dropUntil { case (_, key) => key == chapterKey }
         .flatMap(_._1.entries)
-      val entriesInOtherBooks = (BookService.getBooksWithKeys(books).removeWhere(_._1 == book)).view
+      val entriesInOtherBooks = (BookService.getBooksWithKeys(books).filter(_._1 != book)).view
         .dropUntil{ case (_, key) => key == bookKey }
         .flatMap(_._1.chapters)
         .flatMap(_.entries)
@@ -63,7 +63,7 @@ class BookController @Autowired() (val bookService: BookService) extends BookMod
         (chapter, _) <- BookService.getChaptersWithKeys(book).find { case (_, key) => key == chapterKey } orNotFound s"Chapter $chapterKey"
         _ <- findUsage(entriesAfterInThisBook ++ entriesInOtherBooks, chapter.entries).badRequestIfDefined { case (usedEntry, entryUsing) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
       } yield {
-        book.copy(chapters = BookService.getChaptersWithKeys(book).removeWhere { case (_, key ) => key == chapterKey }.map(_._1))
+        book.copy(chapters = BookService.getChaptersWithKeys(book).filter { case (_, key ) => key != chapterKey }.map(_._1))
       }
     }).map { case (books, _, book) => createBookProps(book, bookKey, BookService.getBooksWithKeys(books)) }.toResponseEntity
   }
