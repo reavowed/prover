@@ -102,103 +102,175 @@ case class TermRearranger[T <: Expression](
     }
   }
 
-  private def matchTreesWithoutCommutingBaseOrTransformingTarget(
+  private def matchBinaryTreesWithSameOperatorWithoutCommuting(
+    operator: RearrangeableOperator,
     base: BinaryOperatorTree,
     target: BinaryOperatorTree,
     deconstruction: Seq[DeconstructionStep]
   ): Option[Seq[RearrangementStep[T]]] = {
-    if (base.operator == target.operator) {
-      val operator = base.operator
-      def directly = for {
-        leftSteps <- matchTrees(base.left, target.left, deconstruction :+ RightBinaryDeconstructionStep(operator, base.right))
-        rightSteps <- matchTrees(base.right, target.right, deconstruction :+ LeftBinaryDeconstructionStep(operator, target.left))
-      } yield leftSteps ++ rightSteps
-      def byAssociating = for {
-        BinaryOperatorTree(`operator`, baseLeftLeft, baseLeftRight) <- base.left.asOptionalInstanceOf[BinaryOperatorTree]
-        innerSteps <- matchTreesWithoutCommutingBaseOrTransformingTarget(BinaryOperatorTree(operator, baseLeftLeft, BinaryOperatorTree(operator, baseLeftRight, base.right)), target, deconstruction)
-        associativityStep <- operator.associativity.reversedRearrangementStep(baseLeftLeft, baseLeftRight, base.right, getWrapper(deconstruction), expansion, reversal)
-      } yield associativityStep +: innerSteps
-      def byAssociatingAndCommuting = for {
-        BinaryOperatorTree(`operator`, baseLeftLeft, baseLeftRight) <- base.left.asOptionalInstanceOf[BinaryOperatorTree]
-        innerSteps <- matchTreesWithoutCommutingBaseOrTransformingTarget(BinaryOperatorTree(operator, baseLeftRight, BinaryOperatorTree(operator, baseLeftLeft, base.right)), target, deconstruction)
-        commutativityStep <- base.operator.commutativity.rearrangementStep(baseLeftLeft, baseLeftRight, getWrapper(deconstruction :+ RightBinaryDeconstructionStep(operator, base.right)), expansion)
-        associativityStep <- operator.associativity.reversedRearrangementStep(baseLeftRight, baseLeftLeft, base.right, getWrapper(deconstruction), expansion, reversal)
-      } yield commutativityStep +: associativityStep +: innerSteps
-      def byDistributingInsideBaseLeft = (for {
-        baseLeft <- base.left.asOptionalInstanceOf[BinaryOperatorTree].toSeq
-        if baseLeft.operator != operator
-        (distributedBaseLeft, distributionSteps) <- findDistributivity(baseLeft, deconstruction :+ RightBinaryDeconstructionStep(operator, base.right), operator, Direction.Forward)
-        innerSteps <- matchTreesWithoutCommutingBaseOrTransformingTarget(BinaryOperatorTree(operator, distributedBaseLeft, base.right), target, deconstruction)
-      } yield distributionSteps ++ innerSteps).headOption
-      def byDistributingBoth = (for {
-        distributivityOperator <- (provingContext.leftDistributivities ++ provingContext.rightDistributivities).filter(_.distributor == operator).map(_.distributee).distinct
-        (distributedBase, baseDistributionSteps) <- findDistributivity(base, deconstruction, distributivityOperator, Direction.Forward)
-        (distributedTarget, targetDistributionSteps) <- findDistributivity(target, deconstruction, distributivityOperator, Direction.Reverse)
-        innerSteps <- matchTrees(distributedBase, distributedTarget, deconstruction)
-      } yield (baseDistributionSteps ++ innerSteps ++ targetDistributionSteps)).headOption
-      directly orElse byAssociating orElse byAssociatingAndCommuting orElse byDistributingInsideBaseLeft orElse byDistributingBoth
-    } else {
-      def byDistributingBase = (for {
-        (distributedBase, distributionSteps) <- findDistributivity(base, deconstruction, target.operator, Direction.Forward)
-        innerSteps <- matchTreesWithoutTransformingTarget(distributedBase, target, deconstruction)
-      } yield distributionSteps ++ innerSteps).headOption
-      def byDistributingTarget = (for {
-        (distributedTarget, distributionSteps) <- findDistributivity(target, deconstruction, base.operator, Direction.Reverse)
-        innerSteps <- matchTreesWithoutTransformingTarget(base, distributedTarget, deconstruction)
-      } yield innerSteps ++ distributionSteps).headOption
-      byDistributingBase orElse byDistributingTarget
-    }
+    def directly = for {
+      leftSteps <- matchTrees(base.left, target.left, deconstruction :+ RightBinaryDeconstructionStep(operator, base.right))
+      rightSteps <- matchTrees(base.right, target.right, deconstruction :+ LeftBinaryDeconstructionStep(operator, target.left))
+    } yield leftSteps ++ rightSteps
+    def byAssociating = for {
+      BinaryOperatorTree(`operator`, baseLeftLeft, baseLeftRight) <- base.left.asOptionalInstanceOf[BinaryOperatorTree]
+      innerSteps <- matchBinaryTreesWithSameOperatorWithoutCommuting(operator, BinaryOperatorTree(operator, baseLeftLeft, BinaryOperatorTree(operator, baseLeftRight, base.right)), target, deconstruction)
+      associativityStep <- operator.associativity.reversedRearrangementStep(baseLeftLeft, baseLeftRight, base.right, getWrapper(deconstruction), expansion, reversal)
+    } yield associativityStep +: innerSteps
+    def byAssociatingAndCommuting = for {
+      BinaryOperatorTree(`operator`, baseLeftLeft, baseLeftRight) <- base.left.asOptionalInstanceOf[BinaryOperatorTree]
+      innerSteps <- matchBinaryTreesWithSameOperatorWithoutCommuting(operator, BinaryOperatorTree(operator, baseLeftRight, BinaryOperatorTree(operator, baseLeftLeft, base.right)), target, deconstruction)
+      commutativityStep <- base.operator.commutativity.rearrangementStep(baseLeftLeft, baseLeftRight, getWrapper(deconstruction :+ RightBinaryDeconstructionStep(operator, base.right)), expansion)
+      associativityStep <- operator.associativity.reversedRearrangementStep(baseLeftRight, baseLeftLeft, base.right, getWrapper(deconstruction), expansion, reversal)
+    } yield commutativityStep +: associativityStep +: innerSteps
+    def byDistributingInsideBaseLeft = (for {
+      baseLeft <- base.left.asOptionalInstanceOf[BinaryOperatorTree].toSeq
+      if baseLeft.operator != operator
+      (distributedBaseLeft, distributionSteps) <- findDistributivity(baseLeft, deconstruction :+ RightBinaryDeconstructionStep(operator, base.right), operator, Direction.Forward)
+      innerSteps <- matchBinaryTreesWithSameOperatorWithoutCommuting(operator, BinaryOperatorTree(operator, distributedBaseLeft, base.right), target, deconstruction)
+    } yield distributionSteps ++ innerSteps).headOption
+    def byDistributingBoth = (for {
+      distributivityOperator <- (provingContext.leftDistributivities ++ provingContext.rightDistributivities).filter(_.distributor == operator).map(_.distributee).distinct
+      (distributedBase, baseDistributionSteps) <- findDistributivity(base, deconstruction, distributivityOperator, Direction.Forward)
+      (distributedTarget, targetDistributionSteps) <- findDistributivity(target, deconstruction, distributivityOperator, Direction.Reverse)
+      innerSteps <- matchBinaryTreesWithSameOperatorWithoutCommuting(distributivityOperator, distributedBase, distributedTarget, deconstruction)
+    } yield (baseDistributionSteps ++ innerSteps ++ targetDistributionSteps)).headOption
+    directly orElse byAssociating orElse byAssociatingAndCommuting orElse byDistributingInsideBaseLeft orElse byDistributingBoth
   }
 
-  private def matchTreesWithoutTransformingTarget(
+  private def matchBinaryTreesWithSameOperator(
+    operator: RearrangeableOperator,
     base: BinaryOperatorTree,
     target: BinaryOperatorTree,
     deconstruction: Seq[DeconstructionStep]
   ): Option[Seq[RearrangementStep[T]]] = {
-    def withoutCommuting = matchTreesWithoutCommutingBaseOrTransformingTarget(base, target, deconstruction)
+    def withoutCommuting = matchBinaryTreesWithSameOperatorWithoutCommuting(operator, base, target, deconstruction)
     def byCommuting = for {
-      innerSteps <- matchTreesWithoutCommutingBaseOrTransformingTarget(BinaryOperatorTree(base.operator, base.right, base.left), target, deconstruction)
-      commutativityStep <- base.operator.commutativity.rearrangementStep(base.left, base.right, getWrapper(deconstruction), expansion)
+      innerSteps <- matchBinaryTreesWithSameOperatorWithoutCommuting(operator, BinaryOperatorTree(operator, base.right, base.left), target, deconstruction)
+      commutativityStep <- operator.commutativity.rearrangementStep(base.left, base.right, getWrapper(deconstruction), expansion)
     } yield commutativityStep +: innerSteps
     withoutCommuting orElse byCommuting
   }
 
-  private def matchTreesWithoutTransformingTarget(
-    base: OperatorTree,
+  private def matchBinaryTreesWithDifferentOperator(
+    base: BinaryOperatorTree,
     target: BinaryOperatorTree,
     deconstruction: Seq[DeconstructionStep]
   ): Option[Seq[RearrangementStep[T]]] = {
-    base match {
-      case base: BinaryOperatorTree =>
-        matchTreesWithoutTransformingTarget(base, target, deconstruction)
+    def byDistributingBase = (for {
+      (distributedBase, distributionSteps) <- findDistributivity(base, deconstruction, target.operator, Direction.Forward)
+      innerSteps <- matchBinaryTreesWithSameOperator(target.operator, distributedBase, target, deconstruction)
+    } yield distributionSteps ++ innerSteps).headOption
+    def byDistributingTarget = (for {
+      (distributedTarget, distributionSteps) <- findDistributivity(target, deconstruction, base.operator, Direction.Reverse)
+      innerSteps <- matchBinaryTreesWithSameOperator(base.operator, base, distributedTarget, deconstruction)
+    } yield innerSteps ++ distributionSteps).headOption
+    byDistributingBase orElse byDistributingTarget
+  }
+
+  private def matchTreesByTransformingBase(
+    base: OperatorTree,
+    target: OperatorTree,
+    deconstruction: Seq[DeconstructionStep]
+  ): Option[Seq[RearrangementStep[T]]] = {
+    if (base == target) {
+      Some(Nil)
+    } else {
+      (base, target) match {
+        case (base: BinaryOperatorTree, target: BinaryOperatorTree) if base.operator == target.operator =>
+          matchBinaryTreesWithSameOperator(base.operator, base, target, deconstruction)
+        case (base: BinaryOperatorTree, target: BinaryOperatorTree) =>
+          matchBinaryTreesWithDifferentOperator(base, target, deconstruction)
+        case _ =>
+          None
+      }
+    }
+  }
+
+  private def simplify(treeToSimplify: OperatorTree, deconstruction: Seq[DeconstructionStep], direction: Direction): Option[(OperatorTree, Seq[RearrangementStep[T]])] = {
+    treeToSimplify match {
+      case treeToSimplify: BinaryOperatorTree =>
+        def leftIdentity = (for {
+          leftIdentity <- treeToSimplify.operator.leftIdentities
+          (source, result) = direction.swapSourceAndResult(treeToSimplify.left, OperatorTree.parse(leftIdentity.identityTerm))
+          stepsToMatchLeft <- matchTrees(source, result, deconstruction :+ RightBinaryDeconstructionStep(treeToSimplify.operator, treeToSimplify.right))
+          identityStep <- leftIdentity.rearrangementStep(treeToSimplify.right, direction, getWrapper(deconstruction), expansion, reversal)
+        } yield (treeToSimplify.right, direction.append(stepsToMatchLeft, identityStep))).headOption
+        def rightIdentity = (for {
+          rightIdentity <- treeToSimplify.operator.rightIdentities
+          (source, result) = direction.swapSourceAndResult(treeToSimplify.right, OperatorTree.parse(rightIdentity.identityTerm))
+          stepsToMatchRight <- matchTrees(source, result, deconstruction :+ LeftBinaryDeconstructionStep(treeToSimplify.operator, treeToSimplify.left))
+          identityStep <- rightIdentity.rearrangementStep(treeToSimplify.left, direction, getWrapper(deconstruction), expansion, reversal)
+        } yield (treeToSimplify.left, direction.append(stepsToMatchRight, identityStep))).headOption
+        def leftAbsorber = (for {
+          leftAbsorber <- treeToSimplify.operator.leftAbsorbers
+          absorberTree = OperatorTree.parse(leftAbsorber.absorberTerm)
+          (source, result) = direction.swapSourceAndResult(treeToSimplify.left, absorberTree)
+          stepsToMatchLeft <- matchTrees(source, result, deconstruction :+ RightBinaryDeconstructionStep(treeToSimplify.operator, treeToSimplify.right))
+          absorberStep <- leftAbsorber.rearrangementStep(treeToSimplify.right, direction, getWrapper(deconstruction), expansion, reversal)
+        } yield (absorberTree, direction.append(stepsToMatchLeft, absorberStep))).headOption
+        def rightAbsorber = (for {
+          rightAbsorber <- treeToSimplify.operator.rightAbsorbers
+          absorberTree = OperatorTree.parse(rightAbsorber.absorberTerm)
+          (source, result) = direction.swapSourceAndResult(treeToSimplify.right, absorberTree)
+          stepsToMatchRight <- matchTrees(source, result, deconstruction :+ LeftBinaryDeconstructionStep(treeToSimplify.operator, treeToSimplify.left))
+          absorberStep <- rightAbsorber.rearrangementStep(treeToSimplify.left, direction, getWrapper(deconstruction), expansion, reversal)
+        } yield (absorberTree, direction.append(stepsToMatchRight, absorberStep))).headOption
+        leftIdentity orElse rightIdentity orElse leftAbsorber orElse rightAbsorber
       case _ =>
         None
     }
   }
 
-  private def matchTrees(
+  private def matchTreesBySimplifyingBase(
     base: OperatorTree,
-    target: BinaryOperatorTree,
+    target: OperatorTree,
     deconstruction: Seq[DeconstructionStep]
   ): Option[Seq[RearrangementStep[T]]] = {
-    def withoutTransformingTarget = matchTreesWithoutTransformingTarget(base, target, deconstruction)
-    def byAssociating = for {
-      BinaryOperatorTree(target.operator, targetLeftLeft, targetLeftRight) <- target.left.asOptionalInstanceOf[BinaryOperatorTree]
-      innerSteps <- matchTrees(base, BinaryOperatorTree(target.operator, targetLeftLeft, BinaryOperatorTree(target.operator, targetLeftRight, target.right)), deconstruction)
-      associativityStep <- target.operator.associativity.rearrangementStep(targetLeftLeft, targetLeftRight, target.right, getWrapper(deconstruction), expansion)
-    } yield innerSteps :+ associativityStep
-    def byDistributingOverTargetLeft = for {
-      targetLeft <- target.left.asOptionalInstanceOf[BinaryOperatorTree]
-      distributivity <- provingContext.rightDistributivities.find(d => d.distributor == target.operator && d.distributee == targetLeft.operator)
-      innerSteps <- matchTrees(base, BinaryOperatorTree(targetLeft.operator, BinaryOperatorTree(target.operator, targetLeft.left, target.right), BinaryOperatorTree(target.operator, targetLeft.right, target.right)), deconstruction)
-      distributivityStep <- distributivity.reversedRearrangementStep(targetLeft.left, targetLeft.right, target.right, getWrapper(deconstruction), expansion, reversal)
-    } yield innerSteps :+ distributivityStep
-    def byDistributingInsideTargetLeft = (for {
-      targetLeft <- target.left.asOptionalInstanceOf[BinaryOperatorTree].toSeq
-      (distributedTargetLeft, distributionSteps) <- findDistributivity(targetLeft, deconstruction :+ RightBinaryDeconstructionStep(target.operator, target.right), target.operator, Direction.Reverse)
-      innerSteps <- matchTrees(base, BinaryOperatorTree(target.operator, distributedTargetLeft, target.right), deconstruction)
-    } yield innerSteps ++ distributionSteps).headOption
-    withoutTransformingTarget orElse byAssociating orElse byDistributingOverTargetLeft orElse byDistributingInsideTargetLeft
+    matchTreesByTransformingBase(base, target, deconstruction) orElse (for {
+      (simplifiedBase, simplificationSteps) <- simplify(base ,deconstruction, Direction.Forward)
+      innerSteps <- matchTreesBySimplifyingBase(simplifiedBase, target, deconstruction)
+    } yield simplificationSteps ++ innerSteps)
+  }
+
+  private def matchTreesBySimplifyingTarget(
+    base: OperatorTree,
+    target: OperatorTree,
+    deconstruction: Seq[DeconstructionStep]
+  ): Option[Seq[RearrangementStep[T]]] = {
+    matchTreesBySimplifyingBase(base, target, deconstruction) orElse (for {
+      (simplifiedTarget, simplificationSteps) <- simplify(target ,deconstruction, Direction.Reverse)
+      innerSteps <- matchTrees(base, simplifiedTarget, deconstruction)
+    } yield simplificationSteps ++ innerSteps)
+  }
+
+  private def matchTreesByTransformingTarget(
+    base: OperatorTree,
+    target: OperatorTree,
+    deconstruction: Seq[DeconstructionStep]
+  ): Option[Seq[RearrangementStep[T]]] = {
+    matchTreesBySimplifyingTarget(base, target, deconstruction) orElse (target match {
+      case target: BinaryOperatorTree =>
+        def byAssociating = for {
+          BinaryOperatorTree(target.operator, targetLeftLeft, targetLeftRight) <- target.left.asOptionalInstanceOf[BinaryOperatorTree]
+          innerSteps <- matchTreesByTransformingTarget(base, BinaryOperatorTree(target.operator, targetLeftLeft, BinaryOperatorTree(target.operator, targetLeftRight, target.right)), deconstruction)
+          associativityStep <- target.operator.associativity.rearrangementStep(targetLeftLeft, targetLeftRight, target.right, getWrapper(deconstruction), expansion)
+        } yield innerSteps :+ associativityStep
+        def byDistributingOverTargetLeft = for {
+          targetLeft <- target.left.asOptionalInstanceOf[BinaryOperatorTree]
+          distributivity <- provingContext.rightDistributivities.find(d => d.distributor == target.operator && d.distributee == targetLeft.operator)
+          innerSteps <- matchTreesByTransformingTarget(base, BinaryOperatorTree(targetLeft.operator, BinaryOperatorTree(target.operator, targetLeft.left, target.right), BinaryOperatorTree(target.operator, targetLeft.right, target.right)), deconstruction)
+          distributivityStep <- distributivity.reversedRearrangementStep(targetLeft.left, targetLeft.right, target.right, getWrapper(deconstruction), expansion, reversal)
+        } yield innerSteps :+ distributivityStep
+        def byDistributingInsideTargetLeft = (for {
+          targetLeft <- target.left.asOptionalInstanceOf[BinaryOperatorTree].toSeq
+          (distributedTargetLeft, distributionSteps) <- findDistributivity(targetLeft, deconstruction :+ RightBinaryDeconstructionStep(target.operator, target.right), target.operator, Direction.Reverse)
+          innerSteps <- matchTreesByTransformingTarget(base, BinaryOperatorTree(target.operator, distributedTargetLeft, target.right), deconstruction)
+        } yield innerSteps ++ distributionSteps).headOption
+        byAssociating orElse byDistributingOverTargetLeft orElse byDistributingInsideTargetLeft
+      case _ =>
+        None
+    })
   }
 
   private def matchTrees(base: OperatorTree, target: OperatorTree, deconstruction: Seq[DeconstructionStep]): Option[Seq[RearrangementStep[T]]] = {
@@ -206,12 +278,8 @@ case class TermRearranger[T <: Expression](
       Some(Nil)
     else if (base.canonicalForm != target.canonicalForm)
       None
-    else target match {
-      case targetAsBinaryOperatorTree: BinaryOperatorTree =>
-        matchTrees(base, targetAsBinaryOperatorTree, deconstruction)
-      case _ =>
-        None
-    }
+    else
+      matchTreesByTransformingTarget(base, target, deconstruction)
   }
 
   private def matchTrees(base: Term, target: Term): Option[Seq[RearrangementStep[T]]] = {

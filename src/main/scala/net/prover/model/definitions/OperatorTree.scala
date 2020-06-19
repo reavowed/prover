@@ -48,18 +48,6 @@ object OperatorTree {
     }
   }
 
-  def getCanonicalForm(operatorTree: OperatorTree)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): OperatorTree = {
-    operatorTree match {
-      case BinaryOperatorTree(operator, left, right) =>
-        val (canonicalOperator, canonicalComponents) = getComponentsOfCanonicalForm(operator, Nil, Seq(left.canonicalForm, right.canonicalForm))
-        rebuild(canonicalOperator, canonicalComponents)
-      case UnaryOperatorTree(operator, inner) =>
-        UnaryOperatorTree(operator, inner.canonicalForm)
-      case Leaf(rootTerm) =>
-        Leaf(rootTerm)
-    }
-  }
-
   def rebuild(operator: RearrangeableOperator, inner: Seq[OperatorTree])(implicit substitutionContext: SubstitutionContext): OperatorTree = {
     inner.reduceRight(BinaryOperatorTree(operator, _, _))
   }
@@ -77,7 +65,12 @@ case class BinaryOperatorTree(operator: RearrangeableOperator, left: OperatorTre
   def term: Term = operator(left.term, right.term)
   override def canonicalForm(implicit provingContext: ProvingContext): OperatorTree = {
     val (canonicalOperator, canonicalComponents) = OperatorTree.getComponentsOfCanonicalForm(operator, Nil, Seq(left.canonicalForm, right.canonicalForm))
-    OperatorTree.rebuild(canonicalOperator, canonicalComponents.sortBy(_.term.serialized))
+    val absorbers = canonicalOperator.leftAbsorbers.map(a => OperatorTree.parse(a.absorberTerm))
+    absorbers.find(canonicalComponents.contains) getOrElse {
+      val identities = canonicalOperator.leftIdentities.map(i => OperatorTree.parse(i.identityTerm))
+      val canonicalComponentsWithoutIdentities = canonicalComponents.filter(c => !identities.contains(c))
+      OperatorTree.rebuild(canonicalOperator, canonicalComponentsWithoutIdentities.sortBy(_.term.serialized))
+    }
   }
 }
 object BinaryOperatorTree {

@@ -352,6 +352,7 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
   val additionIsClosed = createInference("Addition Is Closed", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(add(a, b), Naturals))
   val additionIsAssociative = createInference("Addition Is Associative", Nil, Equals(add(a, add(b, c)), add(add(a, b), c)))
   val additionIsCommutative = createInference("Addition Is Commutative", Nil, Equals(add(a, b), add(b, a)))
+  val zeroIsLeftIdentityForAddition = createInference("Adding Zero Is Same", Nil, Equals(a, add(Zero, a)))
   val zeroIsRightIdentityForAddition = createInference("Adding Zero Is Same", Nil, Equals(a, add(a, Zero)))
   val multiplicationIsAssociative = createInference("Multiplication Is Associative", Nil, Equals(multiply(a, multiply(b, c)), multiply(multiply(a, b), c)))
   val multiplicationIsCommutative = createInference("Multiplication Is Commutative", Nil, Equals(multiply(a, b), multiply(b, a)))
@@ -421,7 +422,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
       reverseEquality, reverseNegatedEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfOrderedPairInCartesianProduct, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, orderedPairIsElementOfCartesianProduct, firstElement,
       functionApplicationIsElementOfRange,
-      zeroIsANaturalNumber, oneIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, zeroIsRightIdentityForAddition,
+      zeroIsANaturalNumber, oneIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, zeroIsLeftIdentityForAddition, zeroIsRightIdentityForAddition,
       multiplicationIsAssociative, multiplicationIsCommutative, multiplicationDistributesOverAddition, oneIsIdentityForMultiplication, zeroIsAbsorberForMultiplication,
       orderingIsTransitive,
       integerAdditionIsClosed, integerAdditionIsAssociative, integerAdditionIsCommutative, identityForIntegerAddition,

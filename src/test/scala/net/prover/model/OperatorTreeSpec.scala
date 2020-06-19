@@ -39,5 +39,17 @@ class OperatorTreeSpec extends Specification {
           mulZ(a, mulZ(b, mulZ(b, mulZ(c, mulZ(d, mulZ(f, f)))))),
           mulZ(a, mulZ(b, mulZ(b, mulZ(d, mulZ(d, mulZ(e, f))))))))
     }
+
+    "remove identities" in {
+      testCanonicalForm(add(add(a, c), add(Zero, d)), add(a, add(c, d)))
+    }
+
+    "collapse absorbers" in {
+      testCanonicalForm(multiply(multiply(c, a), multiply(Zero, d)), Zero)
+    }
+
+    "collapse absorbers as identity" in {
+      testCanonicalForm(add(multiply(c, a), multiply(Zero, d)), multiply(a, c))
+    }
   }
 }
