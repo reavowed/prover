@@ -328,6 +328,13 @@ package object model {
     }
   }
 
+  implicit class SeqSeqOps[T](seq: Seq[Seq[T]]) {
+    def minByLength: Option[Seq[T]] = seq match {
+      case Nil => None
+      case seq => Some(seq.minBy(_.length))
+    }
+  }
+
   implicit class IterableOps[T](iterable: Iterable[T]) {
     def mapFind[S](f: T => Option[S]): Option[S] = {
       iterable.iterator.map(f).find(_.isDefined).flatten

@@ -8,7 +8,7 @@ import net.prover.util.Direction
 sealed trait OperatorTree {
   def term: Term
   def canonicalForm(implicit provingContext: ProvingContext): OperatorTree
-  override def toString = term.serialized
+  override def toString = term.toString
 }
 object OperatorTree {
   implicit def operatorTreeToTerm(operatorTree: OperatorTree): Term = operatorTree.term
@@ -65,10 +65,10 @@ case class BinaryOperatorTree(operator: RearrangeableOperator, left: OperatorTre
   def term: Term = operator(left.term, right.term)
   override def canonicalForm(implicit provingContext: ProvingContext): OperatorTree = {
     val (canonicalOperator, canonicalComponents) = OperatorTree.getComponentsOfCanonicalForm(operator, Nil, Seq(left.canonicalForm, right.canonicalForm))
-    val absorbers = canonicalOperator.leftAbsorbers.map(a => OperatorTree.parse(a.absorberTerm))
+    val absorbers = canonicalOperator.leftAbsorbers.map(a => Leaf(a.absorberTerm))
 
     def removeIdentities(components: Seq[OperatorTree]): Seq[OperatorTree] = {
-      val identities = canonicalOperator.leftIdentities.map(i => OperatorTree.parse(i.identityTerm))
+      val identities = canonicalOperator.leftIdentities.map(i => Leaf(i.identityTerm))
       components.filter(c => !identities.contains(c))
     }
     def collapseInverses(components: Seq[OperatorTree]): Seq[OperatorTree] = {
@@ -92,7 +92,7 @@ case class BinaryOperatorTree(operator: RearrangeableOperator, left: OperatorTre
             case Nil =>
               previous match {
                 case Nil =>
-                  Seq(OperatorTree.parse(inverse.leftInverse.identityTerm))
+                  Seq(Leaf(inverse.identity.identityTerm))
                 case _ =>
                   previous
               }

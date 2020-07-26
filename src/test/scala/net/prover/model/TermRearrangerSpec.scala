@@ -69,7 +69,7 @@ class TermRearrangerSpec extends Specification {
       Fragments.foreach(Seq((Direction.Forward, "left"), (Direction.Reverse, "right"))) { case (interiorDirection, directionDescription) =>
         Fragments.foreach(Seq((Direction.Forward, "LHS"), (Direction.Reverse, "RHS"))) { case (sideDirection, sideDescription) =>
           Fragments.foreach(Seq[(Term => Term, Term => Term, String)]((identity[Term], identity[Term], "main"), (add(_, multiply(d, e)), add(multiply(e, d), _), "inner"))) { case (sourceWrapper, resultWrapper, wrapperDescription) =>
-            s"rearrange using $directionDescription $description on $wrapperDescription $sideDescription" ! {
+            s"rearrange using $directionDescription $description on $wrapperDescription $sideDescription" >> {
               val source = f.tupled(interiorDirection.swapSourceAndResult(a, b))
               val statement = (Equals.apply(_: Term, _: Term)).tupled(sideDirection.swapSourceAndResult(sourceWrapper(source), resultWrapper(result)))
               testRearranging(statement, premises)
@@ -84,26 +84,33 @@ class TermRearrangerSpec extends Specification {
     testReversableOperationMultipleWays("integer distributivity on each side", mulZ, a, addZ(mulZ(b, c), mulZ(d, b)), mulZ(b, addZ(mulZ(a, c), mulZ(d, a))), Seq(a, b, c, d).map(ElementOf(_, Integers)))
 
     "rearrange using multiple distributivities" in {
-      // a(bc) + d(ec + f) = (ab + de)c + df
-      testRearranging(Equals(add(multiply(a, multiply(b, c)), multiply(d, add(multiply(e, c), f))), add(multiply(add(multiply(a, b), multiply(d, e)), c), multiply(d, f))), Nil)
+      // a(bc) + d(ec + f) = (ab + de)c + fd
+      testRearranging(Equals(add(multiply(a, multiply(b, c)), multiply(d, add(multiply(e, c), f))), add(multiply(add(multiply(a, b), multiply(d, e)), c), multiply(f, d))), Nil)
     }
 
     "rearrange using multiple distributivities the other way" in {
-      // (f + ce)d + (cb)a = fd + c(ba + ed)
+      // (f + ce)d + (cb)a = df + c(ba + ed)
       // i.e. the above but backwards
-      testRearranging(Equals(add(multiply(add(f, multiply(c, e)), d), multiply(multiply(c, b), a)), add(multiply(f, d), multiply(c, add(multiply(b, a), multiply(e, d))))), Nil)
+      testRearranging(Equals(add(multiply(add(f, multiply(c, e)), d), multiply(multiply(c, b), a)), add(multiply(d, f), multiply(c, add(multiply(b, a), multiply(e, d))))), Nil)
     }
 
     testReversableOperationMultipleWays("identity", multiply, One, a, a)
-    testReversableOperationMultipleWays("absorber", multiply, Zero, a, Zero)
+    testReversableOperationMultipleWays("absorber to self", multiply, Zero, a, Zero)
+    testReversableOperationMultipleWays("absorber to left absorber", multiply, Zero, a, multiply(Zero, b))
+    testReversableOperationMultipleWays("absorber to right absorber", multiply, Zero, a, multiply(b, Zero))
 
     "rearrange using identities and absorbers" in {
       // (a*1 + b*0, c*1) = (a, c)
       testRearranging(Equals(Pair(add(multiply(a, One), multiply(b, Zero)), multiply(c, One)), Pair(a, c)), Nil)
     }
 
-    testReversableOperationMultipleWays("inverse", addZ, a, IntegerNegation(a), toZ(Zero), Seq(ElementOf(a, Integers)))
-    testReversableOperationMultipleWays("inverse extraction", mulZ, a, IntegerNegation(b), IntegerNegation(mulZ(a, b)), Seq(ElementOf(a, Integers), ElementOf(b, Integers)))
+    testReversableOperationMultipleWays("inverse cancellation to identity", addZ, IntegerNegation(a), a, toZ(Zero), Seq(a).map(ElementOf(_, Integers)))
+    testReversableOperationMultipleWays("hidden inverse cancellation", addZ, addZ(a, IntegerNegation(b)), b, a, Seq(a, b).map(ElementOf(_, Integers)))
+    testReversableOperationMultipleWays("inverse cancellation on both sides", addZ, IntegerNegation(a), a, addZ(b, IntegerNegation(b)), Seq(a, b).map(ElementOf(_, Integers)))
+    testReversableOperationMultipleWays("double inverse cancellation to identity", addZ, addZ(a, IntegerNegation(b)), addZ(IntegerNegation(a), b), toZ(Zero), Seq(a, b).map(ElementOf(_, Integers)))
+    testReversableOperationMultipleWays("inverse extraction", mulZ, a, IntegerNegation(b), IntegerNegation(mulZ(a, b)), Seq(a, b).map(ElementOf(_, Integers)))
+    testReversableOperationMultipleWays("inverse cancellation to identity with extraction", addZ, mulZ(IntegerNegation(b), a), mulZ(a, b), toZ(Zero), Seq(a, b).map(ElementOf(_, Integers)))
+    testReversableOperationMultipleWays("hidden inverse cancellation with extraction", addZ, addZ(mulZ(IntegerNegation(b), a), c), mulZ(a, b), c, Seq(a, b, c).map(ElementOf(_, Integers)))
 
     "rearrange using inverse with extraction" in {
       testRearranging(Equals(addZ(mulZ(a, b), mulZ(b, IntegerNegation(a))), toZ(Zero)), Seq(ElementOf(a, Integers), ElementOf(b, Integers)))

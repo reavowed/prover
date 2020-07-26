@@ -68,6 +68,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableAssociativity: Allowable[Associativity] = allowableGeneric(Generic[Associativity])
     implicit val allowableLeftIdentity: Allowable[LeftIdentity] = allowableGeneric(Generic[LeftIdentity])
     implicit val allowableRightIdentity: Allowable[RightIdentity] = allowableGeneric(Generic[RightIdentity])
+    implicit val allowableDoubleSidedIdentity: Allowable[DoubleSidedIdentity] = allowableGeneric(Generic[DoubleSidedIdentity])
     implicit val allowableLeftAbsorber: Allowable[LeftAbsorber] = allowableGeneric(Generic[LeftAbsorber])
     implicit val allowableRightAbsorber: Allowable[RightAbsorber] = allowableGeneric(Generic[RightAbsorber])
     implicit val allowableLeftInverse: Allowable[LeftInverse] = allowableGeneric(Generic[LeftInverse])

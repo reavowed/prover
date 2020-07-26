@@ -230,6 +230,11 @@ case class Definitions(rootEntryContext: EntryContext) {
           if ExpressionUtils.isCombinationOfTermConstants(identityConstant)
         } yield RightIdentity(operator, identityConstant, inferenceExtraction)
       }
+      val doubleSidedIdentity = for {
+        leftIdentity <- leftIdentities.single
+        rightIdentity <- rightIdentities.single
+        if leftIdentity.identityTerm == rightIdentity.identityTerm
+      } yield DoubleSidedIdentity(operator, leftIdentity.identityTerm, leftIdentity, rightIdentity)
       val leftAbsorbers = rearrangementInferences.mapCollect { inferenceExtraction =>
         for {
           (operator(absorberConstant, TermVariable(0, Nil)), rhs) <- equality.unapply(inferenceExtraction.conclusion)
@@ -243,10 +248,8 @@ case class Definitions(rootEntryContext: EntryContext) {
         } yield RightAbsorber(operator, absorberConstant, inferenceExtraction)
       }
       val inverse = (for {
-        rightIdentity <- rightIdentities
-        leftIdentity <- leftIdentities
-        if rightIdentity.identityTerm == leftIdentity.identityTerm
-        identityTerm = rightIdentity.identityTerm
+        doubleSidedIdentity <- doubleSidedIdentity.toSeq
+        identityTerm = doubleSidedIdentity.identityTerm
         rightInverseInferenceExtraction <- rearrangementInferences
         (operator(TermVariable(0, Nil), inverseTerm), `identityTerm`) <- equality.unapply(rightInverseInferenceExtraction.conclusion).toSeq
         if ExpressionUtils.getSingleSimpleTermVariable(inverseTerm).contains(0)
@@ -256,9 +259,10 @@ case class Definitions(rootEntryContext: EntryContext) {
       } yield DoubleSidedInverse(
         operator,
         inverseOperator,
-        RightInverse(operator, inverseOperator, identityTerm, rightInverseInferenceExtraction),
-        LeftInverse(operator, inverseOperator, identityTerm, leftInverseInferenceExtraction))).headOption
-      RearrangeableOperator(operator, commutativity, associativity, leftIdentities, rightIdentities, leftAbsorbers, rightAbsorbers, inverse)
+        doubleSidedIdentity,
+        RightInverse(operator, inverseOperator, doubleSidedIdentity, rightInverseInferenceExtraction),
+        LeftInverse(operator, inverseOperator, doubleSidedIdentity, leftInverseInferenceExtraction))).headOption
+      RearrangeableOperator(operator, commutativity, associativity, leftIdentities, rightIdentities, doubleSidedIdentity, leftAbsorbers, rightAbsorbers, inverse)
     }
     for {
       equality <- equalityOption.toSeq

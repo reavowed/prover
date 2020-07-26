@@ -74,6 +74,7 @@ case class Associativity(operator: BinaryOperator, inferenceExtraction: Inferenc
 case class Commutativity(operator: BinaryOperator, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Binary {
   override def source(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(a, b)
   override def result(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(b, a)
+  override def reversedRearrangementStep[T <: Expression](terms: Seq[Term], wrapper: Wrapper[Term, T], expansion: Expansion[T], reversal: Reversal[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = rearrangementStep(terms.reverse, wrapper, expansion)
 }
 trait Distributivity extends RearrangementOperation.Ternary {
   def distributor: RearrangeableOperator
@@ -87,31 +88,42 @@ case class RightDistributivity(distributor: RearrangeableOperator, distributee: 
   override def source(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = distributor(distributee(a, b), c)
   override def result(a: Term, b: Term, c: Term)(implicit substitutionContext: SubstitutionContext): Term = distributee(distributor(a, c), distributor(b, c))
 }
-case class LeftIdentity(operator: BinaryOperator, identityTerm: Term, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Unary {
+trait OneSidedIdentity extends RearrangementOperation.Unary {
+  def operator: BinaryOperator
+  def identityTerm: Term
+}
+case class LeftIdentity(operator: BinaryOperator, identityTerm: Term, inferenceExtraction: InferenceExtraction) extends OneSidedIdentity {
   override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(identityTerm, a)
   override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = a
 }
-case class RightIdentity(operator: BinaryOperator, identityTerm: Term, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Unary {
+case class RightIdentity(operator: BinaryOperator, identityTerm: Term, inferenceExtraction: InferenceExtraction) extends OneSidedIdentity {
   override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(a, identityTerm)
   override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = a
 }
-case class LeftAbsorber(operator: BinaryOperator, absorberTerm: Term, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Unary {
+case class DoubleSidedIdentity(operator: BinaryOperator, identityTerm: Term, leftIdentity: LeftIdentity, rightIdentity: RightIdentity)
+
+trait OneSidedAbsorber extends RearrangementOperation.Unary {
+  def operator: BinaryOperator
+  def absorberTerm: Term
+}
+case class LeftAbsorber(operator: BinaryOperator, absorberTerm: Term, inferenceExtraction: InferenceExtraction) extends OneSidedAbsorber {
   override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(absorberTerm, a)
   override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = absorberTerm
 }
-case class RightAbsorber(operator: BinaryOperator, absorberTerm: Term, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Unary {
+case class RightAbsorber(operator: BinaryOperator, absorberTerm: Term, inferenceExtraction: InferenceExtraction) extends OneSidedAbsorber {
   override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(a, absorberTerm)
   override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = absorberTerm
 }
-case class RightInverse(operator: BinaryOperator, inverseOperator: UnaryOperator, identityTerm: Term, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Unary {
-  override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(a, inverseOperator(a))
-  override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = identityTerm
+
+case class RightInverse(binaryOperator: BinaryOperator, inverseOperator: UnaryOperator, identity: DoubleSidedIdentity, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Unary {
+  override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = binaryOperator(a, inverseOperator(a))
+  override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = identity.identityTerm
 }
-case class LeftInverse(operator: BinaryOperator, inverseOperator: UnaryOperator, identityTerm: Term, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Unary {
-  override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = operator(inverseOperator(a), a)
-  override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = identityTerm
+case class LeftInverse(binaryOperator: BinaryOperator, inverseOperator: UnaryOperator, identity: DoubleSidedIdentity, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Unary {
+  override def source(a: Term)(implicit substitutionContext: SubstitutionContext): Term = binaryOperator(inverseOperator(a), a)
+  override def result(a: Term)(implicit substitutionContext: SubstitutionContext): Term = identity.identityTerm
 }
-case class DoubleSidedInverse(operator: BinaryOperator, inverseOperator: UnaryOperator, rightInverse: RightInverse, leftInverse: LeftInverse)
+case class DoubleSidedInverse(binaryOperator: BinaryOperator, inverseOperator: UnaryOperator, identity: DoubleSidedIdentity, rightInverse: RightInverse, leftInverse: LeftInverse)
 
 case class LeftOperatorExtraction(unaryOperator: UnaryOperator, binaryOperator: BinaryOperator, inferenceExtraction: InferenceExtraction) extends RearrangementOperation.Binary {
   override def source(a: Term, b: Term)(implicit substitutionContext: SubstitutionContext): Term = binaryOperator(unaryOperator(a), b)

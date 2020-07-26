@@ -10,6 +10,7 @@ case class RearrangeableOperator(
   associativity: Associativity,
   leftIdentities: Seq[LeftIdentity],
   rightIdentities: Seq[RightIdentity],
+  doubleSidedIdentity: Option[DoubleSidedIdentity],
   leftAbsorbers: Seq[LeftAbsorber],
   rightAbsorbers: Seq[RightAbsorber],
   inverse: Option[DoubleSidedInverse]
