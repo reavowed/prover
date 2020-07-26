@@ -59,5 +59,9 @@ class OperatorTreeSpec extends Specification {
     "replace fully eliminated inverses with identity" in {
       testCanonicalForm(addZ(addZ(a, IntegerNegation(b)), addZ(b, IntegerNegation(a))), toZ(Zero))
     }
+
+    "extract inverses" in {
+      testCanonicalForm(mulZ(a, IntegerNegation(b)), IntegerNegation(mulZ(a, b)))
+    }
   }
 }

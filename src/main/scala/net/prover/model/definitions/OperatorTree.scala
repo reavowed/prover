@@ -102,9 +102,28 @@ case class BinaryOperatorTree(operator: RearrangeableOperator, left: OperatorTre
           components
       }
     }
+    // TODO: If there are ever two unary operators that can be extracted for a given binary operator, they can certainly be swapped and we should be handling that somehow
+    def extractInverses(components: Seq[OperatorTree]): (Seq[(UnaryOperator, Int)], Seq[OperatorTree]) = {
+      provingContext.leftOperatorExtractions.filter(_.binaryOperator == canonicalOperator.operator).foldLeft((Seq.empty[(UnaryOperator, Int)], components)) { case ((acc, components), operatorExtraction) =>
+        val (numberOfOperators, resultingComponents) = components.mapFold(0) { case (i, component) =>
+          component match {
+            case UnaryOperatorTree(operatorExtraction.unaryOperator, inner) =>
+              (i + 1, inner)
+            case component =>
+              (i, component)
+          }
+        }
+        (acc :+ (operatorExtraction.unaryOperator, numberOfOperators), resultingComponents)
+      }
+    }
 
     absorbers.find(canonicalComponents.contains) getOrElse {
-      OperatorTree.rebuild(canonicalOperator, collapseInverses(removeIdentities(canonicalComponents)).sortBy(_.term.serialized))
+      val collapsedComponents = Seq(removeIdentities _, collapseInverses _).foldLeft(canonicalComponents) { case (c, f) => f(c) }
+      val (unaryOperators, finalComponents) = extractInverses(collapsedComponents)
+      val baseOperatorTree = OperatorTree.rebuild(canonicalOperator, finalComponents.sortBy(_.term.serialized))
+      unaryOperators.foldLeft(baseOperatorTree) { case (operatorTree, (unaryOperator, count)) =>
+        (1 to count).foldLeft(operatorTree) { case (operatorTree, _) => UnaryOperatorTree(unaryOperator, operatorTree)}
+      }
     }
   }
 }

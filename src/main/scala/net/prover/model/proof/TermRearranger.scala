@@ -138,7 +138,7 @@ case class TermRearranger[T <: Expression](
       if base.operator == operator
       (source, result) = pullDirection.swapSourceAndResult(base.left, base.right)
       (innerResult, innerSteps) <- pullTargetInBaseWithoutSplitting(source, baseDeconstruction :+ BinaryDeconstructionStep(base, pullDirection), target, operator, stepDirection, pullDirection)
-      associativityStep <- operator.associativity.rearrangementStep(pullDirection.reverseIfNecessary(Seq(target, innerResult, result)), stepDirection.reverse, getWrapper(baseDeconstruction), expansion, reversal)
+      associativityStep <- operator.associativity.rearrangementStep(pullDirection.reverseIfNecessary(Seq(target, innerResult, result)), stepDirection.combine(pullDirection).reverse, getWrapper(baseDeconstruction), expansion, reversal)
     } yield (BinaryOperatorTree(operator, innerResult, result, pullDirection), stepDirection.append(innerSteps, associativityStep))
     matching orElse inside
   }
@@ -164,7 +164,24 @@ case class TermRearranger[T <: Expression](
       (distributedBase, distributionSteps) <- findDistributivity(base, baseDeconstruction, operator, stepDirection)
       (innerResult, innerSteps) <- pullTargetInBaseWithoutSplitting(distributedBase, baseDeconstruction, target, operator, stepDirection, pullDirection)
     } yield (innerResult, stepDirection.concat(distributionSteps, innerSteps))).headOption
-    withoutCommuting orElse byCommuting orElse byDistributing
+    def byPushingUnaryOperator = {
+      def pushLeft = for {
+        base <- base.asOptionalInstanceOf[UnaryOperatorTree]
+        baseInner <- base.inner.asOptionalInstanceOf[BinaryOperatorTree]
+        extraction <- provingContext.leftOperatorExtractions.find(e => e.unaryOperator == base.operator && e.binaryOperator == baseInner.operator.operator)
+        (innerResult, innerSteps) <- pullTargetInBaseWithoutSplitting(BinaryOperatorTree(baseInner.operator, UnaryOperatorTree(base.operator, baseInner.left), baseInner.right), baseDeconstruction, target, operator, stepDirection, pullDirection)
+        extractionStep <- extraction.rearrangementStep(baseInner.left, baseInner.right, stepDirection.reverse, getWrapper(baseDeconstruction), expansion, reversal)
+      } yield (innerResult, stepDirection.prepend(extractionStep, innerSteps))
+      def pushRight = for {
+        base <- base.asOptionalInstanceOf[UnaryOperatorTree]
+        baseInner <- base.inner.asOptionalInstanceOf[BinaryOperatorTree]
+        extraction <- provingContext.rightOperatorExtractions.find(e => e.unaryOperator == base.operator && e.binaryOperator == baseInner.operator.operator)
+        (innerResult, innerSteps) <- pullTargetInBaseWithoutSplitting(BinaryOperatorTree(baseInner.operator, baseInner.left, UnaryOperatorTree(base.operator, baseInner.right)), baseDeconstruction, target, operator, stepDirection, pullDirection)
+        extractionStep <- extraction.rearrangementStep(baseInner.left, baseInner.right, stepDirection.reverse, getWrapper(baseDeconstruction), expansion, reversal)
+      } yield (innerResult, stepDirection.prepend(extractionStep, innerSteps))
+      pushLeft orElse pushRight
+    }
+    withoutCommuting orElse byCommuting orElse byDistributing orElse byPushingUnaryOperator
   }
 
   private def pullTargetInBase(
@@ -206,13 +223,29 @@ case class TermRearranger[T <: Expression](
     directly orElse insideLeft
   }
 
-  private def extractUnaryOperator(tree: OperatorTree, unaryOperator: UnaryOperator): Seq[OperatorTree] = {
-    tree match {
-      case UnaryOperatorTree(`unaryOperator`, inner) => Seq(inner)
-      case _ => Nil
-    }
-  }
+  private def extractUnaryOperator(tree: OperatorTree, unaryOperator: UnaryOperator, deconstruction: Seq[DeconstructionStep], direction: Direction): Seq[(OperatorTree, Seq[RearrangementStep[T]])] = {
+    def direct = for {
+      tree <- tree.asOptionalInstanceOf[UnaryOperatorTree].toSeq
+      if tree.operator == unaryOperator
+    } yield (tree.inner, Nil)
 
+    def extractLeft = for {
+      tree <- tree.asOptionalInstanceOf[BinaryOperatorTree].toSeq
+      extraction <- provingContext.leftOperatorExtractions.find(e => e.unaryOperator == unaryOperator && e.binaryOperator == tree.operator.operator).iterator
+      (innerResult, innerSteps) <- extractUnaryOperator(tree.left, unaryOperator, deconstruction :+ RightBinaryDeconstructionStep(tree), direction)
+      extractionStep <- extraction.rearrangementStep(innerResult, tree.right, direction, getWrapper(deconstruction), expansion, reversal)
+    } yield (BinaryOperatorTree(tree.operator, innerResult, tree.right), direction.append(innerSteps, extractionStep))
+
+    def extractRight = for {
+      tree <- tree.asOptionalInstanceOf[BinaryOperatorTree].toSeq
+      extraction <- provingContext.rightOperatorExtractions.find(e => e.unaryOperator == unaryOperator && e.binaryOperator == tree.operator.operator).iterator
+      (innerResult, innerSteps) <- extractUnaryOperator(tree.right, unaryOperator, deconstruction :+ LeftBinaryDeconstructionStep(tree), direction)
+      extractionStep <- extraction.rearrangementStep(tree.left, innerResult, direction, getWrapper(deconstruction), expansion, reversal)
+    } yield (BinaryOperatorTree(tree.operator, tree.left, innerResult), direction.append(innerSteps, extractionStep))
+
+    direct ++ extractLeft ++ extractRight
+  }
+  
   private def removeLeftmostInverse(tree: BinaryOperatorTree, deconstruction: Seq[DeconstructionStep], stepDirection: Direction): Option[(OperatorTree, Seq[RearrangementStep[T]])] = {
     def directRightInverse = for {
       inverse <- tree.operator.inverse
@@ -221,10 +254,10 @@ case class TermRearranger[T <: Expression](
     } yield (Leaf(inverse.identity.identityTerm), stepDirection.append(stepsToMatch, inverseStep))
     def directLeftInverse = (for {
       inverse <- tree.operator.inverse.toSeq
-      innerLeft <- extractUnaryOperator(tree.left, inverse.inverseOperator)
-      stepsToMatch <- matchTrees(tree.right, innerLeft, deconstruction :+ LeftBinaryDeconstructionStep(tree), stepDirection)
+      (innerLeft, stepsToExtractOperator) <- extractUnaryOperator(tree.left, inverse.inverseOperator, deconstruction :+ RightBinaryDeconstructionStep(tree), stepDirection)
+      stepsToMatch <- matchTrees(tree.right, innerLeft, deconstruction :+ LeftBinaryDeconstructionStep(tree.operator, UnaryOperatorTree(inverse.inverseOperator, innerLeft)), stepDirection)
       inverseStep <- inverse.leftInverse.rearrangementStep(innerLeft, stepDirection, getWrapper(deconstruction), expansion, reversal)
-    } yield (Leaf(inverse.identity.identityTerm), stepDirection.append(stepsToMatch, inverseStep))).headOption
+    } yield (Leaf(inverse.identity.identityTerm), stepDirection.concat(stepsToExtractOperator, stepDirection.append(stepsToMatch, inverseStep)))).headOption
     // a = 0 + a = (b + -b) + a = b + (-b + a) = b + (a + -b)
     def rightInversePullingLeft = for {
       inverse <- tree.operator.inverse
@@ -237,12 +270,12 @@ case class TermRearranger[T <: Expression](
     // a = 0 + a = (-b + b) + a = -b + (b + a) = -b + (a + b)
     def leftInversePullingLeft = (for {
       inverse <- tree.operator.inverse.toSeq
-      innerLeft <- extractUnaryOperator(tree.left, inverse.inverseOperator)
-      (result, stepsToPullLeft) <- pullTargetInBase(tree.right, innerLeft, deconstruction :+ LeftBinaryDeconstructionStep(tree), tree.operator, stepDirection, Direction.Forward)
+      (innerLeft, stepsToExtractOperator) <- extractUnaryOperator(tree.left, inverse.inverseOperator, deconstruction :+ RightBinaryDeconstructionStep(tree), stepDirection)
+      (result, stepsToPullLeft) <- pullTargetInBase(tree.right, innerLeft, deconstruction :+ LeftBinaryDeconstructionStep(tree.operator, UnaryOperatorTree(inverse.inverseOperator, innerLeft)), tree.operator, stepDirection, Direction.Forward)
       identityStep <- inverse.identity.leftIdentity.rearrangementStep(result, stepDirection, getWrapper(deconstruction), expansion, reversal)
       inverseStep <- inverse.leftInverse.rearrangementStep(innerLeft, stepDirection, getWrapper(deconstruction :+ RightBinaryDeconstructionStep(tree.operator, result)), expansion, reversal)
-      associativityStep <- tree.operator.associativity.rearrangementStep(tree.left, innerLeft, result, stepDirection, getWrapper(deconstruction), expansion, reversal)
-    } yield (result, stepDirection.concat(stepsToPullLeft, stepDirection.reverseIfNecessary(Seq(associativityStep, inverseStep, identityStep))))).headOption
+      associativityStep <- tree.operator.associativity.rearrangementStep(UnaryOperatorTree(inverse.inverseOperator, innerLeft), innerLeft, result, stepDirection, getWrapper(deconstruction), expansion, reversal)
+    } yield (result, stepDirection.concat(stepsToExtractOperator, stepDirection.concat(stepsToPullLeft, stepDirection.reverseIfNecessary(Seq(associativityStep, inverseStep, identityStep)))))).headOption
     // (a + b) + -a = a + (b + -a) = ... = b
     def insideLeft = for {
       left <- tree.left.asOptionalInstanceOf[BinaryOperatorTree]
@@ -307,6 +340,21 @@ case class TermRearranger[T <: Expression](
         case _ =>
           None
       })
+    }
+  }
+
+  private def matchTreeWithUnaryTarget(
+    base: OperatorTree,
+    target: UnaryOperatorTree,
+    deconstruction: Seq[DeconstructionStep]
+  ): Option[Seq[RearrangementStep[T]]] = {
+    if (base == target)
+      Some(Nil)
+    else {
+      (for {
+        (baseInner, stepsToExtract) <- extractUnaryOperator(base, target.operator, deconstruction, Direction.Forward)
+        innerSteps <- matchTrees(baseInner, target.inner, deconstruction :+ UnaryDeconstructionStep(target.operator))
+      } yield stepsToExtract ++ innerSteps).minByLength
     }
   }
 
@@ -397,6 +445,8 @@ case class TermRearranger[T <: Expression](
     else target match {
       case target: Leaf =>
         matchTreeWithLeafTarget(base, target, deconstruction)
+      case target: UnaryOperatorTree =>
+        matchTreeWithUnaryTarget(base, target, deconstruction)
       case target: BinaryOperatorTree =>
         matchTreeWithBinaryTarget(base, target, deconstruction, Nil)
       case _ =>
