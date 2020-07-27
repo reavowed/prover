@@ -21,21 +21,21 @@ export function Inference({inference, title, url, bookLink, chapterLink, previou
   const boundVariableLists = useContext(BoundVariableLists) || [];
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(null);
-  const updateName = (newName) => {
-    return window.fetchJson(path.join(url, "name"), {method: "PUT", body: newName})
-      .then(url => window.location.pathname = url);
+  const updateName = async (newName) => {
+    const {url: newUrl} = await window.fetchJson(path.join(url, "name"), {method: "PUT", body: newName});
+    window.location.pathname = newUrl;
   };
-  const updatePremises = (newPremises) => {
-    return window.fetchJson(path.join(url, "premises"), {method: "PUT", body: _.filter(newPremises.split(/\r?\n/), s => s.length)})
-      .then(() => window.location.reload());
+  const updatePremises = async (newPremises) => {
+    await window.fetchJson(path.join(url, "premises"), {method: "PUT", body: _.filter(newPremises.split(/\r?\n/), s => s.length)});
+    window.location.reload();
   };
-  const updateConclusion = (newConclusion) => {
-    return window.fetchJson(path.join(url, "conclusion"), {method: "PUT", body: newConclusion})
-      .then(() => window.location.reload());
+  const updateConclusion = async (newConclusion) => {
+    await window.fetchJson(path.join(url, "conclusion"), {method: "PUT", body: newConclusion});
+    window.location.reload();
   };
-  const updateVariables = (newVariables) => {
-    return window.fetchJson(path.join(url, "variables"), {method: "PUT", body: newVariables})
-      .then(() => window.location.reload());
+  const updateVariables = async (newVariables) => {
+    await window.fetchJson(path.join(url, "variables"), {method: "PUT", body: newVariables});
+    window.location.reload();
   };
   function serializeVariables(prefix, variables) {
     if (variables.length > 0) {
