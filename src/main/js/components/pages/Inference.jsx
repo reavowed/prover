@@ -18,7 +18,7 @@ import {serializeVariable} from "./utils/entryFunctions";
 
 export function Inference({inference, title, url, bookLink, chapterLink, previous, next, usages, children, buttons, createPremiseElement, editable}) {
   const displayContext = useContext(DisplayContext);
-  const boundVariableLists = useContext(BoundVariableLists);
+  const boundVariableLists = useContext(BoundVariableLists) || [];
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(null);
   const updateName = (newName) => {

@@ -294,7 +294,7 @@ export class TypeExpression extends TypeLikeExpression {
         [...baseWords, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists, variableDefinitions))];
     const propertyAndObjectWords = [
         ...this.properties.map(p => p.symbol),
-        ..._.flatMap(this.objects, ([objectDefinition, objectTerm]) => [objectDefinition.symbol, ...objectTerm.serialize()])
+        ..._.flatMap(this.objects, ([objectDefinition, objectTerm]) => [objectDefinition.symbol, ...objectTerm.serializeNicely(boundVariableLists, variableDefinitions)])
     ];
     const allWords = propertyAndObjectWords.length ?
         [...worldsWithQualifier, "with", "(" + propertyAndObjectWords.join(" ") + ")"] :
