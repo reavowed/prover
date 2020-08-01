@@ -257,18 +257,14 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         requiredParentObjects <- getParentObjects(parentType, newPropertyDefinition.requiredParentObjects)
         adapter <- getOptionalAdapter(newPropertyDefinition.ownTermNames, newPropertyDefinition.parentTerms, (requiredParentQualifier.map(_.qualifier) orElse parentType.defaultQualifier).variableDefinitions)
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
-        qualifierVariableDefinitions = PropertyDefinitionOnType.getParentConditionAndQualifierVariableDefinitions(parentType, adapter, requiredParentQualifier, requiredParentObjects, conjunctionDefinition )._2
-        expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(qualifierVariableDefinitions))
+        parentTypeConditions = ParentTypeConditions(parentType, requiredParentQualifier, requiredParentObjects, adapter, conjunctionDefinition)
+        expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(parentTypeConditions.allVariableDefinitions))
         definingStatement <- Statement.parser(expressionParsingContext).parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
         newPropertyDefinition = PropertyDefinitionOnType(
           symbol,
-          parentType,
-          requiredParentQualifier,
-          requiredParentObjects,
-          adapter,
+          parentTypeConditions,
           name,
-          definingStatement,
-          conjunctionDefinition)
+          definingStatement)
       } yield newPropertyDefinition
     }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
@@ -287,17 +283,17 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
         mainVariableDefinition <- getSimpleVariableDefinition(newRelatedObjectDefinition.mainVariableDefinition, "Main variable definition")
         parentType <- getTypeDefinition(newRelatedObjectDefinition.parentType)
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newRelatedObjectDefinition.requiredParentQualifier)
-        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.mainVariableDefinition +: requiredParentQualifier.map(_.qualifier).orElse(parentType.defaultQualifier).variableDefinitions)
-        definingStatement <- Statement.parser(expressionParsingContext).parseFromString(newRelatedObjectDefinition.definingStatement, "definition").recoverWithBadRequest
+        requiredParentObjects <- getParentObjects(parentType, newRelatedObjectDefinition.requiredParentObjects)
         conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
+        parentTypeConditions = ParentTypeConditions(parentType, requiredParentQualifier, requiredParentObjects, None, conjunctionDefinition)
+        expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(mainVariableDefinition +: parentTypeConditions.allVariableDefinitions))
+        definingStatement <- Statement.parser(expressionParsingContext).parseFromString(newRelatedObjectDefinition.definingStatement, "definition").recoverWithBadRequest
         newPropertyDefinition = RelatedObjectDefinition(
           symbol,
-          parentType,
           mainVariableDefinition,
-          requiredParentQualifier,
+          parentTypeConditions,
           name,
-          definingStatement,
-          conjunctionDefinition)
+          definingStatement)
       } yield newPropertyDefinition
     }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
   }
@@ -474,10 +470,11 @@ object ChapterController {
     parentTerms: String)
   case class NewRelatedObjectDefinitionModel(
     symbol: String,
+    mainVariableDefinition: String,
     parentType: String,
     requiredParentQualifier: String,
+    requiredParentObjects: String,
     name: String,
-    mainVariableDefinition: String,
     definingStatement: String)
   case class NewTypeRelationDefinitionModel(
     symbol: String,

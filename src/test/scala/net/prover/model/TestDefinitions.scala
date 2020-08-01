@@ -225,7 +225,7 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
   val BaseSet = simpleTermDefinition("baseSet", Seq(a), Format.Explicit("%0(%1)", "baseSet(a)", 2, false, false), Nil, Equals($, Domain(Domain(a))))
   val BinaryOperation = TypeDefinition("binaryOperation", SimpleVariableDefinition("f", Seq("infix-function")), None, None, Conjunction(Function(f), FunctionFrom(f, Product(BaseSet(f), BaseSet(f)), BaseSet(f))))
   val BinaryOperationOn = TypeQualifierDefinition("on", BinaryOperation, Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true)), None, Equals(BaseSet(f), A), ConjunctionDefinition)
-  val Commutative = PropertyDefinitionOnType("commutative", BinaryOperation, None, None, None, None, ForAllIn("a", BaseSet(f))(ForAllIn("b", BaseSet(f))(Equals(Apply(f, Pair($.^, $)), Apply(f, Pair($, $.^))))), ConjunctionDefinition)
+  val Commutative = PropertyDefinitionOnType("commutative", ParentTypeConditions(BinaryOperation, None, None, None, ConjunctionDefinition), None, ForAllIn("a", BaseSet(f))(ForAllIn("b", BaseSet(f))(Equals(Apply(f, Pair($.^, $)), Apply(f, Pair($, $.^))))))
   val Distributive = TypeRelationDefinition(
     "distributes",
     BinaryOperation,

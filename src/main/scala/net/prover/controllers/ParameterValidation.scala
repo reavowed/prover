@@ -4,7 +4,7 @@ import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{Qualifier, TermListAdapter}
-import net.prover.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition}
+import net.prover.model.entries.{PropertyDefinitionOnType, RequiredParentObjects, TypeDefinition, TypeQualifierDefinition}
 import net.prover.model.expressions.{Statement, Term}
 
 import scala.util.{Failure, Success, Try}
@@ -68,7 +68,7 @@ trait ParameterValidation {
       .map(qualifierSymbol => entryContext.qualifiersByType(parentType.symbol).find(_.symbol == qualifierSymbol).orBadRequest(s"Unknown qualifier '$qualifierSymbol' on type '${parentType.symbol}'"))
       .swap
   }
-  def getParentObjects(parentType: TypeDefinition, objectSymbolsText: String)(implicit entryContext: EntryContext): Try[Option[PropertyDefinitionOnType.RequiredParentObjects]] = {
+  def getParentObjects(parentType: TypeDefinition, objectSymbolsText: String)(implicit entryContext: EntryContext): Try[Option[RequiredParentObjects]] = {
     getWords(objectSymbolsText) match {
       case Nil =>
         Success(None)
@@ -80,7 +80,7 @@ trait ParameterValidation {
           uniquenessDefinition <- entryContext.uniquenessDefinitionOption.orBadRequest("Cannot add related objects to property definition without uniqueness")
           generalizationDefinition <- entryContext.generalizationDefinitionOption.orBadRequest("Cannot add related objects to property definition without generalization")
           deductionDefinition <- entryContext.deductionDefinitionOption.orBadRequest("Cannot add related objects to property definition without deduction")
-        } yield Some(PropertyDefinitionOnType.RequiredParentObjects(objectDefinitions, uniquenessDefinition, generalizationDefinition, deductionDefinition))
+        } yield Some(RequiredParentObjects(objectDefinitions, uniquenessDefinition, generalizationDefinition, deductionDefinition))
     }
   }
   def getOptionalAdapter(variableDefinitionsText: String, possibleSerializedTemplates: String, qualifierVariableDefinitions: Seq[SimpleVariableDefinition])(implicit entryContext: EntryContext): Try[Option[TermListAdapter]] = {

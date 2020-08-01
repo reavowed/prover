@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.Qualifier
-import net.prover.model.entries.{ChapterEntry, RelatedObjectDefinition, TypeDefinition}
+import net.prover.model.entries.{ChapterEntry, ParentTypeConditions, RelatedObjectDefinition, TypeDefinition}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
@@ -22,15 +22,17 @@ class RelatedObjectDefinitionSpec extends Specification {
 
   "related object definition parser" should {
     "serialize and parse a definition correctly" in {
-
       val definition = RelatedObjectDefinition(
         "identity",
-        binaryOperationDefinition,
         "e",
+        ParentTypeConditions(
+          binaryOperationDefinition,
+          None,
+          None,
+          None,
+          ConjunctionDefinition),
         None,
-        None,
-        ForAllIn("a", A)(Conjunction(Equals(Apply(f, Pair($, e)), $), Equals(Apply(f, Pair(e, $)), $))),
-        ConjunctionDefinition)
+        ForAllIn("a", A)(Conjunction(Equals(Apply(f, Pair($, e)), $), Equals(Apply(f, Pair(e, $)), $))))
       testParsingAndSerialization(definition)(defaultEntryContext.addEntry(binaryOperationDefinition))
     }
   }

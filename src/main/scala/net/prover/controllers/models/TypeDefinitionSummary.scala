@@ -28,13 +28,13 @@ object TypeDefinitionSummary {
       typeDefinition.defaultQualifier.map(getQualifierSummary),
       entryContext.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).map(getPropertyDefinitionSummary),
       entryContext.qualifiersByType.getOrElse(typeDefinition.symbol, Nil).map(qd => TypeQualifierDefinitionSummary(qd.symbol, qd.qualifiedSymbol, qd.name, getQualifierSummary(qd.qualifier))),
-      entryContext.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).map(rod => RelatedObjectDefinitionSummary(rod.symbol, rod.qualifiedSymbol, rod.name, rod.article, rod.mainVariableDefinition, rod.requiredParentQualifier.map(_.symbol))))
+      entryContext.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).map(rod => RelatedObjectDefinitionSummary(rod.symbol, rod.qualifiedSymbol, rod.name, rod.article, rod.mainVariableDefinition, rod.parentTypeConditions.requiredParentQualifier.map(_.symbol))))
   }
   def getQualifierSummary(qualifier: Qualifier): QualifierSummary = {
     QualifierSummary(qualifier.format.baseFormatString, qualifier.variableDefinitions)
   }
   def getPropertyDefinitionSummary(pd: PropertyDefinitionOnType): PropertyDefinitionSummary = {
-    PropertyDefinitionSummary(pd.symbol, pd.qualifiedSymbol, pd.name, pd.requiredParentQualifier.map(_.symbol), pd.requiredParentObjects.objectDefinitions.map(_.symbol))
+    PropertyDefinitionSummary(pd.symbol, pd.qualifiedSymbol, pd.name, pd.parentTypeConditions.requiredParentQualifier.map(_.symbol), pd.parentTypeConditions.requiredParentObjects.objectDefinitions.map(_.symbol))
   }
   def getAllFromContext(entryContext: EntryContext): Map[String, TypeDefinitionSummary] = {
     entryContext.typeDefinitions.mapValues(d => getSummary(d)(entryContext))

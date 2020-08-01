@@ -65,7 +65,7 @@ object ExpressionUtils {
       baseTypeStatement <- getTypeStatementWithProperties(first)
       typePropertyStatement <- getTypePropertyStatement(second)
       if baseTypeStatement.matchesWithQualifierTerms(typePropertyStatement)
-      if typePropertyStatement.propertyDefinitionOnType.requiredParentQualifier.forall(baseTypeStatement.explicitQualifier.contains)
+      if typePropertyStatement.propertyDefinitionOnType.parentTypeConditions.requiredParentQualifier.forall(baseTypeStatement.explicitQualifier.contains)
       if !baseTypeStatement.properties.contains(typePropertyStatement.propertyDefinitionOnType)
     } yield TypeStatement(baseTypeStatement.typeDefinition, baseTypeStatement.mainTerm, typePropertyStatement.qualifierTerms, baseTypeStatement.explicitQualifier, baseTypeStatement.properties :+ typePropertyStatement.propertyDefinitionOnType, statement))
   }

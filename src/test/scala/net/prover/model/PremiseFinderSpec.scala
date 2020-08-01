@@ -3,7 +3,7 @@ package net.prover.model
 import net.prover.model.TestDefinitions.{f, _}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
-import net.prover.model.entries.{PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
+import net.prover.model.entries.{ParentTypeConditions, PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import org.specs2.matcher.MatchResult
@@ -233,7 +233,7 @@ class PremiseFinderSpec extends Specification {
       val Inject = TermDefinitionEntry("⍳", Nil, Seq(ComponentType.TermComponent("a", Nil)), None, None, Format.Explicit("%0(%1)", "⍳(a)", 2, false, false), Nil, BlankDefinition, None, Nil, Nil)
       val DefinitionOfPositiveNatural = createInference("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Inject(Zero), $)))))
       val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, false))), None, BlankDefinition)
-      val Irreflexive = PropertyDefinitionOnType("irreflexive", Relation, None, None, None, None, BlankDefinition, ConjunctionDefinition)
+      val Irreflexive = PropertyDefinitionOnType("irreflexive", ParentTypeConditions(Relation, None, None, None, ConjunctionDefinition), None, BlankDefinition)
       val elementsRelatedByIrreflexiveNotEqual = createInference("Elements Related by an Irreflexive Relation Are Not Equal", Seq(Irreflexive(a, b), ElementOf(Pair(c, d), a)), Negation(Equals(c, d)))
       val lessThanIsIrreflexive = createInference("< Is Irreflexive", Nil, Irreflexive(LessThan, Naturals))
       val injectedNaturalIsNatural = createInference("Injected Natural Is Natural", Seq(ElementOf(a, Naturals)), ElementOf(Inject(a), Naturals))

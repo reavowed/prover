@@ -76,7 +76,7 @@ object Statement {
       }
       def getProperty(w: String): Option[Parser[Statement]] = {
         context.entryContext.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
-          val terms = getTerms(d.requiredParentQualifier, s"property ${d.symbol}")
+          val terms = getTerms(d.parentTypeConditions.requiredParentQualifier, s"property ${d.symbol}")
           Parser.constant(d.statementDefinition(terms:_*))
         }
       }
@@ -84,7 +84,7 @@ object Statement {
         context.entryContext.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
           for {
             objectTerm <- Term.parser
-            otherTerms = getTerms(d.requiredParentQualifier, s"object ${d.symbol}")
+            otherTerms = getTerms(d.parentTypeConditions.requiredParentQualifier, s"object ${d.symbol}")
           } yield d.statementDefinition(objectTerm +: otherTerms:_*)
         }
       }
@@ -122,7 +122,7 @@ object Statement {
     for {
       Seq(typeSymbol, propertySymbol) <- "^(\\w+)\\.(\\w+)$".r.unapplySeq(symbol)
       propertyDefinition <- context.entryContext.propertyDefinitionsByType.getOrElse(typeSymbol, Nil).find(_.symbol == propertySymbol)
-    } yield propertyDefinition.qualifierVariableDefinitions.map(_ => Term.parser).traverse.map(qualifierTerms => propertyDefinition.statementDefinition(mainTerm +: qualifierTerms:_*))
+    } yield propertyDefinition.parentTypeConditions.qualifierVariableDefinitions.map(_ => Term.parser).traverse.map(qualifierTerms => propertyDefinition.statementDefinition(mainTerm +: qualifierTerms:_*))
   }
 
   def typeObjectStatementParser(mainTerm: Term, symbol: String)(implicit context: ExpressionParsingContext): Option[Parser[Statement]] = {
