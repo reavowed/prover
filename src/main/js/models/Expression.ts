@@ -277,7 +277,7 @@ export class TypeExpression extends TypeLikeExpression {
         // @ts-ignore
         (wordsSoFar: string[], [objectDefinition, objectTerm]: [RelatedObjectDefinition, Expression]) => {
           if (!this.conjunctionDefinition) throw "Cannot serialize type with object without conjunction";
-          const wordsWithoutQualifier = [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, objectDefinition.qualifiedSymbol, ...objectTerm.serialize(), serializedTerm];
+          const wordsWithoutQualifier = [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, objectDefinition.qualifiedSymbol, objectTerm.serialize(), serializedTerm];
           if (objectDefinition.requiredParentQualifier || this.definition.defaultQualifier) {
             return [...wordsWithoutQualifier, ...serializedQualifierComponents];
           } else {
@@ -294,7 +294,7 @@ export class TypeExpression extends TypeLikeExpression {
         [...baseWords, ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists, variableDefinitions))];
     const propertyAndObjectWords = [
         ...this.properties.map(p => p.symbol),
-        ..._.flatMap(this.objects, ([objectDefinition, objectTerm]) => [objectDefinition.symbol, ...objectTerm.serializeNicely(boundVariableLists, variableDefinitions)])
+        ..._.flatMap(this.objects, ([objectDefinition, objectTerm]) => [objectDefinition.symbol, objectTerm.serializeNicely(boundVariableLists, variableDefinitions)])
     ];
     const allWords = propertyAndObjectWords.length ?
         [...worldsWithQualifier, "with", "(" + propertyAndObjectWords.join(" ") + ")"] :
