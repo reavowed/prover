@@ -4,6 +4,7 @@ import net.prover.controllers.ExtractionHelper
 import net.prover.model.definitions.{BinaryRelationStatement, KnownStatement, TermDefinition, Wrapper}
 import net.prover.model.expressions._
 import net.prover.model.proof.StepProvingContext.KnownEquality
+import net.prover.model.utils.ExpressionUtils
 import net.prover.model.{Inference, Substitutions}
 
 object PremiseFinder {
@@ -123,10 +124,10 @@ object PremiseFinder {
     }
   }
 
-  private def getTarget(
+  private def rewriteTarget(
     premiseStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): (Seq[DerivationStep], Step.Target) = {
+  ): (Seq[DerivationStep], Statement) = {
     stepProvingContext.knownValuesToProperties.foldLeft((premiseStatement, Seq.empty[DerivationStep])) { case ((currentStatement, currentDerivation), propertyValue) =>
       EqualityRewriter.getReverseReplacements(currentStatement, propertyValue.lhs, propertyValue.rhs, propertyValue.equality) match {
         case Some((result, derivationStep)) =>
@@ -134,22 +135,59 @@ object PremiseFinder {
         case None =>
           (currentStatement, currentDerivation)
       }
-    }.swap.mapRight(Step.Target(_))
+    }.swap
+  }
+
+  private def deconstruct(
+    statement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[(DerivationStep, Seq[Statement])] = {
+    stepProvingContext.provingContext.statementDefinitionDeconstructions.mapFind { deconstructionInference =>
+      for {
+        substitutions <- deconstructionInference.conclusion.calculateSubstitutions(statement).flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
+        step <- Step.Assertion.forInference(deconstructionInference, substitutions)
+      } yield (DerivationStep.fromAssertion(step), step.premises.map(_.statement))
+    }
+  }
+
+  private def splitTarget(
+    targetStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): (Seq[DerivationStep], Seq[Statement]) = {
+    def default = (Nil, Seq(targetStatement))
+    if (ExpressionUtils.isTypeLikeStatement(targetStatement)) {
+      default
+    } else {
+      deconstruct(targetStatement) match {
+        case Some((deconstructionStep, innerTargets)) => splitTargets(innerTargets).mapLeft(deconstructionStep +: _)
+        case None => default
+      }
+    }
+  }
+
+  private def splitTargets(
+    targetStatements: Seq[Statement])(
+    implicit stepProvingContext: StepProvingContext
+  ): (Seq[DerivationStep], Seq[Statement]) = {
+    targetStatements.map(splitTarget).splitFlatten
   }
 
   private def findDerivationsOrTargets(
     premiseStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
   ): (Seq[DerivationStep], Seq[Step.Target]) = {
-    val directly = PremiseFinder.findDerivationForStatement(premiseStatement).map(_ -> Nil)
-    def byDeconstructing = (for {
-      deconstructionInference <- stepProvingContext.provingContext.statementDefinitionDeconstructions
-      substitutions <- deconstructionInference.conclusion.calculateSubstitutions(premiseStatement).flatMap(_.confirmTotality(deconstructionInference.variableDefinitions)).toSeq
-      step <- Step.Assertion.forInference(deconstructionInference, substitutions).toSeq
-      (innerSteps, innerTargets) = findDerivationsOrTargets(step.premises.map(_.statement))
-    } yield (innerSteps :+ DerivationStep.fromAssertion(step), innerTargets)).headOption
-
-    directly orElse byDeconstructing getOrElse getTarget(premiseStatement).mapRight(Seq(_))
+    val directly = findDerivationForStatement(premiseStatement).map(_ -> Nil)
+    def byDeconstructing = for {
+      (step, deconstructedStatements) <- deconstruct(premiseStatement)
+      (innerSteps, innerTargets) = findDerivationsOrTargets(deconstructedStatements)
+      if innerSteps.nonEmpty
+    } yield (innerSteps :+ step, innerTargets)
+    def asTarget = {
+      val (rewriteSteps, rewrittenStatement) = rewriteTarget(premiseStatement)
+      val (deconstructionSteps, deconstructedStatements) = splitTarget(rewrittenStatement)
+      (rewriteSteps ++ deconstructionSteps, deconstructedStatements.map(Step.Target(_)))
+    }
+    directly orElse byDeconstructing getOrElse asTarget
   }
 
   def findDerivationsOrTargets(

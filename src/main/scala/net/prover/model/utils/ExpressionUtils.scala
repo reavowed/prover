@@ -76,6 +76,9 @@ object ExpressionUtils {
   def getTypeLikeStatement(statement: Statement)(implicit entryContext: EntryContext): Option[TypeLikeStatement] = {
     getTypeStatementWithOptionalQualifier(statement) orElse getTypeQualifierStatement(statement) orElse getTypePropertyStatement(statement)
   }
+  def isTypeLikeStatement(statement: Statement)(implicit entryContext: EntryContext): Boolean = {
+    getTypeLikeStatement(statement).nonEmpty
+  }
 
   private def getFromUnaryExpression[TExpression <: Expression : ClassTag, TDefinedExpression <: DefinedExpression[TExpression] : ClassTag, TResult](statement: TExpression, f: TExpression => Option[TResult]): Option[TResult] = {
     statement.asOptionalInstanceOf[TDefinedExpression].filter(_.boundVariableNames.isEmpty).flatMap(_.components.single).flatMap(_.asOptionalInstanceOf[TExpression]).flatMap(f)

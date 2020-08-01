@@ -300,6 +300,17 @@ class PremiseFinderSpec extends Specification {
         Seq(ForAllIn("x", Product(Naturals, Naturals))(ForAllIn("y", Product(Naturals, Naturals))(φ($.^, $)))))
     }
 
+    "deconstruct a non-type-statement target" in {
+      findPremiseOrTarget(Conjunction(φ, ψ), Nil) mustEqual (
+        Seq(assertion(combineConjunction, Seq(φ, ψ), Nil)(SubstitutionContext.outsideProof)),
+        Seq(φ.toVariable, ψ.toVariable)
+      )
+    }
+
+    "not deconstruct a type-statement target" in {
+      findPremiseOrTarget(Conjunction(Function(a), FunctionFrom(a, b)), Nil) mustEqual (Nil, Seq(Conjunction(Function(a), FunctionFrom(a, b))))
+    }
+
     "find a premise using a simplification that has a type statement premise" in {
       // There's actually a LOT of complicated stuff going on here - the expected progression is:
       // f(a) ∈ B
