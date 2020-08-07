@@ -1,4 +1,4 @@
-package net.prover.controllers.models
+package net.prover.model.unwrapping
 
 import net.prover.controllers._
 import net.prover.model.definitions.{BinaryJoiner, DeductionDefinition, GeneralizationDefinition, Wrapper}
@@ -20,6 +20,7 @@ sealed trait Unwrapper {
   def rewrapWithDistribution(steps: Seq[Step], joiner: BinaryJoiner[Statement], source: Statement, result: Statement)(implicit stepProvingContext: StepProvingContext): Try[Seq[Step]]
   def remove(source: Term, premises: Seq[Statement], wrapperStatement: Statement)(implicit stepContext: StepContext): Option[(Term, Seq[Statement], Statement)]
 }
+
 case class GeneralizationUnwrapper(variableName: String, generalizationDefinition: GeneralizationDefinition, specificationInference: Inference) extends Unwrapper {
   val definitionSymbol: String = generalizationDefinition.statementDefinition.symbol
   val depth = 1
@@ -59,6 +60,7 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
     } yield (removedSource, removedPremises, addToStatement(wrapperStatement))
   }
 }
+
 case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: DeductionDefinition, deductionEliminationInference: Inference) extends Unwrapper {
   val definitionSymbol: String = deductionDefinition.statementDefinition.symbol
   val depth = 0
@@ -104,12 +106,15 @@ object Unwrapper {
   implicit class Unwrappers(unwrappers: Seq[Unwrapper]) {
     def depth: Int = unwrappers.map(_.depth).sum
 
-    def enhanceContext(stepContext: StepContext): StepContext = {
+    def enhanceStepContext(stepContext: StepContext): StepContext = {
       unwrappers.foldLeft(stepContext) { case (context, unwrapper) => unwrapper.enhanceContext(context) }
     }
+    def enhanceStepProvingContext(stepProvingContext: StepProvingContext): StepProvingContext = {
+      stepProvingContext.updateStepContext(enhanceStepContext)
+    }
 
-    private def getExtractionSteps(premise: Statement, steps: Seq[Step], inference: Option[Inference])(implicit stepContext: StepContext): Seq[Step] = {
-      val enhancedContext = enhanceContext(stepContext)
+    def getExtractionSteps(premise: Statement, steps: Seq[Step], inference: Inference)(implicit stepContext: StepContext): Seq[Step] = {
+      val enhancedContext = enhanceStepContext(stepContext)
 
       def helper(currentUnwrappers: Seq[Unwrapper]): (Seq[Step], Statement, Int) = {
         currentUnwrappers match {
@@ -125,22 +130,27 @@ object Unwrapper {
       val (extractionSteps, _, _) = helper(unwrappers)
       Step.Elided.ifNecessary(extractionSteps, "Extracted") match {
         case Some(extractionStep) =>
-          Seq(extractionStep, EqualityRewriter.rewriteElider(inference)(steps).get)
+          Seq(extractionStep, EqualityRewriter.rewriteElider(Some(inference))(steps).get)
         case None =>
           steps
       }
     }
 
-    def rewrap(premise: Statement, steps: Seq[Step], wrapper: Wrapper[Term, Statement], inference: Inference)(implicit stepContext: StepContext): (Seq[Step], Wrapper[Term, Statement]) = {
-      val rewriteSteps = getExtractionSteps(premise, steps, Some(inference))
-      unwrappers.foldRight((rewriteSteps, wrapper)) { case (unwrapper, (currentSteps, currentWrapper)) =>
-        (Seq(unwrapper.rewrap(currentSteps)), unwrapper.enhanceWrapper(currentWrapper))
+    def rewrap(steps: Seq[Step])(implicit stepContext: StepContext): Seq[Step] = {
+      unwrappers.foldRight(steps) { case (unwrapper, currentSteps) =>
+        Seq(unwrapper.rewrap(currentSteps))
+      }
+    }
+
+    def enhanceWrapper(wrapper: Wrapper[Term, Statement])(implicit stepContext: StepContext): Wrapper[Term, Statement] = {
+      unwrappers.foldRight(wrapper) { case (unwrapper, currentWrapper) =>
+        unwrapper.enhanceWrapper(currentWrapper)
       }
     }
 
     def rewrapWithDistribution(joiner: BinaryJoiner[Statement], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Statement], inference: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Statement])] = {
       val (sourceStatement, resultStatement) = {
-        implicit val enhancedStepContext = enhanceContext(implicitly)
+        implicit val enhancedStepContext = enhanceStepContext(implicitly)
         (wrapper(source), wrapper(result))
       }
 
@@ -185,7 +195,7 @@ object Unwrapper {
     }
 
     def addNecessaryExtractions(statement: Statement, step: Step, targets: Seq[Step.Target])(implicit stepContext: StepContext): (Statement, Seq[Step], Seq[Step.Target]) = {
-      val innermostContext = enhanceContext(stepContext)
+      val innermostContext = enhanceStepContext(stepContext)
       def getTargetExtraction(target: Statement): (Statement, Option[Step]) = {
         def helper(currentUnwrappers: Seq[Unwrapper]): (Statement, Seq[Step], Int) = {
           currentUnwrappers match {

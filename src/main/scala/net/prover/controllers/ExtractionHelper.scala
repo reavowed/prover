@@ -116,7 +116,7 @@ object ExtractionHelper {
     }
   }
 
-  private def groupStepsByDefinition(extractionApplication: ExtractionApplication, initialStep: Option[DerivationStep])(implicit provingContext: ProvingContext): ExtractionApplication = {
+  private def groupStepsByDefinition(extractionApplication: ExtractionApplication, initialStep: Option[DerivationStepWithSingleInference])(implicit provingContext: ProvingContext): ExtractionApplication = {
     extractionApplication.copy(extractionSteps = SubstatementExtractor.groupStepsByDefinition(extractionApplication.extractionSteps, initialStep))
   }
 

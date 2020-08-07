@@ -5,7 +5,7 @@ import net.prover.model.definitions.ExpressionDefinition.ComponentType.{Statemen
 import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
-import net.prover.model.proof.{DerivationStep, Step, SubstatementExtractor, SubstitutionContext}
+import net.prover.model.proof.{DerivationStep, DerivationStepWithSingleInference, Step, SubstatementExtractor, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.util.Direction
@@ -643,7 +643,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     }
   }
 
-  lazy val facts: Seq[DerivationStep] = {
+  lazy val facts: Seq[DerivationStepWithSingleInference] = {
     for {
       inferenceExtraction <- allInferenceExtractions
       if inferenceExtraction.premises.isEmpty && inferenceExtraction.variableDefinitions.isEmpty

@@ -147,6 +147,9 @@ object ExpressionUtils {
   def isCombinationOfTermConstants(t: Term): Boolean = {
     recurseOnTerms(t, getTermConstantDefinition).isDefined
   }
+  def isSimpleTermVariableOrCombinationOfTermConstants(t: Term): Boolean = {
+    isSimpleTermVariable(t) || isCombinationOfTermConstants(t)
+  }
   def isWrappedSimpleTerm(t: Term): Boolean = {
     t.asOptionalInstanceOf[DefinedTerm].map(_.components).exists {
       case Seq(t1: Term) if isSimpleTermVariable(t1) || isTermConstant(t1) =>

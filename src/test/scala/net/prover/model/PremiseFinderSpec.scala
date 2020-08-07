@@ -362,13 +362,13 @@ class PremiseFinderSpec extends Specification {
       val b = TermVariablePlaceholder("b", 3)
       implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(∗ -> 0, A -> 0, a -> 0, b -> 0))
 
-      // a ∗ b ∈ A
-      // a ∗ b ∈ baseSet(∗)                 (via BinaryOperationOn(∗, A) -> baseSet(∗) = A)
-      // a ∗ b ∈ range(∗)                   (via BinaryOperation(∗) -> FunctionFrom(∗, BaseSet(∗) × BaseSet(∗), BaseSet(∗)) -> Range(∗) ⊆ BaseSet(∗))
-      // (a, b) ∈ domain(∗)                 (via BinaryOperation(∗) -> Function(∗) -> Function Application Is Element of Range)
-      // (a, b) ∈ baseSet(∗) × baseSet(∗)   (via BinaryOperation(∗) -> FunctionFrom(∗, BaseSet(∗) × BaseSet(∗), BaseSet(∗)) -> Range(∗) ⊆ BaseSet(∗))
-      // a ∈ baseSet(∗)
-      // a ∈ A
+      // a ∈ A / b ∈ A
+      // a ∈ baseSet(∗) / b ∈ baseSet(∗)
+      // (a, b) ∈ baseSet(∗) × baseSet(∗)
+      // (a, b) ∈ domain(∗)                 (via BinaryOperation(∗) -> FunctionFrom(∗, BaseSet(∗) × BaseSet(∗), BaseSet(∗)) -> Range(∗) ⊆ BaseSet(∗))
+      // a ∗ b ∈ range(∗)                   (via BinaryOperation(∗) -> Function(∗) -> Function Application Is Element of Range)
+      // a ∗ b ∈ baseSet(∗)                 (via BinaryOperation(∗) -> FunctionFrom(∗, BaseSet(∗) × BaseSet(∗), BaseSet(∗)) -> Range(∗) ⊆ BaseSet(∗))
+      // a ∗ b ∈ A                          (via BinaryOperationOn(∗, A) -> baseSet(∗) = A)
       checkFindPremiseSteps(
         ElementOf(Apply(∗, Pair(a , b)), A),
         Seq(Conjunction(BinaryOperation(∗), BinaryOperationOn(∗, A)), ElementOf(a, A), ElementOf(b, A)),
@@ -418,6 +418,50 @@ class PremiseFinderSpec extends Specification {
             assertion(Distributive.deconstructionInference, Nil, Seq(∗, ∘)),
             assertion(reverseEquality, Nil, Seq(BaseSet(∗), BaseSet(∘))))),
           assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(BaseSet(∘), BaseSet(∗)))))
+    }
+
+    "apply multiple type definitions" in {
+      val ∘ = TermVariablePlaceholder("∘", 0)
+      val f = TermVariablePlaceholder("f", 1)
+      val A = TermVariablePlaceholder("A", 2)
+      val a = TermVariablePlaceholder("a", 3)
+      val b = TermVariablePlaceholder("b", 4)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(∘ -> 0, f -> 0, A -> 0, a -> 0, b -> 0))
+
+      // b ∈ A
+      // b ∈ domain(f)
+      // f(b) ∈ range(f)
+      // f(b) ∈ A
+      // f(b) ∈ baseSet(∘)
+      // (a, f(b)) ∈ baseSet(∘) × baseSet(∘)
+      // (a, f(b)) ∈ domain(∘)
+      // a ∘ f(b) ∈ range(∘)
+      // a ∘ f(b) ∈ baseSet(∘)
+      // a ∘ f(b) ∈ A
+
+      checkFindPremise(
+        ElementOf(Apply2(∘, a, Apply(f, b)), A),
+        Seq(Conjunction(BinaryOperation(∘), BinaryOperationOn(∘, A)), Conjunction(UnaryOperation(f), UnaryOperationOn(f, A)), ElementOf(a, A), ElementOf(b, A)))
+    }
+
+    "find a premise inside a generalized deduction" in {
+      val A = TermVariablePlaceholder("A", 0)
+      val b = TermVariablePlaceholder("b", 1)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, b -> 0))
+      checkFindPremise(
+        ForAllIn("a", A)(ElementOf(Pair($, b), Product(A, A))),
+        Seq(ElementOf(b, A)))
+    }
+
+    "apply multiple type definitions inside generalizations and deductions" in {
+      val ∘ = TermVariablePlaceholder("∘", 0)
+      val f = TermVariablePlaceholder("f", 1)
+      val A = TermVariablePlaceholder("A", 2)
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(∘ -> 0, f -> 0, A -> 0))
+
+      checkFindPremise(
+        ForAllIn("a", A)(ForAllIn("b", A)(ElementOf(Apply2(∘, $.^, Apply(f, $)), A))),
+        Seq(Conjunction(BinaryOperation(∘), BinaryOperationOn(∘, A)), Conjunction(UnaryOperation(f), UnaryOperationOn(f, A))))
     }
   }
 }

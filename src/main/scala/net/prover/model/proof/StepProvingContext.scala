@@ -64,12 +64,12 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
   lazy val knownEqualities: Seq[KnownEquality] = {
     for {
       equality <- provingContext.equalityOption.toSeq
-      KnownStatement(statement, derivation) <- (knownStatementsFromPremises ++ provingContext.facts.map(KnownStatement.fromSingleStep))
+      KnownStatement(statement, derivation) <- knownStatementsFromPremises ++ provingContext.facts.map(KnownStatement.fromSingleStep)
       (lhs, rhs) <- equality.unapply(statement)
     } yield KnownEquality(lhs, rhs, equality, derivation)
   }
   lazy val knownValuesToProperties: Seq[KnownEquality] = {
-    def isValue(valueTerm: Term) = ExpressionUtils.isSimpleTermVariable(valueTerm) || ExpressionUtils.isCombinationOfTermConstants(valueTerm)
+    def isValue(valueTerm: Term) = ExpressionUtils.isSimpleTermVariableOrCombinationOfTermConstants(valueTerm)
     def isProperty(propertyTerm: Term) = ExpressionUtils.isWrappedSimpleTerm(propertyTerm)
     knownEqualities.filter { case KnownEquality(lhs, rhs, _, _) =>
       isValue(lhs) && isProperty(rhs)

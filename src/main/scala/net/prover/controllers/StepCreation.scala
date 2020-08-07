@@ -1,6 +1,7 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{StepDefinition, Unwrapper}
+import net.prover.controllers.models.StepDefinition
+import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepProvingContext, SubstatementExtractor}
 import net.prover.model.{ExpressionParsingContext, Substitutions}
@@ -19,7 +20,7 @@ trait StepCreation extends BookModification {
       inference <- findInference(inferenceId)
       extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
       extraction <- SubstatementExtractor.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
-      wrappedStepProvingContext = StepProvingContext.updateStepContext(unwrappers.enhanceContext)
+      wrappedStepProvingContext = StepProvingContext.updateStepContext(unwrappers.enhanceStepContext)
       substitutions <- definition.substitutions.parse(extraction.variableDefinitions)(ExpressionParsingContext.atStep(wrappedStepProvingContext))
       epc = ExpressionParsingContext.forInference(inference).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
       conclusionOption <- getConclusionOption(epc, substitutions)

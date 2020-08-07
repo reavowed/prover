@@ -4,6 +4,7 @@ import net.prover.controllers.ExtractionHelper
 import net.prover.model.definitions.{BinaryRelationStatement, KnownStatement, TermDefinition, Wrapper}
 import net.prover.model.expressions._
 import net.prover.model.proof.StepProvingContext.KnownEquality
+import net.prover.model.unwrapping.UnwrappedStatement
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.{Inference, Substitutions}
 
@@ -29,6 +30,23 @@ object PremiseFinder {
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
   ): Option[Seq[DerivationStep]] = {
+    UnwrappedStatement.getUnwrappedStatements(targetStatement).mapFind { unwrappedStatement =>
+      findDerivationForUnwrappedStatement(unwrappedStatement.statement)(unwrappedStatement.unwrappers.enhanceStepProvingContext(stepProvingContext))
+        .map { derivation =>
+          unwrappedStatement.unwrappers.rewrap(derivation.steps) match {
+            case Seq(singleStep) =>
+              Seq(DerivationStepWithMultipleInferences(targetStatement, derivation.inferences, singleStep))
+            case _ =>
+              derivation
+          }
+        }
+    }
+  }
+
+  private def findDerivationForUnwrappedStatement(
+    targetStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[Seq[DerivationStep]] = {
     stepProvingContext.provingContext.findRelation(targetStatement).map(findDirectDerivationForBinaryRelationStatement)
       .getOrElse(findDirectDerivationForStatement(targetStatement))
       .map(_.deduplicate)
@@ -40,7 +58,7 @@ object PremiseFinder {
   ): Option[Seq[DerivationStep]] = {
     import stepProvingContext._
     import provingContext._
-    def findDerivationWithFactInferences(targetStatement: Statement): Option[(Seq[DerivationStep], Seq[Inference])] = {
+    def findDerivationWithFactInferences(targetStatement: Statement): Option[(Seq[DerivationStepWithSingleInference], Seq[Inference])] = {
       def directly = factsBySerializedStatement.get(targetStatement.serialized).map(derivationStep => (Seq(derivationStep), Seq(derivationStep.inference)))
       def bySimplifying = conclusionSimplificationInferences.iterator.findFirst { inference =>
         for {
@@ -113,15 +131,27 @@ object PremiseFinder {
         } yield innerDerivation ++ rewriteDerivation).headOption
       }
     }
-    withoutRenaming(binaryRelationStatement) orElse
-    {
-      (for {
+    def byRenaming: Option[Seq[DerivationStep]] = {
+      def directly = (for {
         KnownEquality(source, result, equality, equalityDerivation) <- stepProvingContext.knownEqualities
         if result == binaryRelationStatement.right
         innerDerivation <- withoutRenaming(binaryRelationStatement.withNewRight(source))
         renameStep = DerivationStep.fromAssertion(equality.substitution.assertionStep(source, result, Wrapper[Term, Statement]((t, c) => binaryRelationStatement.relation(binaryRelationStatement.left, t)(c))))
       } yield innerDerivation ++ equalityDerivation :+ renameStep).headOption
+      def transitively = (for {
+        secondEquality <- stepProvingContext.knownEqualities
+        equality = secondEquality.equality
+        if secondEquality.rhs == binaryRelationStatement.right && ExpressionUtils.isSimpleTermVariableOrCombinationOfTermConstants(secondEquality.lhs)
+        firstEquality <- stepProvingContext.knownEqualities
+        if firstEquality.rhs == secondEquality.lhs
+        innerDerivation <- withoutRenaming(binaryRelationStatement.withNewRight(firstEquality.lhs))
+        transitivityStep = DerivationStep.fromAssertion(equality.transitivity.assertionStep(firstEquality.lhs, firstEquality.rhs, secondEquality.rhs))
+        renameStep = DerivationStep.fromAssertion(equality.substitution.assertionStep(firstEquality.lhs, secondEquality.rhs, Wrapper[Term, Statement]((t, c) => binaryRelationStatement.relation(binaryRelationStatement.left, t)(c))))
+      } yield innerDerivation ++ firstEquality.derivation ++ secondEquality.derivation :+ transitivityStep :+ renameStep).headOption
+      directly orElse transitively
     }
+
+    withoutRenaming(binaryRelationStatement) orElse byRenaming
   }
 
   private def rewriteTarget(

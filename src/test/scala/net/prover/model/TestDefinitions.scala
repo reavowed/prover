@@ -221,7 +221,10 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
   val Function = TypeDefinition("function", "f", None, None, Conjunction(PairSet(f), ForAllIn("a", Domain(f))(ExistsUnique("b")(ElementOf(Pair($.^, $), f)))))
   val FunctionFrom = TypeQualifierDefinition("from", Function, Qualifier(Seq("A", "B"), Format.Explicit("from A B", Seq("A", "B"), true, true)), None, Conjunction(Equals(Domain(f), A), Subset(Range(f), B)), ConjunctionDefinition)
   val Apply = simpleTermDefinition("apply", Seq(a, b), Format.Explicit("%1(%2)", "a(b)", 3, requiresBrackets = false, requiresComponentBrackets = true))
+  def Apply2(f: Term, a: Term, b: Term): Term = Apply(f, Pair(a, b))
 
+  val UnaryOperation = TypeDefinition("unaryOperation", "f", None, None, Conjunction(Function(f), FunctionFrom(f, Domain(f), Domain(f))))
+  val UnaryOperationOn = TypeQualifierDefinition("on", UnaryOperation, Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true)), None, Equals(Domain(f), A), ConjunctionDefinition)
   val BaseSet = simpleTermDefinition("baseSet", Seq(a), Format.Explicit("%0(%1)", "baseSet(a)", 2, false, false), Nil, Equals($, Domain(Domain(a))))
   val BinaryOperation = TypeDefinition("binaryOperation", SimpleVariableDefinition("f", Seq("infix-function")), None, None, Conjunction(Function(f), FunctionFrom(f, Product(BaseSet(f), BaseSet(f)), BaseSet(f))))
   val BinaryOperationOn = TypeQualifierDefinition("on", BinaryOperation, Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true)), None, Equals(BaseSet(f), A), ConjunctionDefinition)
@@ -409,7 +412,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     Seq(
       EmptySetDefinition, PowerSet, Singleton, Pair, Product, First, Second, Union, Comprehension,
       PairSet, Domain, Range, Relation, Function, FunctionFrom,
-      BaseSet, BinaryOperation, BinaryOperationOn, Commutative, Distributive,
+      UnaryOperation, UnaryOperationOn, BaseSet, BinaryOperation, BinaryOperationOn, Commutative, Distributive,
       NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, MultiplicationDefinition, Apply, LessThanDefinition,
       IntegersDefinition, IntegerEmbeddingDefinition, IntegerAdditionDefinition, IntegerNegation, IntegerMultiplicationDefinition) ++
     Seq(

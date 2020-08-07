@@ -5,6 +5,7 @@ import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
+import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, UnwrappedStatement, Unwrapper}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -39,39 +40,8 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     definition.getFromInferenceOrPremise(withInference, withPremise)
   }
 
-  case class UnwrappedStatement(statement: Statement, unwrappers: Seq[Unwrapper]) {
-    def definitionSymbols: Seq[String] = unwrappers.map(_.definitionSymbol)
-  }
 
-  def getPossibleTargets(statement: Statement)(implicit stepProvingContext: StepProvingContext): Seq[UnwrappedStatement] = {
-    val provingContext = stepProvingContext.provingContext
-    def helper(currentUnwrappedStatement: UnwrappedStatement, resultsSoFar: Seq[UnwrappedStatement], variableTracker: VariableTracker): Seq[UnwrappedStatement] = {
 
-      def byGeneralization = for {
-        generalizationDefinition <- provingContext.generalizationDefinitionOption
-        (specificationInference, _) <- provingContext.specificationInferenceOption
-        (variableName, predicate) <- generalizationDefinition.unapply(currentUnwrappedStatement.statement)
-        (uniqueVariableName, _, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(variableName)
-        newUnwrappedStatement = UnwrappedStatement(predicate, currentUnwrappedStatement.unwrappers :+ GeneralizationUnwrapper(uniqueVariableName, generalizationDefinition, specificationInference))
-      } yield (newUnwrappedStatement, newVariableTracker)
-
-      def byDeduction = for {
-        deductionDefinition <- provingContext.deductionDefinitionOption
-        (deductionEliminationInference, _, _) <- provingContext.deductionEliminationInferenceOption
-        (antecedent, consequent) <- deductionDefinition.unapply(currentUnwrappedStatement.statement)
-        newUnwrappedStatement = UnwrappedStatement(consequent, currentUnwrappedStatement.unwrappers :+ DeductionUnwrapper(antecedent, deductionDefinition, deductionEliminationInference))
-      } yield (newUnwrappedStatement, variableTracker)
-
-      (byGeneralization orElse byDeduction) match {
-        case Some((newUnwrappedStatement, newVariableTracker)) =>
-          helper(newUnwrappedStatement, resultsSoFar :+ newUnwrappedStatement, newVariableTracker)
-        case None =>
-          resultsSoFar
-      }
-    }
-    val initialUnwrappedStatement = UnwrappedStatement(statement, Nil)
-    helper(initialUnwrappedStatement, Seq(initialUnwrappedStatement), VariableTracker.fromStepContext)
-  }
 
   @GetMapping(value = Array("/possibleInferencesForCurrentTarget"), produces = Array("application/json;charset=UTF-8"))
   def getPossibleInferencesForCurrentTarget(
@@ -87,7 +57,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     } yield {
       implicit val spc = stepProvingContext
 
-      val possibleUnwrappedTargetStatements = getPossibleTargets(step.statement)
+      val possibleUnwrappedTargetStatements = UnwrappedStatement.getUnwrappedStatements(step.statement)
 
       def findPossibleInference(inference: Inference): Option[PossibleInferenceWithTargets] = {
         val possibleTargets = for {
@@ -131,9 +101,9 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     (for {
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       inference <- findInference(inferenceId)(stepProvingContext)
-      possibleTarget <- getPossibleTargets(step.statement)(stepProvingContext).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
+      possibleTarget <- UnwrappedStatement.getUnwrappedStatements(step.statement)(stepProvingContext).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
       inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == conclusionExtractionInferenceIds.toSeq).orBadRequest(s"Could not find extraction option with inference ids ${conclusionExtractionInferenceIds.mkString(", ")}")
-    } yield PossibleConclusionWithPremises.fromExtractionWithTarget(inferenceExtraction, possibleTarget.statement)(stepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceContext))).toResponseEntity
+    } yield PossibleConclusionWithPremises.fromExtractionWithTarget(inferenceExtraction, possibleTarget.statement)(stepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceStepContext))).toResponseEntity
   }
 
   @GetMapping(value = Array("/possibleInferencesForNewTarget"), produces = Array("application/json;charset=UTF-8"))
@@ -214,7 +184,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (targetStep, stepProvingContext) =>
       implicit val spc = stepProvingContext
       for {
-        (targetStatement, unwrappers) <- getPossibleTargets(targetStep.statement).find(_.definitionSymbols == definition.wrappingSymbols).map(x => (x.statement, x.unwrappers)).orBadRequest("Invalid wrapping symbols")
+        (targetStatement, unwrappers) <- UnwrappedStatement.getUnwrappedStatements(targetStep.statement).find(_.definitionSymbols == definition.wrappingSymbols).map(x => (x.statement, x.unwrappers)).orBadRequest("Invalid wrapping symbols")
         (result, newStep, targets) <- createStep(definition, (_, _) => Success(Some(targetStatement)), unwrappers)
         _ <- (result == targetStep.statement).orBadRequest("Conclusion was incorrect")
       } yield (newStep, targets)

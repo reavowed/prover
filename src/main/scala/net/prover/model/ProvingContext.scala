@@ -4,7 +4,7 @@ import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.SubstatementExtractor.{Extraction, ExtractionFromSinglePremise, InferenceExtraction}
-import net.prover.model.proof.{DerivationStep, Step, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof.{DerivationStep, DerivationStepWithMultipleInferences, DerivationStepWithSingleInference, Step, StepProvingContext, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
@@ -51,7 +51,14 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
     implicit val allowableStep: Allowable[Step] = allowable(step => step.referencedInferenceIds.forall(entryContext.allInferenceIds.contains))
-    implicit val allowableDerivationStep: Allowable[DerivationStep] = allowableGeneric(Generic[DerivationStep])
+    implicit val allowableDerivationStepWithSingleInference: Allowable[DerivationStepWithSingleInference] = allowableGeneric(Generic[DerivationStepWithSingleInference])
+    implicit val allowableDerivationStepWithMultipleInferences: Allowable[DerivationStepWithMultipleInferences] = allowableGeneric(Generic[DerivationStepWithMultipleInferences])
+    implicit val allowableDerivationStep: Allowable[DerivationStep] = allowable {
+      case derivationStepWithSingleInference: DerivationStepWithSingleInference =>
+        allowableDerivationStepWithSingleInference.isAllowed(derivationStepWithSingleInference)
+      case derivationStepWithMultipleInferences: DerivationStepWithMultipleInferences =>
+        allowableDerivationStepWithMultipleInferences.isAllowed(derivationStepWithMultipleInferences)
+    }
     implicit val allowableKnownStatement: Allowable[KnownStatement] = allowableGeneric(Generic[KnownStatement])
     implicit def allowableDesimplifiedPremise: Allowable[DesimplifiedPremise] = allowableGeneric(Generic[DesimplifiedPremise])
     implicit def allowablePremiseDesimplification: Allowable[DerivedPremise] = allowable {
@@ -224,10 +231,10 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
   lazy val structuralSimplificationInferences: Seq[(Inference, Statement)] = {
     filter(definitions.structuralSimplificationInferences)
   }
-  lazy val facts: Seq[DerivationStep] = {
+  lazy val facts: Seq[DerivationStepWithSingleInference] = {
     filter(definitions.facts)
   }
-  lazy val factsBySerializedStatement: Map[String, DerivationStep] = {
+  lazy val factsBySerializedStatement: Map[String, DerivationStepWithSingleInference] = {
     facts.map { fact => fact.statement.serialized -> fact }.toMapPreservingEarliest
   }
 
