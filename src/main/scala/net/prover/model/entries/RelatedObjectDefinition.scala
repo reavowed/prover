@@ -3,7 +3,7 @@ package net.prover.model.entries
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
-import net.prover.model.expressions.Statement
+import net.prover.model.expressions.{DefinedStatement, FunctionParameter, Statement, TermVariable}
 
 case class RelatedObjectDefinition(
     symbol: String,
@@ -34,6 +34,10 @@ case class RelatedObjectDefinition(
     Some(parentTypeConditions.parentConditionConstructor(definingStatement, 1)),
     this)
   override val inferences: Seq[Inference.FromEntry] = statementDefinition.inferences
+
+  def condition(offset: Int): DefinedStatement = {
+    statementDefinition(FunctionParameter(0, 0) +: parentVariableDefinitions.indices.map(i => TermVariable(i + offset)): _*)
+  }
 
   override def replaceDefinitions(entryReplacements: Map[ChapterEntry, ChapterEntry], expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): ChapterEntry = {
     RelatedObjectDefinition(

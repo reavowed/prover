@@ -46,13 +46,13 @@ class PropertyDefinitionSpec extends Specification {
           None,
           ConjunctionDefinition),
         None,
-        ψ($))
+        Conjunction(φ, ψ($)))
       definition.statementDefinition.definingStatement must beSome(
-        Conjunction(
+        ConjunctionDefinition.all(
           binaryOperationDefinition.statementDefinition(f, A),
-          Conjunction(
-            ExistsUnique("e")(identityDefinition.statementDefinition($, f, A)),
-            ForAll("e")(Implication(identityDefinition.statementDefinition($, f, A), ψ($))))))
+          φ,
+          ExistsUnique("e")(identityDefinition.statementDefinition($, f, A)),
+          ForAll("e")(Implication(identityDefinition.statementDefinition($, f, A), ψ($)))))
     }
   }
 }

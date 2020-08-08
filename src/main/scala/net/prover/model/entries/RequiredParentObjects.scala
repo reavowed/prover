@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import net.prover.model._
 import net.prover.model.definitions.{ConjunctionDefinition, DeductionDefinition, GeneralizationDefinition, UniqueExistenceDefinition}
-import net.prover.model.expressions.{FunctionParameter, Statement, TermVariable}
+import net.prover.model.expressions.Statement
 
 case class RequiredParentObjects(
   objectDefinitions: Seq[RelatedObjectDefinition],
@@ -19,12 +19,21 @@ case class RequiredParentObjects(
       entryContext.deductionDefinitionOption.get)
   }
   def conditionConstructor(conjunctionDefinition: ConjunctionDefinition, offset: Int)(statement: Statement): Statement = {
-    objectDefinitions.foldRight(statement) { (objectDefinition, currentStatement) =>
-      val objectCondition = objectDefinition.statementDefinition(FunctionParameter(0, 0) +: objectDefinition.parentVariableDefinitions.indices.map(i => TermVariable(i + offset)): _*)
-      conjunctionDefinition(
-        uniqueExistenceDefinition(objectDefinition.mainVariableDefinition.name, objectCondition),
-        generalizationDefinition(objectDefinition.mainVariableDefinition.name, deductionDefinition(objectCondition, currentStatement)))
+    val existenceStatements = objectDefinitions.map { objectDefinition =>
+      uniqueExistenceDefinition(objectDefinition.mainVariableDefinition.name, objectDefinition.condition(offset))
     }
+    def helper(statement: Statement, extractedStatements: Seq[Statement]): (Statement, Seq[Statement]) = {
+      def byExtractingLeft = for {
+        (l, r) <- conjunctionDefinition.unapply(statement)
+        extractedL <- l.removeExternalParameters(objectDefinitions.length)
+      } yield helper(r, extractedStatements :+ extractedL)
+      byExtractingLeft getOrElse (statement, extractedStatements)
+    }
+    val (innerStatement, extractedStatements) = helper(statement, Nil)
+    val generalizedInnerStatement = objectDefinitions.foldRight(innerStatement) { (objectDefinition, currentStatement) =>
+      generalizationDefinition(objectDefinition.mainVariableDefinition.name, deductionDefinition(objectDefinition.condition(offset), currentStatement))
+    }
+    conjunctionDefinition.all(extractedStatements ++ existenceStatements :+ generalizedInnerStatement :_*)
   }
   def serialized: String = Seq("parentObjects", objectDefinitions.map(_.symbol).mkString(" ").inParens).mkString(" ")
 }

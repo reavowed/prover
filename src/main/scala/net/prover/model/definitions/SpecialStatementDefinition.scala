@@ -38,7 +38,9 @@ object SpecialStatementDefinition {
   }
 }
 
-case class ConjunctionDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.BinaryConnective
+case class ConjunctionDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.BinaryConnective {
+  def all(statements: Statement*): Statement = statements.reduceRight(apply)
+}
 case class DeductionDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.BinaryConnective
 case class GeneralizationDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.Quantifier
 case class UniqueExistenceDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.Quantifier
