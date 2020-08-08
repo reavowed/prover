@@ -16,6 +16,8 @@ write ∀ x → ∈ $0 X φ as allin
 
 write ∃ x ∧ ∈ $0 X φ as exin
 
+write ∃! x ∧ ∈ $0 X φ as ex!in
+
 axiom Extensionality
 termVariables(a 0, b 0)
 premise ∀ x ↔ ∈ $0 t0 ∈ $0 t1
