@@ -235,6 +235,8 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
     BinaryOperation,
     "∘",
     "∗",
+    TermListAdapter(Nil),
+    TermListAdapter(Nil),
     "distributes over",
     Some("distributivity"),
     Conjunction(

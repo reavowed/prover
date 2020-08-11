@@ -83,17 +83,22 @@ trait ParameterValidation {
         } yield Some(RequiredParentObjects(objectDefinitions, uniquenessDefinition, generalizationDefinition, deductionDefinition))
     }
   }
-  def getOptionalAdapter(variableDefinitionsText: String, possibleSerializedTemplates: String, qualifierVariableDefinitions: Seq[SimpleVariableDefinition])(implicit entryContext: EntryContext): Try[Option[TermListAdapter]] = {
+  def getOptionalAdapter(variableDefinitionsText: String, possibleSerializedTemplates: String, requiredOutputVariables: Seq[SimpleVariableDefinition])(implicit entryContext: EntryContext): Try[Option[(TermListAdapter, Seq[SimpleVariableDefinition])]] = {
     getOptionalString(possibleSerializedTemplates) match {
       case Some(serializedTemplates) =>
         for {
           variableDefinitions <- getSimpleVariableDefinitions(variableDefinitionsText, "adapter variable definitions")
-          epc = ExpressionParsingContext.forTypeDefinition(variableDefinitions)
-          templates <- qualifierVariableDefinitions.indices.map(_ => Term.parser(epc)).traverse.parseFromString(serializedTemplates, "templates").recoverWithBadRequest
-        } yield Some(TermListAdapter(variableDefinitions, templates))
+          adapter <- getAdapter(serializedTemplates, variableDefinitions, requiredOutputVariables)
+        } yield Some((adapter, variableDefinitions))
       case None =>
         Success(None)
     }
+  }
+  def getAdapter(serializedTemplates: String, availableVariables: Seq[SimpleVariableDefinition], requiredOutputVariables: Seq[SimpleVariableDefinition])(implicit entryContext: EntryContext): Try[TermListAdapter] = {
+    val epc = ExpressionParsingContext.forTypeDefinition(availableVariables)
+      for {
+        templates <- requiredOutputVariables.indices.map(_ => Term.parser(epc)).traverse.parseFromString(serializedTemplates, "templates").recoverWithBadRequest
+      } yield TermListAdapter(templates)
   }
 
   private def parse[T](parser: Parser[T], str: String, description: String): Try[T] = {

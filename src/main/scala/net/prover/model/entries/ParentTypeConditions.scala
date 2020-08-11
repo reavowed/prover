@@ -9,17 +9,16 @@ case class ParentTypeConditions(
     parentType: TypeDefinition,
     requiredParentQualifier: Option[TypeQualifierDefinition],
     requiredParentObjects: Option[RequiredParentObjects],
-    termListAdapter: Option[TermListAdapter],
+    adapterAndVariablesOption: Option[(TermListAdapter, Seq[SimpleVariableDefinition])],
     conjunctionDefinition: ConjunctionDefinition)
 {
   val (parentConditionConstructor, qualifierVariableDefinitions) = {
     def mainTerm(offset: Int) = TermVariable(offset, Nil)
-    val (qualifierTerms, qualifierVariableDefinitions) = termListAdapter match {
-      case Some(adapter) =>
+    val (qualifierTerms, qualifierVariableDefinitions) = adapterAndVariablesOption match {
+      case Some((adapter, adapterVariableDefinitions)) =>
         (
-          (offset: Int) =>
-            adapter.templates.map(_.specify(adapter.variableDefinitions.indices.map(i => TermVariable(offset + i + 1, Nil)))(SubstitutionContext.outsideProof).get),
-          adapter.variableDefinitions)
+          (offset: Int) => adapter.specifyTerms(adapterVariableDefinitions.indices.map(i => TermVariable(offset + i + 1, Nil))),
+          adapterVariableDefinitions)
       case None =>
         val variableDefinitions = requiredParentQualifier match {
           case Some(qualifier) =>
@@ -46,7 +45,7 @@ case class ParentTypeConditions(
   def referencedEntries: Set[ChapterEntry] = Set(parentType, conjunctionDefinition.referencedEntry) ++
     requiredParentQualifier.toSet ++
     requiredParentObjects.toSet[RequiredParentObjects].flatMap(_.referencedEntries) ++
-    termListAdapter.toSet[TermListAdapter].flatMap(_.referencedEntries)
+    adapterAndVariablesOption.map(_._1).toSet[TermListAdapter].flatMap(_.referencedEntries)
 
   def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
@@ -57,13 +56,13 @@ case class ParentTypeConditions(
       entryReplacements(parentType).asInstanceOf[TypeDefinition],
       requiredParentQualifier.map(q => entryReplacements(q).asInstanceOf[TypeQualifierDefinition]),
       requiredParentObjects.map(_.replaceDefinitions(entryReplacements, entryContext)),
-      termListAdapter.map(_.replaceDefinitions(expressionDefinitionReplacements)),
+      adapterAndVariablesOption.map(_.mapLeft(_.replaceDefinitions(expressionDefinitionReplacements))),
       entryContext.conjunctionDefinitionOption.get)
   }
 
   def serializedFollowingLines: Seq[String] = requiredParentQualifier.map(q => Seq("parentQualifier", q.symbol).mkString(" ")).toSeq ++
     requiredParentObjects.map(_.serialized).toSeq ++
-    termListAdapter.map(a => Seq("termListAdapter", a.serialized).mkString(" ")).toSeq
+    adapterAndVariablesOption.map { case (adapter, variables) => Seq("termListAdapter", variables.serialized, adapter.serialized).mkString(" ") }.toSeq
 }
 
 object ParentTypeConditions {
@@ -72,7 +71,10 @@ object ParentTypeConditions {
       parentType <- context.typeDefinitionParser
       requiredParentQualifier <- parentType.parentQualifierParser
       requiredParentObjects <- RequiredParentObjects.parser(parentType)
-      termListAdapter <- Parser.optional("termListAdapter", TermListAdapter.parser)
+      termListAdapter <- Parser.optional("termListAdapter", for {
+        adapterVariables <- SimpleVariableDefinition.listParser
+        adapter <-TermListAdapter.parser(adapterVariables)
+      } yield (adapter, adapterVariables))
       conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create parent type condition without conjunction"))
     } yield ParentTypeConditions(parentType, requiredParentQualifier, requiredParentObjects, termListAdapter, conjunctionDefinition)
   }

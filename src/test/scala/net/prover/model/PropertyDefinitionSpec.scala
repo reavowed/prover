@@ -33,7 +33,7 @@ class PropertyDefinitionSpec extends Specification {
       definition.statementDefinition.definingStatement must beSome(Conjunction(Conjunction(functionDefinition.statementDefinition(f), functionFromDefinition.statementDefinition(f, A, B)), ψ))
     }
     "add adapted parent type and qualifier condition with explicit qualifier on parent" in {
-      val definition = PropertyDefinitionOnType("cauchy", ParentTypeConditions(sequenceDefinition, Some(sequenceOnDefinition), None, Some(TermListAdapter(Nil, Seq(Naturals))), ConjunctionDefinition), None, ψ)
+      val definition = PropertyDefinitionOnType("cauchy", ParentTypeConditions(sequenceDefinition, Some(sequenceOnDefinition), None, Some((TermListAdapter(Seq(Naturals)), Nil)), ConjunctionDefinition), None, ψ)
       definition.statementDefinition.definingStatement must beSome(Conjunction(Conjunction(sequenceDefinition.statementDefinition(a), sequenceOnDefinition.statementDefinition(a, Naturals)), ψ))
     }
     "add related object condition by generalizing" in {

@@ -1,11 +1,9 @@
 import React from "react";
-import {Parser} from "../../Parser";
 import EntryContext from "../EntryContext";
 import {Breadcrumbs} from "./components/Breadcrumbs";
 import EditableProperties from "./components/EditableProperties";
 import {NavLinks} from "./components/NavLinks";
 import StatementDefinitionUsages from "./components/StatementDefinitionUsages";
-import TypeQualifierDefinitionDescription from "./components/TypeQualifierDefinitionDescription";
 import TypeRelationDefinitionDescription from "./components/TypeRelationDefinitionDescription";
 import {Page} from "./Page";
 import {serializeVariable, useMappedState} from "./utils/entryFunctions";
@@ -13,7 +11,7 @@ import {serializeVariable, useMappedState} from "./utils/entryFunctions";
 export function TypeRelationDefinition(props) {
   const {definition: definitionJson, bookLink, chapterLink, url, previous, next, usages} = props;
   const [parser, entryContext] = EntryContext.fromEntryProps(props);
-  const [definition, setDefinition] = useMappedState(definitionJson, parser.parseDefinitionWithDefiningStatement);
+  const [definition, setDefinition] = useMappedState(definitionJson, parser.parseTypeRelationDefinition);
 
   const editableProperties = [
     {label: "Symbol", initialValue: definition.symbol, endpointName: "symbol"},

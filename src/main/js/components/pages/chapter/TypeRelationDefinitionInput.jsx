@@ -8,9 +8,11 @@ import ChapterContext from "./ChapterContext";
 const values = [
   {key: "symbol", title: "Symbol"},
   {key: "firstType", title: "First Type", inputType: TypeAutocomplete},
+  {key: "firstTypeVariable", title: "First type variable"},
+  {key: "firstTypeQualifierTerms", title: "First type qualifier terms", inputType: InputWithShorthandReplacement},
   {key: "secondType", title: "Second Type", inputType: TypeAutocomplete},
-  {key: "firstVariableDefinition", title: "First variable"},
-  {key: "secondVariableDefinition", title: "Second variable"},
+  {key: "secondTypeVariable", title: "Second variable"},
+  {key: "secondTypeQualifierTerms", title: "Second type qualifier terms", inputType: InputWithShorthandReplacement},
   {key: "linkingPhrase", title: "Linking phrase"},
   {key: "name", title: "Explicit name (if different from symbol)"},
   {key: "definingStatement", title: "Definition", inputType: InputWithShorthandReplacement}

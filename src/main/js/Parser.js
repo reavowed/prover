@@ -305,6 +305,17 @@ export class Parser {
     definition.definingStatement = this.parseExpression(definition.definingStatement);
     return definition;
   };
+  parseTypeRelationDefinition = (definitionJson) => {
+    const definition = this.parseDefinitionWithDefiningStatement(definitionJson);
+    definition.firstAdapter = this.parseAdapter(definition.firstAdapter);
+    definition.secondAdapter = this.parseAdapter(definition.secondAdapter);
+    return definition;
+  };
+  parseAdapter = (adapterJson) => {
+    return {
+      templates: adapterJson.templates.map(this.parseExpression)
+    };
+  };
   parseSubstitutions = (substitutions) => {
     const statements = _.map(substitutions.statements, s => s && this.parseExpression(s));
     const terms = _.map(substitutions.terms, t => t && this.parseExpression(t));
@@ -370,6 +381,10 @@ export class Parser {
       entry?.conclusion && (entry.conclusion = this.parseExpression(entry.conclusion));
       entry?.defaultValue && (entry.defaultValue = this.parseExpression(entry.defaultValue));
       entry?.definingStatement && (entry.definingStatement = this.parseExpression(entry.definingStatement));
+      entry?.firstAdapter && (entry.firstAdapter = this.parseAdapter(entry.firstAdapter));
+      entry?.firstQualifierTerms && (entry.firstQualifierTerms = entry.firstQualifierTerms.map(this.parseExpression));
+      entry?.secondAdapter && (entry.secondAdapter = this.parseAdapter(entry.secondAdapter));
+      entry?.secondQualifierTerms && (entry.secondQualifierTerms = entry.secondQualifierTerms.map(this.parseExpression));
       return entryWrapper;
     });
   };

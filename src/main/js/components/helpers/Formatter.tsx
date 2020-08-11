@@ -50,6 +50,7 @@ export function replacePlaceholders(text: String, components: React.ReactNode[])
   });
 }
 
+
 interface Format {
   baseFormatString: string;
 }
@@ -58,9 +59,10 @@ interface Qualifier {
   variableDefinitions: SimpleVariableDefinition[]
 }
 
-export function formatQualifier(qualifier: Qualifier | undefined): JSX.Element[] | null {
+export function formatQualifier(qualifier: Qualifier | undefined, replacementExpressions?: React.ReactNode[]): JSX.Element[] | null {
   if (qualifier) {
-    return formatHtml(qualifier.format.baseFormatString, s => replacePlaceholders(s, qualifier.variableDefinitions.map(d => d.name)))
+    const replacementExpressionsOrDefinitions = replacementExpressions || qualifier.variableDefinitions.map(d => d.name);
+    return formatHtml(qualifier.format.baseFormatString, s => replacePlaceholders(s, replacementExpressionsOrDefinitions))
   } else {
     return null;
   }

@@ -310,9 +310,12 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
       for {
         symbol <- getMandatoryString(newTypeRelationDefinition.symbol, "Symbol")
         firstType <- getTypeDefinition(newTypeRelationDefinition.firstType)
-        firstVariableDefinition <- getSimpleVariableDefinition(newTypeRelationDefinition.firstVariableDefinition, "First variable definition")
+        firstVariableDefinition <- getSimpleVariableDefinition(newTypeRelationDefinition.firstTypeVariable, "First variable definition")
         secondType <- getTypeDefinition(newTypeRelationDefinition.secondType)
-        secondVariableDefinition <- getSimpleVariableDefinition(newTypeRelationDefinition.secondVariableDefinition, "Second variable definition")
+        secondVariableDefinition <- getSimpleVariableDefinition(newTypeRelationDefinition.secondTypeVariable, "Second variable definition")
+        variables = Seq(firstVariableDefinition, secondVariableDefinition)
+        firstAdapter <- getAdapter(newTypeRelationDefinition.firstTypeQualifierTerms, variables, firstType.defaultQualifier.variableDefinitions)
+        secondAdapter <- getAdapter(newTypeRelationDefinition.secondTypeQualifierTerms, variables, secondType.defaultQualifier.variableDefinitions)
         linkingPhrase <- getMandatoryString(newTypeRelationDefinition.linkingPhrase, "Linking phrase")
         expressionParsingContext = ExpressionParsingContext.forTypeDefinition(Seq(firstVariableDefinition, secondVariableDefinition))
         definition <- Statement.parser(expressionParsingContext).parseFromString(newTypeRelationDefinition.definingStatement, "definition").recoverWithBadRequest
@@ -323,6 +326,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Book
           secondType,
           firstVariableDefinition,
           secondVariableDefinition,
+          firstAdapter,
+          secondAdapter,
           linkingPhrase,
           name,
           definition,
@@ -479,9 +484,11 @@ object ChapterController {
   case class NewTypeRelationDefinitionModel(
     symbol: String,
     firstType: String,
-    firstVariableDefinition: String,
+    firstTypeVariable: String,
+    firstTypeQualifierTerms: String,
     secondType: String,
-    secondVariableDefinition: String,
+    secondTypeVariable: String,
+    secondTypeQualifierTerms: String,
     linkingPhrase: String,
     name: String,
     definingStatement: String)
