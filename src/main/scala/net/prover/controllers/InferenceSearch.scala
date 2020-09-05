@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover._
 import net.prover.controllers.models.{PossibleConclusion, PossibleInference, PossibleInferenceWithTargets}
 import net.prover.model._
 

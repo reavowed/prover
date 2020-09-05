@@ -2,6 +2,8 @@ package net.prover.model
 
 import java.nio.file.Path
 
+import net.prover._
+
 import scala.util.Try
 import scala.util.control.NonFatal
 

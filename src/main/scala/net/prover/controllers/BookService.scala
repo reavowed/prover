@@ -1,6 +1,7 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.{InferenceSummary, MultipleStepReplacementProps, PathData, ProofUpdateProps, StepInsertionProps, StepReplacementProps, TheoremUpdateProps}
+import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}

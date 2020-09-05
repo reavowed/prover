@@ -1,10 +1,12 @@
 package net.prover.controllers.models
 
-import scala.util.Try
+import net.prover._
 import net.prover.controllers._
 import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstitutionContext
+
+import scala.util.Try
 
 case class StepDefinition(
     inferenceId: Option[String],

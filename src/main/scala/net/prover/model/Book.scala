@@ -3,6 +3,7 @@ package net.prover.model
 import java.nio.file.Path
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover._
 import org.slf4j.{Logger, LoggerFactory}
 
 @JsonIgnoreProperties(Array("dependencies"))

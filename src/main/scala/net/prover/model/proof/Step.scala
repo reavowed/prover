@@ -1,20 +1,18 @@
 package net.prover.model.proof
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover._
 import net.prover.controllers.ExtractionHelper
-import net.prover.controllers.ExtractionHelper.ExtractionApplication
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
-import net.prover.model.definitions.{DeductionDefinition, Definitions, ExpressionDefinition, GeneralizationDefinition, StatementDefinition}
-import net.prover.model.expressions.{DefinedStatement, Statement}
+import net.prover.model.definitions.{DeductionDefinition, Definitions, ExpressionDefinition, GeneralizationDefinition}
+import net.prover.model.expressions.Statement
 import scalaz.Functor
 import scalaz.syntax.functor._
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{Success, Try}
 
 @JsonIgnoreProperties(Array("substitutions", "isComplete"))
 sealed trait Step {
@@ -225,7 +223,7 @@ object Step {
       if (inference == oldInference) {
         for {
           updatedStep <- Assertion(statement, inference, premises, substitutions).replaceInference(oldInference, newInference, stepProvingContext)
-          updatedAssertion <- updatedStep.asOptionalInstanceOf[Step.Assertion].failIfUndefined(InferenceReplacementException.AtStep("Cannot replace naming with an elided step")(stepProvingContext.stepContext))
+          updatedAssertion <- updatedStep.asOptionalInstanceOf[Step.Assertion].orException(InferenceReplacementException.AtStep("Cannot replace naming with an elided step")(stepProvingContext.stepContext))
           updatedSubsteps <- substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext))
         } yield Naming(
           variableName,
@@ -485,8 +483,8 @@ object Step {
           substitutions <- substitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).toSeq
         } yield (inferenceExtraction, substitutions)).headOption
         for {
-          (inferenceExtraction, substitutions) <- substitutionsOption.failIfUndefined(InferenceReplacementException.AtStep("Could not find extraction option")(stepProvingContext.stepContext))
-          extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions).failIfUndefined(InferenceReplacementException.AtStep("Could not apply extraction")(stepProvingContext.stepContext))
+          (inferenceExtraction, substitutions) <- substitutionsOption.orException(InferenceReplacementException.AtStep("Could not find extraction option")(stepProvingContext.stepContext))
+          extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions).orException(InferenceReplacementException.AtStep("Could not apply extraction")(stepProvingContext.stepContext))
         } yield extractionStep.step
       } else Success(this)
     }

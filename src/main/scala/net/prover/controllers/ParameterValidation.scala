@@ -1,10 +1,11 @@
 package net.prover.controllers
 
+import net.prover._
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{Qualifier, TermListAdapter}
-import net.prover.model.entries.{PropertyDefinitionOnType, RequiredParentObjects, TypeDefinition, TypeQualifierDefinition}
+import net.prover.model.entries.{RequiredParentObjects, TypeDefinition, TypeQualifierDefinition}
 import net.prover.model.expressions.{Statement, Term}
 
 import scala.util.{Failure, Success, Try}

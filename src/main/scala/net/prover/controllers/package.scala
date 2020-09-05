@@ -34,15 +34,9 @@ package object controllers {
     }
   }
   implicit class OptionWithResponseExceptionOps[T](option: Option[T]) {
-    def orException(e: Exception): Try[T] = {
-      option match {
-        case Some(t) => Success(t)
-        case None => Failure(e)
-      }
-    }
-    def orNotFound(objectDescription: String): Try[T] = orException(NotFoundException(objectDescription))
-    def orBadRequest(message: String): Try[T] = orException(BadRequestException(message))
-    def orServerError(message: String): Try[T] = orException(new Exception(message))
+    def orNotFound(objectDescription: String): Try[T] = option.orException(NotFoundException(objectDescription))
+    def orBadRequest(message: String): Try[T] = option.orException(BadRequestException(message))
+    def orServerError(message: String): Try[T] = option.orException(new Exception(message))
 
     def badRequestIfDefined(getMessage: T => String): Try[Unit] = {
       option match {
@@ -53,11 +47,8 @@ package object controllers {
   }
 
   implicit class BooleanWithResponseExceptionOps(b: Boolean) {
-    def orException(e: Exception): Try[Unit] = {
-      if (b) Success(()) else Failure(e)
-    }
-    def orNotFound(objectDescription: String): Try[Unit] = orException(NotFoundException(objectDescription))
-    def orBadRequest(message: String): Try[Unit] = orException(BadRequestException(message))
+    def orNotFound(objectDescription: String): Try[Unit] = b.orException(NotFoundException(objectDescription))
+    def orBadRequest(message: String): Try[Unit] = b.orException(BadRequestException(message))
   }
 
   implicit class AnyWithResponseExceptionOps[T](t: => T) {

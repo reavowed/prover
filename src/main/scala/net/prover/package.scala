@@ -1,4 +1,4 @@
-package net.prover
+package net
 
 import java.nio.file.Path
 
@@ -13,8 +13,8 @@ import scala.collection.{AbstractIterator, Iterator, TraversableLike, immutable,
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
-package object model {
-  implicit class AnyOps[T](t: T) {
+package object prover {
+implicit class AnyOps[T](t: T) {
     def ifDefined[S](f: T => Option[S])(action: => Unit): T = {
       f(t).ifDefined(action)
       t
@@ -509,10 +509,11 @@ package object model {
       if (x.isEmpty) action
       x
     }
-    def failIfUndefined(e: => Exception): Try[T] = x match {
+    def orException(e: => Exception): Try[T] = x match {
       case Some(t) => Success(t)
       case None => Failure(e)
     }
+    def orExceptionWithMessage(message: => String): Try[T] = orException(new Exception(message))
   }
 
   implicit class OptionOptionOps[T](x: Option[Option[T]]) {
@@ -600,6 +601,10 @@ package object model {
     def ifFalse[S](s: => S): Option[S] = {
       if (!boolean) Some(s) else None
     }
+    def orException(e: Exception): Try[Unit] = {
+      if (boolean) Success(()) else Failure(e)
+    }
+    def orExceptionWithMessage(message: => String): Try[Unit] = orException(new Exception(message))
   }
 
   implicit class TraversableOnceOps[A](coll: TraversableOnce[A]) {

@@ -4,6 +4,7 @@ import net.prover.controllers.ChapterController._
 import net.prover.controllers.models.ChapterProps._
 import net.prover.controllers.models._
 import net.prover.exceptions.BadRequestException
+import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries._

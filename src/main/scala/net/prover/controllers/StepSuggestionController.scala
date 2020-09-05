@@ -1,14 +1,12 @@
 package net.prover.controllers
 
+import net.prover._
 import net.prover.controllers.models._
-import net.prover.model._
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
-
-import scala.util.Try
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))

@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover._
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.{Template, Term}
 

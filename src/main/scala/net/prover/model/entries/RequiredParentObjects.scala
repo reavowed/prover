@@ -1,5 +1,6 @@
 package net.prover.model.entries
 
+import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.{ConjunctionDefinition, DeductionDefinition, GeneralizationDefinition, UniqueExistenceDefinition}
 import net.prover.model.expressions.Statement

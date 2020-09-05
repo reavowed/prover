@@ -1,7 +1,7 @@
 package net.prover.controllers
 
+import net.prover._
 import net.prover.controllers.models.{NamingDefinition, PathData}
-import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired

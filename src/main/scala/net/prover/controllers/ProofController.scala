@@ -1,7 +1,7 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{InsertionAndDeletionProps, PathData, ProofUpdateProps, StepDeletionProps, StepInsertionProps, StepMoveRequest}
-import net.prover.model._
+import net.prover.controllers.models.{InsertionAndDeletionProps, PathData, StepDeletionProps, StepInsertionProps, StepMoveRequest}
+import net.prover._
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof._
 import org.springframework.beans.factory.annotation.Autowired

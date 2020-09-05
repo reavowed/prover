@@ -1,6 +1,7 @@
 package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
+import net.prover._
 import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.{InferenceExtraction, VariableTracker}

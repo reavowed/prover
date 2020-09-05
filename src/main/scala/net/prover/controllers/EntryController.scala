@@ -1,6 +1,7 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{DefinitionSummary, LinkSummary, StandalonePropertyDefinitionSummary, TypeDefinitionSummary, TypeRelationDefinitionSummary}
+import net.prover._
+import net.prover.controllers.models.LinkSummary
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition

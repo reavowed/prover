@@ -2,8 +2,9 @@ package net.prover.model
 
 import java.security.MessageDigest
 
-import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover._
 import net.prover.model.Inference._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
 import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}

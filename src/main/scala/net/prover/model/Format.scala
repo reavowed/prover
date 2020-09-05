@@ -2,6 +2,7 @@ package net.prover.model
 
 import java.util.regex.Pattern
 
+import net.prover._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 
 trait Format {

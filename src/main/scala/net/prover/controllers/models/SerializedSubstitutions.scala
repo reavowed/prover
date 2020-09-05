@@ -1,5 +1,6 @@
 package net.prover.controllers.models
 
+import net.prover._
 import net.prover.model._
 import net.prover.controllers._
 import net.prover.model.expressions.{Statement, Term}

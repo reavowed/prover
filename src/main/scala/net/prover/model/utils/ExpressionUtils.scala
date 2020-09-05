@@ -1,5 +1,6 @@
 package net.prover.model.utils
 
+import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.TermDefinition
 import net.prover.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition}

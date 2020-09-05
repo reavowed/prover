@@ -1,5 +1,6 @@
 package net.prover.model.definitions
 
+import net.prover._
 import net.prover.model._
 
 case class Qualifier(variableDefinitions: Seq[SimpleVariableDefinition], format: Format.Explicit) {

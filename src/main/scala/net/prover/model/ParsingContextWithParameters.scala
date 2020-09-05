@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover._
 import net.prover.model.expressions.FunctionParameter
 
 import scala.util.Try

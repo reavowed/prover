@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 

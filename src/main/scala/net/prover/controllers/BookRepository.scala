@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.locks.{Lock, ReentrantLock}
 
 import com.googlecode.concurentlocks.ReentrantReadWriteUpdateLock
+import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import org.apache.commons.io.FileUtils
