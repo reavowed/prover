@@ -1,10 +1,12 @@
-package net.prover.model.entries
+package net.prover.structure.model.entries
 
 import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.Statement
+import net.prover.structure.EntryContext
+import net.prover.structure.model.parsers.ChapterEntryParser
 
 case class StandalonePropertyDefinition(
     symbol: String,

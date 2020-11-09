@@ -1,7 +1,7 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.StatementDefinitionEntry
+import net.prover.structure.model.entries.StatementDefinitionEntry
 import org.specs2.mutable.Specification
 
 class StatementDefinitionSpec extends Specification {

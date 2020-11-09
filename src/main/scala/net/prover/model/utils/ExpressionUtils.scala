@@ -1,10 +1,10 @@
 package net.prover.model.utils
 
 import net.prover._
-import net.prover.model._
 import net.prover.model.definitions.TermDefinition
-import net.prover.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition}
 import net.prover.model.expressions._
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition}
 
 import scala.reflect.ClassTag
 

@@ -1,9 +1,11 @@
-package net.prover.model
+package net.prover.structure.model
 
 import java.nio.file.Path
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover._
+import net.prover.model.Parser
+import net.prover.structure.EntryContext
 import org.slf4j.{Logger, LoggerFactory}
 
 @JsonIgnoreProperties(Array("dependencies"))

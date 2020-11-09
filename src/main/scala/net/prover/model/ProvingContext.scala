@@ -1,11 +1,13 @@
 package net.prover.model
 
 import net.prover.model.definitions._
-import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.SubstatementExtractor.{Extraction, ExtractionFromSinglePremise, InferenceExtraction}
-import net.prover.model.proof.{DerivationStep, DerivationStepWithMultipleInferences, DerivationStepWithSingleInference, Step, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof.SubstatementExtractor.{ExtractionFromSinglePremise, InferenceExtraction}
+import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries.ChapterEntry
+import net.prover.structure.model.{Book, Chapter}
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
 

@@ -1,7 +1,8 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.{ChapterEntry, TypeQualifierDefinition}
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries.{ChapterEntry, TypeQualifierDefinition}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 

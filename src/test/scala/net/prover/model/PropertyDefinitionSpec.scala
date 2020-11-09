@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.{Qualifier, TermListAdapter}
-import net.prover.model.entries.{ParentTypeConditions, PropertyDefinitionOnType, RelatedObjectDefinition, RequiredParentObjects, TypeDefinition, TypeQualifierDefinition}
+import net.prover.structure.model.entries.{ParentTypeConditions, PropertyDefinitionOnType, RelatedObjectDefinition, RequiredParentObjects, TypeDefinition, TypeQualifierDefinition}
 import org.specs2.mutable.Specification
 
 class PropertyDefinitionSpec extends Specification {

@@ -7,9 +7,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover._
 import net.prover.model.Inference._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
-import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
 import net.prover.model.expressions._
 import net.prover.model.proof.{StepContext, SubstitutionContext}
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries.ChapterEntry
+import net.prover.structure.model.parsers.ChapterEntryParser
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {

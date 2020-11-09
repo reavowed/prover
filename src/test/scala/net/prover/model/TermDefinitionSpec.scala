@@ -1,7 +1,7 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.{ChapterEntry, TermDefinitionEntry}
+import net.prover.structure.model.entries.{ChapterEntry, TermDefinitionEntry}
 import net.prover.model.expressions.FunctionParameter
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification

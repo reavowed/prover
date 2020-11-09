@@ -4,6 +4,7 @@ import net.prover._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.expressions.{StatementVariable, Term, TermVariable}
 import net.prover.model.proof.{StepContext, StepProvingContext}
+import net.prover.structure.EntryContext
 
 case class ExpressionParsingContext(
     entryContext: EntryContext,

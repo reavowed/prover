@@ -1,4 +1,4 @@
-package net.prover.model.entries
+package net.prover.structure.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover._
@@ -7,9 +7,10 @@ import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
-import net.prover.model.entries.Theorem.Proof
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries.Theorem.Proof
 import scalaz.Functor
 import scalaz.syntax.functor._
 

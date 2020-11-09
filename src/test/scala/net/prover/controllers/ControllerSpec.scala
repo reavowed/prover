@@ -5,7 +5,8 @@ import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.StatementDefinition
 import net.prover.model.expressions.{Statement, StatementVariable, Term, TermVariable}
 import net.prover.model.proof._
-import net.prover.model.{EntryContext, Inference, Substitutions, VariableDefinitions}
+import net.prover.model.{Inference, Substitutions, VariableDefinitions}
+import net.prover.structure.EntryContext
 import org.mockito.Mockito
 import org.specs2.matcher.{Matcher, ValueChecks}
 import org.specs2.mock.mockito.{CalledMatchers, MockitoMatchers, MockitoStubs}

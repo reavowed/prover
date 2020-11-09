@@ -1,9 +1,10 @@
-package net.prover.model.entries
+package net.prover.structure.model.entries
 
 import net.prover.model.definitions.{ConjunctionDefinition, ExpressionDefinition, TermListAdapter}
 import net.prover.model.expressions.{Statement, TermVariable}
 import net.prover.model.proof.SubstitutionContext
-import net.prover.model.{EntryContext, Parser, SimpleVariableDefinition}
+import net.prover.model.{Parser, SimpleVariableDefinition}
+import net.prover.structure.EntryContext
 
 case class ParentTypeConditions(
     parentType: TypeDefinition,

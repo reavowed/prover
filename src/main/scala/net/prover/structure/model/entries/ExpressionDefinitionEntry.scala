@@ -1,9 +1,8 @@
-package net.prover.model.entries
+package net.prover.structure.model.entries
 
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.expressions._
 
 trait ExpressionDefinitionEntry extends TypedExpressionDefinitionEntry[ExpressionDefinitionEntry] with ChapterEntry.Standalone
 

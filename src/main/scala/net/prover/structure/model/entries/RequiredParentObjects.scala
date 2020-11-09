@@ -1,9 +1,10 @@
-package net.prover.model.entries
+package net.prover.structure.model.entries
 
 import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.{ConjunctionDefinition, DeductionDefinition, GeneralizationDefinition, UniqueExistenceDefinition}
 import net.prover.model.expressions.Statement
+import net.prover.structure.EntryContext
 
 case class RequiredParentObjects(
   objectDefinitions: Seq[RelatedObjectDefinition],

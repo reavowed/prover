@@ -5,8 +5,9 @@ import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{Qualifier, TermListAdapter}
-import net.prover.model.entries.{RequiredParentObjects, TypeDefinition, TypeQualifierDefinition}
 import net.prover.model.expressions.{Statement, Term}
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries.{RequiredParentObjects, TypeDefinition, TypeQualifierDefinition}
 
 import scala.util.{Failure, Success, Try}
 

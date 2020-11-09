@@ -1,8 +1,10 @@
-package net.prover.model
+package net.prover.structure
 
-import net.prover.model.definitions.{ConjunctionDefinition, DeductionDefinition, GeneralizationDefinition, StatementDefinition, TermDefinition, UniqueExistenceDefinition}
-import net.prover.model.entries._
+import net.prover.model.definitions._
 import net.prover.model.expressions._
+import net.prover.model.{Inference, Parser, ProvingContext}
+import net.prover.structure.model.entries._
+import net.prover.structure.model.{Book, Chapter}
 
 case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map[String, Inference], statementDefinitionsBySymbol: Map[String, StatementDefinition], termDefinitionsBySymbol: Map[String, TermDefinition]) {
 

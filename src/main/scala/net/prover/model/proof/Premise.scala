@@ -5,6 +5,7 @@ import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Premise.Pending
+import net.prover.structure.EntryContext
 
 sealed trait Premise {
   def statement: Statement

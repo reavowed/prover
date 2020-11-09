@@ -2,7 +2,7 @@ package net.prover.model
 
 import org.specs2.mutable.Specification
 import TestDefinitions._
-import net.prover.model.entries.Axiom
+import net.prover.structure.model.entries.Axiom
 import net.prover.model.expressions.{StatementVariable, TermVariable}
 
 class InferenceSpec extends Specification {

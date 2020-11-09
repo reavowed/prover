@@ -1,8 +1,9 @@
 package net.prover.controllers.models
 
-import net.prover.model.{EntryContext, SimpleVariableDefinition}
+import net.prover.model.SimpleVariableDefinition
 import net.prover.model.definitions.Qualifier
-import net.prover.model.entries.{PropertyDefinitionOnType, TypeDefinition}
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries.{PropertyDefinitionOnType, TypeDefinition}
 
 case class TypeDefinitionSummary(
   symbol: String,

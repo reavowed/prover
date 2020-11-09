@@ -5,8 +5,10 @@ import net.prover.controllers.models.LinkSummary
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition
-import net.prover.model.entries._
 import net.prover.model.expressions.Statement
+import net.prover.structure.EntryContext
+import net.prover.structure.model.Book
+import net.prover.structure.model.entries._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._

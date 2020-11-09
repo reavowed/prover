@@ -3,12 +3,13 @@ package net.prover.model.definitions
 import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
-import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStepWithSingleInference, Step, SubstatementExtractor, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries.DisplayShorthand
 import net.prover.util.Direction
 
 import scala.Ordering.Implicits._

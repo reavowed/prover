@@ -1,9 +1,9 @@
 package net.prover.controllers.models
 
 import net.prover.model.definitions.Definitions
-import net.prover.model.{DisambiguatedSymbol, Inference, VariableDefinitions}
-import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions.Statement
+import net.prover.model.{DisambiguatedSymbol, Inference, VariableDefinitions}
+import net.prover.structure.model.entries.DisplayShorthand
 
 case class ChapterProps(
   title: String,

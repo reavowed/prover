@@ -1,7 +1,7 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.Axiom
+import net.prover.structure.model.entries.Axiom
 import org.specs2.mutable.Specification
 
 class AxiomSpec extends Specification {

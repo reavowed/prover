@@ -4,10 +4,11 @@ import net.prover.model.TestDefinitions.{DeductionDefinition, GeneralizationDefi
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
 import net.prover.model.definitions._
-import net.prover.model.entries.ChapterEntry.HasStatementDefinition
-import net.prover.model.entries._
+import net.prover.structure.model.entries.ChapterEntry.HasStatementDefinition
+import net.prover.structure.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof._
+import net.prover.structure.EntryContext
 import org.specs2.matcher.Matcher
 
 trait Placeholder[T <: ExpressionVariable[_ <: Expression]] {

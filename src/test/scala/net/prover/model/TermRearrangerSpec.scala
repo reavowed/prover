@@ -3,6 +3,7 @@ package net.prover.model
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{Step, TermRearranger}
+import net.prover.structure.EntryContext
 import net.prover.util.Direction
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification

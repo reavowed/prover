@@ -9,6 +9,7 @@ import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
 import net.prover.model.definitions.{DeductionDefinition, Definitions, ExpressionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
+import net.prover.structure.EntryContext
 import scalaz.Functor
 import scalaz.syntax.functor._
 

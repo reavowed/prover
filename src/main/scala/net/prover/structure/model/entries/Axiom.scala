@@ -1,8 +1,9 @@
-package net.prover.model.entries
+package net.prover.structure.model.entries
 
-import net.prover.model.expressions.Statement
 import net.prover.model._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
+import net.prover.model.expressions.Statement
+import net.prover.structure.EntryContext
 
 case class Axiom(
     name: String,

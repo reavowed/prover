@@ -3,6 +3,7 @@ package net.prover.model.proof
 import net.prover._
 import net.prover.model._
 import net.prover.model.expressions._
+import net.prover.structure.EntryContext
 
 object SubstatementExtractor {
 

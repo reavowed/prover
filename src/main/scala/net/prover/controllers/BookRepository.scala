@@ -6,8 +6,9 @@ import java.util.concurrent.locks.{Lock, ReentrantLock}
 
 import com.googlecode.concurentlocks.ReentrantReadWriteUpdateLock
 import net.prover._
-import net.prover.model._
 import net.prover.model.definitions.Definitions
+import net.prover.structure.EntryContext
+import net.prover.structure.model.Book
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 import org.slf4j.{Logger, LoggerFactory}

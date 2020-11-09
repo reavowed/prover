@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model._
-import net.prover.model.entries.{StandalonePropertyDefinition, TypeDefinition, TypeQualifierDefinition}
+import net.prover.structure.model.entries.{StandalonePropertyDefinition, TypeDefinition, TypeQualifierDefinition}
 
 trait Statement extends Expression with TypedExpression[Statement]
 

@@ -1,6 +1,8 @@
-package net.prover.model
+package net.prover.structure.model
 
-import net.prover.model.entries._
+import net.prover.model.Parser
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries._
 
 case class Chapter(
     title: String,

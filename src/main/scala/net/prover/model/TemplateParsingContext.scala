@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.structure.EntryContext
+
 case class TemplateParsingContext(
     entryContext: EntryContext,
     parameterLists: Seq[Seq[(String, Int)]])

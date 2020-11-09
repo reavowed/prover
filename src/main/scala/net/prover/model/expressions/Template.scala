@@ -7,6 +7,7 @@ import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition, TermDefinition}
 import net.prover.model.expressions.Template.Match
+import net.prover.structure.EntryContext
 
 @JsonSerialize(using = classOf[TemplateSerializer])
 sealed trait Template {

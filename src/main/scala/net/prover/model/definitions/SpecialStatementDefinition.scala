@@ -3,8 +3,8 @@ package net.prover.model.definitions
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
-import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{DefinedStatement, Statement}
+import net.prover.structure.model.entries.ChapterEntry
 
 @JsonSerialize(using = classOf[SpecialStatementDefinitionSymbolSerializer])
 sealed trait SpecialStatementDefinition {

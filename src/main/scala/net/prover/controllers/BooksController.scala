@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.BooksController.BookDefinition
 import net.prover.controllers.models.LinkSummary
-import net.prover.model.Book
+import net.prover.structure.model.Book
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation._

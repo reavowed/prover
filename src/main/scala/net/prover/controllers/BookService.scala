@@ -1,11 +1,12 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{InferenceSummary, MultipleStepReplacementProps, PathData, ProofUpdateProps, StepInsertionProps, StepReplacementProps, TheoremUpdateProps}
 import net.prover._
+import net.prover.controllers.models._
 import net.prover.model._
 import net.prover.model.definitions.Definitions
-import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.proof.{Step, StepProvingContext}
+import net.prover.structure.model.entries.{ChapterEntry, Theorem}
+import net.prover.structure.model.{Book, Chapter}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import scalaz.Functor

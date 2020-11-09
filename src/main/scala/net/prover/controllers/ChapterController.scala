@@ -1,15 +1,17 @@
 package net.prover.controllers
 
+import net.prover._
 import net.prover.controllers.ChapterController._
 import net.prover.controllers.models.ChapterProps._
 import net.prover.controllers.models._
 import net.prover.exceptions.BadRequestException
-import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.Definitions
-import net.prover.model.entries._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries._
+import net.prover.structure.model.{Book, Chapter}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._

@@ -3,8 +3,9 @@ package net.prover.controllers.models
 import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.entries.{ExpressionDefinitionEntry, TermDefinitionEntry}
 import net.prover.model.expressions.{DefinedTermTemplate, Template}
+import net.prover.structure.EntryContext
+import net.prover.structure.model.entries.{ExpressionDefinitionEntry, TermDefinitionEntry}
 
 case class DisambiguatorAdderSummary(template: Template, disambiguator: String)
 
