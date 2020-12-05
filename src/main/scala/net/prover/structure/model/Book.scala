@@ -76,7 +76,7 @@ object Book {
     Parser.optional("import", Parser.toEndOfLine).whileDefined
   }
 
-  def variableDefinitionsParser: Parser[(Seq[String], Seq[String])] = {
+  private def variableDefinitionsParser: Parser[(Seq[String], Seq[String])] = {
     Parser.optional(
       "variables",
       for {
@@ -88,7 +88,7 @@ object Book {
       (Nil, Nil))
   }
 
-  def chapterTitlesParser: Parser[Seq[String]] = {
+  private def chapterTitlesParser: Parser[Seq[String]] = {
     Parser.optional("chapter", Parser.toEndOfLine).whileDefined
   }
 }

@@ -7,7 +7,7 @@ import net.prover.controllers.ExtractionHelper
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
-import net.prover.model.definitions.{DeductionDefinition, Definitions, ExpressionDefinition, GeneralizationDefinition}
+import net.prover.model.definitions.{DeductionDefinition, Definitions, CompoundExpressionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.structure.EntryContext
 import scalaz.Functor
@@ -22,7 +22,7 @@ sealed trait Step {
   def modifySubsteps[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]]
   def insertExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step]
-  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Step
+  def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition], entryContext: EntryContext): Step
   def replaceInference(
     oldInference: Inference,
     newInference: Inference,
@@ -32,7 +32,7 @@ sealed trait Step {
   def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange])
   def isComplete(definitions: Definitions): Boolean
   def referencedInferenceIds: Set[String]
-  def referencedDefinitions: Set[ExpressionDefinition]
+  def referencedDefinitions: Set[CompoundExpressionDefinition]
   def referencedLines: Set[PreviousLineReference] = recursivePremises.flatMap(_.referencedLines).toSet
   def recursivePremises: Seq[Premise]
   def length: Int
@@ -120,7 +120,7 @@ object Step {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
       } yield Deduction(newAssumption, newSubsteps, deductionDefinition)
     }
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Deduction = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition], entryContext: EntryContext): Deduction = {
       Deduction(
         assumption.replaceDefinitions(expressionDefinitionReplacements),
         substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)),
@@ -134,7 +134,7 @@ object Step {
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
-    override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet + deductionDefinition.statementDefinition
+    override def referencedDefinitions: Set[CompoundExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet + deductionDefinition.statementDefinition
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"assume ${assumption.serialized} {") ++
       substeps.flatMap(_.serializedLines).indent ++
@@ -208,7 +208,7 @@ object Step {
         newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove, internalDepth)
       } yield Naming(variableName, newAssumption, newStatement, newSubsteps, inference, newPremises, newSubstitutions, generalizationDefinition, deductionDefinition)
     }
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Naming = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition], entryContext: EntryContext): Naming = {
       Naming(
         variableName,
         assumption.replaceDefinitions(expressionDefinitionReplacements),
@@ -255,7 +255,7 @@ object Step {
       (newStep, stepsWithReferenceChanges)
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet + inference.id
-    override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet
+    override def referencedDefinitions: Set[CompoundExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = premises ++ substeps.flatMap(_.recursivePremises)
     @JsonSerialize
     def referencedLinesForExtraction: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
@@ -310,7 +310,7 @@ object Step {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth + 1)).traverseOption
       } yield Generalization(variableName, newSubsteps, generalizationDefinition)
     }
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Generalization = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition], entryContext: EntryContext): Generalization = {
       Generalization(
         variableName,
         substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)),
@@ -320,7 +320,7 @@ object Step {
       copy(substeps = substeps.clearInference(inferenceToClear))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
-    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + generalizationDefinition.statementDefinition
+    override def referencedDefinitions: Set[CompoundExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + generalizationDefinition.statementDefinition
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"take $variableName {") ++
@@ -351,14 +351,14 @@ object Step {
       } yield copy(statement = s)
     }
     override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = Success(this)
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Target = Target(statement.replaceDefinitions(expressionDefinitionReplacements))
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition], entryContext: EntryContext): Target = Target(statement.replaceDefinitions(expressionDefinitionReplacements))
     override def clearInference(inferenceToClear: Inference): Step = {
       this
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = (this, Nil)
     override def referencedInferenceIds: Set[String] = Set.empty
-    override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
+    override def referencedDefinitions: Set[CompoundExpressionDefinition] = statement.referencedDefinitions
     override def recursivePremises: Seq[Premise] = Nil
     override def length = 1
     def serializedLines: Seq[String] = Seq(s"target ${statement.serialized}")
@@ -396,7 +396,7 @@ object Step {
         super.replaceInference(oldInference, newInference, stepProvingContext)
       }
     }
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Elided = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition], entryContext: EntryContext): Elided = {
       Elided(
         substeps.map(_.replaceDefinitions(expressionDefinitionReplacements,entryContext)),
         highlightedInference.map(_.replaceDefinitions(expressionDefinitionReplacements)),
@@ -410,7 +410,7 @@ object Step {
       }
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet ++ highlightedInference.map(_.id).toSet
-    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
+    override def referencedDefinitions: Set[CompoundExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(("elided" +: (highlightedInference.map(_.id).toSeq ++ description.map(_.inParens).toSeq) :+ "{").mkString(" ")) ++
@@ -496,7 +496,7 @@ object Step {
         this
       }
     }
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Assertion = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition], entryContext: EntryContext): Assertion = {
       Assertion(
         statement.replaceDefinitions(expressionDefinitionReplacements),
         inference.replaceDefinitions(expressionDefinitionReplacements),
@@ -512,7 +512,7 @@ object Step {
     @JsonSerialize
     def referencedLinesForAssertion: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
-    override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
+    override def referencedDefinitions: Set[CompoundExpressionDefinition] = statement.referencedDefinitions
     override def recursivePremises: Seq[Premise] = premises
     override def length: Int = 1
     override def serializedLines: Seq[String] = {
@@ -558,7 +558,7 @@ object Step {
         newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
       } yield SubProof(name, newSubsteps)
     }
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): SubProof = {
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition], entryContext: EntryContext): SubProof = {
       SubProof(
         name,
         substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
@@ -567,7 +567,7 @@ object Step {
       copy(substeps = substeps.clearInference(inferenceToClear))
     }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
-    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
+    override def referencedDefinitions: Set[CompoundExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"subproof ($name) {") ++

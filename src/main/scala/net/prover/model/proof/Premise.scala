@@ -2,7 +2,7 @@ package net.prover.model.proof
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Premise.Pending
 import net.prover.structure.EntryContext
@@ -16,7 +16,7 @@ sealed trait Premise {
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Premise] = {
     statement.removeExternalParameters(numberOfParametersToRemove, internalDepth).map(Pending)
   }
-  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Premise
+  def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Premise
   def toPending: Pending = Pending(statement)
   def isComplete: Boolean
 }
@@ -71,7 +71,7 @@ object Premise {
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Pending = {
       copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
     }
-    def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Pending = {
+    def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Pending = {
       Pending(statement.replaceDefinitions(expressionDefinitionReplacements))
     }
     override def isComplete: Boolean = false
@@ -84,7 +84,7 @@ object Premise {
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Given = {
       copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
     }
-    def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Given = {
+    def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Given = {
       Given(
         statement.replaceDefinitions(expressionDefinitionReplacements),
         referencedLine)
@@ -102,7 +102,7 @@ object Premise {
         statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth),
         substitutions = substitutions.insertExternalParameters(numberOfParametersToInsert, internalDepth))
     }
-    def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Simplification = {
+    def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Simplification = {
       Simplification(
         statement.replaceDefinitions(expressionDefinitionReplacements),
         premise.replaceDefinitions(expressionDefinitionReplacements).asInstanceOf[Premise.SingleLinePremise],

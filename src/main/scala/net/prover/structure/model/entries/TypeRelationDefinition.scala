@@ -2,12 +2,12 @@ package net.prover.structure.model.entries
 
 import net.prover._
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
-import net.prover.model.definitions.{ConjunctionDefinition, ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType.TermComponent
+import net.prover.model.definitions.{ConjunctionDefinition, CompoundExpressionDefinition, CompoundStatementDefinition}
 import net.prover.model.expressions.{Statement, TermVariable}
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 case class TypeRelationDefinition(
     symbol: String,
@@ -40,7 +40,7 @@ case class TypeRelationDefinition(
     if (secondType.defaultQualifier.isDefined) throw new Exception("Cannot relate a type with a default qualifier")
   }
 
-  override val statementDefinition: StatementDefinition = StatementDefinition.Derived(
+  override val statementDefinition: CompoundStatementDefinition = CompoundStatementDefinition.Derived(
     symbol,
     allComponents,
     Some(name),
@@ -53,7 +53,7 @@ case class TypeRelationDefinition(
     ( explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq :+
       Seq("definition", definingStatement.serialized.inParens).mkString(" ")).indent
 
-  override def replaceDefinitions(entryReplacements: Map[ChapterEntry, ChapterEntry], expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): ChapterEntry = {
+  override def replaceDefinitions(entryReplacements: Map[ChapterEntry, ChapterEntry], expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition], entryContext: EntryContext): ChapterEntry = {
     TypeRelationDefinition(
       symbol,
       entryReplacements(firstType).asInstanceOf[TypeDefinition],

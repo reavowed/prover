@@ -44,8 +44,8 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit def allowableSeq[T](implicit inner: Allowable[T]): Allowable[Seq[T]] = allowable { x => x.forall(isAllowed) }
 
     implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.allInferenceIds.contains(i.id))
-    implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(d => entryContext.statementDefinitionsBySymbol.contains(d.symbol))
-    implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(d => entryContext.termDefinitionsBySymbol.contains(d.symbol))
+    implicit val allowableStatementDefinition: Allowable[CompoundStatementDefinition] = allowable(d => entryContext.statementDefinitionsBySymbol.contains(d.symbol))
+    implicit val allowableTermDefinition: Allowable[CompoundTermDefinition] = allowable(d => entryContext.termDefinitionsBySymbol.contains(d.symbol))
 
     implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryJoiners.contains)
     implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
@@ -208,7 +208,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 
   lazy val conclusionRelationSimplificationInferences: Map[BinaryRelation, Seq[ConclusionRelationSimplificationInference]] = filter(definitions.conclusionRelationSimplificationInferences)
   lazy val conclusionSimplificationInferences: Seq[Inference] = filter(definitions.conclusionSimplificationInferences)
-  lazy val termDefinitionRemovals: Map[TermDefinition, Seq[InferenceExtraction]] = filter(definitions.termDefinitionRemovals)
+  lazy val termDefinitionRemovals: Map[CompoundTermDefinition, Seq[InferenceExtraction]] = filter(definitions.termDefinitionRemovals)
 
   lazy val rewriteInferences: Seq[(Inference, Statement)] = {
     filter(definitions.rewriteInferences)

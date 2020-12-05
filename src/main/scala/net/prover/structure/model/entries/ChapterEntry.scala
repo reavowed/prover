@@ -1,10 +1,10 @@
 package net.prover.structure.model.entries
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundStatementDefinition}
 import net.prover.model.{Inference, Parser, SimpleVariableDefinition}
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 trait ChapterEntry {
   @JsonSerialize
@@ -16,7 +16,7 @@ trait ChapterEntry {
 
   def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): ChapterEntry
 
@@ -49,7 +49,7 @@ object ChapterEntry {
     def withName(newName: Option[String]): ChapterEntry
   }
   trait HasStatementDefinition extends ChapterEntry {
-    def statementDefinition: StatementDefinition
+    def statementDefinition: CompoundStatementDefinition
   }
   trait HasArticle extends ChapterEntry {
     @JsonSerialize
@@ -58,8 +58,8 @@ object ChapterEntry {
 
   val parsers: Seq[ChapterEntryParser] = Seq(
     Comment,
-    StatementDefinitionEntry,
-    TermDefinitionEntry,
+    CompoundStatementDefinitionEntry,
+    CompoundTermDefinitionEntry,
     TypeDefinition,
     TypeQualifierDefinition,
     PropertyDefinitionOnType,

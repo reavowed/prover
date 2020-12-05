@@ -1,7 +1,7 @@
 package net.prover.model.utils
 
 import net.prover._
-import net.prover.model.definitions.TermDefinition
+import net.prover.model.definitions.CompoundTermDefinition
 import net.prover.model.expressions._
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition}
@@ -136,7 +136,7 @@ object ExpressionUtils {
   def isSimpleTermVariable(term: Term): Boolean = {
     getSimpleTermVariable(term).isDefined
   }
-  def getTermConstantDefinition(term: Term): Option[TermDefinition] = {
+  def getTermConstantDefinition(term: Term): Option[CompoundTermDefinition] = {
     term.asOptionalInstanceOf[DefinedTerm].filter(_.components.isEmpty).map(_.definition)
   }
   def isTermConstant(term: Term): Boolean = {

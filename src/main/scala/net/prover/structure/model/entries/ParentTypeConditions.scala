@@ -1,6 +1,6 @@
 package net.prover.structure.model.entries
 
-import net.prover.model.definitions.{ConjunctionDefinition, ExpressionDefinition, TermListAdapter}
+import net.prover.model.definitions.{ConjunctionDefinition, CompoundExpressionDefinition, TermListAdapter}
 import net.prover.model.expressions.{Statement, TermVariable}
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{Parser, SimpleVariableDefinition}
@@ -51,7 +51,7 @@ case class ParentTypeConditions(
 
   def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): ParentTypeConditions = {
     ParentTypeConditions(

@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.controllers.ExtractionHelper
-import net.prover.model.definitions.{BinaryRelationStatement, KnownStatement, TermDefinition, Wrapper}
+import net.prover.model.definitions.{BinaryRelationStatement, KnownStatement, CompoundTermDefinition, Wrapper}
 import net.prover.model.expressions._
 import net.prover.model.proof.StepProvingContext.KnownEquality
 import net.prover.model.unwrapping.UnwrappedStatement
@@ -96,7 +96,7 @@ object PremiseFinder {
       } yield premiseSteps :+ DerivationStep.fromAssertion(assertionStep)
     }
     def byRemovingTermDefinition = (for {
-      termDefinition <- targetStatement.referencedDefinitions.ofType[TermDefinition].iterator
+      termDefinition <- targetStatement.referencedDefinitions.ofType[CompoundTermDefinition].iterator
       inferenceExtraction <- provingContext.termDefinitionRemovals(termDefinition)
       substitutions <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inferenceExtraction.variableDefinitions))
       premiseStatements <- inferenceExtraction.premises.map(_.applySubstitutions(substitutions)).traverseOption

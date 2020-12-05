@@ -3,11 +3,11 @@ package net.prover.structure.model.entries
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions.Template
 import net.prover.model.{Format, Inference, Parser}
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 @JsonSerialize(using = classOf[DisplayShorthandSerializer])
 case class DisplayShorthand(template: Template, format: Format.Explicit, conditions: Seq[(String, String)]) extends ChapterEntry {
@@ -23,7 +23,7 @@ case class DisplayShorthand(template: Template, format: Format.Explicit, conditi
 
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): DisplayShorthand = {
     DisplayShorthand(

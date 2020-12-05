@@ -3,7 +3,7 @@ package net.prover.model.expressions
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, UsedVariables, VariableDefinitions}
 
@@ -15,7 +15,7 @@ trait TypedExpression[+ExpressionType <: Expression] {
   def definitionalComplexity: Int
   lazy val complexity: (Int, Int) = (structuralComplexity, definitionalComplexity)
   def definitionUsages: DefinitionUsages
-  def referencedDefinitions: Set[ExpressionDefinition] = definitionUsages.map.keySet
+  def referencedDefinitions: Set[CompoundExpressionDefinition] = definitionUsages.map.keySet
 
   def usedVariables: UsedVariables
   def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, ExpressionType, Int, Seq[Int])]
@@ -24,7 +24,7 @@ trait TypedExpression[+ExpressionType <: Expression] {
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType]
-  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): ExpressionType
+  def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): ExpressionType
 
   def specify(
     targetArguments: Map[Int, Term],

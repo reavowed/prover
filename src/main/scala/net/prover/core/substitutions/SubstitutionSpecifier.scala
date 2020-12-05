@@ -16,13 +16,13 @@ case class SubstitutionSpecifier(substitutions: Substitutions) {
   def specifyAndApplySubstitutions(statement: Statement, targetArguments: Seq[Term])(implicit context: Context): Try[Statement] = statement match {
     case sv @ StatementVariable(_, arguments) =>
       arguments.map(specifyAndApplySubstitutions(_, targetArguments)).traverseTry.map(sv.withNewArguments)
-    case definedStatement : DefinedStatement =>
+    case definedStatement : CompoundStatement =>
       specifyAndApplySubstitutionsToDefinedExpression(definedStatement, targetArguments)
   }
   def specifyAndApplySubstitutions(term: Term, targetArguments: Seq[Term])(implicit context: Context): Try[Term] = term match {
     case tv @ TermVariable(_, arguments) =>
       arguments.map(specifyAndApplySubstitutions(_, targetArguments)).traverseTry.map(tv.withNewArguments)
-    case definedTerm : DefinedTerm =>
+    case definedTerm : CompoundTerm =>
       specifyAndApplySubstitutionsToDefinedExpression(definedTerm, targetArguments)
     case parameter @ Parameter(index, level) =>
       if (level == context.internalDepth + context.externalDepth)
@@ -34,7 +34,7 @@ case class SubstitutionSpecifier(substitutions: Substitutions) {
     expressions.map(specifyAndApplySubstitutions(_, targetArguments)).traverseTry
   }
 
-  private def specifyAndApplySubstitutionsToDefinedExpression[T <: DefinedExpression[T]](expression: T, targetArguments: Seq[Term])(implicit context: Context): Try[T] = {
+  private def specifyAndApplySubstitutionsToDefinedExpression[T <: CompoundExpression[T]](expression: T, targetArguments: Seq[Term])(implicit context: Context): Try[T] = {
     val innerContext = context.increaseDepth(expression)
     expression.components.map(specifyAndApplySubstitutions(_, targetArguments)(innerContext)).traverseTry.map(expression.withNewComponents)
   }

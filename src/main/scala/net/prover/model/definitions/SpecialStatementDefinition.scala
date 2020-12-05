@@ -8,7 +8,7 @@ import net.prover.structure.model.entries.ChapterEntry
 
 @JsonSerialize(using = classOf[SpecialStatementDefinitionSymbolSerializer])
 sealed trait SpecialStatementDefinition {
-  val statementDefinition: StatementDefinition
+  val statementDefinition: CompoundStatementDefinition
   val referencedEntry: ChapterEntry = statementDefinition.associatedChapterEntry
 }
 
@@ -38,12 +38,12 @@ object SpecialStatementDefinition {
   }
 }
 
-case class ConjunctionDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.BinaryConnective {
+case class ConjunctionDefinition(statementDefinition: CompoundStatementDefinition) extends SpecialStatementDefinition.BinaryConnective {
   def all(statements: Statement*): Statement = statements.reduceRight(apply)
 }
-case class DeductionDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.BinaryConnective
-case class GeneralizationDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.Quantifier
-case class UniqueExistenceDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.Quantifier
+case class DeductionDefinition(statementDefinition: CompoundStatementDefinition) extends SpecialStatementDefinition.BinaryConnective
+case class GeneralizationDefinition(statementDefinition: CompoundStatementDefinition) extends SpecialStatementDefinition.Quantifier
+case class UniqueExistenceDefinition(statementDefinition: CompoundStatementDefinition) extends SpecialStatementDefinition.Quantifier
 
 class SpecialStatementDefinitionSymbolSerializer extends JsonSerializer[SpecialStatementDefinition] {
   override def serialize(value: SpecialStatementDefinition, gen: JsonGenerator, serializers: SerializerProvider): Unit = {

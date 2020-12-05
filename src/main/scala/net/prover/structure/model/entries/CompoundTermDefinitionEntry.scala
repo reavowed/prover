@@ -2,13 +2,13 @@ package net.prover.structure.model.entries
 
 import net.prover._
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.{ExpressionDefinition, TermDefinition}
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
+import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundTermDefinition}
 import net.prover.model.expressions._
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
-case class TermDefinitionEntry(
+case class CompoundTermDefinitionEntry(
     baseSymbol: String,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
@@ -20,19 +20,19 @@ case class TermDefinitionEntry(
     shorthand: Option[String],
     attributes: Seq[String],
     disambiguatorAdders: Seq[DisambiguatorAdder])
-  extends ExpressionDefinitionEntry with TypedExpressionDefinitionEntry[TermDefinitionEntry] with TermDefinition
+  extends CompoundExpressionDefinitionEntry with TypedExpressionDefinitionEntry[CompoundTermDefinitionEntry] with CompoundTermDefinition
 {
   override def typeName: String = "Term"
   override def referencedEntries: Set[ChapterEntry] = (definingStatement.referencedDefinitions ++ premises.flatMap(_.referencedDefinitions).toSet).map(_.associatedChapterEntry) - this
-  override def inferences: Seq[Inference.FromEntry] = super[TermDefinition].inferences
+  override def inferences: Seq[Inference.FromEntry] = super[CompoundTermDefinition].inferences
 
-  override def withSymbol(newSymbol: String): TermDefinitionEntry = copy(baseSymbol = newSymbol)
-  def withDisambiguator(newDisambiguator: Option[String]): TermDefinitionEntry = copy(disambiguator = newDisambiguator)
-  override def withName(newName: Option[String]): TermDefinitionEntry = copy(explicitName = newName)
-  override def withShorthand(newShorthand: Option[String]): TermDefinitionEntry = copy(shorthand = newShorthand)
-  override def withAttributes(newAttributes: Seq[String]): TermDefinitionEntry = copy(attributes = newAttributes)
-  override def withFormat(newFormat: Format.Basic): TermDefinitionEntry = copy(format = newFormat)
-  def withDisambiguatorAdders(newDisambiguatorAdders: Seq[DisambiguatorAdder]): TermDefinitionEntry = copy(disambiguatorAdders = newDisambiguatorAdders)
+  override def withSymbol(newSymbol: String): CompoundTermDefinitionEntry = copy(baseSymbol = newSymbol)
+  def withDisambiguator(newDisambiguator: Option[String]): CompoundTermDefinitionEntry = copy(disambiguator = newDisambiguator)
+  override def withName(newName: Option[String]): CompoundTermDefinitionEntry = copy(explicitName = newName)
+  override def withShorthand(newShorthand: Option[String]): CompoundTermDefinitionEntry = copy(shorthand = newShorthand)
+  override def withAttributes(newAttributes: Seq[String]): CompoundTermDefinitionEntry = copy(attributes = newAttributes)
+  override def withFormat(newFormat: Format.Basic): CompoundTermDefinitionEntry = copy(format = newFormat)
+  def withDisambiguatorAdders(newDisambiguatorAdders: Seq[DisambiguatorAdder]): CompoundTermDefinitionEntry = copy(disambiguatorAdders = newDisambiguatorAdders)
 
   override def serializedLines: Seq[String] = Seq(s"term $baseSymbol $serializedComponents") ++
     (disambiguator.map(d => s"disambiguator $d").toSeq ++
@@ -47,10 +47,10 @@ case class TermDefinitionEntry(
 
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
-  ): TermDefinitionEntry = {
-    TermDefinitionEntry(
+  ): CompoundTermDefinitionEntry = {
+    CompoundTermDefinitionEntry(
       baseSymbol,
       boundVariableNames,
       componentTypes,
@@ -65,7 +65,7 @@ case class TermDefinitionEntry(
   }
 }
 
-object TermDefinitionEntry extends ChapterEntryParser {
+object CompoundTermDefinitionEntry extends ChapterEntryParser {
   override val name: String = "term"
 
   def premisesParser(implicit context: ExpressionParsingContext): Parser[Seq[Statement]] = Parser.optional(
@@ -77,10 +77,10 @@ object TermDefinitionEntry extends ChapterEntryParser {
     "name",
     Parser.allInParens)
 
-  def parser(implicit entryContext: EntryContext): Parser[TermDefinitionEntry] = {
+  def parser(implicit entryContext: EntryContext): Parser[CompoundTermDefinitionEntry] = {
     for {
       baseSymbol <- Parser.singleWord
-      boundVariablesAndComponentTypes <- ExpressionDefinitionEntry.boundVariablesAndComponentTypesParser
+      boundVariablesAndComponentTypes <- CompoundExpressionDefinitionEntry.boundVariablesAndComponentTypesParser
       boundVariables = boundVariablesAndComponentTypes._1
       componentTypes = boundVariablesAndComponentTypes._2
       expressionParsingContext = ExpressionParsingContext.forComponentTypes(componentTypes)
@@ -89,11 +89,11 @@ object TermDefinitionEntry extends ChapterEntryParser {
       format <- Format.optionalParserForExpressionDefinition(baseSymbol, boundVariables, componentTypes)
       premises <- premisesParser(expressionParsingContext)
       definitionPredicate <- Statement.parser(expressionParsingContext.addInitialParameter("_")).inParens
-      shorthand <- ExpressionDefinitionEntry.shorthandParser
+      shorthand <- CompoundExpressionDefinitionEntry.shorthandParser
       attributes <- Attributes.parser
       disambiguatorAdders <- Parser.optional("disambiguatorAdders", DisambiguatorAdder.listParser).getOrElse(Nil)
     } yield {
-      TermDefinitionEntry(
+      CompoundTermDefinitionEntry(
         baseSymbol,
         boundVariables,
         componentTypes,

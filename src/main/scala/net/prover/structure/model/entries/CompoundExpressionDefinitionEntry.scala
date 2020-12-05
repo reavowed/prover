@@ -1,14 +1,14 @@
 package net.prover.structure.model.entries
 
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
+import net.prover.model.definitions.CompoundExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
 
-trait ExpressionDefinitionEntry extends TypedExpressionDefinitionEntry[ExpressionDefinitionEntry] with ChapterEntry.Standalone
+trait CompoundExpressionDefinitionEntry extends TypedExpressionDefinitionEntry[CompoundExpressionDefinitionEntry] with ChapterEntry.Standalone
 
-trait TypedExpressionDefinitionEntry[+ExpressionDefinitionType <: ExpressionDefinitionEntry] extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ExpressionDefinition { self: ExpressionDefinitionEntry =>
+trait TypedExpressionDefinitionEntry[+ExpressionDefinitionType <: CompoundExpressionDefinitionEntry] extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with CompoundExpressionDefinition { self: CompoundExpressionDefinitionEntry =>
   def typeName: String
-  override def name: String = super[ExpressionDefinition].name
+  override def name: String = super[CompoundExpressionDefinition].name
   override def format: Format.Basic
   override def title: String = s"$typeName Definition: $name"
   override def referencedInferenceIds: Set[String] = Set.empty
@@ -23,7 +23,7 @@ trait TypedExpressionDefinitionEntry[+ExpressionDefinitionType <: ExpressionDefi
   protected def serializedComponents = "(" + (boundVariableNames.map("$" + _) ++ componentTypes.map(_.serialized)).mkString(" ") + ")"
 }
 
-object ExpressionDefinitionEntry {
+object CompoundExpressionDefinitionEntry {
   private def boundVariablesParser: Parser[Seq[String]] = {
     val boundVariablePattern = "\\$(.*)".r
     Parser.selectOptionalWord {

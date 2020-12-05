@@ -2,7 +2,7 @@ package net.prover.model.definitions
 
 import net.prover._
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStepWithSingleInference, Step, SubstatementExtractor, SubstitutionContext}
@@ -542,7 +542,7 @@ case class Definitions(rootEntryContext: EntryContext) {
       false
   }
 
-  lazy val termDefinitionRemovals: Map[TermDefinition, Seq[InferenceExtraction]] = {
+  lazy val termDefinitionRemovals: Map[CompoundTermDefinition, Seq[InferenceExtraction]] = {
     rootEntryContext.termDefinitions.map { termDefinition =>
       termDefinition -> (for {
         inferenceExtraction <- inferenceExtractionsByInferenceId(termDefinition.definitionInference.id)
@@ -695,7 +695,7 @@ case class Definitions(rootEntryContext: EntryContext) {
 }
 
 object Definitions {
-  def getDefinedBinaryStatements(statementDefinitions: Seq[StatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[TermDefinition]): Seq[BinaryJoiner[_ <: Expression]] = {
+  def getDefinedBinaryStatements(statementDefinitions: Seq[CompoundStatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[CompoundTermDefinition]): Seq[BinaryJoiner[_ <: Expression]] = {
     def fromDefinitions = for {
       definition <- statementDefinitions
       if definition.format.baseFormatString == s"%1 %0 %2"

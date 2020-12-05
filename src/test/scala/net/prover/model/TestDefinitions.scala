@@ -1,8 +1,8 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions.{DeductionDefinition, GeneralizationDefinition}
-import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
-import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
+import net.prover.model.definitions.CompoundExpressionDefinition.{ComponentArgument, ComponentType}
 import net.prover.model.definitions._
 import net.prover.structure.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.structure.model.entries._
@@ -55,10 +55,10 @@ trait TestVariableDefinitions {
   implicit def $ToFunctionParameter(x: $.type): FunctionParameter = FunctionParameter(0, 0)
 
 
-  implicit class StatementDefinitionOps(statementDefinition: StatementDefinition) {
+  implicit class StatementDefinitionOps(statementDefinition: CompoundStatementDefinition) {
     def template(components: Template*): Template = DefinedStatementTemplate(statementDefinition, Nil, components)
   }
-  implicit class TermDefinitionOps(termDefinition: TermDefinition) {
+  implicit class TermDefinitionOps(termDefinition: CompoundTermDefinition) {
     def template(components: Template*): Template = DefinedTermTemplate(termDefinition, Nil, components)
   }
   implicit class FunctionParameterOps(functionParameter: FunctionParameter) {
@@ -105,9 +105,9 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
     symbol: String,
     size: Int,
     definingStatement: Option[Statement]
-  ): StatementDefinitionEntry = {
+  ): CompoundStatementDefinitionEntry = {
     val componentTypes = Seq[ComponentType](φ, ψ, χ).take(size)
-    StatementDefinitionEntry(
+    CompoundStatementDefinitionEntry(
       symbol,
       Nil,
       componentTypes,
@@ -121,9 +121,9 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
     symbol: String,
     size: Int,
     definingStatement: Option[Statement]
-  ): StatementDefinitionEntry = {
+  ): CompoundStatementDefinitionEntry = {
     val componentTypes = Seq[ComponentType](a, b, c).take(size)
-    StatementDefinitionEntry(
+    CompoundStatementDefinitionEntry(
       symbol,
       Nil,
       componentTypes,
@@ -136,11 +136,11 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
   private def quantifier(
     symbol: String,
     definingStatement: Option[Statement]
-  ): StatementDefinitionEntry = {
-    StatementDefinitionEntry(
+  ): CompoundStatementDefinitionEntry = {
+    CompoundStatementDefinitionEntry(
       symbol,
       Seq("x"),
-      Seq(StatementComponent("φ", Seq(ExpressionDefinition.ComponentArgument("x", 0)))),
+      Seq(StatementComponent("φ", Seq(CompoundExpressionDefinition.ComponentArgument("x", 0)))),
       None,
       Format.Explicit(s"(%0%1)%2", s"(${symbol}x)φ", 3, requiresBrackets = false, requiresComponentBrackets = true),
       definingStatement,
@@ -152,14 +152,14 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
     symbol: String,
     components: Seq[ComponentType],
     format: Format.Basic
-  ): TermDefinitionEntry = simpleTermDefinition(symbol, components, format, Nil, BlankDefinition)
+  ): CompoundTermDefinitionEntry = simpleTermDefinition(symbol, components, format, Nil, BlankDefinition)
   def simpleTermDefinition(
     symbol: String,
     components: Seq[ComponentType],
     format: Format.Basic,
     premises: Seq[Statement],
     definition: Statement
-  ): TermDefinitionEntry = simpleTermDefinition(symbol, Nil, components, format, premises, definition)
+  ): CompoundTermDefinitionEntry = simpleTermDefinition(symbol, Nil, components, format, premises, definition)
   def simpleTermDefinition(
     symbol: String,
     boundVariables: Seq[String],
@@ -167,7 +167,7 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
     format: Format.Basic,
     premises: Seq[Statement],
     definition: Statement
-  ): TermDefinitionEntry = TermDefinitionEntry(symbol, boundVariables, components, None, None, format, premises, definition, None, Nil, Nil)
+  ): CompoundTermDefinitionEntry = CompoundTermDefinitionEntry(symbol, boundVariables, components, None, None, format, premises, definition, None, Nil, Nil)
 
   val Implication = connective("→", 2, None).copy(attributes = Seq("deduction"))
   val DeductionDefinition = definitions.DeductionDefinition(Implication)
@@ -257,7 +257,7 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
   val Addition = DefinedTerm(Nil, AdditionDefinition)(Nil)
   val MultiplicationDefinition = simpleTermDefinition("×", Nil, Format.default(0), Nil, BlankDefinition).withDisambiguator(Some("ℕ"))
   val Multiplication = DefinedTerm(Nil, MultiplicationDefinition)(Nil)
-  val LessThanDefinition = TermDefinitionEntry(
+  val LessThanDefinition = CompoundTermDefinitionEntry(
     "<",
     Nil,
     Nil,

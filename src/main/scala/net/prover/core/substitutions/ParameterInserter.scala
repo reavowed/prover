@@ -1,6 +1,6 @@
 package net.prover.core.substitutions
 
-import net.prover.core.expressions.{DefinedExpression, DefinedStatement, DefinedTerm, Expression, Parameter, Statement, StatementVariable, Term, TermVariable}
+import net.prover.core.expressions.{CompoundExpression, CompoundStatement, CompoundTerm, Expression, Parameter, Statement, StatementVariable, Term, TermVariable}
 
 object ParameterInserter {
 
@@ -17,13 +17,13 @@ object ParameterInserter {
   def insertExternalParameters(statement: Statement, numberOfParametersToInsert: Int)(implicit context: Context): Statement = statement match {
     case StatementVariable(index, arguments) =>
       StatementVariable(index, arguments.map(insertExternalParameters(_, numberOfParametersToInsert)))
-    case definedStatement : DefinedStatement =>
+    case definedStatement : CompoundStatement =>
       insertExternalParametersIntoDefinedExpression(definedStatement, numberOfParametersToInsert)
   }
   def insertExternalParameters(term: Term, numberOfParametersToInsert: Int)(implicit context: Context): Term = term match {
     case TermVariable(index, arguments) =>
       TermVariable(index, arguments.map(insertExternalParameters(_, numberOfParametersToInsert)))
-    case definedTerm : DefinedTerm =>
+    case definedTerm : CompoundTerm =>
       insertExternalParametersIntoDefinedExpression(definedTerm, numberOfParametersToInsert)
     case p @ Parameter(index, level) =>
       if (level >= context.internalDepth) {
@@ -33,7 +33,7 @@ object ParameterInserter {
       }
   }
 
-  private def insertExternalParametersIntoDefinedExpression[T <: DefinedExpression[T]](expression: T, numberOfParametersToInsert: Int)(implicit context: Context): T = {
+  private def insertExternalParametersIntoDefinedExpression[T <: CompoundExpression[T]](expression: T, numberOfParametersToInsert: Int)(implicit context: Context): T = {
       expression.withNewComponents(expression.components.map(insertExternalParameters(_, numberOfParametersToInsert)(context.increaseDepth(expression))))
   }
 }

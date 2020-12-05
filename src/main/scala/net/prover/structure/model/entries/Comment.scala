@@ -1,9 +1,9 @@
 package net.prover.structure.model.entries
 
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.{Inference, Parser}
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 case class Comment(text: String) extends ChapterEntry {
   override def name: String = Comment.name
@@ -14,7 +14,7 @@ case class Comment(text: String) extends ChapterEntry {
   override def referencedEntries: Set[ChapterEntry] = Set.empty
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): Comment = this
 }

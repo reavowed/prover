@@ -1,16 +1,16 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.structure.model.entries.StatementDefinitionEntry
+import net.prover.structure.model.entries.CompoundStatementDefinitionEntry
 import org.specs2.mutable.Specification
 
-class StatementDefinitionSpec extends Specification {
+class CompoundStatementTypeSpec extends Specification {
 
   implicit val entryContext = defaultEntryContext
 
   "statement definition parser" should {
-    def parseStatementDefinition(text: String): StatementDefinitionEntry = {
-      StatementDefinitionEntry.parser.parseAndDiscard(text)
+    def parseStatementDefinition(text: String): CompoundStatementDefinitionEntry = {
+      CompoundStatementDefinitionEntry.parser.parseAndDiscard(text)
     }
 
     "parse definition" in {

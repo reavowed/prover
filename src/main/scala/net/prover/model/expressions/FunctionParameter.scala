@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model.{Substitutions, UsedVariables}
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 
 case class FunctionParameter(index: Int, level: Int) extends Term {
   override def structuralComplexity: Int = 1
@@ -24,7 +24,7 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     else
       Some(FunctionParameter(index, level - numberOfParametersToRemove))
   }
-  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): FunctionParameter = this
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): FunctionParameter = this
 
   override def getPredicateForTerm(term: Term, depth: Int): Term = {
     if (term == this)

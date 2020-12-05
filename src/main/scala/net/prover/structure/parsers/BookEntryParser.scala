@@ -1,4 +1,4 @@
-package net.prover.structure.model.parsers
+package net.prover.structure.parsers
 
 import net.prover.model.Parser
 import net.prover.structure.model.Book

@@ -1,10 +1,10 @@
 package net.prover.structure.model.entries
 
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions.Template
 import net.prover.model.{Inference, Parser}
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 case class WritingShorthand(template: Template, symbol: String) extends ChapterEntry {
   override def name: String = symbol
@@ -14,7 +14,7 @@ case class WritingShorthand(template: Template, symbol: String) extends ChapterE
   override def referencedEntries: Set[ChapterEntry] = template.referencedDefinitions.map(_.associatedChapterEntry)
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): WritingShorthand = copy(template = template.replaceDefinitions(expressionDefinitionReplacements))
 }

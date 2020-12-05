@@ -2,11 +2,11 @@ package net.prover.structure.model.entries
 
 import net.prover._
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
+import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundStatementDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 case class StandalonePropertyDefinition(
     symbol: String,
@@ -25,7 +25,7 @@ case class StandalonePropertyDefinition(
   override def withName(newName: Option[String]): ChapterEntry = copy(explicitName = newName)
 
   def fullFormat: Format = Format.Explicit(s"%1 is %0", s"${mainVariableDefinition.name} is $name", 2, requiresBrackets = false, requiresComponentBrackets = true)
-  val statementDefinition: StatementDefinition = StatementDefinition.Derived(
+  val statementDefinition: CompoundStatementDefinition = CompoundStatementDefinition.Derived(
     qualifiedSymbol,
     Seq(ComponentType.TermComponent(mainVariableDefinition.name, Nil)),
     explicitName.orElse(Some(symbol)),
@@ -41,7 +41,7 @@ case class StandalonePropertyDefinition(
 
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): StandalonePropertyDefinition = {
     StandalonePropertyDefinition(

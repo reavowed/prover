@@ -6,12 +6,12 @@ import net.prover.model.{Inference, Parser, ProvingContext}
 import net.prover.structure.model.entries._
 import net.prover.structure.model.{Book, Chapter}
 
-case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map[String, Inference], statementDefinitionsBySymbol: Map[String, StatementDefinition], termDefinitionsBySymbol: Map[String, TermDefinition]) {
+case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map[String, Inference], statementDefinitionsBySymbol: Map[String, CompoundStatementDefinition], termDefinitionsBySymbol: Map[String, CompoundTermDefinition]) {
 
   lazy val allInferences: Seq[Inference.FromEntry] = availableEntries.flatMap(_.inferences)
   lazy val allInferenceIds: Set[String] = inferencesById.keySet
-  lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.mapCollect(EntryContext.getStatementDefinitionFromEntry)
-  lazy val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
+  lazy val statementDefinitions: Seq[CompoundStatementDefinition] = availableEntries.mapCollect(EntryContext.getStatementDefinitionFromEntry)
+  lazy val termDefinitions: Seq[CompoundTermDefinition] = availableEntries.ofType[CompoundTermDefinition]
   lazy val typeDefinitions: Map[String, TypeDefinition] = availableEntries.ofType[TypeDefinition].map(t => t.symbol -> t).toMap
   lazy val propertyDefinitionsByType: Map[String, Seq[PropertyDefinitionOnType]] = availableEntries.ofType[PropertyDefinitionOnType].groupBy(_.parentType.symbol)
   lazy val qualifiersByType: Map[String, Seq[TypeQualifierDefinition]] = availableEntries.ofType[TypeQualifierDefinition].groupBy(_.parentType.symbol)
@@ -34,12 +34,12 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
     statementDefinitions.find(_.attributes.contains("uniqueness")).map(UniqueExistenceDefinition)
   }
 
-  lazy val typeStatementDefinitionsByType: Map[String, Seq[StatementDefinition]] = {
+  lazy val typeStatementDefinitionsByType: Map[String, Seq[CompoundStatementDefinition]] = {
     typeDefinitions.mapValues { t =>
       t.statementDefinition +: (qualifiersByType.getOrElse(t.symbol, Nil) ++ propertyDefinitionsByType.getOrElse(t.symbol, Nil) ++ relatedObjectsByType.getOrElse(t.symbol, Nil)).map(_.statementDefinition)
     }
   }
-  lazy val typeStatementDefinitions: Seq[StatementDefinition] = typeStatementDefinitionsByType.values.flatten.toSeq ++ typeRelationDefinitions.map(_.statementDefinition)
+  lazy val typeStatementDefinitions: Seq[CompoundStatementDefinition] = typeStatementDefinitionsByType.values.flatten.toSeq ++ typeRelationDefinitions.map(_.statementDefinition)
 
   def addEntry(entry: ChapterEntry): EntryContext = {
     addEntries(Seq(entry))
@@ -50,12 +50,12 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
 
 
   object RecognisedStatementDefinition {
-    def unapply(symbol: String): Option[StatementDefinition] = {
+    def unapply(symbol: String): Option[CompoundStatementDefinition] = {
       statementDefinitionsBySymbol.get(symbol)
     }
   }
   object RecognisedTermDefinition {
-    def unapply(symbol: String): Option[TermDefinition] = {
+    def unapply(symbol: String): Option[CompoundTermDefinition] = {
       termDefinitionsBySymbol.get(symbol)
     }
   }
@@ -84,8 +84,8 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
 
 object EntryContext {
 
-  def getStatementDefinitionFromEntry(entry: ChapterEntry): Option[StatementDefinition] = entry match {
-    case statementDefinition: StatementDefinition =>
+  def getStatementDefinitionFromEntry(entry: ChapterEntry): Option[CompoundStatementDefinition] = entry match {
+    case statementDefinition: CompoundStatementDefinition =>
       Some(statementDefinition)
     case entryWithStatementDefinition: ChapterEntry.HasStatementDefinition =>
       Some(entryWithStatementDefinition.statementDefinition)
@@ -98,7 +98,7 @@ object EntryContext {
       entries,
       entries.flatMap(_.inferences).toMapWithKey(_.id),
       entries.mapCollect(getStatementDefinitionFromEntry).toMapWithKey(_.symbol),
-      entries.ofType[TermDefinition].toMapWithKey(_.disambiguatedSymbol.serialized))
+      entries.ofType[CompoundTermDefinition].toMapWithKey(_.disambiguatedSymbol.serialized))
   }
 
 

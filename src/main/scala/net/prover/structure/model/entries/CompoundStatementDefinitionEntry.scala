@@ -2,13 +2,13 @@ package net.prover.structure.model.entries
 
 import net.prover._
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
+import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundStatementDefinition}
 import net.prover.model.expressions._
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
-case class StatementDefinitionEntry(
+case class CompoundStatementDefinitionEntry(
     baseSymbol: String,
     boundVariableNames: Seq[String],
     componentTypes: Seq[ComponentType],
@@ -17,17 +17,17 @@ case class StatementDefinitionEntry(
     definingStatement: Option[Statement],
     shorthand: Option[String],
     attributes: Seq[String])
-  extends ExpressionDefinitionEntry with TypedExpressionDefinitionEntry[StatementDefinitionEntry] with StatementDefinition
+  extends CompoundExpressionDefinitionEntry with TypedExpressionDefinitionEntry[CompoundStatementDefinitionEntry] with CompoundStatementDefinition
 {
   override def typeName: String = "Statement"
   override def referencedEntries: Set[ChapterEntry] = definingStatement.map(_.referencedDefinitions).getOrElse(Set.empty).map(_.associatedChapterEntry) - this
-  override def inferences: Seq[Inference.FromEntry] = super[StatementDefinition].inferences
+  override def inferences: Seq[Inference.FromEntry] = super[CompoundStatementDefinition].inferences
 
-  override def withSymbol(newSymbol: String): StatementDefinitionEntry = copy(baseSymbol = newSymbol)
-  override def withName(newName: Option[String]): StatementDefinitionEntry = copy(explicitName = newName)
-  override def withShorthand(newShorthand: Option[String]): StatementDefinitionEntry = copy(shorthand = newShorthand)
-  override def withAttributes(newAttributes: Seq[String]): StatementDefinitionEntry = copy(attributes = newAttributes)
-  override def withFormat(newFormat: Format.Basic): StatementDefinitionEntry = copy(format = newFormat)
+  override def withSymbol(newSymbol: String): CompoundStatementDefinitionEntry = copy(baseSymbol = newSymbol)
+  override def withName(newName: Option[String]): CompoundStatementDefinitionEntry = copy(explicitName = newName)
+  override def withShorthand(newShorthand: Option[String]): CompoundStatementDefinitionEntry = copy(shorthand = newShorthand)
+  override def withAttributes(newAttributes: Seq[String]): CompoundStatementDefinitionEntry = copy(attributes = newAttributes)
+  override def withFormat(newFormat: Format.Basic): CompoundStatementDefinitionEntry = copy(format = newFormat)
 
   override def serializedLines: Seq[String] = Seq(s"statement $baseSymbol $serializedComponents") ++
     (explicitName.map(n => s"name ($n)").toSeq ++
@@ -39,10 +39,10 @@ case class StatementDefinitionEntry(
 
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
-  ): StatementDefinitionEntry = {
-    StatementDefinitionEntry(
+  ): CompoundStatementDefinitionEntry = {
+    CompoundStatementDefinitionEntry(
       baseSymbol,
       boundVariableNames,
       componentTypes,
@@ -54,7 +54,7 @@ case class StatementDefinitionEntry(
   }
 }
 
-object StatementDefinitionEntry extends ChapterEntryParser {
+object CompoundStatementDefinitionEntry extends ChapterEntryParser {
   override val name: String = "statement"
 
   def nameParser: Parser[Option[String]] = Parser.optional(
@@ -65,20 +65,20 @@ object StatementDefinitionEntry extends ChapterEntryParser {
     "definition",
     Statement.parser.inParens)
 
-  def parser(implicit entryContext: EntryContext): Parser[StatementDefinitionEntry] = {
+  def parser(implicit entryContext: EntryContext): Parser[CompoundStatementDefinitionEntry] = {
     for {
       symbol <- Parser.singleWord
-      boundVariablesAndComponentTypes <- ExpressionDefinitionEntry.boundVariablesAndComponentTypesParser
+      boundVariablesAndComponentTypes <- CompoundExpressionDefinitionEntry.boundVariablesAndComponentTypesParser
       boundVariables = boundVariablesAndComponentTypes._1
       componentTypes = boundVariablesAndComponentTypes._2
       expressionParsingContext = ExpressionParsingContext.forComponentTypes(componentTypes)
       name <- nameParser
       format <- Format.optionalParserForExpressionDefinition(symbol, boundVariables, componentTypes)
       optionalDefiningStatement <- definingStatementParser(expressionParsingContext)
-      shorthand <- ExpressionDefinitionEntry.shorthandParser
+      shorthand <- CompoundExpressionDefinitionEntry.shorthandParser
       attributes <- Attributes.parser
     } yield {
-      StatementDefinitionEntry(
+      CompoundStatementDefinitionEntry(
         symbol,
         boundVariables,
         componentTypes,

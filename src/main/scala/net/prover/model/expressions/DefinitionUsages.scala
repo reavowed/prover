@@ -1,12 +1,12 @@
 package net.prover.model.expressions
 
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 
-case class DefinitionUsages(map: Map[ExpressionDefinition, Int]) {
-  def addUsage(definition: ExpressionDefinition): DefinitionUsages = {
+case class DefinitionUsages(map: Map[CompoundExpressionDefinition, Int]) {
+  def addUsage(definition: CompoundExpressionDefinition): DefinitionUsages = {
     addUsages(definition, 1)
   }
-  def addUsages(definition: ExpressionDefinition, count: Int): DefinitionUsages = {
+  def addUsages(definition: CompoundExpressionDefinition, count: Int): DefinitionUsages = {
     copy(map = map.updated(definition, map.getOrElse(definition, 0) + count))
   }
 

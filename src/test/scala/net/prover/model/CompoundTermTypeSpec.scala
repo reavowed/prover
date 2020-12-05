@@ -1,14 +1,14 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions._
-import net.prover.structure.model.entries.{ChapterEntry, TermDefinitionEntry}
+import net.prover.structure.model.entries.{ChapterEntry, CompoundTermDefinitionEntry}
 import net.prover.model.expressions.FunctionParameter
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
-class TermDefinitionSpec extends Specification {
+class CompoundTermTypeSpec extends Specification {
 
-  private def testParsingAndSerialization(termDefinition: TermDefinitionEntry): MatchResult[Any] = {
+  private def testParsingAndSerialization(termDefinition: CompoundTermDefinitionEntry): MatchResult[Any] = {
     val serializedDefinition = termDefinition.serializedLines.mkString("\n")
     val reparsedDefinition = ChapterEntry.parser(defaultEntryContext).parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(termDefinition)
@@ -17,7 +17,7 @@ class TermDefinitionSpec extends Specification {
   "term definition parser" should {
     "parse a term constant" in {
       testParsingAndSerialization(
-        TermDefinitionEntry(
+        CompoundTermDefinitionEntry(
           "∅",
           Nil,
           Nil,
@@ -33,7 +33,7 @@ class TermDefinitionSpec extends Specification {
 
     "parse a term with premises" in {
       testParsingAndSerialization(
-        TermDefinitionEntry(
+        CompoundTermDefinitionEntry(
           "intersection",
           Nil,
           Seq(a),
@@ -52,7 +52,7 @@ class TermDefinitionSpec extends Specification {
     }
     "parse a term with a disambiguator" in {
       testParsingAndSerialization(
-        TermDefinitionEntry(
+        CompoundTermDefinitionEntry(
           "0",
           Nil,
           Nil,
@@ -67,7 +67,7 @@ class TermDefinitionSpec extends Specification {
     }
     "parse a term with a disambiguator adder" in {
       testParsingAndSerialization(
-        TermDefinitionEntry(
+        CompoundTermDefinitionEntry(
           "⍳",
           Nil,
           Nil,

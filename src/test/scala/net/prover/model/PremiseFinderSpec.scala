@@ -1,9 +1,9 @@
 package net.prover.model
 
 import net.prover.model.TestDefinitions.{f, _}
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
-import net.prover.structure.model.entries.{ParentTypeConditions, PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
+import net.prover.structure.model.entries.{ParentTypeConditions, PropertyDefinitionOnType, CompoundTermDefinitionEntry, TypeDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.structure.EntryContext
@@ -104,7 +104,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "find a premise by a conclusion simplification from extracting a term definition" in {
-      val Negated = TermDefinitionEntry(
+      val Negated = CompoundTermDefinitionEntry(
         "negatedZ",
         Nil,
         Seq(ComponentType.TermComponent("a", Nil)),
@@ -167,7 +167,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "simplify a conclusion by converting a complex defined term into a simpler one" in {
-      val PositiveNaturalsDefinition = TermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
+      val PositiveNaturalsDefinition = CompoundTermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val DefinitionOfPositiveNatural = createInference("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
 
@@ -181,7 +181,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "rewrite a premise using a fact" in {
-      val PositiveNaturalsDefinition = TermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
+      val PositiveNaturalsDefinition = CompoundTermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
       val PositiveNaturalsAreASubsetOfTheNaturals = createInference("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
 
@@ -229,9 +229,9 @@ class PremiseFinderSpec extends Specification {
       // a ≠ ⍳(0)
       // ⍳(0) < a
       // a ∈ ℕ^+
-      val PositiveNaturalsDefinition = TermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
+      val PositiveNaturalsDefinition = CompoundTermDefinitionEntry("ℕ^+", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, Equals($, Comprehension.bind("a")(Naturals, lessThan(Zero, $))), None, Nil, Nil)
       val PositiveNaturals = PositiveNaturalsDefinition()
-      val Inject = TermDefinitionEntry("⍳", Nil, Seq(ComponentType.TermComponent("a", Nil)), None, None, Format.Explicit("%0(%1)", "⍳(a)", 2, false, false), Nil, BlankDefinition, None, Nil, Nil)
+      val Inject = CompoundTermDefinitionEntry("⍳", Nil, Seq(ComponentType.TermComponent("a", Nil)), None, None, Format.Explicit("%0(%1)", "⍳(a)", 2, false, false), Nil, BlankDefinition, None, Nil, Nil)
       val DefinitionOfPositiveNatural = createInference("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Inject(Zero), $)))))
       val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, false))), None, BlankDefinition)
       val Irreflexive = PropertyDefinitionOnType("irreflexive", ParentTypeConditions(Relation, None, None, None, ConjunctionDefinition), None, BlankDefinition)

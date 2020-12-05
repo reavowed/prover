@@ -1,11 +1,11 @@
 package net.prover.model.expressions
 
 import net.prover.model.Substitutions
-import net.prover.model.definitions.{ExpressionDefinition, TermDefinition}
+import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundTermDefinition}
 
 case class DefinedTerm(
     components: Seq[Expression],
-    definition: TermDefinition)(
+    definition: CompoundTermDefinition)(
     val boundVariableNames: Seq[String])
   extends Term with DefinedExpression[Term]
 {
@@ -21,10 +21,10 @@ case class DefinedTerm(
   override def updateBoundVariableNames(newBoundVariableNames: Seq[String]): DefinedTerm = {
     DefinedTerm(components, definition)(newBoundVariableNames)
   }
-  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): DefinedTerm = {
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): DefinedTerm = {
     DefinedTerm(
       components.map(_.replaceDefinitions(expressionDefinitionReplacements)),
-      expressionDefinitionReplacements(definition).asInstanceOf[TermDefinition]
+      expressionDefinitionReplacements(definition).asInstanceOf[CompoundTermDefinition]
     )(boundVariableNames)
   }
 

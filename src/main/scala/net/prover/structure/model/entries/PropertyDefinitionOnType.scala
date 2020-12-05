@@ -2,12 +2,12 @@ package net.prover.structure.model.entries
 
 import net.prover._
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType.TermComponent
 import net.prover.model.definitions._
 import net.prover.model.expressions.Statement
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 case class PropertyDefinitionOnType(
     symbol: String,
@@ -34,7 +34,7 @@ case class PropertyDefinitionOnType(
   val allVariableNames: Seq[String] = allVariableDefinitions.map(_.name)
   def allComponents: Seq[TermComponent] = allVariableNames.map(ComponentType.TermComponent(_, Nil))
 
-  val statementDefinition: StatementDefinition = StatementDefinition.Derived(
+  val statementDefinition: CompoundStatementDefinition = CompoundStatementDefinition.Derived(
     qualifiedSymbol,
     allComponents,
     Some(name),
@@ -52,7 +52,7 @@ case class PropertyDefinitionOnType(
 
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): PropertyDefinitionOnType = {
     PropertyDefinitionOnType(

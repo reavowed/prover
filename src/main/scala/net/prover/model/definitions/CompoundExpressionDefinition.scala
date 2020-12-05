@@ -3,11 +3,11 @@ package net.prover.model.definitions
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
 import net.prover.model.expressions._
 import net.prover.structure.model.entries.ChapterEntry
 
-trait ExpressionDefinition {
+trait CompoundExpressionDefinition {
   def baseSymbol: String
   def disambiguator: Option[String]
   def disambiguatedSymbol: DisambiguatedSymbol = DisambiguatedSymbol(baseSymbol, disambiguator)
@@ -17,11 +17,11 @@ trait ExpressionDefinition {
   def name: String = explicitName.getOrElse(disambiguatedSymbol.forDisplay)
   def boundVariableNames: Seq[String]
   def componentTypes: Seq[ComponentType]
-  def expressions: Seq[ExpressionVariable[_]] = componentTypes.mapFold((0, 0)) {
-    case ((s, t), ComponentType.StatementComponent(_, arguments)) =>
-      ((s + 1, t), StatementVariable(s, arguments.map(a => FunctionParameter(a.index, 0))))
-    case ((s, t), ComponentType.TermComponent(_, arguments)) =>
-      ((s, t + 1), TermVariable(t, arguments.map(a => FunctionParameter(a.index, 0))))
+  def defaultComponentExpressions: Seq[ExpressionVariable[_]] = componentTypes.mapFold((0, 0)) {
+    case ((statementCounter, termCounter), ComponentType.StatementComponent(_, arguments)) =>
+      ((statementCounter + 1, termCounter), StatementVariable(statementCounter, arguments.map(a => FunctionParameter(a.index, 0))))
+    case ((statementCounter, termCounter), ComponentType.TermComponent(_, arguments)) =>
+      ((statementCounter, termCounter + 1), TermVariable(termCounter, arguments.map(a => FunctionParameter(a.index, 0))))
   }._2
   def format: Format
   def shorthand: Option[String]
@@ -59,7 +59,7 @@ trait ExpressionDefinition {
   }
 }
 
-object ExpressionDefinition {
+object CompoundExpressionDefinition {
   case class ComponentArgument(name: String, index: Int)
   sealed trait ComponentType {
     def name: String
@@ -130,10 +130,10 @@ object ExpressionDefinition {
   }
 }
 
-trait StatementDefinition extends ExpressionDefinition {
+trait CompoundStatementDefinition extends CompoundExpressionDefinition {
   def definingStatement: Option[Statement]
   val disambiguator: Option[String] = None
-  val defaultValue: DefinedStatement = DefinedStatement(expressions, this)(boundVariableNames)
+  val defaultValue: DefinedStatement = DefinedStatement(defaultComponentExpressions, this)(boundVariableNames)
   val constructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, variableDefinitions,  _, defaultValue))
   val deconstructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, variableDefinitions, defaultValue, _))
   def inferences: Seq[Inference.FromEntry] = constructionInference.toSeq ++ deconstructionInference.toSeq
@@ -164,10 +164,10 @@ trait StatementDefinition extends ExpressionDefinition {
       None
   }
 
-  def canEqual(other: Any): Boolean = other.isInstanceOf[StatementDefinition]
+  def canEqual(other: Any): Boolean = other.isInstanceOf[CompoundStatementDefinition]
 
   override def equals(other: Any): Boolean = other match {
-    case that: StatementDefinition =>
+    case that: CompoundStatementDefinition =>
       (that canEqual this) &&
         symbol == that.symbol
     case _ => false
@@ -175,18 +175,18 @@ trait StatementDefinition extends ExpressionDefinition {
 
   override val hashCode: Int = symbol.hashCode
 }
-object StatementDefinition {
-  case class Derived(baseSymbol: String, componentTypes: Seq[ComponentType], explicitName: Option[String], format: Format, definingStatement: Option[Statement], associatedChapterEntry: ChapterEntry) extends StatementDefinition {
+object CompoundStatementDefinition {
+  case class Derived(baseSymbol: String, componentTypes: Seq[ComponentType], explicitName: Option[String], format: Format, definingStatement: Option[Statement], associatedChapterEntry: ChapterEntry) extends CompoundStatementDefinition {
     override def boundVariableNames: Seq[String] = Nil
     override def shorthand: Option[String] = None
     override def attributes: Seq[String] = Nil
   }
 }
 
-trait TermDefinition extends ExpressionDefinition {
+trait CompoundTermDefinition extends CompoundExpressionDefinition {
   def premises: Seq[Statement]
   def definitionPredicate: Statement
-  val defaultValue: DefinedTerm = DefinedTerm(expressions, this)(boundVariableNames)
+  val defaultValue: DefinedTerm = DefinedTerm(defaultComponentExpressions, this)(boundVariableNames)
   val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0).get
   val definitionInference: Inference.Definition = Inference.TermDefinition(name, variableDefinitions, premises, definingStatement)
   def inferences: Seq[Inference.FromEntry] = Seq(definitionInference)
@@ -212,10 +212,10 @@ trait TermDefinition extends ExpressionDefinition {
     DefinedTerm(components, this)(boundVariableNames)
   }
 
-  def canEqual(other: Any): Boolean = other.isInstanceOf[TermDefinition]
+  def canEqual(other: Any): Boolean = other.isInstanceOf[CompoundTermDefinition]
 
   override def equals(other: Any): Boolean = other match {
-    case that: TermDefinition =>
+    case that: CompoundTermDefinition =>
       (that canEqual this) &&
         symbol == that.symbol
     case _ => false
@@ -223,5 +223,3 @@ trait TermDefinition extends ExpressionDefinition {
 
   override val hashCode: Int = symbol.hashCode
 }
-
-case class DerivedStatementDefinition()

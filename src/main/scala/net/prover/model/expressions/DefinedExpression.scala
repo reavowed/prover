@@ -1,14 +1,14 @@
 package net.prover.model.expressions
 
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 
 import scala.collection.immutable.Nil
 
 trait DefinedExpression[ExpressionType <: Expression] extends Expression with TypedExpression[ExpressionType] {
   def components: Seq[Expression]
   def boundVariableNames: Seq[String]
-  def definition: ExpressionDefinition
+  def definition: CompoundExpressionDefinition
 
   def getMatch(other: Expression): Option[Seq[Expression]]
   def updateComponents(newComponents: Seq[Expression]): ExpressionType

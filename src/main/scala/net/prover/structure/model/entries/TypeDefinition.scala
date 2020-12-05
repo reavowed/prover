@@ -2,12 +2,12 @@ package net.prover.structure.model.entries
 
 import net.prover._
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
-import net.prover.model.definitions.{ExpressionDefinition, Qualifier, StatementDefinition}
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType.TermComponent
+import net.prover.model.definitions.{CompoundExpressionDefinition, Qualifier, CompoundStatementDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 case class TypeDefinition(
     symbol: String,
@@ -33,7 +33,7 @@ case class TypeDefinition(
   val allVariableDefinitions: Seq[SimpleVariableDefinition] = mainVariableDefinition +: defaultQualifier.variableDefinitions
   val allVariableNames: Seq[String] = allVariableDefinitions.map(_.name)
   val allComponents: Seq[TermComponent] = allVariableNames.map(ComponentType.TermComponent(_, Nil))
-  val statementDefinition: StatementDefinition = StatementDefinition.Derived(
+  val statementDefinition: CompoundStatementDefinition = CompoundStatementDefinition.Derived(
     symbol,
     allComponents,
     explicitName,
@@ -50,7 +50,7 @@ case class TypeDefinition(
 
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): TypeDefinition = {
     TypeDefinition(

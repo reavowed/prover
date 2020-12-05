@@ -19,7 +19,7 @@ case class SubstitutionApplier(substitutions: Substitutions) {
         predicate <- statements.lift(index).orExceptionWithMessage(s"No substitution statement with index $index found")
         result <- substitutions.specifier.specifyAndApplySubstitutions(predicate, arguments)(context.toSpecificationContext)
       } yield result
-    case definedStatement : DefinedStatement =>
+    case definedStatement : CompoundStatement =>
       applySubstitutionsToDefinedExpression(definedStatement)
   }
   def applySubstitutions(term: Term)(implicit context: Context): Try[Term] = term match {
@@ -28,7 +28,7 @@ case class SubstitutionApplier(substitutions: Substitutions) {
         function <- terms.lift(index).orExceptionWithMessage(s"No substitution statement with index $index found")
         result <- substitutions.specifier.specifyAndApplySubstitutions(function, arguments)(context.toSpecificationContext)
       } yield result
-    case definedTerm: DefinedTerm =>
+    case definedTerm: CompoundTerm =>
       applySubstitutionsToDefinedExpression(definedTerm)
     case parameter: Parameter =>
       Success(parameter)
@@ -45,7 +45,7 @@ case class SubstitutionApplier(substitutions: Substitutions) {
     } yield RuleOfInference.Raw(premises, conclusion)
   }
 
-  private def applySubstitutionsToDefinedExpression[T <: DefinedExpression[T]](expression: T)(implicit context: Context): Try[T] = {
+  private def applySubstitutionsToDefinedExpression[T <: CompoundExpression[T]](expression: T)(implicit context: Context): Try[T] = {
     val innerContext = context.increaseDepth(expression)
     expression.components.map(applySubstitutions(_)(innerContext)).traverseTry.map(expression.withNewComponents)
   }

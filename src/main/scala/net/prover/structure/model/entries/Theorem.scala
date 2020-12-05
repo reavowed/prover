@@ -6,7 +6,7 @@ import net.prover.controllers.Identity
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
-import net.prover.model.definitions.{Definitions, ExpressionDefinition}
+import net.prover.model.definitions.{Definitions, CompoundExpressionDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.structure.EntryContext
@@ -92,7 +92,7 @@ case class Theorem(
   }
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): Theorem = {
     Theorem(
@@ -109,7 +109,7 @@ object Theorem extends Inference.EntryParser {
 
   case class Proof(steps: Seq[Step]) {
     def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
-    def referencedDefinitions: Set[ExpressionDefinition] = steps.flatMap(_.referencedDefinitions).toSet
+    def referencedDefinitions: Set[CompoundExpressionDefinition] = steps.flatMap(_.referencedDefinitions).toSet
     def isComplete(definitions: Definitions): Boolean = steps.forall(_.isComplete(definitions))
 
     def findStep(indexes: Seq[Int], initialStepContext: StepContext): Option[(Step, StepContext)] = {
@@ -187,7 +187,7 @@ object Theorem extends Inference.EntryParser {
       Proof(steps.clearInference(inference))
     }
     def replaceDefinitions(
-      expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+      expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
       entryContext: EntryContext
     ): Proof = {
       Proof(steps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))

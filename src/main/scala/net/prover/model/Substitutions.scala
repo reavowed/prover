@@ -3,7 +3,7 @@ package net.prover.model
 import monocle.Lens
 import monocle.macros.GenLens
 import net.prover._
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions._
 import net.prover.util.PossibleSingleMatch
 import net.prover.util.PossibleSingleMatch._
@@ -22,7 +22,7 @@ case class Substitutions(statements: Seq[Statement], terms: Seq[Term]) {
       newTerms <- terms.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
     } yield Substitutions(newStatements, newTerms)
   }
-  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Substitutions = {
+  def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Substitutions = {
     Substitutions(
       statements.map(_.replaceDefinitions(expressionDefinitionReplacements)),
       terms.map(_.replaceDefinitions(expressionDefinitionReplacements)))

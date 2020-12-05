@@ -7,7 +7,7 @@ import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.ChapterEntry
 
 case class TermListAdapter(variableDefinitions: Seq[SimpleVariableDefinition], templates: Seq[Term]) {
-  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): TermListAdapter = {
+  def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): TermListAdapter = {
     TermListAdapter(variableDefinitions, templates.map(_.replaceDefinitions(expressionDefinitionReplacements)))
   }
 

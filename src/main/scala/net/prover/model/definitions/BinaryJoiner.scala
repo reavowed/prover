@@ -24,24 +24,24 @@ sealed trait BinaryJoiner[TComponent <: Expression] extends ExpressionLenses[TCo
 }
 
 sealed trait BinaryJoinerFromDefinition[TComponent <: Expression] extends BinaryJoiner[TComponent] {
-  def definition: StatementDefinition
+  def definition: CompoundStatementDefinition
   def templateComponents: Seq[ExpressionVariable[TComponent]]
   override val symbol: String = definition.symbol
   override val template: Statement = definition(templateComponents:_*)
   override val attributes: Seq[String] = definition.attributes
 }
 
-case class BinaryConnective(definition: StatementDefinition) extends BinaryJoinerFromDefinition[Statement] with ExpressionLenses.ForStatements {
+case class BinaryConnective(definition: CompoundStatementDefinition) extends BinaryJoinerFromDefinition[Statement] with ExpressionLenses.ForStatements {
   override def templateComponents: Seq[StatementVariable] = Seq(StatementVariable(0), StatementVariable(1))
 }
 
 sealed trait BinaryRelation extends BinaryJoiner[Term] with ExpressionLenses.ForTerms
 
-case class BinaryRelationFromDefinition(definition: StatementDefinition) extends BinaryRelation with BinaryJoinerFromDefinition[Term] {
+case class BinaryRelationFromDefinition(definition: CompoundStatementDefinition) extends BinaryRelation with BinaryJoinerFromDefinition[Term] {
   override def templateComponents: Seq[TermVariable] = Seq(TermVariable(0), TermVariable(1))
 }
 
-case class BinaryRelationFromGeneralShorthand(definition: TermDefinition, shorthand: DisplayShorthand, lhsVariableName: String, rhsVariableName: String, symbolVariableName: String) extends BinaryRelation {
+case class BinaryRelationFromGeneralShorthand(definition: CompoundTermDefinition, shorthand: DisplayShorthand, lhsVariableName: String, rhsVariableName: String, symbolVariableName: String) extends BinaryRelation {
   override val symbol: String = definition.symbol
   override val template: Statement = shorthand.template.expand(
     Map.empty,

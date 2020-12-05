@@ -1,10 +1,10 @@
 package net.prover.core
 
-import net.prover.core.expressions.{DefinedStatement, Statement, StatementDefinition}
+import net.prover.core.expressions.{CompoundStatement, Statement, CompoundStatementType}
 
-case class ImplicationDefinition(statementDefinition: StatementDefinition) {
-  def apply(antecedent: Statement, consequent: Statement): Statement = DefinedStatement(statementDefinition, Seq(antecedent, consequent))(Nil)
+case class ImplicationDefinition(statementDefinition: CompoundStatementType) {
+  def apply(antecedent: Statement, consequent: Statement): Statement = CompoundStatement(statementDefinition, Seq(antecedent, consequent))(Nil)
 }
-case class UniversalQuantificationDefinition(statementDefinition: StatementDefinition) {
-  def apply(variableName: String, predicate: Statement): Statement = DefinedStatement(statementDefinition, Seq(predicate))(Seq(variableName))
+case class UniversalQuantificationDefinition(statementDefinition: CompoundStatementType) {
+  def apply(variableName: String, predicate: Statement): Statement = CompoundStatement(statementDefinition, Seq(predicate))(Seq(variableName))
 }

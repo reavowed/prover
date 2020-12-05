@@ -1,12 +1,12 @@
 package net.prover.model
 
 import net.prover._
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions.{Template, Term}
 import net.prover.structure.EntryContext
 
 case class DisambiguatorAdder(template: Template, disambiguator: String) {
-  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): DisambiguatorAdder = {
+  def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): DisambiguatorAdder = {
     DisambiguatorAdder(template.replaceDefinitions(expressionDefinitionReplacements), disambiguator)
   }
   def serialized: String = template.serialized + " " + disambiguator

@@ -2,11 +2,11 @@ package net.prover.structure.model.entries
 
 import net.prover._
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
+import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundStatementDefinition}
 import net.prover.model.expressions.{DefinedStatement, FunctionParameter, Statement, TermVariable}
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 case class RelatedObjectDefinition(
     symbol: String,
@@ -29,7 +29,7 @@ case class RelatedObjectDefinition(
   def baseFormat: Format.Explicit = Format.Explicit(s"%1 is $article %0 for %2", s"${mainVariableDefinition.name} is $article $name for ${parentType.mainVariableDefinition.name}", 3, true, true)
   def fullFormat: Format = parentType.defaultQualifier.prependFormat(baseFormat)
   def parentVariableDefinitions: Seq[SimpleVariableDefinition] = parentTypeConditions.allVariableDefinitions
-  val statementDefinition: StatementDefinition = StatementDefinition.Derived(
+  val statementDefinition: CompoundStatementDefinition = CompoundStatementDefinition.Derived(
     qualifiedSymbol,
     (mainVariableDefinition +: parentVariableDefinitions).map(_.name).map(ComponentType.TermComponent(_, Nil)),
     Some(name),
@@ -42,7 +42,7 @@ case class RelatedObjectDefinition(
     statementDefinition(FunctionParameter(0, 0) +: parentVariableDefinitions.indices.map(i => TermVariable(i + offset)): _*)
   }
 
-  override def replaceDefinitions(entryReplacements: Map[ChapterEntry, ChapterEntry], expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): ChapterEntry = {
+  override def replaceDefinitions(entryReplacements: Map[ChapterEntry, ChapterEntry], expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition], entryContext: EntryContext): ChapterEntry = {
     RelatedObjectDefinition(
       symbol,
       mainVariableDefinition,

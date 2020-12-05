@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover._
 import net.prover.model._
-import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition, TermDefinition}
+import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundStatementDefinition, CompoundTermDefinition}
 import net.prover.model.expressions.Template.Match
 import net.prover.structure.EntryContext
 
@@ -14,8 +14,8 @@ sealed trait Template {
   def names: Seq[String]
   def matchExpression(expression: Expression): Option[Seq[Template.Match]] = matchExpression(expression, Nil, Nil)
   def matchExpression(expression: Expression, boundVariableNames: Seq[Seq[String]], internalPath: Seq[Int]): Option[Seq[Template.Match]]
-  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Template
-  def referencedDefinitions: Set[ExpressionDefinition]
+  def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Template
+  def referencedDefinitions: Set[CompoundExpressionDefinition]
   def variables: Seq[VariableTemplate]
   def expand(statements: Map[String, Statement], terms: Map[String, Term]): Expression
   def specify(arguments: Seq[TermTemplate]): Template = specify(arguments, 0)
@@ -47,7 +47,7 @@ case class StatementVariableTemplate(name: String) extends StatementTemplate wit
     case statement: Statement => Some(Seq(Template.Match.Component(statement, boundVariableNames, internalPath)))
     case _ => None
   }
-  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Template = this
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Template = this
   override def variables: Seq[VariableTemplate] = Seq(this)
   override def expand(statements: Map[String, Statement], terms: Map[String, Term]): Statement = statements(name)
   def expressionParserBuilder(statements: Map[String, Statement], terms: Map[String, Term])(implicit expressionParsingContext: ExpressionParsingContext): Parser[(Statement, Map[String, Statement], Map[String, Term])] = {
@@ -60,7 +60,7 @@ case class StatementVariableTemplate(name: String) extends StatementTemplate wit
         }
     }
   }
-  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
+  override def referencedDefinitions: Set[CompoundExpressionDefinition] = Set.empty
   override def serialized: String = name
 }
 
@@ -74,7 +74,7 @@ case class TermVariableTemplate(name: String) extends TermTemplate with Variable
     case term: Term => Some(Seq(Template.Match.Component(term, boundVariableNames, internalPath)))
     case _ => None
   }
-  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Template = this
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Template = this
   override def variables: Seq[VariableTemplate] = Seq(this)
   override def expand(statements: Map[String, Statement], terms: Map[String, Term]): Term = terms(name)
   def expressionParserBuilder(statements: Map[String, Statement], terms: Map[String, Term])(implicit expressionParsingContext: ExpressionParsingContext): Parser[(Term, Map[String, Statement], Map[String, Term])] = {
@@ -87,7 +87,7 @@ case class TermVariableTemplate(name: String) extends TermTemplate with Variable
         }
     }
   }
-  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
+  override def referencedDefinitions: Set[CompoundExpressionDefinition] = Set.empty
   override def serialized: String = name
 }
 
@@ -101,7 +101,7 @@ case class FunctionParameterTemplate(parameter: FunctionParameter) extends TermT
     case FunctionParameter(parameter.index, parameter.level) => Some(Nil)
     case _ => None
   }
-  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Template = this
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Template = this
   override def variables: Seq[VariableTemplate] = Nil
   override def expand(statements: Map[String, Statement], terms: Map[String, Term]): Term = {
     parameter
@@ -116,11 +116,11 @@ case class FunctionParameterTemplate(parameter: FunctionParameter) extends TermT
   def expressionParserBuilder(statements: Map[String, Statement], terms: Map[String, Term])(implicit expressionParsingContext: ExpressionParsingContext): Parser[(FunctionParameter, Map[String, Statement], Map[String, Term])] = {
     Parser.constant((parameter, statements, terms))
   }
-  override def referencedDefinitions: Set[ExpressionDefinition] = Set.empty
+  override def referencedDefinitions: Set[CompoundExpressionDefinition] = Set.empty
   override def serialized: String = parameter.toString
 }
 case class DefinedStatementTemplate(
-  definition: StatementDefinition,
+  definition: CompoundStatementDefinition,
   boundVariableNames: Seq[String],
   components: Seq[Template])
   extends StatementTemplate with DefinedExpressionTemplate
@@ -140,9 +140,9 @@ case class DefinedStatementTemplate(
     case _ =>
       None
   }
-  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Template = {
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Template = {
     DefinedStatementTemplate(
-      expressionDefinitionReplacements(definition).asInstanceOf[StatementDefinition],
+      expressionDefinitionReplacements(definition).asInstanceOf[CompoundStatementDefinition],
       boundVariableNames,
       components.map(_.replaceDefinitions(expressionDefinitionReplacements)))
   }
@@ -165,12 +165,12 @@ case class DefinedStatementTemplate(
       (parsedComponents, resultStatements, resultTerms) = x
     } yield (DefinedStatement(parsedComponents, definition)(parsedBoundVariableNames), resultStatements, resultTerms)
   }
-  override def referencedDefinitions: Set[ExpressionDefinition] = components.flatMap(_.referencedDefinitions).toSet + definition
+  override def referencedDefinitions: Set[CompoundExpressionDefinition] = components.flatMap(_.referencedDefinitions).toSet + definition
   override def serialized: String = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
 }
 
 case class DefinedTermTemplate(
-  definition: TermDefinition,
+  definition: CompoundTermDefinition,
   boundVariableNames: Seq[String],
   components: Seq[Template])
   extends TermTemplate with DefinedExpressionTemplate
@@ -190,13 +190,13 @@ case class DefinedTermTemplate(
     case _ =>
       None
   }
-  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Template = {
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Template = {
     DefinedTermTemplate(
-      expressionDefinitionReplacements(definition).asInstanceOf[TermDefinition],
+      expressionDefinitionReplacements(definition).asInstanceOf[CompoundTermDefinition],
       boundVariableNames,
       components.map(_.replaceDefinitions(expressionDefinitionReplacements)))
   }
-  override def referencedDefinitions: Set[ExpressionDefinition] = components.flatMap(_.referencedDefinitions).toSet + definition
+  override def referencedDefinitions: Set[CompoundExpressionDefinition] = components.flatMap(_.referencedDefinitions).toSet + definition
   override def serialized: String = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
   override def variables: Seq[VariableTemplate] = components.flatMap(_.variables)
   override def expand(statements: Map[String, Statement], terms: Map[String, Term]): Term = {

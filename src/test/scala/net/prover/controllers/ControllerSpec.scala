@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models._
 import net.prover.model.TestDefinitions._
-import net.prover.model.definitions.StatementDefinition
+import net.prover.model.definitions.CompoundStatementDefinition
 import net.prover.model.expressions.{Statement, StatementVariable, Term, TermVariable}
 import net.prover.model.proof._
 import net.prover.model.{Inference, Substitutions, VariableDefinitions}
@@ -55,7 +55,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     statements: Seq[Statement],
     terms: Seq[Term],
     extractionInferences: Seq[Inference],
-    unwrappers: Seq[StatementDefinition] = Nil,
+    unwrappers: Seq[CompoundStatementDefinition] = Nil,
     premisesOption: Option[Seq[Statement]] = None,
     conclusionOption: Option[Statement] = None)(
     implicit entryContext: EntryContext

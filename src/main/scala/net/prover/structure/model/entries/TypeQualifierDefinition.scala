@@ -2,12 +2,12 @@ package net.prover.structure.model.entries
 
 import net.prover._
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
-import net.prover.model.definitions.{ConjunctionDefinition, ExpressionDefinition, Qualifier, StatementDefinition}
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
+import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType.TermComponent
+import net.prover.model.definitions.{ConjunctionDefinition, CompoundExpressionDefinition, Qualifier, CompoundStatementDefinition}
 import net.prover.model.expressions.{Statement, TermVariable}
 import net.prover.structure.EntryContext
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 case class TypeQualifierDefinition(
     symbol: String,
@@ -31,7 +31,7 @@ case class TypeQualifierDefinition(
   def allVariableDefinitions: Seq[SimpleVariableDefinition] = parentType.mainVariableDefinition +: qualifier.variableDefinitions
   def allVariableNames: Seq[String] = allVariableDefinitions.map(_.name)
   def allComponents: Seq[TermComponent] = allVariableNames.map(ComponentType.TermComponent(_, Nil))
-  val statementDefinition: StatementDefinition = StatementDefinition.Derived(
+  val statementDefinition: CompoundStatementDefinition = CompoundStatementDefinition.Derived(
     qualifiedSymbol,
     allComponents,
     Some(name),
@@ -48,7 +48,7 @@ case class TypeQualifierDefinition(
 
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
-    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): TypeQualifierDefinition = {
     TypeQualifierDefinition(

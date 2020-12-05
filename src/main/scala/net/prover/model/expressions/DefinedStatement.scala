@@ -1,10 +1,10 @@
 package net.prover.model.expressions
 
-import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundStatementDefinition}
 
 case class DefinedStatement(
     components: Seq[Expression],
-    definition: StatementDefinition)(
+    definition: CompoundStatementDefinition)(
     val boundVariableNames: Seq[String])
  extends Statement with DefinedExpression[Statement]
 {
@@ -20,10 +20,10 @@ case class DefinedStatement(
   override def updateBoundVariableNames(newBoundVariableNames: Seq[String]): DefinedStatement = {
     DefinedStatement(components, definition)(newBoundVariableNames)
   }
-  override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): DefinedStatement = {
+  override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): DefinedStatement = {
     DefinedStatement(
       components.map(_.replaceDefinitions(expressionDefinitionReplacements)),
-      expressionDefinitionReplacements(definition).asInstanceOf[StatementDefinition]
+      expressionDefinitionReplacements(definition).asInstanceOf[CompoundStatementDefinition]
     )(boundVariableNames)
   }
 }

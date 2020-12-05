@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover._
 import net.prover.model.Inference._
-import net.prover.model.definitions.{Definitions, ExpressionDefinition}
+import net.prover.model.definitions.{Definitions, CompoundExpressionDefinition}
 import net.prover.model.expressions._
 import net.prover.model.proof.{StepContext, SubstitutionContext}
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.ChapterEntry
-import net.prover.structure.model.parsers.ChapterEntryParser
+import net.prover.structure.parsers.ChapterEntryParser
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
@@ -112,7 +112,7 @@ object Inference {
     premises: Seq[Statement],
     conclusion: Statement
   ) extends Inference {
-    def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Summary = {
+    def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Summary = {
       val newPremises = premises.map(_.replaceDefinitions(expressionDefinitionReplacements))
       val newConclusion = conclusion.replaceDefinitions(expressionDefinitionReplacements)
       Summary(

@@ -4,7 +4,7 @@ import net.prover._
 import net.prover.controllers.models.LinkSummary
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions.Statement
 import net.prover.structure.EntryContext
 import net.prover.structure.model.Book
@@ -37,9 +37,9 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
           Success(("Axiom", Map("axiom" -> axiom)))
         case theorem: Theorem =>
           Success(("Theorem", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(theorem.referencedInferenceIds, books, definitions))))
-        case statementDefinition: StatementDefinitionEntry =>
+        case statementDefinition: CompoundStatementDefinitionEntry =>
           Success(("StatementDefinition", Map("definition" -> statementDefinition)))
-        case termDefinition: TermDefinitionEntry =>
+        case termDefinition: CompoundTermDefinitionEntry =>
           Success(("TermDefinition", Map("definition" -> termDefinition)))
         case typeDefinition: TypeDefinition =>
           Success(("TypeDefinition", Map("definition" -> typeDefinition)))
@@ -121,7 +121,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @RequestBody(required = false) newDisambiguator: String
   ): ResponseEntity[_] = {
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
-      case (definition: TermDefinitionEntry, _) =>
+      case (definition: CompoundTermDefinitionEntry, _) =>
         for {
           disambiguator <- getOptionalSingleWord(newDisambiguator, "Disambiguator")
         } yield definition.withDisambiguator(disambiguator)
@@ -138,7 +138,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @RequestBody(required = false) serializedNewDisambiguatorAdders: Seq[String]
   ): ResponseEntity[_] = {
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
-      case (definition: TermDefinitionEntry, entryContext) =>
+      case (definition: CompoundTermDefinitionEntry, entryContext) =>
         for {
           newDisambiguatorAdders <- serializedNewDisambiguatorAdders.mapWithIndex((s, i) => DisambiguatorAdder.parser(entryContext).parseFromString(s, s"disambiguator adder ${i + 1}").recoverWithBadRequest).traverseTry
         } yield definition.withDisambiguatorAdders(newDisambiguatorAdders)
@@ -155,7 +155,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @RequestBody(required = false) newAttributes: Seq[String]
   ): ResponseEntity[_] = {
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
-      case (definition: ExpressionDefinitionEntry, _) =>
+      case (definition: CompoundExpressionDefinitionEntry, _) =>
         Success(definition.withAttributes(newAttributes))
       case (entry, _) =>
         Failure(BadRequestException(s"Cannot set attributes of ${entry.getClass.getName}"))
@@ -170,7 +170,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @RequestBody(required = false) newShorthand: String
   ): ResponseEntity[_] = {
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
-      case (definition: ExpressionDefinitionEntry, _) =>
+      case (definition: CompoundExpressionDefinitionEntry, _) =>
         Success(definition.withShorthand(getOptionalString(newShorthand)))
       case (entry, _) =>
         Failure(BadRequestException(s"Cannot set shorthand of ${entry.getClass.getName}"))
@@ -185,7 +185,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @RequestBody(required = false) rawNewFormatText: String
   ): ResponseEntity[_] = {
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
-      case (definition: ExpressionDefinitionEntry, _) =>
+      case (definition: CompoundExpressionDefinitionEntry, _) =>
         val format = getOptionalString(rawNewFormatText) match {
           case Some(newFormatText) =>
             Format.parserForExpressionDefinition(definition.baseSymbol, definition.boundVariableNames, definition.componentTypes).parseFromString(newFormatText, "format").recoverWithBadRequest
@@ -251,7 +251,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
 
   private def modifyEntryWithReplacement(oldEntry: ChapterEntry, newEntry: ChapterEntry): Seq[Book] = {
     bookService.modifyBooks[Identity]((books, _) => {
-      books.mapFoldWithPrevious[(Map[ChapterEntry, ChapterEntry], Map[ExpressionDefinition, ExpressionDefinition]), Book]((Map.empty, Map.empty)) { case ((chapterEntries, expressionDefinitions), previousBooks, bookToModify) =>
+      books.mapFoldWithPrevious[(Map[ChapterEntry, ChapterEntry], Map[CompoundExpressionDefinition, CompoundExpressionDefinition]), Book]((Map.empty, Map.empty)) { case ((chapterEntries, expressionDefinitions), previousBooks, bookToModify) =>
         bookToModify.chapters.mapFold((EntryContext.forBookExclusive(previousBooks, bookToModify), chapterEntries, expressionDefinitions)) { case ((entryContextForChapter, chapterEntries, expressionDefinitions), chapterToModify) =>
           chapterToModify.entries.mapFold((entryContextForChapter, chapterEntries, expressionDefinitions)) { case ((entryContext, chapterEntries, expressionDefinitions), entryToModify) =>
             val modifiedEntry = if (entryToModify == oldEntry) newEntry else entryToModify.replaceDefinitions(chapterEntries, expressionDefinitions, entryContext)
@@ -261,9 +261,9 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
               case Some(old) =>
                 expressionDefinitions + (old -> EntryContext.getStatementDefinitionFromEntry(modifiedEntry).get)
               case None =>
-                entryToModify.asOptionalInstanceOf[TermDefinitionEntry] match {
+                entryToModify.asOptionalInstanceOf[CompoundTermDefinitionEntry] match {
                   case Some(old) =>
-                    expressionDefinitions + (old -> modifiedEntry.asInstanceOf[TermDefinitionEntry])
+                    expressionDefinitions + (old -> modifiedEntry.asInstanceOf[CompoundTermDefinitionEntry])
                   case None =>
                     expressionDefinitions
                 }
