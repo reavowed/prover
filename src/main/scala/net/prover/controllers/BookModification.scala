@@ -4,7 +4,7 @@ import net.prover._
 import net.prover.controllers.models._
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
-import net.prover.model.expressions.{Expression, Statement, Term}
+import net.prover.core.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
 import net.prover.structure.model.Book
 import net.prover.structure.model.entries.{ChapterEntry, Theorem}

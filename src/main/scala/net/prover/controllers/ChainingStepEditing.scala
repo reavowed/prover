@@ -1,10 +1,11 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, MultipleStepReplacementProps, PathData, StepInsertionProps}
+import net.prover.WithValue
+import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, MultipleStepReplacementProps, PathData}
+import net.prover.core.expressions.{Expression, Statement, Term}
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.definitions._
-import net.prover.model.expressions.{Expression, Statement, Term, TypedExpression}
 import net.prover.model.proof.Premise.SingleLinePremise
 import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
 import org.springframework.http.ResponseEntity
@@ -66,7 +67,7 @@ trait ChainingStepEditing extends BookModification {
     def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.Target])]
   }
   trait CreateChainingStepsCommon extends CreateChainingSteps {
-    def createSteps[T <: Expression with TypedExpression[T] : ChainingMethods](targetJoiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])]
+    def createSteps[T <: Expression : ChainingMethods](targetJoiner: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])]
     def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement, stepProvingContext: StepProvingContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.Target])] = {
       createSteps(targetConnective, targetLhs, targetRhs, stepProvingContext)
     }

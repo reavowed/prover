@@ -1,7 +1,8 @@
-package net.prover.model.proof
+package net.prover.model.simplification
 
-import net.prover.model.{Inference, ProvingContext}
 import net.prover.model.expressions.Statement
+import net.prover.model.proof.{Premise, StepContext, StepProvingContext, SubstitutionContext}
+import net.prover.model.{Inference, ProvingContext}
 
 object SimplificationFinder {
   private def getSimplification(premise: Premise.SingleLinePremise, simplificationInference: Inference, inferencePremise: Statement)(implicit stepContext: StepContext): Option[Premise.Simplification] = {

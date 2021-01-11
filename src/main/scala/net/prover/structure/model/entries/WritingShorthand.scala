@@ -1,7 +1,7 @@
 package net.prover.structure.model.entries
 
 import net.prover.model.definitions.CompoundExpressionDefinition
-import net.prover.model.expressions.Template
+import net.prover.model.template.Template
 import net.prover.model.{Inference, Parser}
 import net.prover.structure.EntryContext
 import net.prover.structure.parsers.ChapterEntryParser

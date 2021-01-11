@@ -2,8 +2,9 @@ package net.prover.controllers
 
 import net.prover.model.{ExpressionParsingContext, Parser, ProvingContext}
 import net.prover.model.definitions.{BinaryConnective, BinaryJoiner, BinaryRelation, Reversal, Transitivity, Wrapper}
-import net.prover.model.expressions.{Expression, Statement, Term}
+import net.prover.core.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.{Step, SubstitutionContext}
+import net.prover.structure.parsers.{StatementParsers, TermParsers}
 
 import scala.reflect.ClassTag
 
@@ -36,7 +37,7 @@ object ChainingMethods {
   }
 
   implicit object ForStatement extends ChainingMethodsAux[Statement, BinaryConnective] with ChainingMethods[Statement] {
-    override def parser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Statement] = Statement.parser
+    override def parser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Statement] = StatementParsers.statementParser
   }
   implicit object ForTerm extends ChainingMethodsAux[Term, BinaryRelation] with ChainingMethods[Term] {
     override def getChainingStep(
@@ -61,7 +62,7 @@ object ChainingMethods {
       } yield firstRelation -> substitution.assertionStep(intermediate, target, Wrapper(firstRelation(source, _)(_)))
       super.getChainingStep(source, intermediate, target, firstRelation, secondRelation) orElse bySubstitutionFromFirst orElse bySubstitutionFromSecond
     }
-    override def parser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Term] = Term.parser
+    override def parser(implicit expressionParsingContext: ExpressionParsingContext): Parser[Term] = TermParsers.termParser
   }
 
   def getJoiner[T <: Expression : ChainingMethods](statement: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(BinaryJoiner[T], T, T)] = {

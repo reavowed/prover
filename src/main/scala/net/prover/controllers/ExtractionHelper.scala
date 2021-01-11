@@ -2,10 +2,12 @@ package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
 import net.prover._
+import net.prover.core.substitutions.{SubstitutionApplier, Substitutions}
 import net.prover.model._
-import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
+import net.prover.core.expressions.{CompoundStatement, Statement, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.{InferenceExtraction, VariableTracker}
 import net.prover.model.proof._
+import net.prover.model.substitutions.{ApplicativeCalculator, PossibleSubstitutions, SubstitutionCalculator}
 
 import scala.util.{Failure, Success, Try}
 
@@ -25,21 +27,21 @@ object ExtractionHelper {
     implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     for {
-      predicate <- extractionPremise.calculateSubstitutions(currentStatement).flatMap(_.statements.get(0)).orBadRequest(s"Could not get predicate for specification ${specificationInference.id}")
-      boundVariableName <- currentStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).orBadRequest(s"Statement $currentStatement did not have a single variable")
+      predicate <- SubstitutionCalculator.calculateSubstitutions(extractionPremise, currentStatement).flatMap(_.statements.get(0)).orBadRequest(s"Could not get predicate for specification ${specificationInference.id}")
+      boundVariableName <- currentStatement.asOptionalInstanceOf[CompoundStatement].flatMap(_.boundVariableNames.single).orBadRequest(s"Statement $currentStatement did not have a single variable")
       (_, newIndex, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(boundVariableName)
       term <- mainSubstitutions.terms.lift(newIndex).orBadRequest(s"Substitutions did not specify a term at index $newIndex")
       extractionSubstitutions = Substitutions(Seq(predicate), Seq(term))
-      extractedConclusion <- specificationInference.conclusion.applySubstitutions(extractionSubstitutions).orBadRequest(s"Could not substitute conclusion for specification ${specificationInference.id}")
+      extractedConclusion <- SubstitutionApplier.applySubstitutions(specificationInference.conclusion, extractionSubstitutions).orBadRequest(s"Could not substitute conclusion for specification ${specificationInference.id}")
       ExtractionApplication(innerResult, innerPremise, innerSteps, innerPremises, innerTargets) <-
         applyExtractions(extractedConclusion, inferencesRemaining, mainSubstitutions, intendedPremises, intendedConclusion, newVariableTracker, findPremiseStepsOrTargets)
-      updatedPredicate <- innerPremise.calculateApplicatives(Seq(TermVariable(newIndex, Nil)), Substitutions.Possible(Map.empty, Map(0 -> term)))
+      updatedPredicate <- ApplicativeCalculator.calculateApplicatives(innerPremise, Seq(TermVariable(newIndex, Nil)), PossibleSubstitutions(Map.empty, Map(0 -> term)))(SubstitutionCalculationContext.initial, implicitly)
         .map(_._1)
         .find(_ == predicate)
         .orBadRequest("Could not recalculate applicative")
       updatedSubstitutions = Substitutions(Seq(updatedPredicate), Seq(term))
-      updatedMainPremise <- extractionPremise.applySubstitutions(updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
-      updatedMainPremiseWithVariable = updatedMainPremise.asInstanceOf[DefinedStatement].updateBoundVariableNames(Seq(boundVariableName))
+      updatedMainPremise <- SubstitutionApplier.applySubstitutions(extractionPremise, updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
+      updatedMainPremiseWithVariable = updatedMainPremise.asInstanceOf[CompoundStatement].withNewBoundVariableNames(Seq(boundVariableName))
       assertionStep = Step.Assertion(innerPremise, specificationInference.summary, Seq(Premise.Pending(updatedMainPremiseWithVariable)), updatedSubstitutions)
     } yield ExtractionApplication(innerResult, updatedMainPremiseWithVariable, DerivationStep.fromAssertion(assertionStep) +: innerSteps, innerPremises, innerTargets)
   }

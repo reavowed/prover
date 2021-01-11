@@ -1,7 +1,8 @@
 package net.prover.model.definitions
 
-import net.prover.model.{Inference, Substitutions}
-import net.prover.model.expressions.{Statement, Term}
+import net.prover.core.expressions.{Statement, Term}
+import net.prover.core.substitutions.Substitutions
+import net.prover.model.Inference
 import net.prover.model.proof.{Premise, Step, SubstitutionContext}
 
 case class Substitution(relation: BinaryJoiner[Term], inference: Inference.Summary) {

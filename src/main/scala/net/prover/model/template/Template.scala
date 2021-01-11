@@ -1,4 +1,4 @@
-package net.prover.model.expressions
+package net.prover.model.template
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
@@ -6,7 +6,8 @@ import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundStatementDefinition, CompoundTermDefinition}
-import net.prover.model.expressions.Template.Match
+import net.prover.model.expressions._
+import net.prover.model.template.Template.Match
 import net.prover.structure.EntryContext
 
 @JsonSerialize(using = classOf[TemplateSerializer])
@@ -32,7 +33,7 @@ sealed trait VariableTemplate extends Template {
   def name: String
   override def specify(arguments: Seq[TermTemplate], internalDepth: Int): Template = this
 }
-sealed trait DefinedExpressionTemplate extends Template {
+sealed trait CompoundExpressionTemplate extends Template {
   def components: Seq[Template]
   def boundVariableNames: Seq[String]
   def withComponents(newComponents: Seq[Template]): Template
@@ -91,7 +92,7 @@ case class TermVariableTemplate(name: String) extends TermTemplate with Variable
   override def serialized: String = name
 }
 
-case class FunctionParameterTemplate(parameter: FunctionParameter) extends TermTemplate {
+case class ParameterTemplate(parameter: FunctionParameter) extends TermTemplate {
   override def names: Nil.type = Nil
   override def matchExpression(
     expression: Expression,
@@ -119,13 +120,14 @@ case class FunctionParameterTemplate(parameter: FunctionParameter) extends TermT
   override def referencedDefinitions: Set[CompoundExpressionDefinition] = Set.empty
   override def serialized: String = parameter.toString
 }
-case class DefinedStatementTemplate(
+
+case class CompoundStatementTemplate(
   definition: CompoundStatementDefinition,
   boundVariableNames: Seq[String],
   components: Seq[Template])
-  extends StatementTemplate with DefinedExpressionTemplate
+  extends StatementTemplate with CompoundExpressionTemplate
 {
-  override def withComponents(newComponents: Seq[Template]): DefinedStatementTemplate = copy(components = newComponents)
+  override def withComponents(newComponents: Seq[Template]): CompoundStatementTemplate = copy(components = newComponents)
   override def names: Seq[String] = boundVariableNames ++ components.flatMap(_.names)
   override def matchExpression(
     expression: Expression,
@@ -141,7 +143,7 @@ case class DefinedStatementTemplate(
       None
   }
   override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Template = {
-    DefinedStatementTemplate(
+    CompoundStatementTemplate(
       expressionDefinitionReplacements(definition).asInstanceOf[CompoundStatementDefinition],
       boundVariableNames,
       components.map(_.replaceDefinitions(expressionDefinitionReplacements)))
@@ -169,13 +171,13 @@ case class DefinedStatementTemplate(
   override def serialized: String = (Seq(definition.symbol) ++ boundVariableNames ++ components.map(_.serialized)).mkString(" ")
 }
 
-case class DefinedTermTemplate(
+case class CompoundTermTemplate(
   definition: CompoundTermDefinition,
   boundVariableNames: Seq[String],
   components: Seq[Template])
-  extends TermTemplate with DefinedExpressionTemplate
+  extends TermTemplate with CompoundExpressionTemplate
 {
-  override def withComponents(newComponents: Seq[Template]): DefinedTermTemplate = copy(components = newComponents)
+  override def withComponents(newComponents: Seq[Template]): CompoundTermTemplate = copy(components = newComponents)
   override def names: Seq[String] = boundVariableNames ++ components.flatMap(_.names)
   override def matchExpression(
     expression: Expression,
@@ -191,7 +193,7 @@ case class DefinedTermTemplate(
       None
   }
   override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Template = {
-    DefinedTermTemplate(
+    CompoundTermTemplate(
       expressionDefinitionReplacements(definition).asInstanceOf[CompoundTermDefinition],
       boundVariableNames,
       components.map(_.replaceDefinitions(expressionDefinitionReplacements)))

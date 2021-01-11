@@ -1,9 +1,10 @@
 package net.prover.controllers.models
 
-import net.prover.model.{Inference, Substitutions, VariableDefinitions}
+import net.prover.model.{Inference, VariableDefinitions}
 import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.StepProvingContext
 import net.prover.model.proof.SubstatementExtractor.Extraction
+import net.prover.model.substitutions.PossibleSubstitutions
 
 sealed trait PossibleInference {
   def inference: Inference.Summary
@@ -53,10 +54,10 @@ object PossibleConclusionWithPremises {
   def fromExtractionWithTarget(extraction: Extraction, target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
     fromExtractionWithSubstitutions(extraction, _.calculateSubstitutions(target))
   }
-  def fromExtractionWithSubstitutions(extraction: Extraction, getSubstitutions: Statement => Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
+  def fromExtractionWithSubstitutions(extraction: Extraction, getSubstitutions: Statement => Option[PossibleSubstitutions])(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
     getSubstitutions(extraction.conclusion).map(s => fromExtraction(extraction, Some(s)))
   }
-  def fromExtraction(extraction: Extraction, substitutions: Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): PossibleConclusionWithPremises = {
+  def fromExtraction(extraction: Extraction, substitutions: Option[PossibleSubstitutions])(implicit stepProvingContext: StepProvingContext): PossibleConclusionWithPremises = {
     PossibleConclusionWithPremises(
       extraction.conclusion,
       PossiblePremise.fromAvailablePremises(extraction.premises, substitutions, extraction.variableDefinitions),

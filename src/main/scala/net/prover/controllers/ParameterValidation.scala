@@ -1,13 +1,14 @@
 package net.prover.controllers
 
 import net.prover._
+import net.prover.core.expressions.Statement
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
 import net.prover.model.definitions.{Qualifier, TermListAdapter}
-import net.prover.model.expressions.{Statement, Term}
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.{RequiredParentObjects, TypeDefinition, TypeQualifierDefinition}
+import net.prover.structure.parsers.TermParsers
 
 import scala.util.{Failure, Success, Try}
 
@@ -91,7 +92,7 @@ trait ParameterValidation {
         for {
           variableDefinitions <- getSimpleVariableDefinitions(variableDefinitionsText, "adapter variable definitions")
           epc = ExpressionParsingContext.forTypeDefinition(variableDefinitions)
-          templates <- qualifierVariableDefinitions.indices.map(_ => Term.parser(epc)).traverse.parseFromString(serializedTemplates, "templates").recoverWithBadRequest
+          templates <- qualifierVariableDefinitions.indices.map(_ => TermParsers.termParser(epc)).traverse.parseFromString(serializedTemplates, "templates").recoverWithBadRequest
         } yield Some(TermListAdapter(variableDefinitions, templates))
       case None =>
         Success(None)

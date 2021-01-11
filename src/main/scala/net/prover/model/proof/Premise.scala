@@ -1,10 +1,14 @@
 package net.prover.model.proof
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.core.expressions.Statement
+import net.prover.core.substitutions.{SubstitutionApplier, Substitutions}
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition
-import net.prover.model.expressions.Statement
 import net.prover.model.proof.Premise.Pending
+import net.prover.model.simplification.ComponentFinder
+import net.prover.model.substitutions.{ParameterRemover, SubstitutionCalculator}
+import net.prover.model.substitutions.ParameterRemover.ParameterRemovalContext
 import net.prover.structure.EntryContext
 
 sealed trait Premise {
@@ -12,11 +16,11 @@ sealed trait Premise {
   def referencedInferenceIds: Set[String]
   def referencedLines: Set[PreviousLineReference]
   def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending]
-  def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise
-  def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Premise] = {
-    statement.removeExternalParameters(numberOfParametersToRemove, internalDepth).map(Pending)
+  def insertExternalParameters(numberOfParametersToInsert: Int)(implicit stepModificationContext: StepModificationContext): Premise
+  def removeExternalParameters(numberOfParametersToRemove: Int)(implicit stepModificationContext: StepModificationContext): Option[Premise] = {
+    ParameterRemover.WithContext.removeExternalParameters(statement, numberOfParametersToRemove)(ParameterRemovalContext(stepModificationContext.internalDepth))
+      .map(Pending)
   }
-  def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Premise
   def toPending: Pending = Pending(statement)
   def isComplete: Boolean
 }
@@ -39,9 +43,9 @@ object Premise {
           premise
         case inference +: tailInferences =>
           val inferencePremise = inference.premises.single.getOrElse(throw new Exception("Given simplification inference did not have a single premise"))
-          val substitutions = inferencePremise.calculateSubstitutions(premise.statement).flatMap(_.confirmTotality(inference.variableDefinitions)).getOrElse(throw new Exception("Could not calculate substitutions for simplification"))
-          val result = inference.conclusion.applySubstitutions(substitutions).getOrElse(throw new Exception("Could not apply substitutions for simplification"))
-          val path = inferencePremise.findComponentPath(inference.conclusion).getOrElse(throw new Exception("Could not find simplification path"))
+          val substitutions = SubstitutionCalculator.calculateSubstitutions(inferencePremise, premise.statement).flatMap(_.confirmTotality(inference.variableDefinitions)).getOrElse(throw new Exception("Could not calculate substitutions for simplification"))
+          val result = SubstitutionApplier.applySubstitutions(inference.conclusion, substitutions).getOrElse(throw new Exception("Could not apply substitutions for simplification"))
+          val path = ComponentFinder.findComponentPath(inferencePremise, inference.conclusion).getOrElse(throw new Exception("Could not find simplification path"))
           helper(tailInferences, Simplification(result, premise, inference.summary, substitutions, path))
       }
     }
@@ -68,12 +72,6 @@ object Premise {
     override def referencedInferenceIds: Set[String] = Set.empty
     override def referencedLines: Set[PreviousLineReference] = Set.empty
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending] = Map(path -> this)
-    override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Pending = {
-      copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
-    }
-    def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Pending = {
-      Pending(statement.replaceDefinitions(expressionDefinitionReplacements))
-    }
     override def isComplete: Boolean = false
   }
 
@@ -81,14 +79,6 @@ object Premise {
     val `type` = "given"
     override def referencedInferenceIds: Set[String] = Set.empty
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending] = Map.empty
-    override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Given = {
-      copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
-    }
-    def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Given = {
-      Given(
-        statement.replaceDefinitions(expressionDefinitionReplacements),
-        referencedLine)
-    }
     override def isComplete: Boolean = true
   }
 
@@ -97,19 +87,6 @@ object Premise {
     override def referencedLine: PreviousLineReference = premise.referencedLine.addInternalPath(path)
     override def referencedInferenceIds: Set[String] = premise.referencedInferenceIds + inference.id
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Pending] = premise.getPendingPremises(path :+ 0)
-    override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Simplification = {
-      copy(
-        statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth),
-        substitutions = substitutions.insertExternalParameters(numberOfParametersToInsert, internalDepth))
-    }
-    def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Simplification = {
-      Simplification(
-        statement.replaceDefinitions(expressionDefinitionReplacements),
-        premise.replaceDefinitions(expressionDefinitionReplacements).asInstanceOf[Premise.SingleLinePremise],
-        inference.replaceDefinitions(expressionDefinitionReplacements),
-        substitutions.replaceDefinitions(expressionDefinitionReplacements),
-        path)
-    }
     override def isComplete: Boolean = premise.isComplete
   }
 }

@@ -2,7 +2,8 @@ package net.prover.model
 
 import net.prover._
 import net.prover.model.definitions.CompoundExpressionDefinition
-import net.prover.model.expressions.{Template, Term}
+import net.prover.model.expressions.Term
+import net.prover.model.template.Template
 import net.prover.structure.EntryContext
 
 case class DisambiguatorAdder(template: Template, disambiguator: String) {

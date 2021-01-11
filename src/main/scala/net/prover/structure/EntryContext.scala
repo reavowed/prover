@@ -2,6 +2,7 @@ package net.prover.structure
 
 import net.prover.model.definitions._
 import net.prover.model.expressions._
+import net.prover.model.template.{CompoundStatementTemplate, CompoundTermTemplate}
 import net.prover.model.{Inference, Parser, ProvingContext}
 import net.prover.structure.model.entries._
 import net.prover.structure.model.{Book, Chapter}
@@ -49,25 +50,25 @@ case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map
   }
 
 
-  object RecognisedStatementDefinition {
+  object RecognisedCompoundStatementDefinition {
     def unapply(symbol: String): Option[CompoundStatementDefinition] = {
       statementDefinitionsBySymbol.get(symbol)
     }
   }
-  object RecognisedTermDefinition {
+  object RecognisedCompoundTermDefinition {
     def unapply(symbol: String): Option[CompoundTermDefinition] = {
       termDefinitionsBySymbol.get(symbol)
     }
   }
 
   object RecognisedStatementShorthand {
-    def unapply(string: String): Option[DefinedStatementTemplate] = {
-      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[DefinedStatementTemplate])
+    def unapply(string: String): Option[CompoundStatementTemplate] = {
+      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[CompoundStatementTemplate])
     }
   }
   object RecognisedTermShorthand {
-    def unapply(string: String): Option[DefinedTermTemplate] = {
-      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[DefinedTermTemplate])
+    def unapply(string: String): Option[CompoundTermTemplate] = {
+      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[CompoundTermTemplate])
     }
   }
 

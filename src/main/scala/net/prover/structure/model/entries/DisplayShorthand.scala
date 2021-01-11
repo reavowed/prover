@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.definitions.CompoundExpressionDefinition
-import net.prover.model.expressions.Template
+import net.prover.model.template.Template
 import net.prover.model.{Format, Inference, Parser}
 import net.prover.structure.EntryContext
 import net.prover.structure.parsers.ChapterEntryParser

@@ -3,7 +3,7 @@ package net.prover.model.definitions
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
-import net.prover.model.expressions.{DefinedStatement, Statement}
+import net.prover.core.expressions.{CompoundStatement, Statement}
 import net.prover.structure.model.entries.ChapterEntry
 
 @JsonSerialize(using = classOf[SpecialStatementDefinitionSymbolSerializer])
@@ -16,7 +16,7 @@ object SpecialStatementDefinition {
   sealed trait BinaryConnective extends SpecialStatementDefinition {
     def apply(firstComponent: Statement, secondComponent: Statement): Statement = statementDefinition(firstComponent, secondComponent)
     def unapply(statement: Statement): Option[(Statement, Statement)] = statement match {
-      case DefinedStatement(Seq(antecedent: Statement, consequent: Statement), `statementDefinition`) =>
+      case CompoundStatement(statementDefinition.definedCompoundStatementType, Seq(antecedent: Statement, consequent: Statement)) =>
         Some((antecedent, consequent))
       case _ =>
         None

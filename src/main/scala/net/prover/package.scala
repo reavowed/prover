@@ -6,6 +6,8 @@ import net.prover.util.PossibleSingleMatch
 import net.prover.util.PossibleSingleMatch.{MultipleMatches, NoMatches, SingleMatch}
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
+import scalaz.{Functor, Monad}
+import scalaz.syntax.functor._
 
 import scala.collection.JavaConverters._
 import scala.collection.generic.CanBuildFrom
@@ -573,6 +575,9 @@ implicit class AnyOps[T](t: T) {
     def replace(key: S, f: T => T): Map[S, T] = {
       map.get(key).map(t => map.updated(key, f(t))) getOrElse map
     }
+    def findValueWithKey(predicate: S => Boolean): Option[T] = {
+      map.keySet.find(predicate).map(map.apply)
+    }
   }
 
   implicit class MapOptionOps[S, T](map: Map[S, Option[T]]) {
@@ -640,5 +645,48 @@ implicit class AnyOps[T](t: T) {
       }
       (aBuilder.result(), bBuilder.result())
     }
+  }
+
+  implicit val identityMonad: Monad[Identity] = new Monad[Identity] {
+    override def bind[A, B](a: A)(f: A => B): B = f(a)
+    override def point[A](a: => A): A = a
+  }
+  // This technically violates the monad rules (for functions that catch exceptions), but we don't actually care
+  implicit val tryMonad: Monad[Try] = new Monad[Try] {
+    override def bind[A, B](fa: Try[A])(f: A => Try[B]): Try[B] = fa.flatMap(f)
+    override def point[A](a: => A): Try[A] = Success(a)
+  }
+
+  type Identity[A] = A
+  implicit val identityFunctor: Functor[Identity] = new Functor[Identity] {
+    override def map[A,B](a: Identity[A])(f: A ⇒ B): Identity[B] = f(a)
+  }
+
+  class WithValue[B] {
+    type Type[A] = (A, B)
+  }
+  implicit def WithValueFunctor[B]: Functor[WithValue[B]#Type] = new Functor[WithValue[B]#Type] {
+    override def map[A, C](input: (A, B))(f: A => C): (C, B) = input.mapLeft(f)
+  }
+
+  class TryWithValue[B] {
+    type Type[A] = Try[(A, B)]
+  }
+  implicit def TryWithValueFunctor[B]: Functor[TryWithValue[B]#Type] = new Functor[TryWithValue[B]#Type] {
+    override def map[A, C](input: Try[(A, B)])(f: A => C): Try[(C, B)] = input.map(_.mapLeft(f))
+  }
+
+  class FWithValue[F[_], B] {
+    type Type[A] = F[(A, B)]
+  }
+  implicit def FWithValueFunctor[F[_]: Functor, B]: Functor[FWithValue[F, B]#Type] = new Functor[FWithValue[F, B]#Type] {
+    override def map[A, C](input: F[(A, B)])(f: A => C): F[(C, B)] = input.map(_.mapLeft(f))
+  }
+
+  class TryFWithValue[F[_], B] {
+    type Type[A] = Try[F[(A, B)]]
+  }
+  implicit def TryFWithValueFunctor[F[_]: Functor, B]: Functor[TryFWithValue[F, B]#Type] = new Functor[TryFWithValue[F, B]#Type] {
+    override def map[A, C](input: Try[F[(A, B)]])(f: A => C): Try[F[(C, B)]] = input.map(_.map(_.mapLeft(f)))
   }
 }

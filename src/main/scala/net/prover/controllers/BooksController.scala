@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover._
 import net.prover.controllers.BooksController.BookDefinition
 import net.prover.controllers.models.LinkSummary
 import net.prover.structure.model.Book

@@ -2,9 +2,10 @@ package net.prover.model.definitions
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.core.expressions._
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
-import net.prover.model.expressions._
+import net.prover.model.substitutions.Specifier
 import net.prover.structure.model.entries.ChapterEntry
 
 trait CompoundExpressionDefinition {
@@ -16,18 +17,18 @@ trait CompoundExpressionDefinition {
   def explicitName: Option[String]
   def name: String = explicitName.getOrElse(disambiguatedSymbol.forDisplay)
   def boundVariableNames: Seq[String]
+  def hasBoundVariables: Boolean = boundVariableNames.nonEmpty
   def componentTypes: Seq[ComponentType]
-  def defaultComponentExpressions: Seq[ExpressionVariable[_]] = componentTypes.mapFold((0, 0)) {
+  def defaultComponentExpressions: Seq[ExpressionVariable[_, _]] = componentTypes.mapFold((0, 0)) {
     case ((statementCounter, termCounter), ComponentType.StatementComponent(_, arguments)) =>
-      ((statementCounter + 1, termCounter), StatementVariable(statementCounter, arguments.map(a => FunctionParameter(a.index, 0))))
+      ((statementCounter + 1, termCounter), StatementVariable(statementCounter, arguments.map(a => Parameter(a.index, 0))))
     case ((statementCounter, termCounter), ComponentType.TermComponent(_, arguments)) =>
-      ((statementCounter, termCounter + 1), TermVariable(termCounter, arguments.map(a => FunctionParameter(a.index, 0))))
+      ((statementCounter, termCounter + 1), TermVariable(termCounter, arguments.map(a => Parameter(a.index, 0))))
   }._2
   def format: Format
   def shorthand: Option[String]
   def defaultValue: Expression
   def attributes: Seq[String]
-  def complexity: Int
   @JsonIgnore
   def associatedChapterEntry: ChapterEntry
 
@@ -39,24 +40,6 @@ trait CompoundExpressionDefinition {
     else
       internalDepth
   }
-
-  protected def componentExpressionParser(implicit context: ExpressionParsingContext): Parser[(Seq[String], Seq[Expression])] = {
-    for {
-      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
-      components <- componentTypes.map { componentType =>
-        componentType.expressionParser(componentType.addParametersToContext(context, newBoundVariableNames))
-      }.traverse
-    } yield (newBoundVariableNames, components)
-  }
-
-  protected def componentTemplateParser(implicit context: TemplateParsingContext): Parser[(Seq[String], Seq[Template])] = {
-    for {
-      newBoundVariableNames <- Parser.nWords(boundVariableNames.length)
-      components <- componentTypes.map { componentType =>
-        componentType.templateParser(componentType.addParametersToContext(context, newBoundVariableNames))
-      }.traverse
-    } yield (newBoundVariableNames, components)
-  }
 }
 
 object CompoundExpressionDefinition {
@@ -64,8 +47,6 @@ object CompoundExpressionDefinition {
   sealed trait ComponentType {
     def name: String
     def arguments: Seq[ComponentArgument]
-    def expressionParser(implicit context: ExpressionParsingContext): Parser[Expression]
-    def templateParser(implicit context: TemplateParsingContext): Parser[Template]
     def addParametersToContext[T <: ParsingContextWithParameters[T]](context: T, boundVariableNames: Seq[String]): T = {
       if (boundVariableNames.nonEmpty)
         context.addInnerParameters(getParameters(boundVariableNames))
@@ -110,8 +91,6 @@ object CompoundExpressionDefinition {
     }
 
     case class StatementComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-      override def expressionParser(implicit context: ExpressionParsingContext) = Statement.parser
-      override def templateParser(implicit context: TemplateParsingContext) = Statement.templateParser
       override def serialized = arguments match {
         case Nil => name
         case Seq(single) => s"with ${single.name} $name"
@@ -119,8 +98,6 @@ object CompoundExpressionDefinition {
       }
     }
     case class TermComponent(name: String, arguments: Seq[ComponentArgument]) extends ComponentType {
-      override def expressionParser(implicit context: ExpressionParsingContext) = Term.parser
-      override def templateParser(implicit context: TemplateParsingContext) = Term.templateParser
       override def serialized = arguments match {
         case Nil => name
         case Seq(single) => s"with ${single.name} $name"
@@ -130,35 +107,22 @@ object CompoundExpressionDefinition {
   }
 }
 
-trait CompoundStatementDefinition extends CompoundExpressionDefinition {
+trait CompoundStatementDefinition extends CompoundExpressionDefinition with CompoundStatementType {
   def definingStatement: Option[Statement]
   val disambiguator: Option[String] = None
-  val defaultValue: DefinedStatement = DefinedStatement(defaultComponentExpressions, this)(boundVariableNames)
+  val defaultValue: CompoundStatement = CompoundStatement(this, defaultComponentExpressions)(boundVariableNames)
   val constructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, variableDefinitions,  _, defaultValue))
   val deconstructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, variableDefinitions, defaultValue, _))
   def inferences: Seq[Inference.FromEntry] = constructionInference.toSeq ++ deconstructionInference.toSeq
 
-  override val complexity: Int = definingStatement.map(_.definitionalComplexity).getOrElse(1)
-
-  def statementParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
-    componentExpressionParser.map { case (newBoundVariableNames, components) =>
-      DefinedStatement(components, this)(newBoundVariableNames)
-    }
+  def apply(components: Expression*): CompoundStatement = {
+    CompoundStatement(this, components)(boundVariableNames)
   }
-  def templateParser(implicit templateParsingContext: TemplateParsingContext): Parser[Template] = {
-    componentTemplateParser.map { case (newBoundVariableNames, components) =>
-      DefinedStatementTemplate(this, newBoundVariableNames, components)
-    }
-  }
-
-  def apply(components: Expression*): DefinedStatement = {
-    DefinedStatement(components, this)(boundVariableNames)
-  }
-  def bind(boundVariableNames: String*)(components: Expression*): DefinedStatement = {
-    DefinedStatement(components, this)(boundVariableNames)
+  def bind(boundVariableNames: String*)(components: Expression*): CompoundStatement = {
+    CompoundStatement(this, components)(boundVariableNames)
   }
   def unapplySeq(expression: Expression): Option[Seq[Expression]] = expression match {
-    case DefinedStatement(components, definition) if definition == this =>
+    case CompoundStatement(definition, components) if definition == this =>
       Some(components)
     case _ =>
       None
@@ -183,33 +147,19 @@ object CompoundStatementDefinition {
   }
 }
 
-trait CompoundTermDefinition extends CompoundExpressionDefinition {
+trait CompoundTermDefinition extends CompoundExpressionDefinition with CompoundTermType {
   def premises: Seq[Statement]
   def definitionPredicate: Statement
-  val defaultValue: DefinedTerm = DefinedTerm(defaultComponentExpressions, this)(boundVariableNames)
-  val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0).get
+  val defaultValue: CompoundTerm = CompoundTerm(this, defaultComponentExpressions)(boundVariableNames)
+  val definingStatement: Statement = Specifier.specifyOutsideProof(definitionPredicate, Seq(defaultValue)).get
   val definitionInference: Inference.Definition = Inference.TermDefinition(name, variableDefinitions, premises, definingStatement)
   def inferences: Seq[Inference.FromEntry] = Seq(definitionInference)
 
-  override val complexity: Int = definitionPredicate.definitionalComplexity
-
-  def termParser(implicit context: ExpressionParsingContext): Parser[Term] = {
-    componentExpressionParser.map { case (newBoundVariableNames, components) =>
-      DefinedTerm(components, this)(newBoundVariableNames)
-    }
+  def apply(components: Expression*): CompoundTerm = {
+    CompoundTerm(this, components)(boundVariableNames)
   }
-
-  def templateParser(implicit context: TemplateParsingContext): Parser[Template] = {
-    componentTemplateParser.map { case (newBoundVariableNames, components) =>
-      DefinedTermTemplate(this, newBoundVariableNames, components)
-    }
-  }
-
-  def apply(components: Expression*): DefinedTerm = {
-    DefinedTerm(components, this)(boundVariableNames)
-  }
-  def bind(boundVariableNames: String*)(components: Expression*): DefinedTerm = {
-    DefinedTerm(components, this)(boundVariableNames)
+  def bind(boundVariableNames: String*)(components: Expression*): CompoundTerm = {
+    CompoundTerm(this, components)(boundVariableNames)
   }
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[CompoundTermDefinition]

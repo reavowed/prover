@@ -6,6 +6,7 @@ import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType.{
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStepWithSingleInference, Step, SubstatementExtractor, SubstitutionContext}
+import net.prover.model.template.{CompoundStatementTemplate, TermVariableTemplate}
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.structure.EntryContext
@@ -708,7 +709,7 @@ object Definitions {
 
     def fromGeneralShorthands = for {
       shorthand <- shorthands
-      if shorthand.template.isInstanceOf[DefinedStatementTemplate]
+      if shorthand.template.isInstanceOf[CompoundStatementTemplate]
       if shorthand.template.variables.length == 3
       Seq(lhsIndex, symbolIndex, rhsIndex) <- "%(\\d) %(\\d) %(\\d)".r.unapplySeq(shorthand.format.baseFormatString).map(_.map(_.toInt)).toSeq
       if lhsIndex != symbolIndex && lhsIndex != rhsIndex && symbolIndex != rhsIndex
@@ -724,7 +725,7 @@ object Definitions {
 
     def fromSpecificShorthands = for {
       shorthand <- shorthands
-      if shorthand.template.isInstanceOf[DefinedStatementTemplate]
+      if shorthand.template.isInstanceOf[CompoundStatementTemplate]
       if shorthand.template.variables.length == 2
       Seq(lhsIndexText, symbol, rhsIndexText) <- "%(\\d) (.) %(\\d)".r.unapplySeq(shorthand.format.baseFormatString).toSeq
       lhsIndex <- Try(lhsIndexText.toInt).toOption

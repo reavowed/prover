@@ -1,6 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model._
+import net.prover.model.template.{StatementVariableTemplate, Template}
 import net.prover.structure.model.entries.{StandalonePropertyDefinition, TypeDefinition, TypeQualifierDefinition}
 
 trait Statement extends Expression with TypedExpression[Statement]
@@ -15,7 +16,7 @@ object Statement {
         } yield context.getStatementVariable(name, arguments).getOrElse(throw new Exception(s"Unrecognised statement variable $name"))
       case "is" =>
         typeOrPropertyStatementParser
-      case context.entryContext.RecognisedStatementDefinition(statementDefinition) =>
+      case context.entryContext.RecognisedCompoundStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
       case context.SimpleStatementVariable(variable) =>
         Parser.constant(variable)
@@ -148,7 +149,7 @@ object Statement {
   def templateParserFunction(implicit templateParsingContext: TemplateParsingContext): PartialFunction[String, Parser[Template]] = {
       case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
         Parser.constant(StatementVariableTemplate(name))
-      case templateParsingContext.entryContext.RecognisedStatementDefinition(definition) =>
+      case templateParsingContext.entryContext.RecognisedCompoundStatementDefinition(definition) =>
         definition.templateParser
   }
 }

@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover._
 import net.prover.controllers.Identity
 import net.prover.controllers.models.StepWithReferenceChange
+import net.prover.core.expressions.Statement
 import net.prover.exceptions.InferenceReplacementException
-import net.prover.model._
-import net.prover.model.definitions.{Definitions, CompoundExpressionDefinition}
-import net.prover.model.expressions.Statement
+import net.prover.model.definitions.{CompoundExpressionDefinition, Definitions}
 import net.prover.model.proof._
+import net.prover.model.{ExpressionDefinitionReplacements, Inference, ProvingContext, VariableDefinitions}
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.Theorem.Proof
 import scalaz.Functor
@@ -28,7 +28,7 @@ case class Theorem(
 {
   override def withName(newName: String): Theorem = copy(name = newName)
   override def referencedInferenceIds: Set[String] = proofs.flatMap(_.referencedInferenceIds).toSet
-  override def referencedEntries: Set[ChapterEntry] =  ((premises :+ conclusion).flatMap(_.referencedDefinitions).toSet ++ proofs.flatMap(_.referencedDefinitions).toSet).map(_.associatedChapterEntry)
+  override def referencedEntries: Set[ChapterEntry] = ((premises :+ conclusion).flatMap(_.referencedDefinitions).toSet ++ proofs.flatMap(_.referencedDefinitions).toSet).map(_.associatedChapterEntry)
   override def inferences: Seq[Inference.FromEntry] = Seq(this)
 
   def isComplete(definitions: Definitions): Boolean = proofs.exists(_.isComplete(definitions))
@@ -95,12 +95,7 @@ case class Theorem(
     expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition],
     entryContext: EntryContext
   ): Theorem = {
-    Theorem(
-      name,
-      variableDefinitions,
-      premises.map(_.replaceDefinitions(expressionDefinitionReplacements)),
-      conclusion.replaceDefinitions(expressionDefinitionReplacements),
-      proofs.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
+    ExpressionDefinitionReplacements(expressionDefinitionReplacements, entryContext).replaceDefinitions(this)
   }
 }
 

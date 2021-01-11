@@ -3,7 +3,7 @@ package net.prover.controllers.models
 import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
-import net.prover.model.expressions.{DefinedTermTemplate, Template}
+import net.prover.model.template.{CompoundTermTemplate, Template}
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.{CompoundExpressionDefinitionEntry, CompoundTermDefinitionEntry}
 
@@ -39,7 +39,7 @@ object DefinitionSummary {
   def getDisambiguatorAdderSummaries(expressionDefinition: CompoundExpressionDefinitionEntry): Seq[DisambiguatorAdderSummary] = expressionDefinition match {
     case termDefinition: CompoundTermDefinitionEntry => {
       termDefinition.disambiguatorAdders.map { da =>
-        DisambiguatorAdderSummary(da.template.specify(Seq(DefinedTermTemplate(termDefinition, Nil, Nil))), da.disambiguator)
+        DisambiguatorAdderSummary(da.template.specify(Seq(CompoundTermTemplate(termDefinition, Nil, Nil))), da.disambiguator)
       }
     }
     case _ => Nil

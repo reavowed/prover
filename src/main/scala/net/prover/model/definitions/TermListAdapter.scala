@@ -1,10 +1,10 @@
 package net.prover.model.definitions
 
-import net.prover._
+import net.prover.core.expressions.Term
 import net.prover.model._
-import net.prover.model.expressions.Term
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.ChapterEntry
+import net.prover.structure.parsers.TermParsers
 
 case class TermListAdapter(variableDefinitions: Seq[SimpleVariableDefinition], templates: Seq[Term]) {
   def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): TermListAdapter = {
@@ -20,7 +20,7 @@ object TermListAdapter {
     for {
       variableDefinitions <- SimpleVariableDefinition.listParser
       expressionParsingContext = ExpressionParsingContext.forTypeDefinition(variableDefinitions)
-      templates <- Term.parser(expressionParsingContext).listInParens(Some(","))
+      templates <- TermParsers.termParser(expressionParsingContext).listInParens(Some(","))
     } yield TermListAdapter(variableDefinitions, templates)
   }
 }

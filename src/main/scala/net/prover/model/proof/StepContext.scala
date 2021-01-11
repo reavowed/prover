@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model.VariableDefinitions
-import net.prover.model.expressions.Statement
+import net.prover.core.expressions.Statement
 
 case class StepContext private(
     stepReference: StepReference,
@@ -14,7 +14,7 @@ case class StepContext private(
   def atIndex(index: Int): StepContext = copy(stepReference = stepReference.forChild(index))
   def addBoundVariable(name: String): StepContext = copy(
     boundVariableLists = boundVariableLists :+ Seq(name),
-    premises = premises.map(_.insertExternalParameters(1, 0)))
+    premises = premises.map(StepParameterInserter.insertExternalParameters(_, 1).asInstanceOf[Premise.Given]))
 
   private def addPremise(givenPremise: Premise.Given): StepContext = {
     copy(premises = premises :+ givenPremise)

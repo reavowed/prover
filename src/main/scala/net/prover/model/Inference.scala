@@ -5,16 +5,18 @@ import java.security.MessageDigest
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover._
+import net.prover.core.RuleOfInference
 import net.prover.model.Inference._
-import net.prover.model.definitions.{Definitions, CompoundExpressionDefinition}
-import net.prover.model.expressions._
+import net.prover.model.definitions.{CompoundExpressionDefinition, Definitions}
+import net.prover.core.expressions._
+import net.prover.core.substitutions.SubstitutionApplier
 import net.prover.model.proof.{StepContext, SubstitutionContext}
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.ChapterEntry
 import net.prover.structure.parsers.ChapterEntryParser
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
-trait Inference {
+trait Inference extends RuleOfInference {
   @JsonSerialize
   def id: String
   @JsonSerialize
@@ -27,21 +29,6 @@ trait Inference {
   def variableDefinitions: VariableDefinitions
 
   def summary: Summary = Summary(this)
-
-  def substitutionsParser(implicit parsingContext: ExpressionParsingContext): Parser[Substitutions] = {
-    for {
-      statements <- variableDefinitions.statements.map(d => Statement.parser(parsingContext.addInitialParameters(d.arity))).inParens(Some(","))
-      terms <- variableDefinitions.terms.map(d => Term.parser(parsingContext.addInitialParameters(d.arity))).inParens(Some(","))
-    } yield {
-      if (statements.length != variableDefinitions.statements.length) {
-        throw new Exception(s"Invalid number of statements in substitutions - expected ${variableDefinitions.statements.length}, got ${statements.length}")
-      }
-      if (terms.length != variableDefinitions.terms.length) {
-        throw new Exception(s"Invalid number of terms in substitutions - expected ${variableDefinitions.terms.length}, got ${terms.length}")
-      }
-      Substitutions(statements, terms)
-    }
-  }
 
   def validatePremisesAndConclusion(expectedPremises: Seq[Statement], expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Option[Unit] = {
     for {
@@ -65,7 +52,7 @@ trait Inference {
   }
 
   def substituteConclusion(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {
-    conclusion.applySubstitutions(substitutions)
+    SubstitutionApplier(substitutions).applySubstitutions(conclusion)
   }
 
   def substituteStatement(statement: Statement, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {

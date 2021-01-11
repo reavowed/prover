@@ -1,5 +1,6 @@
 package net.prover.model.expressions
 
+import net.prover.model.template.{Template, TermVariableTemplate}
 import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, TemplateParsingContext}
 
 trait Term extends Expression with TypedExpression[Term] {
@@ -41,7 +42,7 @@ object Term {
           arguments <- Term.parser.listInParensOrSingle(None)
           name <- Parser.singleWord
         } yield context.getTermVariable(name, arguments).getOrElse(throw new Exception(s"Unrecognised statement variable $name"))
-      case context.entryContext.RecognisedTermDefinition(termDefinition) =>
+      case context.entryContext.RecognisedCompoundTermDefinition(termDefinition) =>
         termDefinition.termParser
       case context.entryContext.RecognisedTermShorthand(template) =>
         template.expressionParser.map(_.asInstanceOf[Term])
@@ -67,10 +68,10 @@ object Term {
   }
 
   def templateParserFunction(implicit context: TemplateParsingContext): PartialFunction[String, Parser[Template]] = {
-    case context.entryContext.RecognisedTermDefinition(definition) =>
+    case context.entryContext.RecognisedCompoundTermDefinition(definition) =>
       definition.templateParser
     case context.RecognisedParameter(parameter) =>
-      Parser.constant(FunctionParameterTemplate(parameter))
+      Parser.constant(ParameterTemplate(parameter))
     case ExpressionParsingContext.RecognisedTermVariableName(name) =>
       Parser.constant(TermVariableTemplate(name))
   }

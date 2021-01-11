@@ -4,11 +4,13 @@ import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.StepProvingContext.KnownEquality
+import net.prover.model.simplification.SimplificationFinder
+import net.prover.model.substitutions.ContextWithExternalDepth
 import net.prover.model.utils.ExpressionUtils
 
 import scala.collection.mutable
 
-case class StepProvingContext(stepContext: StepContext, provingContext: ProvingContext) {
+case class StepProvingContext(stepContext: StepContext, provingContext: ProvingContext) extends ContextWithExternalDepth {
   private implicit val substitutionContext: SubstitutionContext = stepContext
 
   lazy val premisesAndSimplifications: Seq[(Premise.Given, Seq[Premise.Simplification])] = {
@@ -94,6 +96,8 @@ case class StepProvingContext(stepContext: StepContext, provingContext: ProvingC
   }
 
   val cachedDerivations: mutable.Map[String, Option[Seq[DerivationStep]]] = mutable.Map.empty
+
+  override def externalDepth: Int = stepContext.externalDepth
 }
 
 object StepProvingContext {

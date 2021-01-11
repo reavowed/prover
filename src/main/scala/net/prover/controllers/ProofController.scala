@@ -96,7 +96,7 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
                 stepsWithNewContext <- if (parametersToRemove > 0)
                   currentSteps.map(_.removeExternalParameters(parametersToRemove, 0)).traverseOption.orBadRequest("Could not remove extra parameters")
                 else if (parametersToAdd > 0)
-                  Success(currentSteps.map(_.insertExternalParameters(parametersToAdd, 0)))
+                  Success(currentSteps.map(StepParameterInserter.insertExternalParameters(_, parametersToAdd)))
                 else
                   Success(currentSteps)
               } yield (before ++ stepsWithNewContext ++ after, InsertionAndDeletionProps(StepInsertionProps(destinationPath :+ destinationIndex, stepsWithNewContext), StepDeletionProps(sourcePath, sourceStartIndex, sourceEndIndex)))

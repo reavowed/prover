@@ -1,6 +1,8 @@
 package net.prover.model.proof
 
-trait SubstitutionContext {
+import net.prover.model.substitutions.ContextWithExternalDepth
+
+trait SubstitutionContext extends ContextWithExternalDepth {
   def externalDepth: Int
 }
 

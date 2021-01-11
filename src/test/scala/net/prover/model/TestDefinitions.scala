@@ -8,6 +8,7 @@ import net.prover.structure.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.structure.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof._
+import net.prover.model.template.{CompoundStatementTemplate, CompoundTermTemplate, ParameterTemplate, Template, TermVariableTemplate}
 import net.prover.structure.EntryContext
 import org.specs2.matcher.Matcher
 
@@ -43,7 +44,7 @@ trait TestVariableDefinitions {
 
 
   case object $ {
-    def template: Template = FunctionParameterTemplate($ToFunctionParameter(this))
+    def template: Template = ParameterTemplate($ToFunctionParameter(this))
     def apply(index: Int) = FunctionParameter(index, 0)
     def ^ : FunctionParameter = FunctionParameter(0, 1)
     def ^(index: Int) : FunctionParameter = FunctionParameter(index, 1)
@@ -56,13 +57,13 @@ trait TestVariableDefinitions {
 
 
   implicit class StatementDefinitionOps(statementDefinition: CompoundStatementDefinition) {
-    def template(components: Template*): Template = DefinedStatementTemplate(statementDefinition, Nil, components)
+    def template(components: Template*): Template = CompoundStatementTemplate(statementDefinition, Nil, components)
   }
   implicit class TermDefinitionOps(termDefinition: CompoundTermDefinition) {
-    def template(components: Template*): Template = DefinedTermTemplate(termDefinition, Nil, components)
+    def template(components: Template*): Template = CompoundTermTemplate(termDefinition, Nil, components)
   }
   implicit class FunctionParameterOps(functionParameter: FunctionParameter) {
-    def template: Template = FunctionParameterTemplate(functionParameter)
+    def template: Template = template.ParameterTemplate(functionParameter)
   }
   implicit class HasStatementDefinitionOps(hasStatementDefinition: HasStatementDefinition) {
     def apply(components: Expression*) = hasStatementDefinition.statementDefinition(components: _*)

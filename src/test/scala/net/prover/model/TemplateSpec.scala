@@ -1,8 +1,9 @@
 package net.prover.model
 
-import net.prover.model.expressions.{DefinedStatement, Template}
+import net.prover.model.expressions.DefinedStatement
 import org.specs2.mutable.Specification
 import TestDefinitions._
+import net.prover.model.template.Template
 
 class TemplateSpec extends Specification {
 
