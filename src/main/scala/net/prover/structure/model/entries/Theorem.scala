@@ -2,7 +2,6 @@ package net.prover.structure.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover._
-import net.prover.controllers.Identity
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._

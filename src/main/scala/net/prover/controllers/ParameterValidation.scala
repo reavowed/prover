@@ -7,7 +7,8 @@ import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
 import net.prover.model.definitions.{Qualifier, TermListAdapter}
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.structure.EntryContext
-import net.prover.structure.model.entries.{RequiredParentObjects, TypeDefinition, TypeQualifierDefinition}
+import net.prover.types.model.RequiredParentObjects
+import net.prover.types.model.entries.{TypeDefinition, TypeQualifierDefinition}
 
 import scala.util.{Failure, Success, Try}
 

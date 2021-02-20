@@ -3,7 +3,7 @@ package net.prover.model.definitions
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{ExpressionLenses, Inference}
-import net.prover.structure.model.entries.DisplayShorthand
+import net.prover.shorthands.model.entries.DisplayShorthand
 
 sealed trait BinaryJoiner[TComponent <: Expression] extends ExpressionLenses[TComponent] {
   def symbol: String

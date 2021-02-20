@@ -4,6 +4,7 @@ import net.prover.controllers.models.PathData
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{DefinedStatement, TermVariable}
 import net.prover.model.proof.Step
+import net.prover.structure.BookService
 import org.specs2.matcher.Matcher
 import org.springframework.http.ResponseEntity
 

@@ -3,10 +3,12 @@ package net.prover.model
 import net.prover.model.TestDefinitions.{f, _}
 import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
-import net.prover.structure.model.entries.{ParentTypeConditions, PropertyDefinitionOnType, CompoundTermDefinitionEntry, TypeDefinition}
+import net.prover.structure.model.entries.CompoundTermDefinitionEntry
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.structure.EntryContext
+import net.prover.types.model.ParentTypeConditions
+import net.prover.types.model.entries.{PropertyDefinitionOnType, TypeDefinition}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 

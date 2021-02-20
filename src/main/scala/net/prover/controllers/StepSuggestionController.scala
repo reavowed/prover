@@ -4,6 +4,7 @@ import net.prover._
 import net.prover.controllers.models._
 import net.prover.model.expressions._
 import net.prover.model.proof._
+import net.prover.structure.BookService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._

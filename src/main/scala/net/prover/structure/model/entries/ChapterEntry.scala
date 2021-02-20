@@ -3,8 +3,10 @@ package net.prover.structure.model.entries
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundStatementDefinition}
 import net.prover.model.{Inference, Parser, SimpleVariableDefinition}
+import net.prover.shorthands.model.entries._
 import net.prover.structure.EntryContext
 import net.prover.structure.parsers.ChapterEntryParser
+import net.prover.types.model.entries._
 
 trait ChapterEntry {
   @JsonSerialize

@@ -2,7 +2,8 @@ package net.prover.model
 
 import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.{Qualifier, TermListAdapter}
-import net.prover.structure.model.entries.{ParentTypeConditions, PropertyDefinitionOnType, RelatedObjectDefinition, RequiredParentObjects, TypeDefinition, TypeQualifierDefinition}
+import net.prover.types.model.{ParentTypeConditions, RequiredParentObjects, entries}
+import net.prover.types.model.entries.{PropertyDefinitionOnType, RelatedObjectDefinition, TypeDefinition, TypeQualifierDefinition}
 import org.specs2.mutable.Specification
 
 class PropertyDefinitionSpec extends Specification {
@@ -25,19 +26,19 @@ class PropertyDefinitionSpec extends Specification {
       definition.statementDefinition.definingStatement must beSome(Conjunction(functionDefinition.statementDefinition(f), ψ))
     }
     "add simple parent type condition with default qualifier on parent" in {
-      val definition = PropertyDefinitionOnType("reflexive", ParentTypeConditions(relationDefinition, None, None, None, ConjunctionDefinition), None, ψ)
+      val definition = entries.PropertyDefinitionOnType("reflexive", ParentTypeConditions(relationDefinition, None, None, None, ConjunctionDefinition), None, ψ)
       definition.statementDefinition.definingStatement must beSome(Conjunction(relationDefinition.statementDefinition(R, A), ψ))
     }
     "add parent type and qualifier condition with explicit qualifier on parent" in {
-      val definition = PropertyDefinitionOnType("surjective", ParentTypeConditions(functionDefinition, Some(functionFromDefinition), None, None, ConjunctionDefinition), None, ψ)
+      val definition = entries.PropertyDefinitionOnType("surjective", ParentTypeConditions(functionDefinition, Some(functionFromDefinition), None, None, ConjunctionDefinition), None, ψ)
       definition.statementDefinition.definingStatement must beSome(Conjunction(Conjunction(functionDefinition.statementDefinition(f), functionFromDefinition.statementDefinition(f, A, B)), ψ))
     }
     "add adapted parent type and qualifier condition with explicit qualifier on parent" in {
-      val definition = PropertyDefinitionOnType("cauchy", ParentTypeConditions(sequenceDefinition, Some(sequenceOnDefinition), None, Some(TermListAdapter(Nil, Seq(Naturals))), ConjunctionDefinition), None, ψ)
+      val definition = entries.PropertyDefinitionOnType("cauchy", ParentTypeConditions(sequenceDefinition, Some(sequenceOnDefinition), None, Some(TermListAdapter(Nil, Seq(Naturals))), ConjunctionDefinition), None, ψ)
       definition.statementDefinition.definingStatement must beSome(Conjunction(Conjunction(sequenceDefinition.statementDefinition(a), sequenceOnDefinition.statementDefinition(a, Naturals)), ψ))
     }
     "add related object condition by generalizing" in {
-      val definition = PropertyDefinitionOnType(
+      val definition = entries.PropertyDefinitionOnType(
         "invertible",
         ParentTypeConditions(
           binaryOperationDefinition,

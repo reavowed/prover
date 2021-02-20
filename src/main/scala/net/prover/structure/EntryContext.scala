@@ -3,8 +3,10 @@ package net.prover.structure
 import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.{Inference, Parser, ProvingContext}
+import net.prover.shorthands.model.entries.{DisplayShorthand, WritingShorthand}
 import net.prover.structure.model.entries._
 import net.prover.structure.model.{Book, Chapter}
+import net.prover.types.model.entries.{PropertyDefinitionOnType, RelatedObjectDefinition, StandalonePropertyDefinition, TypeDefinition, TypeQualifierDefinition, TypeRelationDefinition}
 
 case class EntryContext(availableEntries: Seq[ChapterEntry], inferencesById: Map[String, Inference], statementDefinitionsBySymbol: Map[String, CompoundStatementDefinition], termDefinitionsBySymbol: Map[String, CompoundTermDefinition]) {
 

@@ -1,9 +1,10 @@
 package net.prover.controllers
 
+import net.prover._
 import net.prover.controllers.models.StepDefinition
-import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepProvingContext, SubstatementExtractor}
+import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.{ExpressionParsingContext, Substitutions}
 
 import scala.util.{Success, Try}

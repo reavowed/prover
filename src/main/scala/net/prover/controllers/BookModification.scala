@@ -1,11 +1,14 @@
 package net.prover.controllers
 
 import net.prover._
+import net.prover.chaining.ChainingMethods
 import net.prover.controllers.models._
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
+import net.prover.structure.BookService
+import net.prover.structure.datatransfer.LinkSummary
 import net.prover.structure.model.Book
 import net.prover.structure.model.entries.{ChapterEntry, Theorem}
 
@@ -17,7 +20,7 @@ trait BookModification {
 
   implicit def toIndexes(pathData: PathData): Seq[Int] = pathData.indexes
 
-  def matchTransitiveChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, stepThree: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(T, T, T)] = {
+  private def matchTransitiveChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, stepThree: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(T, T, T)] = {
     if (stepThree.referencedLines.flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath) == Set(outerPath :+ firstStepIndex, outerPath :+ (firstStepIndex + 1)))
       for {
         statementOne <- stepOne.provenStatement
@@ -30,7 +33,7 @@ trait BookModification {
       } yield (lhsOne, rhsOne, rhsTwo)
     else None
   }
-  def matchReplacementChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(T, T, T)] = {
+  private def matchReplacementChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(T, T, T)] = {
     if (stepTwo.referencedLines.flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath).contains(outerPath :+ firstStepIndex))
       for {
         statementOne <- stepOne.provenStatement

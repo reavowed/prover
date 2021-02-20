@@ -8,8 +8,8 @@ import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStepWithSingleInference, Step, SubstatementExtractor, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
+import net.prover.shorthands.model.entries.DisplayShorthand
 import net.prover.structure.EntryContext
-import net.prover.structure.model.entries.DisplayShorthand
 import net.prover.util.Direction
 
 import scala.Ordering.Implicits._

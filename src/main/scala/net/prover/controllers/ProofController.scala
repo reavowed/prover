@@ -3,6 +3,7 @@ package net.prover.controllers
 import net.prover._
 import net.prover.controllers.models._
 import net.prover.model.proof._
+import net.prover.structure.BookService
 import net.prover.structure.model.entries.Theorem.Proof
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

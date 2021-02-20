@@ -3,7 +3,9 @@ package net.prover.model
 import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.Qualifier
 import net.prover.structure.EntryContext
-import net.prover.structure.model.entries.{ChapterEntry, ParentTypeConditions, RelatedObjectDefinition, TypeDefinition}
+import net.prover.structure.model.entries.ChapterEntry
+import net.prover.types.model.{ParentTypeConditions, entries}
+import net.prover.types.model.entries.{RelatedObjectDefinition, TypeDefinition}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
@@ -23,7 +25,7 @@ class RelatedObjectDefinitionSpec extends Specification {
 
   "related object definition parser" should {
     "serialize and parse a definition correctly" in {
-      val definition = RelatedObjectDefinition(
+      val definition = entries.RelatedObjectDefinition(
         "identity",
         "e",
         ParentTypeConditions(

@@ -1,13 +1,16 @@
 package net.prover.controllers
 
+import net.prover._
+import net.prover.chaining.{ChainingMethods, ChainingStepEditing}
 import net.prover.controllers.StepRewriteController._
 import net.prover.controllers.models._
-import net.prover.model.unwrapping.Unwrapper
 import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.proof.EqualityRewriter.{RewriteMethods, RewritePossibility}
 import net.prover.model.proof._
+import net.prover.model.unwrapping.Unwrapper
+import net.prover.structure.BookService
 import net.prover.util.Direction
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired

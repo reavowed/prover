@@ -3,7 +3,7 @@ package net.prover.controllers.models
 import net.prover.model.SimpleVariableDefinition
 import net.prover.model.definitions.Qualifier
 import net.prover.structure.EntryContext
-import net.prover.structure.model.entries.{PropertyDefinitionOnType, TypeDefinition}
+import net.prover.types.model.entries.{PropertyDefinitionOnType, TypeDefinition}
 
 case class TypeDefinitionSummary(
   symbol: String,

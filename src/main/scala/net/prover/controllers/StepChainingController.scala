@@ -1,11 +1,14 @@
 package net.prover.controllers
 
+import net.prover._
+import net.prover.chaining.{ChainingMethods, ChainingStepEditing}
 import net.prover.controllers.StepChainingController.ChainedTargetDefinition
 import net.prover.controllers.models._
 import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.{ExpressionParsingContext, Inference, Substitutions}
+import net.prover.structure.BookService
 import net.prover.util.Direction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

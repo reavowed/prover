@@ -2,6 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models.PathData
 import net.prover.model.proof.Step
+import net.prover.structure.BookService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._

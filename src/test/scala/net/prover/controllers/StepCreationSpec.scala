@@ -2,6 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models.PathData
 import net.prover.model.TestDefinitions._
+import net.prover.structure.BookService
 
 class StepCreationSpec extends ControllerSpec {
 

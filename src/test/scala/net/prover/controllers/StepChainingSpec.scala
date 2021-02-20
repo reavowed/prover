@@ -4,6 +4,7 @@ import net.prover.controllers.StepChainingController.ChainedTargetDefinition
 import net.prover.controllers.models.PathData
 import net.prover.model.TestDefinitions
 import net.prover.model.TestDefinitions._
+import net.prover.structure.BookService
 
 class StepChainingSpec extends ControllerSpec {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name

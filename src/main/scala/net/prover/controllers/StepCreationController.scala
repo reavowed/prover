@@ -1,9 +1,11 @@
 package net.prover.controllers
 
 import net.prover._
+import net.prover.chaining.ChainingStepEditing
 import net.prover.controllers.models.{NamingDefinition, PathData}
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
+import net.prover.structure.BookService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._

@@ -1,6 +1,7 @@
 package net.prover.controllers.models
 
 import net.prover.model.proof.Step
+import net.prover.structure.datatransfer.InferenceSummary
 import net.prover.structure.model.entries.Theorem
 
 case class TheoremUpdateProps(theorem: Theorem, newInferences: Map[String, InferenceSummary], stepsWithReferenceChanges: Seq[Seq[StepWithReferenceChange]])

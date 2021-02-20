@@ -8,7 +8,10 @@ import net.prover.structure.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.structure.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof._
+import net.prover.shorthands.model.entries.DisplayShorthand
 import net.prover.structure.EntryContext
+import net.prover.types.model.ParentTypeConditions
+import net.prover.types.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition, TypeRelationDefinition}
 import org.specs2.matcher.Matcher
 
 trait Placeholder[T <: ExpressionVariable[_ <: Expression]] {

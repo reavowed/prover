@@ -2,6 +2,7 @@ package net
 
 import java.nio.file.Path
 
+import net.prover.implicits.{ControllerImplicits, FunctionalImplicits}
 import net.prover.util.PossibleSingleMatch
 import net.prover.util.PossibleSingleMatch.{MultipleMatches, NoMatches, SingleMatch}
 import org.apache.commons.io.FileUtils
@@ -13,7 +14,7 @@ import scala.collection.{AbstractIterator, Iterator, TraversableLike, immutable,
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
-package object prover {
+package object prover extends ControllerImplicits with FunctionalImplicits {
 implicit class AnyOps[T](t: T) {
     def ifDefined[S](f: T => Option[S])(action: => Unit): T = {
       f(t).ifDefined(action)

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
 import net.prover.model._
+import net.prover.structure.BookRepository
 
 @RestController
 @RequestMapping(Array("/"))

@@ -1,8 +1,10 @@
 package net.prover.controllers
 
+import net.prover._
 import net.prover.exceptions.BadRequestException
 import net.prover.model.ExpressionParsingContext
 import net.prover.model.proof.Step
+import net.prover.structure.BookService
 import net.prover.structure.model.entries.Theorem
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

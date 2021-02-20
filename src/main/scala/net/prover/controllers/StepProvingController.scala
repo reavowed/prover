@@ -1,11 +1,12 @@
 package net.prover.controllers
 
+import net.prover._
 import net.prover.controllers.models._
 import net.prover.model._
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
-import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, UnwrappedStatement, Unwrapper}
+import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement, Unwrapper}
+import net.prover.structure.BookService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._

@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest
 import net.prover.model.Inference
 import net.prover.model.expressions.DefinedStatement
 import net.prover.model.proof.Step
-import net.prover.structure.EntryContext
+import net.prover.structure.{BookService, EntryContext}
 import net.prover.structure.model.entries.Theorem
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}

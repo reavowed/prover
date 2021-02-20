@@ -1,14 +1,15 @@
 package net.prover.controllers
 
 import net.prover._
-import net.prover.controllers.models.LinkSummary
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions.Statement
-import net.prover.structure.EntryContext
+import net.prover.structure.datatransfer.LinkSummary
+import net.prover.structure.{BookService, EntryContext, ReactViews}
 import net.prover.structure.model.Book
 import net.prover.structure.model.entries._
+import net.prover.types.model.entries.{PropertyDefinitionOnType, RelatedObjectDefinition, StandalonePropertyDefinition, TypeDefinition, TypeQualifierDefinition, TypeRelationDefinition}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._

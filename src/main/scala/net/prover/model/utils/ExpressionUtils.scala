@@ -4,7 +4,7 @@ import net.prover._
 import net.prover.model.definitions.CompoundTermDefinition
 import net.prover.model.expressions._
 import net.prover.structure.EntryContext
-import net.prover.structure.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition}
+import net.prover.types.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition}
 
 import scala.reflect.ClassTag
 
