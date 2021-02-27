@@ -1,19 +1,24 @@
 package net.prover.implicits
 
 import net.prover._
-import scalaz.Functor
+import scalaz.{Functor, Monad}
 import scalaz.syntax.functor._
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
-trait FunctionalImplicits {
-  implicit val tryFunctor: Functor[Try] = new Functor[Try] {
-    override def map[A,B](fa: Try[A])(f: A ⇒ B): Try[B] = fa map f
+trait IdentityTypeWorkaroundTrait {
+  type Identity[+A] = A
+}
+
+trait FunctionalImplicits extends IdentityTypeWorkaroundTrait{
+  implicit val identityMonad: Monad[Identity] = new Monad[Identity] {
+    override def bind[A, B](a: A)(f: A => B): B = f(a)
+    override def point[A](a: => A): A = a
   }
-
-  type Identity[A] = A
-  implicit val identityFunctor: Functor[Identity] = new Functor[Identity] {
-    override def map[A,B](a: Identity[A])(f: A ⇒ B): Identity[B] = f(a)
+  // This technically violates the monad rules (for functions that catch exceptions), but we don't actually care
+  implicit val tryMonad: Monad[Try] = new Monad[Try] {
+    override def bind[A, B](fa: Try[A])(f: A => Try[B]): Try[B] = fa.flatMap(f)
+    override def point[A](a: => A): Try[A] = Success(a)
   }
 
   class WithValue[B] {

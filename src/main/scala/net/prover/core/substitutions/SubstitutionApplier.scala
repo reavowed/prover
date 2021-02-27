@@ -1,62 +1,48 @@
 package net.prover.core.substitutions
 
+import monocle.Lens
+import monocle.macros.GenLens
 import net.prover.core.RuleOfInference
 import net.prover.core.expressions._
-import net.prover.core.substitutions.SubstitutionApplier.Context
+import net.prover.core.transformers.{ContextWithExternalDepth, ContextWithInternalDepth, ExpressionTransformer}
 
+import scala.reflect.ClassTag
 import scala.util.{Success, Try}
 
-case class SubstitutionApplier(substitutions: Substitutions) {
-  import substitutions._
-
-  def applySubstitutions(expression: Expression)(implicit context: Context): Try[Expression] = expression match {
-    case statement: Statement => applySubstitutions(statement)
-    case term: Term => applySubstitutions(term)
-  }
-  def applySubstitutions(statement: Statement)(implicit context: Context): Try[Statement] = statement match {
-    case StatementVariable(index, arguments) =>
-      for {
-        predicate <- statements.lift(index).orExceptionWithMessage(s"No substitution statement with index $index found")
-        result <- substitutions.specifier.specifyAndApplySubstitutions(predicate, arguments)(context.toSpecificationContext)
-      } yield result
-    case definedStatement : CompoundStatement =>
-      applySubstitutionsToDefinedExpression(definedStatement)
-  }
-  def applySubstitutions(term: Term)(implicit context: Context): Try[Term] = term match {
-    case TermVariable(index, arguments) =>
-      for {
-        function <- terms.lift(index).orExceptionWithMessage(s"No substitution statement with index $index found")
-        result <- substitutions.specifier.specifyAndApplySubstitutions(function, arguments)(context.toSpecificationContext)
-      } yield result
-    case definedTerm: CompoundTerm =>
-      applySubstitutionsToDefinedExpression(definedTerm)
-    case parameter: Parameter =>
-      Success(parameter)
-  }
-  def applySubstitutions(expressions: Seq[Expression])(implicit context: Context): Try[Seq[Expression]] = {
-      expressions.map(applySubstitutions).traverseTry
-  }
-
-  def applySubstitutions(ruleOfInference: RuleOfInference): Try[RuleOfInference] = {
-    implicit val context = Context.outsideProof
+case class ApplicationParameters(substitutions: Substitutions, externalContext: ContextWithExternalDepth)
+object SubstitutionApplier
+    extends ExpressionTransformer.TryExpressionTransformer[ApplicationParameters]
+    with ExpressionTransformer.DefaultCompoundExpressionTransformation[Try, ApplicationParameters]
+{
+  def transformExpressionVariableWithContext[
+    TVariable <: ExpressionVariable[TVariable, TExpression],
+    TExpression <: Expression : ClassTag](
+    expressionVariable: TVariable,
+    parameters: ApplicationParameters,
+    substitutionLens: Lens[Substitutions, Seq[TExpression]],
+    transform: (TExpression, SpecificationParameters) => Try[TExpression],
+    description: String)(
+    implicit context: ContextWithInternalDepth
+  ): Try[TExpression] = {
     for {
-      premises <- ruleOfInference.premises.map(applySubstitutions).traverseTry
-      conclusion <- applySubstitutions(ruleOfInference.conclusion)
-    } yield RuleOfInference.Raw(premises, conclusion)
+      predicate <- substitutionLens.get(parameters.substitutions).lift(expressionVariable.index).orExceptionWithMessage(s"No substitution ${description} with index ${expressionVariable.index} found")
+      result <- transform(predicate, SpecificationParameters(expressionVariable.arguments, parameters.substitutions, context, parameters.externalContext))
+    } yield result
   }
+  override def transformStatementVariableWithContext(
+    statementVariable: StatementVariable,
+    parameters: ApplicationParameters)(
+    implicit context: ContextWithInternalDepth
+  ): Try[Statement] = {
+    transformExpressionVariableWithContext(statementVariable, parameters, GenLens[Substitutions](_.statements), SubstitutionSpecifier.transformStatementWithoutContext, "statement")
+  }
+  override def transformTermVariableWithContext(termVariable: TermVariable, parameters: ApplicationParameters)(implicit context: ContextWithInternalDepth): Try[Term] = {
+    transformExpressionVariableWithContext(termVariable, parameters, GenLens[Substitutions](_.terms), SubstitutionSpecifier.transformTermWithoutContext, "term")
+  }
+  override def transformParameterWithContext(parameter: Parameter, parameters: ApplicationParameters)(implicit context: ContextWithInternalDepth): Try[Term] = Success(parameter)
 
-  private def applySubstitutionsToDefinedExpression[T <: CompoundExpression[T]](expression: T)(implicit context: Context): Try[T] = {
-    val innerContext = context.increaseDepth(expression)
-    expression.components.map(applySubstitutions(_)(innerContext)).traverseTry.map(expression.withNewComponents)
+  def applySubstitutions(statement: Statement, substitutions: Substitutions)(implicit contextWithExternalDepth: ContextWithExternalDepth): Try[Statement] = {
+    transformStatementWithoutContext(statement, ApplicationParameters(substitutions, ContextWithExternalDepth(contextWithExternalDepth.externalDepth)))
   }
-}
-
-object SubstitutionApplier {
-  case class Context(internalDepth: Int, externalDepth: Int) extends ContextWithInternalDepth[Context] {
-    def toSpecificationContext: SubstitutionSpecifier.Context = SubstitutionSpecifier.Context(0, this)
-    override def withInternalDepth(newInternalDepth: Int): Context = copy(internalDepth = newInternalDepth)
-  }
-  object Context {
-    val outsideProof: Context = Context(0, 0)
-  }
+  def applySubstitutions(ruleOfInference: RuleOfInference, substitutions: Substitutions): Try[RuleOfInference] = transformRuleOfInference(ruleOfInference, ApplicationParameters(substitutions, ContextWithExternalDepth.zero))
 }

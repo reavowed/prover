@@ -2,6 +2,7 @@ package net.prover.model.definitions
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.core.expressions.CompoundStatementType
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
 import net.prover.model.expressions._
@@ -16,6 +17,7 @@ trait CompoundExpressionDefinition {
   def explicitName: Option[String]
   def name: String = explicitName.getOrElse(disambiguatedSymbol.forDisplay)
   def boundVariableNames: Seq[String]
+  def hasBoundVariables: Boolean = boundVariableNames.nonEmpty
   def componentTypes: Seq[ComponentType]
   def defaultComponentExpressions: Seq[ExpressionVariable[_]] = componentTypes.mapFold((0, 0)) {
     case ((statementCounter, termCounter), ComponentType.StatementComponent(_, arguments)) =>
@@ -130,7 +132,7 @@ object CompoundExpressionDefinition {
   }
 }
 
-trait CompoundStatementDefinition extends CompoundExpressionDefinition {
+trait CompoundStatementDefinition extends CompoundExpressionDefinition with CompoundStatementType {
   def definingStatement: Option[Statement]
   val disambiguator: Option[String] = None
   val defaultValue: DefinedStatement = DefinedStatement(defaultComponentExpressions, this)(boundVariableNames)

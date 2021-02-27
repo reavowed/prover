@@ -1,13 +1,12 @@
 package net
 
-import java.nio.file.Path
-
 import net.prover.implicits.{ControllerImplicits, FunctionalImplicits}
 import net.prover.util.PossibleSingleMatch
 import net.prover.util.PossibleSingleMatch.{MultipleMatches, NoMatches, SingleMatch}
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 
+import java.nio.file.Path
 import scala.collection.JavaConverters._
 import scala.collection.generic.CanBuildFrom
 import scala.collection.{AbstractIterator, Iterator, TraversableLike, immutable, mutable}
