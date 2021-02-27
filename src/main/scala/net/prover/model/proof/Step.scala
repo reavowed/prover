@@ -530,7 +530,7 @@ object Step {
         substitutions <- inference.substitutionsParser
         premiseStatements = inference.substitutePremisesAndValidateConclusion(statement, substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
         premises <- premiseStatements.map(Premise.parser).traverse
-        _ = inference.validatePremisesAndConclusion(premises.map(_.statement), statement, substitutions)
+        _ = inference.validatePremisesAndConclusion(premises.map(_.statement), statement, substitutions).get
       } yield {
         Assertion(statement, inference, premises, substitutions)
       }
@@ -538,8 +538,8 @@ object Step {
 
     def forInference(inference: Inference, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Assertion] = {
       for {
-        premises <- inference.substitutePremises(substitutions)
-        conclusion <- inference.substituteConclusion(substitutions)
+        premises <- inference.substitutePremises(substitutions).toOption
+        conclusion <- inference.substituteConclusion(substitutions).toOption
       } yield Assertion(conclusion, inference.summary, premises.map(Premise.Pending), substitutions.restrictTo(inference.variableDefinitions))
     }
   }

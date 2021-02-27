@@ -5,6 +5,7 @@ import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper,
 import net.prover.model._
 import net.prover.model.definitions.{BinaryJoiner, Equality, RearrangementStep, TermRewriteInference, Wrapper}
 import net.prover.model.expressions._
+import net.prover.old.OldSubstitutionApplier
 import net.prover.util.{Direction, PossibleSingleMatch}
 
 import scala.Ordering.Implicits._
@@ -26,7 +27,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         conclusionSubstitutions <- inferenceSource.calculateSubstitutions(premiseTerm)
         (premises, possibleFinalSubstitutions) <- PremiseFinder.findDerivationsForStatementsBySubstituting(rewriteInference.premises, conclusionSubstitutions)
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality(rewriteInference.variableDefinitions)
-        simplifiedTerm <- inferenceResult.applySubstitutions(finalSubstitutions)
+        simplifiedTerm <- OldSubstitutionApplier.applySubstitutions(inferenceResult, finalSubstitutions).toOption
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
         extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)

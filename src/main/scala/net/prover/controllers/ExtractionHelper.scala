@@ -6,6 +6,7 @@ import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.{InferenceExtraction, VariableTracker}
 import net.prover.model.proof._
+import net.prover.old.OldSubstitutionApplier
 
 import scala.util.{Failure, Success, Try}
 
@@ -30,7 +31,7 @@ object ExtractionHelper {
       (_, newIndex, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(boundVariableName)
       term <- mainSubstitutions.terms.lift(newIndex).orBadRequest(s"Substitutions did not specify a term at index $newIndex")
       extractionSubstitutions = Substitutions(Seq(predicate), Seq(term))
-      extractedConclusion <- specificationInference.conclusion.applySubstitutions(extractionSubstitutions).orBadRequest(s"Could not substitute conclusion for specification ${specificationInference.id}")
+      extractedConclusion <- OldSubstitutionApplier.applySubstitutions(specificationInference.conclusion, extractionSubstitutions).orBadRequest(s"Could not substitute conclusion for specification ${specificationInference.id}")
       ExtractionApplication(innerResult, innerPremise, innerSteps, innerPremises, innerTargets) <-
         applyExtractions(extractedConclusion, inferencesRemaining, mainSubstitutions, intendedPremises, intendedConclusion, newVariableTracker, findPremiseStepsOrTargets)
       updatedPredicate <- innerPremise.calculateApplicatives(Seq(TermVariable(newIndex, Nil)), Substitutions.Possible(Map.empty, Map(0 -> term)))
@@ -38,7 +39,7 @@ object ExtractionHelper {
         .find(_ == predicate)
         .orBadRequest("Could not recalculate applicative")
       updatedSubstitutions = Substitutions(Seq(updatedPredicate), Seq(term))
-      updatedMainPremise <- extractionPremise.applySubstitutions(updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
+      updatedMainPremise <- OldSubstitutionApplier.applySubstitutions(extractionPremise, updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
       updatedMainPremiseWithVariable = updatedMainPremise.asInstanceOf[DefinedStatement].updateBoundVariableNames(Seq(boundVariableName))
       assertionStep = Step.Assertion(innerPremise, specificationInference.summary, Seq(Premise.Pending(updatedMainPremiseWithVariable)), updatedSubstitutions)
     } yield ExtractionApplication(innerResult, updatedMainPremiseWithVariable, DerivationStep.fromAssertion(assertionStep) +: innerSteps, innerPremises, innerTargets)
@@ -57,7 +58,7 @@ object ExtractionHelper {
     for {
       (extractionPremise, otherPremises) <- +:.unapply(inference.premises).filter(_._1.usedVariables.usesAll(inference.variableDefinitions)).orBadRequest(s"Inference ${inference.id} did not have an extraction premise")
       extractionSubstitutions <- extractionPremise.calculateSubstitutions(currentStatement).flatMap(_.confirmTotality(inference.variableDefinitions)).orBadRequest(s"Could not apply extraction premise for inference ${inference.id}")
-      extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions).orBadRequest(s"Could not get extraction conclusion for inference ${inference.id}")
+      extractedConclusion <- OldSubstitutionApplier.applySubstitutions(inference.conclusion, extractionSubstitutions).orBadRequest(s"Could not get extraction conclusion for inference ${inference.id}")
       (intendedPremisesForThisInference, innerIntendedPremises) <- intendedPremisesOption match {
         case Some(intendedPremises) =>
           for {
@@ -82,8 +83,8 @@ object ExtractionHelper {
       }
       updatedSubstitutionsFromInnerPremise <- inference.conclusion.calculateSubstitutions(innerPremise, updatedSubstitutionsFromIntendedPremises).orBadRequest("Could not calculate updated substitutions from inner premise")
       updatedSubstitutions <- extractionPremise.calculateSubstitutions(currentStatement, updatedSubstitutionsFromInnerPremise).flatMap(_.confirmTotality(inference.variableDefinitions)).orBadRequest("Could not calculate updated substitutions from extraction premise")
-      updatedMainPremise <- extractionPremise.applySubstitutions(updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
-      substitutedPremises <- otherPremises.map(_.applySubstitutions(updatedSubstitutions).orBadRequest(s"Could not apply substitutions to premise")).traverseTry
+      updatedMainPremise <- OldSubstitutionApplier.applySubstitutions(extractionPremise, updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
+      substitutedPremises <- otherPremises.map(OldSubstitutionApplier.applySubstitutions(_, updatedSubstitutions).orBadRequest(s"Could not apply substitutions to premise")).traverseTry
       (premiseSteps, targetSteps) = findPremiseStepsOrTargets(substitutedPremises)
       assertionStep = Step.Assertion(innerPremise, inference.summary, (currentStatement +: substitutedPremises).map(Premise.Pending), extractionSubstitutions)
     } yield ExtractionApplication(innerResult, updatedMainPremise, DerivationStep.fromAssertion(assertionStep) +: innerSteps, premiseSteps ++ innerPremises, targetSteps ++ innerTargets)

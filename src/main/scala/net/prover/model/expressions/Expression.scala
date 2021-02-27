@@ -45,24 +45,6 @@ trait TypedExpression[+ExpressionType <: Expression] {
     specify(targetArguments.indices.zip(targetArguments).toMap)
   }
 
-  /**
-    * Specify, lazily substituting any argument used.
-    *
-    * @param targetArguments       the arguments to specify with
-    * @param substitutions         the substitutions to use
-    * @param internalDepth         The current scope depth inside the expression since we starting specifying.
-    * @param previousInternalDepth The scope depth inside the expression before we started specifying.  Specified predicates
-    *                              may not refer to parameters in this range - they must be passed in through the arguments.
-    * @param externalDepth         The depth of external scoped variables that might be referred to by this statement or substitutions
-    * @return
-    */
-  def specifyWithSubstitutions(
-    targetArguments: Seq[Term],
-    substitutions: Substitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType]
   def trySpecifyWithSubstitutions(
     targetArguments: Seq[Term],
     substitutions: Substitutions.Possible,
@@ -94,23 +76,6 @@ trait TypedExpression[+ExpressionType <: Expression] {
     calculateSubstitutions(other, substitutions, 0, substitutionContext.externalDepth)
   }
 
-  /**
-    * Apply the given substitutions to this statement.
-    * @param internalDepth The current scope depth inside the expression since we starting applying substitutions
-    * @param externalDepth The depth of external scoped variables that might be referred to by substitutions
-    * @return
-    */
-  def applySubstitutions(
-    substitutions: Substitutions,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType]
-  def applySubstitutions(
-    substitutions: Substitutions)(
-    implicit substitutionContext: SubstitutionContext
-  ): Option[ExpressionType] = {
-    applySubstitutions(substitutions, 0, substitutionContext.externalDepth)
-  }
   def tryApplySubstitutions(
     substitutions: Substitutions.Possible,
     internalDepth: Int,
@@ -227,13 +192,6 @@ object Expression {
           result <- expression.calculateArguments(target, arguments, previousInternalDepth, internalDepth, externalDepth)
         } yield result
       })
-    }
-    def applySubstitutions(
-      substitutions: Substitutions,
-      internalDepth: Int,
-      externalDepth: Int
-    ): Option[Seq[Expression]] = {
-      expressions.map(_.applySubstitutions(substitutions, internalDepth, externalDepth)).traverseOption
     }
     def tryApplySubstitutions(
       substitutions: Substitutions.Possible,

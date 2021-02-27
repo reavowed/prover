@@ -1,7 +1,9 @@
 package net.prover.model
 
+import net.prover.core.transformers.ContextWithExternalDepth
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Expression, FunctionParameter}
+import net.prover.old.OldSubstitutionApplier
 import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
@@ -12,8 +14,8 @@ class SubstitutionsSpec extends Specification {
     }.flatMap(_.confirmTotality(variableDefinitions))
     calculatedSubstitutions must beSome(expectedSubstitutions)
     Result.foreach(sourceToTarget) { case (source, target) =>
-      val substitutedExpression = source.applySubstitutions(expectedSubstitutions, 0, externalDepth)
-      substitutedExpression must beSome(target)
+      val substitutedExpression = OldSubstitutionApplier.applySubstitutions(source, expectedSubstitutions)(ContextWithExternalDepth(externalDepth))
+      substitutedExpression must beSuccessfulTry(target)
     }
   }
   def testFailedMatch(externalDepth: Int, sourceToTarget: (Expression, Expression)*)(implicit variableDefinitions: VariableDefinitions): Result = {
@@ -338,14 +340,13 @@ class SubstitutionsSpec extends Specification {
 
     "correctly apply substitutions to a bound predicate" in {
       val F = TermVariablePlaceholder("F", 1)
-      ForAll("x")(φ(F(a)))
-        .applySubstitutions(
-          Substitutions(
-            Seq(Equals(b, $.^)),
-            Seq(EmptySet, $)),
-          0,
-          1)
-        .mustEqual(Some(ForAll("x")(Equals(b, $.^))))
+      OldSubstitutionApplier.applySubstitutions(
+        ForAll("x")(φ(F(a))),
+        Substitutions(
+          Seq(Equals(b, $.^)),
+          Seq(EmptySet, $)))(
+          ContextWithExternalDepth(1)
+      ) must beSuccessfulTry(ForAll("x")(Equals(b, $.^)))
     }
 
     "match a variable to a parameter at different internal depths" in {

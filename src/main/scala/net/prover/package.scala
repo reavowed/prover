@@ -533,6 +533,7 @@ implicit class AnyOps[T](t: T) {
       }
       x
     }
+    def toSeq: Seq[T] = x.toOption.toSeq
   }
 
   implicit class OptionTryOps[T](x: Option[Try[T]]) {

@@ -57,15 +57,6 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   ): Option[ExpressionType] = {
     arguments.map(_.specify(targetArguments, internalDepth, externalDepth)).traverseOption.map(update)
   }
-  def specifyWithSubstitutions(
-    targetArguments: Seq[Term],
-    substitutions: Substitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType] = {
-    arguments.map(_.specifyWithSubstitutions(targetArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)).traverseOption.map(update)
-  }
   def trySpecifyWithSubstitutions(
     targetArguments: Seq[Term],
     substitutions: Substitutions.Possible,
@@ -110,12 +101,6 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
           }
       }
     } else None
-  }
-  override def applySubstitutions(substitutions: Substitutions, internalDepth: Int, externalDepth: Int): Option[ExpressionType] = {
-    for {
-      predicate <- substitutionsLens.get(substitutions).lift(index)
-      result <- predicate.specifyWithSubstitutions(arguments, substitutions, 0, internalDepth, externalDepth)
-    } yield result.asInstanceOf[ExpressionType]
   }
   def tryApplySubstitutions(
     substitutions: Substitutions.Possible,

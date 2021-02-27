@@ -3,6 +3,7 @@ package net.prover.model.definitions
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{ExpressionLenses, Inference}
+import net.prover.old.OldSubstitutionApplier
 import net.prover.shorthands.model.entries.DisplayShorthand
 
 sealed trait BinaryJoiner[TComponent <: Expression] extends ExpressionLenses[TComponent] {
@@ -10,7 +11,7 @@ sealed trait BinaryJoiner[TComponent <: Expression] extends ExpressionLenses[TCo
   def template: Statement
   def attributes: Seq[String]
   def apply(left: TComponent, right: TComponent)(implicit substitutionContext: SubstitutionContext): Statement = {
-    template.applySubstitutions(fillSubstitutions(Seq(left, right))).get
+    OldSubstitutionApplier.applySubstitutions(template, fillSubstitutions(Seq(left, right))).get
   }
   def unapply(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(TComponent, TComponent)] = {
     for {

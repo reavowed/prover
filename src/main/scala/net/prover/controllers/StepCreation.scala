@@ -6,6 +6,7 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepProvingContext, SubstatementExtractor}
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.{ExpressionParsingContext, Substitutions}
+import net.prover.old.OldSubstitutionApplier
 
 import scala.util.{Success, Try}
 
@@ -30,7 +31,7 @@ trait StepCreation extends BookModification {
         case Some(newTargetStatements) =>
           for {
             (targetStatementsForInference, targetStatementsForExtraction) <- newTargetStatements.takeAndRemainingIfValid(inference.premises.length).orBadRequest("Not enough target statements provided")
-            substitutedTargetStatementsForExtraction <- targetStatementsForExtraction.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to extraction premises")
+            substitutedTargetStatementsForExtraction <- targetStatementsForExtraction.map(OldSubstitutionApplier.applySubstitutions(_, substitutions)).traverseTry.orBadRequest("Could not apply substitutions to extraction premises")
             _ <- (targetStatementsForInference == inference.premises).orBadRequest("Target statements did not match inference premise")
           } yield (inference.copy(premises = targetStatementsForInference), Some(substitutedTargetStatementsForExtraction))
         case None =>

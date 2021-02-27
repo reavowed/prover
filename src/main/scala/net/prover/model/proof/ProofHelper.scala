@@ -45,8 +45,8 @@ object ProofHelper {
     implicit stepProvingContext: StepProvingContext
   ): Option[(Step.Assertion, Seq[DerivationStep], Seq[Step.Target])] = {
     for {
-      premiseStatements <- inference.substitutePremises(substitutions)
-      conclusion <- inference.substituteConclusion(substitutions)
+      premiseStatements <- inference.substitutePremises(substitutions).toOption
+      conclusion <- inference.substituteConclusion(substitutions).toOption
       (premiseSteps, targetSteps) = PremiseFinder.findDerivationsOrTargets(premiseStatements)
       assertionStep = Step.Assertion(
         conclusion,

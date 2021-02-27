@@ -1,17 +1,19 @@
 package net.prover.model
 
 import java.security.MessageDigest
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover._
 import net.prover.model.Inference._
-import net.prover.model.definitions.{Definitions, CompoundExpressionDefinition}
+import net.prover.model.definitions.{CompoundExpressionDefinition, Definitions}
 import net.prover.model.expressions._
 import net.prover.model.proof.{StepContext, SubstitutionContext}
+import net.prover.old.OldSubstitutionApplier
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.ChapterEntry
 import net.prover.structure.parsers.ChapterEntryParser
+
+import scala.util.Try
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
@@ -43,7 +45,7 @@ trait Inference {
     }
   }
 
-  def validatePremisesAndConclusion(expectedPremises: Seq[Statement], expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Option[Unit] = {
+  def validatePremisesAndConclusion(expectedPremises: Seq[Statement], expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Try[Unit] = {
     for {
       substitutedConclusion <- substituteConclusion(substitutions)
       if substitutedConclusion == expectedConclusion
@@ -52,7 +54,7 @@ trait Inference {
     } yield ()
   }
 
-  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Option[Seq[Statement]] = {
+  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Try[Seq[Statement]] = {
     for {
       substitutedConclusion <- substituteConclusion(substitutions)
       if substitutedConclusion == expectedConclusion
@@ -60,16 +62,12 @@ trait Inference {
     } yield substitutedPremises
   }
 
-  def substitutePremises(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Seq[Statement]] = {
-    premises.map(substituteStatement(_, substitutions)).traverseOption
+  def substitutePremises(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Try[Seq[Statement]] = {
+    premises.map(OldSubstitutionApplier.applySubstitutions(_, substitutions)).traverseTry
   }
 
-  def substituteConclusion(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {
-    conclusion.applySubstitutions(substitutions)
-  }
-
-  def substituteStatement(statement: Statement, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {
-    statement.applySubstitutions(substitutions)
+  def substituteConclusion(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Try[Statement] = {
+    OldSubstitutionApplier.applySubstitutions(conclusion, substitutions)
   }
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Inference]

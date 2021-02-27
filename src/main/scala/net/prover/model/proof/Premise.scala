@@ -5,6 +5,7 @@ import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Premise.Pending
+import net.prover.old.OldSubstitutionApplier
 import net.prover.structure.EntryContext
 
 sealed trait Premise {
@@ -40,7 +41,7 @@ object Premise {
         case inference +: tailInferences =>
           val inferencePremise = inference.premises.single.getOrElse(throw new Exception("Given simplification inference did not have a single premise"))
           val substitutions = inferencePremise.calculateSubstitutions(premise.statement).flatMap(_.confirmTotality(inference.variableDefinitions)).getOrElse(throw new Exception("Could not calculate substitutions for simplification"))
-          val result = inference.conclusion.applySubstitutions(substitutions).getOrElse(throw new Exception("Could not apply substitutions for simplification"))
+          val result = OldSubstitutionApplier.applySubstitutions(inference.conclusion, substitutions).get
           val path = inferencePremise.findComponentPath(inference.conclusion).getOrElse(throw new Exception("Could not find simplification path"))
           helper(tailInferences, Simplification(result, premise, inference.summary, substitutions, path))
       }

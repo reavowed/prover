@@ -1,12 +1,13 @@
 package net.prover.model.proof
 
 import net.prover.controllers.ExtractionHelper
-import net.prover.model.definitions.{BinaryRelationStatement, KnownStatement, CompoundTermDefinition, Wrapper}
+import net.prover.model.definitions.{BinaryRelationStatement, CompoundTermDefinition, KnownStatement, Wrapper}
 import net.prover.model.expressions._
 import net.prover.model.proof.StepProvingContext.KnownEquality
 import net.prover.model.unwrapping.UnwrappedStatement
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.{Inference, Substitutions}
+import net.prover.old.OldSubstitutionApplier
 
 object PremiseFinder {
 
@@ -63,7 +64,7 @@ object PremiseFinder {
       def bySimplifying = conclusionSimplificationInferences.iterator.findFirst { inference =>
         for {
           substitutions <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inference.variableDefinitions))
-          premiseStatements <- inference.substitutePremises(substitutions)
+          premiseStatements <- inference.substitutePremises(substitutions).toOption
           (premiseDerivations, premiseFacts) <- premiseStatements.map(findDerivationWithFactInferences).traverseOption.map(_.splitFlatten)
           assertionStep = Step.Assertion(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
         } yield (premiseDerivations :+ DerivationStep.fromAssertion(assertionStep), premiseFacts)
@@ -90,7 +91,7 @@ object PremiseFinder {
     def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>
       for {
         substitutions <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inference.variableDefinitions))
-        premiseStatements <- inference.substitutePremises(substitutions)
+        premiseStatements <- inference.substitutePremises(substitutions).toOption
         premiseSteps <- findDerivationsForStatements(premiseStatements)
         assertionStep = Step.Assertion(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
       } yield premiseSteps :+ DerivationStep.fromAssertion(assertionStep)
@@ -99,7 +100,7 @@ object PremiseFinder {
       termDefinition <- targetStatement.referencedDefinitions.ofType[CompoundTermDefinition].iterator
       inferenceExtraction <- provingContext.termDefinitionRemovals(termDefinition)
       substitutions <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inferenceExtraction.variableDefinitions))
-      premiseStatements <- inferenceExtraction.premises.map(_.applySubstitutions(substitutions)).traverseOption
+      premiseStatements <- inferenceExtraction.premises.map(OldSubstitutionApplier.applySubstitutions(_, substitutions).toOption).traverseOption
       premiseSteps <- findDerivationsForStatements(premiseStatements)
       derivationStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions)
     } yield premiseSteps :+ derivationStep).headOption
@@ -260,7 +261,7 @@ object PremiseFinder {
     def byDeconstructing = for {
       deconstructionInference <- provingContext.statementDefinitionDeconstructions
       initialDeconstructionSubstitutions <- deconstructionInference.conclusion.calculateSubstitutions(unsubstitutedPremiseStatement).flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
-      deconstructedUnsubstitutedPremiseStatements <- deconstructionInference.premises.map(_.applySubstitutions(initialDeconstructionSubstitutions)).traverseOption
+      deconstructedUnsubstitutedPremiseStatements <- deconstructionInference.premises.map(OldSubstitutionApplier.applySubstitutions(_, initialDeconstructionSubstitutions)).traverseTry.toOption
       (foundStatements, innerSubstitutions) <- findDerivationsForStatementsBySubstituting(deconstructedUnsubstitutedPremiseStatements, initialSubstitutions, knownStatements)
       deconstructionPremisesWithDeconstructedStatements <- deconstructionInference.premises.zipStrict(foundStatements)
       finalDeconstructionSubstitutions <- deconstructionPremisesWithDeconstructedStatements.foldLeft(Option(Substitutions.Possible.empty)) { case (substitutionsOption, (premise, knownStatement)) =>

@@ -5,6 +5,7 @@ import net.prover.chaining.ChainingStepEditing
 import net.prover.controllers.models.{NamingDefinition, PathData}
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
+import net.prover.old.OldSubstitutionApplier
 import net.prover.structure.BookService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -33,8 +34,8 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         (namingPremises, assumption, generalizationDefinition, deductionDefinition) <- ProofHelper.getNamingPremisesAndAssumption(inference).orBadRequest(s"Inference ${definition.inferenceId} is not a naming inference")
         substitutions <- definition.substitutions.parse(inference.variableDefinitions)
         _ <- inference.substituteConclusion(substitutions).filter(_ == step.statement).orBadRequest("Conclusion was incorrect")
-        premiseStatements <- namingPremises.map(inference.substituteStatement(_, substitutions)).traverseOption.orBadRequest("Could not substitute premises")
-        substitutedAssumption <- assumption.applySubstitutions(substitutions, 1, stepProvingContext.stepContext.externalDepth).orBadRequest("Could not substitute assumption")
+        premiseStatements <- namingPremises.map(OldSubstitutionApplier.applySubstitutions(_, substitutions)).traverseTry.orBadRequest("Could not substitute premises")
+        substitutedAssumption <- OldSubstitutionApplier.applySubstitutionsInsideStep(assumption, substitutions)(stepProvingContext.stepContext).orBadRequest("Could not substitute assumption")
       } yield {
         val premises = premiseStatements.map(stepProvingContext.createPremise)
         val targetSteps = premises.ofType[Premise.Pending].map(p => spc.provingContext.factsBySerializedStatement.get(p.statement.serialized).map(_.step).getOrElse(Step.Target(p.statement)))
@@ -75,7 +76,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         }.orBadRequest("Could not find naming inference matching premise")
         substitutionsAfterConclusion <- namingInference.conclusion.calculateSubstitutions(targetStep.statement, substitutionsAfterPremise).orBadRequest("Could not calculate substitutions for conclusion")
         substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.variableDefinitions).orBadRequest("Substitutions for naming inference were not total")
-        substitutedAssumption <- namingInferenceAssumption.applySubstitutions(substitutions, 1, stepProvingContext.stepContext.externalDepth).orBadRequest("Could not substitute assumption")
+        substitutedAssumption <- OldSubstitutionApplier.applySubstitutionsInsideStep(namingInferenceAssumption, substitutions)(stepProvingContext.stepContext).orBadRequest("Could not substitute assumption")
       } yield {
         Seq(Step.Naming(
           variableName,

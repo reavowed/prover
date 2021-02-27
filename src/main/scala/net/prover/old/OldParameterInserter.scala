@@ -1,0 +1,31 @@
+package net.prover.old
+
+import net.prover.Identity
+import net.prover.core.transformers.ContextWithInternalDepth
+import net.prover.model.expressions.{FunctionParameter, Statement, Term}
+import net.prover.old.OldExpressionTransformer.IdentityExpressionTransformer
+
+case class InsertionParameters(numberOfParametersToInsert: Int, externalDepthToInsertAt: Int)
+object OldParameterInserter extends IdentityExpressionTransformer[InsertionParameters]
+    with OldExpressionTransformer.DefaultVariableTransformation[Identity, InsertionParameters]
+    with OldExpressionTransformer.DefaultCompoundExpressionTransformation[Identity, InsertionParameters]
+{
+  override def transformParameterWithContext(
+    parameter: FunctionParameter,
+    insertionParameters: InsertionParameters)(
+    implicit context: ContextWithInternalDepth
+  ): FunctionParameter = {
+    if (parameter.level >= context.internalDepth + insertionParameters.externalDepthToInsertAt) {
+      FunctionParameter(parameter.index, parameter.level + insertionParameters.numberOfParametersToInsert)
+    } else {
+      parameter
+    }
+  }
+
+  def insertParameters(statement: Statement, numberOfParametersToInsert: Int, externalDepthToInsertAt: Int): Statement = {
+    transformStatementWithoutContext(statement, InsertionParameters(numberOfParametersToInsert, externalDepthToInsertAt))
+  }
+  def insertParameters(term: Term, numberOfParametersToInsert: Int, externalDepthToInsertAt: Int): Term = {
+    transformTermWithoutContext(term, InsertionParameters(numberOfParametersToInsert, externalDepthToInsertAt))
+  }
+}

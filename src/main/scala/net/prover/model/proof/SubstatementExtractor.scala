@@ -3,6 +3,7 @@ package net.prover.model.proof
 import net.prover._
 import net.prover.model._
 import net.prover.model.expressions._
+import net.prover.old.OldSubstitutionApplier
 import net.prover.structure.EntryContext
 
 object SubstatementExtractor {
@@ -66,9 +67,9 @@ object SubstatementExtractor {
   ): Seq[ExtractionFromSinglePremise] = {
     for {
       extractionSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
-      extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions).toSeq
+      extractedConclusion <- OldSubstitutionApplier.applySubstitutions(inference.conclusion, extractionSubstitutions).toSeq
       innerExtraction <- recurse(extractedConclusion, variableTracker)
-      newPremiseOption <- otherPremiseOption.map(_.applySubstitutions(extractionSubstitutions)).swap.toSeq
+      newPremiseOption <- otherPremiseOption.map(OldSubstitutionApplier.applySubstitutions(_, extractionSubstitutions)).swap.toSeq
       if !newPremiseOption.contains(innerExtraction.conclusion) // Filter out spurious extractions
       assertionStep = Step.Assertion(extractedConclusion, inference.summary, (newPremiseOption.toSeq :+ sourceStatement).map(Premise.Pending), extractionSubstitutions)
     } yield innerExtraction.copy(
@@ -103,7 +104,7 @@ object SubstatementExtractor {
       boundVariableName <- sourceStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).toSeq
       (_, newIndex, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(boundVariableName)
       substitutions = Substitutions(Seq(predicate), Seq(TermVariable(newIndex)))
-      nextPremise <- inference.conclusion.applySubstitutions(substitutions).toSeq
+      nextPremise <- OldSubstitutionApplier.applySubstitutions(inference.conclusion, substitutions).toSeq
       innerExtraction <- recurse(nextPremise, newVariableTracker)
       assertionStep = Step.Assertion(nextPremise, inference.summary, Seq(Premise.Pending(sourceStatement)), substitutions)
     } yield innerExtraction.copy(
@@ -125,7 +126,7 @@ object SubstatementExtractor {
       inference <- definedStatement.definition.deconstructionInference.toSeq
       premise <- inference.premises.single.toSeq
       substitutions <- premise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
-      deconstructedStatement <- inference.conclusion.applySubstitutions(substitutions).toSeq
+      deconstructedStatement <- OldSubstitutionApplier.applySubstitutions(inference.conclusion, substitutions).toSeq
       innerExtraction <- recurse(deconstructedStatement, variableTracker)
       assertionStep = Step.Assertion(deconstructedStatement, inference.summary, Seq(Premise.Pending(sourceStatement)), substitutions)
     } yield innerExtraction.copy(

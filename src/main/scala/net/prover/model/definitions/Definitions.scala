@@ -8,6 +8,7 @@ import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStepWithSingleInference, Step, SubstatementExtractor, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
+import net.prover.old.OldSubstitutionApplier
 import net.prover.shorthands.model.entries.DisplayShorthand
 import net.prover.structure.EntryContext
 import net.prover.util.Direction
@@ -442,7 +443,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     def byDesimplifying = for {
       inference <- conclusionSimplificationInferences
       substitutions <- inference.conclusion.calculateSubstitutions(premise).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
-      substitutedInferencePremises <- inference.premises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
+      substitutedInferencePremises <- inference.premises.map(OldSubstitutionApplier.applySubstitutions(_, substitutions).toOption).traverseOption.toSeq
       innerDesimplifications <- getPossiblePremiseDesimplifications(substitutedInferencePremises)
     } yield DesimplifiedPremise(premise, inference, innerDesimplifications)
 
@@ -664,7 +665,7 @@ case class Definitions(rootEntryContext: EntryContext) {
         (premiseIndex, conclusionIndex) = swapper.swapSourceAndResult(a, b)
         if inference.variableDefinitions.terms.isEmpty && inference.variableDefinitions.hasNoApplications
         if otherPremise.usedVariables.statements.variableIndices.contains(premiseIndex) && inference.conclusion.usedVariables.statements.variableIndices.contains(conclusionIndex)
-        if otherPremise.applySubstitutions(Substitutions(inference.variableDefinitions.statements.indices.map { i => StatementVariable(if (i == premiseIndex) conclusionIndex else i)}, Nil)).contains(inference.conclusion)
+        if OldSubstitutionApplier.applySubstitutions(otherPremise, Substitutions(inference.variableDefinitions.statements.indices.map { i => StatementVariable(if (i == premiseIndex) conclusionIndex else i)}, Nil)).toOption.contains(inference.conclusion)
       } yield (inference, firstPremise, otherPremise, premiseIndex, conclusionIndex, swapper)
     } yield result
   }

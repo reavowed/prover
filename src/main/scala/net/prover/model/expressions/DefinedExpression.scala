@@ -62,17 +62,6 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   ): Option[ExpressionType] = {
     components.map(_.specify(targetArguments, definition.increaseDepth(internalDepth), externalDepth)).traverseOption.map(updateComponents)
   }
-  def specifyWithSubstitutions(
-    targetArguments: Seq[Term],
-    substitutions: Substitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType] = {
-    components
-      .map(_.specifyWithSubstitutions(targetArguments, substitutions, definition.increaseDepth(internalDepth), previousInternalDepth, externalDepth)).traverseOption
-      .map(updateComponents)
-  }
   def trySpecifyWithSubstitutions(
     targetArguments: Seq[Term],
     substitutions: Substitutions.Possible,
@@ -93,13 +82,6 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   ): Option[Substitutions.Possible] = {
     getMatch(other)
       .flatMap(components.calculateSubstitutions(_, substitutions, definition.increaseDepth(internalDepth), externalDepth))
-  }
-  override def applySubstitutions(
-    substitutions: Substitutions,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType] = {
-    components.applySubstitutions(substitutions, definition.increaseDepth(internalDepth), externalDepth).map(updateComponents)
   }
   def tryApplySubstitutions(
     substitutions: Substitutions.Possible,
