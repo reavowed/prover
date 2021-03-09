@@ -2,6 +2,7 @@ package net.prover.model.expressions
 
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition
+import net.prover.old.OldParameterInserter
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 import scala.collection.immutable.Nil
@@ -46,9 +47,6 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
   override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
 
-  override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0): ExpressionType = {
-    updateComponents(components.map(_.insertExternalParameters(numberOfParametersToInsert, definition.increaseDepth(internalDepth))))
-  }
   override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType] = {
     components
       .map(_.removeExternalParameters(numberOfParametersToRemove, definition.increaseDepth(internalDepth)))

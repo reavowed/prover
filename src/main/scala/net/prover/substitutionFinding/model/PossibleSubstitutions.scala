@@ -6,6 +6,7 @@ import net.prover._
 import net.prover.core.transformers.{ContextWithExternalDepth, ContextWithInternalDepth}
 import net.prover.model.expressions._
 import net.prover.model.{Substitutions, VariableDefinitions}
+import net.prover.old.OldParameterInserter
 import net.prover.substitutionFinding.transformers.{PossibleSubstitutionCalculationParameters, PossibleSubstitutionCalculator}
 import net.prover.util.PossibleSingleMatch
 import net.prover.util.PossibleSingleMatch._
@@ -116,7 +117,7 @@ object PossibleSubstitutions {
       currentApplications.foldLeft(Option(currentSubstitutions)) { case (substitutionsSoFarOption, (arguments, application, internalDepth)) =>
         substitutionsSoFarOption.flatMap(s =>
           PossibleSubstitutionCalculator.calculateFromExpressionWithContext(
-            arguments(i).insertExternalParameters(currentInternalDepth),
+            OldParameterInserter.insertParameters(arguments(i), currentInternalDepth, 0),
             application,
             PossibleSubstitutionCalculationParameters(s, ContextWithExternalDepth(externalDepth)))(
             ContextWithInternalDepth(currentInternalDepth + internalDepth)))

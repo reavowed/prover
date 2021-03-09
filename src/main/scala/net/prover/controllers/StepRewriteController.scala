@@ -10,7 +10,7 @@ import net.prover.model.expressions._
 import net.prover.model.proof.EqualityRewriter.{RewriteMethods, RewritePossibility}
 import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
-import net.prover.old.OldSubstitutionApplier
+import net.prover.old.{OldParameterInserter, OldSubstitutionApplier}
 import net.prover.structure.BookService
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.Direction
@@ -78,7 +78,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           substitutionsAfterLhs <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(termRewriteInference.lhs, term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
           (_, substitutionsAfterPremises) <- PremiseFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceStepContext))
           substitutions <- substitutionsAfterPremises.confirmTotality(termRewriteInference.variableDefinitions)
-          result <- OldSubstitutionApplier.applySubstitutions(termRewriteInference.rhs, substitutions)(SubstitutionContext.withExtraParameters(unwrappers.depth)).toOption.map(_.insertExternalParameters(depth))
+          result <- OldSubstitutionApplier.applySubstitutions(termRewriteInference.rhs, substitutions)(SubstitutionContext.withExtraParameters(unwrappers.depth)).toOption.map(OldParameterInserter.insertParameters(_, depth, 0))
         } yield (term, result, path)
       }
 
@@ -143,7 +143,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       (premisesWithReferencedLines ++ extractedPremises).mapCollect { case (statement, reference) =>
         for {
           (lhs, rhs) <- equality.unapply(statement)
-          results = replacementPossibilities.filter(p => p.term == lhs.insertExternalParameters(p.unwrappers.depth)).map(_.path).map(PremiseRewritePath(_, rhs))
+          results = replacementPossibilities.filter(p => p.term == OldParameterInserter.insertParameters(lhs, p.unwrappers.depth, 0)).map(_.path).map(PremiseRewritePath(_, rhs))
           if results.nonEmpty
         } yield PremiseSuggestion(statement, reference, results)
       }
@@ -213,7 +213,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     implicit stepProvingContext: StepProvingContext
   ): Try[(Term, Term, Seq[Step], Option[Inference.Summary], Option[Inference.Summary], Seq[Unwrapper], TExpression)] = {
     for {
-      premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest.map(_.insertExternalParameters(unwrappers.depth))
+      premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest.map(OldParameterInserter.insertParameters(_, unwrappers.depth, 0))
       (removedUnwrappers, removedSource, Seq(removedPremiseStatement), removedWrapperExpression) = RewriteMethods[TExpression].removeUnwrappers(baseTerm, Seq(premiseStatement), wrapperExpression, unwrappers)
       (premiseLhs, premiseRhs) <- equality.unapply(removedPremiseStatement).orBadRequest("Premise was not equality")
       _ <- (removedSource == premiseLhs).orBadRequest("Premise did not match term at path")

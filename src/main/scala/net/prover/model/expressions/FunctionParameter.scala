@@ -2,6 +2,7 @@ package net.prover.model.expressions
 
 import net.prover.model.{Substitutions, UsedVariables}
 import net.prover.model.definitions.CompoundExpressionDefinition
+import net.prover.old.OldParameterInserter
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 case class FunctionParameter(index: Int, level: Int) extends Term {
@@ -40,7 +41,7 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     externalDepth: Int
   ): Option[Term] = {
     if (level == internalDepth + externalDepth)
-      targetArguments.get(index).map(_.insertExternalParameters(internalDepth))
+      targetArguments.get(index).map(OldParameterInserter.insertParameters(_, internalDepth, 0))
     else
       Some(this)
   }
@@ -53,9 +54,9 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     externalDepth: Int
   ) = {
     if (level == internalDepth + externalDepth)
-      targetArguments(index).tryApplySubstitutions(substitutions, previousInternalDepth, externalDepth).map(_.insertExternalParameters(internalDepth))
+      targetArguments(index).tryApplySubstitutions(substitutions, previousInternalDepth, externalDepth).map(OldParameterInserter.insertParameters(_, internalDepth, 0))
     else
-      Some(this.insertExternalParameters(previousInternalDepth, internalDepth))
+      Some(OldParameterInserter.insertParameters(this, previousInternalDepth, internalDepth))
   }
   override def tryApplySubstitutions(
     substitutions: PossibleSubstitutions,

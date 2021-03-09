@@ -2,6 +2,7 @@ package net.prover.old
 
 import net.prover.Identity
 import net.prover.core.transformers.ContextWithInternalDepth
+import net.prover.model.Substitutions
 import net.prover.model.expressions.{FunctionParameter, Statement, Term}
 import net.prover.old.OldExpressionTransformer.IdentityExpressionTransformer
 
@@ -27,5 +28,10 @@ object OldParameterInserter extends IdentityExpressionTransformer[InsertionParam
   }
   def insertParameters(term: Term, numberOfParametersToInsert: Int, externalDepthToInsertAt: Int): Term = {
     transformTermWithoutContext(term, InsertionParameters(numberOfParametersToInsert, externalDepthToInsertAt))
+  }
+  def insertParameters(substitutions: Substitutions, numberOfParametersToInsert: Int, externalDepthToInsertAt: Int): Substitutions = {
+    Substitutions(
+      substitutions.statements.map(insertParameters(_, numberOfParametersToInsert, externalDepthToInsertAt)),
+      substitutions.terms.map(insertParameters(_, numberOfParametersToInsert, externalDepthToInsertAt)))
   }
 }

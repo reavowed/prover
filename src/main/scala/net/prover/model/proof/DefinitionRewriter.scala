@@ -4,7 +4,7 @@ import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.Wrapper
 import net.prover.model.expressions.{DefinedStatement, Statement}
-import net.prover.old.OldSubstitutionApplier
+import net.prover.old.{OldParameterInserter, OldSubstitutionApplier}
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
 object DefinitionRewriter {
@@ -120,7 +120,7 @@ object DefinitionRewriter {
         innerRewriteStep <- getRewriteStep(premisePredicate, targetPredicate)(implicitly, innerSubstitutionContext)
         source = generalizationDefinition(variableName, innerRewriteStep.source)
         result = generalizationDefinition(variableName, innerRewriteStep.result)
-        specificationSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(specificationPremise, source.insertExternalParameters(1))(innerSubstitutionContext)
+        specificationSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(specificationPremise, OldParameterInserter.insertParameters(source, 1, 0))(innerSubstitutionContext)
           .flatMap(PossibleSubstitutionCalculator.calculatePossibleSubstitutions(specificationInference.conclusion, innerRewriteStep.source, _)(innerSubstitutionContext))
           .flatMap(_.confirmTotality(specificationInference.variableDefinitions))
         specificationStep <- Step.Assertion.forInference(specificationInference, specificationSubstitutions)(innerSubstitutionContext)

@@ -2,6 +2,7 @@ package net.prover.model.expressions
 
 import net.prover.core.transformers.{ContextWithExternalDepth, ContextWithInternalDepth}
 import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, TemplateParsingContext}
+import net.prover.old.OldParameterInserter
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.{PossibleSubstitutionCalculationParameters, PossibleSubstitutionCalculator}
 
@@ -17,8 +18,8 @@ trait Term extends Expression with TypedExpression[Term] {
     for {
       (argument, index) <- baseArguments.zipWithIndex.iterator
       updatedSubstitutions <- PossibleSubstitutionCalculator.calculateFromExpressionWithContext(
-          argument.insertExternalParameters(internalDepth),
-          this,
+        OldParameterInserter.insertParameters(argument, internalDepth, 0),
+        this,
         PossibleSubstitutionCalculationParameters(substitutions, ContextWithExternalDepth(externalDepth)))(
         ContextWithInternalDepth(previousInternalDepth + internalDepth))
     } yield FunctionParameter(index, externalDepth + internalDepth) -> updatedSubstitutions

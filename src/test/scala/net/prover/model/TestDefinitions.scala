@@ -8,6 +8,7 @@ import net.prover.structure.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.structure.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof._
+import net.prover.old.OldParameterInserter
 import net.prover.shorthands.model.entries.DisplayShorthand
 import net.prover.structure.EntryContext
 import net.prover.types.model.ParentTypeConditions
@@ -482,7 +483,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
         Step.Assertion(
           statement,
           specification.summary,
-          Seq(Premise.Pending(generalizeOnce(statement, parameterDepth).insertExternalParameters(1))),
+          Seq(Premise.Pending(OldParameterInserter.insertParameters(generalizeOnce(statement, parameterDepth), 1, 0))),
           Substitutions(Seq(statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get), Seq($)))
       }
       beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>

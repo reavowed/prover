@@ -9,6 +9,7 @@ import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
 import net.prover.model.definitions.{CompoundExpressionDefinition, DeductionDefinition, Definitions, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
+import net.prover.old.OldParameterInserter
 import net.prover.structure.EntryContext
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
@@ -112,7 +113,7 @@ object Step {
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Step = {
       Deduction(
-        assumption.insertExternalParameters(numberOfParametersToInsert, internalDepth),
+        OldParameterInserter.insertParameters(assumption, numberOfParametersToInsert, internalDepth),
         substeps.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)),
         deductionDefinition)
     }
@@ -195,12 +196,12 @@ object Step {
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Step = {
       Naming(
         variableName,
-        assumption.insertExternalParameters(numberOfParametersToInsert, internalDepth + 1),
-        statement.insertExternalParameters(numberOfParametersToInsert, internalDepth),
+        OldParameterInserter.insertParameters(assumption, numberOfParametersToInsert, internalDepth + 1),
+        OldParameterInserter.insertParameters(statement, numberOfParametersToInsert, internalDepth),
         substeps.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth + 1)),
         inference,
         premises.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)),
-        substitutions.insertExternalParameters(numberOfParametersToInsert, internalDepth),
+        OldParameterInserter.insertParameters(substitutions, numberOfParametersToInsert, internalDepth),
         generalizationDefinition,
         deductionDefinition)
     }
@@ -348,7 +349,7 @@ object Step {
     override def isComplete(definitions: Definitions): Boolean = false
     override def provenStatement: Option[Statement] = Some(statement)
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Step = {
-      Target(statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
+      Target(OldParameterInserter.insertParameters(statement, numberOfParametersToInsert, internalDepth))
     }
     override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
       for {
@@ -467,10 +468,10 @@ object Step {
     override def provenStatement: Option[Statement] = Some(statement)
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Step = {
       Assertion(
-        statement.insertExternalParameters(numberOfParametersToInsert, internalDepth),
+        OldParameterInserter.insertParameters(statement, numberOfParametersToInsert, internalDepth),
         inference,
         premises.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)),
-        substitutions.insertExternalParameters(numberOfParametersToInsert, internalDepth))
+        OldParameterInserter.insertParameters(substitutions, numberOfParametersToInsert, internalDepth))
     }
     override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
       for {

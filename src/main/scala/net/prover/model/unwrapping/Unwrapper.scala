@@ -5,6 +5,7 @@ import net.prover.model.definitions.{BinaryJoiner, DeductionDefinition, Generali
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import net.prover.model.{Inference, Substitutions}
+import net.prover.old.OldParameterInserter
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
@@ -78,7 +79,7 @@ case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: Deduct
     deductionDefinition(antecedent, statement)
   }
   def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
-    val insertedAntecedent = antecedent.insertExternalParameters(depth)
+    val insertedAntecedent = OldParameterInserter.insertParameters(antecedent, depth, 0)
     val substitutions = Substitutions(Seq(insertedAntecedent, result), Nil)
     Step.Assertion.forInference(deductionEliminationInference, substitutions).get
   }

@@ -1,21 +1,12 @@
 package net.prover.model
 
-import monocle.Lens
-import monocle.macros.GenLens
 import net.prover._
 import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions._
-import net.prover.util.PossibleSingleMatch
-import net.prover.util.PossibleSingleMatch._
 
 case class Substitutions(statements: Seq[Statement], terms: Seq[Term]) {
   def isEmpty: Boolean = statements.isEmpty && terms.isEmpty
 
-  def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Substitutions = {
-    Substitutions(
-      statements.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)),
-      terms.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)))
-  }
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Substitutions] = {
     for {
       newStatements <- statements.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption

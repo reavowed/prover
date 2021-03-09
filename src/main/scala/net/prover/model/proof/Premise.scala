@@ -5,7 +5,7 @@ import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Premise.Pending
-import net.prover.old.OldSubstitutionApplier
+import net.prover.old.{OldParameterInserter, OldSubstitutionApplier}
 import net.prover.structure.EntryContext
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
@@ -73,7 +73,7 @@ object Premise {
     override def referencedLines: Set[PreviousLineReference] = Set.empty
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending] = Map(path -> this)
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Pending = {
-      copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
+      copy(statement = OldParameterInserter.insertParameters(statement, numberOfParametersToInsert, internalDepth))
     }
     def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Pending = {
       Pending(statement.replaceDefinitions(expressionDefinitionReplacements))
@@ -86,7 +86,7 @@ object Premise {
     override def referencedInferenceIds: Set[String] = Set.empty
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending] = Map.empty
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Given = {
-      copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
+      copy(statement = OldParameterInserter.insertParameters(statement, numberOfParametersToInsert, internalDepth))
     }
     def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Given = {
       Given(
@@ -103,8 +103,8 @@ object Premise {
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Pending] = premise.getPendingPremises(path :+ 0)
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Simplification = {
       copy(
-        statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth),
-        substitutions = substitutions.insertExternalParameters(numberOfParametersToInsert, internalDepth))
+        statement = OldParameterInserter.insertParameters(statement, numberOfParametersToInsert, internalDepth),
+        substitutions = OldParameterInserter.insertParameters(substitutions, numberOfParametersToInsert, internalDepth))
     }
     def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Simplification = {
       Simplification(

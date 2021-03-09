@@ -5,7 +5,7 @@ import net.prover.chaining.ChainingStepEditing
 import net.prover.controllers.models.{NamingDefinition, PathData}
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
-import net.prover.old.OldSubstitutionApplier
+import net.prover.old.{OldParameterInserter, OldSubstitutionApplier}
 import net.prover.structure.BookService
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import org.springframework.beans.factory.annotation.Autowired
@@ -44,7 +44,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
           variableName,
           substitutedAssumption,
           step.statement,
-          Seq(Step.Target(step.statement.insertExternalParameters(1))),
+          Seq(Step.Target(OldParameterInserter.insertParameters(step.statement, 1, 0))),
           inference,
           premises,
           substitutions,
@@ -83,7 +83,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
           variableName,
           substitutedAssumption,
           targetStep.statement,
-          Seq(Step.Target(targetStep.statement.insertExternalParameters(1))),
+          Seq(Step.Target(OldParameterInserter.insertParameters(targetStep.statement, 1, 0))),
           namingInference.summary,
           Seq(premise),
           substitutions,

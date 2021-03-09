@@ -2,6 +2,7 @@ package net.prover.model.proof
 
 import net.prover.model.VariableDefinitions
 import net.prover.model.expressions.Statement
+import net.prover.old.OldParameterInserter
 
 case class StepContext private(
     stepReference: StepReference,
