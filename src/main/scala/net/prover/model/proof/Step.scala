@@ -7,9 +7,11 @@ import net.prover.controllers.ExtractionHelper
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
-import net.prover.model.definitions.{DeductionDefinition, Definitions, CompoundExpressionDefinition, GeneralizationDefinition}
+import net.prover.model.definitions.{CompoundExpressionDefinition, DeductionDefinition, Definitions, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.structure.EntryContext
+import net.prover.substitutionFinding.model.PossibleSubstitutions
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import scalaz.Functor
 import scalaz.syntax.functor._
 
@@ -172,7 +174,10 @@ object Step {
       val newConclusion = newInternalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
       val newInternalPremise = generalizationDefinition(variableName, deductionDefinition(assumption, newInternalConclusion))
       val newSubstitutions = inference.premises.zip(premises.map(_.statement) :+ newInternalPremise)
-        .foldLeft(Substitutions.Possible.empty) { case (substitutions, (inferencePremise, premise)) => inferencePremise.calculateSubstitutions(premise, substitutions)(stepContext).getOrElse(throw new Exception("Could not calculate substitutions from naming premise"))}
+        .foldLeft(PossibleSubstitutions.empty) { case (substitutions, (inferencePremise, premise)) =>
+          PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inferencePremise, premise, substitutions)(stepContext)
+            .getOrElse(throw new Exception("Could not calculate substitutions from naming premise"))
+        }
         .confirmTotality(inference.variableDefinitions)
         .getOrElse(throw new Exception("Naming substitutions were not total"))
       Naming(
@@ -479,8 +484,10 @@ object Step {
       if (inference == oldInference) {
         val substitutionsOption = (for {
           inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(newInference.id)
-          substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(statement).toSeq
-          substitutionsAfterPremises <- inferenceExtraction.premises.zipStrict(premises).flatMap(_.foldLeft(Option(substitutionsAfterConclusion)) { case (so, (ep, p)) => so.flatMap(s => ep.calculateSubstitutions(p.statement, s)) }).toSeq
+          substitutionsAfterConclusion <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inferenceExtraction.conclusion, statement).toSeq
+          substitutionsAfterPremises <- inferenceExtraction.premises.zipStrict(premises).flatMap(_.foldLeft(Option(substitutionsAfterConclusion)) { case (so, (ep, p)) =>
+            so.flatMap(s => PossibleSubstitutionCalculator.calculatePossibleSubstitutions(ep, p.statement, s))
+          }).toSeq
           substitutions <- substitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).toSeq
         } yield (inferenceExtraction, substitutions)).headOption
         for {

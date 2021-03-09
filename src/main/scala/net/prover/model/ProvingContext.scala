@@ -8,6 +8,7 @@ import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.ChapterEntry
 import net.prover.structure.model.{Book, Chapter}
+import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
 
@@ -40,7 +41,7 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowableString: AlwaysAllowable[String] = alwaysAllowable
     implicit val alwaysAllowableInt: AlwaysAllowable[Int] = alwaysAllowable
     implicit val alwaysAllowableDirection: AlwaysAllowable[Direction] = alwaysAllowable
-    implicit val alwaysAllowablePossibleSubstitutions: AlwaysAllowable[Substitutions.Possible] = alwaysAllowable
+    implicit val alwaysAllowablePossibleSubstitutions: AlwaysAllowable[PossibleSubstitutions] = alwaysAllowable
     implicit def allowableSeq[T](implicit inner: Allowable[T]): Allowable[Seq[T]] = allowable { x => x.forall(isAllowed) }
 
     implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.allInferenceIds.contains(i.id))

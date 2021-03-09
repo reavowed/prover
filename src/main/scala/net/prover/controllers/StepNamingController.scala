@@ -6,6 +6,7 @@ import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
 import net.prover.old.OldSubstitutionApplier
 import net.prover.structure.BookService
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -33,7 +34,7 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
             val conclusions = for {
               inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
               if ProofHelper.findNamingInferences.exists { case (_, initialPremises, _, _, _) =>
-                initialPremises.single.exists(_.calculateSubstitutions(inferenceExtraction.conclusion)(SubstitutionContext.outsideProof).nonEmpty)
+                initialPremises.single.exists(PossibleSubstitutionCalculator.calculatePossibleSubstitutions(_, inferenceExtraction.conclusion)(SubstitutionContext.outsideProof).nonEmpty)
               }
             } yield PossibleConclusionWithPremises.fromExtraction(inferenceExtraction, None)
             if (conclusions.nonEmpty) {
@@ -64,11 +65,11 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
           variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single)
           (namingInference, namingInferenceAssumption, substitutionsAfterPremise, generalizationDefinition, deductionDefinition) <- ProofHelper.findNamingInferences.mapFind {
             case (i, Seq(singlePremise), a, generalizationDefinition, deductionDefinition) =>
-              singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s, generalizationDefinition, deductionDefinition) }
+              PossibleSubstitutionCalculator.calculatePossibleSubstitutions(singlePremise, premiseStatement).map { s => (i, a, s, generalizationDefinition, deductionDefinition) }
             case _ =>
               None
           }
-          substitutionsAfterConclusion <- namingInference.conclusion.calculateSubstitutions(resultStatement, substitutionsAfterPremise)
+          substitutionsAfterConclusion <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(namingInference.conclusion, resultStatement, substitutionsAfterPremise)
           substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.variableDefinitions)
           substitutedAssumption <- OldSubstitutionApplier.applySubstitutionsInsideStep(namingInferenceAssumption, substitutions).toOption
           substitutedConclusion <- OldSubstitutionApplier.applySubstitutionsInsideStep(namingInference.conclusion, substitutions).toOption

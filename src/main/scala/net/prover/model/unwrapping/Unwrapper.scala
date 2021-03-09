@@ -5,6 +5,8 @@ import net.prover.model.definitions.{BinaryJoiner, DeductionDefinition, Generali
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import net.prover.model.{Inference, Substitutions}
+import net.prover.substitutionFinding.model.PossibleSubstitutions
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
 import scala.util.{Success, Try}
 
@@ -36,7 +38,7 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
   }
   def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     val parameter = FunctionParameter(0, depth)
-    val predicate = result.calculateApplicatives(Seq(TermVariable(0, Nil)), Substitutions.Possible(Map.empty, Map(0 -> parameter))).next()._1
+    val predicate = result.calculateApplicatives(Seq(TermVariable(0, Nil)), PossibleSubstitutions(Map.empty, Map(0 -> parameter))).next()._1
     val substitutions = Substitutions(Seq(predicate), Seq(parameter))
     val baseAssertionStep = Step.Assertion.forInference(inference, substitutions).get
     baseAssertionStep.copy(premises = Seq(Premise.Pending(baseAssertionStep.premises.head.statement.asInstanceOf[DefinedStatement].updateBoundVariableNames(Seq(variableName)))))
@@ -47,7 +49,8 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
   def rewrapWithDistribution(steps: Seq[Step], joiner: BinaryJoiner[Statement], source: Statement, result: Statement)(implicit stepProvingContext: StepProvingContext): Try[Seq[Step]] = {
     for {
       distributionInference <- stepProvingContext.provingContext.generalizationDistributions.get(joiner).orBadRequest(s"Could not find generalization distribution inference for ${joiner.symbol}")
-      distributionSubstitutions <- distributionInference.premises.head.calculateSubstitutions(addToStatement(joiner(source, result)(enhanceContext(implicitly)))).flatMap(_.confirmTotality(distributionInference.variableDefinitions))
+      distributionSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(distributionInference.premises.head, addToStatement(joiner(source, result)(enhanceContext(implicitly))))
+        .flatMap(_.confirmTotality(distributionInference.variableDefinitions))
         .orBadRequest("Could not calculate substitutions for generalization distribution inference")
       distributionStep <- Step.Assertion.forInference(distributionInference, distributionSubstitutions).orBadRequest("Could not apply generalization distribution inference")
       generalizationStep = rewrap(steps)

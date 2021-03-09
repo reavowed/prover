@@ -4,6 +4,7 @@ import net.prover.model.{ExpressionLenses, ProvingContext}
 import net.prover.model.expressions.Term
 import net.prover.model.proof.SubstitutionContext
 import net.prover.old.OldSubstitutionApplier
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
 sealed trait Operator {
   def arity: Int
@@ -13,7 +14,7 @@ sealed trait Operator {
   }
   protected def extract(t: Term)(implicit substitutionContext: SubstitutionContext): Option[Seq[Term]] = {
     for {
-      substitutions <- template.calculateSubstitutions(t)
+      substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(template, t)
       terms <- (0 until arity).map(substitutions.terms.get).traverseOption
     } yield terms
   }

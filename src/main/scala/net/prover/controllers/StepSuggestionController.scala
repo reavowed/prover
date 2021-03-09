@@ -5,6 +5,7 @@ import net.prover.controllers.models._
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import net.prover.structure.BookService
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -30,7 +31,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
         (_, Seq(singleNamingPremise: DefinedStatement), _, _, _) <- ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext)
         if singleNamingPremise.boundVariableNames.single.nonEmpty
         premise <- stepProvingContext.allPremises
-        if singleNamingPremise.calculateSubstitutions(premise.statement).nonEmpty
+        if PossibleSubstitutionCalculator.calculatePossibleSubstitutions(singleNamingPremise, premise.statement).nonEmpty
       } yield premise
     }).toResponseEntity
   }
@@ -53,7 +54,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
         .filter(x => filter(x._1))
         .reverse
         .mapCollect { case (inference, namingPremises, _, _, _) =>
-          inference.conclusion.calculateSubstitutions(step.statement)
+          PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inference.conclusion, step.statement)
             .map(s => PossibleInferenceWithConclusions(
               inference.summary,
               Seq(PossibleConclusionWithPremises(

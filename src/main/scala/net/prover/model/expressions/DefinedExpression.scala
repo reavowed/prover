@@ -2,6 +2,7 @@ package net.prover.model.expressions
 
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition
+import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 import scala.collection.immutable.Nil
 
@@ -64,7 +65,7 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
   def trySpecifyWithSubstitutions(
     targetArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
@@ -74,17 +75,8 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
       .map(updateComponents)
   }
 
-  override def calculateSubstitutions(
-    other: Expression,
-    substitutions: Substitutions.Possible,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[Substitutions.Possible] = {
-    getMatch(other)
-      .flatMap(components.calculateSubstitutions(_, substitutions, definition.increaseDepth(internalDepth), externalDepth))
-  }
   def tryApplySubstitutions(
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     externalDepth: Int
   ): Option[ExpressionType] = {
@@ -92,22 +84,13 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(ExpressionType, Substitutions.Possible)] = {
+  ): Iterator[(ExpressionType, PossibleSubstitutions)] = {
     components.calculateApplicatives(baseArguments, substitutions, definition.increaseDepth(internalDepth), previousInternalDepth, externalDepth)
       .map(_.mapLeft(updateComponents))
-  }
-  override def calculateArguments(
-    target: Expression,
-    argumentsSoFar: Map[Int, Term],
-    previousInternalDepth: Int,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[Map[Int, Term]] = {
-    getMatch(target).flatMap(targetComponents => components.calculateArguments(targetComponents, argumentsSoFar, previousInternalDepth, definition.increaseDepth(internalDepth), externalDepth))
   }
 
   override def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = {

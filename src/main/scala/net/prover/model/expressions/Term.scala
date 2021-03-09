@@ -1,21 +1,26 @@
 package net.prover.model.expressions
 
+import net.prover.core.transformers.{ContextWithExternalDepth, ContextWithInternalDepth}
 import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, TemplateParsingContext}
+import net.prover.substitutionFinding.model.PossibleSubstitutions
+import net.prover.substitutionFinding.transformers.{PossibleSubstitutionCalculationParameters, PossibleSubstitutionCalculator}
 
 trait Term extends Expression with TypedExpression[Term] {
   override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, Term, Int, Seq[Int])] = Seq((this, FunctionParameter(0, internalDepth + externalDepth), internalDepth, Nil))
   def calculateApplicatives(
     baseArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(Term, Substitutions.Possible)] = {
+  ): Iterator[(Term, PossibleSubstitutions)] = {
     for {
       (argument, index) <- baseArguments.zipWithIndex.iterator
-      updatedSubstitutions <- argument
-        .insertExternalParameters(internalDepth)
-        .calculateSubstitutions(this, substitutions, previousInternalDepth + internalDepth, externalDepth)
+      updatedSubstitutions <- PossibleSubstitutionCalculator.calculateFromExpressionWithContext(
+          argument.insertExternalParameters(internalDepth),
+          this,
+        PossibleSubstitutionCalculationParameters(substitutions, ContextWithExternalDepth(externalDepth)))(
+        ContextWithInternalDepth(previousInternalDepth + internalDepth))
     } yield FunctionParameter(index, externalDepth + internalDepth) -> updatedSubstitutions
   }
 }

@@ -8,6 +8,7 @@ import net.prover.model.proof._
 import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement, Unwrapper}
 import net.prover.old.OldSubstitutionApplier
 import net.prover.structure.BookService
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -65,7 +66,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         val possibleTargets = for {
           possibleUnwrappedTargetStatement <- possibleUnwrappedTargetStatements
           possibleConclusions = spc.provingContext.inferenceExtractionsByInferenceId(inference.id)
-            .filter(_.conclusion.calculateSubstitutions(possibleUnwrappedTargetStatement.statement).nonEmpty)
+            .filter(i => PossibleSubstitutionCalculator.calculatePossibleSubstitutions(i.conclusion, possibleUnwrappedTargetStatement.statement).nonEmpty)
             .map(e => PossibleConclusionWithoutPremises(e.conclusion, e.extractionInferences.map(_.id), e.additionalVariableNames))
           if possibleConclusions.nonEmpty
         } yield PossibleTarget(
@@ -145,11 +146,11 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
       premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-      baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '${premise.statement}'")
+      baseSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(premise.statement, premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '${premise.statement}'")
     } yield {
       implicit val spc = stepProvingContext
       SubstatementExtractor.getPremiseExtractions(premise.statement)
-        .flatMap(PossibleConclusionWithPremises.fromExtractionWithSubstitutions(_, _.calculateSubstitutions(step.statement, baseSubstitutions)))
+        .flatMap(PossibleConclusionWithPremises.fromExtractionWithSubstitutions(_, PossibleSubstitutionCalculator.calculatePossibleSubstitutions(_, step.statement, baseSubstitutions)))
     }).toResponseEntity
   }
 
@@ -166,7 +167,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       (_, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
       premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-      baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '$premiseStatement'")
+      baseSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(premise.statement, premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '$premiseStatement'")
     } yield {
       implicit val spc = stepProvingContext
       SubstatementExtractor.getPremiseExtractions(premise.statement)

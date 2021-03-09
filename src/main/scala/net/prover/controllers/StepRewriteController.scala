@@ -12,6 +12,7 @@ import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.old.OldSubstitutionApplier
 import net.prover.structure.BookService
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.Direction
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
@@ -74,7 +75,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       def getRewritePath(termRewriteInference: TermRewriteInference, replacementPossibility: RewritePossibility[_ <: Expression]): Option[(Term, Term, Seq[Int])] = {
         import replacementPossibility._
         for {
-          substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
+          substitutionsAfterLhs <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(termRewriteInference.lhs, term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
           (_, substitutionsAfterPremises) <- PremiseFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceStepContext))
           substitutions <- substitutionsAfterPremises.confirmTotality(termRewriteInference.variableDefinitions)
           result <- OldSubstitutionApplier.applySubstitutions(termRewriteInference.rhs, substitutions)(SubstitutionContext.withExtraParameters(unwrappers.depth)).toOption.map(_.insertExternalParameters(depth))
@@ -184,13 +185,16 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == extractionInferenceIds).orBadRequest(s"Could not find extraction for inference ${inference.id}")
       (lhs, rhs) <- equality.unapply(inferenceExtraction.conclusion).orBadRequest("Rewrite conclusion was not equality")
       (sourceTemplate, targetTemplate) = direction.swapSourceAndResult(lhs, rhs)
-      substitutions <- sourceTemplate.calculateSubstitutions(baseTerm).orBadRequest("Could not find substitutions")
+      substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(sourceTemplate, baseTerm).orBadRequest("Could not find substitutions")
       (knownPremises, _) <- PremiseFinder.findDerivationsForStatementsBySubstituting(inferenceExtraction.premises, substitutions)
         .orBadRequest("Could not find premises")
       (removedUnwrappers, removedSource, removedPremises, removedWrapperExpression) = RewriteMethods[TExpression].removeUnwrappers(baseTerm, knownPremises.map(_.statement), wrapperExpression, unwrappers)
       removedUnwrappedStepContext = removedUnwrappers.enhanceStepContext(implicitly)
-      finalSubstitutionsAfterSource <- sourceTemplate.calculateSubstitutions(removedSource)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions")
-      finalSubstitutionsAfterPremises <- inference.premises.zip(removedPremises).foldLeft(Try(finalSubstitutionsAfterSource)) { case (s, (ip, p)) => s.flatMap(ip.calculateSubstitutions(p, _)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions"))}
+      finalSubstitutionsAfterSource <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(sourceTemplate, removedSource)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions")
+      finalSubstitutionsAfterPremises <- inference.premises.zip(removedPremises).foldLeft(Try(finalSubstitutionsAfterSource)) { case (s, (ip, p)) =>
+        s.flatMap(PossibleSubstitutionCalculator.calculatePossibleSubstitutions(ip, p, _)(removedUnwrappedStepContext)
+          .orBadRequest("Could not find substitutions"))
+      }
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).orBadRequest("Substitutions were not complete")
       rewrittenTerm <- OldSubstitutionApplier.applySubstitutions(targetTemplate, finalSubstitutions).orBadRequest("Could not apply substitutions to target")
       extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")

@@ -7,6 +7,7 @@ import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
 import net.prover.old.OldSubstitutionApplier
 import net.prover.structure.BookService
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -70,11 +71,11 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
         variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).orBadRequest("Premise did not have single bound variable")
         (namingInference, namingInferenceAssumption, substitutionsAfterPremise, generalizationDefinition, deductionDefinition) <- ProofHelper.findNamingInferences.mapFind {
           case (i, Seq(singlePremise), a, generalizationDefinition, deductionDefinition) =>
-            singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s, generalizationDefinition, deductionDefinition) }
+            PossibleSubstitutionCalculator.calculatePossibleSubstitutions(singlePremise, premiseStatement).map { s => (i, a, s, generalizationDefinition, deductionDefinition) }
           case _ =>
             None
         }.orBadRequest("Could not find naming inference matching premise")
-        substitutionsAfterConclusion <- namingInference.conclusion.calculateSubstitutions(targetStep.statement, substitutionsAfterPremise).orBadRequest("Could not calculate substitutions for conclusion")
+        substitutionsAfterConclusion <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(namingInference.conclusion, targetStep.statement, substitutionsAfterPremise).orBadRequest("Could not calculate substitutions for conclusion")
         substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.variableDefinitions).orBadRequest("Substitutions for naming inference were not total")
         substitutedAssumption <- OldSubstitutionApplier.applySubstitutionsInsideStep(namingInferenceAssumption, substitutions)(stepProvingContext.stepContext).orBadRequest("Could not substitute assumption")
       } yield {

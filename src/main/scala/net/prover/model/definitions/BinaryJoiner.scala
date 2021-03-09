@@ -5,6 +5,7 @@ import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{ExpressionLenses, Inference}
 import net.prover.old.OldSubstitutionApplier
 import net.prover.shorthands.model.entries.DisplayShorthand
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
 sealed trait BinaryJoiner[TComponent <: Expression] extends ExpressionLenses[TComponent] {
   def symbol: String
@@ -15,7 +16,7 @@ sealed trait BinaryJoiner[TComponent <: Expression] extends ExpressionLenses[TCo
   }
   def unapply(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(TComponent, TComponent)] = {
     for {
-      substitutions <- template.calculateSubstitutions(statement)
+      substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(template, statement)
       left <- getSubstitutions(substitutions).get(0)
       right <- getSubstitutions(substitutions).get(1)
     } yield (left, right)

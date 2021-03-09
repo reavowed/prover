@@ -10,6 +10,8 @@ import net.prover.model.proof._
 import net.prover.model.{ExpressionParsingContext, Inference, Substitutions}
 import net.prover.old.OldSubstitutionApplier
 import net.prover.structure.BookService
+import net.prover.substitutionFinding.model.PossibleSubstitutions
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.Direction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -21,9 +23,9 @@ import scala.util.{Success, Try}
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepChainingController @Autowired() (val bookService: BookService) extends BookModification with ChainingStepEditing with InferenceSearch {
-  private def getSubstitutionsWithTermOrSubterm(source: Expression, result: Expression, baseSubstitutions: Substitutions.Possible)(implicit substitutionContext: SubstitutionContext, stepContext: StepContext): Option[Substitutions.Possible] = {
-    source.calculateSubstitutions(result, baseSubstitutions) orElse
-      (result.getTerms().map(_._1).toSet diff result.asOptionalInstanceOf[Term].toSet).toSeq.mapCollect(source.calculateSubstitutions(_, baseSubstitutions)).single
+  private def getSubstitutionsWithTermOrSubterm(source: Expression, result: Expression, baseSubstitutions: PossibleSubstitutions)(implicit substitutionContext: SubstitutionContext, stepContext: StepContext): Option[PossibleSubstitutions] = {
+    PossibleSubstitutionCalculator.calculatePossibleSubstitutions(source, result, baseSubstitutions) orElse
+      (result.getTerms().map(_._1).toSet diff result.asOptionalInstanceOf[Term].toSet).toSeq.mapCollect(PossibleSubstitutionCalculator.calculatePossibleSubstitutions(source, _, baseSubstitutions)).single
   }
 
   private def suggestInferencesForChaining(
@@ -39,11 +41,11 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     def withJoiner[T <: Expression, TJoiner <: BinaryJoiner[T] : ClassTag](targetConnective: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[Seq[PossibleInference]] = {
       implicit val spc = stepProvingContext
       val targetSource = direction.getSource(targetLhs, targetRhs)
-      def getSubstitutions(extractionResult: Statement): Option[Substitutions.Possible] = {
+      def getSubstitutions(extractionResult: Statement): Option[PossibleSubstitutions] = {
         for {
           (conclusionConnective, conclusionSource) <- stepProvingContext.provingContext.definedBinaryJoiners.ofType[TJoiner].mapFind(j => j.unapply(extractionResult).map { case (l, r) => (j, direction.getSource(l, r))} )
           if stepProvingContext.provingContext.transitivities.exists(t => direction.getSource(t.firstPremiseJoiner, t.secondPremiseJoiner) == conclusionConnective && t.resultJoiner == targetConnective)
-          substitutions <- conclusionSource.calculateSubstitutions(targetSource)
+          substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(conclusionSource, targetSource)
         } yield substitutions
       }
       def getPossibleInference(inference: Inference): Option[PossibleInferenceWithTargets] = {
@@ -102,7 +104,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     serializedPremiseStatement: String,
     direction: Direction
   ): ResponseEntity[_] = {
-    def getPremises[T <: Expression](joiner: BinaryJoiner[T], lhs: T, rhs: T, premise: Statement, baseSubstitutions: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Try[Seq[PossibleConclusionWithPremises]] = {
+    def getPremises[T <: Expression](joiner: BinaryJoiner[T], lhs: T, rhs: T, premise: Statement, baseSubstitutions: PossibleSubstitutions)(implicit stepProvingContext: StepProvingContext): Try[Seq[PossibleConclusionWithPremises]] = {
       Success(SubstatementExtractor.getPremiseExtractions(premise)
         .flatMap(PossibleConclusionWithPremises.fromExtractionWithSubstitutions(_, conclusion => for {
           (conclusionLhs, conclusionRhs) <- joiner.unapply(conclusion)
@@ -113,7 +115,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
       premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-      baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '${premise.statement}'")
+      baseSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(premise.statement, premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '${premise.statement}'")
       result <- withRelation(step.statement, getPremises(_, _, _, premise.statement, baseSubstitutions)(stepProvingContext), getPremises(_, _, _, premise.statement, baseSubstitutions)(stepProvingContext))(stepProvingContext)
     } yield result).toResponseEntity
   }

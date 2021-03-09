@@ -2,6 +2,7 @@ package net.prover.model.expressions
 
 import net.prover.model.{Substitutions, UsedVariables}
 import net.prover.model.definitions.CompoundExpressionDefinition
+import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 case class FunctionParameter(index: Int, level: Int) extends Term {
   override def structuralComplexity: Int = 1
@@ -46,7 +47,7 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
 
   def trySpecifyWithSubstitutions(
     targetArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
@@ -56,22 +57,8 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
     else
       Some(this.insertExternalParameters(previousInternalDepth, internalDepth))
   }
-
-  override def calculateSubstitutions(
-    other: Expression,
-    substitutions: Substitutions.Possible,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[Substitutions.Possible] = {
-    other match {
-      case FunctionParameter(`index`, `level`) =>
-        Some(substitutions)
-      case _ =>
-        None
-    }
-  }
   override def tryApplySubstitutions(
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     externalDepth: Int
   ) = {
@@ -79,11 +66,11 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
   }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(Term, Substitutions.Possible)] = {
+  ): Iterator[(Term, PossibleSubstitutions)] = {
     (super.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth).toSet ++
       (if (level >= internalDepth + previousInternalDepth)
         // External context
@@ -96,24 +83,6 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
         // Shared internal context - must be passed in via the arguments
         Nil)
     ).iterator
-  }
-  override def calculateArguments(
-    target: Expression,
-    argumentsSoFar: Map[Int, Term],
-    previousInternalDepth: Int,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[Map[Int, Term]] = {
-    if (level == internalDepth + externalDepth) {
-      for {
-        argument <- target.asOptionalInstanceOf[Term].flatMap(_.removeExternalParameters(internalDepth))
-        result <- argumentsSoFar.tryAdd(index, argument)
-      } yield result
-    } else if (target.removeExternalParameters(previousInternalDepth, internalDepth).contains(this)) {
-      Some(argumentsSoFar)
-    } else {
-      None
-    }
   }
 
   override def toString: String = (0 to level).map(_ => "$").mkString("") + index

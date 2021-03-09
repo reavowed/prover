@@ -2,6 +2,7 @@ package net.prover.model.expressions
 
 import net.prover.model.Substitutions
 import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundTermDefinition}
+import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 case class DefinedTerm(
     components: Seq[Expression],
@@ -41,11 +42,11 @@ case class DefinedTerm(
 
   override def calculateApplicatives(
     baseArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(Term, Substitutions.Possible)] = {
+  ): Iterator[(Term, PossibleSubstitutions)] = {
     super[Term].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
       super[DefinedExpression].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
   }

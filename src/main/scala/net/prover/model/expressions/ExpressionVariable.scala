@@ -2,6 +2,7 @@ package net.prover.model.expressions
 
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition
+import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 import scala.reflect.ClassTag
 
@@ -59,7 +60,7 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   }
   def trySpecifyWithSubstitutions(
     targetArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
@@ -67,43 +68,8 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     arguments.map(_.trySpecifyWithSubstitutions(targetArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)).traverseOption.map(update)
   }
 
-  override def calculateSubstitutions(
-    other: Expression,
-    substitutions: Substitutions.Possible,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[Substitutions.Possible] = {
-    if (other.isRuntimeInstance[ExpressionType]) {
-      possibleSubstitutionsLens.get(substitutions).get(index) match {
-        case Some(applicative) =>
-          applicative.calculateArguments(other, Map.empty, internalDepth, 0, externalDepth).flatMap { otherArguments =>
-            (0 until arity).foldLeft(Option(substitutions)) { case (substitutionOptions, index) =>
-              substitutionOptions.flatMap { substitutionsSoFar =>
-                otherArguments.get(index).map { otherArgument =>
-                  arguments(index).calculateSubstitutions(otherArgument, substitutionsSoFar, internalDepth, externalDepth)
-                }.getOrElse(Some(substitutionsSoFar))
-              }
-            }
-          }
-        case None =>
-          if (arguments.isEmpty) {
-            for {
-              reducedOther <- other.removeExternalParameters(internalDepth)
-              result <- substitutions.update(index, reducedOther.asInstanceOf[ExpressionType], possibleSubstitutionsLens)
-            } yield result
-          } else {
-            substitutions
-              .updateAdd(
-                index,
-                (arguments, other.asInstanceOf[ExpressionType], internalDepth),
-                possibleSubstitutionsApplicationsLens)
-              .flatMap(_.clearApplicationsWherePossible(externalDepth))
-          }
-      }
-    } else None
-  }
   def tryApplySubstitutions(
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     externalDepth: Int
   ): Option[ExpressionType] = {
@@ -115,22 +81,13 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
 
   override def calculateApplicatives(
     baseArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(ExpressionType, Substitutions.Possible)] = {
+  ): Iterator[(ExpressionType, PossibleSubstitutions)] = {
     arguments.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
       .map(_.mapLeft(newArguments => update(newArguments.map(_.asInstanceOf[Term]))))
-  }
-  override def calculateArguments(
-    target: Expression,
-    argumentsSoFar: Map[Int, Term],
-    previousInternalDepth: Int,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[Map[Int, Term]] = {
-    getMatch(target).flatMap(targetComponents => arguments.calculateArguments(targetComponents, argumentsSoFar, previousInternalDepth, internalDepth, externalDepth))
   }
 
   def serializationPrefix: String

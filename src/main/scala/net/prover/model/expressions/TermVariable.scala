@@ -1,6 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model._
+import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 case class TermVariable(index: Int, arguments: Seq[Term]) extends ExpressionVariable[Term] with ExpressionLenses.ForTerms with Term {
   def getMatch(other: Expression): Option[Seq[Expression]] = other match {
@@ -21,11 +22,11 @@ case class TermVariable(index: Int, arguments: Seq[Term]) extends ExpressionVari
   }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(Term, Substitutions.Possible)] = {
+  ): Iterator[(Term, PossibleSubstitutions)] = {
     super[Term].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
       super[ExpressionVariable].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
   }

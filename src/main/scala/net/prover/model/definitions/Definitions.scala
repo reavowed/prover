@@ -11,6 +11,8 @@ import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.old.OldSubstitutionApplier
 import net.prover.shorthands.model.entries.DisplayShorthand
 import net.prover.structure.EntryContext
+import net.prover.substitutionFinding.model.PossibleSubstitutions
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.Direction
 
 import scala.Ordering.Implicits._
@@ -368,7 +370,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val relationRewriteInferences: Seq[RelationRewriteInference] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
 
-    def findPremiseRelation(lastPremise: Statement): Seq[(BinaryRelationStatement, Substitutions.Possible)] = {
+    def findPremiseRelation(lastPremise: Statement): Seq[(BinaryRelationStatement, PossibleSubstitutions)] = {
       val relationsFromTemplate = definedBinaryRelations.ofType[BinaryRelationFromGeneralShorthand].mapCollect { relation =>
         val generalTemplate = relation.shorthand.template.expand(
           Map.empty,
@@ -378,16 +380,16 @@ case class Definitions(rootEntryContext: EntryContext) {
             relation.symbolVariableName -> TermVariable(2))
         ).asInstanceOf[Statement]
         for {
-          substitutions <- generalTemplate.calculateSubstitutions(lastPremise)
+          substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(generalTemplate, lastPremise)
           lhsVariableIndex <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(0))
           rhsVariableIndex <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(1))
           symbolVariableIndex <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(2))
-        } yield (BinaryRelationStatement.construct(relation, TermVariable(lhsVariableIndex), TermVariable(rhsVariableIndex)), Substitutions.Possible(terms = Map(symbolVariableIndex -> relation.definition())))
+        } yield (BinaryRelationStatement.construct(relation, TermVariable(lhsVariableIndex), TermVariable(rhsVariableIndex)), PossibleSubstitutions(terms = Map(symbolVariableIndex -> relation.definition())))
       }
       if (relationsFromTemplate.nonEmpty)
         relationsFromTemplate
       else
-        findRelation(lastPremise).toSeq.map(_ -> Substitutions.Possible.empty)
+        findRelation(lastPremise).toSeq.map(_ -> PossibleSubstitutions.empty)
     }
     def areValidSecondaryComponents(premiseComponent: Term, conclusionComponent: Term): Boolean = {
       (ExpressionUtils.isSimpleTermVariable(premiseComponent) && ExpressionUtils.isSimpleTermVariable(conclusionComponent)) ||
@@ -442,7 +444,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     def directly = DirectPremise(premise)
     def byDesimplifying = for {
       inference <- conclusionSimplificationInferences
-      substitutions <- inference.conclusion.calculateSubstitutions(premise).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
+      substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inference.conclusion, premise).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
       substitutedInferencePremises <- inference.premises.map(OldSubstitutionApplier.applySubstitutions(_, substitutions).toOption).traverseOption.toSeq
       innerDesimplifications <- getPossiblePremiseDesimplifications(substitutedInferencePremises)
     } yield DesimplifiedPremise(premise, inference, innerDesimplifications)

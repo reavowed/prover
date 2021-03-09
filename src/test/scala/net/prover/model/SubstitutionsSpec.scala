@@ -4,13 +4,15 @@ import net.prover.core.transformers.ContextWithExternalDepth
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Expression, FunctionParameter}
 import net.prover.old.OldSubstitutionApplier
+import net.prover.substitutionFinding.model.PossibleSubstitutions
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
 class SubstitutionsSpec extends Specification {
   def testSuccessfulMatch(externalDepth: Int, expectedSubstitutions: Substitutions, sourceToTarget: (Expression, Expression)*)(implicit variableDefinitions: VariableDefinitions): Result = {
-    val calculatedSubstitutions = sourceToTarget.foldLeft(Option(Substitutions.Possible.empty)) { case (substitutions, (source, target)) =>
-      substitutions.flatMap(source.calculateSubstitutions(target, _, 0, externalDepth))
+    val calculatedSubstitutions = sourceToTarget.foldLeft(Option(PossibleSubstitutions.empty)) { case (substitutions, (source, target)) =>
+      substitutions.flatMap(PossibleSubstitutionCalculator.calculatePossibleSubstitutions(source, target, _)(ContextWithExternalDepth(externalDepth)))
     }.flatMap(_.confirmTotality(variableDefinitions))
     calculatedSubstitutions must beSome(expectedSubstitutions)
     Result.foreach(sourceToTarget) { case (source, target) =>
@@ -19,8 +21,8 @@ class SubstitutionsSpec extends Specification {
     }
   }
   def testFailedMatch(externalDepth: Int, sourceToTarget: (Expression, Expression)*)(implicit variableDefinitions: VariableDefinitions): Result = {
-    val calculatedSubstitutions = sourceToTarget.foldLeft(Option(Substitutions.Possible.empty)) { case (substitutions, (source, target)) =>
-      substitutions.flatMap(source.calculateSubstitutions(target, _, 0, externalDepth))
+    val calculatedSubstitutions = sourceToTarget.foldLeft(Option(PossibleSubstitutions.empty)) { case (substitutions, (source, target)) =>
+      substitutions.flatMap(PossibleSubstitutionCalculator.calculatePossibleSubstitutions(source, target, _)(ContextWithExternalDepth(externalDepth)))
     }.flatMap(_.confirmTotality(variableDefinitions))
     calculatedSubstitutions must beNone
   }

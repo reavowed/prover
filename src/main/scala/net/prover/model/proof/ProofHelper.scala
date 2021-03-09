@@ -4,12 +4,14 @@ import net.prover.model._
 import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions._
 import net.prover.structure.EntryContext
+import net.prover.substitutionFinding.model.PossibleSubstitutions
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
 object ProofHelper {
-  def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Option[(DerivationStep, Substitutions.Possible)] = {
+  def findFactBySubstituting(target: Statement, substitutionsSoFar: PossibleSubstitutions)(implicit stepProvingContext: StepProvingContext): Option[(DerivationStep, PossibleSubstitutions)] = {
     stepProvingContext.provingContext.facts.mapFind { fact =>
       for {
-        substitutions <- target.calculateSubstitutions(fact.statement, substitutionsSoFar)
+        substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(target, fact.statement, substitutionsSoFar)
       } yield (fact, substitutions)
     }
   }

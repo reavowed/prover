@@ -4,6 +4,7 @@ import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof._
 import net.prover.structure.EntryContext
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
@@ -20,7 +21,7 @@ class EqualityRewriterSpec extends Specification {
 
       def checkSteps(steps: Seq[Step]): Result = {
         Result.foreach(steps) { step =>
-          step.provenStatement must beSome(beNone ^^ ((s: Statement) => Equals(a, a).calculateSubstitutions(s)(SubstitutionContext.outsideProof)))
+          step.provenStatement must beSome(beNone ^^ ((s: Statement) => PossibleSubstitutionCalculator.calculatePossibleSubstitutions(Equals(a, a), s)(SubstitutionContext.outsideProof)))
           checkSteps(step.asOptionalInstanceOf[Step.WithSubsteps].toSeq.flatMap(_.substeps))
         }
       }

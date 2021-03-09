@@ -6,6 +6,8 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStep, PremiseFinder, StepProvingContext}
 import net.prover.old.OldSubstitutionApplier
+import net.prover.substitutionFinding.model.PossibleSubstitutions
+import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
 case class RelationRewriteInference(
     inferenceExtraction: InferenceExtraction,
@@ -13,12 +15,12 @@ case class RelationRewriteInference(
     mainPremise: Statement,
     premiseRelation: BinaryRelation,
     conclusionRelation: BinaryRelation,
-    initialSubstitutions: Substitutions.Possible)
+    initialSubstitutions: PossibleSubstitutions)
   extends PremiseSimplificationInference
 {
   def getPremiseSimplification(currentStatement: KnownStatement, existingPremises: Seq[KnownStatement])(implicit stepProvingContext: StepProvingContext): Option[KnownStatement] = {
     for {
-      substitutionsAfterMainPremise <- mainPremise.calculateSubstitutions(currentStatement.statement, initialSubstitutions)
+      substitutionsAfterMainPremise <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(mainPremise, currentStatement.statement, initialSubstitutions)
       (premiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
         case Some(initialPremise) =>
           PremiseFinder.findKnownStatementBySubstituting(initialPremise, substitutionsAfterMainPremise, existingPremises).headOption.map(_.mapLeft(_.derivation))
@@ -31,7 +33,7 @@ case class RelationRewriteInference(
   }
   def rewriteTarget(targetStatement: Statement)(implicit stepProvingContext: StepProvingContext): Option[(BinaryRelationStatement, Seq[DerivationStep])] = {
     for {
-      substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement, initialSubstitutions)
+      substitutionsAfterConclusion <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inferenceExtraction.conclusion, targetStatement, initialSubstitutions)
       (premiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
         case Some(initialPremise) =>
           PremiseFinder.findDerivationForStatementBySubstituting(initialPremise, substitutionsAfterConclusion, stepProvingContext.knownStatementsFromPremises).headOption.map(_.mapLeft(_.derivation))

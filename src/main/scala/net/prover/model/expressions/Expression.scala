@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.proof.SubstitutionContext
-import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, UsedVariables, VariableDefinitions}
+import net.prover.model.{ExpressionParsingContext, Parser, UsedVariables}
+import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 @JsonSerialize(using = classOf[ExpressionSerializer])
 trait Expression extends TypedExpression[Expression]
@@ -47,42 +48,19 @@ trait TypedExpression[+ExpressionType <: Expression] {
 
   def trySpecifyWithSubstitutions(
     targetArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
   ): Option[ExpressionType]
 
-  /**
-    * Calculate all valid substitutions that can be applied to this to result in other,
-    * given a set of conditions.
-    *
-    * @param other The target expression to match
-    * @param substitutions A set of existing substitutions to preserve
-    * @param internalDepth The current scope depth inside the expression since we starting calculating substitutions
-    * @param externalDepth The depth of external scoped variables that might be referred to by the other statement
-    * @return A sequence of valid substitutions
-    */
-  def calculateSubstitutions(
-    other: Expression,
-    substitutions: Substitutions.Possible,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[Substitutions.Possible]
-  def calculateSubstitutions(other: Expression)(implicit substitutionContext: SubstitutionContext): Option[Substitutions.Possible] = {
-    calculateSubstitutions(other, Substitutions.Possible.empty)
-  }
-  def calculateSubstitutions(other: Expression, substitutions: Substitutions.Possible)(implicit substitutionContext: SubstitutionContext): Option[Substitutions.Possible] = {
-    calculateSubstitutions(other, substitutions, 0, substitutionContext.externalDepth)
-  }
-
   def tryApplySubstitutions(
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     externalDepth: Int
   ): Option[ExpressionType]
   def tryApplySubstitutions(
-    substitutions: Substitutions.Possible)(
+    substitutions: PossibleSubstitutions)(
     implicit substitutionContext: SubstitutionContext
   ): Option[ExpressionType] = {
     tryApplySubstitutions(substitutions, 0, substitutionContext.externalDepth)
@@ -101,31 +79,18 @@ trait TypedExpression[+ExpressionType <: Expression] {
     */
   def calculateApplicatives(
     targetArguments: Seq[Term],
-    substitutions: Substitutions.Possible,
+    substitutions: PossibleSubstitutions,
     internalDepth: Int,
     previousInternalDepth: Int,
     externalDepth: Int
-  ): Iterator[(ExpressionType, Substitutions.Possible)]
+  ): Iterator[(ExpressionType, PossibleSubstitutions)]
   def calculateApplicatives(
     targetArguments: Seq[Term],
-    substitutions: Substitutions.Possible)(
+    substitutions: PossibleSubstitutions)(
     implicit substitutionContext: SubstitutionContext
-  ): Iterator[(ExpressionType, Substitutions.Possible)] = {
+  ): Iterator[(ExpressionType, PossibleSubstitutions)] = {
     calculateApplicatives(targetArguments, substitutions, 0, 0, substitutionContext.externalDepth)
   }
-
-  def calculateArguments(
-    target: Expression,
-    argumentsSoFar: Map[Int, Term],
-    previousInternalDepth: Int,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[Map[Int, Term]]
-  def calculateArguments(
-    target: Expression,
-    argumentsSoFar: Map[Int, Term])(
-    implicit substitutionContext: SubstitutionContext
-  ): Option[Map[Int, Term]] = calculateArguments(target, argumentsSoFar, 0, 0, substitutionContext.externalDepth)
 
   def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = None
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
@@ -149,24 +114,13 @@ object Expression {
     def usedVariables: UsedVariables = {
       expressions.map(_.usedVariables).foldTogether
     }
-    def calculateSubstitutions(
-      otherExpressions: Seq[Expression],
-      substitutions: Substitutions.Possible,
-      internalDepth: Int,
-      externalDepth: Int
-    ): Option[Substitutions.Possible] = {
-      expressions.zipStrict(otherExpressions)
-        .flatMap(_.foldLeft(Option(substitutions))  { case (substitutionsSoFar, (expression, otherExpression)) =>
-          substitutionsSoFar.flatMap(s => expression.calculateSubstitutions(otherExpression, s, internalDepth, externalDepth))
-        })
-    }
     def calculateApplicatives(
       arguments: Seq[Term],
-      substitutions: Substitutions.Possible,
+      substitutions: PossibleSubstitutions,
       internalDepth: Int,
       previousInternalDepth: Int,
       externalDepth: Int
-    ): Iterator[(Seq[Expression], Substitutions.Possible)] = {
+    ): Iterator[(Seq[Expression], PossibleSubstitutions)] = {
       expressions.iterator.foldLeft(Iterator((Seq.empty[Expression], substitutions))) { case (predicatesAndSubstitutionsSoFar, expression) =>
         for {
           (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
@@ -179,22 +133,8 @@ object Expression {
         } yield (predicatesSoFar :+ predicate, newSubstitutions)
       }
     }
-    def calculateArguments(
-      targets: Seq[Expression],
-      argumentsSoFar: Map[Int, Term],
-      previousInternalDepth: Int,
-      internalDepth: Int,
-      externalDepth: Int
-    ): Option[Map[Int, Term]] = {
-      expressions.zipStrict(targets).flatMap(_.foldLeft(Option(argumentsSoFar)) { case (argumentsOption, (expression, target)) =>
-        for {
-          arguments <- argumentsOption
-          result <- expression.calculateArguments(target, arguments, previousInternalDepth, internalDepth, externalDepth)
-        } yield result
-      })
-    }
     def tryApplySubstitutions(
-      substitutions: Substitutions.Possible,
+      substitutions: PossibleSubstitutions,
       internalDepth: Int,
       externalDepth: Int
     ): Option[Seq[Expression]] = {
