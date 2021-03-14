@@ -6,6 +6,7 @@ import net.prover.model.definitions.{ConjunctionDefinition, DeductionDefinition,
 import net.prover.model.expressions.Statement
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.ChapterEntry
+import net.prover.substitutionFinding.transformers.ParameterRemover
 import net.prover.types.model.entries.{RelatedObjectDefinition, TypeDefinition}
 
 case class RequiredParentObjects(
@@ -29,7 +30,7 @@ case class RequiredParentObjects(
     def helper(statement: Statement, extractedStatements: Seq[Statement]): (Statement, Seq[Statement]) = {
       def byExtractingLeft = for {
         (l, r) <- conjunctionDefinition.unapply(statement)
-        extractedL <- l.removeExternalParameters(objectDefinitions.length)
+        extractedL <- ParameterRemover.removeParameters(l, objectDefinitions.length, 0)
       } yield helper(r, extractedStatements :+ extractedL)
       byExtractingLeft getOrElse (statement, extractedStatements)
     }

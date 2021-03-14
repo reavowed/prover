@@ -1,9 +1,10 @@
 package net.prover.old
 
 import net.prover._
-import net.prover.core.transformers.ContextWithInternalDepth
+import net.prover.core.transformers.{ContextWithExternalDepth, ContextWithInternalDepth}
 import net.prover.model.expressions._
-import net.prover.model.{Inference, VariableDefinitions}
+import net.prover.model.proof.{Premise, Step}
+import net.prover.model.{Inference, Substitutions, VariableDefinitions}
 import scalaz.Monad
 import scalaz.syntax.monad._
 
@@ -96,6 +97,12 @@ object OldExpressionTransformer {
         premises <- traverse(ruleOfInference.premises.map(transformStatementWithoutContext(_, parameters)))
         conclusion <- transformStatementWithoutContext(ruleOfInference.conclusion, parameters)
       } yield TransformedInference(ruleOfInference, premises, conclusion)
+    }
+    def transformSubstitutions(substitutions: Substitutions, parameters: TParameters): TOutput[Substitutions] = {
+      for {
+        statements <- traverse(substitutions.statements.map(transformStatementWithoutContext(_, parameters)))
+        terms <- traverse(substitutions.terms.map(transformTermWithoutContext(_, parameters)))
+      } yield Substitutions(statements, terms)
     }
   }
 

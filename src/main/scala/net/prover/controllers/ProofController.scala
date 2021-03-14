@@ -3,8 +3,10 @@ package net.prover.controllers
 import net.prover._
 import net.prover.controllers.models._
 import net.prover.model.proof._
+import net.prover.old.OldParameterInserter
 import net.prover.structure.BookService
 import net.prover.structure.model.entries.Theorem.Proof
+import net.prover.substitutionFinding.transformers.ParameterRemover
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -95,9 +97,9 @@ class ProofController @Autowired() (val bookService: BookService) extends BookMo
                   (currentStepOuterContext.boundVariableLists(i).size <= newStepOuterContext.boundVariableLists(i).size).orBadRequest("Cannot move step to one with a smaller bound variable list")
                 }.traverseTry
                 stepsWithNewContext <- if (parametersToRemove > 0)
-                  currentSteps.map(_.removeExternalParameters(parametersToRemove, 0)).traverseOption.orBadRequest("Could not remove extra parameters")
+                  currentSteps.map(ParameterRemover.removeParameters(_, parametersToRemove, 0)).traverseOption.orBadRequest("Could not remove extra parameters")
                 else if (parametersToAdd > 0)
-                  Success(currentSteps.map(_.insertExternalParameters(parametersToAdd, 0)))
+                  Success(currentSteps.map(OldParameterInserter.insertParameters(_, parametersToAdd, 0)))
                 else
                   Success(currentSteps)
               } yield (before ++ stepsWithNewContext ++ after, InsertionAndDeletionProps(StepInsertionProps(destinationPath :+ destinationIndex, stepsWithNewContext), StepDeletionProps(sourcePath, sourceStartIndex, sourceEndIndex)))

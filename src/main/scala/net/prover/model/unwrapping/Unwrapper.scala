@@ -7,7 +7,7 @@ import net.prover.model.proof._
 import net.prover.model.{Inference, Substitutions}
 import net.prover.old.OldParameterInserter
 import net.prover.substitutionFinding.model.PossibleSubstitutions
-import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
+import net.prover.substitutionFinding.transformers.{ParameterRemover, PossibleSubstitutionCalculator}
 
 import scala.util.{Success, Try}
 
@@ -59,8 +59,8 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
   }
   def remove(source: Term, premises: Seq[Statement], wrapperStatement: Statement)(implicit stepContext: StepContext): Option[(Term, Seq[Statement], Statement)] = {
     for {
-      removedSource <- source.removeExternalParameters(1)
-      removedPremises <- premises.map(_.removeExternalParameters(1)).traverseOption
+      removedSource <- ParameterRemover.removeParameters(source, 1, 0)
+      removedPremises <- premises.map(ParameterRemover.removeParameters(_, 1, 0)).traverseOption
     } yield (removedSource, removedPremises, addToStatement(wrapperStatement))
   }
 }

@@ -43,7 +43,7 @@ object PossibleSubstitutionCalculator
         case None =>
           if (baseExpressionVariable.arguments.isEmpty) {
             for {
-              targetExpressionWithoutParameters <- ParameterRemover.transformExpressionWithoutContext(targetExpression, context.internalDepth)
+              targetExpressionWithoutParameters <- ParameterRemover.removeParameters(targetExpression, context.internalDepth, 0)
               result <- parameters.possibleSubstitutionsSoFar.update(baseExpressionVariable.index, targetExpressionWithoutParameters.asInstanceOf[TExpression], possibleSubstitutionsLens)
             } yield result
           } else {

@@ -2,7 +2,9 @@ package net.prover.core.transformers
 
 import net.prover.model.proof.SubstitutionContext
 
-case class ContextWithExternalDepth(externalDepth: Int)
+case class ContextWithExternalDepth(externalDepth: Int) {
+  def increaseDepth(): ContextWithExternalDepth = ContextWithExternalDepth(externalDepth + 1)
+}
 
 object ContextWithExternalDepth {
   val zero = ContextWithExternalDepth(0)

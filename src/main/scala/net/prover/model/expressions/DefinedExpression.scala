@@ -4,6 +4,7 @@ import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.old.OldParameterInserter
 import net.prover.substitutionFinding.model.PossibleSubstitutions
+import net.prover.substitutionFinding.transformers.ParameterRemover
 
 import scala.collection.immutable.Nil
 
@@ -39,20 +40,13 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
           acc
       }
     }
-    helper(Nil, components, Nil).mapCollect(_.optionMap1(t => if (boundVariableNames.isEmpty) Some(t) else t.removeExternalParameters(1)))
+    helper(Nil, components, Nil).mapCollect(_.optionMap1(t => if (boundVariableNames.isEmpty) Some(t) else ParameterRemover.removeParameters(t, 1, 0)))
   }
 
   override def getPredicateForTerm(term: Term, depth: Int): ExpressionType = {
     updateComponents(components.map(_.getPredicateForTerm(term, definition.increaseDepth(depth))))
   }
   override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
-
-  override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType] = {
-    components
-      .map(_.removeExternalParameters(numberOfParametersToRemove, definition.increaseDepth(internalDepth)))
-      .traverseOption
-      .map(updateComponents)
-  }
 
   override def specify(
     targetArguments: Map[Int, Term],

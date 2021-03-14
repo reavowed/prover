@@ -20,9 +20,6 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
 
   override def usedVariables: UsedVariables = (usedVariablesLens.set(Seq(UsedVariable(index, arguments.length)))(UsedVariables.empty) +: arguments.map(_.usedVariables)).foldTogether
   override def definitionUsages: DefinitionUsages = arguments.map(_.definitionUsages).foldTogether
-  override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int = 0): Option[ExpressionType] = {
-    arguments.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption.map(update)
-  }
   override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): ExpressionType = {
     update(arguments.map(_.replaceDefinitions(expressionDefinitionReplacements)))
   }

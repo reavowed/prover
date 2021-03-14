@@ -7,7 +7,7 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.Premise.Pending
 import net.prover.old.{OldParameterInserter, OldSubstitutionApplier}
 import net.prover.structure.EntryContext
-import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
+import net.prover.substitutionFinding.transformers.{PossibleSubstitutionCalculator}
 
 sealed trait Premise {
   def statement: Statement
@@ -15,9 +15,6 @@ sealed trait Premise {
   def referencedLines: Set[PreviousLineReference]
   def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending]
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise
-  def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Premise] = {
-    statement.removeExternalParameters(numberOfParametersToRemove, internalDepth).map(Pending)
-  }
   def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): Premise
   def toPending: Pending = Pending(statement)
   def isComplete: Boolean

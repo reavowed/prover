@@ -59,10 +59,10 @@ object ArgumentCalculator
   ): Option[Map[Int, Term]] = {
     if (parameter.level == context.internalDepth + parameters.externalContext.externalDepth) {
       for {
-        argumentWithoutInternalParameters <- ParameterRemover.transformTermWithoutContext(targetExpression, context.internalDepth)
+        argumentWithoutInternalParameters <- ParameterRemover.removeParameters(targetExpression, context.internalDepth, 0)
         result <- parameters.argumentsSoFar.tryAdd(parameter.index, argumentWithoutInternalParameters)
       } yield result
-    } else if (ParameterRemover.transformTermWithContext(targetExpression, parameters.substitutionCalculationContext.internalDepth)(context).contains(parameter)) {
+    } else if (ParameterRemover.removeParameters(targetExpression, parameters.substitutionCalculationContext.internalDepth, context.internalDepth).contains(parameter)) {
       Some(parameters.argumentsSoFar)
     } else {
       None

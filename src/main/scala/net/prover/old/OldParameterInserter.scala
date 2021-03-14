@@ -1,13 +1,15 @@
 package net.prover.old
 
 import net.prover.Identity
-import net.prover.core.transformers.ContextWithInternalDepth
+import net.prover.core.transformers.{ContextWithExternalDepth, ContextWithInternalDepth}
 import net.prover.model.Substitutions
 import net.prover.model.expressions.{FunctionParameter, Statement, Term}
+import net.prover.model.proof.Step
 import net.prover.old.OldExpressionTransformer.IdentityExpressionTransformer
 
 case class InsertionParameters(numberOfParametersToInsert: Int, externalDepthToInsertAt: Int)
 object OldParameterInserter extends IdentityExpressionTransformer[InsertionParameters]
+    with OldStepTransformer[Identity, InsertionParameters]
     with OldExpressionTransformer.DefaultVariableTransformation[Identity, InsertionParameters]
     with OldExpressionTransformer.DefaultCompoundExpressionTransformation[Identity, InsertionParameters]
 {
@@ -33,5 +35,8 @@ object OldParameterInserter extends IdentityExpressionTransformer[InsertionParam
     Substitutions(
       substitutions.statements.map(insertParameters(_, numberOfParametersToInsert, externalDepthToInsertAt)),
       substitutions.terms.map(insertParameters(_, numberOfParametersToInsert, externalDepthToInsertAt)))
+  }
+  def insertParameters(step: Step, numberOfParametersToInsert: Int, externalDepthToInsertAt: Int): Step = {
+    transformStepWithContext(step, contextWithExternalDepth => InsertionParameters(numberOfParametersToInsert, contextWithExternalDepth.externalDepth + externalDepthToInsertAt))(ContextWithExternalDepth.zero)
   }
 }
