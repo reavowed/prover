@@ -35,17 +35,6 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
       this
   }
 
-  override def specify(
-    targetArguments: Map[Int, Term],
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[Term] = {
-    if (level == internalDepth + externalDepth)
-      targetArguments.get(index).map(OldParameterInserter.insertParameters(_, internalDepth, 0))
-    else
-      Some(this)
-  }
-
   def trySpecifyWithSubstitutions(
     targetArguments: Seq[Term],
     substitutions: PossibleSubstitutions,

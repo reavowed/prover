@@ -3,9 +3,11 @@ package net.prover.model.definitions
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.core.expressions.CompoundStatementType
+import net.prover.core.transformers.ContextWithExternalDepth
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType
 import net.prover.model.expressions._
+import net.prover.old.ExpressionSpecifier
 import net.prover.structure.model.entries.ChapterEntry
 
 trait CompoundExpressionDefinition {
@@ -189,7 +191,7 @@ trait CompoundTermDefinition extends CompoundExpressionDefinition {
   def premises: Seq[Statement]
   def definitionPredicate: Statement
   val defaultValue: DefinedTerm = DefinedTerm(defaultComponentExpressions, this)(boundVariableNames)
-  val definingStatement: Statement = definitionPredicate.specify(Seq(defaultValue), 0, 0).get
+  val definingStatement: Statement = ExpressionSpecifier.specify(definitionPredicate, Seq(defaultValue))(ContextWithExternalDepth.zero).get
   val definitionInference: Inference.Definition = Inference.TermDefinition(name, variableDefinitions, premises, definingStatement)
   def inferences: Seq[Inference.FromEntry] = Seq(definitionInference)
 

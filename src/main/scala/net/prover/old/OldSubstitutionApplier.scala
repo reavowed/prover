@@ -19,13 +19,13 @@ object OldSubstitutionApplier
     expressionVariable: TVariable,
     parameters: ApplicationParameters,
     substitutionLens: Lens[Substitutions, Seq[TExpression]],
-    transform: (TExpression, SpecificationParameters) => Try[TExpression],
+    transform: (TExpression, SubstitutionSpecificationParameters) => Try[TExpression],
     description: String)(
     implicit context: ContextWithInternalDepth
   ): Try[TExpression] = {
     for {
       predicate <- substitutionLens.get(parameters.substitutions).lift(expressionVariable.index).orExceptionWithMessage(s"No substitution ${description} with index ${expressionVariable.index} found")
-      result <- transform(predicate, SpecificationParameters(expressionVariable.arguments, parameters.substitutions, context, parameters.externalContext))
+      result <- transform(predicate, SubstitutionSpecificationParameters(expressionVariable.arguments, parameters.substitutions, context, parameters.externalContext))
     } yield result
   }
   override def transformStatementVariableWithContext(

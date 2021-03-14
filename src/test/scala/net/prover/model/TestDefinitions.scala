@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.core.transformers.ContextWithExternalDepth
 import net.prover.model.TestDefinitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.CompoundExpressionDefinition.{ComponentArgument, ComponentType}
@@ -8,7 +9,7 @@ import net.prover.structure.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.structure.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof._
-import net.prover.old.OldParameterInserter
+import net.prover.old.{ExpressionSpecifier, OldParameterInserter}
 import net.prover.shorthands.model.entries.DisplayShorthand
 import net.prover.structure.EntryContext
 import net.prover.types.model.ParentTypeConditions
@@ -484,7 +485,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
           statement,
           specification.summary,
           Seq(Premise.Pending(OldParameterInserter.insertParameters(generalizeOnce(statement, parameterDepth), 1, 0))),
-          Substitutions(Seq(statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get), Seq($)))
+          Substitutions(Seq(ExpressionSpecifier.specify(statement, Seq(FunctionParameter(0, depth - parameterDepth)))(ContextWithExternalDepth.zero).get), Seq($)))
       }
       beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>
         (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.Generalization(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, GeneralizationDefinition))}

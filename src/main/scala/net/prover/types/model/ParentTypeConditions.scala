@@ -4,6 +4,7 @@ import net.prover.model.definitions.{CompoundExpressionDefinition, ConjunctionDe
 import net.prover.model.expressions.{Statement, TermVariable}
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{Parser, SimpleVariableDefinition}
+import net.prover.old.ExpressionSpecifier
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.ChapterEntry
 import net.prover.types.model.entries.{TypeDefinition, TypeQualifierDefinition}
@@ -21,7 +22,7 @@ case class ParentTypeConditions(
       case Some(adapter) =>
         (
           (offset: Int) =>
-            adapter.templates.map(_.specify(adapter.variableDefinitions.indices.map(i => TermVariable(offset + i + 1, Nil)))(SubstitutionContext.outsideProof).get),
+            adapter.templates.map(ExpressionSpecifier.specify(_, adapter.variableDefinitions.indices.map(i => TermVariable(offset + i + 1, Nil)))(SubstitutionContext.outsideProof).get),
           adapter.variableDefinitions)
       case None =>
         val variableDefinitions = requiredParentQualifier match {

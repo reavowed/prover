@@ -2,6 +2,7 @@ package net.prover.model.definitions
 
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
+import net.prover.old.ExpressionSpecifier
 
 sealed trait Wrapper[TInput, TOutput] {
   def apply(t: TInput)(implicit substitutionContext: SubstitutionContext): TOutput
@@ -13,7 +14,7 @@ object Wrapper {
   def apply[TInput, TOutput](f: (TInput, SubstitutionContext) => TOutput): Wrapper[TInput, TOutput] = BaseWrapper(f)
   def identity[T]: Wrapper[T, T] = Wrapper((t, _) => t)
   def fromExpression[T <: Expression with TypedExpression[T]](expression: T): Wrapper[Term, T] = {
-    Wrapper((t, context) => expression.specify(Seq(t))(context).get)
+    Wrapper((t, context) => ExpressionSpecifier.specify(expression, Seq(t))(context).get.asInstanceOf[T])
   }
   implicit class TermWrapper[TOutput](wrapper: Wrapper[Term, TOutput]) {
     def template(implicit substitutionContext: SubstitutionContext): TOutput = {

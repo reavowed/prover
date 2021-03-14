@@ -46,13 +46,6 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     update(arguments.map(_.getPredicateForTerm(term, depth)))
   }
 
-  def specify(
-    targetArguments: Map[Int, Term],
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType] = {
-    arguments.map(_.specify(targetArguments, internalDepth, externalDepth)).traverseOption.map(update)
-  }
   def trySpecifyWithSubstitutions(
     targetArguments: Seq[Term],
     substitutions: PossibleSubstitutions,

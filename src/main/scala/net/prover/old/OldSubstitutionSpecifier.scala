@@ -11,13 +11,13 @@ import scala.util.{Success, Try}
   *
   * Used during the specification of an expression variable (see [[SubstitutionApplier.transformExpressionVariableWithContext]]
   */
-case class SpecificationParameters(targetArguments: Seq[Term], substitutions: Substitutions, applicationContext: ContextWithInternalDepth, externalContext: ContextWithExternalDepth)
+case class SubstitutionSpecificationParameters(targetArguments: Seq[Term], substitutions: Substitutions, applicationContext: ContextWithInternalDepth, externalContext: ContextWithExternalDepth)
 object OldSubstitutionSpecifier
-    extends OldExpressionTransformer.TryExpressionTransformer[SpecificationParameters]
-    with OldExpressionTransformer.DefaultVariableTransformation[Try, SpecificationParameters]
-    with OldExpressionTransformer.DefaultCompoundExpressionTransformation[Try, SpecificationParameters]
+    extends OldExpressionTransformer.TryExpressionTransformer[SubstitutionSpecificationParameters]
+    with OldExpressionTransformer.DefaultVariableTransformation[Try, SubstitutionSpecificationParameters]
+    with OldExpressionTransformer.DefaultCompoundExpressionTransformation[Try, SubstitutionSpecificationParameters]
 {
-  override def transformParameterWithContext(parameter: FunctionParameter, specificationParameters: SpecificationParameters)(implicit context: ContextWithInternalDepth): Try[Term] = {
+  override def transformParameterWithContext(parameter: FunctionParameter, specificationParameters: SubstitutionSpecificationParameters)(implicit context: ContextWithInternalDepth): Try[Term] = {
     if (parameter.level == context.internalDepth + specificationParameters.externalContext.externalDepth)
       OldSubstitutionApplier.transformTermWithContext(specificationParameters.targetArguments(parameter.index), ApplicationParameters(specificationParameters.substitutions, specificationParameters.externalContext))(specificationParameters.applicationContext)
         .map(OldParameterInserter.transformTermWithoutContext(_, InsertionParameters(context.internalDepth, 0)))
