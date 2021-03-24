@@ -46,27 +46,6 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     update(arguments.map(_.getPredicateForTerm(term, depth)))
   }
 
-  def trySpecifyWithSubstitutions(
-    targetArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType] = {
-    arguments.map(_.trySpecifyWithSubstitutions(targetArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)).traverseOption.map(update)
-  }
-
-  def tryApplySubstitutions(
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType] = {
-    for {
-      predicate <- possibleSubstitutionsLens.get(substitutions).get(index)
-      result <- predicate.trySpecifyWithSubstitutions(arguments, substitutions, 0, internalDepth, externalDepth)
-    } yield result.asInstanceOf[ExpressionType]
-  }
-
   override def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: PossibleSubstitutions,

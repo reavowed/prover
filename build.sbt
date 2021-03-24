@@ -2,7 +2,7 @@ name := "prover"
 
 version := "0.1"
 
-scalaVersion := "2.12.5"
+scalaVersion := "2.12.12"
 
 val monocleVersion = "1.4.0"
 

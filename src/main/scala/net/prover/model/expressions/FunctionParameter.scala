@@ -35,25 +35,6 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
       this
   }
 
-  def trySpecifyWithSubstitutions(
-    targetArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ) = {
-    if (level == internalDepth + externalDepth)
-      targetArguments(index).tryApplySubstitutions(substitutions, previousInternalDepth, externalDepth).map(OldParameterInserter.insertParameters(_, internalDepth, 0))
-    else
-      Some(OldParameterInserter.insertParameters(this, previousInternalDepth, internalDepth))
-  }
-  override def tryApplySubstitutions(
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    externalDepth: Int
-  ) = {
-    Some(this)
-  }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: PossibleSubstitutions,

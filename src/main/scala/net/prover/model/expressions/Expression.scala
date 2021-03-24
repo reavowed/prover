@@ -24,26 +24,6 @@ trait TypedExpression[+ExpressionType <: Expression] {
   def getPredicateForTerm(term: Term, depth: Int): ExpressionType
   def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): ExpressionType
 
-  def trySpecifyWithSubstitutions(
-    targetArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType]
-
-  def tryApplySubstitutions(
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType]
-  def tryApplySubstitutions(
-    substitutions: PossibleSubstitutions)(
-    implicit substitutionContext: SubstitutionContext
-  ): Option[ExpressionType] = {
-    tryApplySubstitutions(substitutions, 0, substitutionContext.externalDepth)
-  }
-
   /**
     * Calculate an applicative and a set of substitutions, such that when the applicative is applied to the given
     * arguments after substitution, this expression results.
@@ -110,13 +90,6 @@ object Expression {
             externalDepth)
         } yield (predicatesSoFar :+ predicate, newSubstitutions)
       }
-    }
-    def tryApplySubstitutions(
-      substitutions: PossibleSubstitutions,
-      internalDepth: Int,
-      externalDepth: Int
-    ): Option[Seq[Expression]] = {
-      expressions.map(_.tryApplySubstitutions(substitutions, internalDepth, externalDepth)).traverseOption
     }
   }
 }

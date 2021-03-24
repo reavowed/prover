@@ -48,25 +48,6 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
   override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
 
-  def trySpecifyWithSubstitutions(
-    targetArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType] = {
-    components
-      .map(_.trySpecifyWithSubstitutions(targetArguments, substitutions, definition.increaseDepth(internalDepth), previousInternalDepth, externalDepth)).traverseOption
-      .map(updateComponents)
-  }
-
-  def tryApplySubstitutions(
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    externalDepth: Int
-  ): Option[ExpressionType] = {
-    components.tryApplySubstitutions(substitutions, definition.increaseDepth(internalDepth), externalDepth).map(updateComponents)
-  }
   override def calculateApplicatives(
     baseArguments: Seq[Term],
     substitutions: PossibleSubstitutions,

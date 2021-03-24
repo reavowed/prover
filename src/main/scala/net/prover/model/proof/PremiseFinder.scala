@@ -9,7 +9,9 @@ import net.prover.model.utils.ExpressionUtils
 import net.prover.model.{Inference, Substitutions}
 import net.prover.old.OldSubstitutionApplier
 import net.prover.substitutionFinding.model.PossibleSubstitutions
-import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
+import net.prover.substitutionFinding.transformers.{PossibleSubstitutionApplier, PossibleSubstitutionCalculator}
+
+import scala.util.{Failure, Success}
 
 object PremiseFinder {
 
@@ -273,12 +275,12 @@ object PremiseFinder {
       deconstructionStep <- Step.Assertion.forInference(deconstructionInference, finalDeconstructionSubstitutions)
     } yield (KnownStatement.fromDerivation(foundStatements.flatMap(_.derivation) :+ DerivationStep.fromAssertion(deconstructionStep)), innerSubstitutions)
 
-    unsubstitutedPremiseStatement.tryApplySubstitutions(initialSubstitutions) match {
-      case Some(substitutedPremiseStatement) =>
+    PossibleSubstitutionApplier.applySubstitutions(unsubstitutedPremiseStatement, initialSubstitutions) match {
+      case Success(substitutedPremiseStatement) =>
         for {
           premiseDerivation <- findDerivationForStatement(substitutedPremiseStatement).toSeq
         } yield (KnownStatement(substitutedPremiseStatement, premiseDerivation), initialSubstitutions)
-      case None =>
+      case Failure(_) =>
         directly ++ fromFact ++ byDeconstructing
     }
   }
