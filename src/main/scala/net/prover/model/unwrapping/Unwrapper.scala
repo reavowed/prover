@@ -7,7 +7,7 @@ import net.prover.model.proof._
 import net.prover.model.{Inference, Substitutions}
 import net.prover.old.OldParameterInserter
 import net.prover.substitutionFinding.model.PossibleSubstitutions
-import net.prover.substitutionFinding.transformers.{ParameterRemover, PossibleSubstitutionCalculator}
+import net.prover.substitutionFinding.transformers.{ApplicativeCalculator, ParameterRemover, PossibleSubstitutionCalculator}
 
 import scala.util.{Success, Try}
 
@@ -39,7 +39,7 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
   }
   def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     val parameter = FunctionParameter(0, depth)
-    val predicate = result.calculateApplicatives(Seq(TermVariable(0, Nil)), PossibleSubstitutions(Map.empty, Map(0 -> parameter))).next()._1
+    val predicate = ApplicativeCalculator.calculateApplicatives(result, Seq(TermVariable(0, Nil)), PossibleSubstitutions(Map.empty, Map(0 -> parameter))).next()._1
     val substitutions = Substitutions(Seq(predicate), Seq(parameter))
     val baseAssertionStep = Step.Assertion.forInference(inference, substitutions).get
     baseAssertionStep.copy(premises = Seq(Premise.Pending(baseAssertionStep.premises.head.statement.asInstanceOf[DefinedStatement].updateBoundVariableNames(Seq(variableName)))))

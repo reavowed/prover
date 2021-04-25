@@ -7,6 +7,7 @@ scalaVersion := "2.12.13"
 val monocleVersion = "1.4.0"
 
 addCompilerPlugin("io.tryp" % "splain" % "0.5.8" cross CrossVersion.patch)
+addCompilerPlugin("org.typelevel" % "kind-projector" % "0.11.3" cross CrossVersion.full)
 
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.2",

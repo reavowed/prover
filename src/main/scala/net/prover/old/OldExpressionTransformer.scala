@@ -1,11 +1,10 @@
 package net.prover.old
 
 import net.prover._
-import net.prover.core.transformers.{ContextWithExternalDepth, ContextWithInternalDepth}
+import net.prover.core.transformers.ContextWithInternalDepth
 import net.prover.model.expressions._
-import net.prover.model.proof.{Premise, Step}
 import net.prover.model.{Inference, Substitutions, VariableDefinitions}
-import scalaz.Monad
+import scalaz.{Functor, Monad}
 import scalaz.syntax.monad._
 
 import scala.util.Try
@@ -88,9 +87,71 @@ object OldExpressionTransformer {
     ): TOutput[TExpression]
   }
 
-  trait TraversableExpressionTransformer[TOutput[+_], TParameters] extends OldExpressionTransformer[TOutput, TParameters] {
-    implicit def monad: Monad[TOutput]
+  trait FunctorExpressionTransformer[TOutput[+_], TParameters] extends OldExpressionTransformer[TOutput, TParameters] {
+    implicit def functor: Functor[TOutput]
+  }
+
+  trait ExpressionSequenceTransformer[TOutput[+_], TParameters]
+      extends OldExpressionTransformer[TOutput, TParameters]
+      with FunctorExpressionTransformer[TOutput, TParameters]
+  {
+    def transformGenericExpressionsWithContext[
+      TExpression <: Expression](
+      expressions: Seq[TExpression],
+      parameters: TParameters,
+      transformExpression: (TExpression, TParameters) => TOutput[TExpression])(
+      implicit context: ContextWithInternalDepth
+    ): TOutput[Seq[TExpression]]
+
+    def transformExpressionsWithContext(
+      expressions: Seq[Expression],
+      parameters: TParameters)(
+      implicit context: ContextWithInternalDepth
+    ): TOutput[Seq[Expression]] = {
+      transformGenericExpressionsWithContext(expressions, parameters, transformExpressionWithContext)
+    }
+    def transformStatementsWithContext(
+      expressions: Seq[Statement],
+      parameters: TParameters)(
+      implicit context: ContextWithInternalDepth
+    ): TOutput[Seq[Statement]] = {
+      transformGenericExpressionsWithContext(expressions, parameters, transformStatementWithContext)
+    }
+    def transformTermsWithContext(
+      expressions: Seq[Term],
+      parameters: TParameters)(
+      implicit context: ContextWithInternalDepth
+    ): TOutput[Seq[Term]] = {
+      transformGenericExpressionsWithContext(expressions, parameters, transformTermWithContext)
+    }
+  }
+
+  trait TraversableExpressionTransformer[TOutput[+_], TParameters] extends ExpressionSequenceTransformer[TOutput, TParameters] with FunctorExpressionTransformer[TOutput, TParameters] {
     def traverse[T](seq: Seq[TOutput[T]]): TOutput[Seq[T]]
+
+    override def transformGenericExpressionsWithContext[
+      TExpression <: Expression](
+      expressions: Seq[TExpression],
+      parameters: TParameters,
+      transformExpression: (TExpression, TParameters) => TOutput[TExpression])(
+      implicit context: ContextWithInternalDepth
+    ): TOutput[Seq[TExpression]] = {
+      traverse(expressions.map(transformExpression(_, parameters)))
+    }
+  }
+
+  trait MonadExpressionTransformer[TOutput[+_], TParameters] extends TraversableExpressionTransformer[TOutput, TParameters] {
+    implicit def monad: Monad[TOutput]
+    override implicit def functor: Functor[TOutput] = monad
+
+    override def traverse[T](seq: Seq[TOutput[T]]): TOutput[Seq[T]] = {
+      seq.foldLeft(monad.point(Seq.empty[T])) { case (outputSeq, outputValue) =>
+        for {
+          seq <- outputSeq
+          value <- outputValue
+        } yield seq :+ value
+      }
+    }
 
     def transformRuleOfInference(ruleOfInference: Inference, parameters: TParameters): TOutput[Inference] = {
       for {
@@ -106,20 +167,20 @@ object OldExpressionTransformer {
     }
   }
 
-  trait IdentityExpressionTransformer[TParameters] extends TraversableExpressionTransformer[Identity, TParameters] {
+  trait IdentityExpressionTransformer[TParameters] extends MonadExpressionTransformer[Identity, TParameters] {
     override implicit val monad: Monad[Identity] = identityMonad
-    override def traverse[T](seq: Seq[T]): Seq[T] = seq
   }
-  trait OptionExpressionTransformer[TParameters] extends TraversableExpressionTransformer[Option, TParameters] {
+  trait OptionExpressionTransformer[TParameters] extends MonadExpressionTransformer[Option, TParameters] {
     override implicit val monad: Monad[Option] = scalaz.std.option.optionInstance
-    override def traverse[T](seq: Seq[Option[T]]): Option[Seq[T]] = seq.traverseOption
   }
-  trait TryExpressionTransformer[TParameters] extends TraversableExpressionTransformer[Try, TParameters] {
+  trait TryExpressionTransformer[TParameters] extends MonadExpressionTransformer[Try, TParameters] {
     override implicit val monad: Monad[Try] = tryMonad
-    override def traverse[T](seq: Seq[Try[T]]): Try[Seq[T]] = seq.traverseTry
   }
 
-  trait DefaultVariableTransformation[TOutput[+_], TParameters] extends TraversableExpressionTransformer[TOutput, TParameters] with OldExpressionTransformer.WithCommonVariableTransformation[TOutput, TParameters] {
+  trait DefaultVariableTransformation[TOutput[+_], TParameters]
+      extends ExpressionSequenceTransformer[TOutput, TParameters]
+      with OldExpressionTransformer.WithCommonVariableTransformation[TOutput, TParameters]
+  {
     override def transformExpressionVariableWithContext[
       TVariable <: ExpressionVariable[TExpression],
       TExpression <: Expression](
@@ -127,11 +188,14 @@ object OldExpressionTransformer {
       parameters: TParameters)(
       implicit context: ContextWithInternalDepth
     ): TOutput[TExpression] = {
-      traverse(expressionVariable.arguments.map(transformTermWithContext(_, parameters)))
+      transformTermsWithContext(expressionVariable.arguments, parameters)
         .map(expressionVariable.update)
     }
   }
-  trait DefaultCompoundExpressionTransformation[TOutput[+_], TParameters] extends TraversableExpressionTransformer[TOutput, TParameters] with OldExpressionTransformer.WithCommonCompoundExpressionTransformation[TOutput, TParameters] {
+  trait DefaultCompoundExpressionTransformation[TOutput[+_], TParameters]
+      extends ExpressionSequenceTransformer[TOutput, TParameters]
+      with FunctorExpressionTransformer[TOutput, TParameters]
+      with OldExpressionTransformer.WithCommonCompoundExpressionTransformation[TOutput, TParameters] {
     override def transformCompoundExpressionWithContext[
       TCompoundExpression <: DefinedExpression[TExpression],
       TExpression <: Expression](
@@ -140,7 +204,7 @@ object OldExpressionTransformer {
       implicit context: ContextWithInternalDepth
     ): TOutput[TExpression] = {
       val innerContext = context.increaseDepth(compoundExpression)
-      traverse(compoundExpression.components.map(transformExpressionWithContext(_, parameters)(innerContext)))
+      transformExpressionsWithContext(compoundExpression.components, parameters)(innerContext)
         .map(compoundExpression.updateComponents)
     }
   }

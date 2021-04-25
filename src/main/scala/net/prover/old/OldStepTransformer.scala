@@ -2,10 +2,10 @@ package net.prover.old
 
 import net.prover.core.transformers.ContextWithExternalDepth
 import net.prover.model.proof.{Premise, Step}
-import net.prover.old.OldExpressionTransformer.TraversableExpressionTransformer
+import net.prover.old.OldExpressionTransformer.{MonadExpressionTransformer, TraversableExpressionTransformer}
 import scalaz.syntax.monad._
 
-trait OldStepTransformer[TOutput[+_], TParameters] extends TraversableExpressionTransformer[TOutput, TParameters] {
+trait OldStepTransformer[TOutput[+_], TParameters] extends MonadExpressionTransformer[TOutput, TParameters] {
     def transformPremise(premise: Premise, parameters: TParameters): TOutput[Premise] = {
       for {
         newStatement <- transformStatementWithoutContext(premise.statement, parameters)

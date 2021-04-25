@@ -35,27 +35,6 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
       this
   }
 
-  override def calculateApplicatives(
-    baseArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Iterator[(Term, PossibleSubstitutions)] = {
-    (super.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth).toSet ++
-      (if (level >= internalDepth + previousInternalDepth)
-        // External context
-        // Shifted down to cut out the shared internal context
-        Seq(FunctionParameter(index, level - previousInternalDepth) -> substitutions)
-      else if (level < internalDepth)
-        // Internal context after the entry point to calculateApplicatives
-        Seq(this -> substitutions)
-      else
-        // Shared internal context - must be passed in via the arguments
-        Nil)
-    ).iterator
-  }
-
   override def toString: String = (0 to level).map(_ => "$").mkString("") + index
   override def serialized: String = toString
   override def serializedForHash: String = toString

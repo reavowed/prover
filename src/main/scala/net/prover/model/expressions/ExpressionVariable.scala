@@ -46,17 +46,6 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
     update(arguments.map(_.getPredicateForTerm(term, depth)))
   }
 
-  override def calculateApplicatives(
-    baseArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Iterator[(ExpressionType, PossibleSubstitutions)] = {
-    arguments.calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
-      .map(_.mapLeft(newArguments => update(newArguments.map(_.asInstanceOf[Term]))))
-  }
-
   def serializationPrefix: String
   def serializationSymbol: String = serializationPrefix + index
   override def toString: String = serializationSymbol + (if (arguments.nonEmpty) "(" + arguments.map(_.toString).mkString(", ") + ")" else "")

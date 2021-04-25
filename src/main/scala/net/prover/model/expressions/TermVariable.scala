@@ -20,16 +20,6 @@ case class TermVariable(index: Int, arguments: Seq[Term]) extends ExpressionVari
     else
       super.getPredicateForTerm(term, depth)
   }
-  override def calculateApplicatives(
-    baseArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Iterator[(Term, PossibleSubstitutions)] = {
-    super[Term].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
-      super[ExpressionVariable].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
-  }
   def serializationPrefix: String = "t"
 }
 

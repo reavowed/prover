@@ -48,17 +48,6 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   }
   override def definitionUsages: DefinitionUsages = components.map(_.definitionUsages).foldTogether.addUsage(definition)
 
-  override def calculateApplicatives(
-    baseArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Iterator[(ExpressionType, PossibleSubstitutions)] = {
-    components.calculateApplicatives(baseArguments, substitutions, definition.increaseDepth(internalDepth), previousInternalDepth, externalDepth)
-      .map(_.mapLeft(updateComponents))
-  }
-
   override def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = {
     path match {
       case Nil =>

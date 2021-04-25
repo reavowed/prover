@@ -8,22 +8,6 @@ import net.prover.substitutionFinding.transformers.{PossibleSubstitutionCalculat
 
 trait Term extends Expression with TypedExpression[Term] {
   override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, Term, Int, Seq[Int])] = Seq((this, FunctionParameter(0, internalDepth + externalDepth), internalDepth, Nil))
-  def calculateApplicatives(
-    baseArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Iterator[(Term, PossibleSubstitutions)] = {
-    for {
-      (argument, index) <- baseArguments.zipWithIndex.iterator
-      updatedSubstitutions <- PossibleSubstitutionCalculator.calculateFromExpressionWithContext(
-        OldParameterInserter.insertParameters(argument, internalDepth, 0),
-        this,
-        PossibleSubstitutionCalculationParameters(substitutions, ContextWithExternalDepth(externalDepth)))(
-        ContextWithInternalDepth(previousInternalDepth + internalDepth))
-    } yield FunctionParameter(index, externalDepth + internalDepth) -> updatedSubstitutions
-  }
 }
 
 object Term {

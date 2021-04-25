@@ -5,7 +5,7 @@ import net.prover.model.{Substitutions, VariableDefinition, VariableDefinitions}
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.StepContext
 import net.prover.substitutionFinding.model.PossibleSubstitutions
-import net.prover.substitutionFinding.transformers.PossibleSubstitutionApplier
+import net.prover.substitutionFinding.transformers.{ApplicativeCalculator, PossibleSubstitutionApplier}
 
 case class SuggestedSubstitutions(
   statements: Seq[Option[Statement]],
@@ -30,7 +30,7 @@ object SuggestedSubstitutions {
         applicationsMap.getOrElse(index, Nil)
           .find { case (arguments, _, _) => (0 until definition.arity).forall(i => PossibleSubstitutionApplier.applySubstitutions(arguments(i), possibleSubstitutions).isSuccess) }
           .map { case (arguments, value, depth) =>
-            value.calculateApplicatives(arguments, possibleSubstitutions, 0, depth, stepContext.externalDepth).map(_._1.asInstanceOf[T]).toSeq
+            ApplicativeCalculator.calculateApplicatives(value, arguments, possibleSubstitutions, depth, stepContext).map(_._1.asInstanceOf[T]).toSeq
           }
           .getOrElse(Nil)
       }

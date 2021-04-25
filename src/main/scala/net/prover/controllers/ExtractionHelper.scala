@@ -8,7 +8,7 @@ import net.prover.model.proof.SubstatementExtractor.{InferenceExtraction, Variab
 import net.prover.model.proof._
 import net.prover.old.OldSubstitutionApplier
 import net.prover.substitutionFinding.model.PossibleSubstitutions
-import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
+import net.prover.substitutionFinding.transformers.{ApplicativeCalculator, PossibleSubstitutionCalculator}
 
 import scala.util.{Failure, Success, Try}
 
@@ -36,7 +36,7 @@ object ExtractionHelper {
       extractedConclusion <- OldSubstitutionApplier.applySubstitutions(specificationInference.conclusion, extractionSubstitutions).orBadRequest(s"Could not substitute conclusion for specification ${specificationInference.id}")
       ExtractionApplication(innerResult, innerPremise, innerSteps, innerPremises, innerTargets) <-
         applyExtractions(extractedConclusion, inferencesRemaining, mainSubstitutions, intendedPremises, intendedConclusion, newVariableTracker, findPremiseStepsOrTargets)
-      updatedPredicate <- innerPremise.calculateApplicatives(Seq(TermVariable(newIndex, Nil)), PossibleSubstitutions(Map.empty, Map(0 -> term)))
+      updatedPredicate <- ApplicativeCalculator.calculateApplicatives(innerPremise, Seq(TermVariable(newIndex, Nil)), PossibleSubstitutions(Map.empty, Map(0 -> term)))
         .map(_._1)
         .find(_ == predicate)
         .orBadRequest("Could not recalculate applicative")

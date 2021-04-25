@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{ExpressionParsingContext, Parser, UsedVariables}
-import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 @JsonSerialize(using = classOf[ExpressionSerializer])
 trait Expression extends TypedExpression[Expression]
@@ -23,32 +22,6 @@ trait TypedExpression[+ExpressionType <: Expression] {
   def getTerms()(implicit substitutionContext: SubstitutionContext): Seq[(Term, ExpressionType, Int, Seq[Int])] = getTerms(0, substitutionContext.externalDepth)
   def getPredicateForTerm(term: Term, depth: Int): ExpressionType
   def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): ExpressionType
-
-  /**
-    * Calculate an applicative and a set of substitutions, such that when the applicative is applied to the given
-    * arguments after substitution, this expression results.
-    *
-    * Used in calculating substitutions for a function or predicate application - calling e.g.
-    * `F(a).calculateSubstitutions(other)` will result in a call to `other.calculateApplicatives(Seq(a))`.
-    *
-    * @param internalDepth The current scope depth inside the expression since we starting calculating applicatives
-    * @param previousInternalDepth The scope depth inside the expression at the point we started calculating applicatives
-    * @param externalDepth The depth of external scoped variables that might be referred to by this statement
-    */
-  def calculateApplicatives(
-    targetArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Iterator[(ExpressionType, PossibleSubstitutions)]
-  def calculateApplicatives(
-    targetArguments: Seq[Term],
-    substitutions: PossibleSubstitutions)(
-    implicit substitutionContext: SubstitutionContext
-  ): Iterator[(ExpressionType, PossibleSubstitutions)] = {
-    calculateApplicatives(targetArguments, substitutions, 0, 0, substitutionContext.externalDepth)
-  }
 
   def renameBoundVariable(newName: String, index: Int, path: Seq[Int]): Option[ExpressionType] = None
   def findComponentPath(other: Expression): Option[Seq[Int]] = {
@@ -71,25 +44,6 @@ object Expression {
   implicit class ExpressionSeqOps(expressions: Seq[Expression]) {
     def usedVariables: UsedVariables = {
       expressions.map(_.usedVariables).foldTogether
-    }
-    def calculateApplicatives(
-      arguments: Seq[Term],
-      substitutions: PossibleSubstitutions,
-      internalDepth: Int,
-      previousInternalDepth: Int,
-      externalDepth: Int
-    ): Iterator[(Seq[Expression], PossibleSubstitutions)] = {
-      expressions.iterator.foldLeft(Iterator((Seq.empty[Expression], substitutions))) { case (predicatesAndSubstitutionsSoFar, expression) =>
-        for {
-          (predicatesSoFar, substitutionsSoFar) <- predicatesAndSubstitutionsSoFar
-          (predicate, newSubstitutions) <- expression.calculateApplicatives(
-            arguments,
-            substitutionsSoFar,
-            internalDepth,
-            previousInternalDepth,
-            externalDepth)
-        } yield (predicatesSoFar :+ predicate, newSubstitutions)
-      }
     }
   }
 }

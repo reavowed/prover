@@ -39,15 +39,4 @@ case class DefinedTerm(
     else
       super.getPredicateForTerm(term, depth)
   }
-
-  override def calculateApplicatives(
-    baseArguments: Seq[Term],
-    substitutions: PossibleSubstitutions,
-    internalDepth: Int,
-    previousInternalDepth: Int,
-    externalDepth: Int
-  ): Iterator[(Term, PossibleSubstitutions)] = {
-    super[Term].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
-      super[DefinedExpression].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
-  }
 }
