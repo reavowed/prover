@@ -1,7 +1,7 @@
-package net.prover.substitutionFinding.transformers
+package net.prover.utilities
 
-import net.prover.model.expressions._
 import net.prover.core.transformers.ContextWithInternalDepth
+import net.prover.model.expressions._
 
 import scala.reflect.ClassTag
 
@@ -52,7 +52,6 @@ trait DoubleExpressionCalculator[TOutput, TParameters] {
 }
 
 object DoubleExpressionCalculator {
-
   trait OptionDoubleExpressionCalculator[TOutput, TParameters] extends DoubleExpressionCalculator[Option[TOutput], TParameters] {
     override def flattenOption(option: Option[Option[TOutput]]): Option[TOutput] = option.flatten
   }

@@ -9,6 +9,7 @@ import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement,
 import net.prover.old.OldSubstitutionApplier
 import net.prover.structure.BookService
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
+import net.prover.utilities.complexity.ComplexityCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -80,7 +81,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         else
           None
       }
-      def getConclusionComplexity(possibleConclusion: PossibleConclusion): Int = possibleConclusion.conclusion.structuralComplexity
+      def getConclusionComplexity(possibleConclusion: PossibleConclusion): Int = ComplexityCalculator.calculateStructuralComplexity(possibleConclusion.conclusion)
 
       getPossibleInferences(
         stepProvingContext.provingContext.entryContext.allInferences,

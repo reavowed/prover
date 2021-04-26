@@ -8,6 +8,7 @@ import net.prover.model.expressions._
 import net.prover.old.OldSubstitutionApplier
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.{Direction, PossibleSingleMatch}
+import net.prover.utilities.complexity.ComplexityCalculator
 
 import scala.Ordering.Implicits._
 import scala.util.{Failure, Success, Try}
@@ -94,7 +95,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
 
     def findSimplificationEquality(premiseTerm: Term, targetTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStepWithInference]] = {
       val (source, result) = direction.swapSourceAndResult(premiseTerm, targetTerm)
-      if (source.complexity > result.complexity) {
+      if (ComplexityCalculator.calculateComplexity(source) > ComplexityCalculator.calculateComplexity(result)) {
         findSimplifications(source, direction, wrapper).mapCollect { case SimplificationStepWithInference(baseTerm, rearrangementStep, inference) =>
           val newSource = direction.swapSourceAndResult(baseTerm, rearrangementStep.result)._2
           val (precedingSteps, followingSteps) = direction.swapSourceAndResult(Seq(RearrangementStepWithInference(rearrangementStep, Some(inference))), Nil)
@@ -149,7 +150,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
     }
 
     def findEqualitySteps(premiseTerm: Term, targetTerm: Term, termWrapper: Wrapper[Term, Term]): Option[Seq[RearrangementStepWithInference]] = {
-      def direction = if (premiseTerm.complexity > targetTerm.complexity) Direction.Forward else Direction.Reverse
+      def direction = if (ComplexityCalculator.calculateComplexity(premiseTerm) > ComplexityCalculator.calculateComplexity(targetTerm)) Direction.Forward else Direction.Reverse
       findKnownEquality(premiseTerm, targetTerm, termWrapper) orElse
         findComponentEquality(premiseTerm, targetTerm, termWrapper) orElse
         findSimplificationEquality(premiseTerm, targetTerm, direction, termWrapper)

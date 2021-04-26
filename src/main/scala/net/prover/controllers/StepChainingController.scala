@@ -13,6 +13,7 @@ import net.prover.structure.BookService
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.Direction
+import net.prover.utilities.complexity.ComplexityCalculator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -59,7 +60,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
       }
       def getConclusionComplexity(possibleConclusion: PossibleConclusion): Int = {
         stepProvingContext.provingContext.definedBinaryRelations.ofType[TJoiner]
-          .mapFind(j => j.unapply(possibleConclusion.conclusion).map { case (l, r) => direction.getSource(l, r).structuralComplexity })
+          .mapFind(j => j.unapply(possibleConclusion.conclusion).map { case (l, r) => ComplexityCalculator.calculateStructuralComplexity(direction.getSource(l, r)) })
           .getOrElse(0)
       }
       Success(getPossibleInferences(stepProvingContext.provingContext.entryContext.allInferences, searchText, getPossibleInference, getConclusionComplexity))

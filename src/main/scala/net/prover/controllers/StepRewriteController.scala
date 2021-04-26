@@ -14,6 +14,7 @@ import net.prover.old.{OldParameterInserter, OldSubstitutionApplier}
 import net.prover.structure.BookService
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.Direction
+import net.prover.utilities.complexity.{ComplexityCalculator, ExpressionComplexity}
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -105,13 +106,13 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       def getSuggestionsForInferenceBatch(rewriteInferences: Seq[TermRewriteInference]): Seq[InferenceRewriteSuggestion] = {
         rewriteInferences
           .flatMap(getSuggestionsForInference)
-          .sortBy(_.source.complexity)(Ordering[(Int, Int)].reverse)
+          .sortBy(suggestion => ComplexityCalculator.calculateComplexity(suggestion.source))(Ordering[ExpressionComplexity].reverse)
       }
 
       val filter = inferenceFilter(searchText)
       stepProvingContext.provingContext.prospectiveTermRewriteInferences
         .filter { termRewriteInference => filter(termRewriteInference.baseInference) }
-        .groupBy(_.lhs.structuralComplexity).toSeq
+        .groupBy(i => ComplexityCalculator.calculateStructuralComplexity(i.lhs)).toSeq
         .sortBy(_._1)(Ordering[Int].reverse)
         .iterator
         .map(_._2)

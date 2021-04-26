@@ -6,8 +6,6 @@ import net.prover.old.OldParameterInserter
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 case class FunctionParameter(index: Int, level: Int) extends Term {
-  override def structuralComplexity: Int = 1
-  override def definitionalComplexity: Int = 1
   override def definitionUsages: DefinitionUsages = DefinitionUsages.empty
   override def usedVariables: UsedVariables = UsedVariables.empty
 

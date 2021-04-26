@@ -14,6 +14,7 @@ import net.prover.structure.EntryContext
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.Direction
+import net.prover.utilities.complexity.{ComplexityCache, ComplexityCalculator, ExpressionComplexity}
 
 import scala.Ordering.Implicits._
 import scala.collection.mutable
@@ -24,6 +25,9 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val allInferences: Seq[Inference.FromEntry] = rootEntryContext.allInferences
   lazy val inferenceEntries: Seq[Inference] = rootEntryContext.availableEntries.ofType[Inference]
   private val provingContext: ProvingContext = ProvingContext(rootEntryContext, this)
+
+  private val complexityCache = mutable.Map.empty[Expression, ExpressionComplexity]
+  private def calculateComplexity(expression: Expression): ExpressionComplexity = ComplexityCalculator.calculateComplexity(expression, complexityCache)
 
   val completenessByInference = mutable.Map.empty[String, Boolean]
   def isInferenceComplete(inference: Inference): Boolean = {
@@ -347,7 +351,7 @@ case class Definitions(rootEntryContext: EntryContext) {
       //   {a} -> a
       //   A x B -> A
       //   ℤ+ -> ℤ
-      premiseRhs.complexity > conclusionRhs.complexity &&
+      calculateComplexity(premiseRhs) > calculateComplexity(conclusionRhs) &&
         (ExpressionUtils.getSimpleTermVariable(conclusionRhs).exists(premiseRhs.usedVariables.terms.variableIndices.contains) ||
           ExpressionUtils.getTermConstantDefinition(conclusionRhs).exists(conclusionDefinition => ExpressionUtils.getTermConstantDefinition(premiseRhs).exists(premiseDefinition => premiseDefinition.definingStatement.referencedDefinitions.contains(conclusionDefinition))))
     }
@@ -466,7 +470,7 @@ case class Definitions(rootEntryContext: EntryContext) {
       // or a ∈ ℤ, b ∈ ℤ -> a + b ∈ ℤ
       val isLhsBreakdown: Boolean = {
         ExpressionUtils.isCombinationOfTermConstants(conclusion.right) && premises.forall(p => ExpressionUtils.isCombinationOfTermConstants(p.right)) &&
-          premises.forall(p => p.left.complexity < conclusion.left.complexity) &&
+          premises.forall(p => calculateComplexity(p.left) < calculateComplexity(conclusion.left)) &&
           ExpressionUtils.getCombinationOfSimpleTermVariables(conclusion.left).exists { termVariables =>
             termVariables.zipStrict(premises).exists(_.forall { case (variableName, premise) => ExpressionUtils.getSimpleTermVariable(premise.left).contains(variableName)})
           }
@@ -474,7 +478,7 @@ case class Definitions(rootEntryContext: EntryContext) {
       // e.g. a ∈ A, a ∉ B -> a ∈ A/B
       val isRhsBreakdown: Boolean = {
         ExpressionUtils.getSimpleTermVariable(conclusion.left).exists(v => premises.forall(p => ExpressionUtils.getSimpleTermVariable(p.left).contains(v))) &&
-          premises.forall(p => p.right.complexity < conclusion.right.complexity) &&
+          premises.forall(p => calculateComplexity(p.right) < calculateComplexity(conclusion.right)) &&
           ExpressionUtils.getCombinationOfSimpleTermVariables(conclusion.right).exists { termVariables =>
             termVariables.zipStrict(premises).exists(_.forall { case (variableName, premise) => ExpressionUtils.getSimpleTermVariable(premise.right).contains(variableName)})
           }
@@ -482,7 +486,7 @@ case class Definitions(rootEntryContext: EntryContext) {
       val isDoubleSimplification: Boolean = {
         // e.g. a ∈ ℕ, b ∈ ℕ, a = b -> aℤ = bℤ
         premises.lastOption.exists { lastPremise =>
-          lastPremise.left.complexity < conclusion.left.complexity && lastPremise.right.complexity < conclusion.right.complexity &&
+          calculateComplexity(lastPremise.left) < calculateComplexity(conclusion.left) && calculateComplexity(lastPremise.right) < calculateComplexity(conclusion.right) &&
           ExpressionUtils.getSimpleTermVariable(lastPremise.left).exists { lastPremiseLhsVariable =>
             ExpressionUtils.getSimpleTermVariable(lastPremise.right).exists { lastPremiseRhsVariable =>
               ExpressionUtils.getSingleSimpleTermVariable(conclusion.left).contains(lastPremiseLhsVariable) &&
@@ -535,7 +539,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val conclusionSimplificationInferences: Seq[Inference] = allInferences.filter {
     case inference
       if inference.premises.nonEmpty &&
-        inference.premises.forall(_.complexity < inference.conclusion.complexity) &&
+        inference.premises.forall(p => calculateComplexity(p) < calculateComplexity(inference.conclusion)) &&
         inference.conclusion.usedVariables.usesAll(inference.variableDefinitions) &&
         inference.variableDefinitions.hasNoApplications &&
         inference.premises.forall(_.referencedDefinitions.subsetOf(inference.conclusion.referencedDefinitions))
@@ -559,7 +563,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val rewriteInferences: Seq[(Inference, Statement)] = {
     inferenceEntries.collect {
       case inference @ Inference(_, Seq(singlePremise), conclusion)
-        if conclusion.complexity == singlePremise.complexity &&
+        if calculateComplexity(conclusion) == calculateComplexity(singlePremise) &&
           conclusion.usedVariables.isEquivalentTo(singlePremise.usedVariables) &&
           inference.variableDefinitions.hasNoApplications &&
           conclusion != singlePremise
@@ -571,10 +575,10 @@ case class Definitions(rootEntryContext: EntryContext) {
     def isSingleStatementSimplification = ExpressionUtils.getWrappedSimpleStatementVariable(premise).exists(ExpressionUtils.getWrappedSimpleStatementVariable(conclusion).contains)
     def isDoubleStatementSimplification = ExpressionUtils.getWrappedBinaryStatementVariables(premise).map(_.toSet).exists(ExpressionUtils.getWrappedBinaryStatementVariables(conclusion).map(_.toSet).contains)
     def isDoubleToSingleStatementSimplification = ExpressionUtils.getWrappedBinaryStatementVariables(premise).map(_.toSet).exists { v => ExpressionUtils.getWrappedSimpleStatementVariable(conclusion).exists(v.contains) }
-    conclusion.complexity < premise.complexity && (isSingleStatementSimplification || isDoubleStatementSimplification || isDoubleToSingleStatementSimplification)
+    calculateComplexity(conclusion) < calculateComplexity(premise) && (isSingleStatementSimplification || isDoubleStatementSimplification || isDoubleToSingleStatementSimplification)
   }
   def isValidDoublePremiseExtraction(mainPremise: Statement, subsidiaryPremise: Statement, conclusion: Statement): Boolean = {
-    conclusion.complexity < mainPremise.complexity && (for {
+    calculateComplexity(conclusion) < calculateComplexity(mainPremise) && (for {
       subsidiaryPremiseVariable <- ExpressionUtils.getWrappedSimpleStatementVariable(subsidiaryPremise)
       conclusionVariable <- ExpressionUtils.getWrappedSimpleStatementVariable(conclusion)
       if subsidiaryPremiseVariable != conclusionVariable
@@ -606,12 +610,12 @@ case class Definitions(rootEntryContext: EntryContext) {
   }
   lazy val termSimplificationInferences: Seq[TermRewriteInference] = {
     termRewriteInferences.filter { case TermRewriteInference(_, left, right) =>
-      left.complexity > right.complexity && left.usedVariables.contains(right.usedVariables)
+      calculateComplexity(left) > calculateComplexity(right) && left.usedVariables.contains(right.usedVariables)
     }
   }
   lazy val termDesimplificationInferences: Seq[TermRewriteInference] = {
     termRewriteInferences.filter { case TermRewriteInference(_, left, right) =>
-      left.complexity < right.complexity && right.usedVariables.contains(left.usedVariables)
+      calculateComplexity(left) < calculateComplexity(right) && right.usedVariables.contains(left.usedVariables)
     }
   }
 

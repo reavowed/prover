@@ -2,8 +2,9 @@ package net.prover.substitutionFinding.transformers
 
 import monocle.Lens
 import net.prover.model.expressions._
-import net.prover.core.transformers.{ContextWithInternalDepth, ContextWithExternalDepth}
+import net.prover.core.transformers.{ContextWithExternalDepth, ContextWithInternalDepth}
 import net.prover.substitutionFinding.model.PossibleSubstitutions
+import net.prover.utilities.DoubleExpressionCalculator
 
 import scala.reflect.ClassTag
 

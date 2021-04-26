@@ -3,6 +3,7 @@ package net.prover.controllers
 import net.prover._
 import net.prover.controllers.models.{PossibleConclusion, PossibleInference, PossibleInferenceWithTargets}
 import net.prover.model._
+import net.prover.utilities.complexity.ComplexityCalculator
 
 import scala.collection.{SortedSet, TraversableLike}
 
@@ -39,7 +40,7 @@ trait InferenceSearch {
   ): Seq[PossibleInference] = {
 
     val matchingInferences = filterInferences(inferences, searchText)
-      .mapWithIndex((i, index) => InferenceWithMaximumPossibleComplexity(i, i.conclusion.structuralComplexity, index))
+      .mapWithIndex((i, index) => InferenceWithMaximumPossibleComplexity(i, ComplexityCalculator.calculateStructuralComplexity(i.conclusion), index))
       .sortBy(_.maximumPossibleComplexity)(Ordering[Int].reverse)
 
     @scala.annotation.tailrec
@@ -58,7 +59,7 @@ trait InferenceSearch {
             case Some(possibleInference) =>
               val possibleInferenceWithComplexity = PossibleInferenceWithMaximumMatchingComplexity(
                 possibleInference,
-                possibleInference.possibleTargets.map(_.target.structuralComplexity).max,
+                possibleInference.possibleTargets.map(possibleTarget => ComplexityCalculator.calculateStructuralComplexity(possibleTarget.target)).max,
                 possibleInference.possibleTargets.flatMap(_.possibleConclusions.map(getConclusionComplexity)).max,
                 possibleInference.possibleTargets.flatMap(_.possibleConclusions.map(_.extractionInferenceIds.length)).min,
                 matchHead.index)

@@ -31,7 +31,6 @@ trait CompoundExpressionDefinition {
   def shorthand: Option[String]
   def defaultValue: Expression
   def attributes: Seq[String]
-  def complexity: Int
   @JsonIgnore
   def associatedChapterEntry: ChapterEntry
 
@@ -142,8 +141,6 @@ trait CompoundStatementDefinition extends CompoundExpressionDefinition with Comp
   val deconstructionInference: Option[Inference.StatementDefinition] = definingStatement.map(Inference.StatementDefinition(name, variableDefinitions, defaultValue, _))
   def inferences: Seq[Inference.FromEntry] = constructionInference.toSeq ++ deconstructionInference.toSeq
 
-  override val complexity: Int = definingStatement.map(_.definitionalComplexity).getOrElse(1)
-
   def statementParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
     componentExpressionParser.map { case (newBoundVariableNames, components) =>
       DefinedStatement(components, this)(newBoundVariableNames)
@@ -194,8 +191,6 @@ trait CompoundTermDefinition extends CompoundExpressionDefinition {
   val definingStatement: Statement = ExpressionSpecifier.specify(definitionPredicate, Seq(defaultValue))(ContextWithExternalDepth.zero).get
   val definitionInference: Inference.Definition = Inference.TermDefinition(name, variableDefinitions, premises, definingStatement)
   def inferences: Seq[Inference.FromEntry] = Seq(definitionInference)
-
-  override val complexity: Int = definitionPredicate.definitionalComplexity
 
   def termParser(implicit context: ExpressionParsingContext): Parser[Term] = {
     componentExpressionParser.map { case (newBoundVariableNames, components) =>

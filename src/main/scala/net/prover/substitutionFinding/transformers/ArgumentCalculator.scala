@@ -1,7 +1,8 @@
 package net.prover.substitutionFinding.transformers
 
 import net.prover.model.expressions._
-import net.prover.core.transformers.{ContextWithInternalDepth, ContextWithExternalDepth}
+import net.prover.core.transformers.{ContextWithExternalDepth, ContextWithInternalDepth}
+import net.prover.utilities.DoubleExpressionCalculator
 
 import scala.reflect.ClassTag
 
