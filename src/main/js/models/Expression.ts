@@ -161,7 +161,8 @@ export class Variable extends Expression {
         `with (${this.components.map(a => a.serialize()).join(" ")}) ${this.name}`;
   }
   serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
-    const name = this.getDefinition(variableDefinitions).name;
+    const definition = this.getDefinition(variableDefinitions);
+    const name = definition ? definition.name : this.name;
     return this.components.length == 0 ?
         name :
         `with (${this.components.map(a => a.serializeNicely(boundVariableLists, variableDefinitions)).join(" ")}) ${name}`;
@@ -184,18 +185,14 @@ export class Variable extends Expression {
       return [new Variable(this.name, newComponents), replacementPaths.map(p => [first, ...p])];
     }
   }
-  getDefinition(variableDefinitions: VariableDefinitions): VariableDefinition {
+  getDefinition(variableDefinitions: VariableDefinitions): VariableDefinition | null {
     const statementVariableRegex = /^s(\d+)$/;
     const termVariableRegex = /^t(\d+)$/;
     const statementMatch = this.name.match(statementVariableRegex);
     const termMatch = this.name.match(termVariableRegex);
-    const definition = statementMatch ? variableDefinitions.statements[parseInt(statementMatch[1])] :
+    return statementMatch ? variableDefinitions.statements[parseInt(statementMatch[1])] :
         termMatch ? variableDefinitions.terms[parseInt(termMatch[1])] :
-            null;
-    if (!definition) {
-      throw new Error("Unrecognised variable " + this.name)
-    }
-    return definition;
+        null;
   }
 }
 
