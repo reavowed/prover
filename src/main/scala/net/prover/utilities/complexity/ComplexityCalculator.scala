@@ -3,7 +3,6 @@ package net.prover.utilities.complexity
 import net.prover.core.transformers.ContextWithInternalDepth
 import net.prover.model.definitions.{CompoundExpressionDefinition, CompoundStatementDefinition, CompoundTermDefinition}
 import net.prover.model.expressions.{DefinedExpression, Expression, ExpressionVariable, FunctionParameter}
-import net.prover.structure.model.entries.TypedExpressionDefinitionEntry
 import net.prover.utilities.ExpressionCalculator
 
 import scala.collection.mutable

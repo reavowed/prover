@@ -1,12 +1,9 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Substitutions, UsedVariables}
+import net.prover.model.UsedVariables
 import net.prover.model.definitions.CompoundExpressionDefinition
-import net.prover.old.OldParameterInserter
-import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 case class FunctionParameter(index: Int, level: Int) extends Term {
-  override def definitionUsages: DefinitionUsages = DefinitionUsages.empty
   override def usedVariables: UsedVariables = UsedVariables.empty
 
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = {

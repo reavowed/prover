@@ -6,10 +6,10 @@ import net.prover._
 import net.prover.controllers.ExtractionHelper
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.model._
 import net.prover.model.definitions.{CompoundExpressionDefinition, DeductionDefinition, Definitions, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.old.OldParameterInserter
 import net.prover.structure.EntryContext
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.{ParameterRemover, PossibleSubstitutionCalculator}

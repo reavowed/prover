@@ -11,9 +11,6 @@ import net.prover.model.{ExpressionParsingContext, Parser, UsedVariables}
 trait Expression extends TypedExpression[Expression]
 
 trait TypedExpression[+ExpressionType <: Expression] {
-  def definitionUsages: DefinitionUsages
-  def referencedDefinitions: Set[CompoundExpressionDefinition] = definitionUsages.map.keySet
-
   def usedVariables: UsedVariables
   def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, ExpressionType, Int, Seq[Int])]
   def getTerms()(implicit substitutionContext: SubstitutionContext): Seq[(Term, ExpressionType, Int, Seq[Int])] = getTerms(0, substitutionContext.externalDepth)

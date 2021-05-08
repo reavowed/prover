@@ -1,7 +1,8 @@
 package net.prover.structure.model.entries
 
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.model._
-import net.prover.model.definitions.{Definitions, CompoundExpressionDefinition}
+import net.prover.model.definitions.{CompoundExpressionDefinition, Definitions}
 import net.prover.model.expressions.Statement
 import net.prover.structure.EntryContext
 

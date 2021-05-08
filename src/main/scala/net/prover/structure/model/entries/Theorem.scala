@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover._
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.model._
-import net.prover.model.definitions.{Definitions, CompoundExpressionDefinition}
+import net.prover.model.definitions.{CompoundExpressionDefinition, Definitions}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.structure.EntryContext

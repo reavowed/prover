@@ -1,6 +1,7 @@
 package net.prover.model.definitions
 
 import net.prover._
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.model._
 import net.prover.model.expressions.Term
 import net.prover.structure.EntryContext

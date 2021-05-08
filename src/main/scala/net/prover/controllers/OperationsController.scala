@@ -2,6 +2,7 @@ package net.prover.controllers
 
 import net.prover._
 import net.prover.exceptions.InferenceReplacementException
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.model.definitions.Definitions
 import net.prover.model.{Inference, ProvingContext}
 import net.prover.structure.model.entries.{ChapterEntry, Theorem}

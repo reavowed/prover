@@ -1,6 +1,7 @@
 package net.prover.model.definitions
 
 import net.prover._
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.expressions._
@@ -14,7 +15,7 @@ import net.prover.structure.EntryContext
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.Direction
-import net.prover.utilities.complexity.{ComplexityCache, ComplexityCalculator, ExpressionComplexity}
+import net.prover.utilities.complexity.{ComplexityCalculator, ExpressionComplexity}
 
 import scala.Ordering.Implicits._
 import scala.collection.mutable

@@ -1,12 +1,13 @@
 package net.prover.model.proof
 
 import net.prover.controllers.ExtractionHelper
+import net.prover.extensions.ExpressionExtensions._
+import net.prover.model.Inference
 import net.prover.model.definitions.{BinaryRelationStatement, CompoundTermDefinition, KnownStatement, Wrapper}
 import net.prover.model.expressions._
 import net.prover.model.proof.StepProvingContext.KnownEquality
 import net.prover.model.unwrapping.UnwrappedStatement
 import net.prover.model.utils.ExpressionUtils
-import net.prover.model.{Inference, Substitutions}
 import net.prover.old.OldSubstitutionApplier
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.{PossibleSubstitutionApplier, PossibleSubstitutionCalculator}

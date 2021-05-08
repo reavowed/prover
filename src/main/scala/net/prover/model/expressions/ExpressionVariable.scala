@@ -2,8 +2,6 @@ package net.prover.model.expressions
 
 import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition
-import net.prover.old.OldParameterInserter
-import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 import scala.reflect.ClassTag
 
@@ -16,7 +14,6 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   def update(newArguments: Seq[Term]): ExpressionType
 
   override def usedVariables: UsedVariables = (usedVariablesLens.set(Seq(UsedVariable(index, arguments.length)))(UsedVariables.empty) +: arguments.map(_.usedVariables)).foldTogether
-  override def definitionUsages: DefinitionUsages = arguments.map(_.definitionUsages).foldTogether
   override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): ExpressionType = {
     update(arguments.map(_.replaceDefinitions(expressionDefinitionReplacements)))
   }
