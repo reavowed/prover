@@ -4,8 +4,9 @@ import net.prover._
 import net.prover.model._
 import net.prover.model.definitions.Wrapper
 import net.prover.model.expressions.{DefinedStatement, Statement}
-import net.prover.old.{OldParameterInserter, OldSubstitutionApplier}
+import net.prover.old.{OldParameterInserter}
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
+import net.prover.extensions.ExpressionExtensions._
 
 object DefinitionRewriter {
   private case class DefinitionRewriteStep(steps: Seq[Step], inference: Inference, source: Statement, result: Statement) {
@@ -86,7 +87,7 @@ object DefinitionRewriter {
         preliminarySubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(otherPremise, premise)
           .flatMap(PossibleSubstitutionCalculator.calculatePossibleSubstitutions(wrappingInference.conclusion, target, _))
           .flatMap(_.confirmTotality(wrappingInference.variableDefinitions)).toSeq
-        (innerPremise, innerTarget) <- OldSubstitutionApplier.applySubstitutions(deductionPremise, preliminarySubstitutions).toOption.flatMap(deductionDefinition.unapply).toSeq
+        (innerPremise, innerTarget) <- deductionPremise.applySubstitutions(preliminarySubstitutions).toOption.flatMap(deductionDefinition.unapply).toSeq
         innerRewriteStep <- getRewriteStep(innerPremise, innerTarget)
         deductionStep = Step.Deduction(innerRewriteStep.source, innerRewriteStep.steps, deductionDefinition)
         deductionResult = deductionDefinition(innerRewriteStep.source, innerRewriteStep.result)
@@ -131,7 +132,7 @@ object DefinitionRewriter {
       for {
         (eliminationInference, eliminationPremise) <- provingContext.statementDefinitionEliminationInferences
         substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(eliminationPremise, premise).flatMap(_.confirmTotality(eliminationInference.variableDefinitions))
-        result <- OldSubstitutionApplier.applySubstitutions(eliminationInference.conclusion, substitutions).toOption
+        result <- eliminationInference.conclusion.applySubstitutions(substitutions).toOption
         step <- Step.Assertion.forInference(eliminationInference, substitutions)
       } yield DefinitionRewriteStep(Seq(step), eliminationInference, premise, result)
     }
@@ -139,7 +140,7 @@ object DefinitionRewriter {
       for {
         (introductionInference, introductionPremise) <- provingContext.statementDefinitionIntroductionInferences
         substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(introductionInference.conclusion, target).flatMap(_.confirmTotality(introductionInference.variableDefinitions))
-        source <- OldSubstitutionApplier.applySubstitutions(introductionPremise, substitutions).toOption
+        source <- introductionPremise.applySubstitutions(substitutions).toOption
         step <- Step.Assertion.forInference(introductionInference, substitutions)
       } yield DefinitionRewriteStep(Seq(step), introductionInference, source, target)
     }
@@ -152,13 +153,13 @@ object DefinitionRewriter {
         definition <- innerPremise.asOptionalInstanceOf[DefinedStatement].map(_.definition)
         deconstructionInference <- wrappingSwapper.getSource(definition.deconstructionInference, definition.constructionInference)
         deconstructionSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(definition.defaultValue, innerPremise).flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
-        deconstructedInnerPremise <- definition.definingStatement.flatMap(OldSubstitutionApplier.applySubstitutions(_, deconstructionSubstitutions).toOption).map(unifyBoundVariables(_, innerPremise))
+        deconstructedInnerPremise <- definition.definingStatement.flatMap(_.applySubstitutions(deconstructionSubstitutions).toOption).map(unifyBoundVariables(_, innerPremise))
         deductionSubstitutions <- initialDeductionSubstitutions.copy(statements = initialDeductionSubstitutions.statements + (conclusionIndex -> deconstructedInnerPremise))
           .confirmTotality(deductionInference.variableDefinitions)
-        deconstructedSource <- OldSubstitutionApplier.applySubstitutions(deductionInference.conclusion, deductionSubstitutions).toOption
+        deconstructedSource <- deductionInference.conclusion.applySubstitutions(deductionSubstitutions).toOption
         if provingContext.statementDefinitionEliminationInferences.exists { case (_, premise) => PossibleSubstitutionCalculator.calculatePossibleSubstitutions(premise, deconstructedSource).nonEmpty }
-        deconstructionPremise <- OldSubstitutionApplier.applySubstitutions(deconstructionInference.premise, deconstructionSubstitutions).toOption.map(unifyBoundVariables(_, innerPremise))
-        deconstructionConclusion <- OldSubstitutionApplier.applySubstitutions(deconstructionInference.conclusion, deconstructionSubstitutions).toOption.map(unifyBoundVariables(_, innerPremise))
+        deconstructionPremise <- deconstructionInference.premise.applySubstitutions(deconstructionSubstitutions).toOption.map(unifyBoundVariables(_, innerPremise))
+        deconstructionConclusion <- deconstructionInference.conclusion.applySubstitutions(deconstructionSubstitutions).toOption.map(unifyBoundVariables(_, innerPremise))
         deconstructionStep = Step.Assertion(deconstructionConclusion, deconstructionInference.summary, Seq(Premise.Pending(deconstructionPremise)), deconstructionSubstitutions)
         deductionStep = Step.Deduction(deconstructionStep.premises.head.statement, Seq(deconstructionStep), deductionDefinition)
         assertionStep <- Step.Assertion.forInference(deductionInference, deductionSubstitutions)
@@ -173,13 +174,13 @@ object DefinitionRewriter {
         definition <- innerTarget.asOptionalInstanceOf[DefinedStatement].map(_.definition)
         constructionInference <- wrappingSwapper.getSource(definition.constructionInference, definition.deconstructionInference)
         constructionSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(definition.defaultValue, innerTarget).flatMap(_.confirmTotality(constructionInference.variableDefinitions))
-        deconstructedInnerTarget <- definition.definingStatement.flatMap(OldSubstitutionApplier.applySubstitutions(_, constructionSubstitutions).toOption).map(unifyBoundVariables(_, innerTarget))
+        deconstructedInnerTarget <- definition.definingStatement.flatMap(_.applySubstitutions(constructionSubstitutions).toOption).map(unifyBoundVariables(_, innerTarget))
         deductionSubstitutions <- initialDeductionSubstitutions.copy(statements = initialDeductionSubstitutions.statements + (premiseIndex -> deconstructedInnerTarget))
           .confirmTotality(deductionInference.variableDefinitions)
-        deconstructedTarget <- OldSubstitutionApplier.applySubstitutions(deductionPremise, deductionSubstitutions).toOption
+        deconstructedTarget <- deductionPremise.applySubstitutions(deductionSubstitutions).toOption
         if provingContext.statementDefinitionIntroductionInferences.exists { case (inference, _) => PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inference.conclusion, deconstructedTarget).nonEmpty }
-        constructionPremise <- OldSubstitutionApplier.applySubstitutions(constructionInference.premise, constructionSubstitutions).toOption.map(unifyBoundVariables(_, innerTarget))
-        constructionConclusion <- OldSubstitutionApplier.applySubstitutions(constructionInference.conclusion, constructionSubstitutions).toOption.map(unifyBoundVariables(_, innerTarget))
+        constructionPremise <- constructionInference.premise.applySubstitutions(constructionSubstitutions).toOption.map(unifyBoundVariables(_, innerTarget))
+        constructionConclusion <- constructionInference.conclusion.applySubstitutions(constructionSubstitutions).toOption.map(unifyBoundVariables(_, innerTarget))
         constructionStep = Step.Assertion(constructionConclusion, constructionInference.summary, Seq(Premise.Pending(constructionPremise)), constructionSubstitutions)
         deductionStep = Step.Deduction(constructionStep.premises.head.statement, Seq(constructionStep), deductionDefinition)
         assertionStep <- Step.Assertion.forInference(deductionInference, deductionSubstitutions)

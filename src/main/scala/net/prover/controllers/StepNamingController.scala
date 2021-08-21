@@ -4,7 +4,7 @@ import net.prover._
 import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, PossibleInferenceWithConclusions, StepDefinition}
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.structure.BookService
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import org.springframework.beans.factory.annotation.Autowired
@@ -71,8 +71,8 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
           }
           substitutionsAfterConclusion <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(namingInference.conclusion, resultStatement, substitutionsAfterPremise)
           substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.variableDefinitions)
-          substitutedAssumption <- OldSubstitutionApplier.applySubstitutionsInsideStep(namingInferenceAssumption, substitutions).toOption
-          substitutedConclusion <- OldSubstitutionApplier.applySubstitutionsInsideStep(namingInference.conclusion, substitutions).toOption
+          substitutedAssumption <- namingInferenceAssumption.applySubstitutionsInsideStep(substitutions).toOption
+          substitutedConclusion <- namingInference.conclusion.applySubstitutionsInsideStep(substitutions).toOption
         } yield (
           substitutedAssumption,
           substitutedConclusion,

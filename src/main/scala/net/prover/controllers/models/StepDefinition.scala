@@ -5,7 +5,7 @@ import net.prover.controllers._
 import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstitutionContext
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 
 import scala.util.Try
 
@@ -31,7 +31,7 @@ case class StepDefinition(
     serializedIntendedConclusionStatement.map { serializedIntendedConclusion =>
       for {
         conclusionStatement <- Statement.parser(expressionParsingContext).parseFromString(serializedIntendedConclusion, "conclusion").recoverWithBadRequest
-        substitutedConclusionStatement <- OldSubstitutionApplier.applySubstitutions(conclusionStatement, substitutions).orBadRequest("Could not apply substitutions to intended conclusion")
+        substitutedConclusionStatement <- conclusionStatement.applySubstitutions(substitutions).orBadRequest("Could not apply substitutions to intended conclusion")
       } yield substitutedConclusionStatement
     }.swap
   }

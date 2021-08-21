@@ -3,7 +3,7 @@ package net.prover.model.definitions
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{DerivationStep, Step, StepProvingContext}
 import net.prover.model.{Inference, Substitutions}
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
 sealed trait DerivedPremise {
@@ -26,7 +26,7 @@ case class DirectPremise(premise: Statement) extends DerivedPremise {
   def getRootPremises: Seq[Statement] = Seq(premise)
   def getSubstitutedPremises(substitutions: Substitutions)(implicit stepProvingContext: StepProvingContext): Option[(Seq[Statement], Seq[DerivationStep])] = {
     for {
-      substitutedPremise <- OldSubstitutionApplier.applySubstitutions(premise, substitutions).toOption
+      substitutedPremise <- premise.applySubstitutions(substitutions).toOption
     } yield (Seq(substitutedPremise), Nil)
   }
 }
@@ -34,7 +34,7 @@ case class DesimplifiedPremise(premise: Statement, inference: Inference, innerPr
   def getRootPremises: Seq[Statement] = innerPremises.flatMap(_.getRootPremises)
   def getSubstitutedPremises(substitutions: Substitutions)(implicit stepProvingContext: StepProvingContext): Option[(Seq[Statement], Seq[DerivationStep])] = {
     for {
-      substitutedPremise <- OldSubstitutionApplier.applySubstitutions(premise, substitutions).toOption
+      substitutedPremise <- premise.applySubstitutions(substitutions).toOption
       inferenceSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inference.conclusion, substitutedPremise).flatMap(_.confirmTotality(inference.variableDefinitions))
       assertionStep <- Step.Assertion.forInference(inference, inferenceSubstitutions)
       (innerPremises, innerSteps) <- innerPremises.getSubstitutedPremises(substitutions)

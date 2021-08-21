@@ -8,7 +8,7 @@ import net.prover.model.Inference._
 import net.prover.model.definitions.{CompoundExpressionDefinition, Definitions}
 import net.prover.model.expressions._
 import net.prover.model.proof.{StepContext, SubstitutionContext}
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.structure.EntryContext
 import net.prover.structure.model.entries.ChapterEntry
 import net.prover.structure.parsers.ChapterEntryParser
@@ -63,11 +63,11 @@ trait Inference {
   }
 
   def substitutePremises(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Try[Seq[Statement]] = {
-    premises.map(OldSubstitutionApplier.applySubstitutions(_, substitutions)).traverseTry
+    premises.map(_.applySubstitutions(substitutions)).traverseTry
   }
 
   def substituteConclusion(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Try[Statement] = {
-    OldSubstitutionApplier.applySubstitutions(conclusion, substitutions)
+    conclusion.applySubstitutions(substitutions)
   }
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Inference]

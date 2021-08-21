@@ -2,7 +2,7 @@ package net.prover.substitutionFinding.transformers
 
 import net.prover.core.transformers.{ContextWithExternalDepth, ContextWithInternalDepth}
 import net.prover.model.expressions.{FunctionParameter, Term}
-import net.prover.old.{InsertionParameters, OldExpressionTransformer, OldParameterInserter, OldSubstitutionApplier}
+import net.prover.old.{InsertionParameters, OldExpressionTransformer, OldParameterInserter}
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 
 import scala.util.{Success, Try}

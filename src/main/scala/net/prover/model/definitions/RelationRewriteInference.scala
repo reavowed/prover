@@ -5,7 +5,7 @@ import net.prover.model.Substitutions
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStep, PremiseFinder, StepProvingContext}
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
@@ -42,7 +42,7 @@ case class RelationRewriteInference(
       }
       substitutions <- substitutionsAfterInitialPremise.confirmTotality(inferenceExtraction.variableDefinitions)
       derivationStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions)
-      substitutedPremise <- OldSubstitutionApplier.applySubstitutions(mainPremise, substitutions).toOption
+      substitutedPremise <- mainPremise.applySubstitutions(substitutions).toOption
       premiseRelationStatement <- stepProvingContext.provingContext.findRelation(substitutedPremise)
     } yield (premiseRelationStatement, premiseDerivation :+ derivationStep)
   }

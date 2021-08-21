@@ -4,13 +4,14 @@ import net.prover._
 import net.prover.chaining.{ChainingMethods, ChainingStepEditing}
 import net.prover.controllers.StepRewriteController._
 import net.prover.controllers.models._
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.proof.EqualityRewriter.{RewriteMethods, RewritePossibility}
 import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
-import net.prover.old.{OldParameterInserter, OldSubstitutionApplier}
+import net.prover.old.OldParameterInserter
 import net.prover.structure.BookService
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.Direction
@@ -79,7 +80,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           substitutionsAfterLhs <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(termRewriteInference.lhs, term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
           (_, substitutionsAfterPremises) <- PremiseFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceStepContext))
           substitutions <- substitutionsAfterPremises.confirmTotality(termRewriteInference.variableDefinitions)
-          result <- OldSubstitutionApplier.applySubstitutions(termRewriteInference.rhs, substitutions)(SubstitutionContext.withExtraParameters(unwrappers.depth)).toOption.map(OldParameterInserter.insertParameters(_, depth, 0))
+          result <- termRewriteInference.rhs.applySubstitutions(substitutions)(SubstitutionContext.withExtraParameters(unwrappers.depth)).toOption.map(OldParameterInserter.insertParameters(_, depth, 0))
         } yield (term, result, path)
       }
 
@@ -197,7 +198,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
           .orBadRequest("Could not find substitutions"))
       }
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).orBadRequest("Substitutions were not complete")
-      rewrittenTerm <- OldSubstitutionApplier.applySubstitutions(targetTemplate, finalSubstitutions).orBadRequest("Could not apply substitutions to target")
+      rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
       extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
       elidedStep = Step.Elided.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).deduplicate.steps, inference).get
     } yield (removedSource, rewrittenTerm, Seq(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)

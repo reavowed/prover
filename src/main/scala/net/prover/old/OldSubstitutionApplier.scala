@@ -39,19 +39,30 @@ object OldSubstitutionApplier
     transformExpressionVariableWithContext(termVariable, parameters, GenLens[Substitutions](_.terms), OldSubstitutionSpecifier.transformTermWithoutContext, "term")
   }
   override def transformParameterWithContext(parameter: FunctionParameter, parameters: ApplicationParameters)(implicit context: ContextWithInternalDepth): Try[Term] = Success(parameter)
+}
 
-  def applySubstitutionsInsideStep(statement: Statement, substitutions: Substitutions)(implicit contextWithExternalDepth: ContextWithExternalDepth): Try[Statement] = {
-    transformStatementWithContext(statement, ApplicationParameters(substitutions, contextWithExternalDepth))(ContextWithInternalDepth(1))
+trait SubstitutionApplicationImplicits {
+  implicit class ExpressionSubstitutionApplier(expression: Expression) {
+    def applySubstitutions(substitutions: Substitutions)(implicit contextWithExternalDepth: ContextWithExternalDepth): Try[Expression] = {
+      OldSubstitutionApplier.transformExpressionWithoutContext(expression, ApplicationParameters(substitutions, contextWithExternalDepth))
+    }
   }
-
-  def applySubstitutions(expression: Expression, substitutions: Substitutions)(implicit contextWithExternalDepth: ContextWithExternalDepth): Try[Expression] = {
-    transformExpressionWithoutContext(expression, ApplicationParameters(substitutions, contextWithExternalDepth))
+  implicit class StatementSubstitutionApplier(statement: Statement) {
+    def applySubstitutions(substitutions: Substitutions)(implicit contextWithExternalDepth: ContextWithExternalDepth): Try[Statement] = {
+      OldSubstitutionApplier.transformStatementWithoutContext(statement, ApplicationParameters(substitutions, contextWithExternalDepth))
+    }
+    def applySubstitutionsInsideStep(substitutions: Substitutions)(implicit contextWithExternalDepth: ContextWithExternalDepth): Try[Statement] = {
+      OldSubstitutionApplier.transformStatementWithContext(statement, ApplicationParameters(substitutions, contextWithExternalDepth))(ContextWithInternalDepth(1))
+    }
   }
-  def applySubstitutions(statement: Statement, substitutions: Substitutions)(implicit contextWithExternalDepth: ContextWithExternalDepth): Try[Statement] = {
-    transformStatementWithoutContext(statement, ApplicationParameters(substitutions, contextWithExternalDepth))
+  implicit class TermSubstitutionApplier(term: Term) {
+    def applySubstitutions(substitutions: Substitutions)(implicit contextWithExternalDepth: ContextWithExternalDepth): Try[Term] = {
+      OldSubstitutionApplier.transformTermWithoutContext(term, ApplicationParameters(substitutions, contextWithExternalDepth))
+    }
   }
-  def applySubstitutions(term: Term, substitutions: Substitutions)(implicit contextWithExternalDepth: ContextWithExternalDepth): Try[Term] = {
-    transformTermWithoutContext(term, ApplicationParameters(substitutions, contextWithExternalDepth))
+  implicit class RuleOfInferenceSubstitutionApplier(term: Inference) {
+    def applySubstitutions(substitutions: Substitutions)(implicit contextWithExternalDepth: ContextWithExternalDepth): Try[Inference] = {
+      OldSubstitutionApplier.transformRuleOfInference(term, ApplicationParameters(substitutions, contextWithExternalDepth))
+    }
   }
-  def applySubstitutions(ruleOfInference: Inference, substitutions: Substitutions): Try[Inference] = transformRuleOfInference(ruleOfInference, ApplicationParameters(substitutions, ContextWithExternalDepth.zero))
 }

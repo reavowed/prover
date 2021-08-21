@@ -5,7 +5,7 @@ import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper,
 import net.prover.model._
 import net.prover.model.definitions.{BinaryJoiner, Equality, RearrangementStep, TermRewriteInference, Wrapper}
 import net.prover.model.expressions._
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.util.{Direction, PossibleSingleMatch}
 import net.prover.utilities.complexity.ComplexityCalculator
@@ -29,7 +29,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         conclusionSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inferenceSource, premiseTerm)
         (premises, possibleFinalSubstitutions) <- PremiseFinder.findDerivationsForStatementsBySubstituting(rewriteInference.premises, conclusionSubstitutions)
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality(rewriteInference.variableDefinitions)
-        simplifiedTerm <- OldSubstitutionApplier.applySubstitutions(inferenceResult, finalSubstitutions).toOption
+        simplifiedTerm <- inferenceResult.applySubstitutions(finalSubstitutions).toOption
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
         extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)

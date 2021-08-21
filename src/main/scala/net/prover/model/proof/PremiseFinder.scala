@@ -8,7 +8,7 @@ import net.prover.model.expressions._
 import net.prover.model.proof.StepProvingContext.KnownEquality
 import net.prover.model.unwrapping.UnwrappedStatement
 import net.prover.model.utils.ExpressionUtils
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.{PossibleSubstitutionApplier, PossibleSubstitutionCalculator}
 
@@ -105,7 +105,7 @@ object PremiseFinder {
       termDefinition <- targetStatement.referencedDefinitions.ofType[CompoundTermDefinition].iterator
       inferenceExtraction <- provingContext.termDefinitionRemovals(termDefinition)
       substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inferenceExtraction.conclusion, targetStatement).flatMap(_.confirmTotality(inferenceExtraction.variableDefinitions))
-      premiseStatements <- inferenceExtraction.premises.map(OldSubstitutionApplier.applySubstitutions(_, substitutions).toOption).traverseOption
+      premiseStatements <- inferenceExtraction.premises.map(_.applySubstitutions(substitutions).toOption).traverseOption
       premiseSteps <- findDerivationsForStatements(premiseStatements)
       derivationStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions)
     } yield premiseSteps :+ derivationStep).headOption
@@ -267,7 +267,7 @@ object PremiseFinder {
       deconstructionInference <- provingContext.statementDefinitionDeconstructions
       initialDeconstructionSubstitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(deconstructionInference.conclusion, unsubstitutedPremiseStatement)
         .flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
-      deconstructedUnsubstitutedPremiseStatements <- deconstructionInference.premises.map(OldSubstitutionApplier.applySubstitutions(_, initialDeconstructionSubstitutions)).traverseTry.toOption
+      deconstructedUnsubstitutedPremiseStatements <- deconstructionInference.premises.map(_.applySubstitutions(initialDeconstructionSubstitutions)).traverseTry.toOption
       (foundStatements, innerSubstitutions) <- findDerivationsForStatementsBySubstituting(deconstructedUnsubstitutedPremiseStatements, initialSubstitutions, knownStatements)
       deconstructionPremisesWithDeconstructedStatements <- deconstructionInference.premises.zipStrict(foundStatements)
       finalDeconstructionSubstitutions <- deconstructionPremisesWithDeconstructedStatements.foldLeft(Option(PossibleSubstitutions.empty)) { case (substitutionsOption, (premise, knownStatement)) =>

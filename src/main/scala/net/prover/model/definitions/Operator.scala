@@ -3,14 +3,14 @@ package net.prover.model.definitions
 import net.prover.model.{ExpressionLenses, ProvingContext}
 import net.prover.model.expressions.Term
 import net.prover.model.proof.SubstitutionContext
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
 sealed trait Operator {
   def arity: Int
   def template: Term
   protected def fill(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term = {
-    OldSubstitutionApplier.applySubstitutions(template, ExpressionLenses.ForTerms.fillSubstitutions(terms)).get
+    template.applySubstitutions(ExpressionLenses.ForTerms.fillSubstitutions(terms)).get
   }
   protected def extract(t: Term)(implicit substitutionContext: SubstitutionContext): Option[Seq[Term]] = {
     for {

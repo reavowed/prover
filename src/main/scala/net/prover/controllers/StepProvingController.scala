@@ -6,7 +6,7 @@ import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement, Unwrapper}
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.structure.BookService
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import net.prover.utilities.complexity.ComplexityCalculator
@@ -36,7 +36,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         epc = ExpressionParsingContext.withDefinitions(extraction.variableDefinitions)
         conclusionOption <- getConclusionOption(epc, substitutions)
         newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
-        substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(OldSubstitutionApplier.applySubstitutions(_, substitutions)).traverseTry.orBadRequest("Could not apply substitutions to intended new targets")).swap
+        substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseTry.orBadRequest("Could not apply substitutions to intended new targets")).swap
         (result, stepOption, extractionTargets) <- ExtractionHelper.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
         step <- stepOption.orBadRequest("At least one step must be present")
       } yield (result, step, extractionTargets)

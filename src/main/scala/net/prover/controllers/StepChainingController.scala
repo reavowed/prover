@@ -8,7 +8,7 @@ import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.{ExpressionParsingContext, Inference, Substitutions}
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.structure.BookService
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
@@ -194,7 +194,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
               case Some(serializedIntendedConclusionStatement) =>
                 for {
                   conclusionStatement <- Statement.parser(expressionParsingContext).parseFromString(serializedIntendedConclusionStatement, "intended conclusion").recoverWithBadRequest
-                  substitutedConclusionStatement <- OldSubstitutionApplier.applySubstitutions(conclusionStatement, substitutions).orBadRequest("Could not apply substitutions to intended conclusion")
+                  substitutedConclusionStatement <- conclusionStatement.applySubstitutions(substitutions).orBadRequest("Could not apply substitutions to intended conclusion")
                 } yield Some(substitutedConclusionStatement)
               case None =>
                 Success(None)
@@ -223,7 +223,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                 case Some(intendedPremiseStatements) =>
                   for {
                     (intendedInferencePremises, intendedExtractionPremises) <- intendedPremiseStatements.takeAndRemainingIfValid(inference.premises.length).orBadRequest("Not enough intended premises statements provided")
-                    substitutedIntendedExtractionPremises <- intendedExtractionPremises.map(OldSubstitutionApplier.applySubstitutions(_, substitutions)).traverseTry.orBadRequest("Could not apply substitutions to extraction premises")
+                    substitutedIntendedExtractionPremises <- intendedExtractionPremises.map(_.applySubstitutions(substitutions)).traverseTry.orBadRequest("Could not apply substitutions to extraction premises")
                     _ <- (intendedInferencePremises == inference.premises).orBadRequest("Intended premises did not match inference premises")
                   } yield (inference.copy(premises = intendedInferencePremises), Some(substitutedIntendedExtractionPremises))
                 case None =>
@@ -243,7 +243,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
               substitutions <- definition.substitutions.parse(extraction.variableDefinitions)
               intendedConclusionOption <- getIntendedConclusion(epc, substitutions)
               intendedPremiseStatementsOption <- definition.parseIntendedPremiseStatements(epc)
-              substitutedIntendedPremiseStatementsOption <- intendedPremiseStatementsOption.map(_.map(OldSubstitutionApplier.applySubstitutions(_, substitutions)).traverseTry.orBadRequest("Could not apply substitutions to extraction premises")).swap
+              substitutedIntendedPremiseStatementsOption <- intendedPremiseStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseTry.orBadRequest("Could not apply substitutions to extraction premises")).swap
               (result, step, targets)  <- ExtractionHelper.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedIntendedPremiseStatementsOption, intendedConclusionOption)
             } yield (result, step, targets)
           }

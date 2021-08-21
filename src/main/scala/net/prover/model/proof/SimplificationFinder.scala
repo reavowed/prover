@@ -2,14 +2,14 @@ package net.prover.model.proof
 
 import net.prover.model.{Inference, ProvingContext}
 import net.prover.model.expressions.Statement
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
 object SimplificationFinder {
   private def getSimplification(premise: Premise.SingleLinePremise, simplificationInference: Inference, inferencePremise: Statement)(implicit stepContext: StepContext): Option[Premise.Simplification] = {
     for {
       substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inferencePremise, premise.statement).flatMap(_.confirmTotality(simplificationInference.variableDefinitions))
-      simplifiedTarget <- OldSubstitutionApplier.applySubstitutions(simplificationInference.conclusion, substitutions).toOption
+      simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions).toOption
       path <- inferencePremise.findComponentPath(simplificationInference.conclusion)
     } yield {
       Premise.Simplification(simplifiedTarget, premise, simplificationInference.summary, substitutions, path)
@@ -35,7 +35,7 @@ object SimplificationFinder {
   private def getSimplification(statement: Statement, simplificationInference: Inference, inferencePremise: Statement)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {
     for {
       substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inferencePremise, statement).flatMap(_.confirmTotality(simplificationInference.variableDefinitions))
-      simplifiedTarget <- OldSubstitutionApplier.applySubstitutions(simplificationInference.conclusion, substitutions).toOption
+      simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions).toOption
     } yield {
       simplifiedTarget
     }

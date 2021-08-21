@@ -5,7 +5,7 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStep, StepProvingContext}
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 
 case class ConclusionRelationSimplificationInference(inferenceExtraction: InferenceExtraction, typePremiseOption: Option[TypeLikeStatement], derivedPremises: Seq[DerivedPremise]) extends DerivedInference {
@@ -14,7 +14,7 @@ case class ConclusionRelationSimplificationInference(inferenceExtraction: Infere
       substitutions <- PossibleSubstitutionCalculator.calculatePossibleSubstitutions(conclusion, target).flatMap(_.confirmTotality(variableDefinitions))
       derivationStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions)
       if derivationStep.statement == target
-      substitutedTypeStatement <- typePremiseOption.map(s => OldSubstitutionApplier.applySubstitutions(s.baseStatement, substitutions).toOption).swap
+      substitutedTypeStatement <- typePremiseOption.map(s => s.baseStatement.applySubstitutions(substitutions).toOption).swap
       (simplifiedTargets, derivationSteps) <- derivedPremises.getSubstitutedPremises(substitutions)
       targetRelationStatements <- simplifiedTargets.map(stepProvingContext.provingContext.findRelation).traverseOption
     } yield (substitutedTypeStatement.toSeq, targetRelationStatements, derivationSteps :+ derivationStep)

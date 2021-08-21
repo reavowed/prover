@@ -3,7 +3,7 @@ package net.prover.model
 import net.prover.core.transformers.ContextWithExternalDepth
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Expression, FunctionParameter}
-import net.prover.old.OldSubstitutionApplier
+import net.prover.extensions.ExpressionExtensions._
 import net.prover.substitutionFinding.model.PossibleSubstitutions
 import net.prover.substitutionFinding.transformers.PossibleSubstitutionCalculator
 import org.specs2.execute.Result
@@ -16,7 +16,7 @@ class SubstitutionsSpec extends Specification {
     }.flatMap(_.confirmTotality(variableDefinitions))
     calculatedSubstitutions must beSome(expectedSubstitutions)
     Result.foreach(sourceToTarget) { case (source, target) =>
-      val substitutedExpression = OldSubstitutionApplier.applySubstitutions(source, expectedSubstitutions)(ContextWithExternalDepth(externalDepth))
+      val substitutedExpression = source.applySubstitutions(expectedSubstitutions)(ContextWithExternalDepth(externalDepth))
       substitutedExpression must beSuccessfulTry(target)
     }
   }
@@ -342,8 +342,7 @@ class SubstitutionsSpec extends Specification {
 
     "correctly apply substitutions to a bound predicate" in {
       val F = TermVariablePlaceholder("F", 1)
-      OldSubstitutionApplier.applySubstitutions(
-        ForAll("x")(φ(F(a))),
+      ForAll("x")(φ(F(a))).applySubstitutions(
         Substitutions(
           Seq(Equals(b, $.^)),
           Seq(EmptySet, $)))(

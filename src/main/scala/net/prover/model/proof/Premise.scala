@@ -5,9 +5,10 @@ import net.prover.model._
 import net.prover.model.definitions.CompoundExpressionDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Premise.Pending
-import net.prover.old.{OldParameterInserter, OldSubstitutionApplier}
+import net.prover.old.{OldParameterInserter}
 import net.prover.structure.EntryContext
 import net.prover.substitutionFinding.transformers.{PossibleSubstitutionCalculator}
+import net.prover.extensions.ExpressionExtensions._
 
 sealed trait Premise {
   def statement: Statement
@@ -41,7 +42,7 @@ object Premise {
           val substitutions = PossibleSubstitutionCalculator.calculatePossibleSubstitutions(inferencePremise, premise.statement)
             .flatMap(_.confirmTotality(inference.variableDefinitions))
             .getOrElse(throw new Exception("Could not calculate substitutions for simplification"))
-          val result = OldSubstitutionApplier.applySubstitutions(inference.conclusion, substitutions).get
+          val result = inference.conclusion.applySubstitutions(substitutions).get
           val path = inferencePremise.findComponentPath(inference.conclusion).getOrElse(throw new Exception("Could not find simplification path"))
           helper(tailInferences, Simplification(result, premise, inference.summary, substitutions, path))
       }
