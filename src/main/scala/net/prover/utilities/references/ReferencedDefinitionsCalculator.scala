@@ -9,7 +9,7 @@ import net.prover.utilities.ExpressionCalculator.SetExpressionCalculator
 object ReferencedDefinitionsCalculator
     extends SetExpressionCalculator[CompoundExpressionDefinition, Unit]
     with ExpressionCalculator.WithDefaultVariableCalculation[Set[CompoundExpressionDefinition], Unit]
-    with ExpressionCalculator.WithDefaultCompoundExpressionTransformation[Set[CompoundExpressionDefinition], Unit]
+    with ExpressionCalculator.WithDefaultCompoundExpressionCalculation[Set[CompoundExpressionDefinition], Unit]
 {
   override def calculateFromCompoundExpressionWithContext[
     TCompoundExpression <: DefinedExpression[TExpression],

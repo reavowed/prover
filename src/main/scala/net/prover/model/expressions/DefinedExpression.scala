@@ -15,7 +15,6 @@ trait DefinedExpression[ExpressionType <: Expression] extends Expression with Ty
   def updateComponents(newComponents: Seq[Expression]): ExpressionType
   def updateBoundVariableNames(newBoundVariableNames: Seq[String]): ExpressionType
 
-  override def usedVariables: UsedVariables = components.usedVariables
   override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, ExpressionType, Int, Seq[Int])] = {
     @scala.annotation.tailrec
     def helper(previous: Seq[Expression], next: Seq[Expression], acc: Seq[(Term, ExpressionType, Int, Seq[Int])]): Seq[(Term, ExpressionType, Int, Seq[Int])] = {

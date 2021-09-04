@@ -30,6 +30,9 @@ trait ExpressionCalculator[TOutput, TParameters] {
 object ExpressionCalculator {
   trait ReducableExpressionCalculator[TOutput, TParameters] extends ExpressionCalculator[TOutput, TParameters] {
     def reduceAll(outputs: Seq[TOutput]): TOutput
+    def calculateFromExpressionsWithContext(expressions: Seq[Expression], parameters: TParameters)(implicit context: ContextWithInternalDepth) : TOutput = {
+      reduceAll(expressions.map(calculateFromExpressionWithContext(_, parameters)(context)))
+    }
   }
   trait PlusEmptyExpressionCalculator[TOutputOuter[_], TOutputInner, TParameters] extends ReducableExpressionCalculator[TOutputOuter[TOutputInner], TParameters] {
     def plusEmpty: PlusEmpty[TOutputOuter]
@@ -73,11 +76,11 @@ object ExpressionCalculator {
       parameters: TParameters)(
       implicit context: ContextWithInternalDepth
     ): TOutput = {
-      reduceAll(expressionVariable.arguments.map(calculateFromExpressionWithContext(_, parameters)))
+      calculateFromExpressionsWithContext(expressionVariable.arguments, parameters)
     }
   }
 
-  trait WithCommonCompoundExpressionTransformation[TOutput, TParameters] extends ExpressionCalculator[TOutput, TParameters] {
+  trait WithCommonCompoundExpressionCalculation[TOutput, TParameters] extends ExpressionCalculator[TOutput, TParameters] {
     def calculateFromCompoundStatementWithContext(
       compoundStatement: DefinedStatement,
       parameters: TParameters)(
@@ -100,8 +103,8 @@ object ExpressionCalculator {
       implicit context: ContextWithInternalDepth
     ): TOutput
   }
-  trait WithDefaultCompoundExpressionTransformation[TOutput, TParameters]
-      extends WithCommonCompoundExpressionTransformation[TOutput, TParameters]
+  trait WithDefaultCompoundExpressionCalculation[TOutput, TParameters]
+      extends WithCommonCompoundExpressionCalculation[TOutput, TParameters]
       with ReducableExpressionCalculator[TOutput, TParameters]
   {
     override def calculateFromCompoundExpressionWithContext[
@@ -112,7 +115,7 @@ object ExpressionCalculator {
       implicit context: ContextWithInternalDepth
     ): TOutput = {
       val innerContext = context.increaseDepth(compoundExpression)
-      reduceAll(compoundExpression.components.map(calculateFromExpressionWithContext(_, parameters)(innerContext)))
+      calculateFromExpressionsWithContext(compoundExpression.components, parameters)(innerContext)
     }
   }
 }

@@ -13,7 +13,6 @@ abstract class ExpressionVariable[ExpressionType <: Expression : ClassTag] exten
   def getMatch(other: Expression): Option[Seq[Expression]]
   def update(newArguments: Seq[Term]): ExpressionType
 
-  override def usedVariables: UsedVariables = (usedVariablesLens.set(Seq(UsedVariable(index, arguments.length)))(UsedVariables.empty) +: arguments.map(_.usedVariables)).foldTogether
   override def replaceDefinitions(expressionDefinitionReplacements: Map[CompoundExpressionDefinition, CompoundExpressionDefinition]): ExpressionType = {
     update(arguments.map(_.replaceDefinitions(expressionDefinitionReplacements)))
   }

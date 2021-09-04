@@ -15,6 +15,7 @@ import net.prover.structure.EntryContext
 import net.prover.types.model.ParentTypeConditions
 import net.prover.types.model.entries.{PropertyDefinitionOnType, TypeDefinition, TypeQualifierDefinition, TypeRelationDefinition}
 import org.specs2.matcher.Matcher
+import net.prover.extensions.ExpressionExtensions._
 
 trait Placeholder[T <: ExpressionVariable[_ <: Expression]] {
   def name: String

@@ -4,8 +4,6 @@ import net.prover.model.UsedVariables
 import net.prover.model.definitions.CompoundExpressionDefinition
 
 case class FunctionParameter(index: Int, level: Int) extends Term {
-  override def usedVariables: UsedVariables = UsedVariables.empty
-
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int = 0) = {
     if (level >= internalDepth) {
       FunctionParameter(index, level + numberOfParametersToInsert)

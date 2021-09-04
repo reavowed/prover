@@ -10,7 +10,7 @@ import scala.collection.mutable
 object ComplexityCalculator
   extends ExpressionCalculator[ExpressionComplexity, mutable.Map[Expression, ExpressionComplexity]]
     with ExpressionCalculator.WithCommonVariableCalculation[ExpressionComplexity, mutable.Map[Expression, ExpressionComplexity]]
-    with ExpressionCalculator.WithCommonCompoundExpressionTransformation[ExpressionComplexity, mutable.Map[Expression, ExpressionComplexity]] {
+    with ExpressionCalculator.WithCommonCompoundExpressionCalculation[ExpressionComplexity, mutable.Map[Expression, ExpressionComplexity]] {
 
   def calculateComplexity(expression: Expression, cache: mutable.Map[Expression, ExpressionComplexity]): ExpressionComplexity = calculateFromExpressionWithoutContext(expression, cache)
   def calculateComplexity(expression: Expression): ExpressionComplexity = calculateComplexity(expression, mutable.Map.empty)

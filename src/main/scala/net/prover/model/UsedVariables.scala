@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.model.expressions.{StatementVariable, TermVariable}
+
 case class UsedVariable(index: Int, arity: Int)
 object UsedVariable {
   implicit class SeqOps(usedVariables: Seq[UsedVariable]) {
@@ -8,6 +10,13 @@ object UsedVariable {
 }
 
 case class UsedVariables(statements: Seq[UsedVariable], terms: Seq[UsedVariable]) {
+  def withStatement(statementVariable: StatementVariable): UsedVariables = {
+    copy(statements = statements :+ UsedVariable(statementVariable.index, statementVariable.arity))
+  }
+  def withTerm(termVariable: TermVariable): UsedVariables = {
+    copy(terms = terms :+ UsedVariable(termVariable.index, termVariable.arity))
+  }
+
   def contains(other: UsedVariables): Boolean = {
     other.statements.toSet.subsetOf(statements.toSet) && other.terms.toSet.subsetOf(terms.toSet)
   }
