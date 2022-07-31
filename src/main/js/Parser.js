@@ -295,6 +295,7 @@ export class Parser {
   parseTermDefinition = (definitionJson) => {
     const definition = _.cloneDeep(definitionJson);
     definition.definingStatement && (definition.definingStatement = this.parseExpression(definition.definingStatement));
+    definition.definitionPredicate && (definition.definitionPredicate = this.parseExpression(definition.definitionPredicate));
     definition.defaultValue = this.parseExpression(definition.defaultValue);
     definition.premises && (definition.premises = definition.premises.map(this.parseExpression));
     _.forEach(definition.disambiguatorAdders, da => da.template = this.parseExpression(da.template));

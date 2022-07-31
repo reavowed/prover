@@ -254,14 +254,14 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     @RequestBody(required = false) newDefiningStatementText: String
   ): ResponseEntity[_] = {
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
-      case (entry: TypeDefinition, entryContext) =>
+      case (entry: ChapterEntry.HasDefiningStatement, entryContext) =>
         for {
           _ <- bookService.books.flatMap(_.chapters).flatMap(_.entries)
             .find(_.referencedInferenceIds.exists(entry.inferences.map(_.id).contains))
             .badRequestIfDefined(entryUsing => "Cannot set defining statement - is already depended on by " + entryUsing.name)
-          expressionParsingContext = ExpressionParsingContext.forTypeDefinition(entry.allVariableDefinitions)(entryContext)
+          expressionParsingContext = entry.definingStatementParsingContext(entryContext)
           newDefiningStatement <- Statement.parser(expressionParsingContext).parseFromString(newDefiningStatementText, "new defining statement").recoverWithBadRequest
-        } yield entry.copy(definingStatement = newDefiningStatement)
+        } yield entry.withDefiningStatement(newDefiningStatement)
       case (entry, _) =>
         Failure(BadRequestException(s"Cannot set defining statement of ${entry.getClass.getName}"))
     }

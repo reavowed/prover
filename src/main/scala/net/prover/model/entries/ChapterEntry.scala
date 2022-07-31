@@ -2,7 +2,8 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
-import net.prover.model.{EntryContext, Inference, Parser, SimpleVariableDefinition}
+import net.prover.model.expressions.Statement
+import net.prover.model.{EntryContext, ExpressionParsingContext, Inference, Parser, SimpleVariableDefinition}
 
 trait ChapterEntry {
   @JsonSerialize
@@ -40,6 +41,11 @@ object ChapterEntry {
   trait HasMainVariable extends ChapterEntry {
     def mainVariableDefinition: SimpleVariableDefinition
     def withMainVariableDefinition(newMainVariableDefinition: SimpleVariableDefinition): ChapterEntry
+  }
+  trait HasDefiningStatement extends ChapterEntry {
+    def definingStatement: Statement
+    def withDefiningStatement(newDefiningStatement: Statement): ChapterEntry
+    def definingStatementParsingContext(implicit entryContext: EntryContext): ExpressionParsingContext
   }
   trait HasOptionalExplicitName extends ChapterEntry with HasSymbol {
     def explicitName: Option[String]

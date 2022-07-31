@@ -29,7 +29,13 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
       endpointName: "disambiguator",
       process: newDisambiguatorAddersText => _.filter(newDisambiguatorAddersText.split(/\r?\n/).map(_.trim), s => s.length),
       inputType: InputWithShorthandReplacement,
-      inputProps: {as: "textarea"}},
+      inputProps: {as: "textarea"}
+    },
+    definition.definitionPredicate && {
+      label: "Definition Predicate",
+      initialValue: definition.definitionPredicate.serializeNicely([["_"]], displayContext.variableDefinitions),
+      endpointName: "definingStatement"
+    }
   ];
 
   return <EntryContext.Provider value={entryContext}>

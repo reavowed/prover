@@ -17,7 +17,10 @@ case class TermDefinitionEntry(
     shorthand: Option[String],
     attributes: Seq[String],
     disambiguatorAdders: Seq[DisambiguatorAdder])
-  extends ExpressionDefinitionEntry with TypedExpressionDefinitionEntry[TermDefinitionEntry] with TermDefinition
+  extends ExpressionDefinitionEntry
+    with TypedExpressionDefinitionEntry[TermDefinitionEntry]
+    with TermDefinition
+    with ChapterEntry.HasDefiningStatement
 {
   override def typeName: String = "Term"
   override def referencedEntries: Set[ChapterEntry] = (definingStatement.referencedDefinitions ++ premises.flatMap(_.referencedDefinitions).toSet).map(_.associatedChapterEntry) - this
@@ -30,6 +33,11 @@ case class TermDefinitionEntry(
   override def withAttributes(newAttributes: Seq[String]): TermDefinitionEntry = copy(attributes = newAttributes)
   override def withFormat(newFormat: Format.Basic): TermDefinitionEntry = copy(format = newFormat)
   def withDisambiguatorAdders(newDisambiguatorAdders: Seq[DisambiguatorAdder]): TermDefinitionEntry = copy(disambiguatorAdders = newDisambiguatorAdders)
+  override def withDefiningStatement(newDefiningStatement: Statement) = copy(definitionPredicate = newDefiningStatement)
+
+  override def definingStatementParsingContext(implicit entryContext: EntryContext) = {
+    ExpressionParsingContext.forComponentTypes(componentTypes).addInitialParameter("_")
+  }
 
   override def serializedLines: Seq[String] = Seq(s"term $baseSymbol $serializedComponents") ++
     (disambiguator.map(d => s"disambiguator $d").toSeq ++

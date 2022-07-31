@@ -36,6 +36,7 @@ export interface ExpressionDefinition {
   numberOfBoundVariables: number;
   numberOfComponents: number;
   attributes: string[];
+  definitionPredicate?: Expression
 }
 
 export interface QualifierDefinition {

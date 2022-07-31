@@ -12,7 +12,12 @@ case class TypeDefinition(
     defaultQualifier: Option[Qualifier],
     explicitName: Option[String],
     definingStatement: Statement)
-  extends ChapterEntry.Standalone with ChapterEntry.HasOptionalExplicitName with ChapterEntry.HasStatementDefinition with ChapterEntry.HasArticle with ChapterEntry.HasMainVariable
+  extends ChapterEntry.Standalone
+    with ChapterEntry.HasOptionalExplicitName
+    with ChapterEntry.HasStatementDefinition
+    with ChapterEntry.HasArticle
+    with ChapterEntry.HasMainVariable
+    with ChapterEntry.HasDefiningStatement
 {
   override val title: String = s"Definition: ${name.capitalizeWords}"
 
@@ -23,6 +28,11 @@ case class TypeDefinition(
   override def withName(newName: Option[String]): TypeDefinition = copy(explicitName = newName)
   def withFormat(newFormat: Format.Explicit): TypeDefinition = copy(defaultQualifier = defaultQualifier.map(_.withFormat(newFormat)))
   def withMainVariableDefinition(newMainVariableDefinition: SimpleVariableDefinition): TypeDefinition = copy(mainVariableDefinition = newMainVariableDefinition)
+  override def withDefiningStatement(newDefiningStatement: Statement) = copy(definingStatement = newDefiningStatement)
+
+  override def definingStatementParsingContext(implicit entryContext: EntryContext) = {
+    ExpressionParsingContext.forTypeDefinition(allVariableDefinitions)
+  }
 
   def baseFormat = Format.Explicit(s"%1 is $article %0", s"${mainVariableDefinition.name} is $article $name", 2, true, true)
   def fullFormat = defaultQualifier.prependFormat(baseFormat)
