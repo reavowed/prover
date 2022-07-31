@@ -1,0 +1,5 @@
+Define the notion of a group and its basic properties.
+
+type group G
+  qualifier (∘) (under ∘)
+  definition (∧ ∧ ∧ binaryOperation t1 binaryOperationOn t1 t0 associativeBinaryOperation t1 invertibleBinaryOperation t1)
