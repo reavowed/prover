@@ -246,6 +246,27 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
     }
   }
 
+  @PutMapping(value = Array("/definingStatement"), produces = Array("application/json;charset=UTF-8"))
+  def editDefiningStatement(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("entryKey") entryKey: String,
+    @RequestBody(required = false) newDefiningStatementText: String
+  ): ResponseEntity[_] = {
+    modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
+      case (entry: TypeDefinition, entryContext) =>
+        for {
+          _ <- bookService.books.flatMap(_.chapters).flatMap(_.entries)
+            .find(_.referencedInferenceIds.exists(entry.inferences.map(_.id).contains))
+            .badRequestIfDefined(entryUsing => "Cannot set defining statement - is already depended on by " + entryUsing.name)
+          expressionParsingContext = ExpressionParsingContext.forTypeDefinition(entry.allVariableDefinitions)(entryContext)
+          newDefiningStatement <- Statement.parser(expressionParsingContext).parseFromString(newDefiningStatementText, "new defining statement").recoverWithBadRequest
+        } yield entry.copy(definingStatement = newDefiningStatement)
+      case (entry, _) =>
+        Failure(BadRequestException(s"Cannot set defining statement of ${entry.getClass.getName}"))
+    }
+  }
+
   private def modifyEntryWithReplacement(oldEntry: ChapterEntry, newEntry: ChapterEntry): Seq[Book] = {
     bookService.modifyBooks[Identity]((books, _) => {
       books.mapFoldWithPrevious[(Map[ChapterEntry, ChapterEntry], Map[ExpressionDefinition, ExpressionDefinition]), Book]((Map.empty, Map.empty)) { case ((chapterEntries, expressionDefinitions), previousBooks, bookToModify) =>

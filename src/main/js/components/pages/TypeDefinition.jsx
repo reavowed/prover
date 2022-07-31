@@ -41,9 +41,9 @@ export function TypeDefinition(props) {
             ({name}) => {
               return {name, arity: 0}
             }
-          ),
-          endpointName: "definingStatement"
-        })
+          )
+        }),
+      endpointName: "definingStatement"
     }
   ];
 
