@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {Parser} from "../../Parser";
 import EntryContext from "../EntryContext";
 import {Breadcrumbs} from "./components/Breadcrumbs";
@@ -31,6 +31,20 @@ export function TypeDefinition(props) {
     {label: "Main Variable", initialValue: serializeVariableDefinition(definition.mainVariableDefinition), endpointName: "mainVariableDefinition"},
     definition.qualifier && {label: "Qualifier Variables", initialValue: definition.qualifier.variableDefinitions.map(serializeVariableDefinition).join(" ")},
     definition.qualifier && {label: "Qualifier Format", initialValue: serializedFormat, endpointName: "format"},
+    {
+      label: "Definition",
+      initialValue: definition.definingStatement.serializeNicely(
+        [],
+        {
+          statements: [],
+          terms: definition.allVariableDefinitions.map(
+            ({name}) => {
+              return {name, arity: 0}
+            }
+          ),
+          endpointName: "definingStatement"
+        })
+    }
   ];
 
 

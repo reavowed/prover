@@ -46,6 +46,8 @@ export interface QualifierDefinition {
 export interface TypeDefinition {
   symbol: string;
   name: string;
+  allVariableDefinitions: SimpleVariableDefinition[];
+  mainVariableDefinition: SimpleVariableDefinition;
   defaultQualifier: QualifierDefinition | null;
   properties: PropertyDefinition[];
   qualifiers: TypeQualifierDefinition[];
