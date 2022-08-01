@@ -29,7 +29,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
         extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
         extraction <- SubstatementExtractor.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
         substitutions <- definition.substitutions.parse(extraction.variableDefinitions)
-        epc = ExpressionParsingContext.withDefinitions(extraction.variableDefinitions)
+        epc = implicitly[ExpressionParsingContext].addSimpleTermVariables(extraction.additionalVariableNames)
         conclusionOption <- getConclusionOption(epc, substitutions)
         newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
         substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to intended new targets")).swap

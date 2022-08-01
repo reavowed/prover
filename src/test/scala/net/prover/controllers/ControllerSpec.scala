@@ -80,11 +80,21 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     implicit entryContext: EntryContext,
     variableDefinitions: VariableDefinitions
   ): StepDefinition = {
-    implicit val stepContext: StepContext = createOuterStepContextForStatements(Nil, Nil)
-    val extraction = SubstatementExtractor.getPremiseExtractions(premise).find(_.extractionInferences == extractionInferences).get
     val substitutions = Substitutions(
       variableDefinitions.statements.mapWithIndex((d, i) => StatementVariable(i, (0 until d.arity).map($(_)))),
       variableDefinitions.terms.mapWithIndex((d, i) => TermVariable(i, (0 until d.arity).map($(_)))) ++ terms)
+    definitionWithPremise(premise, extractionInferences, substitutions, conclusionOption)
+  }
+  def definitionWithPremise(
+    premise: Statement,
+    extractionInferences: Seq[Inference],
+    substitutions: Substitutions,
+    conclusionOption: Option[Statement])(
+    implicit entryContext: EntryContext,
+    variableDefinitions: VariableDefinitions
+  ): StepDefinition = {
+    implicit val stepContext: StepContext = createOuterStepContextForStatements(Nil, Nil)
+    val extraction = SubstatementExtractor.getPremiseExtractions(premise).find(_.extractionInferences == extractionInferences).get
     val serializedSubstitutions = SerializedSubstitutions(substitutions.statements.map(_.serialized), substitutions.terms.map(_.serialized))
     StepDefinition(
       None,

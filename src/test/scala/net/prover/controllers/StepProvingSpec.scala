@@ -1,6 +1,7 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.PathData
+import net.prover.model.Substitutions
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{DefinedStatement, TermVariable}
 import net.prover.model.proof.Step
@@ -183,7 +184,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithPremise(premise, Seq(a), Seq(specification, modusPonens), Some(Exists("z")(ψ(x, $)))))
+        definitionWithPremise(premise, Seq(a()), Seq(specification, modusPonens), Some(Exists("z")(ψ(x, $)))))
 
       checkModifyStepsWithMatcher(
         service,
@@ -327,6 +328,36 @@ class StepProvingSpec extends ControllerSpec {
               assertion(FunctionFrom.statementDefinition.deconstructionInference.get, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
               assertion(extractRightConjunct, Seq(Function(Addition), Conjunction(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals))), Nil),
               assertion(extractLeftConjunct, Seq(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals)), Nil))))))
+    }
+
+    "prove a new target by extracting inside a bound variable" in {
+      val service = mock[BookService]
+      mockReplaceStepsForInsertion(service)
+      val controller = new StepProvingController(service)
+
+      val premise = ForAll("x")(φ($))
+      val localVariableDefinitions = getVariableDefinitions(Seq(φ -> 1), Nil)
+
+      controller.addNewTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        definitionWithPremise(premise, Seq(specification), Substitutions(Seq(φ($)), Seq($)), Some(φ($)))(implicitly, localVariableDefinitions))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex - 1)
+          :+ target(premise)
+          :+ target(ψ),
+        fillerSteps(stepIndex - 1)
+          :+ target(premise)
+          :+ assertion(specification, Seq(φ($^)), Seq($))
+          :+ target(ψ),
+        Seq("x"))(
+        implicitly,
+        localVariableDefinitions)
     }
   }
 }
