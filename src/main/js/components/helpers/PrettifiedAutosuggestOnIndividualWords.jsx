@@ -18,7 +18,7 @@ export default function PrettifiedAutosuggestOnIndividualWords({value, onChange,
   }
 
   function onInnerChange(event) {
-    const [newText, newSelectionStart] = replaceCompletedWordIfApplicable(event.target.value, event.target.selectionStart, true);
+    const [newText, newSelectionStart] = replaceCompletedWordIfApplicable(ref.current.input.value, ref.current.input.selectionStart, true);
     const callback = () => ref.current.input.setSelectionRange(newSelectionStart, newSelectionStart);
     return onChange(newText, callback);
   }
