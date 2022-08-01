@@ -1,48 +1,5 @@
 Establish the existence of the unordered pair {a, b}.
 
-theorem Unordered Pair Existence Lemma
-termVariables(a 0, b 0)
-conclusion ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 ∨ = $0 t0 = $0 t1
-{
-  take y {
-    assume ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 {
-      let x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 t0 ∧ = $$0 ∅ = $0 t1, ∨ = $0 t0 = $0 t1) () {
-        assume ∧ = $0 singleton ∅ = $$0 t0 {
-          prove ∨ = $$0 t0 = $$0 t1 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (= $$0 t0, = $$0 t1) () 0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        }
-        assume ∧ = $0 ∅ = $$0 t1 {
-          prove ∨ = $$0 t0 = $$0 t1 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (= $$0 t1, = $$0 t0) () 0.0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        }
-        prove ∨ = $$0 t0 = $$0 t1 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∧ = $0 singleton ∅ = $$0 t0, ∧ = $0 ∅ = $$0 t1, ∨ = $$0 t0 = $$0 t1) () 0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.0.0.0 0.0.0.1
-      } 0.0a
-    }
-    assume ∨ = $0 t0 = $0 t1 {
-      assume = $0 t0 {
-        prove ∈ singleton ∅ powerSet singleton ∅ 6d9969f24629cbc5b410cebb8d4d426f1c712107b59e52fe914afce08d1c859c () (singleton ∅)
-        prove = singleton ∅ singleton ∅ 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (singleton ∅)
-        elided 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 {
-          prove ∧ = singleton ∅ singleton ∅ = $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= singleton ∅ singleton ∅, = $0 t0) () 0.1.0.1 0.1.0a
-          prove ∨ ∧ = singleton ∅ singleton ∅ = $0 t0 ∧ = singleton ∅ ∅ = $0 t1 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ = singleton ∅ singleton ∅ = $0 t0, ∧ = singleton ∅ ∅ = $0 t1) () 0.1.0.2.0
-          prove ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ singleton ∅ = $0 t0 ∧ = singleton ∅ ∅ = $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ singleton ∅ powerSet singleton ∅, ∨ ∧ = singleton ∅ singleton ∅ = $0 t0 ∧ = singleton ∅ ∅ = $0 t1) () 0.1.0.0 0.1.0.2.1
-        }
-        prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 t0 ∧ = $$0 ∅ = $0 t1) (singleton ∅) 0.1.0.2
-      }
-      assume = $0 t1 {
-        prove ∈ ∅ powerSet singleton ∅ 1b4b7e14784be7940f719468c38125a9b1ab00f3064655f8f6ae03612d948f85 () (singleton ∅)
-        prove = ∅ ∅ 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (∅)
-        elided 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 {
-          prove ∧ = ∅ ∅ = $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= ∅ ∅, = $0 t1) () 0.1.1.1 0.1.1a
-          prove ∨ ∧ = ∅ singleton ∅ = $0 t0 ∧ = ∅ ∅ = $0 t1 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∧ = ∅ ∅ = $0 t1, ∧ = ∅ singleton ∅ = $0 t0) () 0.1.1.2.0
-          prove ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ singleton ∅ = $0 t0 ∧ = ∅ ∅ = $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ ∅ powerSet singleton ∅, ∨ ∧ = ∅ singleton ∅ = $0 t0 ∧ = ∅ ∅ = $0 t1) () 0.1.1.0 0.1.1.2.1
-        }
-        prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 t0 ∧ = $$0 ∅ = $0 t1) (∅) 0.1.1.2
-      }
-      prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= $0 t0, = $0 t1, ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1) () 0.1a 0.1.0 0.1.1
-    }
-    prove ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 ∨ = $0 t0 = $0 t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1, ∨ = $0 t0 = $0 t1) () 0.0 0.1
-  }
-}
-
 theorem Unordered Pair Existence
 termVariables(a 0, b 0)
 conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 t0 = $0 t1
@@ -55,7 +12,45 @@ conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 t0 = $0 t1
     }
   }
   prove ∃! x ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 b9824fd6f00092a866dd6293c23a983e93e0ddf13a433df477ab83cd6fbf83fa (∨ ∧ = $0 singleton ∅ = $1 t0 ∧ = $0 ∅ = $1 t1) (powerSet singleton ∅) 0
-  prove ∀ y ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 ∨ = $0 t0 = $0 t1 612c8e2f39a1b92b4fbf614484d401d1df9ebcf40ce697a029b064f093484ce4 () (t0, t1)
+  take y {
+    assume ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 {
+      let x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 t0 ∧ = $$0 ∅ = $0 t1, ∨ = $0 t0 = $0 t1) () {
+        elided 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 {
+          assume ∧ = $0 singleton ∅ = $$0 t0 {
+            prove ∨ = $$0 t0 = $$0 t1 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (= $$0 t0, = $$0 t1) () 2.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          }
+          assume ∧ = $0 ∅ = $$0 t1 {
+            prove ∨ = $$0 t0 = $$0 t1 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (= $$0 t1, = $$0 t0) () 2.0.0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          }
+          prove ∨ = $$0 t0 = $$0 t1 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∧ = $0 singleton ∅ = $$0 t0, ∧ = $0 ∅ = $$0 t1, ∨ = $$0 t0 = $$0 t1) () 2.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.0.0.0.0 2.0.0.0.1
+        }
+      } 2.0a
+    }
+    assume ∨ = $0 t0 = $0 t1 {
+      assume = $0 t0 {
+        prove ∈ singleton ∅ powerSet singleton ∅ 6d9969f24629cbc5b410cebb8d4d426f1c712107b59e52fe914afce08d1c859c () (singleton ∅)
+        prove = singleton ∅ singleton ∅ 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (singleton ∅)
+        elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+          prove ∧ = singleton ∅ singleton ∅ = $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= singleton ∅ singleton ∅, = $0 t0) () 2.1.0.1 2.1.0a
+          prove ∨ ∧ = singleton ∅ singleton ∅ = $0 t0 ∧ = singleton ∅ ∅ = $0 t1 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ = singleton ∅ singleton ∅ = $0 t0, ∧ = singleton ∅ ∅ = $0 t1) () 2.1.0.2.0
+          prove ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ singleton ∅ = $0 t0 ∧ = singleton ∅ ∅ = $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ singleton ∅ powerSet singleton ∅, ∨ ∧ = singleton ∅ singleton ∅ = $0 t0 ∧ = singleton ∅ ∅ = $0 t1) () 2.1.0.0 2.1.0.2.1
+          prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 t0 ∧ = $$0 ∅ = $0 t1) (singleton ∅) 2.1.0.2.2
+        }
+      }
+      assume = $0 t1 {
+        prove ∈ ∅ powerSet singleton ∅ 1b4b7e14784be7940f719468c38125a9b1ab00f3064655f8f6ae03612d948f85 () (singleton ∅)
+        prove = ∅ ∅ 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (∅)
+        elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+          prove ∧ = ∅ ∅ = $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= ∅ ∅, = $0 t1) () 2.1.1.1 2.1.1a
+          prove ∨ ∧ = ∅ singleton ∅ = $0 t0 ∧ = ∅ ∅ = $0 t1 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∧ = ∅ ∅ = $0 t1, ∧ = ∅ singleton ∅ = $0 t0) () 2.1.1.2.0
+          prove ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ singleton ∅ = $0 t0 ∧ = ∅ ∅ = $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ ∅ powerSet singleton ∅, ∨ ∧ = ∅ singleton ∅ = $0 t0 ∧ = ∅ ∅ = $0 t1) () 2.1.1.0 2.1.1.2.1
+          prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 t0 ∧ = $$0 ∅ = $0 t1) (∅) 2.1.1.2.2
+        }
+      }
+      prove ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= $0 t0, = $0 t1, ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1) () 2.1a 2.1.0 2.1.1
+    }
+    prove ↔ ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 ∨ = $0 t0 = $0 t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1, ∨ = $0 t0 = $0 t1) () 2.0 2.1
+  }
   prove ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 t0 = $0 t1 8ae8122d854da1474bddaf18a318cb348535112ca944d8e70f9ebf555a97ed2e (∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1, ∨ = $0 t0 = $0 t1) () 1 2
 }
 
