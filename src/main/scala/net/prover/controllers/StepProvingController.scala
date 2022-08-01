@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models._
 import net.prover.model._
-import net.prover.model.expressions.Statement
+import net.prover.model.expressions.{FunctionParameter, Statement, StatementVariable, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, UnwrappedStatement, Unwrapper}
@@ -164,7 +164,11 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       (_, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
       premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-      baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '$premiseStatement'")
+      // First of all, initialise the substitutions with all the existing variables in the theorem
+      baseSubstitutions = Substitutions.Possible(
+        stepProvingContext.stepContext.variableDefinitions.statements.mapWithIndex((variableDefinition, index) => index -> StatementVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap,
+        stepProvingContext.stepContext.variableDefinitions.terms.mapWithIndex((variableDefinition, index) => index -> TermVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap)
+      // Then add any premise-specific variables that might be missing
     } yield {
       implicit val spc = stepProvingContext
       SubstatementExtractor.getPremiseExtractions(premise.statement)
