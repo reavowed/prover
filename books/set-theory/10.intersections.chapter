@@ -121,14 +121,21 @@ theorem Binary Intersection Is Symmetric
 termVariables(a 0, b 0)
 conclusion = ∩ t0 t1 ∩ t1 t0
 {
-  prove ∀ x ↔ ∈ $0 ∩ t0 t1 ∧ ∈ $0 t0 ∈ $0 t1 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (t0, t1)
-  prove ∀ x ↔ ∈ $0 ∩ t1 t0 ∧ ∈ $0 t1 ∈ $0 t0 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (t1, t0)
-  elided b356169c385355e0eba377b961d4c0bbbeb649b0834fc1324faa9e712d4db587 {
-    take x {
-      prove ↔ ∧ ∈ $0 t0 ∈ $0 t1 ∧ ∈ $0 t1 ∈ $0 t0 b356169c385355e0eba377b961d4c0bbbeb649b0834fc1324faa9e712d4db587 (∈ $0 t0, ∈ $0 t1) ()
+  take x {
+    elided 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c {
+      prove ∀ x ↔ ∈ $0 ∩ t0 t1 ∧ ∈ $0 t0 ∈ $0 t1 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (t0, t1)
+      prove ↔ ∈ $0 ∩ t0 t1 ∧ ∈ $0 t0 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 ∩ t0 t1 ∧ ∈ $$0 t0 ∈ $$0 t1) ($0) 0.0.0
     }
+    prove ↔ ∧ ∈ $0 t0 ∈ $0 t1 ∧ ∈ $0 t1 ∈ $0 t0 b356169c385355e0eba377b961d4c0bbbeb649b0834fc1324faa9e712d4db587 (∈ $0 t0, ∈ $0 t1) ()
+    prove ↔ ∈ $0 ∩ t0 t1 ∧ ∈ $0 t1 ∈ $0 t0 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 ∩ t0 t1, ∧ ∈ $0 t0 ∈ $0 t1, ∧ ∈ $0 t1 ∈ $0 t0) () 0.0 0.1
+    elided 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c {
+      prove ∀ x ↔ ∈ $0 ∩ t1 t0 ∧ ∈ $0 t1 ∈ $0 t0 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (t1, t0)
+      prove ↔ ∈ $0 ∩ t1 t0 ∧ ∈ $0 t1 ∈ $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 ∩ t1 t0 ∧ ∈ $$0 t1 ∈ $$0 t0) ($0) 0.3.0
+      prove ↔ ∧ ∈ $0 t1 ∈ $0 t0 ∈ $0 ∩ t1 t0 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ $0 ∩ t1 t0, ∧ ∈ $0 t1 ∈ $0 t0) () 0.3.1
+    }
+    prove ↔ ∈ $0 ∩ t0 t1 ∈ $0 ∩ t1 t0 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 ∩ t0 t1, ∧ ∈ $0 t1 ∈ $0 t0, ∈ $0 ∩ t1 t0) () 0.2 0.3
   }
-  prove = ∩ t0 t1 ∩ t1 t0 aaab61a4596fa162a6e81a9ad0b3a803eec50e8cfc3b5a55db30a3884165a8ca (∧ ∈ $0 t0 ∈ $0 t1, ∧ ∈ $0 t1 ∈ $0 t0) (∩ t0 t1, ∩ t1 t0) 0 1 2
+  prove = ∩ t0 t1 ∩ t1 t0 65dcb85d85a1b0c0107a9c47ec499c5d9828ccf4b6880d399f0b456d994b576b () (∩ t0 t1, ∩ t1 t0) 0
 }
 
 theorem An Element of Two Sets Is an Element of Their Intersection
