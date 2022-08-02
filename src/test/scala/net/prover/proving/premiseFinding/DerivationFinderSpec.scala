@@ -10,7 +10,7 @@ import net.prover.model.{EntryContext, Format, TermVariablePlaceholder, TestDefi
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
-class PremiseFinderSpec extends Specification {
+class DerivationFinderSpec extends Specification {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
   implicit val entryContext = defaultEntryContext
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
@@ -35,14 +35,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
-      PremiseFinder.findDerivationForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, target, depth))).map(_.steps)
-    }
-
-    def findPremiseOrTarget(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): (Seq[Step], Seq[Statement]) = {
-      implicit val stepContext = getStepContext(premises, target, depth)
-      PremiseFinder.findDerivationsOrTargets(Seq(target))(entryContextAndStepContextToStepProvingContext(entryContext, stepContext))
-        .mapLeft(_.steps)
-        .mapRight(_.map(_.statement))
+      DerivationFinder.findDerivationForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, target, depth))).map(_.steps)
     }
 
     "find a simplified premise without a derivation" in {
@@ -273,53 +266,6 @@ class PremiseFinderSpec extends Specification {
           assertion(axiom, Nil, Nil),
           assertion(extractLeftConjunct, Seq(Conjunction(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), additionProperty), Nil),
           assertion(extractLeftConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))))(SubstitutionContext.outsideProof))
-    }
-
-    "only add one half of a conjunction as a target if the other half is present as a premise" in {
-      findPremiseOrTarget(
-        Conjunction(φ, ψ),
-        Seq(φ)
-      ) mustEqual (
-        Seq(assertion(combineConjunction, Seq(φ, ψ), Nil)(SubstitutionContext.outsideProof)),
-        Seq(ψ.toVariable)
-      )
-    }
-
-    "replace terms in a target using a fact" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 2), Nil)
-      val axiom = createInference(
-        "Function Properties of Natural Addition",
-        Nil,
-        Conjunction(
-          Function(Addition),
-          FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)))
-
-      findPremiseOrTarget(
-        ForAllIn("x", Domain(Addition))(ForAllIn("y", Domain(Addition))(φ($.^, $))),
-        Nil)(
-        defaultEntryContext.addEntry(axiom)
-      ) mustEqual (
-        Seq(
-          elided(axiom, Seq(
-            elided(axiom, Seq(
-              assertion(axiom, Nil, Nil),
-              assertion(extractRightConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))),
-            elided(FunctionFrom.deconstructionInference, Seq(
-              assertion(FunctionFrom.deconstructionInference, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
-              assertion(reverseEquality, Nil, Seq(Domain(Addition), Product(Naturals, Naturals))))))),
-          assertion(substitutionOfEquals, Seq(ForAllIn("x", $.^)(ForAllIn("y", $.^^)(φ($.^, $)))), Seq(Product(Naturals, Naturals), Domain(Addition))))(SubstitutionContext.outsideProof),
-        Seq(ForAllIn("x", Product(Naturals, Naturals))(ForAllIn("y", Product(Naturals, Naturals))(φ($.^, $)))))
-    }
-
-    "deconstruct a non-type-statement target" in {
-      findPremiseOrTarget(Conjunction(φ, ψ), Nil) mustEqual (
-        Seq(assertion(combineConjunction, Seq(φ, ψ), Nil)(SubstitutionContext.outsideProof)),
-        Seq(φ.toVariable, ψ.toVariable)
-      )
-    }
-
-    "not deconstruct a type-statement target" in {
-      findPremiseOrTarget(Conjunction(Function(a), FunctionFrom(a, b, c)), Nil) mustEqual (Nil, Seq(Conjunction(Function(a), FunctionFrom(a, b, c))))
     }
 
     "find a premise using a simplification that has a type statement premise" in {

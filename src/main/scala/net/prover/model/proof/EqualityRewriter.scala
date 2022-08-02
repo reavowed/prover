@@ -5,7 +5,7 @@ import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper,
 import net.prover.model._
 import net.prover.model.definitions.{BinaryJoiner, Equality, RearrangementStep, TermRewriteInference, Wrapper}
 import net.prover.model.expressions._
-import net.prover.proving.premiseFinding.PremiseFinder
+import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.util.{Direction, PossibleSingleMatch}
 
 import scala.Ordering.Implicits._
@@ -25,7 +25,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         rewriteInference <- inferences
         (inferenceSource, inferenceResult) = direction.swapSourceAndResult(rewriteInference.lhs, rewriteInference.rhs)
         conclusionSubstitutions <- inferenceSource.calculateSubstitutions(premiseTerm)
-        (premises, possibleFinalSubstitutions) <- PremiseFinder.findDerivationsForStatementsBySubstituting(rewriteInference.premises, conclusionSubstitutions)
+        (premises, possibleFinalSubstitutions) <- DerivationFinder.findDerivationsForStatementsBySubstituting(rewriteInference.premises, conclusionSubstitutions)
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality(rewriteInference.variableDefinitions)
         simplifiedTerm <- inferenceResult.applySubstitutions(finalSubstitutions)
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
@@ -76,7 +76,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
       def findDirectly = {
         for {
-          premiseSteps <- PremiseFinder.findDerivationForStatement(equality(premiseTerm, targetTerm))
+          premiseSteps <- DerivationFinder.findDerivationForStatement(equality(premiseTerm, targetTerm))
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
           inference = premiseSteps.inferences.singleMatch match {
             case PossibleSingleMatch.NoMatches =>

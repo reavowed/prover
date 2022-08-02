@@ -5,7 +5,7 @@ import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.{InferenceExtraction, VariableTracker}
 import net.prover.model.proof._
-import net.prover.proving.premiseFinding.PremiseFinder
+import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 
 import scala.util.{Failure, Success, Try}
 
@@ -166,7 +166,7 @@ object ExtractionHelper {
   ): Try[(DerivationStep, Seq[Step.Target])] = {
     for {
       (mainAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(inference, substitutions).orBadRequest("Could not apply substitutions to inference")
-      ExtractionApplication(_, mainPremise, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForInference(mainAssertion, extractionInferences, inference, substitutions, intendedPremises, intendedConclusion, PremiseFinder.findDerivationsOrTargets)
+      ExtractionApplication(_, mainPremise, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForInference(mainAssertion, extractionInferences, inference, substitutions, intendedPremises, intendedConclusion, DerivationOrTargetFinder.findDerivationsOrTargets)
       mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise)
       extractionStep = SubstatementExtractor.createDerivationForInferenceExtraction(mainAssertionWithCorrectConclusion, extractionSteps)
     } yield (extractionStep.elideWithPremiseSteps((mainPremises ++ extractionPremises).deduplicate), mainTargets ++ extractionTargets)
@@ -191,7 +191,7 @@ object ExtractionHelper {
     implicit stepProvingContext: StepProvingContext
   ): Try[(Statement, Option[Step], Seq[Step.Target])] = {
     for {
-      ExtractionApplication(extractionResult, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForPremise(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion, PremiseFinder.findDerivationsOrTargets)
+      ExtractionApplication(extractionResult, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForPremise(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion, DerivationOrTargetFinder.findDerivationsOrTargets)
       extractionStep = Step.Elided.ifNecessary(extractionSteps.steps, "Extracted")
       assertionWithExtractionStep = Step.Elided.ifNecessary(extractionPremises.deduplicate.steps ++ extractionStep.toSeq, "Extracted")
     } yield (extractionResult, assertionWithExtractionStep, extractionTargets)

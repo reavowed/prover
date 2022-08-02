@@ -5,7 +5,7 @@ import net.prover.model.Substitutions
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStep, StepProvingContext}
-import net.prover.proving.premiseFinding.PremiseFinder
+import net.prover.proving.premiseFinding.DerivationFinder
 
 case class RelationRewriteInference(
     inferenceExtraction: InferenceExtraction,
@@ -21,7 +21,7 @@ case class RelationRewriteInference(
       substitutionsAfterMainPremise <- mainPremise.calculateSubstitutions(currentStatement.statement, initialSubstitutions)
       (premiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
         case Some(initialPremise) =>
-          PremiseFinder.findKnownStatementBySubstituting(initialPremise, substitutionsAfterMainPremise, existingPremises).headOption.map(_.mapLeft(_.derivation))
+          DerivationFinder.findKnownStatementBySubstituting(initialPremise, substitutionsAfterMainPremise, existingPremises).headOption.map(_.mapLeft(_.derivation))
         case None =>
           Some((Nil, substitutionsAfterMainPremise))
       }
@@ -34,7 +34,7 @@ case class RelationRewriteInference(
       substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement, initialSubstitutions)
       (premiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
         case Some(initialPremise) =>
-          PremiseFinder.findDerivationForStatementBySubstituting(initialPremise, substitutionsAfterConclusion, stepProvingContext.knownStatementsFromPremises).headOption.map(_.mapLeft(_.derivation))
+          DerivationFinder.findDerivationForStatementBySubstituting(initialPremise, substitutionsAfterConclusion, stepProvingContext.knownStatementsFromPremises).headOption.map(_.mapLeft(_.derivation))
         case None =>
           Some((Nil, substitutionsAfterConclusion))
       }

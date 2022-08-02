@@ -3,7 +3,7 @@ package net.prover.model.proof
 import net.prover.model._
 import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions._
-import net.prover.proving.premiseFinding.PremiseFinder
+import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 
 object ProofHelper {
   def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Option[(DerivationStep, Substitutions.Possible)] = {
@@ -47,7 +47,7 @@ object ProofHelper {
     for {
       premiseStatements <- inference.substitutePremises(substitutions)
       conclusion <- inference.substituteConclusion(substitutions)
-      (premiseSteps, targetSteps) = PremiseFinder.findDerivationsOrTargets(premiseStatements)
+      (premiseSteps, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(premiseStatements)
       assertionStep = Step.Assertion(
         conclusion,
         inference.summary,

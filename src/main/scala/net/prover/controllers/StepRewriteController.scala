@@ -8,7 +8,7 @@ import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.proof.EqualityRewriter.{RewriteMethods, RewritePossibility}
 import net.prover.model.proof._
-import net.prover.proving.premiseFinding.PremiseFinder
+import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.util.Direction
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
@@ -72,7 +72,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
         import replacementPossibility._
         for {
           substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
-          (_, substitutionsAfterPremises) <- PremiseFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceStepContext))
+          (_, substitutionsAfterPremises) <- DerivationFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceStepContext))
           substitutions <- substitutionsAfterPremises.confirmTotality(termRewriteInference.variableDefinitions)
           result <- termRewriteInference.rhs.applySubstitutions(substitutions)(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
         } yield (term, result, path)
@@ -182,7 +182,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
       (lhs, rhs) <- equality.unapply(inferenceExtraction.conclusion).orBadRequest("Rewrite conclusion was not equality")
       (sourceTemplate, targetTemplate) = direction.swapSourceAndResult(lhs, rhs)
       substitutions <- sourceTemplate.calculateSubstitutions(baseTerm).orBadRequest("Could not find substitutions")
-      (knownPremises, _) <- PremiseFinder.findDerivationsForStatementsBySubstituting(inferenceExtraction.premises, substitutions)
+      (knownPremises, _) <- DerivationFinder.findDerivationsForStatementsBySubstituting(inferenceExtraction.premises, substitutions)
         .orBadRequest("Could not find premises")
       (removedUnwrappers, removedSource, removedPremises, removedWrapperExpression) = RewriteMethods[TExpression].removeUnwrappers(baseTerm, knownPremises.map(_.statement), wrapperExpression, unwrappers)
       removedUnwrappedStepContext = removedUnwrappers.enhanceStepContext(implicitly)
