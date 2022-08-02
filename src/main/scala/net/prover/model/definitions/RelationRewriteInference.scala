@@ -4,7 +4,8 @@ import net.prover.controllers.ExtractionHelper
 import net.prover.model.Substitutions
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
-import net.prover.model.proof.{DerivationStep, PremiseFinder, StepProvingContext}
+import net.prover.model.proof.{DerivationStep, StepProvingContext}
+import net.prover.proving.premiseFinding.PremiseFinder
 
 case class RelationRewriteInference(
     inferenceExtraction: InferenceExtraction,

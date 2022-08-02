@@ -1,11 +1,12 @@
-package net.prover.model
+package net.prover.proving.premiseFinding
 
-import net.prover.model.TestDefinitions.{f, _}
+import net.prover.model.TestDefinitions.{a, b, _}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
 import net.prover.model.entries.{ParentTypeConditions, PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
+import net.prover.model.{EntryContext, Format, TermVariablePlaceholder, TestDefinitions, VariableDefinitions}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 

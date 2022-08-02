@@ -5,6 +5,7 @@ import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper,
 import net.prover.model._
 import net.prover.model.definitions.{BinaryJoiner, Equality, RearrangementStep, TermRewriteInference, Wrapper}
 import net.prover.model.expressions._
+import net.prover.proving.premiseFinding.PremiseFinder
 import net.prover.util.{Direction, PossibleSingleMatch}
 
 import scala.Ordering.Implicits._

@@ -5,6 +5,7 @@ import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.SubstatementExtractor.{InferenceExtraction, VariableTracker}
 import net.prover.model.proof._
+import net.prover.proving.premiseFinding.PremiseFinder
 
 import scala.util.{Failure, Success, Try}
 
