@@ -6,7 +6,7 @@ import net.prover.model.expressions._
 import net.prover.model.proof.StepProvingContext.KnownEquality
 import net.prover.model.unwrapping.UnwrappedStatement
 import net.prover.model.utils.ExpressionUtils
-import net.prover.model.{Inference, Substitutions}
+import net.prover.model._
 
 object PremiseFinder {
 
@@ -206,16 +206,23 @@ object PremiseFinder {
     premiseStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
   ): (Seq[DerivationStep], Seq[Step.Target]) = {
-    val directly = findDerivationForStatement(premiseStatement).map(_ -> Nil)
+    findDerivationsOrTargetsWithSuccessResult(premiseStatement).strip3
+  }
+
+  private def findDerivationsOrTargetsWithSuccessResult(
+    premiseStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): (Seq[DerivationStep], Seq[Step.Target], Boolean) = {
+    val directly = findDerivationForStatement(premiseStatement).map((_, Nil, true))
     def byDeconstructing = for {
       (step, deconstructedStatements) <- deconstruct(premiseStatement)
-      (innerSteps, innerTargets) = findDerivationsOrTargets(deconstructedStatements)
-      if innerSteps.nonEmpty
-    } yield (innerSteps :+ step, innerTargets)
+      (innerSteps, innerTargets, wasSuccessful) = findDerivationsOrTargetsWithSuccessResult(deconstructedStatements)
+      if wasSuccessful
+    } yield (innerSteps :+ step, innerTargets, true)
     def asTarget = {
       val (rewriteSteps, rewrittenStatement) = rewriteTarget(premiseStatement)
       val (deconstructionSteps, deconstructedStatements) = splitTarget(rewrittenStatement)
-      (rewriteSteps ++ deconstructionSteps, deconstructedStatements.map(Step.Target(_)))
+      (rewriteSteps ++ deconstructionSteps, deconstructedStatements.map(Step.Target(_)), false)
     }
     directly orElse byDeconstructing getOrElse asTarget
   }
@@ -229,6 +236,17 @@ object PremiseFinder {
       (premiseStepsSoFar ++ stepsForThisPremise, targetStepsSoFar ++ targetsForThisPremise)
     }
     (premiseSteps.deduplicate, targets)
+  }
+
+  def findDerivationsOrTargetsWithSuccessResult(
+    premiseStatements: Seq[Statement])(
+    implicit stepProvingContext: StepProvingContext
+  ): (Seq[DerivationStep], Seq[Step.Target], Boolean) = {
+    val (premiseSteps, targets, wasSuccessful) = premiseStatements.foldLeft((Seq.empty[DerivationStep], Seq.empty[Step.Target], false)) { case ((premiseStepsSoFar, targetStepsSoFar, wasSuccessfulSoFar), premiseStatement) =>
+      val (stepsForThisPremise, targetsForThisPremise, wasThisStatementSuccessful) = findDerivationsOrTargetsWithSuccessResult(premiseStatement)
+      (premiseStepsSoFar ++ stepsForThisPremise, targetStepsSoFar ++ targetsForThisPremise, wasSuccessfulSoFar || wasThisStatementSuccessful)
+    }
+    (premiseSteps.deduplicate, targets, wasSuccessful)
   }
 
   def findKnownStatementBySubstituting(

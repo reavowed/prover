@@ -274,6 +274,16 @@ class PremiseFinderSpec extends Specification {
           assertion(extractLeftConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))))(SubstitutionContext.outsideProof))
     }
 
+    "only add one half of a conjunction as a target if the other half is present as a premise" in {
+      findPremiseOrTarget(
+        Conjunction(φ, ψ),
+        Seq(φ)
+      ) mustEqual (
+        Seq(assertion(combineConjunction, Seq(φ, ψ), Nil)(SubstitutionContext.outsideProof)),
+        Seq(ψ.toVariable)
+      )
+    }
+
     "replace terms in a target using a fact" in {
       implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 2), Nil)
       val axiom = createInference(
@@ -308,7 +318,7 @@ class PremiseFinderSpec extends Specification {
     }
 
     "not deconstruct a type-statement target" in {
-      findPremiseOrTarget(Conjunction(Function(a), FunctionFrom(a, b)), Nil) mustEqual (Nil, Seq(Conjunction(Function(a), FunctionFrom(a, b))))
+      findPremiseOrTarget(Conjunction(Function(a), FunctionFrom(a, b, c)), Nil) mustEqual (Nil, Seq(Conjunction(Function(a), FunctionFrom(a, b, c))))
     }
 
     "find a premise using a simplification that has a type statement premise" in {

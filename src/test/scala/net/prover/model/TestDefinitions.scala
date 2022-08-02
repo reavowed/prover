@@ -219,7 +219,7 @@ trait TestExpressionDefinitions extends TestVariableDefinitions {
   val Range = simpleTermDefinition("range", Seq(a), Format.Explicit("%0(%1)", "range(a)", 2, false, false), Nil, Equals($, Comprehension.bind("x")(Union(Union(a)), Exists("a")(ElementOf(Pair($, $.^), a)))))
   val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, true))), None, Subset(R, Product(A, A)))
   val Function = TypeDefinition("function", "f", None, None, Conjunction(PairSet(f), ForAllIn("a", Domain(f))(ExistsUnique("b")(ElementOf(Pair($.^, $), f)))))
-  val FunctionFrom = TypeQualifierDefinition("from", Function, Qualifier(Seq("A", "B"), Format.Explicit("from A B", Seq("A", "B"), true, true)), None, Conjunction(Equals(Domain(f), A), Subset(Range(f), B)), ConjunctionDefinition)
+  val FunctionFrom = TypeQualifierDefinition("from", Function, Qualifier(Seq("A", "B"), Format.Explicit("from A to B", Seq("A", "B"), true, true)), None, Conjunction(Equals(Domain(f), A), Subset(Range(f), B)), ConjunctionDefinition)
   val Apply = simpleTermDefinition("apply", Seq(a, b), Format.Explicit("%1(%2)", "a(b)", 3, requiresBrackets = false, requiresComponentBrackets = true))
   def Apply2(f: Term, a: Term, b: Term): Term = Apply(f, Pair(a, b))
 
