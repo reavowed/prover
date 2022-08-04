@@ -1,19 +1,17 @@
 package net.prover.controllers
 
-import java.nio.file.{Files, Path, Paths}
-import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.locks.{Lock, ReentrantLock}
-
 import com.googlecode.concurentlocks.ReentrantReadWriteUpdateLock
+import net.prover.books.io.{BookListReader, BookListWriter, BookReader, BookWriter}
 import net.prover.model._
 import net.prover.model.definitions.Definitions
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.filefilter.TrueFileFilter
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.stereotype.Service
 import scalaz.Functor
 import scalaz.syntax.functor._
 
+import java.nio.file.{Files, Path, Paths}
+import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.concurrent.locks.{Lock, ReentrantLock}
 import scala.collection.JavaConverters._
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContext, Future, Promise}
@@ -21,8 +19,6 @@ import scala.util.Try
 
 @Service
 class BookRepository {
-  private val bookDirectoryPath = Paths.get("books")
-
   trait UpdateAction {
     def runActionOnThisThread(books: Seq[Book], definitions: Definitions): UpdateActionResult
   }
@@ -135,8 +131,8 @@ class BookRepository {
   }
 
   private def parseBooksInitiallyUnsafe(): Seq[Book] = {
-    val books = getBookList.mapReduceWithPrevious[Book] { case (booksSoFar, bookTitle) =>
-      val newBook = parseBook(bookTitle, booksSoFar)
+    val books = BookListReader.read().bookDefinitions.mapReduceWithPrevious[Book] { case (booksSoFar, bookDefinition) =>
+      val newBook = BookReader.readBook(bookDefinition, booksSoFar)
       val definitions = getDefinitions(booksSoFar :+ newBook)
       withLock(bookLock.writeLock()) {
         _booksAndDefinitions = (booksSoFar :+ newBook, definitions)
@@ -160,63 +156,15 @@ class BookRepository {
     Await.ready(reloadAction.future, Duration.Inf).value.get
   }
 
-  private def parseBook(title: String, previousBooks: Seq[Book]): Book = {
-    BookRepository.logger.info(s"Parsing book $title")
-    Book.parse(title, getBookPath(title), previousBooks, getChapterPath(title, _, _))
-  }
-
-  private def getBookList: Seq[String] = {
-    Files
-      .readAllLines(getBookListPath)
-      .asScala
-      .filter(s => !s.startsWith("#"))
-  }
-
   private def writeBooks(books: Seq[Book]): Unit = {
-    writeBooklist(books)
-    books.foreach(writeBookAndChapterFiles)
+    BookListWriter.write(books)
+    books.foreach(BookWriter.write)
   }
 
   case class FilePathAndContents(path: Path, getContents: () => String) {
     def write(): Unit = {
       Files.write(path, getContents().getBytes("UTF-8"))
     }
-  }
-
-  private def deleteUnusedFiles(directoryPath: Path, filePathsAndContents: Seq[FilePathAndContents]): Unit = {
-    FileUtils.listFiles(directoryPath.toFile, TrueFileFilter.INSTANCE, null).asScala.foreach { file =>
-      if (!filePathsAndContents.exists(_.path.toAbsolutePath.toString == file.getAbsolutePath)) {
-        BookRepository.logger.info(s"Deleting file ${file.getAbsolutePath}")
-        file.delete()
-      }
-    }
-  }
-
-  private def writeBooklist(books: Seq[Book]): Unit = {
-    val file = FilePathAndContents(getBookListPath, () => books.map(_.title).mkString("\n") + "\n")
-    file.write()
-    deleteUnusedFiles(bookDirectoryPath, Seq(file))
-  }
-
-  private def writeBookAndChapterFiles(book: Book): Unit = {
-    Files.createDirectories(getBookPath(book.title).getParent)
-    val files = FilePathAndContents(getBookPath(book.title), () => book.serialized) +:
-      book.chapters.mapWithIndex((chapter, index) => FilePathAndContents(getChapterPath(book.title, chapter.title, index), () => chapter.serialized ))
-    files.foreach(_.write())
-    deleteUnusedFiles(bookDirectoryPath.resolve(book.title.formatAsKey), files)
-  }
-
-  private def getBookListPath: Path = {
-    bookDirectoryPath.resolve("books.list")
-  }
-
-  private def getBookPath(title: String): Path = {
-    val key = title.formatAsKey
-    bookDirectoryPath.resolve(key).resolve(key + ".book")
-  }
-
-  private def getChapterPath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
-    bookDirectoryPath.resolve(bookTitle.formatAsKey).resolve("%02d".format(chapterIndex + 1) + "." + chapterTitle.camelCase + ".chapter")
   }
 
   private def getDefinitions(books: Seq[Book]): Definitions = {
