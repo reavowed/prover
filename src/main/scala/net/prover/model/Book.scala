@@ -1,9 +1,6 @@
 package net.prover.model
 
-import java.nio.file.Path
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import org.slf4j.{Logger, LoggerFactory}
 
 @JsonIgnoreProperties(Array("dependencies"))
 case class Book(
@@ -34,8 +31,6 @@ case class Book(
 }
 
 object Book {
-  val logger: Logger = LoggerFactory.getLogger(Book.getClass)
-
   def getDependencies(imports: Seq[String], availableBooks: Seq[Book]): Seq[Book] = {
     imports
       .map { importTitle =>
@@ -45,34 +40,5 @@ object Book {
         getDependencies(importedBook.imports, availableBooks) :+ importedBook
       }
       .distinctBy(_.title)
-  }
-
-  def parse(title: String, path: Path, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Book = {
-    parser(title, previousBooks, getChapterPath).parseFromFile(path, s"book '$title'")
-  }
-
-  def parser(title: String, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Parser[Book] = {
-    for {
-      imports <- importsParser
-      chapterTitles <- chapterTitlesParser
-    } yield {
-      val dependencies = getDependencies(imports, previousBooks)
-      val entryContext = EntryContext.forBooks(dependencies)
-      val chapters = chapterTitles.zipWithIndex.mapFold(entryContext) { case (context, (chapterTitle, index)) =>
-        val chapterPath = getChapterPath(chapterTitle, index)
-        val (chapterOutline, newContext) = Chapter.parser(chapterTitle)(context)
-          .parseFromFile(chapterPath, s"book '$title' chapter '$chapterTitle'")
-        (newContext, chapterOutline)
-      }._2
-      Book(title, imports, chapters)
-    }
-  }
-
-  private def importsParser: Parser[Seq[String]] = {
-    Parser.optional("import", Parser.toEndOfLine).whileDefined
-  }
-
-  def chapterTitlesParser: Parser[Seq[String]] = {
-    Parser.optional("chapter", Parser.toEndOfLine).whileDefined
   }
 }

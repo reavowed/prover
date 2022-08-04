@@ -27,17 +27,3 @@ case class Chapter(
     title.hashCode
   }
 }
-
-object Chapter {
-
-  def parser(title: String)(initialContext: EntryContext): Parser[(Chapter, EntryContext)] = {
-    for {
-      summary <- Parser.toEndOfLine
-      entriesAndContext <- Parser.foldWhileDefined[ChapterEntry, EntryContext](initialContext) { (_, _, currentContext) =>
-        ChapterEntry.parser(currentContext).mapMap { entry =>
-          (entry, currentContext.addEntry(entry))
-        }
-      }
-    } yield Chapter(title, summary, entriesAndContext._1) -> entriesAndContext._2
-  }
-}
