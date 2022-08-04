@@ -22,5 +22,4 @@ object ChapterReader {
 
     parser.parseFromFile(path, s"book '${bookOutline.title}' chapter '$chapterTitle''")
   }
-
 }

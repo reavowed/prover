@@ -21,7 +21,7 @@ object BookReader {
   }
 
   private def parseOutline(title: String): BookOutline = {
-    val path = BookDirectoryConfig.getBookPath(title)
+    val path = BookDirectoryConfig.getBookFilePath(title)
     val parser = for {
       imports <- Parser.optional("import", Parser.toEndOfLine).whileDefined
       chapterTitles <- Parser.optional("chapter", Parser.toEndOfLine).whileDefined
