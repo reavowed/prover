@@ -54,7 +54,6 @@ object Book {
   def parser(title: String, previousBooks: Seq[Book], getChapterPath: (String, Int) => Path): Parser[Book] = {
     for {
       imports <- importsParser
-      _ <- variableDefinitionsParser
       chapterTitles <- chapterTitlesParser
     } yield {
       val dependencies = getDependencies(imports, previousBooks)
@@ -71,18 +70,6 @@ object Book {
 
   private def importsParser: Parser[Seq[String]] = {
     Parser.optional("import", Parser.toEndOfLine).whileDefined
-  }
-
-  def variableDefinitionsParser: Parser[(Seq[String], Seq[String])] = {
-    Parser.optional(
-      "variables",
-      for {
-        statementVariableNames <- Parser.wordsInParens
-        termVariableNames <- Parser.wordsInParens
-      } yield {
-        (statementVariableNames, termVariableNames)
-      },
-      (Nil, Nil))
   }
 
   def chapterTitlesParser: Parser[Seq[String]] = {
