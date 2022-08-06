@@ -10,7 +10,7 @@ term | ()
 
 write ∈ orderedPair a b |ℤ as divZ
 
-theorem |_ℤ Is a Relation
+theorem Integer Divisibility Is a Relation
 conclusion relation |ℤ ℤ
 {
   prove = |ℤ productComprehension a b product ℤ ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 $$1 61711599c91d5278fea16b1a88db4c0ea604b3193f5d6e65b230a4fdc99c3d9c () ()
@@ -18,7 +18,7 @@ conclusion relation |ℤ ℤ
   prove relation |ℤ ℤ ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (|ℤ, ℤ) 1
 }
 
-theorem Component Membership Condition for |_ℤ
+theorem Component Membership Condition for Integer Divisibility
 conclusion ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0
 {
   prove = |ℤ productComprehension a b product ℤ ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 $$1 61711599c91d5278fea16b1a88db4c0ea604b3193f5d6e65b230a4fdc99c3d9c () ()

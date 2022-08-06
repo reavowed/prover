@@ -8,6 +8,8 @@ import net.prover.model.proof.Step
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 
+import java.util.regex.Pattern
+
 @RestController
 @RequestMapping(Array("/stats"))
 class StatsController @Autowired() (val bookService: BookService) extends BookModification  {
@@ -86,5 +88,18 @@ class StatsController @Autowired() (val bookService: BookService) extends BookMo
       (elision, context) <- theorem.findSteps[Step.Elided]
       if elision.highlightedInference.exists(_.id == inferenceId)
     } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
+  }
+
+  @GetMapping(value = Array("nonAlphanumericTheorems"))
+  def findNonAlphanumericTheorems(
+    request: HttpServletRequest
+  ): Seq[String] = {
+    for {
+      (book, bookKey) <- bookService.getBooksWithKeys
+      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
+      (theorem, inferenceKey) <- BookService.getEntriesWithKeys(chapter)
+        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
+      if Pattern.compile("[^A-Za-z0-9-'()]").matcher(inferenceKey).find()
+    } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(bookKey, chapterKey, inferenceKey)
   }
 }

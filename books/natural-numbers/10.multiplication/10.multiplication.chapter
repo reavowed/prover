@@ -477,7 +477,7 @@ conclusion = apply ×ℕ orderedPair t0 apply ×ℕ orderedPair t1 t2 apply ×�
   prove = apply ×ℕ orderedPair t0 apply ×ℕ orderedPair t1 t2 apply ×ℕ orderedPair apply ×ℕ orderedPair t0 t1 t2 4f6fc5278d8806c2580ac552515ba0954b5447473eefeb89ad1a4379624bc059 (= apply ×ℕ orderedPair t0 apply ×ℕ orderedPair t1 $0 apply ×ℕ orderedPair apply ×ℕ orderedPair t0 t1 $0) (t2) 4 5 p2
 }
 
-theorem Natural Multiplication By Non-Zero Preserves <
+theorem Natural Multiplication By Non-Zero Preserves Strict Order
 termVariables(n 0, m 0, r 0)
 premise ∈ t0 ℕ
 premise ∈ t1 ℕ

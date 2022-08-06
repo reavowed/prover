@@ -1,6 +1,6 @@
 The standard ordering on the integers.
 
-theorem Existence of <_ℤ
+theorem Existence of Strict Integer Order
 conclusion ∃! ~ ∧ relation $0 ℤ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ $$$$$0 ∈ orderedPair apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 <ℕ
 {
   subproof (Forward condition) {
@@ -201,7 +201,7 @@ term < ()
   shorthand (<Z)
   attributes (infix-relation)
 
-theorem <_ℤ Is a Strict Total Order on ℤ
+theorem Strict Integer Order Is a Strict Total Order
 conclusion strictTotalOrder <ℤ ℤ
 {
   elided 099e2609908d9688a62987a8fa7f613209d3ca6cfe5a832d431504424c0a5f0e {
@@ -629,7 +629,7 @@ conclusion strictTotalOrder <ℤ ℤ
   }
 }
 
-theorem <_ℤ Is Transitive
+theorem Strict Integer Order Is Transitive
 termVariables(a 0, b 0, c 0)
 premise ∈ orderedPair t0 t1 <ℤ
 premise ∈ orderedPair t1 t2 <ℤ
@@ -670,7 +670,7 @@ conclusion ∈ orderedPair t0 t2 <ℤ
   }
 }
 
-theorem <_ℤ Is Irreflexive
+theorem Strict Integer Order Is Irreflexive
 conclusion irreflexiveRelation <ℤ ℤ
 {
   elided f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 {
@@ -767,14 +767,14 @@ term ≤ ()
   shorthand (leZ)
   attributes (infix-relation)
 
-theorem Component Membership Condition for ≤_ℤ
+theorem Membership Condition for Non-Strict Integer Order
 conclusion ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0
 {
   prove = ≤ℤ productComprehension a b product ℤ ℤ ∨ ∈ orderedPair $0 $1 <ℤ = $0 $1 63d9dc1a99cb9c55661f61a516472b21f865f84576a9ff02b1377a14749fe51e () ()
   prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $0 $1 <ℤ = $0 $1) (≤ℤ, ℤ, ℤ) 0
 }
 
-theorem Equivalence Class Membership Condition for ≤_ℤ
+theorem Equivalence Class Membership Condition for Non-Strict Integer Order
 conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ ∈ orderedPair apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ
 {
   take a {
@@ -833,7 +833,7 @@ conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d 
   }
 }
 
-theorem ≤_ℤ Is a Total Order on ℤ
+theorem Non-Strict Integer Order Is a Total Order
 conclusion totalOrder ≤ℤ ℤ
 {
   prove strictTotalOrder <ℤ ℤ f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 () ()
@@ -841,7 +841,7 @@ conclusion totalOrder ≤ℤ ℤ
   prove totalOrder ≤ℤ ℤ f219e982e3aacf2100b68bb8a019313cd2e1022321b5e8fb185ae670a16c2887 () (<ℤ, ℤ, ≤ℤ) 0 1
 }
 
-theorem ≤_ℤ Is Transitive
+theorem Non-Strict Integer Order Is Transitive
 termVariables(a 0, b 0, c 0)
 premise ∈ orderedPair t0 t1 ≤ℤ
 premise ∈ orderedPair t1 t2 ≤ℤ
@@ -882,7 +882,7 @@ conclusion ∈ orderedPair t0 t2 ≤ℤ
   }
 }
 
-theorem ≤_ℤ Is Reflexive
+theorem Non-Strict Integer Order Is Reflexive
 conclusion reflexiveRelation ≤ℤ ℤ
 {
   elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
@@ -895,7 +895,7 @@ conclusion reflexiveRelation ≤ℤ ℤ
   }
 }
 
-theorem Natural Embedding Preserves Non-Strict Order
+theorem Natural Embedding into Integers Preserves Non-Strict Order
 termVariables(a 0, b 0)
 premise ∈ t0 ℕ
 premise ∈ t1 ℕ
@@ -928,83 +928,6 @@ conclusion ↔ ∈ orderedPair t0 t1 ≤ℕ ∈ orderedPair apply ⍳_ℤ t0 app
     }
   }
   prove ↔ ∈ orderedPair t0 t1 ≤ℕ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair t0 t1 ≤ℕ, ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ = apply ⍳_ℤ t0 apply ⍳_ℤ t1, ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ) () 4 5
-}
-
-comment Show that the strict ordering on ℤ distributes over the non-strict ordering.
-
-theorem <_ℤ Distributes over ≤_ℤ from Left
-termVariables(a 0, b 0, c 0)
-premise ∈ orderedPair t0 t1 <ℤ
-premise ∈ orderedPair t1 t2 ≤ℤ
-conclusion ∈ orderedPair t0 t2 <ℤ
-{
-  elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
-    prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
-    prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 0.0
-    prove ⊆ ≤ℤ product ℤ ℤ e3a7e3f727ccfe95728f3df8bab36dc71f8f578c1df1cabdf75f51ddfe4baaa2 () (≤ℤ, ℤ) 0.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-  }
-  elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
-    prove ∀ x → ∈ $0 ≤ℤ ∈ $0 product ℤ ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (≤ℤ, product ℤ ℤ) 0
-    prove → ∈ orderedPair t1 t2 ≤ℤ ∈ orderedPair t1 t2 product ℤ ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ≤ℤ ∈ $0 product ℤ ℤ) (orderedPair t1 t2) 1.0
-    prove ∈ orderedPair t1 t2 product ℤ ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t1 t2 ≤ℤ, ∈ orderedPair t1 t2 product ℤ ℤ) () 1.1 p1
-  }
-  prove ∈ t1 ℤ d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () (t1, t2, ℤ, ℤ) 1
-  prove ∈ t2 ℤ 6cd156e422d6cfba504e0632433c59f2eac64b90aec16bce29bd31ef9780c1dc () (t1, t2, ℤ, ℤ) 1
-  elided a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 {
-    prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0 a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 () ()
-    prove → ∈ t1 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t1 $0 ≤ℤ ∨ ∈ orderedPair t1 $0 <ℤ = t1 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0) (t1) 4.0
-    prove ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t1 $0 ≤ℤ ∨ ∈ orderedPair t1 $0 <ℤ = t1 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℤ, ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t1 $0 ≤ℤ ∨ ∈ orderedPair t1 $0 <ℤ = t1 $0) () 4.1 2
-    prove → ∈ t2 ℤ ↔ ∈ orderedPair t1 t2 ≤ℤ ∨ ∈ orderedPair t1 t2 <ℤ = t1 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ↔ ∈ orderedPair t1 $0 ≤ℤ ∨ ∈ orderedPair t1 $0 <ℤ = t1 $0) (t2) 4.2
-    prove ↔ ∈ orderedPair t1 t2 ≤ℤ ∨ ∈ orderedPair t1 t2 <ℤ = t1 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t2 ℤ, ↔ ∈ orderedPair t1 t2 ≤ℤ ∨ ∈ orderedPair t1 t2 <ℤ = t1 t2) () 4.3 3
-    prove → ∈ orderedPair t1 t2 ≤ℤ ∨ ∈ orderedPair t1 t2 <ℤ = t1 t2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t1 t2 ≤ℤ, ∨ ∈ orderedPair t1 t2 <ℤ = t1 t2) () 4.4
-    prove ∨ ∈ orderedPair t1 t2 <ℤ = t1 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t1 t2 ≤ℤ, ∨ ∈ orderedPair t1 t2 <ℤ = t1 t2) () 4.5 p1
-  }
-  assume ∈ orderedPair t1 t2 <ℤ {
-    prove ∈ orderedPair t0 t2 <ℤ 510613dfcf7cbefe0c421f729775f504b563595ebad5befbc308f6531a126b9b () (t0, t1, t2) p0 5a
-  }
-  assume = t1 t2 {
-    prove ∈ orderedPair t0 t2 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair t0 $0 <ℤ) (t1, t2) 6a p0
-  }
-  prove ∈ orderedPair t0 t2 <ℤ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair t1 t2 <ℤ, = t1 t2, ∈ orderedPair t0 t2 <ℤ) () 4 5 6
-}
-
-theorem <_ℤ Distributes over ≤_ℤ from Right
-termVariables(a 0, b 0, c 0)
-premise ∈ orderedPair t0 t1 ≤ℤ
-premise ∈ orderedPair t1 t2 <ℤ
-conclusion ∈ orderedPair t0 t2 <ℤ
-{
-  elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
-    prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
-    prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 0.0
-    prove ⊆ ≤ℤ product ℤ ℤ e3a7e3f727ccfe95728f3df8bab36dc71f8f578c1df1cabdf75f51ddfe4baaa2 () (≤ℤ, ℤ) 0.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-  }
-  elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
-    prove ∀ x → ∈ $0 ≤ℤ ∈ $0 product ℤ ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (≤ℤ, product ℤ ℤ) 0
-    prove → ∈ orderedPair t0 t1 ≤ℤ ∈ orderedPair t0 t1 product ℤ ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ≤ℤ ∈ $0 product ℤ ℤ) (orderedPair t0 t1) 1.0
-    prove ∈ orderedPair t0 t1 product ℤ ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 t1 ≤ℤ, ∈ orderedPair t0 t1 product ℤ ℤ) () 1.1 p0
-  }
-  prove ∈ t0 ℤ d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () (t0, t1, ℤ, ℤ) 1
-  prove ∈ t1 ℤ 6cd156e422d6cfba504e0632433c59f2eac64b90aec16bce29bd31ef9780c1dc () (t0, t1, ℤ, ℤ) 1
-  elided a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 {
-    prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0 a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 () ()
-    prove → ∈ t0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 ≤ℤ ∨ ∈ orderedPair t0 $0 <ℤ = t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0) (t0) 4.0
-    prove ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 ≤ℤ ∨ ∈ orderedPair t0 $0 <ℤ = t0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 ≤ℤ ∨ ∈ orderedPair t0 $0 <ℤ = t0 $0) () 4.1 2
-    prove → ∈ t1 ℤ ↔ ∈ orderedPair t0 t1 ≤ℤ ∨ ∈ orderedPair t0 t1 <ℤ = t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 ≤ℤ ∨ ∈ orderedPair t0 $0 <ℤ = t0 $0) (t1) 4.2
-    prove ↔ ∈ orderedPair t0 t1 ≤ℤ ∨ ∈ orderedPair t0 t1 <ℤ = t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℤ, ↔ ∈ orderedPair t0 t1 ≤ℤ ∨ ∈ orderedPair t0 t1 <ℤ = t0 t1) () 4.3 3
-    prove → ∈ orderedPair t0 t1 ≤ℤ ∨ ∈ orderedPair t0 t1 <ℤ = t0 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t0 t1 ≤ℤ, ∨ ∈ orderedPair t0 t1 <ℤ = t0 t1) () 4.4
-    prove ∨ ∈ orderedPair t0 t1 <ℤ = t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 t1 ≤ℤ, ∨ ∈ orderedPair t0 t1 <ℤ = t0 t1) () 4.5 p0
-  }
-  assume ∈ orderedPair t0 t1 <ℤ {
-    prove ∈ orderedPair t0 t2 <ℤ 510613dfcf7cbefe0c421f729775f504b563595ebad5befbc308f6531a126b9b () (t0, t1, t2) 5a p1
-  }
-  assume = t0 t1 {
-    elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-      prove = t1 t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, t1) 6a
-      prove ∈ orderedPair t0 t2 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $0 t2 <ℤ) (t1, t0) 6.0.0 p1
-    }
-  }
-  prove ∈ orderedPair t0 t2 <ℤ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair t0 t1 <ℤ, = t0 t1, ∈ orderedPair t0 t2 <ℤ) () 4 5 6
 }
 
 theorem Two Integers Are Either Strictly Ordered Or Non-Strictly Ordered

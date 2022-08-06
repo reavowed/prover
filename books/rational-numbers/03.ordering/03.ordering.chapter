@@ -1,6 +1,6 @@
 The standard ordering on the rationals.
 
-theorem Existence of <_ℚ
+theorem Existence of Strict Rational Order
 conclusion ∃! ~ ∧ relation $0 ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ^+ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 ℤ^+ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 ∈ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 <ℤ
 {
   take a {
@@ -928,7 +928,7 @@ term < ()
   shorthand (<Q)
   attributes (infix-relation)
 
-theorem <_ℚ Is a Strict Total Order on ℚ
+theorem Strict Rational Order Is a Strict Total Order
 conclusion strictTotalOrder <ℚ ℚ
 {
   elided b9d15f1c0006fef6f6a1585086c7e6eaaa6f3ebc4f68aa4015ff9e25f96a9ae3 {

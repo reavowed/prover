@@ -8,7 +8,7 @@ term | ()
 
 write ∈ orderedPair a b |ℕ as divN
 
-theorem |_ℕ Is a Relation on ℕ
+theorem Natural Divisibility Is a Relation
 conclusion relation |ℕ ℕ
 {
   prove = |ℕ productComprehension a b product ℕ ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair $$0 $0 $$1 d20750d73c5cb1035a959862191b3afc7c5a7463bd284ac0fd1730eda10332f8 () ()
@@ -16,7 +16,7 @@ conclusion relation |ℕ ℕ
   prove relation |ℕ ℕ ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (|ℕ, ℕ) 1
 }
 
-theorem Component Membership Condition for |_ℕ
+theorem Component Membership Condition for Natural Divisibility
 conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 |ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair $$$0 $0 $$0
 {
   prove = |ℕ productComprehension a b product ℕ ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair $$0 $0 $$1 d20750d73c5cb1035a959862191b3afc7c5a7463bd284ac0fd1730eda10332f8 () ()
