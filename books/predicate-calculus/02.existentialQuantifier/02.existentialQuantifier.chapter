@@ -69,7 +69,7 @@ conclusion ↔ ∃ x with ($0) s0 ∃ x with ($0) s1
 }
 
 theorem Quantified Existence Equivalence
-statementVariables(χ 1, φ 1, ψ 1)
+statementVariables(φ 1, ψ 1, χ 1)
 premise ∀ x → with ($0) s0 ↔ with ($0) s1 with ($0) s2
 conclusion ↔ ∃ x ∧ with ($0) s0 with ($0) s1 ∃ x ∧ with ($0) s0 with ($0) s2
 {
