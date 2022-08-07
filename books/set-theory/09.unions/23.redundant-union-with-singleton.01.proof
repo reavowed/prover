@@ -1,0 +1,2 @@
+prove ⊆ singleton t0 t1 0b12623ee6714e2d19658cded86d4dd9badc9ff00665610d50c4ebe0ed9e7d60 () (t0, t1) p0
+prove = ∪ t1 singleton t0 t1 49728e06dd56a8be23050a64a0d0e5d00c459d4601457cc39db68498ec59ac58 () (singleton t0, t1) 0

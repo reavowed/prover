@@ -1,0 +1,13 @@
+elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
+  prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair $$0 $0 apply +ℤ orderedPair $$0 negatedZ $0 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 () ()
+  prove → ∈ t0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t0 $0 apply +ℤ orderedPair t0 negatedZ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair $$0 $0 apply +ℤ orderedPair $$0 negatedZ $0) (t0) 0.0
+  prove ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t0 $0 apply +ℤ orderedPair t0 negatedZ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t0 $0 apply +ℤ orderedPair t0 negatedZ $0) () 0.1 p0
+  prove → ∈ t0 ℤ = apply -ℤ orderedPair t0 t0 apply +ℤ orderedPair t0 negatedZ t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ = apply -ℤ orderedPair t0 $0 apply +ℤ orderedPair t0 negatedZ $0) (t0) 0.2
+  prove = apply -ℤ orderedPair t0 t0 apply +ℤ orderedPair t0 negatedZ t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, = apply -ℤ orderedPair t0 t0 apply +ℤ orderedPair t0 negatedZ t0) () 0.3 p0
+}
+elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+  prove ∧ ∈ negatedZ t0 ℤ ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t0) p0
+  prove ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ negatedZ t0 ℤ, ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ) () 1.0
+  prove = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ, = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ) () 1.1
+}
+prove = apply -ℤ orderedPair t0 t0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply -ℤ orderedPair t0 t0, apply +ℤ orderedPair t0 negatedZ t0, apply ⍳_ℤ 0ℕ) 0 1

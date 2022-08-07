@@ -1,0 +1,27 @@
+Define the set of natural numbers, ℕ.
+
+axiom Axiom of Infinity
+conclusion ∃ X inductive $0
+
+theorem The Natural Numbers Exist
+conclusion ∃! Y ∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0
+
+term ℕ ()
+  (∀ n ↔ ∈ $0 $$0 ∀ X → inductive $0 ∈ $$0 $0)
+  shorthand (nat)
+
+theorem An Element of All Inductive Sets Is a Natural Number
+termVariables(n 0)
+premise ∀ X → inductive $0 ∈ t0 $0
+conclusion ∈ t0 ℕ
+
+theorem A Natural Number Is an Element of Any Inductive Set
+termVariables(n 0, S 0)
+premise ∈ t0 ℕ
+premise inductive t1
+conclusion ∈ t0 t1
+
+theorem A Successor of a Natural Number Is a Natural Number
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ∈ successor t0 ℕ

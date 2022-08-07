@@ -1,0 +1,28 @@
+prove ∈ t0 singleton t0 a0bad9956e6b2f9007fb684c8e27101690c71803f9e2bc8b777f2486d3992f88 () (t0)
+prove ∈ t1 singleton t1 a0bad9956e6b2f9007fb684c8e27101690c71803f9e2bc8b777f2486d3992f88 () (t1)
+prove ∈ orderedPair t0 t1 product singleton t0 singleton t1 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, singleton t0, t1, singleton t1) 0 1
+prove ⊆ singleton orderedPair t0 t1 product singleton t0 singleton t1 0b12623ee6714e2d19658cded86d4dd9badc9ff00665610d50c4ebe0ed9e7d60 () (orderedPair t0 t1, product singleton t0 singleton t1) 2
+take x {
+  assume ∈ $0 singleton t0 {
+    prove = $0 t0 6acf06be48fa49ac292909853e78fdb76495f5eee6ccc72143d1c51f5f3e56d4 () ($0, t0) 4.0a
+    elided a0bad9956e6b2f9007fb684c8e27101690c71803f9e2bc8b777f2486d3992f88 {
+      prove ∈ orderedPair t0 t1 singleton orderedPair t0 t1 a0bad9956e6b2f9007fb684c8e27101690c71803f9e2bc8b777f2486d3992f88 () (orderedPair t0 t1)
+      prove ∈ orderedPair $0 t1 singleton orderedPair t0 t1 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ orderedPair $$0 t1 singleton orderedPair t0 t1) ($0, t0) 4.0.0 4.0.1.0
+    }
+    take y {
+      assume ∈ orderedPair $$0 $0 singleton orderedPair t0 t1 {
+        prove = orderedPair $$0 $0 orderedPair t0 t1 6acf06be48fa49ac292909853e78fdb76495f5eee6ccc72143d1c51f5f3e56d4 () (orderedPair $$0 $0, orderedPair t0 t1) 4.0.2.0a
+        prove = $0 t1 19a66c6e2472407a6bc0db6ef3785ff4af4337ccc0c3ee8053164db261062df3 () ($$0, $0, t0, t1) 4.0.2.0.0
+      }
+    }
+    prove ∃! y ∈ orderedPair $$0 $0 singleton orderedPair t0 t1 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∈ orderedPair $0 $$0 singleton orderedPair t0 t1) (t1) 4.0.1 4.0.2
+  }
+}
+elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+  prove ∧ ⊆ singleton orderedPair t0 t1 product singleton t0 singleton t1 ∀ x → ∈ $0 singleton t0 ∃! b ∈ orderedPair $$0 $0 singleton orderedPair t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ singleton orderedPair t0 t1 product singleton t0 singleton t1, ∀ x → ∈ $0 singleton t0 ∃! b ∈ orderedPair $$0 $0 singleton orderedPair t0 t1) () 3 4
+  elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+    prove ↔ ∧ function singleton orderedPair t0 t1 functionFrom singleton orderedPair t0 t1 singleton t0 singleton t1 ∧ ⊆ singleton orderedPair t0 t1 product singleton t0 singleton t1 ∀ x → ∈ $0 singleton t0 ∃! b ∈ orderedPair $$0 $0 singleton orderedPair t0 t1 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (singleton orderedPair t0 t1, singleton t0, singleton t1)
+    prove → ∧ ⊆ singleton orderedPair t0 t1 product singleton t0 singleton t1 ∀ x → ∈ $0 singleton t0 ∃! b ∈ orderedPair $$0 $0 singleton orderedPair t0 t1 ∧ function singleton orderedPair t0 t1 functionFrom singleton orderedPair t0 t1 singleton t0 singleton t1 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∧ function singleton orderedPair t0 t1 functionFrom singleton orderedPair t0 t1 singleton t0 singleton t1, ∧ ⊆ singleton orderedPair t0 t1 product singleton t0 singleton t1 ∀ x → ∈ $0 singleton t0 ∃! b ∈ orderedPair $$0 $0 singleton orderedPair t0 t1) () 5.1.0
+    prove ∧ function singleton orderedPair t0 t1 functionFrom singleton orderedPair t0 t1 singleton t0 singleton t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ⊆ singleton orderedPair t0 t1 product singleton t0 singleton t1 ∀ x → ∈ $0 singleton t0 ∃! b ∈ orderedPair $$0 $0 singleton orderedPair t0 t1, ∧ function singleton orderedPair t0 t1 functionFrom singleton orderedPair t0 t1 singleton t0 singleton t1) () 5.1.1 5.0
+  }
+}

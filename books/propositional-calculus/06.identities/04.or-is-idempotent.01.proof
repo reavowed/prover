@@ -1,0 +1,8 @@
+assume ∨ s0 s0 {
+  prove → s0 s0 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (s0) ()
+  prove s0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (s0, s0, s0) () 0a 0.0 0.0
+}
+assume s0 {
+  prove ∨ s0 s0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (s0, s0) () 1a
+}
+prove ↔ ∨ s0 s0 s0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ s0 s0, s0) () 0 1

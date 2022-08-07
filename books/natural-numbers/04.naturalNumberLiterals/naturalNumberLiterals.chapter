@@ -1,0 +1,41 @@
+Define some literal natural numbers - 0, 1, 2, etc.
+
+term 0 ()
+  disambiguator ℕ
+  (= $0 ∅)
+  shorthand (0N)
+
+theorem 0 Is a Natural Number
+conclusion ∈ 0ℕ ℕ
+
+theorem 0 Is Not the Successor of Any Natural Number
+termVariables(n 0)
+conclusion ¬ = successor t0 0ℕ
+
+term 1 ()
+  disambiguator ℕ
+  (= $0 successor 0ℕ)
+  shorthand (1N)
+
+theorem 1 Is a Natural Number
+conclusion ∈ 1ℕ ℕ
+
+theorem 1 Is the Singleton of 0
+conclusion = 1ℕ singleton 0ℕ
+
+theorem One Is Not Zero
+conclusion ¬ = 1ℕ 0ℕ
+
+term 2 ()
+  disambiguator ℕ
+  (= $0 successor 1ℕ)
+  shorthand (2N)
+
+theorem 2 Is a Natural Number
+conclusion ∈ 2ℕ ℕ
+
+theorem 2 Is Not Zero
+conclusion ¬ = 2ℕ 0ℕ
+
+theorem 2 Is Not 1
+conclusion ¬ = 2ℕ 1ℕ

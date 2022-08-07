@@ -1,0 +1,65 @@
+Introduce the "and" or "conjuction" connective, ∧.
+
+statement ∧ (φ ψ)
+  definition (¬ → s0 ¬ s1)
+  shorthand (and)
+  attributes (conjunction)
+
+theorem Extract Left Conjunct
+statementVariables(φ 0, ψ 0)
+premise ∧ s0 s1
+conclusion s0
+
+theorem Extract Right Conjunct
+statementVariables(φ 0, ψ 0)
+premise ∧ s0 s1
+conclusion s1
+
+theorem Combine Conjunction
+statementVariables(φ 0, ψ 0)
+premise s0
+premise s1
+conclusion ∧ s0 s1
+
+theorem Reverse Conjunction
+statementVariables(φ 0, ψ 0)
+premise ∧ s0 s1
+conclusion ∧ s1 s0
+
+theorem Law of Non-Contradiction
+statementVariables(φ 0)
+conclusion ¬ ∧ s0 ¬ s0
+
+comment Some inferences for negated conjunctions.
+
+theorem Add Right Negated Conjunct
+statementVariables(φ 0, ψ 0)
+premise ¬ s0
+conclusion ¬ ∧ s0 s1
+
+theorem Add Left Negated Conjunct
+statementVariables(ψ 0, φ 0)
+premise ¬ s0
+conclusion ¬ ∧ s1 s0
+
+theorem Add Negated Conjunct
+statementVariables(φ 0, ψ 0)
+premise s0
+conclusion ¬ ∧ ¬ s0 s1
+
+theorem Add Negated Conjunct
+statementVariables(ψ 0, φ 0)
+premise s0
+conclusion ¬ ∧ s1 ¬ s0
+
+theorem Extract Negated Conjunct
+statementVariables(φ 0, ψ 0)
+premise ¬ ∧ s0 s1
+premise s0
+conclusion ¬ s1
+
+theorem Extract Negated Conjunct
+statementVariables(φ 0, ψ 0)
+premise ¬ ∧ s0 s1
+premise s1
+conclusion ¬ s0

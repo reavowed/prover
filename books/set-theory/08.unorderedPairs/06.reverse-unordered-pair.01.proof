@@ -1,0 +1,15 @@
+take x {
+  elided 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 {
+    prove ∀ x ↔ ∈ $0 pair t0 t1 ∨ = $0 t0 = $0 t1 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 () (t0, t1)
+    prove ↔ ∈ $0 pair t0 t1 ∨ = $0 t0 = $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 pair t0 t1 ∨ = $$0 t0 = $$0 t1) ($0) 0.0.0
+  }
+  prove ↔ ∨ = $0 t0 = $0 t1 ∨ = $0 t1 = $0 t0 6a69a6d59764ffe4b9a2eeacc0888588de474f47ce04d36054eebbb1c3156ec2 (= $0 t0, = $0 t1) ()
+  prove ↔ ∈ $0 pair t0 t1 ∨ = $0 t1 = $0 t0 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 pair t0 t1, ∨ = $0 t0 = $0 t1, ∨ = $0 t1 = $0 t0) () 0.0 0.1
+  elided 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 {
+    prove ∀ x ↔ ∈ $0 pair t1 t0 ∨ = $0 t1 = $0 t0 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 () (t1, t0)
+    prove ↔ ∈ $0 pair t1 t0 ∨ = $0 t1 = $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 pair t1 t0 ∨ = $$0 t1 = $$0 t0) ($0) 0.3.0
+    prove ↔ ∨ = $0 t1 = $0 t0 ∈ $0 pair t1 t0 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ $0 pair t1 t0, ∨ = $0 t1 = $0 t0) () 0.3.1
+  }
+  prove ↔ ∈ $0 pair t0 t1 ∈ $0 pair t1 t0 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 pair t0 t1, ∨ = $0 t1 = $0 t0, ∈ $0 pair t1 t0) () 0.2 0.3
+}
+prove = pair t0 t1 pair t1 t0 65dcb85d85a1b0c0107a9c47ec499c5d9828ccf4b6880d399f0b456d994b576b () (pair t0 t1, pair t1 t0) 0

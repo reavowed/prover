@@ -1,0 +1,3 @@
+prove strictTotalOrder <ℤ ℤ f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 () ()
+prove = ≤ℤ productComprehension a b product ℤ ℤ ∨ ∈ orderedPair $0 $1 <ℤ = $0 $1 63d9dc1a99cb9c55661f61a516472b21f865f84576a9ff02b1377a14749fe51e () ()
+prove totalOrder ≤ℤ ℤ f219e982e3aacf2100b68bb8a019313cd2e1022321b5e8fb185ae670a16c2887 () (<ℤ, ℤ, ≤ℤ) 0 1

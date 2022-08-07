@@ -1,0 +1,100 @@
+Definition of a function.
+
+type function f
+  definition (∧ pairSet t0 ∀ x → ∈ $0 domain t0 ∃! y ∈ orderedPair $$0 $0 t0)
+
+qualifier from on function (A B) (from A → B)
+  definition (∧ = domain t0 t1 ⊆ codomain t0 t2)
+
+theorem Subset Condition for Function From
+termVariables(f 0, A 0, B 0)
+conclusion ↔ ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0
+
+theorem Any Function Is From Its Domain to Its Codomain
+termVariables(f 0)
+premise function t0
+conclusion ∧ function t0 functionFrom t0 domain t0 codomain t0
+
+term apply (f a)
+  name (Function Application)
+  format (f(a))
+  premises (function t0, ∈ t1 domain t0)
+  (∈ orderedPair t1 $0 t0)
+
+theorem Function Application Is Element of Codomain
+termVariables(f 0, a 0)
+premise function t0
+premise ∈ t1 domain t0
+conclusion ∈ apply t0 t1 codomain t0
+
+theorem Function Application Is Element of Explicit Range
+termVariables(f 0, A 0, B 0, a 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ∈ t3 t1
+conclusion ∈ apply t0 t3 t2
+
+theorem Extend Function Range to Superset
+termVariables(f 0, A 0, B 0, C 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ⊆ t2 t3
+conclusion ∧ function t0 functionFrom t0 t1 t3
+
+theorem Function Element Condition
+termVariables(f 0, A 0, B 0, a 0, b 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+conclusion ↔ ∈ orderedPair t3 t4 t0 ∧ ∈ t3 t1 = t4 apply t0 t3
+
+theorem Membership Condition for Function
+termVariables(f 0, A 0, B 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+conclusion ∀ x ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t0 $0
+
+theorem Functions with Same Values Are Equal
+termVariables(f 0, A 0, B 0, g 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ∧ function t3 functionFrom t3 t1 t2
+premise ∀ a → ∈ $0 t1 = apply t0 $0 apply t3 $0
+conclusion = t0 t3
+
+theorem Function With Specified Values Is Unique
+termVariables(A 0, B 0, F 1)
+premise ∃ f ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ x → ∈ $0 t0 = apply $$0 $0 with ($0) t2
+conclusion ∃! f ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ x → ∈ $0 t0 = apply $$0 $0 with ($0) t2
+
+theorem Binary Function With Specified Values Is Unique
+termVariables(A 0, B 0, C 0, F 2)
+premise ∃ f ∧ ∧ function $0 functionFrom $0 product t0 t1 t2 ∀ a → ∈ $0 t0 ∀ b → ∈ $0 t1 = apply $$$0 orderedPair $$0 $0 with ($$0 $0) t3
+conclusion ∃! f ∧ ∧ function $0 functionFrom $0 product t0 t1 t2 ∀ a → ∈ $0 t0 ∀ b → ∈ $0 t1 = apply $$$0 orderedPair $$0 $0 with ($$0 $0) t3
+
+term functionSpace (A B)
+  name (Function Space)
+  format (B^A)
+  (= $0 comprehension f powerSet product t0 t1 ∧ function $0 functionFrom $0 t0 t1)
+
+theorem Membership Condition for Function Space
+termVariables(A 0, B 0)
+conclusion ∀ f ↔ ∈ $0 functionSpace t0 t1 ∧ function $0 functionFrom $0 t0 t1
+
+comment Applying a function to a subset of its domain.
+
+term applySet (f X)
+  name (Function Application on Set)
+  format (f[X])
+  (= $0 replacementSet x t1 apply t0 $0)
+
+theorem Membership Condition for Function Application on Set
+termVariables(f 0, X 0)
+conclusion ∀ b ↔ ∈ $0 applySet t0 t1 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0
+
+theorem Function Application on Set Is Subset of Range
+termVariables(f 0, A 0, B 0, X 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ⊆ t3 t1
+conclusion ⊆ applySet t0 t3 t2
+
+theorem Function Application of Element of Set Is Element of Function Application on Set
+termVariables(f 0, A 0, B 0, X 0, a 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ⊆ t3 t1
+premise ∈ t4 t3
+conclusion ∈ apply t0 t4 applySet t0 t3

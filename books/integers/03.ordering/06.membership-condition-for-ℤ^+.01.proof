@@ -1,0 +1,2 @@
+prove = ℤ^+ comprehension a ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 2eec716895dc120b64050c2121210574f3b28787bcc8486f342f697c4b907486 () ()
+prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ) (ℤ^+, ℤ) 0

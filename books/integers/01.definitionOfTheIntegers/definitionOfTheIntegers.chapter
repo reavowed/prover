@@ -1,0 +1,44 @@
+Define the set of integers, ℤ.
+
+theorem Existence of ~_ℤ
+conclusion ∃! ~ ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0
+
+term ~_ℤ ()
+  (∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0)
+  shorthand (~z)
+  attributes (infix-relation)
+
+theorem ~_ℤ is an equivalence relation
+conclusion equivalenceRelation ~_ℤ product ℕ ℕ
+
+write equivalenceClass orderedPair a b ~_ℤ as int2
+
+display equivalenceClass orderedPair a b ~_ℤ as ((a, b)_ℤ)
+
+term ℤ ()
+  (= $0 equivalenceQuotient product ℕ ℕ ~_ℤ)
+  shorthand (int)
+
+theorem Equivalence Class Is Integer
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ∈ equivalenceClass orderedPair t0 t1 ~_ℤ ℤ
+
+theorem Integer Is Equivalence Class
+termVariables(x 0)
+premise ∈ t0 ℤ
+conclusion ∃ n ∧ ∈ $0 ℕ ∃ m ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ
+
+theorem Equality Condition for Integer Equivalence Classes
+termVariables(a 0, b 0, c 0, d 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+premise ∈ t3 ℕ
+conclusion ↔ = equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceClass orderedPair t2 t3 ~_ℤ = apply +ℕ orderedPair t0 t3 apply +ℕ orderedPair t1 t2
+
+theorem Classification of Integers
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ∨ ∃ n ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 0ℕ $0 ~_ℤ ∃ n ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $0 0ℕ ~_ℤ

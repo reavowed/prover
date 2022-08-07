@@ -1,0 +1,3 @@
+prove = second orderedPair t0 t1 t1 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () (t0, t1)
+prove ∈ second orderedPair t0 t1 t3 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (orderedPair t0 t1, t2, t3) p0
+prove ∈ t1 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 t3) (second orderedPair t0 t1, t1) 0 1

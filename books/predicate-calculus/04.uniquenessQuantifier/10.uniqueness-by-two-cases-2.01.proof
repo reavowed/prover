@@ -1,0 +1,2 @@
+prove ⊕ s0 ¬ s0 cbd0781af2091fbb25a8f45e859ab34228d60761bc70a24adfa794ca1d08eedb (s0) ()
+prove ∃! x ∨ ∧ s0 = $0 t0 ∧ ¬ s0 = $0 t1 bd3cc9abad73d034ddd73bb207923eecf9720dec8ba9321cdd060127570f851c (s0, ¬ s0) (t0, t1) 0

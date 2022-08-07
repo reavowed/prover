@@ -1,0 +1,5 @@
+prove ∈ singleton t0 pair singleton t0 pair t0 t1 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b72df9639e () (singleton t0, pair t0 t1)
+elided 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 {
+  prove = orderedPair t0 t1 pair singleton t0 pair t0 t1 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 () (t0, t1)
+  prove ∈ singleton t0 orderedPair t0 t1 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ singleton t0 $0) (orderedPair t0 t1, pair singleton t0 pair t0 t1) 1.0 0
+}

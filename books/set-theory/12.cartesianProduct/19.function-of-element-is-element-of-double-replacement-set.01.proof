@@ -1,0 +1,16 @@
+elided be269a4b0cd317daa897c5e8f7922f09b50f613296445fc2014c6474b2c28e24 {
+  prove = replacementSet2 a b t1 with ($0 $1) t2 replacementSet x t1 with (first $0 second $0) t2 be269a4b0cd317daa897c5e8f7922f09b50f613296445fc2014c6474b2c28e24 () (t1, with ($0 $1) t2)
+  prove = t0 replacementSet x t1 with (first $0 second $0) t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (replacementSet2 a b t1 with ($0 $1) t2, replacementSet x t1 with (first $0 second $0) t2) 0.0 p0
+}
+prove ∈ orderedPair t3 t5 product t4 t6 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t3, t4, t5, t6) p1 p2
+prove ∈ with (first orderedPair t3 t5 second orderedPair t3 t5) t2 t0 c9f2bb871030aba7cefe90ec5d1063e3fede02bed65e9e77472830a9b98bcc95 () (t0, t1, with (first $0 second $0) t2, orderedPair t3 t5) 0 p3
+elided (Rewritten) {
+  elided 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f {
+    prove = first orderedPair t3 t5 t3 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () (t3, t5)
+    prove ∈ with (t3 second orderedPair t3 t5) t2 t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ with ($0 second orderedPair t3 t5) t2 t0) (first orderedPair t3 t5, t3) 3.0.0 2
+  }
+  elided d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b {
+    prove = second orderedPair t3 t5 t5 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () (t3, t5)
+    prove ∈ with (t3 t5) t2 t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ with (t3 $0) t2 t0) (second orderedPair t3 t5, t5) 3.1.0 3.0
+  }
+}

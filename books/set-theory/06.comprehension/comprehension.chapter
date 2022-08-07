@@ -1,0 +1,41 @@
+Introduce set comprehension, {x ∈ A | φ(x)}.
+
+theorem Comprehensions Exist for Empty Sets
+statementVariables(φ 1)
+termVariables(A 0)
+premise ¬ ∃ x ∧ ∈ $0 t0 with ($0) s0
+conclusion ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0
+
+theorem Comprehensions Exist for Non-Empty Sets Lemma
+statementVariables(φ 1)
+termVariables(a 0, A 0)
+premise ∧ ∈ t0 t1 with (t0) s0
+conclusion ∀ y ↔ ∃ x ∧ ∈ $0 t1 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 t0 ∧ ∈ $0 t1 with ($0) s0
+
+theorem Comprehensions Exist for Non-Empty Sets
+statementVariables(φ 1)
+termVariables(A 0)
+premise ∃ y ∧ ∈ $0 t0 with ($0) s0
+conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0
+
+theorem Comprehensions Exist
+statementVariables(φ 1)
+termVariables(X 0)
+conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0
+
+term comprehension ($x A with x φ)
+  name (Comprehension)
+  format ({ x ∈ A | φ }) no-component-brackets
+  (∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0)
+
+theorem Membership Condition for a Comprehension
+statementVariables(φ 1)
+termVariables(S 0, A 0)
+premise = t0 comprehension x t1 with ($0) s0
+conclusion ∀ y ↔ ∈ $0 t0 ∧ ∈ $0 t1 with ($0) s0
+
+theorem A Comprehension Is a Subset of Its Domain
+statementVariables(φ 1)
+termVariables(S 0, A 0)
+premise = t0 comprehension x t1 with ($0) s0
+conclusion ⊆ t0 t1

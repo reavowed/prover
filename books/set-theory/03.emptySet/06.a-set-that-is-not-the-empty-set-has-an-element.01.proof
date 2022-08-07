@@ -1,0 +1,4 @@
+assume ¬ ∃ x ∈ $0 t0 {
+  prove = t0 ∅ af5531b2602db7f5be6467227130a81ee26f96ed2cd1838633cb9a02c4bf5dd9 () (t0) 0a
+}
+prove ∃ x ∈ $0 t0 b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (∃ x ∈ $0 t0, = t0 ∅) () 0 p0

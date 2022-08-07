@@ -1,0 +1,15 @@
+assume ↔ s0 s1 {
+  prove → s1 s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s0, s1) () 0a
+  prove → ¬ s0 ¬ s1 abeedb9d46001e574926a8c0cd2dca72c9a3b82e3d333b9e1e0d5f009e68fb85 (s1, s0) () 0.0
+  prove → s0 s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s0, s1) () 0a
+  prove → ¬ s1 ¬ s0 abeedb9d46001e574926a8c0cd2dca72c9a3b82e3d333b9e1e0d5f009e68fb85 (s0, s1) () 0.2
+  prove ↔ ¬ s0 ¬ s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (¬ s0, ¬ s1) () 0.1 0.3
+}
+assume ↔ ¬ s0 ¬ s1 {
+  prove → ¬ s1 ¬ s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (¬ s0, ¬ s1) () 1a
+  prove → s0 s1 89034f35aeb254d553fdab69d42492f594422eca953e1110e3061c26aab26fed (s1, s0) () 1.0
+  prove → ¬ s0 ¬ s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (¬ s0, ¬ s1) () 1a
+  prove → s1 s0 89034f35aeb254d553fdab69d42492f594422eca953e1110e3061c26aab26fed (s0, s1) () 1.2
+  prove ↔ s0 s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (s0, s1) () 1.1 1.3
+}
+prove ↔ ↔ s0 s1 ↔ ¬ s0 ¬ s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (↔ s0 s1, ↔ ¬ s0 ¬ s1) () 0 1

@@ -1,0 +1,16 @@
+prove ¬ = pair t1 t0 ∅ e777b8cef763827ba814c08245dd2b6cabaefb14aa2a5d8971176a7f35038203 () (t1, t0)
+prove ∃ x ∧ ∈ $0 pair t1 t0 = ∩ $0 pair t1 t0 ∅ caeb0cf3cc259bc405ef6d844792b45098ddfdeee2b27bce34bab25d8b7ec3d7 () (pair t1 t0) 0
+let c ∧ ∈ $0 pair t1 t0 = ∩ $0 pair t1 t0 ∅ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 pair t1 t0 = ∩ $0 pair t1 t0 ∅, ∨ ¬ ∈ t0 t1 ¬ ∈ t1 t0) () {
+  prove ∨ = $0 t1 = $0 t0 755a6dbda3a9a8372094e25f348a7578c296526a74ba5c52b062566f67761637 () ($0, t1, t0) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+  assume = $0 t1 {
+    prove = ∩ t1 pair t1 t0 ∅ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= ∩ $$0 pair t1 t0 ∅) ($0, t1) 2.1a 2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove ∈ t0 pair t1 t0 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (t0, t1)
+    prove ¬ ∈ t0 t1 24f62408ff02d7907e3d04494e4b7151b1dc92227f23d3493f211a06828e0c14 () (t1, pair t1 t0, t0) 2.1.0 2.1.1
+  }
+  assume = $0 t0 {
+    prove = ∩ t0 pair t1 t0 ∅ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= ∩ $$0 pair t1 t0 ∅) ($0, t0) 2.2a 2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove ∈ t1 pair t1 t0 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b72df9639e () (t1, t0)
+    prove ¬ ∈ t1 t0 24f62408ff02d7907e3d04494e4b7151b1dc92227f23d3493f211a06828e0c14 () (t0, pair t1 t0, t1) 2.2.0 2.2.1
+  }
+  prove ∨ ¬ ∈ t0 t1 ¬ ∈ t1 t0 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (= $0 t1, = $0 t0, ¬ ∈ t0 t1, ¬ ∈ t1 t0) () 2.0 2.1 2.2
+} 1

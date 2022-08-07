@@ -1,0 +1,49 @@
+Introduce the exclusive or connective, ⊕.
+
+statement ⊕ (φ ψ)
+  definition (∨ ∧ s0 ¬ s1 ∧ ¬ s0 s1)
+  shorthand (xor)
+
+theorem Reverse Exclusive Or
+statementVariables(φ 0, ψ 0)
+premise ⊕ s0 s1
+conclusion ⊕ s1 s0
+
+theorem Or from Exclusive Or
+statementVariables(φ 0, ψ 0)
+premise ⊕ s0 s1
+conclusion ∨ s0 s1
+
+theorem Negated And from Exclusive Or
+statementVariables(φ 0, ψ 0)
+premise ⊕ s0 s1
+conclusion ¬ ∧ s0 s1
+
+theorem Exclusive Or from Or and Negated And
+statementVariables(φ 0, ψ 0)
+premise ∨ s0 s1
+premise ¬ ∧ s0 s1
+conclusion ⊕ s0 s1
+
+theorem Only One Part of an Exclusive Or Is True
+statementVariables(φ 0, ψ 0)
+premise ⊕ s0 s1
+premise s0
+conclusion ¬ s1
+
+theorem Only One Part of an Exclusive Or Is True
+statementVariables(φ 0, ψ 0)
+premise ⊕ s0 s1
+premise s1
+conclusion ¬ s0
+
+theorem Proof by Exclusive Cases
+statementVariables(φ 0, ψ 0, χ 0)
+premise ⊕ s0 s1
+premise → s0 s2
+premise → s1 s2
+conclusion s2
+
+theorem Exclusive Middle
+statementVariables(φ 0)
+conclusion ⊕ s0 ¬ s0

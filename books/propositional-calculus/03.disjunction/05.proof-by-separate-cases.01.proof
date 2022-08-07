@@ -1,0 +1,9 @@
+assume s0 {
+  prove s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s2) () p1 0a
+  prove ∨ s2 s3 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (s2, s3) () 0.0
+}
+assume s1 {
+  prove s3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s1, s3) () p2 1a
+  prove ∨ s2 s3 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (s3, s2) () 1.0
+}
+prove ∨ s2 s3 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (s0, s1, ∨ s2 s3) () p0 0 1

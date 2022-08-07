@@ -1,0 +1,27 @@
+prove ↔ ∈ orderedPair t0 t1 <ℕ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ 1760e1b115ad354c2948efe51448d9a3ba82aee7f9c2b8c25909a515461f5ab2 () (t0, t1) p0 p1
+elided d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b {
+  prove ↔ = apply ⍳_ℤ t0 apply ⍳_ℤ t1 = t0 t1 d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b () (t0, t1) p0 p1
+  prove ↔ = t0 t1 = apply ⍳_ℤ t0 apply ⍳_ℤ t1 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (= apply ⍳_ℤ t0 apply ⍳_ℤ t1, = t0 t1) () 1.0
+}
+elided 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 {
+  prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 () ()
+  prove → ∈ t0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0) (t0) 2.0
+  prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0) () 2.1 p0
+  prove → ∈ t1 ℕ ↔ ∈ orderedPair t0 t1 ≤ℕ ∨ ∈ orderedPair t0 t1 <ℕ = t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0) (t1) 2.2
+  prove ↔ ∈ orderedPair t0 t1 ≤ℕ ∨ ∈ orderedPair t0 t1 <ℕ = t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℕ, ↔ ∈ orderedPair t0 t1 ≤ℕ ∨ ∈ orderedPair t0 t1 <ℕ = t0 t1) () 2.3 p1
+}
+prove ↔ ∨ ∈ orderedPair t0 t1 <ℕ = t0 t1 ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ = apply ⍳_ℤ t0 apply ⍳_ℤ t1 0e72b1ea61b9283ca256f30f8aad3a2560673c1053f233808046d148b0e9519f (∈ orderedPair t0 t1 <ℕ, ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ, = t0 t1, = apply ⍳_ℤ t0 apply ⍳_ℤ t1) () 0 1
+prove ↔ ∈ orderedPair t0 t1 ≤ℕ ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ = apply ⍳_ℤ t0 apply ⍳_ℤ t1 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair t0 t1 ≤ℕ, ∨ ∈ orderedPair t0 t1 <ℕ = t0 t1, ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ = apply ⍳_ℤ t0 apply ⍳_ℤ t1) () 2 3
+elided a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 {
+  prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
+  prove ∈ apply ⍳_ℤ t1 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t1) p1
+  elided a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 {
+    prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0 a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 () ()
+    prove → ∈ apply ⍳_ℤ t0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair apply ⍳_ℤ t0 $0 ≤ℤ ∨ ∈ orderedPair apply ⍳_ℤ t0 $0 <ℤ = apply ⍳_ℤ t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0) (apply ⍳_ℤ t0) 5.2.0
+    prove ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair apply ⍳_ℤ t0 $0 ≤ℤ ∨ ∈ orderedPair apply ⍳_ℤ t0 $0 <ℤ = apply ⍳_ℤ t0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ t0 ℤ, ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair apply ⍳_ℤ t0 $0 ≤ℤ ∨ ∈ orderedPair apply ⍳_ℤ t0 $0 <ℤ = apply ⍳_ℤ t0 $0) () 5.2.1 5.0
+    prove → ∈ apply ⍳_ℤ t1 ℤ ↔ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ = apply ⍳_ℤ t0 apply ⍳_ℤ t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ↔ ∈ orderedPair apply ⍳_ℤ t0 $0 ≤ℤ ∨ ∈ orderedPair apply ⍳_ℤ t0 $0 <ℤ = apply ⍳_ℤ t0 $0) (apply ⍳_ℤ t1) 5.2.2
+    prove ↔ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ = apply ⍳_ℤ t0 apply ⍳_ℤ t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ t1 ℤ, ↔ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ = apply ⍳_ℤ t0 apply ⍳_ℤ t1) () 5.2.3 5.1
+    prove ↔ ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ = apply ⍳_ℤ t0 apply ⍳_ℤ t1 ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ, ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ = apply ⍳_ℤ t0 apply ⍳_ℤ t1) () 5.2.4
+  }
+}
+prove ↔ ∈ orderedPair t0 t1 ≤ℕ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair t0 t1 ≤ℕ, ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ = apply ⍳_ℤ t0 apply ⍳_ℤ t1, ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ) () 4 5

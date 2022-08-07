@@ -1,0 +1,2 @@
+prove = ≤ℤ productComprehension a b product ℤ ℤ ∨ ∈ orderedPair $0 $1 <ℤ = $0 $1 63d9dc1a99cb9c55661f61a516472b21f865f84576a9ff02b1377a14749fe51e () ()
+prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (∨ ∈ orderedPair $0 $1 <ℤ = $0 $1) (≤ℤ, ℤ, ℤ) 0

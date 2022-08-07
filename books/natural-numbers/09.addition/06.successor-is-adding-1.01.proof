@@ -1,0 +1,21 @@
+elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+  elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+    prove ∧ = apply +ℕ orderedPair t0 0ℕ t0 = apply +ℕ orderedPair 0ℕ t0 t0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (t0) p0
+    prove = t0 apply +ℕ orderedPair t0 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair t0 0ℕ, t0) 0.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+  }
+  prove = successor t0 successor apply +ℕ orderedPair t0 0ℕ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (t0, apply +ℕ orderedPair t0 0ℕ, successor $0) 0.0
+}
+elided 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 {
+  prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+  elided 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 {
+    prove = apply +ℕ orderedPair t0 successor 0ℕ successor apply +ℕ orderedPair t0 0ℕ 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 () (t0, 0ℕ) p0 1.0
+    prove = successor apply +ℕ orderedPair t0 0ℕ apply +ℕ orderedPair t0 successor 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair t0 successor 0ℕ, successor apply +ℕ orderedPair t0 0ℕ) 1.1.0
+  }
+}
+prove = successor t0 apply +ℕ orderedPair t0 successor 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (successor t0, successor apply +ℕ orderedPair t0 0ℕ, apply +ℕ orderedPair t0 successor 0ℕ) 0 1
+elided 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b {
+  prove = 1ℕ successor 0ℕ 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b () ()
+  prove = successor 0ℕ 1ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (1ℕ, successor 0ℕ) 3.0
+  prove = apply +ℕ orderedPair t0 successor 0ℕ apply +ℕ orderedPair t0 1ℕ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (successor 0ℕ, 1ℕ, apply +ℕ orderedPair t0 $0) 3.1
+}
+prove = successor t0 apply +ℕ orderedPair t0 1ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (successor t0, apply +ℕ orderedPair t0 successor 0ℕ, apply +ℕ orderedPair t0 1ℕ) 2 3

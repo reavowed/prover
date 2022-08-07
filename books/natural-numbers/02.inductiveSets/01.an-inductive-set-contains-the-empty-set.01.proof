@@ -1,0 +1,2 @@
+prove ∧ ∈ ∅ t0 ∀ n → ∈ $0 t0 ∈ successor $0 t0 f2b7cefc49d2f0737d6a298a095bc653c10d6ec6e37017d9c09cc29edb582431 () (t0) p0
+prove ∈ ∅ t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ ∅ t0, ∀ n → ∈ $0 t0 ∈ successor $0 t0) () 0

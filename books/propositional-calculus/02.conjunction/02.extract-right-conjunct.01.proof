@@ -1,0 +1,5 @@
+prove ¬ → s0 ¬ s1 9c9e3d5bfff8bf34a41d9577b72a31695973eb6943afc7e411cd430f0b5e9c7f (s0, s1) () p0
+assume ¬ s1 {
+  prove → s0 ¬ s1 acbe547cc61228898842cf6a8732b10d52cf1f493dd2455a7cecc64235f53854 (¬ s1, s0) () 1a
+}
+prove s1 b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (s1, → s0 ¬ s1) () 1 0

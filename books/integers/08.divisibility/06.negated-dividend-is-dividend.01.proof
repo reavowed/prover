@@ -1,0 +1,69 @@
+assume ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 {
+  let c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1) () {
+    elided (Rearranged) {
+      elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
+        prove ∧ = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0 = apply ×ℤ orderedPair negatedZ t0 $0 negatedZ apply ×ℤ orderedPair t0 $0 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 () (t0, $0) p0 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        prove = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0, = apply ×ℤ orderedPair negatedZ t0 $0 negatedZ apply ×ℤ orderedPair t0 $0) () 0.0.0.0.0
+      }
+      prove = negatedZ apply ×ℤ orderedPair t0 $0 negatedZ t1 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ×ℤ orderedPair t0 $0, t1, negatedZ $$0) 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ t1 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair t0 negatedZ $0, negatedZ apply ×ℤ orderedPair t0 $0, negatedZ t1) 0.0.0.0 0.0.0.1
+    }
+    elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+      elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+        prove ∧ ∈ negatedZ $0 ℤ ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () ($0) 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        prove ∈ negatedZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $0 ℤ, ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ) () 0.0.1.0.0
+      }
+      prove ∧ ∈ negatedZ $0 ℤ = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ negatedZ $0 ℤ, = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ t1) () 0.0.1.0 0.0.0
+      prove ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 ℤ = apply ×ℤ orderedPair t0 $$0 negatedZ t1) (negatedZ $0) 0.0.1.1
+    }
+  } 0a
+}
+assume ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1 {
+  let c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1) () {
+    elided (Rearranged) {
+      elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
+        prove ∧ = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0 = apply ×ℤ orderedPair negatedZ t0 $0 negatedZ apply ×ℤ orderedPair t0 $0 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 () (t0, $0) p0 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        prove = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0, = apply ×ℤ orderedPair negatedZ t0 $0 negatedZ apply ×ℤ orderedPair t0 $0) () 1.0.0.0.0
+      }
+      prove = negatedZ apply ×ℤ orderedPair t0 $0 negatedZ negatedZ t1 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ×ℤ orderedPair t0 $0, negatedZ t1, negatedZ $$0) 1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ negatedZ t1 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair t0 negatedZ $0, negatedZ apply ×ℤ orderedPair t0 $0, negatedZ negatedZ t1) 1.0.0.0 1.0.0.1
+      elided 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b {
+        prove = t1 negatedZ negatedZ t1 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b () (t1) p1
+        prove = negatedZ negatedZ t1 t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, negatedZ negatedZ t1) 1.0.0.3.0
+      }
+      prove = apply ×ℤ orderedPair t0 negatedZ $0 t1 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair t0 negatedZ $0, negatedZ negatedZ t1, t1) 1.0.0.2 1.0.0.3
+    }
+    elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+      elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+        prove ∧ ∈ negatedZ $0 ℤ ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () ($0) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        prove ∈ negatedZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $0 ℤ, ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ) () 1.0.1.0.0
+      }
+      prove ∧ ∈ negatedZ $0 ℤ = apply ×ℤ orderedPair t0 negatedZ $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ negatedZ $0 ℤ, = apply ×ℤ orderedPair t0 negatedZ $0 t1) () 1.0.1.0 1.0.0
+      prove ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 ℤ = apply ×ℤ orderedPair t0 $$0 t1) (negatedZ $0) 1.0.1.1
+    }
+  } 1a
+}
+elided 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 {
+  prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 () ()
+  prove → ∈ t0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0) (t0) 2.0
+  prove ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 $$0) () 2.1 p0
+  prove → ∈ t1 ℤ ↔ ∈ orderedPair t0 t1 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 $$0) (t1) 2.2
+  prove ↔ ∈ orderedPair t0 t1 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℤ, ↔ ∈ orderedPair t0 t1 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1) () 2.3 p1
+}
+prove ↔ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1) () 0 1
+prove ↔ ∈ orderedPair t0 t1 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair t0 t1 |ℤ, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1) () 2 3
+elided 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 {
+  elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+    prove ∧ ∈ negatedZ t1 ℤ ∧ = apply +ℤ orderedPair t1 negatedZ t1 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t1 t1 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t1) p1
+    prove ∈ negatedZ t1 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t1 ℤ, ∧ = apply +ℤ orderedPair t1 negatedZ t1 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t1 t1 apply ⍳_ℤ 0ℕ) () 5.0.0
+  }
+  elided 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 {
+    prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 () ()
+    prove → ∈ t0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0) (t0) 5.1.0
+    prove ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 $$0) () 5.1.1 p0
+    prove → ∈ negatedZ t1 ℤ ↔ ∈ orderedPair t0 negatedZ t1 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ↔ ∈ orderedPair t0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 $$0) (negatedZ t1) 5.1.2
+    prove ↔ ∈ orderedPair t0 negatedZ t1 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ negatedZ t1 ℤ, ↔ ∈ orderedPair t0 negatedZ t1 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1) () 5.1.3 5.0
+    prove ↔ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1 ∈ orderedPair t0 negatedZ t1 |ℤ aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ orderedPair t0 negatedZ t1 |ℤ, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1) () 5.1.4
+  }
+}
+prove ↔ ∈ orderedPair t0 t1 |ℤ ∈ orderedPair t0 negatedZ t1 |ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair t0 t1 |ℤ, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1, ∈ orderedPair t0 negatedZ t1 |ℤ) () 4 5

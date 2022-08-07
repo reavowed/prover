@@ -2,6 +2,7 @@ package net.prover.books.io
 
 import java.nio.file.{Path, Paths}
 import net.prover.model._
+import net.prover.model.entries.Theorem
 
 object BookDirectoryConfig {
   val booksDirectoryPath: Path = Paths.get("books")
@@ -20,7 +21,13 @@ object BookDirectoryConfig {
   private def getChapterDirectoryPath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
     getBookDirectoryPath(bookTitle).resolve(getChapterKey(chapterTitle, chapterIndex))
   }
-  def getChapterPath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
+  def getOldChapterFilePath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
     getChapterDirectoryPath(bookTitle, chapterTitle, chapterIndex).resolve(getChapterKey(chapterTitle, chapterIndex) + ".chapter")
+  }
+  def getChapterFilePath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
+    getChapterDirectoryPath(bookTitle, chapterTitle, chapterIndex).resolve(chapterTitle.camelCase + ".chapter")
+  }
+  def getProofPath(bookTitle: String, chapterTitle: String, chapterIndex: Int, theoremKey: String, theoremIndex: Int, proofIndex: Int): Path = {
+    getChapterDirectoryPath(bookTitle, chapterTitle, chapterIndex).resolve("%02d".format(theoremIndex + 1) + "." + theoremKey + "." + "%02d".format(proofIndex + 1) + ".proof")
   }
 }

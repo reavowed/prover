@@ -1,0 +1,17 @@
+elided ece00383af090dc62ff992ffc66e68b761085eab964fd9ca5c2f5f0124c89ac7 {
+  prove = compose t3 t0 functionMap a domain t0 apply t3 apply t0 $0 ece00383af090dc62ff992ffc66e68b761085eab964fd9ca5c2f5f0124c89ac7 () (t3, t0)
+  elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+    prove functionFrom t0 t1 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, functionFrom t0 t1 t2) () p0
+    prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) 0.1.0
+    prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 0.1.1
+    prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 0.1.2
+    prove = compose t3 t0 functionMap a t1 apply t3 apply t0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= compose t3 t0 functionMap a $$0 apply t3 apply t0 $0) (domain t0, t1) 0.1.3 0.0
+  }
+}
+take a {
+  assume ∈ $0 t1 {
+    prove ∈ apply t0 $0 t2 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (t0, t1, t2, $0) p0 1.0a
+    prove ∈ apply t3 apply t0 $0 t4 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (t3, t2, t4, apply t0 $0) p1 1.0.0
+  }
+}
+prove ∧ function compose t3 t0 functionFrom compose t3 t0 t1 t4 49727ac5186e6b8f7eb3d0851aac61a302ea69932f3ee7bfdf036e6054f6a9fc () (compose t3 t0, t1, apply t3 apply t0 $0, t4) 0 1

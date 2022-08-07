@@ -1,0 +1,7 @@
+elided 17e048779bfd128b1486cd7d2158b1fae7040208a5f345087ab96233cbb6f78d {
+  take x {
+    prove → with ($0) s0 ↔ with ($0) s1 with ($0) s2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) s0 ↔ with ($$0) s1 with ($$0) s2) ($0) p1
+    prove ↔ ∧ with ($0) s0 with ($0) s1 ∧ with ($0) s0 with ($0) s2 17e048779bfd128b1486cd7d2158b1fae7040208a5f345087ab96233cbb6f78d (with ($0) s0, with ($0) s1, with ($0) s2) () 0.0.0
+  }
+}
+prove ∃! x ∧ with ($0) s0 with ($0) s2 45888b214c786b95cbdc045febde3b5f80f88a7352acc53e819310ef8adc15e7 (∧ with ($0) s0 with ($0) s1, ∧ with ($0) s0 with ($0) s2) () p0 0

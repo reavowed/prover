@@ -1,0 +1,31 @@
+take a {
+  assume ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 {
+    let b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 codomain product t1 t0 ∈ orderedPair $0 $$0 product t1 t0, ∈ $0 t1) () {
+      prove ∈ $$0 t1 d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () ($$0, $0, t1, t0) 0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    } 0.0a
+  }
+  assume ∈ $0 t1 {
+    prove ∃ b ∈ $0 t0 3533f6dbdbf8d0f28da330a846256442487d9d249dba242bb407d5b7ec57865d () (t0) p0
+    let b ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ $$0 t0, ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0) () {
+      elided 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a {
+        prove ∈ orderedPair $$0 $0 product t1 t0 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t1, $0, t0) 0.1a 0.1.1a
+        elided 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a {
+          prove ∧ ∈ $$0 domain product t1 t0 ∈ $0 codomain product t1 t0 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a () ($$0, $0, product t1 t0) 0.1.1.0.0
+          prove ∈ $0 codomain product t1 t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$0 domain product t1 t0, ∈ $0 codomain product t1 t0) () 0.1.1.0.1.0
+        }
+      }
+      elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+        prove ∈ orderedPair $$0 $0 product t1 t0 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t1, $0, t0) 0.1a 0.1.1a
+        prove ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 codomain product t1 t0, ∈ orderedPair $$0 $0 product t1 t0) () 0.1.1.0 0.1.1.1.0
+        prove ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$$0 $0 product t1 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 codomain product t1 t0 ∈ orderedPair $$0 $$$0 product t1 t0) ($0) 0.1.1.1.1
+      }
+    } 0.1.0
+  }
+  elided 599dfc696517a7bb4212a58bf9846f4d911a39afcb1c77c4033044ada81fe184 {
+    prove ∀ a ↔ ∈ $0 domain product t1 t0 ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 599dfc696517a7bb4212a58bf9846f4d911a39afcb1c77c4033044ada81fe184 () (product t1 t0)
+    prove ↔ ∈ $0 domain product t1 t0 ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 domain product t1 t0 ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$$0 $0 product t1 t0) ($0) 0.2.0
+  }
+  prove ↔ ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 ∈ $0 t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0, ∈ $0 t1) () 0.0 0.1
+  prove ↔ ∈ $0 domain product t1 t0 ∈ $0 t1 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 domain product t1 t0, ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0, ∈ $0 t1) () 0.2 0.3
+}
+prove = domain product t1 t0 t1 65dcb85d85a1b0c0107a9c47ec499c5d9828ccf4b6880d399f0b456d994b576b () (domain product t1 t0, t1) 0

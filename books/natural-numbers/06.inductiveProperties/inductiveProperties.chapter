@@ -1,0 +1,55 @@
+Some basic inductive properties of ℕ.
+
+theorem A Natural Number Is Either 0 or a Successor
+conclusion ∀ n → ∈ $0 ℕ ∨ = $0 0ℕ ∃ m ∧ ∈ $0 ℕ = $$0 successor $0
+
+theorem Proof by Induction on Property for Non-Zero Numbers
+statementVariables(φ 1)
+premise with (1ℕ) s0
+premise ∀ n → ∈ $0 ℕ → ¬ = $0 0ℕ → with ($0) s0 with (successor $0) s0
+conclusion ∀ n → ∈ $0 ℕ → ¬ = $0 0ℕ with ($0) s0
+
+theorem Every Element of a Natural Number Is a Natural Number
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 t0
+conclusion ∈ t1 ℕ
+
+theorem A Natural Number Is a Subset of the Natural Numbers
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ⊆ t0 ℕ
+
+theorem A Natural Number Either Is 0 or Contains 0
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ⊕ = t0 0ℕ ∈ 0ℕ t0
+
+theorem Element Condition for Successors
+conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ successor $$0 successor $0 ∈ $$0 $0
+
+theorem A Natural Number Either Contains Or Is The Successor of an Element
+conclusion ∀ n → ∈ $0 ℕ ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0
+
+theorem Natural Number Trichotomy
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ∨ ∈ t0 t1 ∨ = t0 t1 ∈ t1 t0
+
+theorem Natural Number Transitivity
+conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 $$0 ⊆ $0 $$0
+
+theorem Natural Number Transitivity
+conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 $$0 ∀ x → ∈ $0 $$0 ∈ $0 $$$0
+
+theorem A Natural Number Contains the Predecessor of an Element
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ successor t1 t0
+conclusion ∈ t1 t0
+
+theorem Zero Is an Element of a Successor
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ∈ 0ℕ successor t0

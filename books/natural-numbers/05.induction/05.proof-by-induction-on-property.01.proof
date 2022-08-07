@@ -1,0 +1,57 @@
+let S = $0 comprehension n ℕ with ($0) s0 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∀ n → ∈ $0 ℕ with ($0) s0) (comprehension n ℕ with ($0) s0) {
+  subproof (Base case) {
+    elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+      prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+      prove ∧ ∈ 0ℕ ℕ with (0ℕ) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, with (0ℕ) s0) () 0.0.0.0 p0
+      elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+        prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 ℕ with ($0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with ($$0) s0) ($0, ℕ) 0a
+        prove ↔ ∈ 0ℕ $0 ∧ ∈ 0ℕ ℕ with (0ℕ) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 $0 ∧ ∈ $$0 ℕ with ($$0) s0) (0ℕ) 0.0.0.2.0
+        prove → ∧ ∈ 0ℕ ℕ with (0ℕ) s0 ∈ 0ℕ $0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ 0ℕ $0, ∧ ∈ 0ℕ ℕ with (0ℕ) s0) () 0.0.0.2.1
+        prove ∈ 0ℕ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ 0ℕ ℕ with (0ℕ) s0, ∈ 0ℕ $0) () 0.0.0.2.2 0.0.0.1
+      }
+    }
+  }
+  subproof (Inductive case) {
+    take n {
+      assume ∈ $0 $$0 {
+        elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+          prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ with ($0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with ($$$0) s0) ($$0, ℕ) 0a
+          prove ↔ ∈ $0 $$0 ∧ ∈ $0 ℕ with ($0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℕ with ($$$0) s0) ($0) 0.1.0.0.0.0
+          prove → ∈ $0 $$0 ∧ ∈ $0 ℕ with ($0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$0, ∧ ∈ $0 ℕ with ($0) s0) () 0.1.0.0.0.1
+          prove ∧ ∈ $0 ℕ with ($0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$0, ∧ ∈ $0 ℕ with ($0) s0) () 0.1.0.0.0.2 0.1.0.0a
+        }
+        elided (Extracted) {
+          prove → ∈ $0 ℕ → with ($0) s0 with (successor $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℕ → with ($$$0) s0 with (successor $$$0) s0) ($0) p1
+          prove → with ($0) s0 with (successor $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, → with ($0) s0 with (successor $0) s0) () 0.1.0.0.1.0 0.1.0.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+          prove with (successor $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s0, with (successor $0) s0) () 0.1.0.0.1.1 0.1.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        }
+        elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+          prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 0.1.0.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+          prove ∧ ∈ successor $0 ℕ with (successor $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ successor $0 ℕ, with (successor $0) s0) () 0.1.0.0.2.0 0.1.0.0.1
+          elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+            prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ with ($0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with ($$$0) s0) ($$0, ℕ) 0a
+            prove ↔ ∈ successor $0 $$0 ∧ ∈ successor $0 ℕ with (successor $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℕ with ($$$0) s0) (successor $0) 0.1.0.0.2.2.0
+            prove → ∧ ∈ successor $0 ℕ with (successor $0) s0 ∈ successor $0 $$0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ successor $0 $$0, ∧ ∈ successor $0 ℕ with (successor $0) s0) () 0.1.0.0.2.2.1
+            prove ∈ successor $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ successor $0 ℕ with (successor $0) s0, ∈ successor $0 $$0) () 0.1.0.0.2.2.2 0.1.0.0.2.1
+          }
+        }
+      }
+    }
+  }
+  prove = $0 ℕ 1ccac7029f6f5905f08245e509ec496d0200233d22f10c103dc4a63bd04d368b (with ($$0) s0) ($0) 0a 0.0 0.1
+  take n {
+    assume ∈ $0 ℕ {
+      elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+        prove = ℕ $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$0, ℕ) 0.2
+        prove ∈ $0 $$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$$0) (ℕ, $$0) 0.3.0.0.0 0.3.0a
+      }
+      elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+        prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ with ($0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with ($$$0) s0) ($$0, ℕ) 0a
+        prove ↔ ∈ $0 $$0 ∧ ∈ $0 ℕ with ($0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℕ with ($$$0) s0) ($0) 0.3.0.1.0
+        prove → ∈ $0 $$0 ∧ ∈ $0 ℕ with ($0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$0, ∧ ∈ $0 ℕ with ($0) s0) () 0.3.0.1.1
+        prove ∧ ∈ $0 ℕ with ($0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$0, ∧ ∈ $0 ℕ with ($0) s0) () 0.3.0.1.2 0.3.0.0
+        prove with ($0) s0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 ℕ, with ($0) s0) () 0.3.0.1.3
+      }
+    }
+  }
+}

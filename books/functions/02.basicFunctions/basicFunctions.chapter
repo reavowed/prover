@@ -1,0 +1,157 @@
+Define some basic functions.
+
+theorem The Empty Set Is a Function with Empty Domain
+termVariables(A 0)
+conclusion ∧ function ∅ functionFrom ∅ ∅ t0
+
+theorem Function with a Singleton Domain
+termVariables(a 0, b 0)
+conclusion ∧ function singleton orderedPair t0 t1 functionFrom singleton orderedPair t0 t1 singleton t0 singleton t1
+
+theorem Combine Functions
+termVariables(f 0, A 0, B 0, g 0, C 0, D 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ∧ function t3 functionFrom t3 t4 t5
+premise ∀ x → ∈ $0 ∩ t1 t4 = apply t0 $0 apply t3 $0
+conclusion ∧ function ∪ t0 t3 functionFrom ∪ t0 t3 ∪ t1 t4 ∪ t2 t5
+
+theorem Combine Disjoint Functions
+termVariables(f 0, A 0, B 0, g 0, C 0, D 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ∧ function t3 functionFrom t3 t4 t5
+premise = ∩ t1 t4 ∅
+conclusion ∧ function ∪ t0 t3 functionFrom ∪ t0 t3 ∪ t1 t4 ∪ t2 t5
+
+theorem Extending a Function by One Value
+termVariables(f 0, A 0, B 0, a 0, b 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ¬ ∈ t3 t1
+premise ∈ t4 t2
+conclusion ∧ function ∪ t0 singleton orderedPair t3 t4 functionFrom ∪ t0 singleton orderedPair t3 t4 ∪ t1 singleton t3 t2
+
+theorem Extended Function is Equal to Original on its Domain
+termVariables(f 0, A 0, B 0, g 0, C 0, D 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ∧ function t3 functionFrom t3 t4 t5
+premise ⊆ t0 t3
+conclusion ∀ a → ∈ $0 t1 = apply t0 $0 apply t3 $0
+
+theorem Function from Unique Pairing
+statementVariables(φ 2)
+termVariables(A 0, B 0)
+premise ∀ a → ∈ $0 t0 ∃! b ∧ ∈ $0 t1 with ($$0 $0) s0
+conclusion ∃! f ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0
+
+comment Define function maps.
+
+term functionMap ($a A with a F)
+  format (a : A ↦ F) requires-brackets
+  (= $0 replacementSet a t0 orderedPair $0 with ($0) t1)
+
+theorem Function Map Is Function
+termVariables(f 0, A 0, F 1, B 0)
+premise = t0 functionMap a t1 with ($0) t2
+premise ∀ a → ∈ $0 t1 ∈ with ($0) t2 t3
+conclusion ∧ function t0 functionFrom t0 t1 t3
+
+theorem Function Map Application
+termVariables(f 0, A 0, F 1)
+premise = t0 functionMap a t1 with ($0) t2
+conclusion ∀ a → ∈ $0 t1 = apply t0 $0 with ($0) t2
+
+comment Binary function maps.
+
+term functionMap2 ($a $b A B with (a b) F)
+  name (Binary Function Map)
+  format ((a : A, b : B) ↦ F) requires-brackets
+  (= $0 functionMap x product t0 t1 with (first $0 second $0) t2)
+
+theorem Binary Function Map Is Function
+termVariables(f 0, A 0, B 0, F 2, C 0)
+premise = t0 functionMap2 a b t1 t2 with ($0 $1) t3
+premise ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∈ with ($$0 $0) t3 t4
+conclusion ∧ function t0 functionFrom t0 product t1 t2 t4
+
+theorem Binary Function Map Application
+termVariables(f 0, A 0, B 0, F 2)
+premise = t0 functionMap2 a b t1 t2 with ($0 $1) t3
+conclusion ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply t0 orderedPair $$0 $0 with ($$0 $0) t3
+
+comment And extend that to quadruple function maps.
+
+term functionMap4 ($a $b $c $d A B C D with (a b c d) F)
+  name (Quadruple Function Map)
+  format (((a : A, b : B), (c : C, d : D)) ↦ F)
+  (= $0 functionMap2 x y product t0 t1 product t2 t3 with (first $0 second $0 first $1 second $1) t4)
+
+theorem Quadruple Function Map Is Function
+termVariables(f 0, A 0, B 0, C 0, D 0, F 4, E 0)
+premise = t0 functionMap4 a b c d t1 t2 t3 t4 with ($0 $1 $2 $3) t5
+premise ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ∈ with ($$$$0 $$$0 $$0 $0) t5 t6
+conclusion ∧ function t0 functionFrom t0 product product t1 t2 product t3 t4 t6
+
+theorem Quadruple Function Map Application
+termVariables(f 0, A 0, B 0, C 0, D 0, F 4)
+premise = t0 functionMap4 a b c d t1 t2 t3 t4 with ($0 $1 $2 $3) t5
+conclusion ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 = apply t0 orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 with ($$$$0 $$$0 $$0 $0) t5
+
+comment Function composition
+
+term compose (f g)
+  name (function composition)
+  format (%1 ∘ %2) requires-brackets
+  (= $0 functionMap a domain t1 apply t0 apply t1 $0)
+  shorthand (comp)
+
+theorem Function Composition Is Function
+termVariables(f 0, A 0, B 0, g 0, C 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ∧ function t3 functionFrom t3 t2 t4
+conclusion ∧ function compose t3 t0 functionFrom compose t3 t0 t1 t4
+
+theorem Application of Function Composition
+termVariables(f 0, A 0, B 0, g 0, C 0, a 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ∧ function t3 functionFrom t3 t2 t4
+premise ∈ t5 t1
+conclusion = apply compose t3 t0 t5 apply t3 apply t0 t5
+
+theorem Application of Function Composition on Set
+termVariables(f 0, A 0, B 0, g 0, C 0, X 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ∧ function t3 functionFrom t3 t2 t4
+premise ⊆ t5 t1
+conclusion = applySet compose t3 t0 t5 applySet t3 applySet t0 t5
+
+theorem Function Composition Is Associative
+termVariables(f 0, A 0, B 0, g 0, C 0, h 0, D 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ∧ function t3 functionFrom t3 t2 t4
+premise ∧ function t5 functionFrom t5 t4 t6
+conclusion = compose t5 compose t3 t0 compose compose t5 t3 t0
+
+comment The identity function on a set.
+
+term identityFunction (A)
+  name (identity function)
+  format (id_A)
+  (= $0 functionMap a t0 $0)
+
+theorem Identity Function Application
+termVariables(a 0, A 0)
+premise ∈ t0 t1
+conclusion = apply identityFunction t1 t0 t0
+
+theorem Identity Function Is a Function
+termVariables(A 0)
+conclusion ∧ function identityFunction t0 functionFrom identityFunction t0 t0 t0
+
+theorem Identity Function Is Identity for Function Composition
+termVariables(f 0, A 0, B 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+conclusion ∧ = compose identityFunction t2 t0 t0 = compose t0 identityFunction t1 t0
+
+theorem Function Application of Identity on Set
+termVariables(X 0, A 0)
+premise ⊆ t0 t1
+conclusion = applySet identityFunction t1 t0 t0

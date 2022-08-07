@@ -1,0 +1,131 @@
+The standard ordering on natural numbers.
+
+term < ()
+  disambiguator ℕ
+  name (Standard order on ℕ)
+  (= $0 productComprehension a b product ℕ ℕ ∈ $0 $1)
+  shorthand (<N)
+  attributes (infix-relation)
+
+write ∈ orderedPair a b <ℕ as lessN
+
+theorem Strict Natural Order Is Element Relation
+conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 <ℕ ∈ $$0 $0
+
+theorem Strict Natural Order Is a Strict Total Order
+conclusion strictTotalOrder <ℕ ℕ
+
+theorem Strict Natural Order Is Irreflexive
+conclusion ∧ relation <ℕ ℕ irreflexiveRelation <ℕ ℕ
+
+theorem Strict Natural Order Is Transitive
+termVariables(n 0, m 0, r 0)
+premise ∈ orderedPair t0 t1 <ℕ
+premise ∈ orderedPair t1 t2 <ℕ
+conclusion ∈ orderedPair t0 t2 <ℕ
+
+comment Ordering and successors.
+
+theorem Natural Number Is Less than Successor
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ∈ orderedPair t0 successor t0 <ℕ
+
+theorem Strict Natural Order Is Preserved for Successors
+conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ orderedPair successor $$0 successor $0 <ℕ ∈ orderedPair $$0 $0 <ℕ
+
+comment Non-strict ordering.
+
+term ≤ ()
+  disambiguator ℕ
+  (= $0 productComprehension a b product ℕ ℕ ∨ ∈ orderedPair $0 $1 <ℕ = $0 $1)
+  shorthand (le)
+  attributes (infix-relation)
+
+write ∈ orderedPair a b ≤ℕ as leqN
+
+theorem Membership Condition for Non-Strict Natural Order
+conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0
+
+theorem Membership Condition for Non-Strict Natural Order via Element Relation
+conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ $$0 $0 = $$0 $0
+
+theorem One Natural Is Either Smaller than Another or At Least as Large
+conclusion ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 <ℕ ∈ orderedPair $0 $$0 ≤ℕ
+
+theorem Less than Successor Is Less than Or Equal to
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ↔ ∈ orderedPair t0 successor t1 <ℕ ∈ orderedPair t0 t1 ≤ℕ
+
+theorem Greater than Or Equal to Successor Is Greater than
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ↔ ∈ orderedPair successor t0 t1 ≤ℕ ∈ orderedPair t0 t1 <ℕ
+
+theorem Non-Strict Natural Order Is a Well-Order
+conclusion wellOrder ≤ℕ ℕ
+
+theorem Non-Strict Natural Order Is Reflexive
+conclusion reflexiveRelation ≤ℕ ℕ
+
+theorem Non-Strict Natural Order Is Transitive
+termVariables(n 0, m 0, r 0)
+premise ∈ orderedPair t0 t1 ≤ℕ
+premise ∈ orderedPair t1 t2 ≤ℕ
+conclusion ∈ orderedPair t0 t2 ≤ℕ
+
+theorem Strict Natural Order Distributes over Non-Strict Natural Order from Left
+termVariables(n 0, m 0, r 0)
+premise ∈ orderedPair t0 t1 <ℕ
+premise ∈ orderedPair t1 t2 ≤ℕ
+conclusion ∈ orderedPair t0 t2 <ℕ
+
+theorem Strict Natural Order Distributes over Non-Strict Natural Order from Right
+termVariables(n 0, m 0, r 0)
+premise ∈ orderedPair t0 t1 ≤ℕ
+premise ∈ orderedPair t1 t2 <ℕ
+conclusion ∈ orderedPair t0 t2 <ℕ
+
+comment Ordering and zero.
+
+theorem A Natural Number That Is Greater than Another Is Non-Zero
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ orderedPair t0 t1 <ℕ
+conclusion ¬ = t1 0ℕ
+
+theorem No Natural Number Is Less than Zero
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ¬ ∈ orderedPair t0 0ℕ <ℕ
+
+theorem Every Natural Number Is Either Zero or Greater than Zero
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ⊕ = t0 0ℕ ∈ orderedPair 0ℕ t0 <ℕ
+
+theorem Every Natural Number Is At Least as Big as Zero
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ∈ orderedPair 0ℕ t0 ≤ℕ
+
+comment The positive naturals.
+
+term ℕ^+ ()
+  (= $0 comprehension n ℕ ∈ orderedPair 0ℕ $0 <ℕ)
+
+theorem Proof by Strong Induction
+statementVariables(φ 1)
+premise ∀ n → ∈ $0 ℕ → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 <ℕ with ($0) s0 with ($0) s0
+conclusion ∀ n → ∈ $0 ℕ with ($0) s0
+
+theorem Every Set of Naturals Bounded Above Has a Greatest Element
+termVariables(S 0)
+premise ⊆ t0 ℕ
+premise ¬ = t0 ∅
+premise ∃ a ∧ ∈ $0 ℕ ∀ b → ∈ $0 t0 ∈ orderedPair $0 $$0 ≤ℕ
+conclusion ∃! a ∧ ∈ $0 t0 ∀ b → ∈ $0 t0 ∈ orderedPair $0 $$0 ≤ℕ

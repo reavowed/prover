@@ -1,0 +1,19 @@
+prove ∀ x ↔ ∈ $0 ∪ t0 t2 ∨ ∈ $0 t0 ∈ $0 t2 6df17685ff2fcdfe09e7677621a4ee11bf84d2594d923cf2839b7c7388bf089d () (t0, t2)
+prove ∀ x → ∈ $0 t0 ∈ $0 t1 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, t1) p0
+prove ∀ x → ∈ $0 t2 ∈ $0 t1 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t2, t1) p1
+elided d5ae154dc36200c1ad1fefe3cb0c30a20b73733c5a8fc1c3f892825368309ad9 {
+  take x {
+    prove → ∈ $0 t0 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t0 ∈ $$0 t1) ($0) 1
+    prove → ∈ $0 t2 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t2 ∈ $$0 t1) ($0) 2
+    prove → ∨ ∈ $0 t0 ∈ $0 t2 ∈ $0 t1 d5ae154dc36200c1ad1fefe3cb0c30a20b73733c5a8fc1c3f892825368309ad9 (∈ $0 t0, ∈ $0 t1, ∈ $0 t2) () 3.0.0 3.0.1
+  }
+}
+elided fdfa0040ca36d70ab3bc93906e3b3ef953b4c0f212eb782f88a9d66a6cd2691b {
+  take x {
+    prove ↔ ∈ $0 ∪ t0 t2 ∨ ∈ $0 t0 ∈ $0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 ∪ t0 t2 ∨ ∈ $$0 t0 ∈ $$0 t2) ($0) 0
+    prove → ∈ $0 ∪ t0 t2 ∨ ∈ $0 t0 ∈ $0 t2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 ∪ t0 t2, ∨ ∈ $0 t0 ∈ $0 t2) () 4.0.0
+    prove → ∨ ∈ $0 t0 ∈ $0 t2 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∨ ∈ $$0 t0 ∈ $$0 t2 ∈ $$0 t1) ($0) 3
+    prove → ∈ $0 ∪ t0 t2 ∈ $0 t1 fdfa0040ca36d70ab3bc93906e3b3ef953b4c0f212eb782f88a9d66a6cd2691b (∈ $0 ∪ t0 t2, ∨ ∈ $0 t0 ∈ $0 t2, ∈ $0 t1) () 4.0.1 4.0.2
+  }
+}
+prove ⊆ ∪ t0 t2 t1 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (∪ t0 t2, t1) 4

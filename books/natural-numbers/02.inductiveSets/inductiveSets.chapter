@@ -1,0 +1,10 @@
+Define the concept of an inductive set - effectively, a set that contains every natural number.
+
+statement inductive (S)
+  format (S is inductive) requires-brackets
+  definition (∧ ∈ ∅ t0 ∀ n → ∈ $0 t0 ∈ successor $0 t0)
+
+theorem An Inductive Set Contains the Empty Set
+termVariables(S 0)
+premise inductive t0
+conclusion ∈ ∅ t0

@@ -1,0 +1,4 @@
+assume ∃ x with ($0) s0 {
+  prove ¬ ∀ x ¬ with ($0) s0 05f66fc1d7ca1416b6e82d594ee494b31a64c9398f0dc6bc6c70c60b89088696 (with ($0) s0) () 0a
+}
+prove ¬ ∃ x with ($0) s0 c6b6030434c95c400a4957ceb07ae21ea196cdb331dff0f66919e9330fb24450 (∃ x with ($0) s0, ∀ x ¬ with ($0) s0) () 0 p0

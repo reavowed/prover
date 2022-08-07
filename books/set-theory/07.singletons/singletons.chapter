@@ -1,0 +1,46 @@
+Establish the existence of the singleton set {a}.
+
+theorem There Exists a Set with an Element
+conclusion ∃ x ∃ y ∈ $0 $$0
+
+theorem Singleton Existence
+termVariables(a 0)
+conclusion ∃! z ∀ x ↔ ∈ $0 $$0 = $0 t0
+
+term singleton (a)
+  name (Singleton)
+  format ({a})
+  (∀ x ↔ ∈ $0 $$0 = $0 t0)
+
+theorem A Set Is an Element of Its Singleton
+termVariables(a 0)
+conclusion ∈ t0 singleton t0
+
+theorem Element of Singleton
+termVariables(b 0, a 0)
+premise ∈ t0 singleton t1
+conclusion = t0 t1
+
+theorem Sets Are Equal If Singletons Are Equal
+termVariables(a 0, b 0)
+premise = singleton t0 singleton t1
+conclusion = t0 t1
+
+theorem Singleton of Element Is Subset
+termVariables(a 0, S 0)
+premise ∈ t0 t1
+conclusion ⊆ singleton t0 t1
+
+theorem Singleton Is in Power Set
+termVariables(a 0, S 0)
+premise ∈ t0 t1
+conclusion ∈ singleton t0 powerSet t1
+
+theorem A Singleton Is Not the Empty Set
+termVariables(a 0)
+conclusion ¬ = singleton t0 ∅
+
+theorem Subsets of a Singleton
+termVariables(S 0, a 0)
+premise ⊆ t0 singleton t1
+conclusion ⊕ = t0 singleton t1 = t0 ∅

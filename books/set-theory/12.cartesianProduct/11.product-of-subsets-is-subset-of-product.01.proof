@@ -1,0 +1,12 @@
+take x {
+  assume ∈ $0 product t0 t2 {
+    prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t0, t2) 0.0a
+    prove ∈ first $0 t0 cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, t0, t2) 0.0a
+    prove ∈ second $0 t2 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, t0, t2) 0.0a
+    prove ∈ first $0 t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t0, t1, first $0) p0 0.0.1
+    prove ∈ second $0 t3 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t2, t3, second $0) p1 0.0.2
+    prove ∈ orderedPair first $0 second $0 product t1 t3 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (first $0, t1, second $0, t3) 0.0.3 0.0.4
+    prove ∈ $0 product t1 t3 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$0 product t1 t3) ($0, orderedPair first $0 second $0) 0.0.0 0.0.5
+  }
+}
+prove ⊆ product t0 t2 product t1 t3 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (product t0 t2, product t1 t3) 0

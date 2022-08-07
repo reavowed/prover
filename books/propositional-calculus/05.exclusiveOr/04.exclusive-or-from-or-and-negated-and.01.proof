@@ -1,0 +1,13 @@
+assume s0 {
+  prove ¬ s1 33deb5f816a1d197a67d4e2acf51cdda7b8476ded9fb6760cfe07c64b724b79c (s0, s1) () p1 0a
+  prove ∧ s0 ¬ s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, ¬ s1) () 0a 0.0
+  prove ∨ ∧ s0 ¬ s1 ∧ ¬ s0 s1 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ s0 ¬ s1, ∧ ¬ s0 s1) () 0.1
+  prove ⊕ s0 s1 684743a58f8592e8be53db072870ceb2f3f4c4f5ddcfa2ed0238514edecc723d (s0, s1) () 0.2
+}
+assume s1 {
+  prove ¬ s0 392864f5c9680ea88343c2f67fac1a4428f36f6fa04695988438f7741bc52edb (s0, s1) () p1 1a
+  prove ∧ ¬ s0 s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (¬ s0, s1) () 1.0 1a
+  prove ∨ ∧ s0 ¬ s1 ∧ ¬ s0 s1 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∧ ¬ s0 s1, ∧ s0 ¬ s1) () 1.1
+  prove ⊕ s0 s1 684743a58f8592e8be53db072870ceb2f3f4c4f5ddcfa2ed0238514edecc723d (s0, s1) () 1.2
+}
+prove ⊕ s0 s1 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (s0, s1, ⊕ s0 s1) () p0 0 1

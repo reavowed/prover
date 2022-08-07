@@ -1,0 +1,2 @@
+prove ∧ ∈ t0 t1 ∈ t0 t2 e9423e705bb1853702cf1d6375d29c0a0150a410b425f4a002dd4ed11f9078e3 () (t0, t1, t2) p0
+prove ∈ t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ t0 t1, ∈ t0 t2) () 0

@@ -1,0 +1,33 @@
+elided 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b {
+  prove = 1ℕ successor 0ℕ 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b () ()
+  prove = apply ×ℕ orderedPair t0 1ℕ apply ×ℕ orderedPair t0 successor 0ℕ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (1ℕ, successor 0ℕ, apply ×ℕ orderedPair t0 $0) 0.0
+}
+elided 87f6eec65ee7b1f694fbef11260c2086b2f9d533d365c0b343118eb3017dbcf5 {
+  prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+  prove = apply ×ℕ orderedPair t0 successor 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair t0 0ℕ t0 87f6eec65ee7b1f694fbef11260c2086b2f9d533d365c0b343118eb3017dbcf5 () (t0, 0ℕ) p0 1.0
+}
+prove = apply ×ℕ orderedPair t0 1ℕ apply +ℕ orderedPair apply ×ℕ orderedPair t0 0ℕ t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℕ orderedPair t0 1ℕ, apply ×ℕ orderedPair t0 successor 0ℕ, apply +ℕ orderedPair apply ×ℕ orderedPair t0 0ℕ t0) 0 1
+elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
+  elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
+    prove ∧ = apply ×ℕ orderedPair t0 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ t0 0ℕ 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c () (t0) p0
+    prove = apply ×ℕ orderedPair t0 0ℕ 0ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℕ orderedPair t0 0ℕ 0ℕ, = apply ×ℕ orderedPair 0ℕ t0 0ℕ) () 3.0.0
+  }
+  prove = apply +ℕ orderedPair apply ×ℕ orderedPair t0 0ℕ t0 apply +ℕ orderedPair 0ℕ t0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ×ℕ orderedPair t0 0ℕ, 0ℕ, apply +ℕ orderedPair $0 t0) 3.0
+}
+prove = apply ×ℕ orderedPair t0 1ℕ apply +ℕ orderedPair 0ℕ t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℕ orderedPair t0 1ℕ, apply +ℕ orderedPair apply ×ℕ orderedPair t0 0ℕ t0, apply +ℕ orderedPair 0ℕ t0) 2 3
+elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+  prove ∧ = apply +ℕ orderedPair t0 0ℕ t0 = apply +ℕ orderedPair 0ℕ t0 t0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (t0) p0
+  prove = apply +ℕ orderedPair 0ℕ t0 t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply +ℕ orderedPair t0 0ℕ t0, = apply +ℕ orderedPair 0ℕ t0 t0) () 5.0
+}
+prove = apply ×ℕ orderedPair t0 1ℕ t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℕ orderedPair t0 1ℕ, apply +ℕ orderedPair 0ℕ t0, t0) 4 5
+elided 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 {
+  elided 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 {
+    prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+    elided 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 {
+      prove = apply ×ℕ orderedPair 1ℕ t0 apply ×ℕ orderedPair t0 1ℕ 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 () (1ℕ, t0) 7.0.0 p0
+      prove = apply ×ℕ orderedPair t0 1ℕ apply ×ℕ orderedPair 1ℕ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair 1ℕ t0, apply ×ℕ orderedPair t0 1ℕ) 7.0.1.0
+    }
+  }
+  prove = apply ×ℕ orderedPair 1ℕ t0 t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $0 t0) (apply ×ℕ orderedPair t0 1ℕ, apply ×ℕ orderedPair 1ℕ t0) 7.0 6
+}
+prove ∧ = apply ×ℕ orderedPair t0 1ℕ t0 = apply ×ℕ orderedPair 1ℕ t0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= apply ×ℕ orderedPair t0 1ℕ t0, = apply ×ℕ orderedPair 1ℕ t0 t0) () 6 7

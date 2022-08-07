@@ -1,0 +1,9 @@
+The difference of two sets.
+
+term diff (A B)
+  format (A/B) requires-brackets
+  (= $0 comprehension x t0 ¬ ∈ $0 t1)
+
+theorem Element Condition for Set Difference
+termVariables(A 0, B 0)
+conclusion ∀ a ↔ ∈ $0 diff t0 t1 ∧ ∈ $0 t0 ¬ ∈ $0 t1

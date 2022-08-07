@@ -1,0 +1,5 @@
+prove = successor t0 ∪ t0 singleton t0 dec42ee681a0e7646e6b484e545639882290b9e728e0ee4b71ecc4f80cfe3aff () (t0)
+prove ¬ ∈ t0 t0 58f0a7f71c917f4d6cd1c96b9f76ef5b3af8d834a2505073b27bb3a7bbe99451 () (t0)
+prove ∧ function ∪ t1 singleton orderedPair t0 t3 functionFrom ∪ t1 singleton orderedPair t0 t3 ∪ t0 singleton t0 t2 39dc8e203e2af0a3b8bb408f99679caa0cfbe325d7c7ba123683f9200281450e () (t1, t0, t2, t0, t3) p1 1 p2
+prove ∧ function ∪ t1 singleton orderedPair t0 t3 functionFrom ∪ t1 singleton orderedPair t0 t3 successor t0 t2 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∧ function ∪ t1 singleton orderedPair t0 t3 functionFrom ∪ t1 singleton orderedPair t0 t3 $0 t2) (successor t0, ∪ t0 singleton t0) 0 2
+prove ∧ function t4 functionFrom t4 successor t0 t2 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∧ function $0 functionFrom $0 successor t0 t2) (t4, ∪ t1 singleton orderedPair t0 t3) p3 3

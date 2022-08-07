@@ -1,0 +1,22 @@
+Define partial and total orders on a set
+
+type strictTotalOrder <
+  qualifier (A) (on A)
+  name (strict total order)
+  definition (∧ ∧ ∧ relation t0 t1 asymmetricRelation t0 t1 transitiveRelation t0 t1 semicompleteRelation t0 t1)
+
+type totalOrder <
+  qualifier (A) (on A)
+  name (total order)
+  definition (∧ ∧ ∧ relation t0 t1 antisymmetricRelation t0 t1 transitiveRelation t0 t1 completeRelation t0 t1)
+
+theorem Total Order from Extended Strict Total Order
+termVariables(R 0, A 0, S 0)
+premise strictTotalOrder t0 t1
+premise = t2 productComprehension a b product t1 t1 ∨ ∈ orderedPair $0 $1 t0 = $0 $1
+conclusion totalOrder t2 t1
+
+type wellOrder ≤
+  qualifier (A) (on A)
+  name (well-order)
+  definition (∧ totalOrder t0 t1 ∀ S → ⊆ $0 t1 → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 t0)

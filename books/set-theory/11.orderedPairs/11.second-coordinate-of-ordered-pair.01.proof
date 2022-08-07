@@ -1,0 +1,12 @@
+elided 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 {
+  prove = orderedPair t0 t1 orderedPair t0 t1 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (orderedPair t0 t1)
+  prove ∃ b' = orderedPair t0 t1 orderedPair t0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= orderedPair t0 t1 orderedPair t0 $0) (t1) 0.0
+  prove ∃ a' ∃ b' = orderedPair t0 t1 orderedPair $$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ b = orderedPair t0 t1 orderedPair $$0 $0) (t0) 0.1
+}
+prove ∃! b' ∃ a' = orderedPair t0 t1 orderedPair $0 $$0 02f42cedcfe11c54fb2e8062e25d54b9db41940ffc3c8bc09dcf5c93627b2dac () (orderedPair t0 t1) 0
+prove ∃ a' = orderedPair t0 t1 orderedPair $0 second orderedPair t0 t1 c14edf76b6364ae3dc2af1590340e017789f9fc579e6c9a042bb21ac7bbd68f7 () (orderedPair t0 t1) 0
+elided 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 {
+  prove = orderedPair t0 t1 orderedPair t0 t1 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (orderedPair t0 t1)
+  prove ∃ a' = orderedPair t0 t1 orderedPair $0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= orderedPair t0 t1 orderedPair $0 t1) (t0) 3.0
+}
+prove = second orderedPair t0 t1 t1 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ a' = orderedPair t0 t1 orderedPair $0 $$0) (second orderedPair t0 t1, t1) 1 2 3

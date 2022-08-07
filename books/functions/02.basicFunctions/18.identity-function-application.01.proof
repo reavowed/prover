@@ -1,0 +1,6 @@
+prove = identityFunction t1 functionMap a t1 $0 ddfdc5168c946acb05577a1505f192510ac2361e71dc3198a8bb365889c2fa3a () (t1)
+elided 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 {
+  prove ∀ a → ∈ $0 t1 = apply identityFunction t1 $0 $0 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 () (identityFunction t1, t1, $0) 0
+  prove → ∈ t0 t1 = apply identityFunction t1 t0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 t1 = apply identityFunction t1 $0 $0) (t0) 1.0
+  prove = apply identityFunction t1 t0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 t1, = apply identityFunction t1 t0 t0) () 1.1 p0
+}

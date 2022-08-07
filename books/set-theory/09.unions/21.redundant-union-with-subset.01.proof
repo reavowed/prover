@@ -1,0 +1,23 @@
+take x {
+  assume ∈ $0 ∪ t0 t1 {
+    prove ∨ ∈ $0 t0 ∈ $0 t1 5a81ee7915bbcf6610375dbab10576eef68e3c4e2dd424c81b9c188147f30ae7 () ($0, t0, t1) 0.0a
+    assume ∈ $0 t0 {
+      prove ∈ $0 t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t0, t1, $0) p0 0.0.1a
+    }
+    prove ∈ $0 t1 94a09a0b02449696854fb3127e2d7d09e0aa3166ae4882ec9f7b5ca335baf226 (∈ $0 t0, ∈ $0 t1) () 0.0.0 0.0.1
+  }
+}
+take x {
+  assume ∈ $0 t1 {
+    prove ∈ $0 ∪ t0 t1 575ab7217e272c44f21400641b5fa55080fbd1412a6ab09aac691f4d4611e10e () ($0, t1, t0) 1.0a
+  }
+}
+elided fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c {
+  take x {
+    prove → ∈ $0 ∪ t0 t1 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ∪ t0 t1 ∈ $$0 t1) ($0) 0
+    prove → ∈ $0 t1 ∈ $0 ∪ t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∈ $$0 ∪ t0 t1) ($0) 1
+    prove ∧ → ∈ $0 ∪ t0 t1 ∈ $0 t1 → ∈ $0 t1 ∈ $0 ∪ t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∈ $0 ∪ t0 t1 ∈ $0 t1, → ∈ $0 t1 ∈ $0 ∪ t0 t1) () 2.0.0 2.0.1
+    prove ↔ ∈ $0 ∪ t0 t1 ∈ $0 t1 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (∈ $0 ∪ t0 t1, ∈ $0 t1) () 2.0.2
+  }
+}
+prove = ∪ t0 t1 t1 65dcb85d85a1b0c0107a9c47ec499c5d9828ccf4b6880d399f0b456d994b576b () (∪ t0 t1, t1) 2

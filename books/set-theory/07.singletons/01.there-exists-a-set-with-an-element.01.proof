@@ -1,0 +1,3 @@
+prove ∈ ∅ powerSet ∅ 1b4b7e14784be7940f719468c38125a9b1ab00f3064655f8f6ae03612d948f85 () (∅)
+prove ∃ y ∈ $0 powerSet ∅ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ $0 powerSet ∅) (∅) 0
+prove ∃ x ∃ y ∈ $0 $$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ y ∈ $0 $$0) (powerSet ∅) 1

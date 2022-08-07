@@ -71,8 +71,7 @@ case class Theorem(
   override def serializedLines: Seq[String] = Seq(s"theorem $name") ++
     variableDefinitions.serializedLines ++
     premises.map("premise " + _.serialized) ++
-    Seq("conclusion " + conclusion.serialized) ++
-    proofs.flatMap(_.serializedLines)
+    Seq("conclusion " + conclusion.serialized)
 
   def replaceInference(
     oldInference: Inference,
@@ -191,7 +190,7 @@ object Theorem extends Inference.EntryParser {
       Proof(steps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
     }
 
-    def serializedLines: Seq[String] = Seq("{") ++ steps.flatMap(_.serializedLines).indent ++ Seq("}")
+    def serialized: String = steps.flatMap(_.serializedLines).mkString("\n") + "\n"
   }
 
   object Proof {

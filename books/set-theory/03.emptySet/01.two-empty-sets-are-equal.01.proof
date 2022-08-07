@@ -1,0 +1,8 @@
+elided 969fe999e4d5d620af12493d29f784dc121d217aee403848a602e7dbae723076 {
+  take x {
+    prove ¬ ∈ $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$0 t0) ($0) p0
+    prove ¬ ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$0 t1) ($0) p1
+    prove ↔ ∈ $0 t0 ∈ $0 t1 969fe999e4d5d620af12493d29f784dc121d217aee403848a602e7dbae723076 (∈ $0 t0, ∈ $0 t1) () 0.0.0 0.0.1
+  }
+}
+prove = t0 t1 65dcb85d85a1b0c0107a9c47ec499c5d9828ccf4b6880d399f0b456d994b576b () (t0, t1) 0

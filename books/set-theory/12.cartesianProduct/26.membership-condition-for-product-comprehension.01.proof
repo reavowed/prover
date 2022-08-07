@@ -1,0 +1,58 @@
+elided 4f7f4ef78054a5eb2b0078044ef866570f9856509ab0e937785f5b77c533826a {
+  prove = productComprehension a b product t1 t2 with ($0 $1) s0 comprehension x product t1 t2 with (first $0 second $0) s0 4f7f4ef78054a5eb2b0078044ef866570f9856509ab0e937785f5b77c533826a (with ($0 $1) s0) (product t1 t2)
+  prove = t0 comprehension x product t1 t2 with (first $0 second $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (productComprehension a b product t1 t2 with ($0 $1) s0, comprehension x product t1 t2 with (first $0 second $0) s0) 0.0 p0
+}
+prove ∀ y ↔ ∈ $0 t0 ∧ ∈ $0 product t1 t2 with (first $0 second $0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with (first $0 second $0) s0) (t0, product t1 t2) 0
+take a {
+  assume ∈ $0 t1 {
+    take b {
+      assume ∈ $0 t2 {
+        assume ∈ orderedPair $$0 $0 t0 {
+          elided (Extracted) {
+            prove ↔ ∈ orderedPair $$0 $0 t0 ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 t0 ∧ ∈ $$$0 product t1 t2 with (first $$$0 second $$$0) s0) (orderedPair $$0 $0) 1
+            prove → ∈ orderedPair $$0 $0 t0 ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 t0, ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 2.0.0.0.0.0.0
+            prove ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t0, ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 2.0.0.0.0.0.1 2.0.0.0.0a
+          }
+          elided (Rewritten) {
+            elided 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f {
+              prove = first orderedPair $$0 $0 $$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () ($$0, $0)
+              prove with ($$0 second orderedPair $$0 $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($$$0 second orderedPair $$0 $0) s0) (first orderedPair $$0 $0, $$0) 2.0.0.0.0.1.0.0 2.0.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            }
+            elided d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b {
+              prove = second orderedPair $$0 $0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () ($$0, $0)
+              prove with ($$0 $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($$0 $$$0) s0) (second orderedPair $$0 $0, $0) 2.0.0.0.0.1.1.0 2.0.0.0.0.1.0
+            }
+          }
+        }
+        assume with ($$0 $0) s0 {
+          prove ∈ orderedPair $$0 $0 product t1 t2 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t1, $0, t2) 2.0a 2.0.0.0a
+          elided (Rewritten) {
+            elided (Rewritten) {
+              elided (Rewritten) {
+                prove = first orderedPair $$0 $0 $$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () ($$0, $0)
+                prove = $$0 first orderedPair $$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (first orderedPair $$0 $0, $$0) 2.0.0.0.1.1.0.0.0
+              }
+              prove with (first orderedPair $$0 $0 $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($$$0 $0) s0) ($$0, first orderedPair $$0 $0) 2.0.0.0.1.1.0.0 2.0.0.0.1a
+            }
+            elided (Rewritten) {
+              elided (Rewritten) {
+                prove = second orderedPair $$0 $0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () ($$0, $0)
+                prove = $0 second orderedPair $$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (second orderedPair $$0 $0, $0) 2.0.0.0.1.1.1.0.0
+              }
+              prove with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with (first orderedPair $$0 $0 $$$0) s0) ($0, second orderedPair $$0 $0) 2.0.0.0.1.1.1.0 2.0.0.0.1.1.0
+            }
+          }
+          elided (Extracted) {
+            prove ↔ ∈ orderedPair $$0 $0 t0 ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 t0 ∧ ∈ $$$0 product t1 t2 with (first $$$0 second $$$0) s0) (orderedPair $$0 $0) 1
+            prove → ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 ∈ orderedPair $$0 $0 t0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $$0 $0 t0, ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 2.0.0.0.1.2.0
+            elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+              prove ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $$0 $0 product t1 t2, with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 2.0.0.0.1.0 2.0.0.0.1.1
+              prove ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0, ∈ orderedPair $$0 $0 t0) () 2.0.0.0.1.2.1 2.0.0.0.1.2.2.0
+            }
+          }
+        }
+        prove ↔ ∈ orderedPair $$0 $0 t0 with ($$0 $0) s0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ orderedPair $$0 $0 t0, with ($$0 $0) s0) () 2.0.0.0.0 2.0.0.0.1
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+Introduce the Axiom of Replacement.
+
+axiom Axiom of Replacement
+statementVariables(φ 2)
+termVariables(a 0)
+premise ∀ x → ∈ $0 t0 ∃! y with ($$0 $0) s0
+conclusion ∃ z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 t0 with ($0 $$0) s0
+
+theorem Unique Replacement
+statementVariables(φ 2)
+termVariables(a 0)
+premise ∀ x → ∈ $0 t0 ∃! y with ($$0 $0) s0
+conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 t0 with ($0 $$0) s0
+
+theorem Existence of Replacement Set
+termVariables(A 0, F 1)
+conclusion ∃! B ∀ b ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 t0 = $$0 with ($0) t1
+
+term replacementSet ($x A with x F)
+  name (Replacement Set)
+  format ({ F | x ∈ A }) no-component-brackets
+  (∀ y ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 t0 = $$0 with ($0) t1)
+
+theorem Membership Condition for Replacement Set
+termVariables(S 0, A 0, F 1)
+premise = t0 replacementSet a t1 with ($0) t2
+conclusion ∀ s ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 with ($0) t2
+
+theorem Replacement Set Is Subset
+termVariables(S 0, A 0, F 1, B 0)
+premise = t0 replacementSet a t1 with ($0) t2
+premise ∀ a → ∈ $0 t1 ∈ with ($0) t2 t3
+conclusion ⊆ t0 t3
+
+theorem Function of Element is Element of Replacement Set
+termVariables(S 0, A 0, F 1, a 0)
+premise = t0 replacementSet a t1 with ($0) t2
+premise ∈ t3 t1
+conclusion ∈ with (t3) t2 t0

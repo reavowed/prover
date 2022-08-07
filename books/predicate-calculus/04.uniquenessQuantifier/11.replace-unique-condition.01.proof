@@ -1,0 +1,32 @@
+prove ∧ ∃ x with ($0) s0 ∀ x ∀ y → ∧ with ($$0) s0 with ($0) s0 = $$0 $0 1037a1e33818194900243ae4824d86fbbb30a92e781f79a00dd71740f7d96e2f (with ($0) s0) () p0
+elided a2cadff009701879c74e5f7d551ed34282367056f28eb1907a6099742cd4d23f {
+  prove ↔ ∃ x with ($0) s0 ∃ x with ($0) s1 a2cadff009701879c74e5f7d551ed34282367056f28eb1907a6099742cd4d23f (with ($0) s0, with ($0) s1) () p1
+  prove → ∃ x with ($0) s0 ∃ x with ($0) s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∃ x with ($0) s0, ∃ x with ($0) s1) () 1.0
+  prove ∃ x with ($0) s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ x with ($0) s0, ∃ x with ($0) s1) () 1.1 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+}
+take x {
+  take y {
+    assume ∧ with ($$0) s1 with ($0) s1 {
+      elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+        prove ↔ with ($$0) s0 with ($$0) s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$$0) s0 with ($$$0) s1) ($$0) p1
+        prove → with ($$0) s1 with ($$0) s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (with ($$0) s0, with ($$0) s1) () 2.0.0.0.0
+        prove with ($$0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($$0) s1, with ($$0) s0) () 2.0.0.0.1 2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      }
+      elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+        prove ↔ with ($0) s0 with ($0) s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$$0) s0 with ($$$0) s1) ($0) p1
+        prove → with ($0) s1 with ($0) s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (with ($0) s0, with ($0) s1) () 2.0.0.1.0
+        prove with ($0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s1, with ($0) s0) () 2.0.0.1.1 2.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      }
+      elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+        prove ∀ y' → ∧ with ($$$0) s0 with ($0) s0 = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ y' → ∧ with ($$$$0) s0 with ($0) s0 = $$$$0 $0) ($$0) 0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove → ∧ with ($$0) s0 with ($0) s0 = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∧ with ($$0) s0 with ($$$0) s0 = $$0 $$$0) ($0) 2.0.0.2.0
+        prove ∧ with ($$0) s0 with ($0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($$0) s0, with ($0) s0) () 2.0.0.0 2.0.0.1
+        prove = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ with ($$0) s0 with ($0) s0, = $$0 $0) () 2.0.0.2.1 2.0.0.2.2
+      }
+    }
+  }
+}
+elided 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 {
+  prove ∧ ∃ x with ($0) s1 ∀ x ∀ y → ∧ with ($$0) s1 with ($0) s1 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x with ($0) s1, ∀ x ∀ y → ∧ with ($$0) s1 with ($0) s1 = $$0 $0) () 1 2
+  prove ∃! x with ($0) s1 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (with ($0) s1) () 3.0
+}

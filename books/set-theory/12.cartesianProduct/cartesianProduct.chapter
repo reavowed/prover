@@ -1,0 +1,211 @@
+Introduce the Cartesian product of two sets, a×b.
+
+theorem Ordered Pair Is Element of Double Power Set of Union
+termVariables(a 0, A 0, b 0, B 0)
+premise ∈ t0 t1
+premise ∈ t2 t3
+conclusion ∈ orderedPair t0 t2 powerSet powerSet ∪ t1 t3
+
+term product (A B)
+  name (Cartesian Product)
+  format (A × B) requires-brackets
+  (= $0 comprehension x powerSet powerSet ∪ t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0)
+  shorthand (prod)
+
+theorem Membership Condition for Cartesian Product
+termVariables(A 0, B 0)
+conclusion ∀ x ↔ ∈ $0 product t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0
+
+theorem Element of Cartesian Product
+termVariables(X 0, A 0, B 0)
+premise ∈ t0 product t1 t2
+conclusion ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = t0 orderedPair $$0 $0
+
+theorem First Coordinate of Element of Cartesian Product
+termVariables(x 0, A 0, B 0)
+premise ∈ t0 product t1 t2
+conclusion ∈ first t0 t1
+
+theorem Second Coordinate of Element of Cartesian Product
+termVariables(x 0, A 0, B 0)
+premise ∈ t0 product t1 t2
+conclusion ∈ second t0 t2
+
+theorem Element of Cartesian Product from Coordinates
+termVariables(x 0, A 0, B 0)
+premise ∈ t0 product t1 t2
+conclusion = t0 orderedPair first t0 second t0
+
+theorem Ordered Pair Is Element of Cartesian Product
+termVariables(a 0, A 0, b 0, B 0)
+premise ∈ t0 t1
+premise ∈ t2 t3
+conclusion ∈ orderedPair t0 t2 product t1 t3
+
+theorem First Coordinate of Ordered Pair in Cartesian Product
+termVariables(a 0, b 0, A 0, B 0)
+premise ∈ orderedPair t0 t1 product t2 t3
+conclusion ∈ t0 t2
+
+theorem Second Coordinate of Ordered Pair in Cartesian Product
+termVariables(a 0, b 0, A 0, B 0)
+premise ∈ orderedPair t0 t1 product t2 t3
+conclusion ∈ t1 t3
+
+theorem Subset of Cartesian Product Is Pair-Set
+termVariables(X 0, A 0, B 0)
+premise ⊆ t0 product t1 t2
+conclusion pairSet t0
+
+theorem Product of Subsets Is Subset of Product
+termVariables(A 0, C 0, B 0, D 0)
+premise ⊆ t0 t1
+premise ⊆ t2 t3
+conclusion ⊆ product t0 t2 product t1 t3
+
+theorem Product Preserves Subset
+termVariables(A 0, B 0, C 0)
+premise ⊆ t0 t1
+conclusion ⊆ product t0 t2 product t1 t2
+
+theorem Product Preserves Subset
+termVariables(A 0, B 0, C 0)
+premise ⊆ t0 t1
+conclusion ⊆ product t2 t0 product t2 t1
+
+theorem Universal Condition for Elements of Cartesian Product by Coordinates
+statementVariables(φ 2)
+termVariables(A 0, B 0)
+conclusion ↔ ∀ x → ∈ $0 product t0 t1 with (first $0 second $0) s0 ∀ a → ∈ $0 t0 ∀ b → ∈ $0 t1 with ($$0 $0) s0
+
+theorem Existence Condition for Element of Cartesian Product by Coordinates
+statementVariables(φ 2)
+termVariables(A 0, B 0)
+conclusion ↔ ∃ x ∧ ∈ $0 product t0 t1 with (first $0 second $0) s0 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 with ($$0 $0) s0
+
+theorem Existence Condition for Element of Subset of Cartesian Product by Coordinates
+statementVariables(φ 2)
+termVariables(X 0, A 0, B 0)
+premise ⊆ t0 product t1 t2
+conclusion ↔ ∃ x ∧ ∈ $0 t0 with (first $0 second $0) s0 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 ∧ ∈ orderedPair $$0 $0 t0 with ($$0 $0) s0
+
+comment Extend the notation for replacement sets to replacing from a cartesian product.
+
+term replacementSet2 ($a $b X with (a b) F)
+  name (Double Replacement Set)
+  format ({ F | (a, b) ∈ X })
+  (= $0 replacementSet x t0 with (first $0 second $0) t1)
+
+theorem Membership Condition for Double Replacement Set
+termVariables(S 0, X 0, F 2, A 0, B 0)
+premise = t0 replacementSet2 a b t1 with ($0 $1) t2
+premise ⊆ t1 product t3 t4
+conclusion ∀ s ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t3 ∃ b ∧ ∈ $0 t4 ∧ ∈ orderedPair $$0 $0 t1 = $$$0 with ($$0 $0) t2
+
+theorem Membership Condition for Double Replacement Set over Product
+termVariables(S 0, A 0, B 0, F 2)
+premise = t0 replacementSet2 a b product t1 t2 with ($0 $1) t3
+conclusion ∀ s ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = $$$0 with ($$0 $0) t3
+
+theorem Function of Element is Element of Double Replacement Set
+termVariables(S 0, X 0, F 2, a 0, A 0, b 0, B 0)
+premise = t0 replacementSet2 a b t1 with ($0 $1) t2
+premise ∈ t3 t4
+premise ∈ t5 t6
+premise ∈ orderedPair t3 t5 t1
+conclusion ∈ with (t3 t5) t2 t0
+
+theorem Function of Element is Element of Double Replacement Set over Product
+termVariables(S 0, A 0, B 0, F 2, a 0, b 0)
+premise = t0 replacementSet2 a b product t1 t2 with ($0 $1) t3
+premise ∈ t4 t1
+premise ∈ t5 t2
+conclusion ∈ with (t4 t5) t3 t0
+
+theorem Double Replacement Set Is Subset
+termVariables(S 0, X 0, F 2, A 0, B 0, C 0)
+premise = t0 replacementSet2 a b t1 with ($0 $1) t2
+premise ⊆ t1 product t3 t4
+premise ∀ a → ∈ $0 t3 ∀ b → ∈ $0 t4 ∈ with ($$0 $0) t2 t5
+conclusion ⊆ t0 t5
+
+comment And then extend that to replacing from a cartesian product of cartesian products.
+
+term quadrupleReplacementSet ($a $b $c $d X with (a b c d) F)
+  name (Quadruple Replacement Set)
+  format ({ F | ((a, b), (c, d)) ∈ X })
+  (= $0 replacementSet2 x y t0 with (first $0 second $0 first $1 second $1) t1)
+
+theorem Membership Condition for Quadruple Replacement Set
+termVariables(S 0, X 0, F 4, A 0, B 0, C 0, D 0)
+premise = t0 quadrupleReplacementSet a b c d t1 with ($0 $1 $2 $3) t2
+premise ⊆ t1 product product t3 t4 product t5 t6
+conclusion ∀ s ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t3 ∃ b ∧ ∈ $0 t4 ∃ c ∧ ∈ $0 t5 ∃ d ∧ ∈ $0 t6 ∧ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 t1 = $$$$$0 with ($$$$0 $$$0 $$0 $0) t2
+
+theorem Membership Condition for Quadruple Replacement Set over Product
+termVariables(S 0, A 0, B 0, C 0, D 0, F 4)
+premise = t0 quadrupleReplacementSet a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) t5
+conclusion ∀ s ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$$$0 with ($$$$0 $$$0 $$0 $0) t5
+
+theorem Function of Element is Element of Quadruple Replacement Set
+termVariables(S 0, A 0, B 0, C 0, D 0, F 4, a 0, b 0, c 0, d 0)
+premise = t0 quadrupleReplacementSet a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) t5
+premise ∈ t6 t1
+premise ∈ t7 t2
+premise ∈ t8 t3
+premise ∈ t9 t4
+conclusion ∈ with (t6 t7 t8 t9) t5 t0
+
+theorem Quadruple Replacement Set Is Subset
+termVariables(S 0, X 0, F 4, A 0, B 0, C 0, D 0, E 0)
+premise = t0 quadrupleReplacementSet a b c d t1 with ($0 $1 $2 $3) t2
+premise ⊆ t1 product product t3 t4 product t5 t6
+premise ∀ a → ∈ $0 t3 ∀ b → ∈ $0 t4 ∀ c → ∈ $0 t5 ∀ d → ∈ $0 t6 → ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 t1 ∈ with ($$$$0 $$$0 $$0 $0) t2 t7
+conclusion ⊆ t0 t7
+
+comment Product comprehensions.
+
+term productComprehension ($a $b X with (a b) φ)
+  name (Product Comprehension)
+  format ({ (a, b) ∈ X | φ })
+  (= $0 comprehension x t0 with (first $0 second $0) s0)
+
+theorem Membership Condition for Product Comprehension
+statementVariables(φ 2)
+termVariables(S 0, A 0, B 0)
+premise = t0 productComprehension a b product t1 t2 with ($0 $1) s0
+conclusion ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ↔ ∈ orderedPair $$0 $0 t0 with ($$0 $0) s0
+
+theorem Product Comprehension Is a Subset of Its Domain
+statementVariables(φ 2)
+termVariables(S 0, X 0)
+premise = t0 productComprehension a b t1 with ($0 $1) s0
+conclusion ⊆ t0 t1
+
+comment And double product comprehensions.
+
+term quadrupleComprehension ($a $b $c $d X with (a b c d) φ)
+  name (quadruple comprehension)
+  format ({ ((a, b), (c, d)) ∈ X | φ })
+  (= $0 productComprehension x y t0 with (first $0 second $0 first $1 second $1) s0)
+
+theorem Membership Condition for Quadruple Comprehension
+statementVariables(φ 4)
+termVariables(S 0, A 0, B 0, C 0, D 0)
+premise = t0 quadrupleComprehension a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) s0
+conclusion ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 t0 with ($$$$0 $$$0 $$0 $0) s0
+
+theorem Quadruple Comprehension Is Subset of Its Domain
+statementVariables(φ 4)
+termVariables(S 0, X 0)
+premise = t0 quadrupleComprehension a b c d t1 with ($0 $1 $2 $3) s0
+conclusion ⊆ t0 t1
+
+theorem Domain of Cartesian Product
+termVariables(B 0, A 0)
+premise ¬ = t0 ∅
+conclusion = domain product t1 t0 t1
+
+theorem Cartesian Product Is Empty Iff One of Its Components is Empty
+termVariables(A 0, B 0)
+conclusion ↔ = product t0 t1 ∅ ∨ = t0 ∅ = t1 ∅

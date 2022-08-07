@@ -1,0 +1,27 @@
+Show that the naturals can be embedded in the integers in a natural way.
+
+term ⍳_ℤ ()
+  (= $0 functionMap n ℕ equivalenceClass orderedPair $0 0ℕ ~_ℤ)
+  shorthand (iZ)
+  disambiguatorAdders (apply $0 a ℤ)
+
+write apply ⍳_ℤ a as toZ
+
+theorem Function Properties of ⍳_ℤ
+conclusion ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ
+
+theorem Injected Natural Is Integer
+termVariables(a 0)
+premise ∈ t0 ℕ
+conclusion ∈ apply ⍳_ℤ t0 ℤ
+
+theorem 0_ℤ as Equivalence Class of Same Naturals
+termVariables(a 0)
+premise ∈ t0 ℕ
+conclusion = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair t0 t0 ~_ℤ
+
+theorem Equality Condition for Embedded Naturals
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ↔ = apply ⍳_ℤ t0 apply ⍳_ℤ t1 = t0 t1

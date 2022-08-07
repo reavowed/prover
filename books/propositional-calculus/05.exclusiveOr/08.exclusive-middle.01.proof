@@ -1,0 +1,9 @@
+assume s0 {
+  prove ¬ ¬ s0 3df4534886dd61f6ef0a8462fb7cdbff93a3381c7b5ce4d4871f1d25450b688a (s0) () 0a
+  prove ∧ s0 ¬ ¬ s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, ¬ ¬ s0) () 0a 0.0
+}
+assume ¬ s0 {
+  prove ∧ ¬ s0 ¬ s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (¬ s0, ¬ s0) () 1a 1a
+}
+prove ∨ ∧ s0 ¬ ¬ s0 ∧ ¬ s0 ¬ s0 2675666723e5a17ef041d85c43dad465dfd282e6739857d16692114b32aced76 (s0, ∧ s0 ¬ ¬ s0, ∧ ¬ s0 ¬ s0) () 0 1
+prove ⊕ s0 ¬ s0 684743a58f8592e8be53db072870ceb2f3f4c4f5ddcfa2ed0238514edecc723d (s0, ¬ s0) () 2

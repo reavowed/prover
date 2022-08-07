@@ -1,0 +1,3 @@
+prove = ∩ t1 t0 ∩ t0 t1 abc01ddb628a9bd1ec31c384b4080d3cfa84837739d6e2360d77cba13c487648 () (t1, t0)
+prove = ∩ t0 t1 ∅ 78851639dac82f917360234cb01c66a8bdbfe01dab630d54d3a5dfc814f968a8 () (t0, t1) p0
+prove = ∩ t1 t0 ∅ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (∩ t1 t0, ∩ t0 t1, ∅) 0 1

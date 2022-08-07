@@ -1,0 +1,27 @@
+Introduce the Axiom of Regularity.
+
+axiom Axiom of Regularity
+conclusion ∀ x → ¬ = $0 ∅ ∃ y ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅
+
+theorem Regularity
+termVariables(a 0)
+premise ¬ = t0 ∅
+conclusion ∃ x ∧ ∈ $0 t0 = ∩ $0 t0 ∅
+
+theorem No Set Contains Itself
+termVariables(a 0)
+conclusion ¬ ∈ t0 t0
+
+theorem Element of a Set Is Not the Set
+termVariables(a 0, b 0)
+premise ∈ t0 t1
+conclusion ¬ = t0 t1
+
+theorem No Two Sets Contain Each Other
+termVariables(b 0, a 0)
+conclusion ∨ ¬ ∈ t0 t1 ¬ ∈ t1 t0
+
+theorem Element of a Set Cannot Contain It
+termVariables(a 0, b 0)
+premise ∈ t0 t1
+conclusion ¬ ∈ t1 t0

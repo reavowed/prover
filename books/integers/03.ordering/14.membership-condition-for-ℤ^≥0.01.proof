@@ -1,0 +1,2 @@
+prove = ℤ^≥0 comprehension a ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ 86ac55c83c118731996a1a025a5587c46eb29edb7c6cdb294d51e19ed03da02a () ()
+prove ∀ a ↔ ∈ $0 ℤ^≥0 ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ) (ℤ^≥0, ℤ) 0

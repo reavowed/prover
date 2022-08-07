@@ -1,0 +1,35 @@
+assume ∧ unaryOperation t0 unaryOperationOn t0 t1 {
+  elided 189bbce21d7943a5b44679f49e66cb4b6e56ef34e97ad259e56f82953fe55c2a {
+    prove ∧ unaryOperation t0 = domain t0 t1 189bbce21d7943a5b44679f49e66cb4b6e56ef34e97ad259e56f82953fe55c2a () (t0, t1) 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove = domain t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (unaryOperation t0, = domain t0 t1) () 0.0.0
+  }
+  prove ∧ function t0 functionFrom t0 domain t0 domain t0 65302ad667918f8e4353bdf303ef416424efde343876d93d3419ea9dcfcafeb4 () (t0) 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+  elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+    prove ∧ function t0 functionFrom t0 t1 domain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function t0 functionFrom t0 $0 domain t0) (domain t0, t1) 0.0 0.1
+    prove ∧ function t0 functionFrom t0 t1 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function t0 functionFrom t0 t1 $0) (domain t0, t1) 0.0 0.2.0
+  }
+}
+assume ∧ function t0 functionFrom t0 t1 t1 {
+  elided 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b {
+    prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t1) 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove ∧ = domain t0 t1 ⊆ codomain t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t1) () 1.0.0
+    prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t1) () 1.0.1
+  }
+  elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+    elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+      prove = t1 domain t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain t0, t1) 1.0
+      prove ∧ function t0 functionFrom t0 domain t0 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function t0 functionFrom t0 $0 t1) (t1, domain t0) 1.1.0.0 1a
+    }
+    elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+      prove = t1 domain t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain t0, t1) 1.0
+      prove ∧ function t0 functionFrom t0 domain t0 domain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function t0 functionFrom t0 domain t0 $0) (t1, domain t0) 1.1.1.0 1.1.0
+    }
+  }
+  prove unaryOperation t0 7443d59685a17cccee611b8de9e5287f99e9397e30a822b74da1b82c48fa0124 () (t0) 1.1
+  elided 12f6dee153005d73afc29286ab2490f7f817b94cbee7a94235b3692da3a367f3 {
+    prove ∧ unaryOperation t0 = domain t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (unaryOperation t0, = domain t0 t1) () 1.2 1.0
+    prove unaryOperationOn t0 t1 12f6dee153005d73afc29286ab2490f7f817b94cbee7a94235b3692da3a367f3 () (t0, t1) 1.3.0
+  }
+  prove ∧ unaryOperation t0 unaryOperationOn t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (unaryOperation t0, unaryOperationOn t0 t1) () 1.2 1.3
+}
+prove ↔ ∧ unaryOperation t0 unaryOperationOn t0 t1 ∧ function t0 functionFrom t0 t1 t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ unaryOperation t0 unaryOperationOn t0 t1, ∧ function t0 functionFrom t0 t1 t1) () 0 1

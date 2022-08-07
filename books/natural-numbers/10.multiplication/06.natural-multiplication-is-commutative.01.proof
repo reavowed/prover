@@ -1,0 +1,24 @@
+elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
+  prove ∧ = apply ×ℕ orderedPair t0 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ t0 0ℕ 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c () (t0) p0
+  prove = apply ×ℕ orderedPair t0 0ℕ 0ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℕ orderedPair t0 0ℕ 0ℕ, = apply ×ℕ orderedPair 0ℕ t0 0ℕ) () 0.0
+}
+elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
+  prove ∧ = apply ×ℕ orderedPair t0 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ t0 0ℕ 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c () (t0) p0
+  prove = 0ℕ apply ×ℕ orderedPair 0ℕ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair 0ℕ t0, 0ℕ) 1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+}
+prove = apply ×ℕ orderedPair t0 0ℕ apply ×ℕ orderedPair 0ℕ t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℕ orderedPair t0 0ℕ, 0ℕ, apply ×ℕ orderedPair 0ℕ t0) 0 1
+take x {
+  assume ∈ $0 ℕ {
+    assume = apply ×ℕ orderedPair t0 $0 apply ×ℕ orderedPair $0 t0 {
+      prove = apply ×ℕ orderedPair t0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 t0 87f6eec65ee7b1f694fbef11260c2086b2f9d533d365c0b343118eb3017dbcf5 () (t0, $0) p0 3.0a
+      prove = apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 t0 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t0 t0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ×ℕ orderedPair t0 $0, apply ×ℕ orderedPair $0 t0, apply +ℕ orderedPair $$0 t0) 3.0.0a
+      prove = apply ×ℕ orderedPair t0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t0 t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℕ orderedPair t0 successor $0, apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 t0, apply +ℕ orderedPair apply ×ℕ orderedPair $0 t0 t0) 3.0.0.0 3.0.0.1
+      elided 55835599beea40a47f4afb84d6a53402ee3f6dcf495d27037bd17fa53936591e {
+        prove = apply ×ℕ orderedPair successor $0 t0 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t0 t0 55835599beea40a47f4afb84d6a53402ee3f6dcf495d27037bd17fa53936591e () ($0, t0) 3.0a p0
+        prove = apply +ℕ orderedPair apply ×ℕ orderedPair $0 t0 t0 apply ×ℕ orderedPair successor $0 t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair successor $0 t0, apply +ℕ orderedPair apply ×ℕ orderedPair $0 t0 t0) 3.0.0.3.0
+      }
+      prove = apply ×ℕ orderedPair t0 successor $0 apply ×ℕ orderedPair successor $0 t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℕ orderedPair t0 successor $0, apply +ℕ orderedPair apply ×ℕ orderedPair $0 t0 t0, apply ×ℕ orderedPair successor $0 t0) 3.0.0.2 3.0.0.3
+    }
+  }
+}
+prove = apply ×ℕ orderedPair t0 t1 apply ×ℕ orderedPair t1 t0 4f6fc5278d8806c2580ac552515ba0954b5447473eefeb89ad1a4379624bc059 (= apply ×ℕ orderedPair t0 $0 apply ×ℕ orderedPair $0 t0) (t1) 2 3 p1

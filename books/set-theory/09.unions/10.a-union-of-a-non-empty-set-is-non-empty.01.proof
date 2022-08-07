@@ -1,0 +1,5 @@
+prove ∃ x ∈ $0 t0 3533f6dbdbf8d0f28da330a846256442487d9d249dba242bb407d5b7ec57865d () (t0) p0
+let x ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ $0 t0, ¬ = ∪ t0 t1 ∅) () {
+  prove ∈ $0 ∪ t0 t1 33f2017abf1119244d3e5afed3c492684b656c592fb65d4f2afa6ca2ff732db8 () ($0, t0, t1) 1a
+  prove ¬ = ∪ t0 t1 ∅ d197f0469101dba16f72c9b3e6c622698a14a37bfe377f0d1e1e06962e7f87ec () ($0, ∪ t0 t1) 1.0
+} 0

@@ -1,0 +1,56 @@
+prove ¬ = t1 0ℕ 8fcd46cb680f8623012e9c9c58daf95f0a206f37482996b61131a04539d5f361 () (t0, t1) p0 p1 p3
+elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
+  elided de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 {
+    prove ⊕ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 () (t1) p1
+    prove ∨ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 2cb695f79e67d4a66aadf665aa336968a1cec742a0feff3940335eb98c713167 (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 1.0.0
+    prove ∈ orderedPair 0ℕ t1 <ℕ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 1.0.1 0
+  }
+  prove ∨ ∈ orderedPair 0ℕ t0 <ℕ ∈ orderedPair 0ℕ t1 <ℕ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∈ orderedPair 0ℕ t1 <ℕ, ∈ orderedPair 0ℕ t0 <ℕ) () 1.0
+  elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
+    prove ∧ ∈ gcdℕ t0 t1 ℕ ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 () (t0, t1) p0 p1 1.1
+    prove ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ gcdℕ t0 t1 ℕ, ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 1.2.0
+    prove ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ, ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 1.2.1
+    prove ∈ orderedPair gcdℕ t0 t1 t0 |ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ orderedPair gcdℕ t0 t1 t0 |ℕ, ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 1.2.2
+  }
+}
+elided 364bbd79cbb397680f370a451f83ed23bcc45deb7d5d0295f038decaaa51657d {
+  elided de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 {
+    prove ⊕ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 () (t1) p1
+    prove ∨ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 2cb695f79e67d4a66aadf665aa336968a1cec742a0feff3940335eb98c713167 (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 2.0.0
+    prove ∈ orderedPair 0ℕ t1 <ℕ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 2.0.1 0
+  }
+  prove ∨ ∈ orderedPair 0ℕ t0 <ℕ ∈ orderedPair 0ℕ t1 <ℕ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∈ orderedPair 0ℕ t1 <ℕ, ∈ orderedPair 0ℕ t0 <ℕ) () 2.0
+  elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
+    prove ∧ ∈ gcdℕ t0 t1 ℕ ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 () (t0, t1) p0 p1 2.1
+    prove ∈ gcdℕ t0 t1 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ gcdℕ t0 t1 ℕ, ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 2.2.0
+  }
+  elided 364bbd79cbb397680f370a451f83ed23bcc45deb7d5d0295f038decaaa51657d {
+    prove ∧ ∈ t0 ℕ ∧ ∈ orderedPair 1ℕ t0 <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 t0 |ℕ ∨ = $0 1ℕ = $0 t0 364bbd79cbb397680f370a451f83ed23bcc45deb7d5d0295f038decaaa51657d () (t0) p2
+    prove → ∈ gcdℕ t0 t1 ℕ → ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∨ = gcdℕ t0 t1 1ℕ = gcdℕ t0 t1 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ → ∈ orderedPair $0 t0 |ℕ ∨ = $0 1ℕ = $0 t0) (gcdℕ t0 t1) 2.3.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove → ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∨ = gcdℕ t0 t1 1ℕ = gcdℕ t0 t1 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ gcdℕ t0 t1 ℕ, → ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∨ = gcdℕ t0 t1 1ℕ = gcdℕ t0 t1 t0) () 2.3.1 2.2
+    prove ∨ = gcdℕ t0 t1 1ℕ = gcdℕ t0 t1 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair gcdℕ t0 t1 t0 |ℕ, ∨ = gcdℕ t0 t1 1ℕ = gcdℕ t0 t1 t0) () 2.3.2 1
+  }
+}
+subproof (gcd(p, a) is not p) {
+  assume = gcdℕ t0 t1 t0 {
+    elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
+      elided de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 {
+        prove ⊕ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 () (t1) p1
+        prove ∨ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 2cb695f79e67d4a66aadf665aa336968a1cec742a0feff3940335eb98c713167 (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 3.0.0.0.0
+        prove ∈ orderedPair 0ℕ t1 <ℕ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 3.0.0.0.1 0
+      }
+      prove ∨ ∈ orderedPair 0ℕ t0 <ℕ ∈ orderedPair 0ℕ t1 <ℕ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∈ orderedPair 0ℕ t1 <ℕ, ∈ orderedPair 0ℕ t0 <ℕ) () 3.0.0.0
+      elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
+        prove ∧ ∈ gcdℕ t0 t1 ℕ ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 () (t0, t1) p0 p1 3.0.0.1
+        prove ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ gcdℕ t0 t1 ℕ, ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 3.0.0.2.0
+        prove ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ, ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 3.0.0.2.1
+        prove ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ orderedPair gcdℕ t0 t1 t0 |ℕ, ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 3.0.0.2.2
+        prove ∈ orderedPair gcdℕ t0 t1 t1 |ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ orderedPair gcdℕ t0 t1 t1 |ℕ, ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 3.0.0.2.3
+      }
+    }
+    prove ∈ orderedPair t0 t1 |ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $0 t1 |ℕ) (gcdℕ t0 t1, t0) 3.0a 3.0.0
+    prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∈ orderedPair t0 t1 |ℕ) () 3.0.1 p3
+  }
+  prove ¬ = gcdℕ t0 t1 t0 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (= gcdℕ t0 t1 t0) () 3.0
+}
+prove = gcdℕ t0 t1 1ℕ ff2f6dbf1f9d72bed232823eeca33745970df4eadd4712ff5dcc9db8d7b5ad1f (= gcdℕ t0 t1 1ℕ, = gcdℕ t0 t1 t0) () 2 3

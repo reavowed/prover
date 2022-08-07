@@ -1,0 +1,33 @@
+let f_S = $0 functionMap n ℕ successor $0 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∃! f ∧ ∧ function $0 functionFrom $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0) (functionMap n ℕ successor $0) {
+  elided f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd {
+    take a {
+      assume ∈ $0 ℕ {
+        prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 0.0.0.0a
+      }
+    }
+  }
+  prove ∧ function $0 functionFrom $0 ℕ ℕ 49727ac5186e6b8f7eb3d0851aac61a302ea69932f3ee7bfdf036e6054f6a9fc () ($0, ℕ, successor $$0, ℕ) 0a 0.0
+  take n {
+    assume ∈ $0 ℕ {
+      prove ∃! f ∧ ∧ function $0 functionFrom $0 ℕ ℕ ∧ = apply $0 0ℕ $$0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply $$$$0 apply $$0 $0 43c3aec452308507d7ed6d1847506e4970449488fa69112bdfb446de122bef87 () ($$0, ℕ, $0) 0.1 0.2.0a
+      take f {
+        assume ∧ function $0 functionFrom $0 ℕ ℕ {
+          take m {
+            assume ∈ $0 ℕ {
+              prove ∈ apply $$0 $0 ℕ 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () ($$0, ℕ, ℕ, $0) 0.2.0.1.0a 0.2.0.1.0.0.0a
+              elided 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 {
+                prove ∀ a → ∈ $0 ℕ = apply $$$$$0 $0 successor $0 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 () ($$$$0, ℕ, successor $$$$$0) 0a
+                prove → ∈ apply $$0 $0 ℕ = apply $$$$0 apply $$0 $0 successor apply $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ = apply $$$$0 $$$$$0 successor $$$$$0) (apply $$0 $0) 0.2.0.1.0.0.0.1.0
+                prove = apply $$$$0 apply $$0 $0 successor apply $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply $$0 $0 ℕ, = apply $$$$0 apply $$0 $0 successor apply $$0 $0) () 0.2.0.1.0.0.0.1.1 0.2.0.1.0.0.0.0
+              }
+            }
+          }
+          prove ↔ ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply $$$$0 apply $$0 $0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 successor apply $$0 $0 110af754aa71217ca2a990822e8faea7a40ea788de146e38e22bb2beaea0c3b4 (∈ $$$$0 ℕ, = apply $0 successor $$$$0 $$$$1) (apply $$$0 apply $0 $$$$0, successor apply $0 $$$$0) 0.2.0.1.0.0
+          prove ↔ ∧ = apply $0 0ℕ $$0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply $$$$0 apply $$0 $0 ∧ = apply $0 0ℕ $$0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 successor apply $$0 $0 113a3bf9e67b2b1bac70a8cb79adfdd8be05a302eb13fb7c461bc01b7b1186ff (∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply $$$$0 apply $$0 $0, ∀ m → ∈ $0 ℕ = apply $$0 successor $0 successor apply $$0 $0, = apply $0 0ℕ $$0) () 0.2.0.1.0.1
+        }
+      }
+      prove ∃! f ∧ ∧ function $0 functionFrom $0 ℕ ℕ ∧ = apply $0 0ℕ $$0 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 successor apply $$0 $0 fa494b94116d4ec710d4ceb82c71d51b73634a10ba39f8dac40ed155bda028b6 (∧ function $$$0 functionFrom $$$0 ℕ ℕ, ∧ = apply $$$0 0ℕ $0 ∀ n → ∈ $0 ℕ = apply $$$$0 successor $0 apply $$$0 apply $$$$0 $0, ∧ = apply $$$0 0ℕ $0 ∀ m → ∈ $0 ℕ = apply $$$$0 successor $0 successor apply $$$$0 $0) () 0.2.0.0 0.2.0.1
+    }
+  }
+  prove ∃! f ∧ ∧ function $0 functionFrom $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0 fbb9f49ae457c56e8c813c133334c0f0f29a08ae158fab5cf1789e9d34ee9245 () (ℕ, $$0, successor $$1) 0.2
+}

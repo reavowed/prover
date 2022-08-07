@@ -1,0 +1,13 @@
+The standard ordering on the rationals.
+
+theorem Existence of Strict Rational Order
+conclusion ∃! ~ ∧ relation $0 ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ^+ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 ℤ^+ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 ∈ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 <ℤ
+
+term < ()
+  disambiguator ℚ
+  (∧ relation $0 ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ^+ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 ℤ^+ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 ∈ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 <ℤ)
+  shorthand (<Q)
+  attributes (infix-relation)
+
+theorem Strict Rational Order Is a Strict Total Order
+conclusion strictTotalOrder <ℚ ℚ

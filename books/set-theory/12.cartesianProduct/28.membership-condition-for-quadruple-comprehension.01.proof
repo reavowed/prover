@@ -1,0 +1,51 @@
+elided d33651137768d3c411b5cf291cdd305870237f09afa6e43997fca4e350cfe42d {
+  prove = quadrupleComprehension a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) s0 productComprehension x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) s0 d33651137768d3c411b5cf291cdd305870237f09afa6e43997fca4e350cfe42d (with ($0 $1 $2 $3) s0) (product product t1 t2 product t3 t4)
+  prove = t0 productComprehension x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (quadrupleComprehension a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) s0, productComprehension x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) s0) 0.0 p0
+}
+prove ∀ x → ∈ $0 product t1 t2 ∀ y → ∈ $0 product t3 t4 ↔ ∈ orderedPair $$0 $0 t0 with (first $$0 second $$0 first $0 second $0) s0 c0938d6bca7f0d2e8e691534f05e18e5d3c7a085e0cb4784ce06995ad956b625 (with (first $0 second $0 first $1 second $1) s0) (t0, product t1 t2, product t3 t4) 0
+elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
+  take x {
+    assume ∈ $0 product t1 t2 {
+      take y {
+        assume ∈ $0 product t3 t4 {
+          elided (Extracted) {
+            prove → ∈ $$0 product t1 t2 ∀ y → ∈ $0 product t3 t4 ↔ ∈ orderedPair $$$0 $0 t0 with (first $$$0 second $$$0 first $0 second $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 product t1 t2 ∀ y → ∈ $0 product t3 t4 ↔ ∈ orderedPair $$$$0 $0 t0 with (first $$$$0 second $$$$0 first $0 second $0) s0) ($$0) 1
+            prove ∀ y → ∈ $0 product t3 t4 ↔ ∈ orderedPair $$$0 $0 t0 with (first $$$0 second $$$0 first $0 second $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 product t1 t2, ∀ y → ∈ $0 product t3 t4 ↔ ∈ orderedPair $$$0 $0 t0 with (first $$$0 second $$$0 first $0 second $0) s0) () 2.0.0.0.0.0.0 2.0.0a
+            prove → ∈ $0 product t3 t4 ↔ ∈ orderedPair $$0 $0 t0 with (first $$0 second $$0 first $0 second $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 product t3 t4 ↔ ∈ orderedPair $$0 $$$0 t0 with (first $$0 second $$0 first $$$0 second $$$0) s0) ($0) 2.0.0.0.0.0.1
+            prove ↔ ∈ orderedPair $$0 $0 t0 with (first $$0 second $$0 first $0 second $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 product t3 t4, ↔ ∈ orderedPair $$0 $0 t0 with (first $$0 second $$0 first $0 second $0) s0) () 2.0.0.0.0.0.2 2.0.0.0.0a
+          }
+          elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
+            elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
+              prove = $$0 orderedPair first $$0 second $$0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($$0, t1, t2) 2.0.0a
+              prove ↔ ∈ orderedPair orderedPair first $$0 second $$0 $0 t0 with (first $$0 second $$0 first $0 second $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (↔ ∈ orderedPair $$$0 $0 t0 with (first $$0 second $$0 first $0 second $0) s0) ($$0, orderedPair first $$0 second $$0) 2.0.0.0.0.1.0.0 2.0.0.0.0.0
+            }
+            elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
+              prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t3, t4) 2.0.0.0.0a
+              prove ↔ ∈ orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 t0 with (first $$0 second $$0 first $0 second $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (↔ ∈ orderedPair orderedPair first $$0 second $$0 $$$0 t0 with (first $$0 second $$0 first $0 second $0) s0) ($0, orderedPair first $0 second $0) 2.0.0.0.0.1.1.0 2.0.0.0.0.1.0
+            }
+          }
+        }
+      }
+    }
+  }
+}
+elided c77bb73bca1f02d6d38280eab9fda22237ae20b85ed00393014b5566bfb5948b {
+  take x {
+    assume ∈ $0 product t1 t2 {
+      elided (Extracted) {
+        prove → ∈ $0 product t1 t2 ∀ y → ∈ $0 product t3 t4 ↔ ∈ orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 t0 with (first $$0 second $$0 first $0 second $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 product t1 t2 ∀ y → ∈ $0 product t3 t4 ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair first $0 second $0 t0 with (first $$$0 second $$$0 first $0 second $0) s0) ($0) 2
+        prove ∀ y → ∈ $0 product t3 t4 ↔ ∈ orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 t0 with (first $$0 second $$0 first $0 second $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 product t1 t2, ∀ y → ∈ $0 product t3 t4 ↔ ∈ orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 t0 with (first $$0 second $$0 first $0 second $0) s0) () 3.0.0.0.0 3.0.0a
+      }
+      elided c77bb73bca1f02d6d38280eab9fda22237ae20b85ed00393014b5566bfb5948b {
+        prove ↔ ∀ x → ∈ $0 product t3 t4 ↔ ∈ orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 t0 with (first $$0 second $$0 first $0 second $0) s0 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 t0 with (first $$$0 second $$$0 $$0 $0) s0 c77bb73bca1f02d6d38280eab9fda22237ae20b85ed00393014b5566bfb5948b (↔ ∈ orderedPair orderedPair first $0 second $0 orderedPair $$0 $$1 t0 with (first $0 second $0 $$0 $$1) s0) (t3, t4)
+        prove → ∀ x → ∈ $0 product t3 t4 ↔ ∈ orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 t0 with (first $$0 second $$0 first $0 second $0) s0 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 t0 with (first $$$0 second $$$0 $$0 $0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∀ x → ∈ $0 product t3 t4 ↔ ∈ orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 t0 with (first $$0 second $$0 first $0 second $0) s0, ∀ a → ∈ $0 t3 ∀ b → ∈ $0 t4 ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 t0 with (first $$$0 second $$$0 $$0 $0) s0) () 3.0.0.1.0
+        prove ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 t0 with (first $$$0 second $$$0 $$0 $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∀ x → ∈ $0 product t3 t4 ↔ ∈ orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 t0 with (first $$0 second $$0 first $0 second $0) s0, ∀ a → ∈ $0 t3 ∀ b → ∈ $0 t4 ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 t0 with (first $$$0 second $$$0 $$0 $0) s0) () 3.0.0.1.1 3.0.0.0
+      }
+    }
+  }
+}
+elided c77bb73bca1f02d6d38280eab9fda22237ae20b85ed00393014b5566bfb5948b {
+  prove ↔ ∀ x → ∈ $0 product t1 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 t0 with (first $$$0 second $$$0 $$0 $0) s0 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 t0 with ($$$$0 $$$0 $$0 $0) s0 c77bb73bca1f02d6d38280eab9fda22237ae20b85ed00393014b5566bfb5948b (∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair $$$0 $$$1 orderedPair $$0 $0 t0 with ($$$0 $$$1 $$0 $0) s0) (t1, t2)
+  prove → ∀ x → ∈ $0 product t1 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 t0 with (first $$$0 second $$$0 $$0 $0) s0 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 t0 with ($$$$0 $$$0 $$0 $0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∀ x → ∈ $0 product t1 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 t0 with (first $$$0 second $$$0 $$0 $0) s0, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 t0 with ($$$$0 $$$0 $$0 $0) s0) () 4.0
+  prove ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 t0 with ($$$$0 $$$0 $$0 $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∀ x → ∈ $0 product t1 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair first $$$0 second $$$0 orderedPair $$0 $0 t0 with (first $$$0 second $$$0 $$0 $0) s0, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t3 ∀ d → ∈ $0 t4 ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 t0 with ($$$$0 $$$0 $$0 $0) s0) () 4.1 3
+}

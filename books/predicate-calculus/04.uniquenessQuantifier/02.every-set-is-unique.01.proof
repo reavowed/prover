@@ -1,0 +1,12 @@
+prove ∃ x = $0 t0 de7d43f826cdb2f5dca088f82e26c2c2da96c6b591905920625cbb14c4189f91 () (t0)
+take x {
+  take y {
+    assume ∧ = $$0 t0 = $0 t0 {
+      prove = $$0 $0 b45f186b49b0f3a01f5bfa7a79bb1ee4bf1764d6c199d933392ebea7fd0641eb () ($$0, t0, $0) 1.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    }
+  }
+}
+elided 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 {
+  prove ∧ ∃ x = $0 t0 ∀ x ∀ y → ∧ = $$0 t0 = $0 t0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x = $0 t0, ∀ x ∀ y → ∧ = $$0 t0 = $0 t0 = $$0 $0) () 0 1
+  prove ∃! y = $0 t0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (= $0 t0) () 2.0
+}

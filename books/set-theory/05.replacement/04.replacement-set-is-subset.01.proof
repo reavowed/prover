@@ -1,0 +1,18 @@
+take b {
+  assume ∈ $0 t0 {
+    elided a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec {
+      prove ∀ s ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 with ($0) t2 a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec () (t0, t1, with ($$0) t2) p0
+      prove ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 with ($0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∃ a ∧ ∈ $0 t1 = $$$0 with ($0) t2) ($0) 0.0.0.0
+      prove → ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 with ($0) t2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 t0, ∃ a ∧ ∈ $0 t1 = $$0 with ($0) t2) () 0.0.0.1
+      prove ∃ a ∧ ∈ $0 t1 = $$0 with ($0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, ∃ a ∧ ∈ $0 t1 = $$0 with ($0) t2) () 0.0.0.2 0.0a
+    }
+    let a_b ∧ ∈ $0 t1 = $$0 with ($0) t2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 t1 = $0 with ($$0) t2, ∈ $0 t3) () {
+      elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+        prove → ∈ $0 t1 ∈ with ($0) t2 t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t1 ∈ with ($$$0) t2 t3) ($0) p1
+        prove ∈ with ($0) t2 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∈ with ($0) t2 t3) () 0.0.1.0.0 0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      }
+      prove ∈ $$0 t3 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$$0 t3) ($$0, with ($0) t2) 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.0.1.0
+    } 0.0.0
+  }
+}
+prove ⊆ t0 t3 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (t0, t3) 0

@@ -1,0 +1,124 @@
+We start by introducing our two fundamental connectives, → and ¬, and proving some basic facts about them.
+
+axiom Repetition
+statementVariables(φ 0)
+premise s0
+conclusion s0
+
+statement → (φ ψ)
+  shorthand (imp)
+  attributes (deduction)
+
+theorem Implication Is Reflexive
+statementVariables(φ 0)
+conclusion → s0 s0
+
+axiom Modus Ponens
+statementVariables(φ 0, ψ 0)
+premise → s0 s1
+premise s0
+conclusion s1
+
+theorem Implication Is Transitive
+statementVariables(φ 0, ψ 0, χ 0)
+premise → s0 s1
+premise → s1 s2
+conclusion → s0 s2
+
+statement ⊥ ()
+  shorthand (false)
+
+statement ¬ (φ)
+  definition (→ s0 ⊥)
+  shorthand (not)
+
+axiom Remove Double Negative
+statementVariables(φ 0)
+premise ¬ ¬ s0
+conclusion s0
+
+theorem Self-Contradiction
+statementVariables(φ 0)
+premise → ¬ s0 ⊥
+conclusion s0
+
+theorem Contradiction
+statementVariables(φ 0)
+premise s0
+premise ¬ s0
+conclusion ⊥
+
+theorem Principle of Explosion
+statementVariables(φ 0)
+premise ⊥
+conclusion s0
+
+theorem Principle of Explosion
+statementVariables(φ 0, ψ 0)
+premise s0
+premise ¬ s0
+conclusion s1
+
+theorem Add Double Negative
+statementVariables(φ 0)
+premise s0
+conclusion ¬ ¬ s0
+
+theorem Proof by Self-Contradiction
+statementVariables(φ 0)
+premise → s0 ¬ s0
+conclusion ¬ s0
+
+theorem Proof by Self-Contradiction
+statementVariables(φ 0)
+premise → ¬ s0 s0
+conclusion s0
+
+theorem Modus Tollens
+statementVariables(φ 0, ψ 0)
+premise → s0 s1
+premise ¬ s1
+conclusion ¬ s0
+
+theorem Modus Tollens
+statementVariables(φ 0, ψ 0)
+premise → s0 ¬ s1
+premise s1
+conclusion ¬ s0
+
+theorem Modus Tollens
+statementVariables(φ 0, ψ 0)
+premise → ¬ s0 s1
+premise ¬ s1
+conclusion s0
+
+theorem Proof by Exclusive Cases
+statementVariables(φ 0, ψ 0)
+premise → s0 s1
+premise → ¬ s0 s1
+conclusion s1
+
+theorem Anything Implies A True Statement
+statementVariables(φ 0, ψ 0)
+premise s0
+conclusion → s1 s0
+
+theorem A False Statement Implies Anything
+statementVariables(φ 0, ψ 0)
+premise ¬ s0
+conclusion → s0 s1
+
+theorem A False Statement Implies Anything
+statementVariables(φ 0, ψ 0)
+premise s0
+conclusion → ¬ s0 s1
+
+theorem Add Contraposition
+statementVariables(φ 0, ψ 0)
+premise → s0 s1
+conclusion → ¬ s1 ¬ s0
+
+theorem Remove Contraposition
+statementVariables(φ 0, ψ 0)
+premise → ¬ s0 ¬ s1
+conclusion → s1 s0

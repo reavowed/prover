@@ -1,0 +1,4 @@
+assume = t0 t1 {
+  prove with (t1) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0) s0) (t0, t1) 0a p0
+}
+prove ¬ = t0 t1 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= t0 t1, with (t1) s0) () 0 p1

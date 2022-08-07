@@ -1,0 +1,3 @@
+assume ∨ s0 s2 {
+  prove s1 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (s0, s2, s1) () 0a p0 p1
+}

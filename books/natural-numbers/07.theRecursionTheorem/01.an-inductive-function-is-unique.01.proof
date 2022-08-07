@@ -1,0 +1,31 @@
+take f {
+  take g {
+    assume ∧ ∧ ∧ function $$0 functionFrom $$0 ℕ t0 ∧ = apply $$0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) t2 ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2 {
+      prove = apply $$0 0ℕ apply $0 0ℕ b45f186b49b0f3a01f5bfa7a79bb1ee4bf1764d6c199d933392ebea7fd0641eb () (apply $$0 0ℕ, t1, apply $0 0ℕ) 0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      take n {
+        assume ∈ $0 ℕ {
+          assume = apply $$$0 $0 apply $$0 $0 {
+            elided (Extracted) {
+              prove → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ = apply $$$0 successor $$$$0 with (apply $$$0 $$$$0) t2) ($0) 0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              prove = apply $$$0 successor $0 with (apply $$$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply $$$0 successor $0 with (apply $$$0 $0) t2) () 0.0.0.1.0.0.0.0 0.0.0.1.0a
+            }
+            prove = with (apply $$$0 $0) t2 with (apply $$0 $0) t2 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply $$$0 $0, apply $$0 $0, with ($$$$0) t2) 0.0.0.1.0.0a
+            prove = apply $$$0 successor $0 with (apply $$0 $0) t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply $$$0 successor $0, with (apply $$$0 $0) t2, with (apply $$0 $0) t2) 0.0.0.1.0.0.0 0.0.0.1.0.0.1
+            elided (Extracted) {
+              prove → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ = apply $$0 successor $$$$0 with (apply $$0 $$$$0) t2) ($0) 0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              prove = apply $$0 successor $0 with (apply $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply $$0 successor $0 with (apply $$0 $0) t2) () 0.0.0.1.0.0.3.0 0.0.0.1.0a
+              prove = with (apply $$0 $0) t2 apply $$0 successor $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply $$0 successor $0, with (apply $$0 $0) t2) 0.0.0.1.0.0.3.1
+            }
+            prove = apply $$$0 successor $0 apply $$0 successor $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply $$$0 successor $0, with (apply $$0 $0) t2, apply $$0 successor $0) 0.0.0.1.0.0.2 0.0.0.1.0.0.3
+          }
+        }
+      }
+      prove ∀ n → ∈ $0 ℕ = apply $$$0 $0 apply $$0 $0 19929f12c2d837743d530233061fddca190c574115ac9b3835bea89d29e3e4d7 (= apply $$0 $$$0 apply $0 $$$0) () 0.0.0.0 0.0.0.1
+      prove = $$0 $0 d062dc18912b8cffa422e3e7fc85cd6f2f4146355f0ba48999b4e1cc1a2cd96b () ($$0, ℕ, t0, $0) 0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0.2
+    }
+  }
+}
+elided 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 {
+  prove ∧ ∃ f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2 ∀ f ∀ g → ∧ ∧ ∧ function $$0 functionFrom $$0 ℕ t0 ∧ = apply $$0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) t2 ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2, ∀ f ∀ g → ∧ ∧ ∧ function $$0 functionFrom $$0 ℕ t0 ∧ = apply $$0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 with (apply $$$0 $0) t2 ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2 = $$0 $0) () p0 0
+  prove ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2) () 1.0
+}

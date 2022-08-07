@@ -1,0 +1,10 @@
+prove ⊆ t0 ℕ 34a7f76ed080afa14ba8e71d62dede990465b606d025c97cf6715b36125808cf () (t0) p0
+elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+  prove ↔ ∧ function t1 functionFrom t1 t0 t2 ∧ ⊆ t1 product t0 t2 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (t1, t0, t2)
+  prove → ∧ function t1 functionFrom t1 t0 t2 ∧ ⊆ t1 product t0 t2 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ function t1 functionFrom t1 t0 t2, ∧ ⊆ t1 product t0 t2 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1) () 1.0
+  prove ∧ ⊆ t1 product t0 t2 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ function t1 functionFrom t1 t0 t2, ∧ ⊆ t1 product t0 t2 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1) () 1.1 p1
+  prove ⊆ t1 product t0 t2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (⊆ t1 product t0 t2, ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1) () 1.2
+}
+prove ⊆ product t0 t2 product ℕ t2 942e113ffe8b203087c545dc81ac730c31f4b614a8b18460935dd068898a26d7 () (t0, ℕ, t2) 0
+prove ⊆ t1 product ℕ t2 7ec7cabe50f4cb7fe84fa2c0e6493db48f8e0755d65caca1d3eb447796ab3687 () (t1, product t0 t2, product ℕ t2) 1 2
+prove ∈ t1 powerSet product ℕ t2 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (t1, product ℕ t2) 3

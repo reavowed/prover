@@ -1,0 +1,25 @@
+elided 8d2b899ed603dcfd1ad54dbd945fd05dea4f3a61e470882b0b15f64f78e65d33 {
+  prove wellOrder ≤ℕ ℕ 8d2b899ed603dcfd1ad54dbd945fd05dea4f3a61e470882b0b15f64f78e65d33 () ()
+  prove ∧ totalOrder ≤ℕ ℕ ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℕ 9f51581e6b04082a59aca422f1b4ffb8e8933acedcd0a5d5cca63d97dcd83259 () (≤ℕ, ℕ) 0.0
+  prove ∧ ∧ ∧ relation ≤ℕ ℕ antisymmetricRelation ≤ℕ ℕ transitiveRelation ≤ℕ ℕ completeRelation ≤ℕ ℕ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℕ, ℕ) 0.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+  prove ⊆ ≤ℕ product ℕ ℕ e3a7e3f727ccfe95728f3df8bab36dc71f8f578c1df1cabdf75f51ddfe4baaa2 () (≤ℕ, ℕ) 0.2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+}
+prove ∈ orderedPair t1 t2 product ℕ ℕ f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (≤ℕ, product ℕ ℕ, orderedPair t1 t2) 0 p1
+prove ∈ t1 ℕ d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () (t1, t2, ℕ, ℕ) 1
+prove ∈ t2 ℕ 6cd156e422d6cfba504e0632433c59f2eac64b90aec16bce29bd31ef9780c1dc () (t1, t2, ℕ, ℕ) 1
+elided 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 {
+  prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 () ()
+  prove → ∈ t1 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t1 $0 ≤ℕ ∨ ∈ orderedPair t1 $0 <ℕ = t1 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0) (t1) 4.0
+  prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t1 $0 ≤ℕ ∨ ∈ orderedPair t1 $0 <ℕ = t1 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t1 $0 ≤ℕ ∨ ∈ orderedPair t1 $0 <ℕ = t1 $0) () 4.1 2
+  prove → ∈ t2 ℕ ↔ ∈ orderedPair t1 t2 ≤ℕ ∨ ∈ orderedPair t1 t2 <ℕ = t1 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ↔ ∈ orderedPair t1 $0 ≤ℕ ∨ ∈ orderedPair t1 $0 <ℕ = t1 $0) (t2) 4.2
+  prove ↔ ∈ orderedPair t1 t2 ≤ℕ ∨ ∈ orderedPair t1 t2 <ℕ = t1 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t2 ℕ, ↔ ∈ orderedPair t1 t2 ≤ℕ ∨ ∈ orderedPair t1 t2 <ℕ = t1 t2) () 4.3 3
+  prove → ∈ orderedPair t1 t2 ≤ℕ ∨ ∈ orderedPair t1 t2 <ℕ = t1 t2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t1 t2 ≤ℕ, ∨ ∈ orderedPair t1 t2 <ℕ = t1 t2) () 4.4
+  prove ∨ ∈ orderedPair t1 t2 <ℕ = t1 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t1 t2 ≤ℕ, ∨ ∈ orderedPair t1 t2 <ℕ = t1 t2) () 4.5 p1
+}
+assume ∈ orderedPair t1 t2 <ℕ {
+  prove ∈ orderedPair t0 t2 <ℕ 1f7bb894b49d0cb9296bcce3d3321d832f8c11b832e53955c1976ca28a712ac7 () (t0, t1, t2) p0 5a
+}
+assume = t1 t2 {
+  prove ∈ orderedPair t0 t2 <ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair t0 $0 <ℕ) (t1, t2) 6a p0
+}
+prove ∈ orderedPair t0 t2 <ℕ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair t1 t2 <ℕ, = t1 t2, ∈ orderedPair t0 t2 <ℕ) () 4 5 6

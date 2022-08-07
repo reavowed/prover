@@ -1,0 +1,24 @@
+Define the successor pseudo-function which will form the basis of our inductive definition of the natural numbers.
+
+term successor (n)
+  name (a Successor)
+  format (n^+)
+  (= $0 ∪ t0 singleton t0)
+
+theorem Membership Condition for Successor
+conclusion ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0
+
+theorem A Set Is an Element of Its Successor
+termVariables(n 0)
+conclusion ∈ t0 successor t0
+
+theorem A Set Is a Subset of Its Successor
+termVariables(n 0)
+conclusion ⊆ t0 successor t0
+
+theorem Successors Are Unique
+conclusion ∀ n ∀ m ↔ = successor $$0 successor $0 = $$0 $0
+
+theorem Nothing Equals Its Successor
+termVariables(n 0)
+conclusion ¬ = t0 successor t0

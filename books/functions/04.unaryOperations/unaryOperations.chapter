@@ -1,0 +1,12 @@
+An unary operation is a function that acts from a set to itself.
+
+type unaryOperation f
+  name (unary operation)
+  definition (∧ function t0 functionFrom t0 domain t0 domain t0)
+
+qualifier on on unaryOperation (A) (on A)
+  definition (= domain t0 t1)
+
+theorem Alternative Definition for Unary Operation on a Set
+termVariables(f 0, A 0)
+conclusion ↔ ∧ unaryOperation t0 unaryOperationOn t0 t1 ∧ function t0 functionFrom t0 t1 t1

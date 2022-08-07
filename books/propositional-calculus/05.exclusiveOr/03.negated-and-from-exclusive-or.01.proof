@@ -1,0 +1,7 @@
+prove ∨ ∧ s0 ¬ s1 ∧ ¬ s0 s1 81b22df3035dce0e7af5fe394d287b900db7fa29286c56f48181b29c3ee386ae (s0, s1) () p0
+assume ∧ s0 s1 {
+  prove ¬ ∧ s0 ¬ s1 0f312eeeb0f79b141e3a829eac8b55b2e382769bcb7eb6b84d1d2613604d5c46 (s1, s0) () 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+  prove ¬ ∧ ¬ s0 s1 971282e53080aaa84e257f3b794959be786ac98eb5fc51e58181a8c19ac87ee1 (s0, s1) () 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+  prove ¬ ∨ ∧ s0 ¬ s1 ∧ ¬ s0 s1 403c99556d1d944b1441d404e264b68e20dc4c3e62bd7024cccd76ca6bd875bc (∧ s0 ¬ s1, ∧ ¬ s0 s1) () 1.0 1.1
+}
+prove ¬ ∧ s0 s1 c6b6030434c95c400a4957ceb07ae21ea196cdb331dff0f66919e9330fb24450 (∧ s0 s1, ∨ ∧ s0 ¬ s1 ∧ ¬ s0 s1) () 1 0

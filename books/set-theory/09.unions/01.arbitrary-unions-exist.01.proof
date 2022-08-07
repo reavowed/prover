@@ -1,0 +1,2 @@
+prove ∃ x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 t0 ∈ $$0 $0 bef857e738847c40cf8dd62977f3478691bef60ff42e9af532e2cda001c6539e () (t0)
+prove ∃! x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 t0 ∈ $$0 $0 288a339c30f6b561d0a86d8a4ad51c2acccaa964cc586fd001f47dde466ba92c (∃ z ∧ ∈ $0 t0 ∈ $$0 $0) () 0

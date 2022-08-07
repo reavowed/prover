@@ -1,0 +1,5 @@
+prove ∀ n → ∈ $0 ℕ with ($0) s0 19929f12c2d837743d530233061fddca190c574115ac9b3835bea89d29e3e4d7 (with ($0) s0) () p0 p1
+elided (Extracted) {
+  prove → ∈ t0 ℕ with (t0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ with ($0) s0) (t0) 0
+  prove with (t0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, with (t0) s0) () 1.0 p2
+}

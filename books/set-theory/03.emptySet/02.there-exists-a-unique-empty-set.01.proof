@@ -1,0 +1,12 @@
+prove ∃ X ∀ x ¬ ∈ $0 $$0 8cb461b548b624327fb06349cc783dcfe8c32d8a0e06ed3cec2f7283c17ad309 () ()
+take X {
+  take Y {
+    assume ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 {
+      prove = $$0 $0 002d253a32387e62557a7218443e6f126984b4f8d35e578f6665e1f6bb55ebe6 () ($$0, $0) 1.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    }
+  }
+}
+elided 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 {
+  prove ∧ ∃ x ∀ x ¬ ∈ $0 $$0 ∀ x ∀ y → ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x ∀ x ¬ ∈ $0 $$0, ∀ x ∀ y → ∧ ∀ x ¬ ∈ $0 $$$0 ∀ x ¬ ∈ $0 $$0 = $$0 $0) () 0 1
+  prove ∃! X ∀ x ¬ ∈ $0 $$0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∀ x ¬ ∈ $0 $$0) () 2.0
+}

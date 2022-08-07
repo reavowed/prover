@@ -1,0 +1,41 @@
+Proof by induction.
+
+theorem ℕ Is a Subset of Any Inductive Set
+termVariables(S 0)
+premise inductive t0
+conclusion ⊆ ℕ t0
+
+theorem An Inductive Subset of ℕ Is ℕ
+termVariables(S 0)
+premise ⊆ t0 ℕ
+premise inductive t0
+conclusion = t0 ℕ
+
+theorem Proof by Induction
+termVariables(S 0)
+premise ⊆ t0 ℕ
+premise ∈ 0ℕ t0
+premise ∀ n → ∈ $0 t0 ∈ successor $0 t0
+conclusion = t0 ℕ
+
+theorem Proof by Induction over Comprehension
+statementVariables(φ 1)
+termVariables(S 0)
+premise = t0 comprehension n ℕ with ($0) s0
+premise ∈ 0ℕ t0
+premise ∀ n → ∈ $0 t0 ∈ successor $0 t0
+conclusion = t0 ℕ
+
+theorem Proof by Induction on Property
+statementVariables(φ 1)
+premise with (0ℕ) s0
+premise ∀ n → ∈ $0 ℕ → with ($0) s0 with (successor $0) s0
+conclusion ∀ n → ∈ $0 ℕ with ($0) s0
+
+theorem An Inductive Property Applies to Any Natural Number
+statementVariables(φ 1)
+termVariables(n 0)
+premise with (0ℕ) s0
+premise ∀ n → ∈ $0 ℕ → with ($0) s0 with (successor $0) s0
+premise ∈ t0 ℕ
+conclusion with (t0) s0
