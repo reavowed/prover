@@ -1,0 +1,28 @@
+prove = domain t2 comprehension a union union t2 ∃ b ∈ orderedPair $$0 $0 t2 4186f8707db1f2ca1e4bd5932d08070b74f53eb3890a58ab44d0100457e2c4c7 () (t2)
+prove = codomain t2 comprehension b union union t2 ∃ a ∈ orderedPair $0 $$0 t2 9e67beca6b16a63bad776aa0c81f01a6a3df4e9bace0478e3b94b529431b22cb () (t2)
+prove ∧ ∈ t0 union union t2 ∈ t1 union union t2 d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 () (t0, t1, t2) p0
+elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+  prove ∃ b ∈ orderedPair t0 $0 t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair t0 $0 t2) (t1) p0
+  elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+    prove ∧ ∈ t0 union union t2 ∃ b ∈ orderedPair t0 $0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 union union t2, ∃ b ∈ orderedPair t0 $0 t2) () 2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 3.0
+    elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+      prove ∀ y ↔ ∈ $0 domain t2 ∧ ∈ $0 union union t2 ∃ b ∈ orderedPair $$0 $0 t2 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ b ∈ orderedPair $$0 $0 t2) (domain t2, union union t2) 0
+      prove ↔ ∈ t0 domain t2 ∧ ∈ t0 union union t2 ∃ b ∈ orderedPair t0 $0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 domain t2 ∧ ∈ $0 union union t2 ∃ b ∈ orderedPair $$0 $0 t2) (t0) 3.1.1.0
+      prove → ∧ ∈ t0 union union t2 ∃ b ∈ orderedPair t0 $0 t2 ∈ t0 domain t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 domain t2, ∧ ∈ t0 union union t2 ∃ b ∈ orderedPair t0 $0 t2) () 3.1.1.1
+      prove ∈ t0 domain t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ t0 union union t2 ∃ b ∈ orderedPair t0 $0 t2, ∈ t0 domain t2) () 3.1.1.2 3.1.0
+    }
+  }
+}
+elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+  prove ∃ a ∈ orderedPair $0 t1 t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair $0 t1 t2) (t0) p0
+  elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+    prove ∧ ∈ t1 union union t2 ∃ a ∈ orderedPair $0 t1 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t1 union union t2, ∃ a ∈ orderedPair $0 t1 t2) () 2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 4.0
+    elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+      prove ∀ y ↔ ∈ $0 codomain t2 ∧ ∈ $0 union union t2 ∃ a ∈ orderedPair $0 $$0 t2 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ a ∈ orderedPair $0 $$0 t2) (codomain t2, union union t2) 1
+      prove ↔ ∈ t1 codomain t2 ∧ ∈ t1 union union t2 ∃ a ∈ orderedPair $0 t1 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 codomain t2 ∧ ∈ $0 union union t2 ∃ a ∈ orderedPair $0 $$0 t2) (t1) 4.1.1.0
+      prove → ∧ ∈ t1 union union t2 ∃ a ∈ orderedPair $0 t1 t2 ∈ t1 codomain t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t1 codomain t2, ∧ ∈ t1 union union t2 ∃ a ∈ orderedPair $0 t1 t2) () 4.1.1.1
+      prove ∈ t1 codomain t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ t1 union union t2 ∃ a ∈ orderedPair $0 t1 t2, ∈ t1 codomain t2) () 4.1.1.2 4.1.0
+    }
+  }
+}
+prove ∧ ∈ t0 domain t2 ∈ t1 codomain t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 domain t2, ∈ t1 codomain t2) () 3 4

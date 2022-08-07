@@ -1,0 +1,7 @@
+take x {
+  assume ∈ $0 t0 {
+    prove ∈ $0 t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t0, t1, $0) p0 0.0a
+    prove ∈ $0 ∪ t1 t2 33f2017abf1119244d3e5afed3c492684b656c592fb65d4f2afa6ca2ff732db8 () ($0, t1, t2) 0.0.0
+  }
+}
+prove ⊆ t0 ∪ t1 t2 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (t0, ∪ t1 t2) 0

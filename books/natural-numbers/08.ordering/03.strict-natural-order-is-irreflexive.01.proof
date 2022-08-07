@@ -1,0 +1,6 @@
+elided 3a892325f069a905737f5f700d91ff187d047c348fcb1605168bbd0a24a248d0 {
+  prove strictTotalOrder <ℕ ℕ 3a892325f069a905737f5f700d91ff187d047c348fcb1605168bbd0a24a248d0 () ()
+  prove ∧ ∧ ∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ transitiveRelation <ℕ ℕ semicompleteRelation <ℕ ℕ 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (<ℕ, ℕ) 0.0
+}
+prove irreflexiveRelation <ℕ ℕ 57b622edd9f88231c66bf022119233a15d2e1eef5298968c8babb7f56a9ea26d () (<ℕ, ℕ) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+prove ∧ relation <ℕ ℕ irreflexiveRelation <ℕ ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation <ℕ ℕ, irreflexiveRelation <ℕ ℕ) () 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1

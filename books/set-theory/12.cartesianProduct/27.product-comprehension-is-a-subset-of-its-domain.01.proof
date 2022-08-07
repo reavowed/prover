@@ -1,0 +1,5 @@
+elided 4f7f4ef78054a5eb2b0078044ef866570f9856509ab0e937785f5b77c533826a {
+  prove = productComprehension a b t1 with ($0 $1) s0 comprehension x t1 with (first $0 second $0) s0 4f7f4ef78054a5eb2b0078044ef866570f9856509ab0e937785f5b77c533826a (with ($0 $1) s0) (t1)
+  prove = t0 comprehension x t1 with (first $0 second $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (productComprehension a b t1 with ($0 $1) s0, comprehension x t1 with (first $0 second $0) s0) 0.0 p0
+}
+prove ⊆ t0 t1 a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (with (first $0 second $0) s0) (t0, t1) 0

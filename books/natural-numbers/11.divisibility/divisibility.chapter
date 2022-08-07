@@ -1,0 +1,99 @@
+Define what it means for one natural number to be divisible by another, even in the absence of a full division function.
+
+term | ()
+  disambiguator ℕ
+  (= $0 productComprehension a b product ℕ ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair $$0 $0 $$1)
+  shorthand (|N)
+  attributes (infix-relation)
+
+write ∈ orderedPair a b |ℕ as divN
+
+theorem Natural Divisibility Is a Relation
+conclusion relation |ℕ ℕ
+
+theorem Component Membership Condition for Natural Divisibility
+conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 |ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair $$$0 $0 $$0
+
+theorem 1 Divides Every Natural Number
+termVariables(a 0)
+premise ∈ t0 ℕ
+conclusion ∈ orderedPair 1ℕ t0 |ℕ
+
+theorem Every Natural Divides Itself
+termVariables(a 0)
+premise ∈ t0 ℕ
+conclusion ∈ orderedPair t0 t0 |ℕ
+
+theorem Every Natural Divides Zero
+termVariables(a 0)
+premise ∈ t0 ℕ
+conclusion ∈ orderedPair t0 0ℕ |ℕ
+
+theorem Non-Dividend Is Non-Zero
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ¬ ∈ orderedPair t0 t1 |ℕ
+conclusion ¬ = t1 0ℕ
+
+theorem Divisors of Non-Zero Naturals Are Smaller than It
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ orderedPair t0 t1 |ℕ
+premise ∈ orderedPair 0ℕ t1 <ℕ
+conclusion ∧ ∈ orderedPair 1ℕ t0 ≤ℕ ∈ orderedPair t0 t1 ≤ℕ
+
+theorem Divisibility of Product of Naturals
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+premise ∨ ∈ orderedPair t0 t1 |ℕ ∈ orderedPair t0 t2 |ℕ
+conclusion ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ
+
+theorem Euclidean Division for Naturals
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ orderedPair 0ℕ t1 <ℕ
+conclusion ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = t0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0 ∈ orderedPair $0 t1 <ℕ
+
+comment Define the greatest common divisor of two naturals.
+
+theorem Existence of Greatest Common Divisor for Naturals
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∨ ∈ orderedPair 0ℕ t0 <ℕ ∈ orderedPair 0ℕ t1 <ℕ
+conclusion ∃! c ∧ ∈ $0 ℕ ∧ ∈ orderedPair 0ℕ $0 <ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∧ ∈ orderedPair $0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ
+
+term gcd (a b)
+  disambiguator ℕ
+  name (Greatest Common Divisor of Naturals)
+  format (%0(a, b)) no-component-brackets
+  premises (∈ t0 ℕ, ∈ t1 ℕ, ∨ ∈ orderedPair 0ℕ t0 <ℕ ∈ orderedPair 0ℕ t1 <ℕ)
+  (∧ ∈ $0 ℕ ∧ ∈ orderedPair 0ℕ $0 <ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∧ ∈ orderedPair $0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ)
+  shorthand (gcdN)
+
+comment Prime numbers.
+
+standaloneProperty prime a
+  definition (∧ ∈ t0 ℕ ∧ ∈ orderedPair 1ℕ t0 <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 t0 |ℕ ∨ = $0 1ℕ = $0 t0)
+
+theorem 0 Is Not Prime
+conclusion ¬ prime 0ℕ
+
+theorem 1 Is Not Prime
+conclusion ¬ prime 1ℕ
+
+theorem 2 is prime
+conclusion prime 2ℕ
+
+theorem Prime Is Coprime to Non-Dividend
+termVariables(p 0, a 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise prime t0
+premise ¬ ∈ orderedPair t0 t1 |ℕ
+conclusion = gcdℕ t0 t1 1ℕ

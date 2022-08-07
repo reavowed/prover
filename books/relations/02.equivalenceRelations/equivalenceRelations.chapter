@@ -1,0 +1,81 @@
+Define equivalence relations and their quotients.
+
+type equivalenceRelation ≈
+  qualifier (A) (on A)
+  name (equivalence relation)
+  definition (∧ ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 transitiveRelation t0 t1)
+
+theorem Domain and Codomain of Equivalence Relation
+termVariables(≈ 0, A 0)
+premise equivalenceRelation t0 t1
+conclusion ∧ = domain t0 t1 = codomain t0 t1
+
+term equivalenceClass (a ≈)
+  name (Equivalence Class)
+  format ([a]_≈)
+  (= $0 comprehension x domain t1 ∈ orderedPair t0 $0 t1)
+  shorthand (ec)
+
+term equivalenceQuotient (A ≈)
+  name (Quotient)
+  format (A/≈) requires-brackets
+  premises (equivalenceRelation t1 t0)
+  (= $0 replacementSet a t0 equivalenceClass $0 t1)
+  shorthand (eq)
+
+theorem Equivalence Class Is Element of Quotient
+termVariables(≈ 0, A 0, a 0)
+premise equivalenceRelation t0 t1
+premise ∈ t2 t1
+conclusion ∈ equivalenceClass t2 t0 equivalenceQuotient t1 t0
+
+theorem Element of Quotient Is Equivalence Class
+termVariables(≈ 0, A 0, x 0)
+premise equivalenceRelation t0 t1
+premise ∈ t2 equivalenceQuotient t1 t0
+conclusion ∃ a ∧ ∈ $0 t1 = t2 equivalenceClass $0 t0
+
+theorem Element of Own Equivalence Class
+termVariables(≈ 0, A 0, a 0)
+premise equivalenceRelation t0 t1
+premise ∈ t2 t1
+conclusion ∈ t2 equivalenceClass t2 t0
+
+theorem Element Condition for Equivalence Class
+termVariables(≈ 0, A 0, a 0, b 0)
+premise equivalenceRelation t0 t1
+premise ∈ t2 t1
+premise ∈ t3 t1
+conclusion ↔ ∈ t3 equivalenceClass t2 t0 ∈ orderedPair t2 t3 t0
+
+theorem Equality Condition for Equivalence Classes
+termVariables(≈ 0, A 0, a 0, b 0)
+premise equivalenceRelation t0 t1
+premise ∈ t2 t1
+premise ∈ t3 t1
+conclusion ↔ = equivalenceClass t2 t0 equivalenceClass t3 t0 ∈ orderedPair t2 t3 t0
+
+comment If a function on a set is constant on the equivalence classes of a relation on that set, we can lift the function to one on the quotient.
+
+theorem Lift Function to Quotient
+termVariables(≈ 0, A 0, f 0, B 0)
+premise equivalenceRelation t0 t1
+premise ∧ function t2 functionFrom t2 t1 t3
+premise ∀ x → ∈ $0 t1 ∀ y → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 = apply t2 $$0 apply t2 $0
+conclusion ∃! g ∧ ∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3 ∀ a → ∈ $0 t1 = apply $$0 equivalenceClass $0 t0 apply t2 $0
+
+term quotientFunction (f A B ≈)
+  name (quotient function)
+  format (f/≈) requires-brackets
+  premises (equivalenceRelation t3 t1, ∧ function t0 functionFrom t0 t1 t2, ∀ x → ∈ $0 t1 ∀ y → ∈ $0 t1 → ∈ orderedPair $$0 $0 t3 = apply t0 $$0 apply t0 $0)
+  (∧ ∧ function $0 functionFrom $0 equivalenceQuotient t1 t3 t2 ∀ a → ∈ $0 t1 = apply $$0 equivalenceClass $0 t3 apply t0 $0)
+
+theorem Existence of Relation on Product Quotient
+statementVariables(φ 4)
+termVariables(≈ 0, A 0, B 0, C 0, D 0)
+premise equivalenceRelation t0 product t1 t2
+premise ⊆ t3 t1
+premise ⊆ t4 t2
+premise ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 t0
+premise ∀ c_1 → ∈ $0 t3 ∀ d_1 → ∈ $0 t4 ∀ c_2 → ∈ $0 t3 ∀ d_2 → ∈ $0 t4 ∀ c_3 → ∈ $0 t3 ∀ d_3 → ∈ $0 t4 ∀ c_4 → ∈ $0 t3 ∀ d_4 → ∈ $0 t4 → ∧ ∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 t0 ∈ orderedPair orderedPair $$$$$$0 $$$$$0 orderedPair $$0 $0 t0 → with ($$$$$$$$0 $$$$$$$0 $$$$$$0 $$$$$0) s0 with ($$$$0 $$$0 $$0 $0) s0
+conclusion ∃! R ∧ relation $0 equivalenceQuotient product t1 t2 t0 ∀ c_1 → ∈ $0 t3 ∀ d_1 → ∈ $0 t4 ∀ c_2 → ∈ $0 t3 ∀ d_2 → ∈ $0 t4 ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 t0 equivalenceClass orderedPair $$0 $0 t0 $$$$$0 with ($$$$0 $$$0 $$0 $0) s0

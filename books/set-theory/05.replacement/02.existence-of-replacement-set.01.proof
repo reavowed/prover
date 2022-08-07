@@ -1,0 +1,6 @@
+take a {
+  assume ∈ $0 t0 {
+    prove ∃! b = $0 with ($$0) t1 8bd430aa127bd6eb6ab68bdc4b82882686238ffa92fc641c4ddb1f14b418aa1f () (with ($0) t1)
+  }
+}
+prove ∃! B ∀ b ↔ ∈ $0 $$0 ∃ a ∧ ∈ $0 t0 = $$0 with ($0) t1 b9824fd6f00092a866dd6293c23a983e93e0ddf13a433df477ab83cd6fbf83fa (= $1 with ($0) t1) (t0) 0

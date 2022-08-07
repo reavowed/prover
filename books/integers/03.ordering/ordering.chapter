@@ -1,0 +1,97 @@
+The standard ordering on the integers.
+
+theorem Existence of Strict Integer Order
+conclusion ∃! ~ ∧ relation $0 ℤ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ $$$$$0 ∈ orderedPair apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 <ℕ
+
+term < ()
+  disambiguator ℤ
+  (∧ relation $0 ℤ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ $$$$$0 ∈ orderedPair apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 <ℕ)
+  shorthand (<Z)
+  attributes (infix-relation)
+
+theorem Strict Integer Order Is a Strict Total Order
+conclusion strictTotalOrder <ℤ ℤ
+
+theorem Strict Integer Order Is Transitive
+termVariables(a 0, b 0, c 0)
+premise ∈ orderedPair t0 t1 <ℤ
+premise ∈ orderedPair t1 t2 <ℤ
+conclusion ∈ orderedPair t0 t2 <ℤ
+
+theorem Strict Integer Order Is Irreflexive
+conclusion irreflexiveRelation <ℤ ℤ
+
+theorem Natural Embedding Preserves Strict Order
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ↔ ∈ orderedPair t0 t1 <ℕ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ
+
+comment Define the set of positive integers.
+
+term ℤ^+ ()
+  (= $0 comprehension a ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ)
+  shorthand (Z+)
+
+theorem Membership Condition for ℤ^+
+conclusion ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ
+
+comment Extend the strict ordering on ℤ to the non-strict ordering.
+
+term ≤ ()
+  disambiguator ℤ
+  (= $0 productComprehension a b product ℤ ℤ ∨ ∈ orderedPair $0 $1 <ℤ = $0 $1)
+  shorthand (leZ)
+  attributes (infix-relation)
+
+theorem Membership Condition for Non-Strict Integer Order
+conclusion ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0
+
+theorem Equivalence Class Membership Condition for Non-Strict Integer Order
+conclusion ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ ∈ orderedPair apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ
+
+theorem Non-Strict Integer Order Is a Total Order
+conclusion totalOrder ≤ℤ ℤ
+
+theorem Non-Strict Integer Order Is Transitive
+termVariables(a 0, b 0, c 0)
+premise ∈ orderedPair t0 t1 ≤ℤ
+premise ∈ orderedPair t1 t2 ≤ℤ
+conclusion ∈ orderedPair t0 t2 ≤ℤ
+
+theorem Non-Strict Integer Order Is Reflexive
+conclusion reflexiveRelation ≤ℤ ℤ
+
+theorem Natural Embedding into Integers Preserves Non-Strict Order
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ↔ ∈ orderedPair t0 t1 ≤ℕ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ
+
+theorem Two Integers Are Either Strictly Ordered Or Non-Strictly Ordered
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion ∧ ⊕ ∈ orderedPair t0 t1 <ℤ ∈ orderedPair t1 t0 ≤ℤ ⊕ ∈ orderedPair t0 t1 ≤ℤ ∈ orderedPair t1 t0 <ℤ
+
+comment Define the non-negative integers.
+
+term ℤ^≥0 ()
+  name (Non-Negative Integers)
+  (= $0 comprehension a ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ)
+  shorthand (Znn)
+
+theorem Membership Condition for ℤ^≥0
+conclusion ∀ a ↔ ∈ $0 ℤ^≥0 ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ
+
+theorem Codomain of ⍳_ℤ Is the Non-Negative Integers
+conclusion = codomain ⍳_ℤ ℤ^≥0
+
+theorem ⍳_ℤ Bijects ℕ with ℤ^≥0
+conclusion ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0
+
+theorem Non-Negative Integer Has a Corresponding Natural
+termVariables(a 0)
+premise ∈ t0 ℤ
+premise ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ
+conclusion ∃! n ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0

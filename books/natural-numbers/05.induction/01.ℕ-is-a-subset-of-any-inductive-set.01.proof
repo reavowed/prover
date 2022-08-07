@@ -1,0 +1,6 @@
+take n {
+  assume ∈ $0 ℕ {
+    prove ∈ $0 t0 2646aeec823cfa4ee182e84546e94101db9cec4147a2642a318f9375559deda8 () ($0, t0) 0.0a p0
+  }
+}
+prove ⊆ ℕ t0 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (ℕ, t0) 0

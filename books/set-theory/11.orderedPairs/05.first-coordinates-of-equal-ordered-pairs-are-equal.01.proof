@@ -1,0 +1,14 @@
+prove ∈ singleton t0 orderedPair t0 t1 d08a6801a2b9b1e224b5d767de23883380c6ce09e5f2c069261de00a4e9a2fa8 () (t0, t1)
+prove ∈ singleton t0 orderedPair t2 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ singleton t0 $0) (orderedPair t0 t1, orderedPair t2 t3) p0 0
+prove ∨ = singleton t0 singleton t2 = singleton t0 pair t2 t3 83ec046daec13a9f63167db62849e99d77e053a3d9bd0fd4bbe48c98efe9b63e () (singleton t0, t2, t3) 1
+assume = singleton t0 singleton t2 {
+  prove = t0 t2 62a31e869c36337e95e31ecbac09fb20633ec7fdeda937e8f6ceb969002e9fee () (t0, t2) 3a
+}
+assume = singleton t0 pair t2 t3 {
+  elided 375d79dbf74ac2bec7b558a826a3456fa0b610880a86fb4c3c485f47845c3bad {
+    prove = pair t2 t3 singleton t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (singleton t0, pair t2 t3) 4a
+    prove = t2 t0 375d79dbf74ac2bec7b558a826a3456fa0b610880a86fb4c3c485f47845c3bad () (t2, t3, t0) 4.0.0
+    prove = t0 t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t2, t0) 4.0.1
+  }
+}
+prove = t0 t2 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= singleton t0 singleton t2, = singleton t0 pair t2 t3, = t0 t2) () 2 3 4

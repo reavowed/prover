@@ -1,0 +1,8 @@
+elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+  prove ¬ ∈ t0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $0 ∅) (t0) 0.0
+}
+assume = t1 ∅ {
+  prove ∈ t0 ∅ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ t0 $0) (t1, ∅) 1a p0
+}
+prove ¬ = t1 ∅ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= t1 ∅, ∈ t0 ∅) () 1 0

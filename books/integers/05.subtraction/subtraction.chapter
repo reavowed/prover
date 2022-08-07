@@ -1,0 +1,152 @@
+By construction, the set of integers has additive inverses, so we can define negative numbers and subtraction.
+
+theorem Existence of Additive Inverse of an Integer
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ∃! b ∧ ∈ $0 ℤ ∧ = apply +ℤ orderedPair t0 $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $0 t0 apply ⍳_ℤ 0ℕ
+
+term negatedZ (a)
+  name (integer negation)
+  format (-a)
+  premises (∈ t0 ℤ)
+  (∧ ∈ $0 ℤ ∧ = apply +ℤ orderedPair t0 $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $0 t0 apply ⍳_ℤ 0ℕ)
+
+theorem Negation of Integer Equivalence Class
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion = negatedZ equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceClass orderedPair t1 t0 ~_ℤ
+
+theorem Integer Equals Double Negative
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion = t0 negatedZ negatedZ t0
+
+theorem Integer Negation Is Unique
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion ↔ = negatedZ t0 negatedZ t1 = t0 t1
+
+theorem Negation of Positive Integer Is Negative
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ ∈ orderedPair negatedZ t0 apply ⍳_ℤ 0ℕ <ℤ
+
+theorem Negation of Negative Integer Is Positive
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ↔ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ t0 <ℤ
+
+theorem Zero Is Its Own Negative
+conclusion = apply ⍳_ℤ 0ℕ negatedZ apply ⍳_ℤ 0ℕ
+
+theorem Integer Negation Reverses Strict Order
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion ↔ ∈ orderedPair t0 t1 <ℤ ∈ orderedPair negatedZ t1 negatedZ t0 <ℤ
+
+theorem Integer Negation Reverses Non-Strict Order
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion ↔ ∈ orderedPair t0 t1 ≤ℤ ∈ orderedPair negatedZ t1 negatedZ t0 ≤ℤ
+
+theorem Negation of Non-Positive Integer Is Non-Negative
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ↔ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ t0 ≤ℤ
+
+theorem Negation of Non-Negative Integer Is Non-Positive
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ ∈ orderedPair negatedZ t0 apply ⍳_ℤ 0ℕ ≤ℤ
+
+comment Define subtraction.
+
+term - ()
+  disambiguator ℤ
+  (= $0 functionMap2 a b ℤ ℤ apply +ℤ orderedPair $0 negatedZ $1)
+  shorthand (-Z)
+  attributes (infix-function)
+
+write apply -ℤ orderedPair a b as subZ
+
+theorem Subtraction Is Closed on the Integers
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion ∈ apply -ℤ orderedPair t0 t1 ℤ
+
+theorem Integer Subtraction
+conclusion ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair $$0 $0 apply +ℤ orderedPair $$0 negatedZ $0
+
+theorem Integer Subtract Itself Is Zero
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion = apply -ℤ orderedPair t0 t0 apply ⍳_ℤ 0ℕ
+
+theorem Integer Subtraction Is Cancellable
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+conclusion ↔ = apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2 = t0 t1
+
+theorem Integer Subtraction Preserves Strict Order
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+conclusion ↔ ∈ orderedPair apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2 <ℤ ∈ orderedPair t0 t1 <ℤ
+
+theorem Integer Subtraction Preserves Non-Strict Order
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+conclusion ↔ ∈ orderedPair apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2 ≤ℤ ∈ orderedPair t0 t1 ≤ℤ
+
+theorem Reversed Order in Equal Integer Sums
+termVariables(a 0, b 0, c 0, d 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+premise ∈ t3 ℤ
+premise = apply +ℤ orderedPair t0 t1 apply +ℤ orderedPair t2 t3
+conclusion ↔ ∈ orderedPair t0 t2 <ℤ ∈ orderedPair t3 t1 <ℤ
+
+theorem Negation of Integer Addition
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion = negatedZ apply +ℤ orderedPair t0 t1 apply +ℤ orderedPair negatedZ t0 negatedZ t1
+
+theorem Right Identity for Integer Subtraction
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion = apply -ℤ orderedPair t0 apply ⍳_ℤ 0ℕ t0
+
+theorem Integer Subtraction Reverses Strict Order
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+conclusion ↔ ∈ orderedPair apply -ℤ orderedPair t0 t1 apply -ℤ orderedPair t0 t2 <ℤ ∈ orderedPair t2 t1 <ℤ
+
+comment Show that bounded sets of integers have extremal elements.
+
+theorem Set of Integers Bounded Below Has a Least Element
+termVariables(S 0)
+premise ⊆ t0 ℤ
+premise ¬ = t0 ∅
+premise ∃ b ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ
+conclusion ∃ b ∧ ∈ $0 t0 ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ
+
+theorem Set of Integers Bounded Above Has a Greatest Element
+termVariables(S 0)
+premise ⊆ t0 ℤ
+premise ¬ = t0 ∅
+premise ∃ b ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $0 $$0 ≤ℤ
+conclusion ∃ b ∧ ∈ $0 t0 ∀ s → ∈ $0 t0 ∈ orderedPair $0 $$0 ≤ℤ

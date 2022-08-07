@@ -1,0 +1,69 @@
+Introduce the existential quantifier, ∃.
+
+statement ∃ ($x with x φ)
+  format ((∃x)φ)
+  definition (¬ ∀ x ¬ with ($0) s0)
+  shorthand (ex)
+
+theorem Existence by Exhibiting Value
+statementVariables(φ 1)
+termVariables(a 0)
+premise with (t0) s0
+conclusion ∃ x with ($0) s0
+
+comment If something exists, we can name that something with an arbitrary variable for free.
+
+theorem Value for Existence
+statementVariables(φ 1, ψ 0)
+premise ∃ x with ($0) s0
+premise ∀ x → with ($0) s0 s1
+conclusion s1
+
+comment Swapping an existence condition with an equivalent one.
+
+theorem Existence Equivalence
+statementVariables(φ 1, ψ 1)
+premise ∀ x ↔ with ($0) s0 with ($0) s1
+conclusion ↔ ∃ x with ($0) s0 ∃ x with ($0) s1
+
+theorem Quantified Existence Equivalence
+statementVariables(φ 1, ψ 1, χ 1)
+premise ∀ x → with ($0) s0 ↔ with ($0) s1 with ($0) s2
+conclusion ↔ ∃ x ∧ with ($0) s0 with ($0) s1 ∃ x ∧ with ($0) s0 with ($0) s2
+
+comment Swapping between universal and existential quantifiers.
+
+theorem Not Exists Not Is For All
+statementVariables(φ 1)
+premise ¬ ∃ x ¬ with ($0) s0
+conclusion ∀ x with ($0) s0
+
+theorem Not Exists Is For All Not
+statementVariables(φ 1)
+premise ¬ ∃ x with ($0) s0
+conclusion ∀ x ¬ with ($0) s0
+
+theorem For All Not Is Not Exists
+statementVariables(φ 1)
+premise ∀ x ¬ with ($0) s0
+conclusion ¬ ∃ x with ($0) s0
+
+theorem Swap Existential Quantifiers
+statementVariables(φ 2)
+premise ∃ a ∃ b with ($$0 $0) s0
+conclusion ∃ b ∃ a with ($0 $$0) s0
+
+theorem Swap Restricted Existential Quantifiers
+statementVariables(φ 1, ψ 1, χ 2)
+premise ∃ a ∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2
+conclusion ∃ b ∧ with ($0) s1 ∃ a ∧ with ($0) s0 with ($0 $$0) s2
+
+theorem Remove Existential Quantifier Restriction
+statementVariables(φ 1, ψ 1)
+premise ∃ a ∧ with ($0) s0 with ($0) s1
+conclusion ∃ a with ($0) s1
+
+theorem Remove Two Existential Quantifier Restrictions
+statementVariables(φ 1, ψ 1, χ 2)
+premise ∃ a ∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2
+conclusion ∃ a ∃ b with ($$0 $0) s2

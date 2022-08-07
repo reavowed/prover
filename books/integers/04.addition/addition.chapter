@@ -1,0 +1,82 @@
+Addition on the integers.
+
+term + ()
+  disambiguator ℤ
+  (= $0 quadrupleQuotientFunction functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair $0 $2 apply +ℕ orderedPair $1 $3 ~_ℤ ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ)
+  shorthand (+Z)
+  attributes (infix-function)
+
+write apply +ℤ orderedPair a b as addZ
+
+theorem +_ℤ Is Well Defined
+termVariables(f 0)
+premise = t0 functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair $0 $2 apply +ℕ orderedPair $1 $3 ~_ℤ
+conclusion ∀ a_1 → ∈ $0 ℕ ∀ b_1 → ∈ $0 ℕ ∀ a_2 → ∈ $0 ℕ ∀ b_2 → ∈ $0 ℕ ∀ c_1 → ∈ $0 ℕ ∀ d_1 → ∈ $0 ℕ ∀ c_2 → ∈ $0 ℕ ∀ d_2 → ∈ $0 ℕ → ∧ ∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$$$0 $$$$$0 ~_ℤ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply t0 orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 apply t0 orderedPair orderedPair $$$$$$0 $$$$$0 orderedPair $$0 $0
+
+theorem +_ℤ is a function
+conclusion ∧ function +ℤ functionFrom +ℤ product ℤ ℤ ℤ
+
+theorem Addition Is Closed on the Integers
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion ∈ apply +ℤ orderedPair t0 t1 ℤ
+
+theorem Integer Addition on Equivalence Classes
+termVariables(a 0, b 0, c 0, d 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+premise ∈ t3 ℕ
+conclusion = apply +ℤ orderedPair equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceClass orderedPair t2 t3 ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair t0 t2 apply +ℕ orderedPair t1 t3 ~_ℤ
+
+theorem Integer Addition Is Commutative
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion = apply +ℤ orderedPair t0 t1 apply +ℤ orderedPair t1 t0
+
+theorem Integer Addition Is Associative
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+conclusion = apply +ℤ orderedPair t0 apply +ℤ orderedPair t1 t2 apply +ℤ orderedPair apply +ℤ orderedPair t0 t1 t2
+
+theorem Integer Addition Is Cancellable
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+conclusion ∧ ↔ = apply +ℤ orderedPair t0 t2 apply +ℤ orderedPair t1 t2 = t0 t1 ↔ = apply +ℤ orderedPair t2 t0 apply +ℤ orderedPair t2 t1 = t0 t1
+
+theorem Identity for Integer Addition
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ∧ = apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ t0 = apply +ℤ orderedPair apply ⍳_ℤ 0ℕ t0 t0
+
+theorem Integer Addition Preserves Strict Order
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+conclusion ∧ ↔ ∈ orderedPair apply +ℤ orderedPair t0 t2 apply +ℤ orderedPair t1 t2 <ℤ ∈ orderedPair t0 t1 <ℤ ↔ ∈ orderedPair apply +ℤ orderedPair t2 t0 apply +ℤ orderedPair t2 t1 <ℤ ∈ orderedPair t0 t1 <ℤ
+
+theorem Integer Addition Preserves Non-Strict Order
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+conclusion ∧ ↔ ∈ orderedPair apply +ℤ orderedPair t0 t2 apply +ℤ orderedPair t1 t2 ≤ℤ ∈ orderedPair t0 t1 ≤ℤ ↔ ∈ orderedPair apply +ℤ orderedPair t2 t0 apply +ℤ orderedPair t2 t1 ≤ℤ ∈ orderedPair t0 t1 ≤ℤ
+
+theorem Natural Embedding Preserves Addition
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion = apply ⍳_ℤ apply +ℕ orderedPair t0 t1 apply +ℤ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1
+
+theorem Adding One to Less than Is Less than Or Equal to
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion ↔ ∈ orderedPair t0 t1 <ℤ ∈ orderedPair apply +ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t1 ≤ℤ

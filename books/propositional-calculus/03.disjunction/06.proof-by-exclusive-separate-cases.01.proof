@@ -1,0 +1,2 @@
+prove ∨ s0 ¬ s0 463cb6809a9f4be671a279fc3400ca7f0a9e651ffc60c5441cb2475c9efd7148 (s0) ()
+prove ∨ s1 s2 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (s0, ¬ s0, s1, s2) () 0 p0 p1

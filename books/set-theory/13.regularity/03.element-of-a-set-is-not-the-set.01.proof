@@ -1,0 +1,2 @@
+prove ¬ ∈ t1 t1 58f0a7f71c917f4d6cd1c96b9f76ef5b3af8d834a2505073b27bb3a7bbe99451 () (t1)
+prove ¬ = t0 t1 0ec7472431b851c54c14ab1bc111421721cb9a7110c3ad3d5573eefebabf8aa0 (∈ $0 t1) (t0, t1) p0 0

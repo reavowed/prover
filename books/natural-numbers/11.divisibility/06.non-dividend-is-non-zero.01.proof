@@ -1,0 +1,9 @@
+assume = t1 0ℕ {
+  prove ∈ orderedPair t0 0ℕ |ℕ 2a0ee17bec81c7caea1292a057ae77aff10033ce706fea66875725d36cbfe4f2 () (t0) p0
+  elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+    prove = 0ℕ t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, 0ℕ) 0a
+    prove ∈ orderedPair t0 t1 |ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair t0 $0 |ℕ) (0ℕ, t1) 0.1.0 0.0
+  }
+  prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∈ orderedPair t0 t1 |ℕ) () 0.1 p2
+}
+prove ¬ = t1 0ℕ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (= t1 0ℕ) () 0

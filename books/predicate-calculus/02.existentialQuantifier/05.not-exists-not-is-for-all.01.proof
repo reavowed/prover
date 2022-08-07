@@ -1,0 +1,6 @@
+take x {
+  assume ¬ with ($0) s0 {
+    prove ∃ y ¬ with ($0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (¬ with ($$0) s0) ($0) 0.0a
+  }
+  prove with ($0) s0 b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (with ($0) s0, ∃ y ¬ with ($0) s0) () 0.0 p0
+}

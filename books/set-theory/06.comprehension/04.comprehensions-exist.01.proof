@@ -1,0 +1,7 @@
+assume ¬ ∃ y ∧ ∈ $0 t0 with ($0) s0 {
+  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0 a2e359e0255d7d6ae9b4ff03cf70607190e8d4458a95454971b7b106dd8ce3fb (with ($0) s0) (t0) 0a
+}
+assume ∃ y ∧ ∈ $0 t0 with ($0) s0 {
+  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0 6ca18706a301e5c0143f8dd6b6320095e831fe6c2f03739678b458208e72cf80 (with ($0) s0) (t0) 1a
+}
+prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0 12afb9df21eda1ecba39f95a0b7af6e3087951e80382722b0e143de0e3443389 (∃ y ∧ ∈ $0 t0 with ($0) s0, ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0) () 1 0

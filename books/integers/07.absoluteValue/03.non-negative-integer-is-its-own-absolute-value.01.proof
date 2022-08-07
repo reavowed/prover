@@ -1,0 +1,19 @@
+assume ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ {
+  prove = t0 t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (t0)
+  elided 67b7ad54221f99c690a841d9b3d0dd2bc8da51d735b4b19655114da4a0237b35 {
+    prove ∨ = t0 t0 = t0 negatedZ t0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (= t0 t0, = t0 negatedZ t0) () 0.0
+    prove = t0 absZ t0 67b7ad54221f99c690a841d9b3d0dd2bc8da51d735b4b19655114da4a0237b35 () (t0, t0) p0 p0 0a 0.1.0
+  }
+}
+assume = t0 absZ t0 {
+  elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
+    prove ∧ ∈ absZ t0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t0) p0
+    prove ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ absZ t0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0) () 1.0.0
+    prove ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ, ∨ = absZ t0 t0 = absZ t0 negatedZ t0) () 1.0.1
+  }
+  elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+    prove = absZ t0 t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, absZ t0) 1a
+    prove ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ) (absZ t0, t0) 1.1.0 1.0
+  }
+}
+prove ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ = t0 absZ t0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ, = t0 absZ t0) () 0 1

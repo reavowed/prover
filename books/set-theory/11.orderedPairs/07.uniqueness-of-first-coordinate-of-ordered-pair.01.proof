@@ -1,0 +1,16 @@
+take a_1 {
+  take a_2 {
+    assume ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 {
+      let b_1 = t0 orderedPair $$$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $$0 $$$0, = $$0 $0) () {
+        let b_2 = t0 orderedPair $$$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $$0 $$$$0, = $$$0 $$0) () {
+          prove = orderedPair $$$$0 $$0 orderedPair $$$0 $0 17ea1189d21985c734cf2ff359fbe657b6f31d5a78f5d8746e6b5e2b5c2f39e3 () (t0, orderedPair $$$$0 $$0, orderedPair $$$0 $0) 0.0.0.0a 0.0.0.0.0a
+          prove = $$$$0 $$$0 8977209a710a2fb4f728d3cb71cb83d4362a8863f78e362c0e63185d93e510d1 () ($$$$0, $$0, $$$0, $0) 0.0.0.0.0.0
+        } 0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      } 0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+    }
+  }
+}
+elided 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 {
+  prove ∧ ∃ a ∃ b = t0 orderedPair $$0 $0 ∀ a_1 ∀ a_2 → ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ a ∃ b = t0 orderedPair $$0 $0, ∀ a_1 ∀ a_2 → ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 = $$0 $0) () p0 0
+  prove ∃! a ∃ b = t0 orderedPair $$0 $0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∃ b = t0 orderedPair $$0 $0) () 1.0
+}

@@ -1,0 +1,96 @@
+Define the set of rational numbers, ℚ.
+
+theorem Existence of ~_ℚ
+conclusion ∃! ~ ∧ relation $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0
+
+term ~_ℚ ()
+  (∧ relation $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0)
+  shorthand (~Q)
+  attributes (infix-relation)
+
+theorem ~_ℚ Is an Equivalence Relation
+conclusion equivalenceRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ
+
+write equivalenceClass orderedPair a b ~_ℚ as rat2
+
+display equivalenceClass orderedPair a b ~_ℚ as ((a, b)_ℚ)
+
+term ℚ ()
+  (= $0 equivalenceQuotient product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ~_ℚ)
+  shorthand (rat)
+
+theorem Equality Condition for Rational Equivalence Classes
+termVariables(a 0, b 0, c 0, d 0)
+premise ∈ t0 ℤ
+premise ∈ t1 diff ℤ singleton apply ⍳_ℤ 0ℕ
+premise ∈ t2 ℤ
+premise ∈ t3 diff ℤ singleton apply ⍳_ℤ 0ℕ
+conclusion ↔ = equivalenceClass orderedPair t0 t1 ~_ℚ equivalenceClass orderedPair t2 t3 ~_ℚ = apply ×ℤ orderedPair t0 t3 apply ×ℤ orderedPair t1 t2
+
+comment Some useful theorems about the set of non-zero integers.
+
+theorem Product of Non-Zeros Is Non-Zero
+termVariables(a 0, b 0)
+premise ∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ
+premise ∈ t1 diff ℤ singleton apply ⍳_ℤ 0ℕ
+conclusion ∈ apply ×ℤ orderedPair t0 t1 diff ℤ singleton apply ⍳_ℤ 0ℕ
+
+theorem Element of Non-Zero Rationals Is Either Less than or Greater than Zero
+termVariables(a 0)
+premise ∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ
+conclusion ⊕ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ
+
+theorem Negative of Non-Zero is Non-Zero
+termVariables(a 0)
+premise ∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ
+conclusion ∈ negatedZ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ
+
+theorem Positive Integers Are a Subset of the Non-Zero Integers
+conclusion ⊆ ℤ^+ diff ℤ singleton apply ⍳_ℤ 0ℕ
+
+comment Now we can show that every rational can be formed as the ratio of two integers, where the denominator is positive.
+
+theorem Rational Is Equivalence Class with Positive Denominator
+termVariables(a 0)
+premise ∈ t0 ℚ
+conclusion ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ
+
+theorem Equivalence Class Is Rational
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 diff ℤ singleton apply ⍳_ℤ 0ℕ
+conclusion ∈ equivalenceClass orderedPair t0 t1 ~_ℚ ℚ
+
+theorem Equal Rationals Share Positive Denominators
+termVariables(a 0, b 0, c 0, d 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ^+
+premise ∈ t2 ℤ
+premise ∈ t3 ℤ^+
+premise = apply ×ℤ orderedPair t0 t3 apply ×ℤ orderedPair t1 t2
+conclusion ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t2 <ℤ
+
+theorem Equal Rationals Share Negative Denominators
+termVariables(a 0, b 0, c 0, d 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ^+
+premise ∈ t2 ℤ
+premise ∈ t3 ℤ^+
+premise = apply ×ℤ orderedPair t0 t3 apply ×ℤ orderedPair t1 t2
+conclusion ↔ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ ∈ orderedPair t2 apply ⍳_ℤ 0ℕ <ℤ
+
+theorem Equal Rationals Share Zero Denominators
+termVariables(a 0, b 0, c 0, d 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ^+
+premise ∈ t2 ℤ
+premise ∈ t3 ℤ^+
+premise = apply ×ℤ orderedPair t0 t3 apply ×ℤ orderedPair t1 t2
+conclusion ↔ = t0 apply ⍳_ℤ 0ℕ = t2 apply ⍳_ℤ 0ℕ
+
+comment We can go further, and say that every rational can be formed as the ratio of two coprime integers. This representation is unique.
+
+theorem Rational Is Equivalence Class in Lowest Terms
+termVariables(a 0)
+premise ∈ t0 ℚ
+conclusion ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ ∧ = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ

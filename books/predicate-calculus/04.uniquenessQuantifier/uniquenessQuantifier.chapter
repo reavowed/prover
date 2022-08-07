@@ -1,0 +1,85 @@
+Introduce the uniqueness quantifier, ∃!.
+
+statement ∃! ($x with x φ)
+  format ((∃!x)φ)
+  definition (∧ ∃ x with ($0) s0 ∀ x ∀ y → ∧ with ($$0) s0 with ($0) s0 = $$0 $0)
+  shorthand (ex!)
+  attributes (uniqueness)
+
+theorem Value for Unique Existence
+statementVariables(φ 1, ψ 0)
+premise ∃! x with ($0) s0
+premise ∀ x → with ($0) s0 s1
+conclusion s1
+
+theorem Every Set Is Unique
+termVariables(a 0)
+conclusion ∃! y = $0 t0
+
+theorem Two Values Satisfying Unique Condition Are Equal
+statementVariables(φ 1)
+termVariables(a 0, b 0)
+premise ∃! x with ($0) s0
+premise with (t0) s0
+premise with (t1) s0
+conclusion = t0 t1
+
+theorem Uniqueness by Equivalence with Single Value
+statementVariables(φ 1)
+termVariables(a 0)
+premise ∀ x ↔ with ($0) s0 = $0 t0
+conclusion ∃! x with ($0) s0
+
+theorem Uniqueness Equivalence from Single Value
+statementVariables(φ 1)
+termVariables(a 0)
+premise ∀ x → with ($0) s0 = $0 t0
+premise with (t0) s0
+conclusion ∀ x ↔ with ($0) s0 = $0 t0
+
+theorem Uniqueness by Exhibiting Single Value
+statementVariables(φ 1)
+termVariables(a 0)
+premise with (t0) s0
+premise ∀ x → with ($0) s0 = $0 t0
+conclusion ∃! x with ($0) s0
+
+theorem Existence of Unique Value
+statementVariables(φ 1)
+premise ∃! x with ($0) s0
+conclusion ∃ y ∀ x ↔ with ($0) s0 = $0 $$0
+
+theorem Unique Value Satisifies Condition
+statementVariables(φ 1)
+termVariables(a 0)
+premise ∀ x ↔ with ($0) s0 = $0 t0
+conclusion with (t0) s0
+
+theorem Uniqueness by Two Cases
+statementVariables(φ 0, ψ 0)
+termVariables(a 0, b 0)
+premise ⊕ s0 s1
+conclusion ∃! x ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1
+
+theorem Uniqueness by Two Cases
+statementVariables(φ 0)
+termVariables(a 0, b 0)
+conclusion ∃! x ∨ ∧ s0 = $0 t0 ∧ ¬ s0 = $0 t1
+
+theorem Replace Unique Condition
+statementVariables(φ 1, ψ 1)
+premise ∃! x with ($0) s0
+premise ∀ x ↔ with ($0) s0 with ($0) s1
+conclusion ∃! x with ($0) s1
+
+theorem Replace Uniqueness Quantifier Restriction
+statementVariables(φ 1, χ 1, ψ 1)
+premise ∃! x ∧ with ($0) s0 with ($0) s1
+premise ∀ x ↔ with ($0) s0 with ($0) s2
+conclusion ∃! x ∧ with ($0) s2 with ($0) s1
+
+theorem Replace Quantified Unique Condition
+statementVariables(φ 1, ψ 1, χ 1)
+premise ∃! x ∧ with ($0) s0 with ($0) s1
+premise ∀ x → with ($0) s0 ↔ with ($0) s1 with ($0) s2
+conclusion ∃! x ∧ with ($0) s0 with ($0) s2

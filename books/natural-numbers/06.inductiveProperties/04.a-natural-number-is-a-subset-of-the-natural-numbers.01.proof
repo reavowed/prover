@@ -1,0 +1,6 @@
+take m {
+  assume ∈ $0 t0 {
+    prove ∈ $0 ℕ afde84629e5b4f6c729b4663c2d7fc084c2ca9a4b497f0307c8fcb8196909893 () (t0, $0) p0 0.0a
+  }
+}
+prove ⊆ t0 ℕ ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (t0, ℕ) 0

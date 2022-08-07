@@ -1,0 +1,2 @@
+prove ⊆ singleton t0 t1 0b12623ee6714e2d19658cded86d4dd9badc9ff00665610d50c4ebe0ed9e7d60 () (t0, t1) p0
+prove ∈ singleton t0 powerSet t1 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (singleton t0, t1) 0

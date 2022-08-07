@@ -1,0 +1,137 @@
+Arbitrary and binary unions.
+
+axiom Axiom of Union
+termVariables(a 0)
+conclusion ∃ x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 t0 ∈ $$0 $0
+
+theorem Arbitrary Unions Exist
+termVariables(a 0)
+conclusion ∃! x ∀ y ↔ ∈ $0 $$0 ∃ z ∧ ∈ $0 t0 ∈ $$0 $0
+
+term union (a)
+  name (Arbitrary Union)
+  format (⋃a)
+  (∀ x ↔ ∈ $0 $$0 ∃ y ∧ ∈ $$0 $0 ∈ $0 t0)
+
+theorem Element of Arbitrary Union
+termVariables(a 0, A 0)
+premise ∈ t0 union t1
+conclusion ∃ x ∧ ∈ t0 $0 ∈ $0 t1
+
+theorem Element of Element Is Element of Union
+termVariables(b 0, a 0, A 0)
+premise ∈ t0 t1
+premise ∈ t1 t2
+conclusion ∈ t0 union t2
+
+term ∪ (a b)
+  (= $0 union pair t0 t1)
+  shorthand (un)
+
+theorem Membership Condition for Binary Union
+termVariables(a 0, b 0)
+conclusion ∀ x ↔ ∈ $0 ∪ t0 t1 ∨ ∈ $0 t0 ∈ $0 t1
+
+theorem Element of Binary Union
+termVariables(c 0, a 0, b 0)
+premise ∈ t0 ∪ t1 t2
+conclusion ∨ ∈ t0 t1 ∈ t0 t2
+
+theorem Binary Union Is Symmetric
+termVariables(a 0, b 0)
+conclusion = ∪ t0 t1 ∪ t1 t0
+
+theorem Element of Union (Left)
+termVariables(c 0, a 0, b 0)
+premise ∈ t0 t1
+conclusion ∈ t0 ∪ t1 t2
+
+theorem Element of Union (Right)
+termVariables(c 0, b 0, a 0)
+premise ∈ t0 t1
+conclusion ∈ t0 ∪ t2 t1
+
+theorem The Empty Set Is an Identity for Binary Union
+termVariables(a 0)
+conclusion = ∪ ∅ t0 t0
+
+theorem A Union of a Non-Empty Set Is Non-Empty
+termVariables(a 0, b 0)
+premise ¬ = t0 ∅
+conclusion ¬ = ∪ t0 t1 ∅
+
+theorem A Union of a Non-Empty Set Is Non-Empty
+termVariables(a 0, b 0)
+premise ¬ = t0 ∅
+conclusion ¬ = ∪ t1 t0 ∅
+
+theorem Set Is in One Part of a Binary Union
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ∪ t1 t2
+premise ¬ ∈ t0 t1
+conclusion ∈ t0 t2
+
+theorem Set Is in One Part of a Binary Union
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ∪ t1 t2
+premise ¬ ∈ t0 t2
+conclusion ∈ t0 t1
+
+theorem Union Membership Equivalence If Not In One Set
+termVariables(a 0, c 0, b 0)
+premise ¬ ∈ t0 t1
+conclusion ↔ ∈ t0 t2 ∈ t0 ∪ t2 t1
+
+theorem Union Membership Equivalence If Not In One Set
+termVariables(a 0, b 0, c 0)
+premise ¬ ∈ t0 t1
+conclusion ↔ ∈ t0 t2 ∈ t0 ∪ t1 t2
+
+theorem Union of Subsets Is a Subset
+termVariables(A 0, X 0, B 0)
+premise ⊆ t0 t1
+premise ⊆ t2 t1
+conclusion ⊆ ∪ t0 t2 t1
+
+theorem Subset of Union (Left)
+termVariables(X 0, A 0, B 0)
+premise ⊆ t0 t1
+conclusion ⊆ t0 ∪ t1 t2
+
+theorem Subset of Union (Right)
+termVariables(X 0, A 0, B 0)
+premise ⊆ t0 t1
+conclusion ⊆ t0 ∪ t2 t1
+
+theorem Set Is Subset of Its Union
+termVariables(A 0, B 0)
+conclusion ⊆ t0 ∪ t0 t1
+
+theorem Set Is Subset of Its Union
+termVariables(B 0, A 0)
+conclusion ⊆ t0 ∪ t1 t0
+
+theorem Redundant Union with Subset
+termVariables(A 0, B 0)
+premise ⊆ t0 t1
+conclusion = ∪ t0 t1 t1
+
+theorem Redundant Union with Subset
+termVariables(A 0, B 0)
+premise ⊆ t0 t1
+conclusion = ∪ t1 t0 t1
+
+theorem Redundant Union with Singleton
+termVariables(a 0, A 0)
+premise ∈ t0 t1
+conclusion = ∪ t1 singleton t0 t1
+
+theorem Union of Subsets Is Subset
+termVariables(A 0, B 0)
+premise ⊆ t0 powerSet t1
+conclusion ⊆ union t0 t1
+
+theorem Element is Subset of Union
+termVariables(a 0, A 0)
+premise ∈ t0 t1
+conclusion ⊆ t0 union t1

@@ -1,0 +1,123 @@
+A binary operator is a binary function that acts purely within a single set.
+
+term baseSet (X)
+  name (base set)
+  format (baseSet(X))
+  (= $0 domain domain t0)
+
+type binaryOperation ∘ (infix-function)
+  name (binary operation)
+  definition (∧ function t0 functionFrom t0 product baseSet t0 baseSet t0 baseSet t0)
+
+qualifier on on binaryOperation (A) (on A)
+  definition (= baseSet t0 t1)
+
+theorem Alternative Definition for Binary Operation on a Set
+termVariables(∘ 0 (infix-function), A 0)
+conclusion ↔ ∧ binaryOperation t0 binaryOperationOn t0 t1 ∧ function t0 functionFrom t0 product t1 t1 t1
+
+property associative on binaryOperation
+  definition (∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 ∀ c → ∈ $0 baseSet t0 = apply t0 orderedPair $$$0 apply t0 orderedPair $$0 $0 apply t0 orderedPair apply t0 orderedPair $$$0 $$0 $0)
+
+property commutative on binaryOperation
+  definition (∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 = apply t0 orderedPair $$0 $0 apply t0 orderedPair $0 $$0)
+
+comment Identities.
+
+relatedObject identity e for binaryOperation
+  definition (∧ ∈ t0 baseSet t1 ∀ a → ∈ $0 baseSet t1 ∧ = apply t1 orderedPair $0 t0 $0 = apply t1 orderedPair t0 $0 $0)
+
+theorem Identities are Unique
+termVariables(∘ 0 (infix-function), e_1 0, e_2 0)
+premise binaryOperation t0
+premise identityBinaryOperation t1 t0
+premise identityBinaryOperation t2 t0
+conclusion = t1 t2
+
+comment Cancellable operators.
+
+property leftCancellable on binaryOperation
+  name (left-cancellable)
+  definition (∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 ∀ c → ∈ $0 baseSet t0 → = apply t0 orderedPair $$$0 $$0 apply t0 orderedPair $$$0 $0 = $$0 $0)
+
+property rightCancellable on binaryOperation
+  name (right-cancellable)
+  definition (∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 ∀ c → ∈ $0 baseSet t0 → = apply t0 orderedPair $$$0 $0 apply t0 orderedPair $$0 $0 = $$$0 $$0)
+
+property cancellable on binaryOperation
+  definition (∧ leftCancellableBinaryOperation t0 rightCancellableBinaryOperation t0)
+
+theorem A Commutative Operator Is Cancellable If It Is Cancellable on One Side
+termVariables(∘ 0 (infix-function))
+premise ∧ binaryOperation t0 commutativeBinaryOperation t0
+premise ∨ leftCancellableBinaryOperation t0 rightCancellableBinaryOperation t0
+conclusion cancellableBinaryOperation t0
+
+comment Invertible operators.
+
+property invertible on binaryOperation
+  parentObjects (identity)
+  definition (∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0)
+
+relatedObject invertingOperation f for binaryOperation
+  parentQualifier on
+  parentObjects (identity)
+  name (inverting operation)
+  definition (∧ ∧ unaryOperation t0 unaryOperationOn t0 t2 ∀ a → ∈ $0 t2 ∧ = apply t1 orderedPair $0 apply t0 $0 $$0 = apply t1 orderedPair apply t0 $0 $0 $$0)
+
+relatedObject inverseOperation ∗ (infix-function) for binaryOperation
+  parentQualifier on
+  name (inverse operation)
+  definition (∧ ∧ binaryOperation t0 binaryOperationOn t0 t2 ∀ a → ∈ $0 t2 ∀ b → ∈ $0 t2 = apply t0 orderedPair apply t1 orderedPair $$0 $0 $0 $$0)
+
+theorem An Invertible Binary Operation Is Cancellable
+termVariables(∘ 0 (infix-function))
+premise ∧ ∧ binaryOperation t0 associativeBinaryOperation t0 invertibleBinaryOperation t0
+conclusion cancellableBinaryOperation t0
+
+theorem Direct Invertibility Condition for Binary Operator
+termVariables(∘ 0 (infix-function), e 0)
+premise ∧ binaryOperation t0 identityBinaryOperation t1 t0
+premise ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 t1 = apply t0 orderedPair $0 $$0 t1
+conclusion invertibleBinaryOperation t0
+
+theorem Relationship Between Inverting Operation and Inverse Operation
+termVariables(∘ 0 (infix-function), ∗ 0 (infix-function), f 0, A 0)
+premise ∧ ∧ ∧ ∧ binaryOperation t0 binaryOperationOn t0 t3 associativeBinaryOperation t0 inverseOperationBinaryOperation t1 t0 t3 invertingOperationBinaryOperation t2 t0 t3
+conclusion ∀ a → ∈ $0 t3 ∀ b → ∈ $0 t3 = apply t1 orderedPair $$0 $0 apply t0 orderedPair $$0 apply t2 $0
+
+theorem Associative Invertible Binary Operation Has Unique Inverses
+termVariables(∘ 0 (infix-function), A 0, e 0)
+premise ∧ ∧ ∧ ∧ binaryOperation t0 binaryOperationOn t0 t1 associativeBinaryOperation t0 invertibleBinaryOperation t0 identityBinaryOperation t2 t0
+conclusion ∀ a → ∈ $0 t1 ∃! b ∧ ∈ $0 t1 ∧ = apply t0 orderedPair $$0 $0 t2 = apply t0 orderedPair $0 $$0 t2
+
+theorem Associative Invertible Binary Operation Has Unique Inverting Operation
+termVariables(∘ 0 (infix-function), A 0, e 0)
+premise ∧ ∧ ∧ ∧ binaryOperation t0 binaryOperationOn t0 t1 associativeBinaryOperation t0 invertibleBinaryOperation t0 identityBinaryOperation t2 t0
+conclusion ∃! f invertingOperationBinaryOperation $0 t0 t1
+
+theorem Associative Invertible Binary Operation Has Unique Inverse Operation
+termVariables(∘ 0 (infix-function), A 0, e 0)
+premise ∧ ∧ ∧ ∧ binaryOperation t0 binaryOperationOn t0 t1 associativeBinaryOperation t0 invertibleBinaryOperation t0 identityBinaryOperation t2 t0
+conclusion ∃! ∗ inverseOperationBinaryOperation $0 t0 t1
+
+comment Distributivity of operators.
+
+typeRelation leftDistributes (left-distributes over) binaryOperation ∘ (infix-function) binaryOperation ∗ (infix-function)
+  name (left distributivity)
+  definition (∧ = baseSet t0 baseSet t1 ∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 ∀ c → ∈ $0 baseSet t0 = apply t0 orderedPair $$$0 apply t1 orderedPair $$0 $0 apply t1 orderedPair apply t0 orderedPair $$$0 $$0 apply t0 orderedPair $$$0 $0)
+
+typeRelation rightDistributes (right-distributes over) binaryOperation ∘ (infix-function) binaryOperation ∗ (infix-function)
+  name (right distributivity)
+  definition (∧ = baseSet t0 baseSet t1 ∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 ∀ c → ∈ $0 baseSet t0 = apply t0 orderedPair apply t1 orderedPair $$$0 $$0 $0 apply t1 orderedPair apply t0 orderedPair $$$0 $0 apply t0 orderedPair $$0 $0)
+
+typeRelation distributes (distributes over) binaryOperation ∘ (infix-function) binaryOperation ∗ (infix-function)
+  name (distributivity)
+  definition (∧ leftDistributes t0 t1 rightDistributes t0 t1)
+
+theorem A Commutative Operator Distributes If It Distributes on One Side
+termVariables(∘ 0 (infix-function), ∗ 0 (infix-function), A 0)
+premise ∧ ∧ binaryOperation t0 binaryOperationOn t0 t2 commutativeBinaryOperation t0
+premise ∧ binaryOperation t1 binaryOperationOn t1 t2
+premise ∨ leftDistributes t0 t1 rightDistributes t0 t1
+conclusion distributes t0 t1

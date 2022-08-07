@@ -1,0 +1,132 @@
+elided 39a4a0b58fd0350180fbaa5054a7ac890a57bb416bf5f07a71553e8d94706219 {
+  take f {
+    elided 39a4a0b58fd0350180fbaa5054a7ac890a57bb416bf5f07a71553e8d94706219 {
+      prove ∀ f ↔ ∈ $0 functionSpace ℕ t0 ∧ function $0 functionFrom $0 ℕ t0 39a4a0b58fd0350180fbaa5054a7ac890a57bb416bf5f07a71553e8d94706219 () (ℕ, t0)
+      prove ↔ ∈ $0 functionSpace ℕ t0 ∧ function $0 functionFrom $0 ℕ t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 functionSpace ℕ t0 ∧ function $$0 functionFrom $$0 ℕ t0) ($0) 0.0.0.0
+      prove ↔ ∧ function $0 functionFrom $0 ℕ t0 ∈ $0 functionSpace ℕ t0 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ $0 functionSpace ℕ t0, ∧ function $0 functionFrom $0 ℕ t0) () 0.0.0.1
+    }
+  }
+}
+elided 6f9d482ed3e2f6556597c50fa69557c764daac7d53092439e673f5c6a9d92028 {
+  take n {
+    assume ∈ $0 ℕ {
+      elided (Simplified) {
+        prove → ∈ $0 ℕ ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$$0 apply $$0 $0) t2) ($0) p0
+        prove ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2) () 1.0.0.0.0 1.0.0a
+      }
+      prove ∃! f ∧ ∈ $0 functionSpace ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 6f9d482ed3e2f6556597c50fa69557c764daac7d53092439e673f5c6a9d92028 (∧ function $$0 functionFrom $$0 ℕ t0, ∧ = apply $$0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply $$$0 successor $0 with ($$0 apply $$$0 $0) t2, ∈ $$0 functionSpace ℕ t0) () 1.0.0.0 0
+    }
+  }
+}
+prove ∃! f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2 68b01f5ab65d0995f0c75d8c5549250cf53acdf9aeb8051355c7f9f91c7b1758 (∧ = apply $1 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply $$1 successor $0 with ($$0 apply $$1 $0) t2) (ℕ, functionSpace ℕ t0) 1
+let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2, ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2) () {
+  prove ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 0f288e6d953d0e4246260cd926e823969cbfa3d913d01937d6394711c1857652 () ($0, ℕ, ℕ, t0) 3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+  subproof (Equivalence of definitions) {
+    take g {
+      assume ∧ function $0 functionFrom $0 product ℕ ℕ t0 {
+        subproof (Forward implication) {
+          assume ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 {
+            take n {
+              assume ∈ $0 ℕ {
+                elided (Simplified) {
+                  prove → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$$$$0 $0 apply apply $$$$0 $$$$$0 $0) ($0) 3.1.0.0.0.0a
+                  prove ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0) () 3.1.0.0.0.0.0.0.0.0 3.1.0.0.0.0.0.0a
+                  prove → ∈ 0ℕ ℕ = apply $$0 orderedPair $0 0ℕ apply apply $$$0 $0 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ = apply $$0 orderedPair $0 $$$$0 apply apply $$$0 $0 $$$$0) (0ℕ) 3.1.0.0.0.0.0.0.0.1
+                  prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+                  prove = apply $$0 orderedPair $0 0ℕ apply apply $$$0 $0 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ 0ℕ ℕ, = apply $$0 orderedPair $0 0ℕ apply apply $$$0 $0 0ℕ) () 3.1.0.0.0.0.0.0.0.2 3.1.0.0.0.0.0.0.0.3
+                }
+                elided (Simplified) {
+                  prove → ∈ $0 ℕ ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ ∧ = apply apply $$$0 $$$$0 0ℕ with ($$$$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$$$$0 successor $0 with ($$$$$0 apply apply $$$$0 $$$$$0 $0) t2) ($0) 3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                  prove ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2) () 3.1.0.0.0.0.0.0.1.0 3.1.0.0.0.0.0.0a
+                  prove = apply apply $$$0 $0 0ℕ with ($0) t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply apply $$$0 $0 0ℕ with ($0) t1, ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2) () 3.1.0.0.0.0.0.0.1.1
+                }
+                prove = apply $$0 orderedPair $0 0ℕ with ($0) t1 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply $$0 orderedPair $0 0ℕ, apply apply $$$0 $0 0ℕ, with ($0) t1) 3.1.0.0.0.0.0.0.0 3.1.0.0.0.0.0.0.1
+              }
+            }
+            take n {
+              assume ∈ $0 ℕ {
+                take m {
+                  assume ∈ $0 ℕ {
+                    elided (Simplified) {
+                      prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$$$$0 $0 apply apply $$$$$0 $$$$$$0 $0) ($$0) 3.1.0.0.0.0a
+                      prove ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0) () 3.1.0.0.0.0.1.0.0.0.0.0 3.1.0.0.0.0.1.0a
+                      prove → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ = apply $$$0 orderedPair $$0 $$$$$0 apply apply $$$$0 $$0 $$$$$0) ($0) 3.1.0.0.0.0.1.0.0.0.0.1
+                      prove = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0) () 3.1.0.0.0.0.1.0.0.0.0.2 3.1.0.0.0.0.1.0.0.0a
+                    }
+                    elided (Simplified) {
+                      prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$$$$0 $0 apply apply $$$$$0 $$$$$$0 $0) ($$0) 3.1.0.0.0.0a
+                      prove ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0) () 3.1.0.0.0.0.1.0.0.0.1.0 3.1.0.0.0.0.1.0a
+                      prove → ∈ successor $0 ℕ = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ = apply $$$0 orderedPair $$0 $$$$$0 apply apply $$$$0 $$0 $$$$$0) (successor $0) 3.1.0.0.0.0.1.0.0.0.1.1
+                      prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 3.1.0.0.0.0.1.0.0.0a
+                      prove = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ successor $0 ℕ, = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0) () 3.1.0.0.0.0.1.0.0.0.1.2 3.1.0.0.0.0.1.0.0.0.1.3
+                    }
+                    elided (Simplified) {
+                      prove → ∈ $$0 ℕ ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∧ = apply apply $$$$0 $$$$$0 0ℕ with ($$$$$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$$$$0 successor $0 with ($$$$$$0 apply apply $$$$$0 $$$$$$0 $0) t2) ($$0) 3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                      prove ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2) () 3.1.0.0.0.0.1.0.0.0.2.0 3.1.0.0.0.0.1.0a
+                      prove ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply apply $$$$0 $$0 0ℕ with ($$0) t1, ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2) () 3.1.0.0.0.0.1.0.0.0.2.1
+                      prove → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ = apply apply $$$$0 $$0 successor $$$$$0 with ($$0 apply apply $$$$0 $$0 $$$$$0) t2) ($0) 3.1.0.0.0.0.1.0.0.0.2.2
+                      prove = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2) () 3.1.0.0.0.0.1.0.0.0.2.3 3.1.0.0.0.0.1.0.0.0a
+                    }
+                    prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply $$$0 orderedPair $$0 successor $0, apply apply $$$$0 $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) t2) 3.1.0.0.0.0.1.0.0.0.1 3.1.0.0.0.0.1.0.0.0.2
+                    prove = with ($$0 apply apply $$$$0 $$0 $0) t2 with ($$0 apply $$$0 orderedPair $$0 $0) t2 d56f1ff9e3b526cb25fb49de66654bc457201e53fcd423e49c32c60c0932e6cc () (apply $$$0 orderedPair $$0 $0, apply apply $$$$0 $$0 $0, with ($$0 $$$$$0) t2) 3.1.0.0.0.0.1.0.0.0.0
+                    prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply $$$0 orderedPair $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) t2, with ($$0 apply $$$0 orderedPair $$0 $0) t2) 3.1.0.0.0.0.1.0.0.0.3 3.1.0.0.0.0.1.0.0.0.4
+                  }
+                }
+              }
+            }
+            prove ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1, ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2) () 3.1.0.0.0.0.0 3.1.0.0.0.0.1
+          }
+        }
+        subproof (Reverse implication) {
+          assume ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 {
+            take n {
+              assume ∈ $0 ℕ {
+                elided (Simplified) {
+                  prove → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ = apply $$0 orderedPair $$$$0 0ℕ with ($$$$0) t1) ($0) 3.1.0.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  prove = apply $$0 orderedPair $0 0ℕ with ($0) t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply $$0 orderedPair $0 0ℕ with ($0) t1) () 3.1.0.0.1.0.0.0.0.0 3.1.0.0.1.0.0.0a
+                }
+                elided (Simplified) {
+                  prove → ∈ $0 ℕ ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ ∧ = apply apply $$$0 $$$$0 0ℕ with ($$$$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$$$$0 successor $0 with ($$$$$0 apply apply $$$$0 $$$$$0 $0) t2) ($0) 3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                  prove ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2) () 3.1.0.0.1.0.0.0.1.0 3.1.0.0.1.0.0.0a
+                  prove = apply apply $$$0 $0 0ℕ with ($0) t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply apply $$$0 $0 0ℕ with ($0) t1, ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2) () 3.1.0.0.1.0.0.0.1.1
+                  prove = with ($0) t1 apply apply $$$0 $0 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply apply $$$0 $0 0ℕ, with ($0) t1) 3.1.0.0.1.0.0.0.1.2
+                }
+                prove = apply $$0 orderedPair $0 0ℕ apply apply $$$0 $0 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply $$0 orderedPair $0 0ℕ, with ($0) t1, apply apply $$$0 $0 0ℕ) 3.1.0.0.1.0.0.0.0 3.1.0.0.1.0.0.0.1
+                take m {
+                  assume ∧ ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 {
+                  }
+                }
+                take m {
+                  assume ∈ $0 ℕ {
+                    assume = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 {
+                      elided (Simplified) {
+                        prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 successor $0 with ($$$0 apply $$$$0 orderedPair $$$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$$$$0 successor $0 with ($$$$$$0 apply $$$$0 orderedPair $$$$$$0 $0) t2) ($$0) 3.1.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                        prove ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 successor $0 with ($$$0 apply $$$$0 orderedPair $$$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 successor $0 with ($$$0 apply $$$$0 orderedPair $$$0 $0) t2) () 3.1.0.0.1.0.0.0.4.0.0.0.0 3.1.0.0.1.0.0.0a
+                        prove → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ = apply $$$0 orderedPair $$0 successor $$$$$0 with ($$0 apply $$$0 orderedPair $$0 $$$$$0) t2) ($0) 3.1.0.0.1.0.0.0.4.0.0.0.1
+                        prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2) () 3.1.0.0.1.0.0.0.4.0.0.0.2 3.1.0.0.1.0.0.0.4.0a
+                      }
+                      prove = with ($$0 apply $$$0 orderedPair $$0 $0) t2 with ($$0 apply apply $$$$0 $$0 $0) t2 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply $$$0 orderedPair $$0 $0, apply apply $$$$0 $$0 $0, with ($$0 $$$$$0) t2) 3.1.0.0.1.0.0.0.4.0.0a
+                      prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply $$$0 orderedPair $$0 successor $0, with ($$0 apply $$$0 orderedPair $$0 $0) t2, with ($$0 apply apply $$$$0 $$0 $0) t2) 3.1.0.0.1.0.0.0.4.0.0.0 3.1.0.0.1.0.0.0.4.0.0.1
+                      elided (Simplified) {
+                        prove → ∈ $$0 ℕ ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∧ = apply apply $$$$0 $$$$$0 0ℕ with ($$$$$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$$$$0 successor $0 with ($$$$$$0 apply apply $$$$$0 $$$$$$0 $0) t2) ($$0) 3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                        prove ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2) () 3.1.0.0.1.0.0.0.4.0.0.3.0 3.1.0.0.1.0.0.0a
+                        prove ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply apply $$$$0 $$0 0ℕ with ($$0) t1, ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2) () 3.1.0.0.1.0.0.0.4.0.0.3.1
+                        prove → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ = apply apply $$$$0 $$0 successor $$$$$0 with ($$0 apply apply $$$$0 $$0 $$$$$0) t2) ($0) 3.1.0.0.1.0.0.0.4.0.0.3.2
+                        prove = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2) () 3.1.0.0.1.0.0.0.4.0.0.3.3 3.1.0.0.1.0.0.0.4.0a
+                        prove = with ($$0 apply apply $$$$0 $$0 $0) t2 apply apply $$$$0 $$0 successor $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply apply $$$$0 $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) t2) 3.1.0.0.1.0.0.0.4.0.0.3.4
+                      }
+                      prove = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply $$$0 orderedPair $$0 successor $0, with ($$0 apply apply $$$$0 $$0 $0) t2, apply apply $$$$0 $$0 successor $0) 3.1.0.0.1.0.0.0.4.0.0.2 3.1.0.0.1.0.0.0.4.0.0.3
+                    }
+                  }
+                }
+                prove ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 19929f12c2d837743d530233061fddca190c574115ac9b3835bea89d29e3e4d7 (= apply $$0 orderedPair $0 $$$$0 apply apply $$$0 $0 $$$$0) () 3.1.0.0.1.0.0.0.2 3.1.0.0.1.0.0.0.4
+              }
+            }
+          }
+        }
+        prove ↔ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0, ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2) () 3.1.0.0.0 3.1.0.0.1
+      }
+    }
+  }
+  prove ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 fa494b94116d4ec710d4ceb82c71d51b73634a10ba39f8dac40ed155bda028b6 (∧ function $$0 functionFrom $$0 product ℕ ℕ t0, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 $0 apply apply $$$0 $$0 $0, ∧ ∀ n → ∈ $0 ℕ = apply $$$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 successor $0 with ($$0 apply $$$$0 orderedPair $$0 $0) t2) () 3.0 3.1
+} 2

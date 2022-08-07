@@ -1,0 +1,6 @@
+prove ∀ n ↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0 69ab0035b05f277d98392c7b596d7e0dfef8953dd2f283a416a33e3c3ffcec6f () ()
+elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+  prove ↔ ∈ t0 ℕ ∀ X → inductive $0 ∈ t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 ℕ ∀ X → inductive $0 ∈ $$0 $0) (t0) 0
+  prove → ∀ X → inductive $0 ∈ t0 $0 ∈ t0 ℕ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 ℕ, ∀ X → inductive $0 ∈ t0 $0) () 1.0
+  prove ∈ t0 ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∀ X → inductive $0 ∈ t0 $0, ∈ t0 ℕ) () 1.1 p0
+}

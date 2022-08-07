@@ -1,0 +1,10 @@
+prove ∀ x → ∈ $0 t0 ∈ $0 t1 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, t1) p0
+prove ∀ x → ∈ $0 t1 ∈ $0 t0 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t1, t0) p1
+elided df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 {
+  take x {
+    prove → ∈ $0 t0 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t0 ∈ $$0 t1) ($0) 0
+    prove → ∈ $0 t1 ∈ $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∈ $$0 t0) ($0) 1
+    prove ↔ ∈ $0 t0 ∈ $0 t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ $0 t0, ∈ $0 t1) () 2.0.0 2.0.1
+  }
+}
+prove = t0 t1 65dcb85d85a1b0c0107a9c47ec499c5d9828ccf4b6880d399f0b456d994b576b () (t0, t1) 2

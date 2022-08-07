@@ -1,0 +1,8 @@
+prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
+take X {
+  assume inductive $0 {
+    prove ∈ ∅ $0 a9223b3983e6ed83fb416ece84ccb6d852003f1f38b8fbf8cadc31be99d15997 () ($0) 1.0a
+    prove ∈ 0ℕ $0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$0 $0) (0ℕ, ∅) 0 1.0.0
+  }
+}
+prove ∈ 0ℕ ℕ 53a7af449062b9fc8bcb8716a4142c8fe0b6bac044bdf6ba19c763ba6d31b858 () (0ℕ) 1

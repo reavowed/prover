@@ -1,0 +1,21 @@
+prove ∀ x ↔ ∈ $0 pair t0 t2 ∨ = $0 t0 = $0 t2 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 () (t0, t2)
+take x {
+  assume = $0 t0 {
+    prove ∈ $0 t1 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$0 t1) ($0, t0) 1.0a p0
+  }
+  assume = $0 t2 {
+    prove ∈ $0 t1 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$0 t1) ($0, t2) 1.1a p1
+  }
+  assume ∨ = $0 t0 = $0 t2 {
+    prove ∈ $0 t1 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= $0 t0, = $0 t2, ∈ $0 t1) () 1.2a 1.0 1.1
+  }
+}
+elided fdfa0040ca36d70ab3bc93906e3b3ef953b4c0f212eb782f88a9d66a6cd2691b {
+  take x {
+    prove ↔ ∈ $0 pair t0 t2 ∨ = $0 t0 = $0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 pair t0 t2 ∨ = $$0 t0 = $$0 t2) ($0) 0
+    prove → ∈ $0 pair t0 t2 ∨ = $0 t0 = $0 t2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 pair t0 t2, ∨ = $0 t0 = $0 t2) () 2.0.0
+    prove → ∨ = $0 t0 = $0 t2 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∨ = $$0 t0 = $$0 t2 ∈ $$0 t1) ($0) 1
+    prove → ∈ $0 pair t0 t2 ∈ $0 t1 fdfa0040ca36d70ab3bc93906e3b3ef953b4c0f212eb782f88a9d66a6cd2691b (∈ $0 pair t0 t2, ∨ = $0 t0 = $0 t2, ∈ $0 t1) () 2.0.1 2.0.2
+  }
+}
+prove ⊆ pair t0 t2 t1 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (pair t0 t2, t1) 2

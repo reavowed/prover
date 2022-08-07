@@ -1,0 +1,7 @@
+assume with (t0) s0 {
+  prove with (t1) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0) s0) (t0, t1) p0 0a
+}
+assume with (t1) s0 {
+  prove with (t0) s0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (with ($0) s0) (t0, t1) p0 1a
+}
+prove ↔ with (t0) s0 with (t1) s0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (with (t0) s0, with (t1) s0) () 0 1

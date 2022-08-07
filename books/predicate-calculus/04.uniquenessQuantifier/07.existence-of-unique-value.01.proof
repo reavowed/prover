@@ -1,0 +1,12 @@
+let a with ($0) s0 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (with ($0) s0, ∃ y ∀ x ↔ with ($0) s0 = $0 $$0) () {
+  take x {
+    assume with ($0) s0 {
+      prove = $0 $$0 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (with ($$$0) s0) ($0, $$0) p0 0.0.0a 0a
+    }
+    assume = $0 $$0 {
+      prove with ($0) s0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (with ($$$0) s0) ($0, $$0) 0.0.1a 0a
+    }
+    prove ↔ with ($0) s0 = $0 $$0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (with ($0) s0, = $0 $$0) () 0.0.0 0.0.1
+  }
+  prove ∃ y ∀ x ↔ with ($0) s0 = $0 $$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∀ x ↔ with ($0) s0 = $0 $$$0) ($0) 0.0
+} p0

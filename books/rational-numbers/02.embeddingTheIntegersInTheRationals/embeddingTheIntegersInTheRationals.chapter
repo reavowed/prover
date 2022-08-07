@@ -1,0 +1,18 @@
+Show that the integers can be embedded in the rationals in a natural way.
+
+term ⍳_ℚ ()
+  (= $0 functionMap a ℤ equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ)
+  shorthand (iQ)
+  disambiguatorAdders (apply $0 a ℚ)
+
+write apply ⍳_ℚ a as toQ
+
+write apply ⍳_ℚ apply ⍳_ℤ a as toZQ
+
+theorem Function Properties of ⍳_ℚ
+conclusion ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ
+
+theorem Rational With Zero Denominator Is Zero
+termVariables(b 0)
+premise ∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ
+conclusion = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ t0 ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ

@@ -1,0 +1,7 @@
+prove ∈ t0 ∪ t1 t3 33f2017abf1119244d3e5afed3c492684b656c592fb65d4f2afa6ca2ff732db8 () (t0, t1, t3) p0
+prove ∈ t2 ∪ t1 t3 575ab7217e272c44f21400641b5fa55080fbd1412a6ab09aac691f4d4611e10e () (t2, t3, t1) p1
+prove ∈ singleton t0 powerSet ∪ t1 t3 262cb43a8ab6dab00dde5857a2b9ef05f04acb8517f26bc52cc91a1472bcf101 () (t0, ∪ t1 t3) 0
+prove ∈ pair t0 t2 powerSet ∪ t1 t3 981eb0565e09f8732a56a8116603739ac3b5c7177af7f086e7f18b6173814f82 () (t0, ∪ t1 t3, t2) 0 1
+prove ∈ pair singleton t0 pair t0 t2 powerSet powerSet ∪ t1 t3 981eb0565e09f8732a56a8116603739ac3b5c7177af7f086e7f18b6173814f82 () (singleton t0, powerSet ∪ t1 t3, pair t0 t2) 2 3
+prove = orderedPair t0 t2 pair singleton t0 pair t0 t2 019cf1061bdb4d2885755b1a54eb2a7d6e676ab095141b43c3d5e7108955f558 () (t0, t2)
+prove ∈ orderedPair t0 t2 powerSet powerSet ∪ t1 t3 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $0 powerSet powerSet ∪ t1 t3) (orderedPair t0 t2, pair singleton t0 pair t0 t2) 5 4

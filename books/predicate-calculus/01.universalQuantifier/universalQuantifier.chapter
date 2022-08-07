@@ -1,0 +1,27 @@
+Introduce the universal quantifier, ∀.
+
+statement ∀ ($x with x φ)
+  format ((∀x)φ)
+  shorthand (fa)
+  attributes (generalization)
+
+axiom Specification
+statementVariables(φ 1)
+termVariables(a 0)
+premise ∀ x with ($0) s0
+conclusion with (t0) s0
+
+theorem Quantified Universal Equivalence
+statementVariables(χ 1, φ 1, ψ 1)
+premise ∀ x → with ($0) s0 ↔ with ($0) s1 with ($0) s2
+conclusion ↔ ∀ x → with ($0) s0 with ($0) s1 ∀ x → with ($0) s0 with ($0) s2
+
+theorem Distribute Universal Quantifier over Equivalence
+statementVariables(φ 1, ψ 1)
+premise ∀ x ↔ with ($0) s0 with ($0) s1
+conclusion ↔ ∀ x with ($0) s0 ∀ x with ($0) s1
+
+theorem Swap Restricted Universal Quantifiers
+statementVariables(φ 1, ψ 1, χ 2)
+premise ∀ x → with ($0) s0 ∀ y → with ($0) s1 with ($$0 $0) s2
+conclusion ∀ y → with ($0) s1 ∀ x → with ($0) s0 with ($0 $$0) s2

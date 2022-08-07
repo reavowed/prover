@@ -1,0 +1,49 @@
+Introduce the equivalence connective, ↔.
+
+statement ↔ (φ ψ)
+  definition (∧ → s0 s1 → s1 s0)
+  shorthand (equiv)
+
+display ∧ ↔ φ χ ↔ ψ χ as (φ ↔ ψ ↔ χ) requires-brackets
+
+theorem Equivalence by Both Cases
+statementVariables(φ 0, ψ 0)
+premise → s0 s1
+premise → s1 s0
+conclusion ↔ s0 s1
+
+theorem Reverse Equivalence
+statementVariables(φ 0, ψ 0)
+premise ↔ s0 s1
+conclusion ↔ s1 s0
+
+theorem Forward Implication from Equivalence
+statementVariables(φ 0, ψ 0)
+premise ↔ s0 s1
+conclusion → s0 s1
+
+theorem Reverse Implication from Equivalence
+statementVariables(φ 0, ψ 0)
+premise ↔ s0 s1
+conclusion → s1 s0
+
+theorem Equivalence Is Transitive
+statementVariables(φ 0, ψ 0, χ 0)
+premise ↔ s0 s1
+premise ↔ s1 s2
+conclusion ↔ s0 s2
+
+theorem False Statements Are Equivalent
+statementVariables(φ 0, ψ 0)
+premise ¬ s0
+premise ¬ s1
+conclusion ↔ s0 s1
+
+theorem Distribute Implication over Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
+premise → s0 ↔ s1 s2
+conclusion ↔ → s0 s1 → s0 s2
+
+theorem Negated Equivalence
+statementVariables(φ 0, ψ 0)
+conclusion ↔ ↔ s0 s1 ↔ ¬ s0 ¬ s1

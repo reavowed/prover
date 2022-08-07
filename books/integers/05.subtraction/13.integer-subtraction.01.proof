@@ -1,0 +1,2 @@
+prove = -ℤ functionMap2 a b ℤ ℤ apply +ℤ orderedPair $0 negatedZ $1 5f45ff7aba9947d9ab3bb4ebfb3956b5194295927d317c42b3b7de9614368973 () ()
+prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair $$0 $0 apply +ℤ orderedPair $$0 negatedZ $0 586963320ed6538e64ac71a84d942a392e9b90d386a164ad1be78e9111f6498e () (-ℤ, ℤ, ℤ, apply +ℤ orderedPair $0 negatedZ $1) 0

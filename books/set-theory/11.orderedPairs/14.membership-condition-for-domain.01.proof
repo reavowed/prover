@@ -1,0 +1,41 @@
+prove = domain t0 comprehension a union union t0 ∃ b ∈ orderedPair $$0 $0 t0 4186f8707db1f2ca1e4bd5932d08070b74f53eb3890a58ab44d0100457e2c4c7 () (t0)
+take a {
+  assume ∈ $0 domain t0 {
+    elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+      prove ∀ y ↔ ∈ $0 domain t0 ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ b ∈ orderedPair $$$0 $0 t0) (domain t0, union union t0) 0
+      prove ↔ ∈ $0 domain t0 ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 domain t0 ∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0) ($0) 1.0.0.0
+      prove → ∈ $0 domain t0 ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 domain t0, ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0) () 1.0.0.1
+      prove ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 domain t0, ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0) () 1.0.0.2 1.0a
+      prove ∃ b ∈ orderedPair $$0 $0 t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 union union t0, ∃ b ∈ orderedPair $$0 $0 t0) () 1.0.0.3
+    }
+    let b ∈ orderedPair $$0 $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ orderedPair $0 $$0 t0, ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0) () {
+      elided 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a {
+        prove ∧ ∈ $$0 domain t0 ∈ $0 codomain t0 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a () ($$0, $0, t0) 1.0.1a
+        prove ∈ $0 codomain t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$0 domain t0, ∈ $0 codomain t0) () 1.0.1.0.0
+      }
+      elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+        prove ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 codomain t0, ∈ orderedPair $$0 $0 t0) () 1.0.1.0 1.0.1a
+        prove ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$$0 $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 codomain t0 ∈ orderedPair $$0 $$$0 t0) ($0) 1.0.1.1.0
+      }
+    } 1.0.0
+  }
+  assume ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 {
+    let b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 codomain t0 ∈ orderedPair $0 $$0 t0, ∈ $0 domain t0) () {
+      elided d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 {
+        prove ∧ ∈ $$0 union union t0 ∈ $0 union union t0 d8b76a606d480b023a3c4b9b2418a999af6fb053ec6af539fef72beedeb47ce1 () ($$0, $0, t0) 1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove ∈ $$0 union union t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $$0 union union t0, ∈ $0 union union t0) () 1.1.0.0.0
+      }
+      elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+        prove ∃ b ∈ orderedPair $$$0 $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∈ orderedPair $$0 $$$0 t0) ($0) 1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove ∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 union union t0, ∃ b ∈ orderedPair $$$0 $0 t0) () 1.1.0.0 1.1.0.1.0
+        elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+          prove ∀ y ↔ ∈ $0 domain t0 ∧ ∈ $0 union union t0 ∃ b ∈ orderedPair $$0 $0 t0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∃ b ∈ orderedPair $$$$0 $0 t0) (domain t0, union union t0) 0
+          prove ↔ ∈ $$0 domain t0 ∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 domain t0 ∧ ∈ $$$0 union union t0 ∃ b ∈ orderedPair $$$$0 $0 t0) ($$0) 1.1.0.1.2.0
+          prove → ∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0 ∈ $$0 domain t0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $$0 domain t0, ∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0) () 1.1.0.1.2.1
+          prove ∈ $$0 domain t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ $$0 union union t0 ∃ b ∈ orderedPair $$$0 $0 t0, ∈ $$0 domain t0) () 1.1.0.1.2.2 1.1.0.1.1
+        }
+      }
+    } 1.1a
+  }
+  prove ↔ ∈ $0 domain t0 ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ $0 domain t0, ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0) () 1.0 1.1
+}

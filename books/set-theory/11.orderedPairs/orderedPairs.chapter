@@ -1,0 +1,106 @@
+Establish the existence of the ordered pair (a, b).
+
+term orderedPair (a b)
+  name (Ordered Pair)
+  format ((a, b)) no-component-brackets
+  (= $0 pair singleton t0 pair t0 t1)
+  shorthand (op)
+
+theorem Elements of Ordered Pair
+termVariables(c 0, a 0, b 0)
+premise ∈ t0 orderedPair t1 t2
+conclusion ∨ = t0 singleton t1 = t0 pair t1 t2
+
+theorem Singleton of First Coordinate Is Element of Ordered Pair
+termVariables(a 0, b 0)
+conclusion ∈ singleton t0 orderedPair t0 t1
+
+theorem Pair Is Element of Ordered Pair
+termVariables(a 0, b 0)
+conclusion ∈ pair t0 t1 orderedPair t0 t1
+
+theorem Ordered Pair with Same Coordinates Is Double Singleton
+termVariables(a 0)
+conclusion = orderedPair t0 t0 singleton singleton t0
+
+theorem First Coordinates of Equal Ordered Pairs Are Equal
+termVariables(a 0, b 0, c 0, d 0)
+premise = orderedPair t0 t1 orderedPair t2 t3
+conclusion = t0 t2
+
+theorem Second Coordinates of Equal Ordered Pairs Are Equal
+termVariables(a 0, b 0, c 0, d 0)
+premise = orderedPair t0 t1 orderedPair t2 t3
+conclusion = t1 t3
+
+theorem Uniqueness of First Coordinate of Ordered Pair
+termVariables(x 0)
+premise ∃ a ∃ b = t0 orderedPair $$0 $0
+conclusion ∃! a ∃ b = t0 orderedPair $$0 $0
+
+theorem Uniqueness of Second Coordinate of Ordered Pair
+termVariables(x 0)
+premise ∃ a ∃ b = t0 orderedPair $$0 $0
+conclusion ∃! b ∃ a = t0 orderedPair $0 $$0
+
+term first (x)
+  name (First Element of Ordered Pair)
+  format (x_0)
+  premises (∃ a ∃ b = t0 orderedPair $$0 $0)
+  (∃ b = t0 orderedPair $$0 $0)
+
+term second (x)
+  name (Second Element of Ordered Pair)
+  format (x_1)
+  premises (∃ a ∃ b = t0 orderedPair $$0 $0)
+  (∃ a = t0 orderedPair $0 $$0)
+
+write orderedPair first a second a as expandPair
+
+theorem Ordered Pair from Coordinates
+termVariables(x 0)
+premise ∃ a ∃ b = t0 orderedPair $$0 $0
+conclusion = t0 orderedPair first t0 second t0
+
+theorem First Coordinate of Ordered Pair
+termVariables(a 0, b 0)
+conclusion = first orderedPair t0 t1 t0
+
+theorem Second Coordinate of Ordered Pair
+termVariables(a 0, b 0)
+conclusion = second orderedPair t0 t1 t1
+
+theorem Double Union Contains Elements of Ordered Pair
+termVariables(a 0, b 0, X 0)
+premise ∈ orderedPair t0 t1 t2
+conclusion ∧ ∈ t0 union union t2 ∈ t1 union union t2
+
+comment Define the concept of a set of ordered pairs, which will be useful later for functions and relations.
+
+type pairSet X
+  name (pair-set)
+  definition (∀ x → ∈ $0 t0 ∃ a ∃ b = $$$0 orderedPair $$0 $0)
+
+term domain (X)
+  format (domain(X)) no-component-brackets
+  (= $0 comprehension a union union t0 ∃ b ∈ orderedPair $$0 $0 t0)
+
+term codomain (X)
+  format (codomain(X)) no-component-brackets
+  (= $0 comprehension b union union t0 ∃ a ∈ orderedPair $0 $$0 t0)
+
+theorem Coordinates of Element Are Elements of Domain and Codomain
+termVariables(a 0, b 0, X 0)
+premise ∈ orderedPair t0 t1 t2
+conclusion ∧ ∈ t0 domain t2 ∈ t1 codomain t2
+
+theorem Membership Condition for Domain
+termVariables(X 0)
+conclusion ∀ a ↔ ∈ $0 domain t0 ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0
+
+theorem Membership Condition for Codomain
+termVariables(X 0)
+conclusion ∀ b ↔ ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0
+
+theorem Domain of Empty Set Is Empty
+conclusion = domain ∅ ∅

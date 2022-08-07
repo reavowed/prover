@@ -1,0 +1,18 @@
+prove = functionSpace t0 t1 comprehension f powerSet product t0 t1 ∧ function $0 functionFrom $0 t0 t1 5d69304a961a2d460e9d9cdab2a94bedb5fbbea37de4a6ca3623eccbc418ce32 () (t0, t1)
+take f {
+  assume ∧ function $0 functionFrom $0 t0 t1 {
+    elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+      prove ↔ ∧ function $0 functionFrom $0 t0 t1 ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () ($0, t0, t1)
+      prove → ∧ function $0 functionFrom $0 t0 t1 ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ function $0 functionFrom $0 t0 t1, ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0) () 1.0.0.0
+      prove ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ function $0 functionFrom $0 t0 t1, ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0) () 1.0.0.1 1.0a
+      prove ⊆ $0 product t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (⊆ $0 product t0 t1, ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0) () 1.0.0.2
+    }
+    prove ∈ $0 powerSet product t0 t1 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () ($0, product t0 t1) 1.0.0
+  }
+  elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+    prove ∀ y ↔ ∈ $0 functionSpace t0 t1 ∧ ∈ $0 powerSet product t0 t1 ∧ function $0 functionFrom $0 t0 t1 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ function $$0 functionFrom $$0 t0 t1) (functionSpace t0 t1, powerSet product t0 t1) 0
+    prove ↔ ∈ $0 functionSpace t0 t1 ∧ ∈ $0 powerSet product t0 t1 ∧ function $0 functionFrom $0 t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 functionSpace t0 t1 ∧ ∈ $$0 powerSet product t0 t1 ∧ function $$0 functionFrom $$0 t0 t1) ($0) 1.1.0
+  }
+  prove ↔ ∧ ∈ $0 powerSet product t0 t1 ∧ function $0 functionFrom $0 t0 t1 ∧ function $0 functionFrom $0 t0 t1 cf157b2b1bd058c8f87e3c98b7214da8a96a8f4e81231e5ccf6187ba601b2b5e (∧ function $0 functionFrom $0 t0 t1, ∈ $0 powerSet product t0 t1) () 1.0
+  prove ↔ ∈ $0 functionSpace t0 t1 ∧ function $0 functionFrom $0 t0 t1 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 functionSpace t0 t1, ∧ ∈ $0 powerSet product t0 t1 ∧ function $0 functionFrom $0 t0 t1, ∧ function $0 functionFrom $0 t0 t1) () 1.1 1.2
+}

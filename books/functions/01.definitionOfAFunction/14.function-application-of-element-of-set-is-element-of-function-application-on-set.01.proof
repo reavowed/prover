@@ -1,0 +1,11 @@
+prove = apply t0 t4 apply t0 t4 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (apply t0 t4)
+elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+  prove ∧ ∈ t4 t3 = apply t0 t4 apply t0 t4 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t4 t3, = apply t0 t4 apply t0 t4) () p2 0
+  prove ∃ a ∧ ∈ $0 t3 = apply t0 t4 apply t0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 t3 = apply t0 t4 apply t0 $0) (t4) 1.0
+}
+elided 2d53839253ae79456a823bb9196b815acf9752fa7abdaffaaf36a01f6c0d1f40 {
+  prove ∀ b ↔ ∈ $0 applySet t0 t3 ∃ a ∧ ∈ $0 t3 = $$0 apply t0 $0 2d53839253ae79456a823bb9196b815acf9752fa7abdaffaaf36a01f6c0d1f40 () (t0, t3)
+  prove ↔ ∈ apply t0 t4 applySet t0 t3 ∃ a ∧ ∈ $0 t3 = apply t0 t4 apply t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 applySet t0 t3 ∃ a ∧ ∈ $0 t3 = $$0 apply t0 $0) (apply t0 t4) 2.0
+  prove → ∃ a ∧ ∈ $0 t3 = apply t0 t4 apply t0 $0 ∈ apply t0 t4 applySet t0 t3 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ apply t0 t4 applySet t0 t3, ∃ a ∧ ∈ $0 t3 = apply t0 t4 apply t0 $0) () 2.1
+  prove ∈ apply t0 t4 applySet t0 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ a ∧ ∈ $0 t3 = apply t0 t4 apply t0 $0, ∈ apply t0 t4 applySet t0 t3) () 2.2 1
+}

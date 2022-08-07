@@ -1,0 +1,7 @@
+prove = identityFunction t0 functionMap a t0 $0 ddfdc5168c946acb05577a1505f192510ac2361e71dc3198a8bb365889c2fa3a () (t0)
+elided 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b {
+  take a {
+    prove → ∈ $0 t0 ∈ $0 t0 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (∈ $0 t0) ()
+  }
+}
+prove ∧ function identityFunction t0 functionFrom identityFunction t0 t0 t0 49727ac5186e6b8f7eb3d0851aac61a302ea69932f3ee7bfdf036e6054f6a9fc () (identityFunction t0, t0, $0, t0) 0 1

@@ -1,0 +1,102 @@
+Introduce the "or" or "disjuction" connective, ∨.
+
+statement ∨ (φ ψ)
+  definition (→ ¬ s0 s1)
+  shorthand (or)
+
+theorem Add Right Disjunct
+statementVariables(φ 0, ψ 0)
+premise s0
+conclusion ∨ s0 s1
+
+theorem Add Left Disjunct
+statementVariables(ψ 0, φ 0)
+premise s0
+conclusion ∨ s1 s0
+
+theorem Law of the Excluded Middle
+statementVariables(φ 0)
+conclusion ∨ s0 ¬ s0
+
+theorem Proof by Cases
+statementVariables(φ 0, ψ 0, χ 0)
+premise ∨ s0 s1
+premise → s0 s2
+premise → s1 s2
+conclusion s2
+
+theorem Proof by Separate Cases
+statementVariables(φ 0, ψ 0, χ 0, ω 0)
+premise ∨ s0 s1
+premise → s0 s2
+premise → s1 s3
+conclusion ∨ s2 s3
+
+theorem Proof by Exclusive Separate Cases
+statementVariables(φ 0, ψ 0, χ 0)
+premise → s0 s1
+premise → ¬ s0 s2
+conclusion ∨ s1 s2
+
+theorem Combine Cases
+statementVariables(φ 0, χ 0, ψ 0)
+premise → s0 s1
+premise → s2 s1
+conclusion → ∨ s0 s2 s1
+
+theorem Reverse Disjunction
+statementVariables(φ 0, ψ 0)
+premise ∨ s0 s1
+conclusion ∨ s1 s0
+
+theorem Right Disjunct Must Be True
+statementVariables(φ 0, ψ 0)
+premise ∨ s0 s1
+premise ¬ s0
+conclusion s1
+
+theorem Left Disjunct Must Be True
+statementVariables(φ 0, ψ 0)
+premise ∨ s0 s1
+premise ¬ s1
+conclusion s0
+
+theorem Combine Negated Disjunction
+statementVariables(φ 0, ψ 0)
+premise ¬ s0
+premise ¬ s1
+conclusion ¬ ∨ s0 s1
+
+theorem Deduction in Left Disjunct
+statementVariables(φ 0, ψ 0, χ 0)
+premise ∨ s0 s1
+premise → s0 s2
+conclusion ∨ s2 s1
+
+theorem Deduction in Right Disjunct
+statementVariables(φ 0, ψ 0, χ 0)
+premise ∨ s0 s1
+premise → s1 s2
+conclusion ∨ s0 s2
+
+theorem Eliminate Redundant Left Disjunct
+statementVariables(φ 0, ψ 0)
+premise ∨ s0 s1
+premise → s0 s1
+conclusion s1
+
+theorem Eliminate Redundant Right Disjunct
+statementVariables(φ 0, ψ 0)
+premise ∨ s0 s1
+premise → s1 s0
+conclusion s0
+
+theorem Extract Left Negated Disjunct
+statementVariables(φ 0, ψ 0)
+premise ¬ ∨ s0 s1
+conclusion ¬ s0
+
+theorem Extract Right Negated Disjunct
+statementVariables(φ 0, ψ 0)
+premise ¬ ∨ s0 s1
+conclusion ¬ s1

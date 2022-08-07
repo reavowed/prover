@@ -1,0 +1,3 @@
+assume s1 {
+  prove s0 99c9b30776361008f1532f8942d7a8bd8c54fa9a4c4784fd0b91d73187974c76 (s0) () p0
+}

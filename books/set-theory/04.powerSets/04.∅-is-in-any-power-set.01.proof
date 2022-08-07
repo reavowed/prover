@@ -1,0 +1,2 @@
+prove ⊆ ∅ t0 e80dbd150e124b5ae524c59ff43b8233ff5c3e64ab4b90b524f50be0c81732c9 () (t0)
+prove ∈ ∅ powerSet t0 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (∅, t0) 0

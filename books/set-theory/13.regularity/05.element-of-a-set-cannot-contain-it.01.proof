@@ -1,0 +1,5 @@
+prove ∨ ¬ ∈ t0 t1 ¬ ∈ t1 t0 2b0b24f2f84b7d50edd48b994b9076f24dddaec91b6e5487e9febb15ddd30fc6 () (t0, t1)
+elided (Extracted) {
+  prove ¬ ¬ ∈ t0 t1 3df4534886dd61f6ef0a8462fb7cdbff93a3381c7b5ce4d4871f1d25450b688a (∈ t0 t1) () p0
+  prove ¬ ∈ t1 t0 f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (¬ ∈ t0 t1, ¬ ∈ t1 t0) () 0 1.0
+}

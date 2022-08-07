@@ -1,0 +1,5 @@
+prove ∀ y → ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅ 5a2bf4e5105d379d8d2886424f9e4c79009e47b8c59897ad379640ef9c3fafe2 () ()
+elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+  prove → ¬ = t0 ∅ ∃ x ∧ ∈ $0 t0 = ∩ $0 t0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ¬ = $0 ∅ ∃ x ∧ ∈ $0 $$0 = ∩ $0 $$0 ∅) (t0) 0
+  prove ∃ x ∧ ∈ $0 t0 = ∩ $0 t0 ∅ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (¬ = t0 ∅, ∃ x ∧ ∈ $0 t0 = ∩ $0 t0 ∅) () 1.0 p0
+}

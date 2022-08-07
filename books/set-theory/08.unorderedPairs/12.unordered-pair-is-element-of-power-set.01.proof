@@ -1,0 +1,2 @@
+prove ⊆ pair t0 t2 t1 71b790545d840e2f245c868d9305daec77f180a1e01362df08698edd960ff9d8 () (t0, t1, t2) p0 p1
+prove ∈ pair t0 t2 powerSet t1 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () (pair t0 t2, t1) 0

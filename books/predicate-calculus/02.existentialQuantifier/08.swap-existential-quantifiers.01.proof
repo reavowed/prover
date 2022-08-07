@@ -1,0 +1,6 @@
+let a' ∃ b with ($$0 $0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∃ b with ($$0 $0) s0, ∃ b ∃ a with ($0 $$0) s0) () {
+  let b' with ($$0 $0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0 $$0) s0, ∃ b ∃ a with ($0 $$0) s0) () {
+    prove ∃ a with ($0 $$0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$$0 $0) s0) ($$0) 0.0a
+    prove ∃ b ∃ a with ($0 $$0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ a with ($0 $$$$0) s0) ($0) 0.0.0
+  } 0a
+} p0

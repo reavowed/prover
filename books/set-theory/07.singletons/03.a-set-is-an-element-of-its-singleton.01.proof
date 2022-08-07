@@ -1,0 +1,2 @@
+prove ∀ x ↔ ∈ $0 singleton t0 = $0 t0 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (t0)
+prove ∈ t0 singleton t0 77e84bb4cca8e45bae306bcda7f8aac1e9fd1910ce48db79ed57d6bd8667e744 (∈ $0 singleton t0) (t0) 0

@@ -1,0 +1,62 @@
+Establish the existence of the unordered pair {a, b}.
+
+theorem Unordered Pair Existence
+termVariables(a 0, b 0)
+conclusion ∃! z ∀ y ↔ ∈ $0 $$0 ∨ = $0 t0 = $0 t1
+
+term pair (a b)
+  name (Unordered Pair)
+  format ({a, b})
+  (∀ x ↔ ∈ $0 $$0 ∨ = $0 t0 = $0 t1)
+
+theorem Elements of Unordered Pair
+termVariables(c 0, a 0, b 0)
+premise ∈ t0 pair t1 t2
+conclusion ∨ = t0 t1 = t0 t2
+
+theorem First Element of Unordered Pair
+termVariables(a 0, b 0)
+conclusion ∈ t0 pair t0 t1
+
+theorem Second Element of Unordered Pair
+termVariables(b 0, a 0)
+conclusion ∈ t0 pair t1 t0
+
+theorem An Unordered Pair Is Not the Empty Set
+termVariables(a 0, b 0)
+conclusion ¬ = pair t0 t1 ∅
+
+theorem Reverse Unordered Pair
+termVariables(a 0, b 0)
+conclusion = pair t0 t1 pair t1 t0
+
+theorem Repeated Pair Is Singleton
+termVariables(a 0)
+conclusion = pair t0 t0 singleton t0
+
+theorem Sets Are Equal If Pair Is Singleton
+termVariables(a 0, b 0, c 0)
+premise = pair t0 t1 singleton t2
+conclusion = t0 t2
+
+theorem Sets Are Equal If Pair Is Singleton
+termVariables(a 0, b 0, c 0)
+premise = pair t0 t1 singleton t2
+conclusion = t1 t2
+
+theorem Sets Are Equal If Pair Is Singleton
+termVariables(a 0, b 0, c 0)
+premise = pair t0 t1 singleton t2
+conclusion = t0 t1
+
+theorem Unordered Pair Is Subset
+termVariables(a 0, S 0, b 0)
+premise ∈ t0 t1
+premise ∈ t2 t1
+conclusion ⊆ pair t0 t2 t1
+
+theorem Unordered Pair Is Element of Power Set
+termVariables(a 0, S 0, b 0)
+premise ∈ t0 t1
+premise ∈ t2 t1
+conclusion ∈ pair t0 t2 powerSet t1

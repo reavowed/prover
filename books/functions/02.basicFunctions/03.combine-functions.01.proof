@@ -1,0 +1,146 @@
+elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+  prove ↔ ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (t0, t1, t2)
+  prove → ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ function t0 functionFrom t0 t1 t2, ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.0
+  prove ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ function t0 functionFrom t0 t1 t2, ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.1 p0
+  prove ⊆ t0 product t1 t2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (⊆ t0 product t1 t2, ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.2
+}
+elided 942e113ffe8b203087c545dc81ac730c31f4b614a8b18460935dd068898a26d7 {
+  prove ⊆ t1 ∪ t1 t4 051ab2a94bcffef8bd5f48a2a098876bd8eb86b4ecdd3e844696b47146f918df () (t1, t4)
+  prove ⊆ product t1 t2 product ∪ t1 t4 t2 942e113ffe8b203087c545dc81ac730c31f4b614a8b18460935dd068898a26d7 () (t1, ∪ t1 t4, t2) 1.0
+}
+prove ⊆ t0 product ∪ t1 t4 t2 7ec7cabe50f4cb7fe84fa2c0e6493db48f8e0755d65caca1d3eb447796ab3687 () (t0, product t1 t2, product ∪ t1 t4 t2) 0 1
+elided 1a3b5651d48b259c2cb11e78f184653da72a27c10712e8ae6c3eb0d3a98edfa9 {
+  prove ⊆ t2 ∪ t2 t5 051ab2a94bcffef8bd5f48a2a098876bd8eb86b4ecdd3e844696b47146f918df () (t2, t5)
+  prove ⊆ product ∪ t1 t4 t2 product ∪ t1 t4 ∪ t2 t5 1a3b5651d48b259c2cb11e78f184653da72a27c10712e8ae6c3eb0d3a98edfa9 () (t2, ∪ t2 t5, ∪ t1 t4) 3.0
+}
+prove ⊆ t0 product ∪ t1 t4 ∪ t2 t5 7ec7cabe50f4cb7fe84fa2c0e6493db48f8e0755d65caca1d3eb447796ab3687 () (t0, product ∪ t1 t4 t2, product ∪ t1 t4 ∪ t2 t5) 2 3
+elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+  prove ↔ ∧ function t3 functionFrom t3 t4 t5 ∧ ⊆ t3 product t4 t5 ∀ x → ∈ $0 t4 ∃! b ∈ orderedPair $$0 $0 t3 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (t3, t4, t5)
+  prove → ∧ function t3 functionFrom t3 t4 t5 ∧ ⊆ t3 product t4 t5 ∀ x → ∈ $0 t4 ∃! b ∈ orderedPair $$0 $0 t3 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ function t3 functionFrom t3 t4 t5, ∧ ⊆ t3 product t4 t5 ∀ x → ∈ $0 t4 ∃! b ∈ orderedPair $$0 $0 t3) () 5.0
+  prove ∧ ⊆ t3 product t4 t5 ∀ x → ∈ $0 t4 ∃! b ∈ orderedPair $$0 $0 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ function t3 functionFrom t3 t4 t5, ∧ ⊆ t3 product t4 t5 ∀ x → ∈ $0 t4 ∃! b ∈ orderedPair $$0 $0 t3) () 5.1 p1
+  prove ⊆ t3 product t4 t5 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (⊆ t3 product t4 t5, ∀ x → ∈ $0 t4 ∃! b ∈ orderedPair $$0 $0 t3) () 5.2
+}
+elided 942e113ffe8b203087c545dc81ac730c31f4b614a8b18460935dd068898a26d7 {
+  prove ⊆ t4 ∪ t1 t4 baeea87568a26ea2a1e0a679491f2459e08026d309ca95c23a1ec6f23f103c05 () (t4, t1)
+  prove ⊆ product t4 t5 product ∪ t1 t4 t5 942e113ffe8b203087c545dc81ac730c31f4b614a8b18460935dd068898a26d7 () (t4, ∪ t1 t4, t5) 6.0
+}
+prove ⊆ t3 product ∪ t1 t4 t5 7ec7cabe50f4cb7fe84fa2c0e6493db48f8e0755d65caca1d3eb447796ab3687 () (t3, product t4 t5, product ∪ t1 t4 t5) 5 6
+elided 1a3b5651d48b259c2cb11e78f184653da72a27c10712e8ae6c3eb0d3a98edfa9 {
+  prove ⊆ t5 ∪ t2 t5 baeea87568a26ea2a1e0a679491f2459e08026d309ca95c23a1ec6f23f103c05 () (t5, t2)
+  prove ⊆ product ∪ t1 t4 t5 product ∪ t1 t4 ∪ t2 t5 1a3b5651d48b259c2cb11e78f184653da72a27c10712e8ae6c3eb0d3a98edfa9 () (t5, ∪ t2 t5, ∪ t1 t4) 8.0
+}
+prove ⊆ t3 product ∪ t1 t4 ∪ t2 t5 7ec7cabe50f4cb7fe84fa2c0e6493db48f8e0755d65caca1d3eb447796ab3687 () (t3, product ∪ t1 t4 t5, product ∪ t1 t4 ∪ t2 t5) 7 8
+prove ⊆ ∪ t0 t3 product ∪ t1 t4 ∪ t2 t5 0e8c69ec55c6a0f326d2b01003e2e71d5d78b85a69f4080df8ab953aa42c94ca () (t0, product ∪ t1 t4 ∪ t2 t5, t3) 4 9
+take x {
+  assume ∈ $0 t1 {
+    take y {
+      assume ∈ orderedPair $$0 $0 ∪ t0 t3 {
+        assume ∈ orderedPair $$0 $0 t0 {
+          elided bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 {
+            prove ↔ ∈ orderedPair $$0 $0 t0 ∧ ∈ $$0 t1 = $0 apply t0 $$0 bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 () (t0, t1, t2, $$0, $0) p0
+            prove → ∈ orderedPair $$0 $0 t0 ∧ ∈ $$0 t1 = $0 apply t0 $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 t0, ∧ ∈ $$0 t1 = $0 apply t0 $$0) () 11.0.0.0.0.0.0
+            prove ∧ ∈ $$0 t1 = $0 apply t0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t0, ∧ ∈ $$0 t1 = $0 apply t0 $$0) () 11.0.0.0.0.0.1 11.0.0.0.0a
+            prove = $0 apply t0 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$0 t1, = $0 apply t0 $$0) () 11.0.0.0.0.0.2
+          }
+        }
+        assume ∈ orderedPair $$0 $0 t3 {
+          elided d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 {
+            elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+              prove ∀ x → ∈ $0 t3 ∈ $0 product t4 t5 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t3, product t4 t5) 5
+              prove → ∈ orderedPair $$0 $0 t3 ∈ orderedPair $$0 $0 product t4 t5 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t3 ∈ $$$0 product t4 t5) (orderedPair $$0 $0) 11.0.0.0.1.0.0.0
+              prove ∈ orderedPair $$0 $0 product t4 t5 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t3, ∈ orderedPair $$0 $0 product t4 t5) () 11.0.0.0.1.0.0.1 11.0.0.0.1a
+            }
+            prove ∈ $$0 t4 d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () ($$0, $0, t4, t5) 11.0.0.0.1.0.0
+          }
+          elided bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 {
+            prove ↔ ∈ orderedPair $$0 $0 t3 ∧ ∈ $$0 t4 = $0 apply t3 $$0 bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 () (t3, t4, t5, $$0, $0) p1
+            prove → ∈ orderedPair $$0 $0 t3 ∧ ∈ $$0 t4 = $0 apply t3 $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 t3, ∧ ∈ $$0 t4 = $0 apply t3 $$0) () 11.0.0.0.1.1.0
+            prove ∧ ∈ $$0 t4 = $0 apply t3 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t3, ∧ ∈ $$0 t4 = $0 apply t3 $$0) () 11.0.0.0.1.1.1 11.0.0.0.1a
+            prove = $0 apply t3 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$0 t4, = $0 apply t3 $$0) () 11.0.0.0.1.1.2
+          }
+          elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+            prove → ∈ $$0 ∩ t1 t4 = apply t0 $$0 apply t3 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ∩ t1 t4 = apply t0 $$$0 apply t3 $$$0) ($$0) p2
+            prove ∈ $$0 ∩ t1 t4 5cfa7495cb5ecbf61be53d87749d4bb7653440a3668657c5832f5ef4d6b16c7c () ($$0, t1, t4) 11.0a 11.0.0.0.1.0
+            prove = apply t0 $$0 apply t3 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ∩ t1 t4, = apply t0 $$0 apply t3 $$0) () 11.0.0.0.1.2.0 11.0.0.0.1.2.1
+            prove = apply t3 $$0 apply t0 $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply t0 $$0, apply t3 $$0) 11.0.0.0.1.2.2
+          }
+          prove = $0 apply t0 $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($0, apply t3 $$0, apply t0 $$0) 11.0.0.0.1.1 11.0.0.0.1.2
+        }
+        elided 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 {
+          prove ∨ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$0 $0 t3 5a81ee7915bbcf6610375dbab10576eef68e3c4e2dd424c81b9c188147f30ae7 () (orderedPair $$0 $0, t0, t3) 11.0.0.0a
+          prove = $0 apply t0 $$0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair $$0 $0 t0, ∈ orderedPair $$0 $0 t3, = $0 apply t0 $$0) () 11.0.0.0.2.0 11.0.0.0.0 11.0.0.0.1
+        }
+      }
+    }
+    elided 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb {
+      prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove = t1 domain t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain t0, t1) 11.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      prove ∈ $0 domain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (t1, domain t0) 11.0.1.1 11.0a
+      prove ∈ orderedPair $0 apply t0 $0 t0 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb () (t0, $0) 11.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 11.0.1.2
+    }
+    prove ∈ orderedPair $0 apply t0 $0 ∪ t0 t3 33f2017abf1119244d3e5afed3c492684b656c592fb65d4f2afa6ca2ff732db8 () (orderedPair $0 apply t0 $0, t0, t3) 11.0.1
+    prove ∃! x ∈ orderedPair $$0 $0 ∪ t0 t3 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∈ orderedPair $0 $$0 ∪ t0 t3) (apply t0 $0) 11.0.2 11.0.0
+  }
+  assume ∈ $0 t4 {
+    take y {
+      assume ∈ orderedPair $$0 $0 ∪ t0 t3 {
+        assume ∈ orderedPair $$0 $0 t0 {
+          elided d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 {
+            elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+              prove ∀ x → ∈ $0 t0 ∈ $0 product t1 t2 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, product t1 t2) 0
+              prove → ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$0 $0 product t1 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t0 ∈ $$$0 product t1 t2) (orderedPair $$0 $0) 11.1.0.0.0.0.0.0
+              prove ∈ orderedPair $$0 $0 product t1 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t0, ∈ orderedPair $$0 $0 product t1 t2) () 11.1.0.0.0.0.0.1 11.1.0.0.0a
+            }
+            prove ∈ $$0 t1 d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () ($$0, $0, t1, t2) 11.1.0.0.0.0.0
+          }
+          elided bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 {
+            prove ↔ ∈ orderedPair $$0 $0 t0 ∧ ∈ $$0 t1 = $0 apply t0 $$0 bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 () (t0, t1, t2, $$0, $0) p0
+            prove → ∈ orderedPair $$0 $0 t0 ∧ ∈ $$0 t1 = $0 apply t0 $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 t0, ∧ ∈ $$0 t1 = $0 apply t0 $$0) () 11.1.0.0.0.1.0
+            prove ∧ ∈ $$0 t1 = $0 apply t0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t0, ∧ ∈ $$0 t1 = $0 apply t0 $$0) () 11.1.0.0.0.1.1 11.1.0.0.0a
+            prove = $0 apply t0 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$0 t1, = $0 apply t0 $$0) () 11.1.0.0.0.1.2
+          }
+          elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+            prove → ∈ $$0 ∩ t1 t4 = apply t0 $$0 apply t3 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ∩ t1 t4 = apply t0 $$$0 apply t3 $$$0) ($$0) p2
+            prove ∈ $$0 ∩ t1 t4 5cfa7495cb5ecbf61be53d87749d4bb7653440a3668657c5832f5ef4d6b16c7c () ($$0, t1, t4) 11.1.0.0.0.0 11.1a
+            prove = apply t0 $$0 apply t3 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ∩ t1 t4, = apply t0 $$0 apply t3 $$0) () 11.1.0.0.0.2.0 11.1.0.0.0.2.1
+          }
+          prove = $0 apply t3 $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($0, apply t0 $$0, apply t3 $$0) 11.1.0.0.0.1 11.1.0.0.0.2
+        }
+        assume ∈ orderedPair $$0 $0 t3 {
+          elided bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 {
+            prove ↔ ∈ orderedPair $$0 $0 t3 ∧ ∈ $$0 t4 = $0 apply t3 $$0 bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 () (t3, t4, t5, $$0, $0) p1
+            prove → ∈ orderedPair $$0 $0 t3 ∧ ∈ $$0 t4 = $0 apply t3 $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 t3, ∧ ∈ $$0 t4 = $0 apply t3 $$0) () 11.1.0.0.1.0.0
+            prove ∧ ∈ $$0 t4 = $0 apply t3 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t3, ∧ ∈ $$0 t4 = $0 apply t3 $$0) () 11.1.0.0.1.0.1 11.1.0.0.1a
+            prove = $0 apply t3 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$0 t4, = $0 apply t3 $$0) () 11.1.0.0.1.0.2
+          }
+        }
+        elided 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 {
+          prove ∨ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$0 $0 t3 5a81ee7915bbcf6610375dbab10576eef68e3c4e2dd424c81b9c188147f30ae7 () (orderedPair $$0 $0, t0, t3) 11.1.0.0a
+          prove = $0 apply t3 $$0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair $$0 $0 t0, ∈ orderedPair $$0 $0 t3, = $0 apply t3 $$0) () 11.1.0.0.2.0 11.1.0.0.0 11.1.0.0.1
+        }
+      }
+    }
+    elided 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb {
+      prove ∧ function t3 ∧ = domain t3 t4 ⊆ codomain t3 t5 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t3, t4, t5) p1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove = t4 domain t3 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain t3, t4) 11.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      prove ∈ $0 domain t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (t4, domain t3) 11.1.1.1 11.1a
+      prove ∈ orderedPair $0 apply t3 $0 t3 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb () (t3, $0) 11.1.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 11.1.1.2
+    }
+    prove ∈ orderedPair $0 apply t3 $0 ∪ t0 t3 575ab7217e272c44f21400641b5fa55080fbd1412a6ab09aac691f4d4611e10e () (orderedPair $0 apply t3 $0, t3, t0) 11.1.1
+    prove ∃! x ∈ orderedPair $$0 $0 ∪ t0 t3 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∈ orderedPair $0 $$0 ∪ t0 t3) (apply t3 $0) 11.1.2 11.1.0
+  }
+  elided 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 {
+    assume ∈ $0 ∪ t1 t4 {
+      prove ∨ ∈ $0 t1 ∈ $0 t4 5a81ee7915bbcf6610375dbab10576eef68e3c4e2dd424c81b9c188147f30ae7 () ($0, t1, t4) 11.2.0a
+      prove ∃! y ∈ orderedPair $$0 $0 ∪ t0 t3 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ $0 t1, ∈ $0 t4, ∃! y ∈ orderedPair $$0 $0 ∪ t0 t3) () 11.2.0.0 11.0 11.1
+    }
+  }
+}
+elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+  prove ∧ ⊆ ∪ t0 t3 product ∪ t1 t4 ∪ t2 t5 ∀ x → ∈ $0 ∪ t1 t4 ∃! b ∈ orderedPair $$0 $0 ∪ t0 t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ ∪ t0 t3 product ∪ t1 t4 ∪ t2 t5, ∀ x → ∈ $0 ∪ t1 t4 ∃! b ∈ orderedPair $$0 $0 ∪ t0 t3) () 10 11
+  elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+    prove ↔ ∧ function ∪ t0 t3 functionFrom ∪ t0 t3 ∪ t1 t4 ∪ t2 t5 ∧ ⊆ ∪ t0 t3 product ∪ t1 t4 ∪ t2 t5 ∀ x → ∈ $0 ∪ t1 t4 ∃! b ∈ orderedPair $$0 $0 ∪ t0 t3 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (∪ t0 t3, ∪ t1 t4, ∪ t2 t5)
+    prove → ∧ ⊆ ∪ t0 t3 product ∪ t1 t4 ∪ t2 t5 ∀ x → ∈ $0 ∪ t1 t4 ∃! b ∈ orderedPair $$0 $0 ∪ t0 t3 ∧ function ∪ t0 t3 functionFrom ∪ t0 t3 ∪ t1 t4 ∪ t2 t5 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∧ function ∪ t0 t3 functionFrom ∪ t0 t3 ∪ t1 t4 ∪ t2 t5, ∧ ⊆ ∪ t0 t3 product ∪ t1 t4 ∪ t2 t5 ∀ x → ∈ $0 ∪ t1 t4 ∃! b ∈ orderedPair $$0 $0 ∪ t0 t3) () 12.1.0
+    prove ∧ function ∪ t0 t3 functionFrom ∪ t0 t3 ∪ t1 t4 ∪ t2 t5 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ⊆ ∪ t0 t3 product ∪ t1 t4 ∪ t2 t5 ∀ x → ∈ $0 ∪ t1 t4 ∃! b ∈ orderedPair $$0 $0 ∪ t0 t3, ∧ function ∪ t0 t3 functionFrom ∪ t0 t3 ∪ t1 t4 ∪ t2 t5) () 12.1.1 12.0
+  }
+}

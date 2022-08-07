@@ -1,0 +1,33 @@
+Define the power set of a set - the set of all its subsets.
+
+axiom Axiom of Power Set
+termVariables(a 0)
+conclusion ∃ x ∀ y ↔ ∈ $0 $$0 ⊆ $0 t0
+
+theorem Power Sets Are Unique
+termVariables(a 0)
+conclusion ∃! x ∀ y ↔ ∈ $0 $$0 ⊆ $0 t0
+
+term powerSet (a)
+  name (Power Set)
+  format (𝒫a)
+  (∀ x ↔ ∈ $0 $$0 ⊆ $0 t0)
+  shorthand (power)
+
+theorem Subset Is in Power Set
+termVariables(b 0, a 0)
+premise ⊆ t0 t1
+conclusion ∈ t0 powerSet t1
+
+theorem Element of Power Set Is Subset
+termVariables(b 0, a 0)
+premise ∈ t0 powerSet t1
+conclusion ⊆ t0 t1
+
+theorem ∅ Is in Any Power Set
+termVariables(a 0)
+conclusion ∈ ∅ powerSet t0
+
+theorem Any Set Is in Its Own Power Set
+termVariables(a 0)
+conclusion ∈ t0 powerSet t0

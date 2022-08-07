@@ -1,0 +1,9 @@
+assume ∨ s2 s0 {
+  prove → s0 s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s0, s1) () p0
+  prove ∨ s2 s1 248476159b47ac04f4372eb3da2ea80598a55590337f781b1e6082ad4f70c003 (s2, s0, s1) () 0a 0.0
+}
+assume ∨ s2 s1 {
+  prove → s1 s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s0, s1) () p0
+  prove ∨ s2 s0 248476159b47ac04f4372eb3da2ea80598a55590337f781b1e6082ad4f70c003 (s2, s1, s0) () 1a 1.0
+}
+prove ↔ ∨ s2 s0 ∨ s2 s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ s2 s0, ∨ s2 s1) () 0 1

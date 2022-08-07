@@ -1,0 +1,72 @@
+Arbitrary and binary intersections.
+
+theorem Intersection over a Class
+statementVariables(φ 1)
+premise ∃ x with ($0) s0
+conclusion ∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) s0 ∈ $$0 $0
+
+theorem Arbitrary Intersections Are Unique
+termVariables(a 0)
+premise ¬ = t0 ∅
+conclusion ∃! Y ∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 t0 ∈ $$0 $0
+
+term intersection (a)
+  name (Arbitrary Intersection)
+  format (⋂a)
+  premises (¬ = t0 ∅)
+  (∀ y ↔ ∈ $0 $$0 ∀ x → ∈ $0 t0 ∈ $$0 $0)
+
+term ∩ (a b)
+  (= $0 intersection pair t0 t1)
+  shorthand (int)
+
+theorem Membership Condition for Binary Intersection
+termVariables(a 0, b 0)
+conclusion ∀ x ↔ ∈ $0 ∩ t0 t1 ∧ ∈ $0 t0 ∈ $0 t1
+
+theorem Element of Binary Intersection
+termVariables(a 0, A 0, B 0)
+premise ∈ t0 ∩ t1 t2
+conclusion ∧ ∈ t0 t1 ∈ t0 t2
+
+theorem Binary Intersection Is Symmetric
+termVariables(a 0, b 0)
+conclusion = ∩ t0 t1 ∩ t1 t0
+
+theorem An Element of Two Sets Is an Element of Their Intersection
+termVariables(a 0, A 0, B 0)
+premise ∈ t0 t1
+premise ∈ t0 t2
+conclusion ∈ t0 ∩ t1 t2
+
+theorem A Set Can Only Be an Element of One of a Disjoint Pair
+termVariables(A 0, B 0, a 0)
+premise = ∩ t0 t1 ∅
+premise ∈ t2 t0
+conclusion ¬ ∈ t2 t1
+
+theorem A Set Can Only Be an Element of One of a Disjoint Pair
+termVariables(A 0, B 0, a 0)
+premise = ∩ t0 t1 ∅
+premise ∈ t2 t1
+conclusion ¬ ∈ t2 t0
+
+theorem Element Transfers from Intersection
+termVariables(a 0, A 0, B 0)
+premise ∈ t0 ∩ t1 t2
+conclusion ∈ t0 t1
+
+theorem Element Transfers from Intersection
+termVariables(a 0, A 0, B 0)
+premise ∈ t0 ∩ t1 t2
+conclusion ∈ t0 t2
+
+theorem Disjoint Pair
+termVariables(A 0, B 0)
+premise ∀ x → ∈ $0 t0 ¬ ∈ $0 t1
+conclusion = ∩ t0 t1 ∅
+
+theorem Disjoint Pair
+termVariables(A 0, B 0)
+premise ∀ x → ∈ $0 t0 ¬ ∈ $0 t1
+conclusion = ∩ t1 t0 ∅

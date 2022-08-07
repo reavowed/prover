@@ -1,0 +1,41 @@
+Introduce the empty set, ∅.
+
+axiom Axiom of Empty Set
+conclusion ∃ X ∀ x ¬ ∈ $0 $$0
+
+theorem Two Empty Sets Are Equal
+termVariables(a 0, b 0)
+premise ∀ x ¬ ∈ $0 t0
+premise ∀ x ¬ ∈ $0 t1
+conclusion = t0 t1
+
+theorem There Exists a Unique Empty Set
+conclusion ∃! X ∀ x ¬ ∈ $0 $$0
+
+term ∅ ()
+  (∀ x ¬ ∈ $0 $$0)
+  shorthand (empty)
+
+theorem A Set with No Elements Is the Empty Set
+termVariables(a 0)
+premise ∀ x ¬ ∈ $0 t0
+conclusion = t0 ∅
+
+theorem A Set with No Elements Is the Empty Set
+termVariables(a 0)
+premise ¬ ∃ x ∈ $0 t0
+conclusion = t0 ∅
+
+theorem A Set with an Element Is Not the Empty Set
+termVariables(b 0, a 0)
+premise ∈ t0 t1
+conclusion ¬ = t1 ∅
+
+theorem A Set That Is Not the Empty Set Has an Element
+termVariables(a 0)
+premise ¬ = t0 ∅
+conclusion ∃ x ∈ $0 t0
+
+theorem The Empty Set Is a Subset of Any Set
+termVariables(a 0)
+conclusion ⊆ ∅ t0

@@ -1,0 +1,6 @@
+take x {
+  assume ∈ $0 t0 {
+    prove ∈ $0 union t1 159dff654ef0a4ccce97c93a3c3e9bf88a22dd35833fdba434500a11753671f0 () ($0, t0, t1) 0.0a p0
+  }
+}
+prove ⊆ t0 union t1 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (t0, union t1) 0

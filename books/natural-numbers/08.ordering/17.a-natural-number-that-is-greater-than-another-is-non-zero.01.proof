@@ -1,0 +1,15 @@
+elided 0365a10f9c1edf5cecc039f2bbef4aa9fb53054e14192dac03923c0de5e9661a {
+  prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 <ℕ ∈ $$0 $0 0365a10f9c1edf5cecc039f2bbef4aa9fb53054e14192dac03923c0de5e9661a () ()
+  prove → ∈ t0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 <ℕ ∈ t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 <ℕ ∈ $$0 $0) (t0) 0.0
+  prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 <ℕ ∈ t0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 <ℕ ∈ t0 $0) () 0.1 p0
+  prove → ∈ t1 ℕ ↔ ∈ orderedPair t0 t1 <ℕ ∈ t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 <ℕ ∈ t0 $0) (t1) 0.2
+  prove ↔ ∈ orderedPair t0 t1 <ℕ ∈ t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℕ, ↔ ∈ orderedPair t0 t1 <ℕ ∈ t0 t1) () 0.3 p1
+  prove → ∈ orderedPair t0 t1 <ℕ ∈ t0 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t0 t1 <ℕ, ∈ t0 t1) () 0.4
+  prove ∈ t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 t1 <ℕ, ∈ t0 t1) () 0.5 p2
+}
+prove ¬ = t1 ∅ d197f0469101dba16f72c9b3e6c622698a14a37bfe377f0d1e1e06962e7f87ec () (t0, t1) 0
+elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
+  prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
+  prove = ∅ 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (0ℕ, ∅) 2.0
+  prove ¬ = t1 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ = t1 $0) (∅, 0ℕ) 2.1 1
+}

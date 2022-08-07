@@ -1,0 +1,6 @@
+prove ∀ x ↔ ∈ $0 pair t1 t2 ∨ = $0 t1 = $0 t2 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 () (t1, t2)
+elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+  prove ↔ ∈ t0 pair t1 t2 ∨ = t0 t1 = t0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 pair t1 t2 ∨ = $0 t1 = $0 t2) (t0) 0
+  prove → ∈ t0 pair t1 t2 ∨ = t0 t1 = t0 t2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ t0 pair t1 t2, ∨ = t0 t1 = t0 t2) () 1.0
+  prove ∨ = t0 t1 = t0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 pair t1 t2, ∨ = t0 t1 = t0 t2) () 1.1 p0
+}

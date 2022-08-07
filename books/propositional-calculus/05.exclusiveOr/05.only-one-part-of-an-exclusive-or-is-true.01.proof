@@ -1,0 +1,4 @@
+prove ∨ ∧ s0 ¬ s1 ∧ ¬ s0 s1 81b22df3035dce0e7af5fe394d287b900db7fa29286c56f48181b29c3ee386ae (s0, s1) () p0
+prove ¬ ∧ ¬ s0 s1 971282e53080aaa84e257f3b794959be786ac98eb5fc51e58181a8c19ac87ee1 (s0, s1) () p1
+prove ∧ s0 ¬ s1 ff2f6dbf1f9d72bed232823eeca33745970df4eadd4712ff5dcc9db8d7b5ad1f (∧ s0 ¬ s1, ∧ ¬ s0 s1) () 0 1
+prove ¬ s1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (s0, ¬ s1) () 2

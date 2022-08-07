@@ -1,0 +1,11 @@
+elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+  prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+  prove ∀ x ¬ ∈ $0 ∩ t1 t4 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∀ x ¬ ∈ $0 $$0) (∩ t1 t4, ∅) p2 0.0
+}
+elided fa02c308b535e06a6fd425d8073ebbf2e2e6127a20a17a8bf3fe76840855133f {
+  take x {
+    prove ¬ ∈ $0 ∩ t1 t4 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$0 ∩ t1 t4) ($0) 0
+    prove → ∈ $0 ∩ t1 t4 = apply t0 $0 apply t3 $0 fa02c308b535e06a6fd425d8073ebbf2e2e6127a20a17a8bf3fe76840855133f (∈ $0 ∩ t1 t4, = apply t0 $0 apply t3 $0) () 1.0.0
+  }
+}
+prove ∧ function ∪ t0 t3 functionFrom ∪ t0 t3 ∪ t1 t4 ∪ t2 t5 9811a422d24853ac499a0df7c3695cccc20f7cd33a99eb7dcffb2315a727b0e8 () (t0, t1, t2, t3, t4, t5) p0 p1 1

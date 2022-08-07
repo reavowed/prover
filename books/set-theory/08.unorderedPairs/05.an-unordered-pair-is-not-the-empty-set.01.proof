@@ -1,0 +1,2 @@
+prove ∈ t0 pair t0 t1 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b72df9639e () (t0, t1)
+prove ¬ = pair t0 t1 ∅ d197f0469101dba16f72c9b3e6c622698a14a37bfe377f0d1e1e06962e7f87ec () (t0, pair t0 t1) 0

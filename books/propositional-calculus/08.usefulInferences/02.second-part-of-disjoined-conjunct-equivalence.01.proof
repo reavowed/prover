@@ -1,0 +1,6 @@
+prove ↔ ∨ ∧ s1 s3 ∧ s0 s2 s3 bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 (s1, s0, s3, s2) () p1 p0
+prove ↔ ∨ ∧ s1 s3 ∧ s0 s2 ∨ ∧ s0 s2 ∧ s1 s3 6a69a6d59764ffe4b9a2eeacc0888588de474f47ce04d36054eebbb1c3156ec2 (∧ s1 s3, ∧ s0 s2) ()
+elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
+  prove ↔ ∨ ∧ s0 s2 ∧ s1 s3 ∨ ∧ s1 s3 ∧ s0 s2 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∨ ∧ s1 s3 ∧ s0 s2, ∨ ∧ s0 s2 ∧ s1 s3) () 1
+  prove ↔ ∨ ∧ s0 s2 ∧ s1 s3 s3 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∨ ∧ s0 s2 ∧ s1 s3, ∨ ∧ s1 s3 ∧ s0 s2, s3) () 2.0 0
+}

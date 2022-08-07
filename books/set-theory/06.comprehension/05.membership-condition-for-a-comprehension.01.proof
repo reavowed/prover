@@ -1,0 +1,2 @@
+prove ∀ y ↔ ∈ $0 comprehension x t1 with ($0) s0 ∧ ∈ $0 t1 with ($0) s0 75d843010d923f185d0c6260204d038d28a6e82a4fed04ce7c3d27acd454bb56 (with ($0) s0) (t1)
+prove ∀ y ↔ ∈ $0 t0 ∧ ∈ $0 t1 with ($0) s0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t1 with ($0) s0) (t0, comprehension x t1 with ($0) s0) p0 0

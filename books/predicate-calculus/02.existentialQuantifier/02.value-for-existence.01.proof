@@ -1,0 +1,10 @@
+prove ¬ ∀ x ¬ with ($0) s0 05f66fc1d7ca1416b6e82d594ee494b31a64c9398f0dc6bc6c70c60b89088696 (with ($0) s0) () p0
+assume ¬ s1 {
+  elided f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b {
+    take x {
+      prove → with ($0) s0 s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) s0 s1) ($0) p1
+      prove ¬ with ($0) s0 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (with ($0) s0, s1) () 1.0.0.0 1a
+    }
+  }
+}
+prove s1 b031e4f2f4f85c8c0022e2fe1a7e107e8da8ad80902e1a8ba5f1b40a9deecc73 (s1, ∀ x ¬ with ($0) s0) () 1 0

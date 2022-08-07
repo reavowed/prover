@@ -1,0 +1,6 @@
+prove ∀ x ↔ ∈ $0 singleton t1 = $0 t1 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (t1)
+elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+  prove ↔ ∈ t0 singleton t1 = t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 singleton t1 = $0 t1) (t0) 0
+  prove → ∈ t0 singleton t1 = t0 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ t0 singleton t1, = t0 t1) () 1.0
+  prove = t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 singleton t1, = t0 t1) () 1.1 p0
+}

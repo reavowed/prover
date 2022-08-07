@@ -1,0 +1,19 @@
+assume s0 {
+  prove ¬ s1 6c8066d1d6929a9884ff35ff44cde85658c881867f3da7c8459e41fb54febb61 (s0, s1) () p0 0a
+  elided bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 {
+    take x {
+      prove ↔ ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1 = $0 t0 bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 (s0, s1, = $0 t0, = $0 t1) () 0a 0.0
+    }
+  }
+  prove ∃! x ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1 4546cf0ca0a98d722f8a5ee8bb04599652c5fa3a3419cd6c8bb8de8a9002bcf6 (∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1) (t0) 0.1
+}
+assume s1 {
+  prove ¬ s0 cd6001b6685e6efd134062cc83085a05f31e3c2e205f0db675e8a53aadfe8a86 (s0, s1) () p0 1a
+  elided 5aab6ca759237c74f7c83672e9a60b1e04fd164457bc51b95ed496fa53c75694 {
+    take x {
+      prove ↔ ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1 = $0 t1 5aab6ca759237c74f7c83672e9a60b1e04fd164457bc51b95ed496fa53c75694 (s0, s1, = $0 t0, = $0 t1) () 1.0 1a
+    }
+  }
+  prove ∃! x ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1 4546cf0ca0a98d722f8a5ee8bb04599652c5fa3a3419cd6c8bb8de8a9002bcf6 (∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1) (t1) 1.1
+}
+prove ∃! x ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1 0ccf7c0036fbf71a3939e714383a08f871c48974ef54351091f812ab96d5ce30 (s0, s1, ∃! x ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1) () p0 0 1

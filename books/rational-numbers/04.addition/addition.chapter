@@ -1,0 +1,24 @@
+Addition on the rationals.
+
+term + ()
+  disambiguator ℚ
+  (= $0 quadrupleQuotientFunction functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $0 $3 apply ×ℤ orderedPair $1 $2 apply ×ℤ orderedPair $1 $3 ~_ℚ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ)
+  shorthand (+Q)
+  attributes (infix-function)
+
+write apply +ℚ orderedPair a b as addQ
+
+theorem Rational Addition Function Properties
+conclusion ∧ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ
+
+theorem Rational Addition Is Associative
+conclusion associativeBinaryOperation +ℚ
+
+theorem Rational Addition Is Commutative
+conclusion commutativeBinaryOperation +ℚ
+
+theorem Identity for Rational Addition
+conclusion identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 0ℕ +ℚ
+
+theorem Rational Addition Is Invertible
+conclusion invertibleBinaryOperation +ℚ

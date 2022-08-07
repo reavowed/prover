@@ -1,0 +1,3 @@
+prove = |ℤ productComprehension a b product ℤ ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 $$1 61711599c91d5278fea16b1a88db4c0ea604b3193f5d6e65b230a4fdc99c3d9c () ()
+prove ⊆ |ℤ product ℤ ℤ 81b5dbe32279dbd5d93496d0e9d0489e46443ce8779f383a18c2222e389730ce (∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 $$1) (|ℤ, product ℤ ℤ) 0
+prove relation |ℤ ℤ ad873f1d6176a65adbc539ef3aada6d352d4f561c9b7326f4546bccadda16f9a () (|ℤ, ℤ) 1

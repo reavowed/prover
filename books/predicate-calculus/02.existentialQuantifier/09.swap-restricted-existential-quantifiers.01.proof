@@ -1,0 +1,12 @@
+let a' ∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2, ∃ b ∧ with ($0) s1 ∃ a ∧ with ($0) s0 with ($0 $$0) s2) () {
+  let b' ∧ with ($0) s1 with ($$0 $0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($$0) s1 with ($0 $$0) s2, ∃ b ∧ with ($0) s1 ∃ a ∧ with ($0) s0 with ($0 $$0) s2) () {
+    elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+      prove ∧ with ($$0) s0 with ($$0 $0) s2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($$0) s0, with ($$0 $0) s2) () 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ∃ a ∧ with ($0) s0 with ($0 $$0) s2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ with ($$$0) s0 with ($$$0 $0) s2) ($$0) 0.0.0.0
+    }
+    elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+      prove ∧ with ($0) s1 ∃ a ∧ with ($0) s0 with ($0 $$0) s2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) s1, ∃ a ∧ with ($0) s0 with ($0 $$0) s2) () 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0
+      prove ∃ b ∧ with ($0) s1 ∃ a ∧ with ($0) s0 with ($0 $$0) s2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ with ($$$0) s1 ∃ a ∧ with ($0) s0 with ($0 $$$$0) s2) ($0) 0.0.1.0
+    }
+  } 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+} p0

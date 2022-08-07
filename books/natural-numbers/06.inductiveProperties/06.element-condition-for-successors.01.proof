@@ -1,0 +1,73 @@
+subproof (Base case) {
+  take n {
+    assume ∈ $0 ℕ {
+      elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+        prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
+        prove ¬ ∈ $0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$0 ∅) ($0) 0.0.0.0.0
+      }
+      elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
+        elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
+          prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
+          prove = ∅ 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (0ℕ, ∅) 0.0.0.1.0.0
+        }
+        prove ¬ ∈ $0 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ $0 $$0) (∅, 0ℕ) 0.0.0.1.0 0.0.0.0
+      }
+      prove ¬ = successor $0 0ℕ 680871c216b3ec6767ce74e9d781392911f72cdcb40b15d7b4f9071ed1491366 () ($0)
+      elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+        prove ∀ x ↔ ∈ $0 singleton 0ℕ = $0 0ℕ 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (0ℕ)
+        prove ↔ ∈ successor $0 singleton 0ℕ = successor $0 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 singleton 0ℕ = $$0 0ℕ) (successor $0) 0.0.0.3.0
+        prove → ∈ successor $0 singleton 0ℕ = successor $0 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ successor $0 singleton 0ℕ, = successor $0 0ℕ) () 0.0.0.3.1
+        prove ¬ ∈ successor $0 singleton 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ successor $0 singleton 0ℕ, = successor $0 0ℕ) () 0.0.0.3.2 0.0.0.2
+      }
+      elided 57beb22f2b138311d56700b177c9e188c51e86c7ea55ddf4bae8a64c2d18c6e7 {
+        elided 57beb22f2b138311d56700b177c9e188c51e86c7ea55ddf4bae8a64c2d18c6e7 {
+          prove = 1ℕ singleton 0ℕ 57beb22f2b138311d56700b177c9e188c51e86c7ea55ddf4bae8a64c2d18c6e7 () ()
+          prove = singleton 0ℕ 1ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (1ℕ, singleton 0ℕ) 0.0.0.4.0.0
+        }
+        prove ¬ ∈ successor $0 1ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ successor $0 $$0) (singleton 0ℕ, 1ℕ) 0.0.0.4.0 0.0.0.3
+      }
+      elided 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b {
+        prove = 1ℕ successor 0ℕ 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b () ()
+        prove ¬ ∈ successor $0 successor 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ successor $0 $$0) (1ℕ, successor 0ℕ) 0.0.0.5.0 0.0.0.4
+      }
+      prove ↔ ∈ successor $0 successor 0ℕ ∈ $0 0ℕ 969fe999e4d5d620af12493d29f784dc121d217aee403848a602e7dbae723076 (∈ successor $0 successor 0ℕ, ∈ $0 0ℕ) () 0.0.0.5 0.0.0.1
+    }
+  }
+}
+subproof (Inductive case) {
+  take n {
+    assume ∈ $0 ℕ {
+      assume ∀ m → ∈ $0 ℕ ↔ ∈ successor $0 successor $$0 ∈ $0 $$0 {
+        take m {
+          assume ∈ $0 ℕ {
+            elided (Extracted) {
+              prove → ∈ $0 ℕ ↔ ∈ successor $0 successor $$0 ∈ $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℕ ↔ ∈ successor $$$0 successor $$0 ∈ $$$0 $$0) ($0) 1.0.0.0a
+              prove ↔ ∈ successor $0 successor $$0 ∈ $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ↔ ∈ successor $0 successor $$0 ∈ $0 $$0) () 1.0.0.0.0.0.0.0 1.0.0.0.0.0a
+            }
+            elided 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd {
+              prove ∀ n ∀ m ↔ = successor $$0 successor $0 = $$0 $0 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd () ()
+              prove ∀ m ↔ = successor $$0 successor $0 = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ = successor $$$$0 successor $0 = $$$$0 $0) ($0) 1.0.0.0.0.0.1.0
+              prove ↔ = successor $0 successor $$0 = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ = successor $0 successor $$$0 = $0 $$$0) ($$0) 1.0.0.0.0.0.1.1
+            }
+            elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
+              prove ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 () ()
+              prove ∀ m ↔ ∈ $0 successor successor $$$0 ∨ ∈ $0 successor $$$0 = $0 successor $$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ ∈ $0 successor $$$$0 ∨ ∈ $0 $$$$0 = $0 $$$$0) (successor $$0) 1.0.0.0.0.0.2.0
+              prove ↔ ∈ successor $0 successor successor $$0 ∨ ∈ successor $0 successor $$0 = successor $0 successor $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 successor successor $$0 ∨ ∈ $$$0 successor $$0 = $$$0 successor $$0) (successor $0) 1.0.0.0.0.0.2.1
+            }
+            prove ↔ ∨ ∈ successor $0 successor $$0 = successor $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 0e72b1ea61b9283ca256f30f8aad3a2560673c1053f233808046d148b0e9519f (∈ successor $0 successor $$0, ∈ $0 $$0, = successor $0 successor $$0, = $0 $$0) () 1.0.0.0.0.0.0 1.0.0.0.0.0.1
+            prove ↔ ∈ successor $0 successor successor $$0 ∨ ∈ $0 $$0 = $0 $$0 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ successor $0 successor successor $$0, ∨ ∈ successor $0 successor $$0 = successor $0 successor $$0, ∨ ∈ $0 $$0 = $0 $$0) () 1.0.0.0.0.0.2 1.0.0.0.0.0.3
+            elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
+              prove ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 () ()
+              prove ∀ m ↔ ∈ $0 successor $$$0 ∨ ∈ $0 $$$0 = $0 $$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ ∈ $0 successor $$$$0 ∨ ∈ $0 $$$$0 = $0 $$$$0) ($$0) 1.0.0.0.0.0.5.0
+              prove ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 successor $$0 ∨ ∈ $$$0 $$0 = $$$0 $$0) ($0) 1.0.0.0.0.0.5.1
+              prove ↔ ∨ ∈ $0 $$0 = $0 $$0 ∈ $0 successor $$0 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ $0 successor $$0, ∨ ∈ $0 $$0 = $0 $$0) () 1.0.0.0.0.0.5.2
+            }
+            prove ↔ ∈ successor $0 successor successor $$0 ∈ $0 successor $$0 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ successor $0 successor successor $$0, ∨ ∈ $0 $$0 = $0 $$0, ∈ $0 successor $$0) () 1.0.0.0.0.0.4 1.0.0.0.0.0.5
+          }
+        }
+      }
+    }
+  }
+}
+prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ successor $0 successor $$0 ∈ $0 $$0 19929f12c2d837743d530233061fddca190c574115ac9b3835bea89d29e3e4d7 (∀ n → ∈ $0 ℕ ↔ ∈ successor $0 successor $$0 ∈ $0 $$0) () 0 1
+prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ successor $$0 successor $0 ∈ $$0 $0 f226fe340cad7d95c6eb4a0b1bf6a0a9b7627150b1dab4f2c1b825ed9cd342c9 (∈ $0 ℕ, ∈ $0 ℕ, ↔ ∈ successor $1 successor $0 ∈ $1 $0) () 2

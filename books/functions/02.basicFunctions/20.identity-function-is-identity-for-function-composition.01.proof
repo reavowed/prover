@@ -1,0 +1,25 @@
+prove ∧ function identityFunction t2 functionFrom identityFunction t2 t2 t2 37f9c10d2262f9702affece9d218edf9ed2014fdfd000076706be2880a10ae24 () (t2)
+prove ∧ function compose identityFunction t2 t0 functionFrom compose identityFunction t2 t0 t1 t2 27a9ad07b0d146334e257aaba7427cce388fe953c9727f6ae96e50a67b67a3cb () (t0, t1, t2, identityFunction t2, t2) p0 0
+take a {
+  assume ∈ $0 t1 {
+    prove ∈ apply t0 $0 t2 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (t0, t1, t2, $0) p0 2.0a
+    prove = apply compose identityFunction t2 t0 $0 apply identityFunction t2 apply t0 $0 dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc () (t0, t1, t2, identityFunction t2, t2, $0) p0 0 2.0a
+    prove = apply identityFunction t2 apply t0 $0 apply t0 $0 12943fec453bd8b1d073280cbf411da07a378b1979e8355c5a48fe3c2fe11fd8 () (apply t0 $0, t2) 2.0.0
+    prove = apply compose identityFunction t2 t0 $0 apply t0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply compose identityFunction t2 t0 $0, apply identityFunction t2 apply t0 $0, apply t0 $0) 2.0.1 2.0.2
+  }
+}
+prove = compose identityFunction t2 t0 t0 d062dc18912b8cffa422e3e7fc85cd6f2f4146355f0ba48999b4e1cc1a2cd96b () (compose identityFunction t2 t0, t1, t2, t0) 1 p0 2
+prove ∧ function identityFunction t1 functionFrom identityFunction t1 t1 t1 37f9c10d2262f9702affece9d218edf9ed2014fdfd000076706be2880a10ae24 () (t1)
+prove ∧ function compose t0 identityFunction t1 functionFrom compose t0 identityFunction t1 t1 t2 27a9ad07b0d146334e257aaba7427cce388fe953c9727f6ae96e50a67b67a3cb () (identityFunction t1, t1, t1, t0, t2) 4 p0
+take a {
+  assume ∈ $0 t1 {
+    prove = apply compose t0 identityFunction t1 $0 apply t0 apply identityFunction t1 $0 dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc () (identityFunction t1, t1, t1, t0, t2, $0) 4 p0 6.0a
+    elided 12943fec453bd8b1d073280cbf411da07a378b1979e8355c5a48fe3c2fe11fd8 {
+      prove = apply identityFunction t1 $0 $0 12943fec453bd8b1d073280cbf411da07a378b1979e8355c5a48fe3c2fe11fd8 () ($0, t1) 6.0a
+      prove = apply t0 apply identityFunction t1 $0 apply t0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply identityFunction t1 $0, $0, apply t0 $$0) 6.0.1.0
+    }
+    prove = apply compose t0 identityFunction t1 $0 apply t0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply compose t0 identityFunction t1 $0, apply t0 apply identityFunction t1 $0, apply t0 $0) 6.0.0 6.0.1
+  }
+}
+prove = compose t0 identityFunction t1 t0 d062dc18912b8cffa422e3e7fc85cd6f2f4146355f0ba48999b4e1cc1a2cd96b () (compose t0 identityFunction t1, t1, t2, t0) 5 p0 6
+prove ∧ = compose identityFunction t2 t0 t0 = compose t0 identityFunction t1 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= compose identityFunction t2 t0 t0, = compose t0 identityFunction t1 t0) () 3 7

@@ -1,0 +1,2 @@
+prove = equivalenceQuotient t1 t0 replacementSet a t1 equivalenceClass $0 t0 ec442a98cdbc6640198dd0ddeaee384239ad8ae44af30403e971ac17a5739955 () (t1, t0) p0
+prove ∈ equivalenceClass t2 t0 equivalenceQuotient t1 t0 c9f2bb871030aba7cefe90ec5d1063e3fede02bed65e9e77472830a9b98bcc95 () (equivalenceQuotient t1 t0, t1, equivalenceClass $0 t0, t2) 0 p1

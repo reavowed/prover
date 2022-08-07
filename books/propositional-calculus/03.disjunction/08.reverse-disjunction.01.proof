@@ -1,0 +1,7 @@
+assume s0 {
+  prove ∨ s1 s0 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (s0, s1) () 0a
+}
+assume s1 {
+  prove ∨ s1 s0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (s1, s0) () 1a
+}
+prove ∨ s1 s0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (s0, s1, ∨ s1 s0) () p0 0 1

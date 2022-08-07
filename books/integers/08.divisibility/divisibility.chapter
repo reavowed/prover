@@ -1,0 +1,145 @@
+Define what it means for one integer to be divisible by another, even in the absence of general multiplicative inverses.
+
+comment Define the divisibility relation on the integers.
+
+term | ()
+  disambiguator ℤ
+  (= $0 productComprehension a b product ℤ ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 $$1)
+  shorthand (|Z)
+  attributes (infix-relation)
+
+write ∈ orderedPair a b |ℤ as divZ
+
+theorem Integer Divisibility Is a Relation
+conclusion relation |ℤ ℤ
+
+theorem Component Membership Condition for Integer Divisibility
+conclusion ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0
+
+theorem 1 Divides Every Integer
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ∈ orderedPair apply ⍳_ℤ 1ℕ t0 |ℤ
+
+theorem Every Integer Divides Itself
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ∈ orderedPair t0 t0 |ℤ
+
+theorem Negated Divisor Is Divisor
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion ↔ ∈ orderedPair t0 t1 |ℤ ∈ orderedPair negatedZ t0 t1 |ℤ
+
+theorem Negated Dividend Is Dividend
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion ↔ ∈ orderedPair t0 t1 |ℤ ∈ orderedPair t0 negatedZ t1 |ℤ
+
+theorem Absolute Value of Divisor Is Divisor
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion ↔ ∈ orderedPair t0 t1 |ℤ ∈ orderedPair absZ t0 t1 |ℤ
+
+theorem Bounds for Divisor of Non-Zero Integer
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ orderedPair t0 t1 |ℤ
+premise ¬ = t1 apply ⍳_ℤ 0ℕ
+conclusion ∧ ∈ orderedPair negatedZ absZ t1 t0 ≤ℤ ∈ orderedPair t0 absZ t1 ≤ℤ
+
+theorem Divisibility of Sum of Integers
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+premise ∈ orderedPair t0 t1 |ℤ
+premise ∈ orderedPair t0 t2 |ℤ
+conclusion ∈ orderedPair t0 apply +ℤ orderedPair t1 t2 |ℤ
+
+theorem Divisibility of Product of Integers
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+premise ∨ ∈ orderedPair t0 t1 |ℤ ∈ orderedPair t0 t2 |ℤ
+conclusion ∈ orderedPair t0 apply ×ℤ orderedPair t1 t2 |ℤ
+
+theorem Existence of Greatest Common Divisor for Integers
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∨ ¬ = t0 apply ⍳_ℤ 0ℕ ¬ = t1 apply ⍳_ℤ 0ℕ
+conclusion ∃! c ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∧ ∈ orderedPair $0 t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ orderedPair $0 $$0 ≤ℤ
+
+term gcd (a b)
+  disambiguator ℤ
+  name (Greatest Common Divisor)
+  format (%0(a, b)) no-component-brackets
+  premises (∈ t0 ℤ, ∈ t1 ℤ, ∨ ¬ = t0 apply ⍳_ℤ 0ℕ ¬ = t1 apply ⍳_ℤ 0ℕ)
+  (∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∧ ∈ orderedPair $0 t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ orderedPair $0 $$0 ≤ℤ)
+
+theorem Euclidean Division for Integers
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ¬ = t1 apply ⍳_ℤ 0ℕ
+conclusion ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 t1 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ t1 <ℤ
+
+theorem Bezout's Lemma
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∨ ¬ = t0 apply ⍳_ℤ 0ℕ ¬ = t1 apply ⍳_ℤ 0ℕ
+conclusion ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 gcdℤ t0 t1
+
+theorem Natural Embedding Preserves Divisibility
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ↔ ∈ orderedPair t0 t1 |ℕ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 |ℤ
+
+theorem Natural Embedding Preserves GCD
+termVariables(a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∨ ∈ orderedPair 0ℕ t0 <ℕ ∈ orderedPair 0ℕ t1 <ℕ
+conclusion = apply ⍳_ℤ gcdℕ t0 t1 gcdℤ apply ⍳_ℤ t0 apply ⍳_ℤ t1
+
+theorem Euclid's Lemma
+termVariables(p 0, a 0, b 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+premise prime t0
+conclusion ↔ ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ ∨ ∈ orderedPair t0 t1 |ℕ ∈ orderedPair t0 t2 |ℕ
+
+theorem Euclid's Lemma for Integers
+termVariables(p 0, a 0, b 0)
+premise ∈ t0 ℕ
+premise prime t0
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+conclusion ↔ ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair t1 t2 |ℤ ∨ ∈ orderedPair apply ⍳_ℤ t0 t1 |ℤ ∈ orderedPair apply ⍳_ℤ t0 t2 |ℤ
+
+theorem Multiplication of Divisors
+termVariables(a 0, b 0, c 0, d 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+premise ∈ t3 ℤ
+premise ∈ orderedPair t0 t2 |ℤ
+premise ∈ orderedPair t1 t3 |ℤ
+conclusion ∈ orderedPair apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t2 t3 |ℤ
+
+theorem Multiplication is Cancellable in Divisor Relation
+termVariables(a 0, b 0, c 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ t2 ℤ
+premise ¬ = t2 apply ⍳_ℤ 0ℕ
+conclusion ↔ ∈ orderedPair apply ×ℤ orderedPair t0 t2 apply ×ℤ orderedPair t1 t2 |ℤ ∈ orderedPair t0 t1 |ℤ

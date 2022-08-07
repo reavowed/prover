@@ -1,0 +1,21 @@
+assume → s0 s1 {
+  assume s0 {
+    prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s1) () 0a 0.0a
+    elided (Extracted) {
+      prove ↔ s1 s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, ↔ s1 s2) () p0 0.0a
+      prove → s1 s2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s1, s2) () 0.0.1.0
+      prove s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s1, s2) () 0.0.1.1 0.0.0
+    }
+  }
+}
+assume → s0 s2 {
+  assume s0 {
+    prove s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s2) () 1a 1.0a
+    elided (Extracted) {
+      prove ↔ s1 s2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, ↔ s1 s2) () p0 1.0a
+      prove → s2 s1 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s1, s2) () 1.0.1.0
+      prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s2, s1) () 1.0.1.1 1.0.0
+    }
+  }
+}
+prove ↔ → s0 s1 → s0 s2 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (→ s0 s1, → s0 s2) () 0 1

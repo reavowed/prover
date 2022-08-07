@@ -1,0 +1,7 @@
+assume ∈ t0 t2 {
+  prove ∈ t0 ∪ t2 t1 33f2017abf1119244d3e5afed3c492684b656c592fb65d4f2afa6ca2ff732db8 () (t0, t2, t1) 0a
+}
+assume ∈ t0 ∪ t2 t1 {
+  prove ∈ t0 t2 fd1318eb795bf6424a29aa5aa54de0e1e703653477ccebf84acf47c622a62058 () (t0, t2, t1) 1a p0
+}
+prove ↔ ∈ t0 t2 ∈ t0 ∪ t2 t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ t0 t2, ∈ t0 ∪ t2 t1) () 0 1

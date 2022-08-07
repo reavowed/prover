@@ -1,0 +1,3 @@
+prove = ∪ t1 t0 ∪ t0 t1 0a71a87b82027d08ae78f92e82252a814c8da618c7d54b0d9ff877c76612ad37 () (t1, t0)
+prove = ∪ t0 t1 t1 caa552aea0f4266f08b8d57fb66f89e5b15136442e7ab2a496853718cca4f8b9 () (t0, t1) p0
+prove = ∪ t1 t0 t1 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (∪ t1 t0, ∪ t0 t1, t1) 0 1

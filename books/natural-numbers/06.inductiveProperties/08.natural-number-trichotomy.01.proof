@@ -1,0 +1,50 @@
+elided 02bd7ae2d41023b89d8d6909b508437682b3b637a9958a9b75240d4cdb12be26 {
+  prove ⊕ = t0 0ℕ ∈ 0ℕ t0 02bd7ae2d41023b89d8d6909b508437682b3b637a9958a9b75240d4cdb12be26 () (t0) p0
+  prove ∨ = t0 0ℕ ∈ 0ℕ t0 2cb695f79e67d4a66aadf665aa336968a1cec742a0feff3940335eb98c713167 (= t0 0ℕ, ∈ 0ℕ t0) () 0.0
+}
+prove ∨ ∈ t0 0ℕ ∨ = t0 0ℕ ∈ 0ℕ t0 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∨ = t0 0ℕ ∈ 0ℕ t0, ∈ t0 0ℕ) () 0
+take a {
+  assume ∈ $0 ℕ {
+    assume ∨ ∈ t0 $0 ∨ = t0 $0 ∈ $0 t0 {
+      assume ∈ t0 $0 {
+        elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
+          prove ∨ ∈ t0 $0 = t0 $0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ t0 $0, = t0 $0) () 2.0.0.0a
+          elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
+            prove ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 () ()
+            prove ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ ∈ $0 successor $$$0 ∨ ∈ $0 $$$0 = $0 $$$0) ($0) 2.0.0.0.0.1.0
+            prove ↔ ∈ t0 successor $0 ∨ ∈ t0 $0 = t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 successor $0 ∨ ∈ $$0 $0 = $$0 $0) (t0) 2.0.0.0.0.1.1
+            prove → ∨ ∈ t0 $0 = t0 $0 ∈ t0 successor $0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 successor $0, ∨ ∈ t0 $0 = t0 $0) () 2.0.0.0.0.1.2
+            prove ∈ t0 successor $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ t0 $0 = t0 $0, ∈ t0 successor $0) () 2.0.0.0.0.1.3 2.0.0.0.0.0
+          }
+        }
+        prove ∨ ∈ t0 successor $0 ∨ = t0 successor $0 ∈ successor $0 t0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ t0 successor $0, ∨ = t0 successor $0 ∈ successor $0 t0) () 2.0.0.0.0
+      }
+      assume = t0 $0 {
+        prove ∈ t0 successor t0 fe3e3ed1a695fe6d7d69ea9843ee5b5a2ad74543046fa92c170ced1188ee5964 () (t0)
+        prove ∈ t0 successor $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ t0 successor $$0) (t0, $0) 2.0.0.1a 2.0.0.1.0
+        prove ∨ ∈ t0 successor $0 ∨ = t0 successor $0 ∈ successor $0 t0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ t0 successor $0, ∨ = t0 successor $0 ∈ successor $0 t0) () 2.0.0.1.1
+      }
+      assume ∈ $0 t0 {
+        elided c06768d75c05348690098b02ae1dd805419c16771314db00c4d82f16a9522255 {
+          prove ∀ n → ∈ $0 ℕ ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 c06768d75c05348690098b02ae1dd805419c16771314db00c4d82f16a9522255 () ()
+          prove → ∈ t0 ℕ ∀ m ↔ ∈ $0 t0 ∨ ∈ successor $0 t0 = successor $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ ∀ m ↔ ∈ $0 $$$0 ∨ ∈ successor $0 $$$0 = successor $0 $$$0) (t0) 2.0.0.2.0.0
+          prove ∀ m ↔ ∈ $0 t0 ∨ ∈ successor $0 t0 = successor $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ m ↔ ∈ $0 t0 ∨ ∈ successor $0 t0 = successor $0 t0) () 2.0.0.2.0.1 p0
+          prove ↔ ∈ $0 t0 ∨ ∈ successor $0 t0 = successor $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∨ ∈ successor $$0 t0 = successor $$0 t0) ($0) 2.0.0.2.0.2
+          prove → ∈ $0 t0 ∨ ∈ successor $0 t0 = successor $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 t0, ∨ ∈ successor $0 t0 = successor $0 t0) () 2.0.0.2.0.3
+          prove ∨ ∈ successor $0 t0 = successor $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, ∨ ∈ successor $0 t0 = successor $0 t0) () 2.0.0.2.0.4 2.0.0.2a
+        }
+        prove ∨ = successor $0 t0 ∈ successor $0 t0 b134472f96d09743ef31ae01b078b0eb39e40cae7af88a3daa98c677ba777f89 (∈ successor $0 t0, = successor $0 t0) () 2.0.0.2.0
+        assume = successor $0 t0 {
+          prove = t0 successor $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (successor $0, t0) 2.0.0.2.2a
+        }
+        prove ∨ = t0 successor $0 ∈ successor $0 t0 b453d979eebd5cc336443bccc95802e8ef76c51a9ea14bc35868255acbd9adc9 (= successor $0 t0, ∈ successor $0 t0, = t0 successor $0) () 2.0.0.2.1 2.0.0.2.2
+        prove ∨ ∈ t0 successor $0 ∨ = t0 successor $0 ∈ successor $0 t0 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∨ = t0 successor $0 ∈ successor $0 t0, ∈ t0 successor $0) () 2.0.0.2.3
+      }
+      assume ∨ = t0 $0 ∈ $0 t0 {
+        prove ∨ ∈ t0 successor $0 ∨ = t0 successor $0 ∈ successor $0 t0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= t0 $0, ∈ $0 t0, ∨ ∈ t0 successor $0 ∨ = t0 successor $0 ∈ successor $0 t0) () 2.0.0.3a 2.0.0.1 2.0.0.2
+      }
+      prove ∨ ∈ t0 successor $0 ∨ = t0 successor $0 ∈ successor $0 t0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ t0 $0, ∨ = t0 $0 ∈ $0 t0, ∨ ∈ t0 successor $0 ∨ = t0 successor $0 ∈ successor $0 t0) () 2.0.0a 2.0.0.0 2.0.0.3
+    }
+  }
+}
+prove ∨ ∈ t0 t1 ∨ = t0 t1 ∈ t1 t0 4f6fc5278d8806c2580ac552515ba0954b5447473eefeb89ad1a4379624bc059 (∨ ∈ t0 $0 ∨ = t0 $0 ∈ $0 t0) (t1) 1 2 p1

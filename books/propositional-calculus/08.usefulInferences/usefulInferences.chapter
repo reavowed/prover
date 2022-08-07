@@ -1,0 +1,102 @@
+Some inferences that can be used to reduce boilerplate in proofs.
+
+comment A set of more complicated structural facts that are surprisingly useful later on.
+
+theorem First Part of Disjoined Conjunct Equivalence
+statementVariables(φ 0, χ 0, ψ 0, ω 0)
+premise s0
+premise ¬ s1
+conclusion ↔ ∨ ∧ s0 s2 ∧ s1 s3 s2
+
+theorem Second Part of Disjoined Conjunct Equivalence
+statementVariables(φ 0, χ 0, ψ 0, ω 0)
+premise ¬ s0
+premise s1
+conclusion ↔ ∨ ∧ s0 s2 ∧ s1 s3 s3
+
+comment Some tricks to simplify redundant statements.
+
+theorem Remove Redundant Left Conjunct from Equivalence
+statementVariables(φ 0, ψ 0)
+premise → s0 s1
+conclusion ↔ ∧ s0 s1 s0
+
+theorem Remove Redundant Right Conjunct from Equivalence
+statementVariables(φ 0, ψ 0)
+premise → s0 s1
+conclusion ↔ ∧ s1 s0 s0
+
+theorem Remove Redundant Left Disjunct from Equivalence
+statementVariables(φ 0, ψ 0)
+premise → s0 s1
+conclusion ↔ ∨ s0 s1 s1
+
+theorem Remove Redundant Right Disjunct from Equivalence
+statementVariables(φ 0, ψ 0)
+premise → s0 s1
+conclusion ↔ ∨ s1 s0 s1
+
+theorem Remove False Left Disjunct from Equivalence
+statementVariables(φ 0, ψ 0)
+premise ¬ s0
+conclusion ↔ ∨ s0 s1 s1
+
+theorem Remove False Right Disjunct From Equivalence
+statementVariables(φ 0, ψ 0)
+premise ¬ s0
+conclusion ↔ ∨ s1 s0 s1
+
+comment Adding extra conjunctions to equivalences.
+
+theorem Add Left Conjunction to Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
+premise ↔ s0 s1
+conclusion ↔ ∧ s2 s0 ∧ s2 s1
+
+theorem Add Right Conjunction to Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
+premise ↔ s0 s1
+conclusion ↔ ∧ s0 s2 ∧ s1 s2
+
+theorem Distribute Implication over Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
+premise → s0 ↔ s1 s2
+conclusion ↔ ∧ s0 s1 ∧ s0 s2
+
+comment And removing them.
+
+theorem Remove Known Left Conjunct From Equivalence
+statementVariables(φ 0, ψ 0)
+premise s0
+conclusion ↔ ∧ s0 s1 s1
+
+theorem Remove Known Right Conjunct From Equivalence
+statementVariables(φ 0, ψ 0)
+premise s0
+conclusion ↔ ∧ s1 s0 s1
+
+comment Adding extra disjunctions to equivalences.
+
+theorem Add Left Disjunction to Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
+premise ↔ s0 s1
+conclusion ↔ ∨ s2 s0 ∨ s2 s1
+
+theorem Add Right Disjunction to Equivalence
+statementVariables(φ 0, ψ 0, χ 0)
+premise ↔ s0 s1
+conclusion ↔ ∨ s0 s2 ∨ s1 s2
+
+theorem Disjunction of Equivalences
+statementVariables(φ 0, ψ 0, χ 0, ω 0)
+premise ↔ s0 s1
+premise ↔ s2 s3
+conclusion ↔ ∨ s0 s2 ∨ s1 s3
+
+comment Extend a disjunction to conjunction.
+
+theorem Extend Disjunction of Equivalents to Conjunction
+statementVariables(φ 0, ψ 0)
+premise ∨ s0 s1
+premise ↔ s0 s1
+conclusion ∧ s0 s1

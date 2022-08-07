@@ -10,7 +10,7 @@ object ChapterReader {
     chapterIndex: Int,
     entryContext: EntryContext
   ): (Chapter, EntryContext) = {
-    val path = BookDirectoryConfig.getChapterPath(bookOutline.title, chapterTitle, chapterIndex)
+    val path = BookDirectoryConfig.getOldChapterFilePath(bookOutline.title, chapterTitle, chapterIndex)
     val parser = for {
       summary <- Parser.toEndOfLine
       entriesAndContext <- Parser.foldWhileDefined[ChapterEntry, EntryContext](entryContext) { (_, _, currentContext) =>

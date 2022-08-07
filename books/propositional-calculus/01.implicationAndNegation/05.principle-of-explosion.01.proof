@@ -1,0 +1,4 @@
+assume ¬ s0 {
+  prove ⊥ 99c9b30776361008f1532f8942d7a8bd8c54fa9a4c4784fd0b91d73187974c76 (⊥) () p0
+}
+prove s0 e45f4d1e7214523c8dea6e1ddbd11256b1fb4a03a7c4b69e0e177e59ed2bce58 (s0) () 0

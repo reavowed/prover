@@ -1,0 +1,115 @@
+Introduce equality and its associated rules of inference.
+
+statement = (a b)
+  format (a = b) requires-brackets no-component-brackets
+  attributes (equality)
+
+display ¬ = a b as (a ≠ b) requires-brackets
+
+display ∧ = a c = b c as (a = b = c) requires-brackets
+
+axiom Equality Is Reflexive
+termVariables(a 0)
+conclusion = t0 t0
+
+axiom Substitution of Equals
+statementVariables(φ 1)
+termVariables(a 0, b 0)
+premise = t0 t1
+premise with (t0) s0
+conclusion with (t1) s0
+
+comment We first have to prove that equality is symmetric before we can prove the reversed version of the second axiom.
+
+theorem Reverse Equality
+termVariables(a 0, b 0)
+premise = t0 t1
+conclusion = t1 t0
+
+theorem Substitution of Equals (Reversed)
+statementVariables(φ 1)
+termVariables(a 0, b 0)
+premise = t0 t1
+premise with (t1) s0
+conclusion with (t0) s0
+
+comment Now we can also prove that the substitution axiom works when substituting into equal terms.
+
+theorem Substitution of Equals into Function
+termVariables(a 0, b 0, F 1)
+premise = t0 t1
+conclusion = with (t0) t2 with (t1) t2
+
+theorem Substitution of Equals into Function (Reversed)
+termVariables(a 0, b 0, F 1)
+premise = t0 t1
+conclusion = with (t1) t2 with (t0) t2
+
+comment Basic facts about equality.
+
+theorem Equality Is Symmetric
+termVariables(a 0, b 0)
+conclusion ↔ = t0 t1 = t1 t0
+
+theorem Equality Is Transitive
+termVariables(a 0, b 0, c 0)
+premise = t0 t1
+premise = t1 t2
+conclusion = t0 t2
+
+theorem Equality by Equaling the Same Thing (Left)
+termVariables(a 0, x 0, b 0)
+premise = t0 t1
+premise = t2 t1
+conclusion = t0 t2
+
+theorem Equality by Equaling the Same Thing (Right)
+termVariables(x 0, a 0, b 0)
+premise = t0 t1
+premise = t0 t2
+conclusion = t1 t2
+
+theorem Equivalence of Substituted Equals
+statementVariables(φ 1)
+termVariables(a 0, b 0)
+premise = t0 t1
+conclusion ↔ with (t0) s0 with (t1) s0
+
+theorem Distinguishable Terms Are Not Equal
+statementVariables(φ 1)
+termVariables(a 0, b 0)
+premise with (t0) s0
+premise ¬ with (t1) s0
+conclusion ¬ = t0 t1
+
+theorem Every Set Exists
+termVariables(a 0)
+conclusion ∃ x = $0 t0
+
+theorem Renamed Set
+statementVariables(φ 0)
+termVariables(a 0)
+premise ∀ x → = $0 t0 s0
+conclusion s0
+
+theorem Exclusive Or for Equality
+termVariables(a 0, b 0, c 0)
+premise ∨ = t0 t1 = t0 t2
+premise ¬ = t1 t2
+conclusion ⊕ = t0 t1 = t0 t2
+
+theorem Equivalence of Generalised Equals
+statementVariables(φ 1, ψ 2)
+termVariables(G 1, H 1)
+premise ∀ x → with ($0) s0 = with ($0) t0 with ($0) t1
+conclusion ↔ ∀ x → with ($0) s0 with ($0 with ($0) t0) s1 ∀ x → with ($0) s0 with ($0 with ($0) t1) s1
+
+theorem Reverse Negated Equality
+termVariables(a 0, b 0)
+premise ¬ = t0 t1
+conclusion ¬ = t1 t0
+
+theorem Function Equality Equivalence
+termVariables(a 0, F 1, b 0)
+premise → = with (t0) t1 with (t2) t1 = t0 t2
+conclusion ↔ = with (t0) t1 with (t2) t1 = t0 t2

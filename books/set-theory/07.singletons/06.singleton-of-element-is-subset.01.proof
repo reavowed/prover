@@ -1,0 +1,16 @@
+prove ∀ x ↔ ∈ $0 singleton t0 = $0 t0 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (t0)
+take x {
+  assume = $0 t0 {
+    prove ∈ $0 t1 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$0 t1) ($0, t0) 1.0a p0
+  }
+}
+take x {
+  assume ∈ $0 singleton t0 {
+    prove = $0 t0 6acf06be48fa49ac292909853e78fdb76495f5eee6ccc72143d1c51f5f3e56d4 () ($0, t0) 2.0a
+    elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+      prove → = $0 t0 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ = $$0 t0 ∈ $$0 t1) ($0) 1
+      prove ∈ $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= $0 t0, ∈ $0 t1) () 2.0.1.0 2.0.0
+    }
+  }
+}
+prove ⊆ singleton t0 t1 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (singleton t0, t1) 2

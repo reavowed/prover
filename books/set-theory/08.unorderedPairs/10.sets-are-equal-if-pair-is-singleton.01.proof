@@ -1,0 +1,3 @@
+prove = t0 t2 375d79dbf74ac2bec7b558a826a3456fa0b610880a86fb4c3c485f47845c3bad () (t0, t1, t2) p0
+prove = t1 t2 6d97a7c220fd2caf5e244edb8384ca1ecdd6297b237692029c0b01304a7b6782 () (t0, t1, t2) p0
+prove = t0 t1 b45f186b49b0f3a01f5bfa7a79bb1ee4bf1764d6c199d933392ebea7fd0641eb () (t0, t2, t1) 0 1

@@ -1,0 +1,16 @@
+assume ∧ s0 s2 {
+  prove s2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (s0, s2) () 0a
+}
+assume ∧ s1 s3 {
+  prove s2 56ea0c2f6150a1c8039e028ea603ffd99cd1c5d6c0825b24f59c86a3e3ced6a1 (s1, s2) () 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p1
+}
+assume ∨ ∧ s0 s2 ∧ s1 s3 {
+  prove s2 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∧ s0 s2, ∧ s1 s3, s2) () 2a 0 1
+}
+assume s2 {
+  elided 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 {
+    prove ∧ s0 s2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s2) () p0 3a
+    prove ∨ ∧ s0 s2 ∧ s1 s3 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ s0 s2, ∧ s1 s3) () 3.0.0
+  }
+}
+prove ↔ ∨ ∧ s0 s2 ∧ s1 s3 s2 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∨ ∧ s0 s2 ∧ s1 s3, s2) () 2 3

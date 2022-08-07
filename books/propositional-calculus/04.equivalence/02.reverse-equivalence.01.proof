@@ -1,0 +1,3 @@
+prove ∧ → s0 s1 → s1 s0 3110a0fcbc6e1b1e6c0c70fb52ad8589d7abbd79616211011a8e8b5f97d0ab6e (s0, s1) () p0
+prove ∧ → s1 s0 → s0 s1 8584d0863e2899efd18c2fe95bafea9d2d79f82bbc22dc480c474086c866b70c (→ s0 s1, → s1 s0) () 0
+prove ↔ s1 s0 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (s1, s0) () 1

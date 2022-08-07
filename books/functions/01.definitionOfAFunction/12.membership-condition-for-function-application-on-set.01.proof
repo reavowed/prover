@@ -1,0 +1,2 @@
+prove = applySet t0 t1 replacementSet x t1 apply t0 $0 90237ba801c7009a209a664d4304300ba9f19f5c3889d385427b6ca3da45e7bc () (t0, t1)
+prove ∀ b ↔ ∈ $0 applySet t0 t1 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0 a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec () (applySet t0 t1, t1, apply t0 $0) 0

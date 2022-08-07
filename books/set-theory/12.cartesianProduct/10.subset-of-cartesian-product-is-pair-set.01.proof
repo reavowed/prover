@@ -1,0 +1,14 @@
+take x {
+  assume ∈ $0 t0 {
+    elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+      prove ∀ x → ∈ $0 t0 ∈ $0 product t1 t2 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, product t1 t2) p0
+      prove → ∈ $0 t0 ∈ $0 product t1 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t0 ∈ $$0 product t1 t2) ($0) 0.0.0.0
+      prove ∈ $0 product t1 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, ∈ $0 product t1 t2) () 0.0.0.1 0.0a
+    }
+    elided 04d25940483e2da57ec763affbce387d793357cc8cb7702aef82750d69f52ec4 {
+      prove ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = $$$0 orderedPair $$0 $0 04d25940483e2da57ec763affbce387d793357cc8cb7702aef82750d69f52ec4 () ($0, t1, t2) 0.0.0
+      prove ∃ a ∃ b = $$$0 orderedPair $$0 $0 9aa6f3e8f4b9fe99e869fdf177edf601da568b1ee1d7cadc2be14344862a5119 (∈ $$0 t1, ∈ $$0 t2, = $0 orderedPair $$0 $$1) () 0.0.1.0
+    }
+  }
+}
+prove pairSet t0 5ce5b07cd07bf802c79c5305f58dfa06ba95bd4bff6928b2cab9430f7bcd6897 () (t0) 0

@@ -1,0 +1,123 @@
+Addition on natural numbers.
+
+theorem Existence of Addition
+conclusion ∃! f ∧ ∧ function $0 functionFrom $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0
+
+term + ()
+  disambiguator ℕ
+  (∧ ∧ binaryOperation $0 binaryOperationOn $0 ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0)
+  attributes (infix-function)
+
+write apply +ℕ orderedPair a b as addN
+
+theorem Successor of Addition (Right)
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion = apply +ℕ orderedPair t0 successor t1 successor apply +ℕ orderedPair t0 t1
+
+theorem Identity for Addition
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ∧ = apply +ℕ orderedPair t0 0ℕ t0 = apply +ℕ orderedPair 0ℕ t0 t0
+
+theorem Successor of Addition (Left)
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion = apply +ℕ orderedPair successor t0 t1 successor apply +ℕ orderedPair t0 t1
+
+theorem Addition is Closed on the Natural Numbers
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ∈ apply +ℕ orderedPair t0 t1 ℕ
+
+theorem Successor Is Adding 1
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion = successor t0 apply +ℕ orderedPair t0 1ℕ
+
+theorem Natural Addition is Commutative
+conclusion commutativeBinaryOperation +ℕ
+
+theorem Natural Addition is Commutative (old)
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion = apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair t1 t0
+
+theorem Natural Addition is Associative
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion = apply +ℕ orderedPair t0 apply +ℕ orderedPair t1 t2 apply +ℕ orderedPair apply +ℕ orderedPair t0 t1 t2
+
+theorem Natural Addition is Right-Cancellable
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion ↔ = apply +ℕ orderedPair t0 t2 apply +ℕ orderedPair t1 t2 = t0 t1
+
+theorem Natural Addition is Left-Cancellable
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion ↔ = apply +ℕ orderedPair t2 t0 apply +ℕ orderedPair t2 t1 = t0 t1
+
+theorem Natural Addition Preserves Strict Order (Left)
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion ↔ ∈ orderedPair apply +ℕ orderedPair t0 t2 apply +ℕ orderedPair t1 t2 <ℕ ∈ orderedPair t0 t1 <ℕ
+
+theorem Natural Addition Preserves Strict Order (Right)
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion ↔ ∈ orderedPair apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair t0 t2 <ℕ ∈ orderedPair t1 t2 <ℕ
+
+theorem Addition of Non-Zero Natural Is Increase
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ¬ = t1 0ℕ
+conclusion ∈ orderedPair t0 apply +ℕ orderedPair t0 t1 <ℕ
+
+theorem Addition of Natural Is At Least As Large
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ∈ orderedPair t0 apply +ℕ orderedPair t0 t1 ≤ℕ
+
+theorem Natural Addition Is Zero Iff Both Summands Are Zero
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ↔ = apply +ℕ orderedPair t0 t1 0ℕ ∧ = t0 0ℕ = t1 0ℕ
+
+theorem Difference Condition for Strictly-Ordered Naturals
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ↔ ∈ orderedPair t0 t1 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 t1
+
+theorem Difference Condition for Non-Strictly Ordered Naturals
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ↔ ∈ orderedPair t0 t1 ≤ℕ ∃ d ∧ ∈ $0 ℕ = apply +ℕ orderedPair t0 $0 t1
+
+theorem Reversed Order in Equal Sums of Naturals
+termVariables(a 0, b 0, c 0, d 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+premise ∈ t3 ℕ
+premise = apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair t2 t3
+conclusion ↔ ∈ orderedPair t0 t2 <ℕ ∈ orderedPair t3 t1 <ℕ

@@ -1,0 +1,76 @@
+Define an relation between two sets.
+
+type relation R
+  qualifier (A) (on A)
+  definition (⊆ t0 product t1 t1)
+
+display ∈ orderedPair a b R as (a R b) requires-brackets if R infix-relation
+
+display ¬ ∈ orderedPair a b R as (¬(a R b)) requires-brackets if R infix-relation
+
+display ∧ ∈ orderedPair a b R ∈ orderedPair b c S as (a R b S c) requires-brackets if R infix-relation if S infix-relation
+
+write ∈ orderedPair a b R as in2
+
+write ∈ orderedPair orderedPair a b orderedPair c d R as in4
+
+write orderedPair orderedPair a b orderedPair c d as pair4
+
+property reflexive on relation
+  definition (∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0)
+
+property irreflexive on relation
+  definition (∀ a → ∈ $0 t1 ¬ ∈ orderedPair $0 $0 t0)
+
+property symmetric on relation
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0)
+
+property asymmetric on relation
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0)
+
+property antisymmetric on relation
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∧ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0 = $$0 $0)
+
+property transitive on relation
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$0 $0 t0)
+
+property complete on relation
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0)
+
+property semicomplete on relation
+  name (semi-complete)
+  definition (∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t0 ∨ = $$0 $0 ∈ orderedPair $0 $$0 t0)
+
+theorem Antisymmetric Relation from Extended Asymmetric Relation
+termVariables(R 0, A 0, S 0)
+premise ∧ relation t0 t1 asymmetricRelation t0 t1
+premise = t2 productComprehension a b product t1 t1 ∨ ∈ orderedPair $0 $1 t0 = $0 $1
+conclusion ∧ relation t2 t1 antisymmetricRelation t2 t1
+
+theorem Transitive Relation from Extended Transitive Relation
+termVariables(R 0, A 0, S 0)
+premise ∧ relation t0 t1 transitiveRelation t0 t1
+premise = t2 productComprehension a b product t1 t1 ∨ ∈ orderedPair $0 $1 t0 = $0 $1
+conclusion ∧ relation t2 t1 transitiveRelation t2 t1
+
+theorem Complete Relation from Extended Semi-Complete Relation
+termVariables(R 0, A 0, S 0)
+premise ∧ relation t0 t1 semicompleteRelation t0 t1
+premise = t2 productComprehension a b product t1 t1 ∨ ∈ orderedPair $0 $1 t0 = $0 $1
+conclusion ∧ relation t2 t1 completeRelation t2 t1
+
+theorem Asymmetric Relation Is Irreflexive
+termVariables(~ 0, A 0)
+premise ∧ relation t0 t1 asymmetricRelation t0 t1
+conclusion irreflexiveRelation t0 t1
+
+theorem Complete Relation Is Reflexive
+termVariables(~ 0, A 0)
+premise ∧ relation t0 t1 completeRelation t0 t1
+conclusion reflexiveRelation t0 t1
+
+theorem Elements Related by an Irreflexive Relation Are Not Equal
+termVariables(~ 0, A 0, a 0, b 0)
+premise ∧ relation t0 t1 irreflexiveRelation t0 t1
+premise ∈ orderedPair t2 t3 t0
+conclusion ¬ = t2 t3

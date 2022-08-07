@@ -1,5 +1,6 @@
 package net.prover.books.io
 
+import net.prover.model.entries.Theorem
 import net.prover.model.{Book, Chapter}
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
@@ -17,18 +18,30 @@ object BookWriter {
     FileDefinition(BookDirectoryConfig.getBookFilePath(book.title), book.serialized) +: getChapterFiles(book)
   }
 
-  private def getChapterFiles(book: Book) = {
-    book.chapters.mapWithIndex(getChapterFile(book, _, _))
+  private def getChapterFiles(book: Book): Seq[FileDefinition] = {
+    book.chapters.flatMapWithIndex(getChapterFiles(book, _, _))
   }
 
-  private def getChapterFile(book: Book, chapter: Chapter, index: Int) = {
+  private def getChapterFiles(book: Book, chapter: Chapter, chapterIndex: Int): Seq[FileDefinition] = {
+    getChapterFile(book, chapter, chapterIndex) +: getProofFiles(book, chapter, chapterIndex)
+  }
+
+  private def getChapterFile(book: Book, chapter: Chapter, chapterIndex: Int): FileDefinition = {
     FileDefinition(
-      BookDirectoryConfig.getChapterPath(book.title, chapter.title, index),
+      BookDirectoryConfig.getChapterFilePath(book.title, chapter.title, chapterIndex),
       chapter.serialized)
   }
 
+  private def getProofFiles(book: Book, chapter: Chapter, chapterIndex: Int): Seq[FileDefinition] = {
+    chapter.entries.ofType[Theorem].flatMapWithIndex((theorem, theoremIndex) =>
+      theorem.proofs.mapWithIndex((proof, proofIndex) =>
+        FileDefinition(
+          BookDirectoryConfig.getProofPath(book.title, chapter.title, chapterIndex, theorem, theoremIndex, proofIndex),
+          proof.serialized)))
+  }
+
   private def deleteUnusedFiles(book: Book, bookFiles: Seq[FileDefinition]): Unit = {
-    FileUtils.listFiles(BookDirectoryConfig.getBookDirectoryPath(book.title).toFile, TrueFileFilter.INSTANCE, null).asScala.foreach { file =>
+    FileUtils.listFiles(BookDirectoryConfig.getBookDirectoryPath(book.title).toFile, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE).asScala.foreach { file =>
       if (!bookFiles.exists(_.path.toAbsolutePath.toString == file.getAbsolutePath)) {
         file.delete()
       }

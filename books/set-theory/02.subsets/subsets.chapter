@@ -1,0 +1,36 @@
+Introduce the subset relation, ⊆.
+
+statement ⊆ (A B)
+  definition (∀ x → ∈ $0 t0 ∈ $0 t1)
+  shorthand (sub)
+
+display ∀ A → ⊆ $0 B φ as ((∀A ⊆ B)φ)
+
+display ∃ A ∧ ⊆ $0 B φ as ((∀A ⊆ B)φ)
+
+theorem Element of Subset Is Element of Set
+termVariables(A 0, B 0, a 0)
+premise ⊆ t0 t1
+premise ∈ t2 t0
+conclusion ∈ t2 t1
+
+theorem Subset Is Antisymmetric
+termVariables(A 0, B 0)
+premise ⊆ t0 t1
+premise ⊆ t1 t0
+conclusion = t0 t1
+
+theorem Subset Is Transitive
+termVariables(A 0, B 0, C 0)
+premise ⊆ t0 t1
+premise ⊆ t1 t2
+conclusion ⊆ t0 t2
+
+theorem Any Set Is a Subset of Itself
+termVariables(A 0)
+conclusion ⊆ t0 t0
+
+theorem Uniqueness Condition from Subset Condition
+statementVariables(φ 1)
+premise ∀ x ∀ y → ∧ with ($$0) s0 with ($0) s0 ⊆ $$0 $0
+conclusion ∀ x ∀ y → ∧ with ($$0) s0 with ($0) s0 = $$0 $0

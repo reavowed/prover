@@ -1,0 +1,113 @@
+Multiplication on Natural Numbers
+
+theorem Existence of Natural Multiplication
+conclusion ∃! f ∧ ∧ function $0 functionFrom $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 apply +ℕ orderedPair apply $$$0 orderedPair $$0 $0 $$0
+
+term × ()
+  disambiguator ℕ
+  name (Multiplication)
+  (∧ ∧ function $0 functionFrom $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 apply +ℕ orderedPair apply $$$0 orderedPair $$0 $0 $$0)
+  shorthand (xN)
+  attributes (infix-function)
+
+display apply ×ℕ orderedPair a b as (%0%1) requires-brackets
+
+write apply ×ℕ orderedPair a b as mulN
+
+theorem Multiplication Is Closed on the Natural Numbers
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ∈ apply ×ℕ orderedPair t0 t1 ℕ
+
+theorem Successor of Natural Multiplication (Right)
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion = apply ×ℕ orderedPair t0 successor t1 apply +ℕ orderedPair apply ×ℕ orderedPair t0 t1 t0
+
+theorem Absorber for Natural Multiplication
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ∧ = apply ×ℕ orderedPair t0 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ t0 0ℕ
+
+theorem Successor of Natural Multiplication (Left)
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion = apply ×ℕ orderedPair successor t0 t1 apply +ℕ orderedPair apply ×ℕ orderedPair t0 t1 t1
+
+theorem Natural Multiplication is Commutative
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion = apply ×ℕ orderedPair t0 t1 apply ×ℕ orderedPair t1 t0
+
+theorem Identity for Natural Multiplication
+termVariables(n 0)
+premise ∈ t0 ℕ
+conclusion ∧ = apply ×ℕ orderedPair t0 1ℕ t0 = apply ×ℕ orderedPair 1ℕ t0 t0
+
+theorem Left Distribute Natural Multiplication over Addition
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion = apply ×ℕ orderedPair t0 apply +ℕ orderedPair t1 t2 apply +ℕ orderedPair apply ×ℕ orderedPair t0 t1 apply ×ℕ orderedPair t0 t2
+
+theorem Right Distribute Natural Multiplication over Addition
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion = apply ×ℕ orderedPair apply +ℕ orderedPair t0 t1 t2 apply +ℕ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2
+
+theorem Natural Multiplication is Associative
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion = apply ×ℕ orderedPair t0 apply ×ℕ orderedPair t1 t2 apply ×ℕ orderedPair apply ×ℕ orderedPair t0 t1 t2
+
+theorem Natural Multiplication By Non-Zero Preserves Strict Order
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion ∧ ↔ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ ∧ ∈ orderedPair t0 t1 <ℕ ¬ = t2 0ℕ ↔ ∈ orderedPair apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t2 t1 <ℕ ∧ ∈ orderedPair t0 t1 <ℕ ¬ = t2 0ℕ
+
+theorem Natural Multiplication Is Right-Cancellable
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion ↔ = apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 ∨ = t0 t1 = t2 0ℕ
+
+theorem Natural Multiplication Is Left-Cancellable
+termVariables(n 0, m 0, r 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+conclusion ↔ = apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t2 t1 ∨ = t0 t1 = t2 0ℕ
+
+theorem Natural Multiplication Is Zero Iff A Multiplicand Is Zero
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+conclusion ↔ = apply ×ℕ orderedPair t0 t1 0ℕ ∨ = t0 0ℕ = t1 0ℕ
+
+theorem Multiplication of Non-Zero Natural Is At Least As Large
+termVariables(n 0, m 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ¬ = t1 0ℕ
+conclusion ∈ orderedPair t0 apply ×ℕ orderedPair t0 t1 ≤ℕ
+
+theorem Cross-Multiplication Order Condition for Naturals
+termVariables(n 0, m 0, r 0, s 0)
+premise ∈ t0 ℕ
+premise ∈ t1 ℕ
+premise ∈ t2 ℕ
+premise ∈ t3 ℕ
+premise ∈ orderedPair t2 t3 <ℕ
+conclusion ↔ ∈ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 t3 apply ×ℕ orderedPair t1 t2 apply +ℕ orderedPair apply ×ℕ orderedPair t1 t3 apply ×ℕ orderedPair t0 t2 <ℕ ∈ orderedPair t0 t1 <ℕ

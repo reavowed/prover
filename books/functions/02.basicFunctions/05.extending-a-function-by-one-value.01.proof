@@ -1,0 +1,18 @@
+take x {
+  assume ∈ $0 t1 {
+    assume ∈ $0 singleton t3 {
+      prove = $0 t3 6acf06be48fa49ac292909853e78fdb76495f5eee6ccc72143d1c51f5f3e56d4 () ($0, t3) 0.0.0a
+      prove ∈ t3 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$0 t1) ($0, t3) 0.0.0.0 0.0a
+    }
+    prove ¬ ∈ $0 singleton t3 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ $0 singleton t3, ∈ t3 t1) () 0.0.0 p1
+  }
+}
+prove = ∩ t1 singleton t3 ∅ 78851639dac82f917360234cb01c66a8bdbfe01dab630d54d3a5dfc814f968a8 () (t1, singleton t3) 0
+prove ∧ function singleton orderedPair t3 t4 functionFrom singleton orderedPair t3 t4 singleton t3 singleton t4 66c204d55c2d320a678a5b14b0b0867938391faf5ca80ff2ba7d7cafcb5339bc () (t3, t4)
+elided 0f59e0a62abe8c28a4cb185bfca7a34f974b78247bce2650d7a08eeaed96f332 {
+  prove ∧ function ∪ t0 singleton orderedPair t3 t4 functionFrom ∪ t0 singleton orderedPair t3 t4 ∪ t1 singleton t3 ∪ t2 singleton t4 0f59e0a62abe8c28a4cb185bfca7a34f974b78247bce2650d7a08eeaed96f332 () (t0, t1, t2, singleton orderedPair t3 t4, singleton t3, singleton t4) p0 2 1
+  elided f4df9fd879b926cd0ee88a0393c0e910cc3f27bf67a0258ab019aa0ffe8145e1 {
+    prove = ∪ t2 singleton t4 t2 f4df9fd879b926cd0ee88a0393c0e910cc3f27bf67a0258ab019aa0ffe8145e1 () (t4, t2) p2
+    prove ∧ function ∪ t0 singleton orderedPair t3 t4 functionFrom ∪ t0 singleton orderedPair t3 t4 ∪ t1 singleton t3 t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function ∪ t0 singleton orderedPair t3 t4 functionFrom ∪ t0 singleton orderedPair t3 t4 ∪ t1 singleton t3 $0) (∪ t2 singleton t4, t2) 3.1.0 3.0
+  }
+}

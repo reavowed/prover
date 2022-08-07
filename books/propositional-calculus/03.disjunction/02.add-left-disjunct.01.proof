@@ -1,0 +1,2 @@
+prove → ¬ s1 s0 acbe547cc61228898842cf6a8732b10d52cf1f493dd2455a7cecc64235f53854 (s0, ¬ s1) () p0
+prove ∨ s1 s0 f1907fcb38bc4edb92cfc8dab5e442371437f79540509ece7bfd74945e1ea932 (s1, s0) () 0

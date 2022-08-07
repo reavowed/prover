@@ -1,0 +1,17 @@
+Having established the basic properties of all our connectives, we can now prove a list of identities relating them.
+
+theorem And Is Symmetric
+statementVariables(φ 0, ψ 0)
+conclusion ↔ ∧ s0 s1 ∧ s1 s0
+
+theorem Or Is Symmetric
+statementVariables(φ 0, ψ 0)
+conclusion ↔ ∨ s0 s1 ∨ s1 s0
+
+theorem And Is Idempotent
+statementVariables(φ 0)
+conclusion ↔ ∧ s0 s0 s0
+
+theorem Or Is Idempotent
+statementVariables(φ 0)
+conclusion ↔ ∨ s0 s0 s0

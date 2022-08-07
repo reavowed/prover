@@ -1,0 +1,46 @@
+Define the absolute value of an integer.
+
+theorem Existence of Absolute Value
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ∃! b ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0
+
+term absZ (a)
+  name (absolute value of integer)
+  format (|a|) no-component-brackets
+  premises (∈ t0 ℤ)
+  (∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0)
+
+theorem Absolute Value Is Unique
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+premise ∈ orderedPair apply ⍳_ℤ 0ℕ t1 ≤ℤ
+premise ∨ = t1 t0 = t1 negatedZ t0
+conclusion = t1 absZ t0
+
+theorem Non-Negative Integer Is Its Own Absolute Value
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ = t0 absZ t0
+
+theorem Absolute Value of Negation
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion = absZ negatedZ t0 absZ t0
+
+theorem Absolute Value of Multiplication
+termVariables(a 0, b 0)
+premise ∈ t0 ℤ
+premise ∈ t1 ℤ
+conclusion = absZ apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair absZ t0 absZ t1
+
+theorem Integer Is At Most Its Absolute Value
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ∈ orderedPair t0 absZ t0 ≤ℤ
+
+theorem Absolute Value Is Only Zero for Zero
+termVariables(a 0)
+premise ∈ t0 ℤ
+conclusion ↔ = t0 apply ⍳_ℤ 0ℕ = absZ t0 apply ⍳_ℤ 0ℕ

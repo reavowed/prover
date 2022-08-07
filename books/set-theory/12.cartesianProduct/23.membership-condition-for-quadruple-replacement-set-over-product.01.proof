@@ -1,0 +1,21 @@
+elided 4326d901a2c6d2454d7cdf30ecf5002d807b388b1459191199ddc8a35bcac5f5 {
+  prove = quadrupleReplacementSet a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) t5 replacementSet2 x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 4326d901a2c6d2454d7cdf30ecf5002d807b388b1459191199ddc8a35bcac5f5 () (product product t1 t2 product t3 t4, with ($0 $1 $2 $3) t5)
+  prove = t0 replacementSet2 x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (quadrupleReplacementSet a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) t5, replacementSet2 x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5) 0.0 p0
+}
+take s {
+  elided 498d6624618f2a98d46994f24df9de9aa4ff1920c6c2f7a9448ad996c30d9522 {
+    prove ∀ s ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 product t1 t2 ∃ y ∧ ∈ $0 product t3 t4 = $$$0 with (first $$0 second $$0 first $0 second $0) t5 498d6624618f2a98d46994f24df9de9aa4ff1920c6c2f7a9448ad996c30d9522 () (t0, product t1 t2, product t3 t4, with (first $$0 second $$0 first $$1 second $$1) t5) 0
+    prove ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 product t1 t2 ∃ y ∧ ∈ $0 product t3 t4 = $$$0 with (first $$0 second $$0 first $0 second $0) t5 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∃ x ∧ ∈ $0 product t1 t2 ∃ y ∧ ∈ $0 product t3 t4 = $$$$0 with (first $$0 second $$0 first $0 second $0) t5) ($0) 1.0.0
+  }
+  elided dd7b34cfabe761d72ca27a7de038393c6aeb230006e774252d2b74d9a26f8aa0 {
+    take x {
+      assume ∈ $0 product t1 t2 {
+        prove ↔ ∃ y ∧ ∈ $0 product t3 t4 = $$$0 with (first $$0 second $$0 first $0 second $0) t5 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$$0 with (first $$$0 second $$$0 $$0 $0) t5 dd7b34cfabe761d72ca27a7de038393c6aeb230006e774252d2b74d9a26f8aa0 (= $$0 with (first $0 second $0 $$$0 $$$1) t5) (t3, t4)
+      }
+    }
+    prove ↔ ∃ x ∧ ∈ $0 product t1 t2 ∃ y ∧ ∈ $0 product t3 t4 = $$$0 with (first $$0 second $$0 first $0 second $0) t5 ∃ x ∧ ∈ $0 product t1 t2 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$$0 with (first $$$0 second $$$0 $$0 $0) t5 4cb43000bb83d45aed68b3fcf827f03cdf4bf5f595e8b72cf4c3579ba2807c53 (∈ $$0 product t1 t2, ∃ y ∧ ∈ $0 product t3 t4 = $$0 with (first $$$0 second $$$0 first $0 second $0) t5, ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$0 with (first $$$$0 second $$$$0 $$0 $0) t5) () 1.1.0
+  }
+  prove ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 product t1 t2 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$$0 with (first $$$0 second $$$0 $$0 $0) t5 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 t0, ∃ a ∧ ∈ $0 product t1 t2 ∃ b ∧ ∈ $0 product t3 t4 = $$$0 with (first $$0 second $$0 first $0 second $0) t5, ∃ x ∧ ∈ $0 product t1 t2 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$$0 with (first $$$0 second $$$0 $$0 $0) t5) () 1.0 1.1
+  prove ↔ ∃ x ∧ ∈ $0 product t1 t2 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$$0 with (first $$$0 second $$$0 $$0 $0) t5 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$$$0 with ($$$$0 $$$0 $$0 $0) t5 dd7b34cfabe761d72ca27a7de038393c6aeb230006e774252d2b74d9a26f8aa0 (∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$0 with ($$$$0 $$$$1 $$0 $0) t5) (t1, t2)
+  prove ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$$$0 with ($$$$0 $$$0 $$0 $0) t5 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 t0, ∃ x ∧ ∈ $0 product t1 t2 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$$0 with (first $$$0 second $$$0 $$0 $0) t5, ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 ∃ c ∧ ∈ $0 t3 ∃ d ∧ ∈ $0 t4 = $$$$$0 with ($$$$0 $$$0 $$0 $0) t5) () 1.2 1.3
+}
