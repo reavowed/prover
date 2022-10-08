@@ -60,15 +60,15 @@ case class TypeQualifierDefinition(
 
 object TypeQualifierDefinition extends ChapterEntryParser {
   override def name: String = "qualifier"
-  override def parser(implicit context: EntryContext): Parser[ChapterEntry] = {
+  override def parser(implicit context: EntryParsingContext): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
-      parentType <- Parser.required("on", context.typeDefinitionParser)
+      parentType <- Parser.required("on", context.entryContext.typeDefinitionParser)
       qualifier <- Qualifier.parser
       expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.mainVariableDefinition +: qualifier.variableDefinitions)
       explicitName <- Parser.optional("name", Parser.allInParens)
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
-      conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
+      conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
     } yield TypeQualifierDefinition(symbol, parentType, qualifier, explicitName, definingStatement, conjunctionDefinition)
   }
 }

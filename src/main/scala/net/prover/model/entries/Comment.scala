@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.model.definitions.ExpressionDefinition
-import net.prover.model.{EntryContext, Inference, Parser}
+import net.prover.model.{EntryContext, EntryParsingContext, Inference, Parser}
 
 case class Comment(text: String) extends ChapterEntry {
   override def name: String = Comment.name
@@ -19,7 +19,7 @@ case class Comment(text: String) extends ChapterEntry {
 
 object Comment extends ChapterEntryParser {
   override val name: String = "comment"
-  override def parser(implicit context: EntryContext): Parser[Comment] = {
+  override def parser(implicit context: EntryParsingContext): Parser[Comment] = {
     for {
       text <- Parser.toEndOfLine
     } yield Comment(text)

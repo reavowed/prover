@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Template
-import net.prover.model.{EntryContext, Format, Inference, Parser}
+import net.prover.model.{EntryContext, EntryParsingContext, Format, Inference, Parser}
 
 @JsonSerialize(using = classOf[DisplayShorthandSerializer])
 case class DisplayShorthand(template: Template, format: Format.Explicit, conditions: Seq[(String, String)]) extends ChapterEntry {
@@ -44,7 +44,7 @@ object DisplayShorthand extends ChapterEntryParser {
     ).whileDefined
   }
 
-  override def parser(implicit entryContext: EntryContext): Parser[DisplayShorthand] = {
+  override def parser(implicit context: EntryParsingContext): Parser[DisplayShorthand] = {
     for {
       template <- Template.parser
       format <- Parser.required("as", Format.parser(template.names))

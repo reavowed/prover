@@ -39,7 +39,7 @@ case class Axiom(
 object Axiom extends Inference.EntryParser {
   override val name: String = "axiom"
 
-  def parser(implicit entryContext: EntryContext): Parser[Axiom] = {
+  def parser(implicit context: EntryParsingContext): Parser[Axiom] = {
     for {
       name <- Parser.toEndOfLine
       variableDefinitions <- VariableDefinitions.parser

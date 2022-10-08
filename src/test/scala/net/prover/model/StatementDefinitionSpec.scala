@@ -6,11 +6,9 @@ import org.specs2.mutable.Specification
 
 class StatementDefinitionSpec extends Specification {
 
-  implicit val entryContext = defaultEntryContext
-
   "statement definition parser" should {
     def parseStatementDefinition(text: String): StatementDefinitionEntry = {
-      StatementDefinitionEntry.parser.parseAndDiscard(text)
+      StatementDefinitionEntry.parser(defaultEntryContext).parseAndDiscard(text)
     }
 
     "parse definition" in {

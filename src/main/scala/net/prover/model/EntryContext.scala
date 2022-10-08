@@ -117,4 +117,5 @@ object EntryContext {
   }
 
   implicit def fromProvingContext(implicit provingContext: ProvingContext): EntryContext = provingContext.entryContext
+  implicit def fromEntryParsingContext(implicit entryParsingContext: EntryParsingContext): EntryContext = entryParsingContext.entryContext
 }

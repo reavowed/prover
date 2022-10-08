@@ -82,7 +82,7 @@ object TermDefinitionEntry extends ChapterEntryParser {
     "name",
     Parser.allInParens)
 
-  def parser(implicit entryContext: EntryContext): Parser[TermDefinitionEntry] = {
+  def parser(implicit context: EntryParsingContext): Parser[TermDefinitionEntry] = {
     for {
       baseSymbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinitionEntry.boundVariablesAndComponentTypesParser

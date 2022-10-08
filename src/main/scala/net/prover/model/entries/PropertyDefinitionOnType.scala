@@ -62,7 +62,7 @@ case class PropertyDefinitionOnType(
 
 object PropertyDefinitionOnType extends ChapterEntryParser {
   override def name: String = "property"
-  override def parser(implicit context: EntryContext): Parser[ChapterEntry] = {
+  override def parser(implicit context: EntryParsingContext): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       parentTypeConditions <- Parser.required("on", ParentTypeConditions.parser)

@@ -4,5 +4,5 @@ import net.prover.model._
 
 trait ChapterEntryParser {
   def name: String
-  def parser(implicit context: EntryContext): Parser[ChapterEntry]
+  def parser(implicit context: EntryParsingContext): Parser[ChapterEntry]
 }

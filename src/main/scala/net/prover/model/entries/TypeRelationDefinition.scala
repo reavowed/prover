@@ -67,18 +67,18 @@ case class TypeRelationDefinition(
 
 object TypeRelationDefinition extends ChapterEntryParser {
   override def name: String = "typeRelation"
-  override def parser(implicit context: EntryContext): Parser[ChapterEntry] = {
+  override def parser(implicit context: EntryParsingContext): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       linkingPhrase <- Parser.allInParens
-      firstType <- context.typeDefinitionParser
+      firstType <- context.entryContext.typeDefinitionParser
       firstVariableDefinition <- SimpleVariableDefinition.parser
-      secondType <- context.typeDefinitionParser
+      secondType <- context.entryContext.typeDefinitionParser
       secondVariableDefinition <- SimpleVariableDefinition.parser
       explicitName <- Parser.optional("name", Parser.allInParens)
       expressionParsingContext = ExpressionParsingContext.forTypeDefinition(Seq(firstVariableDefinition, secondVariableDefinition))
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
-      conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
+      conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
     } yield TypeRelationDefinition(symbol, firstType, secondType, firstVariableDefinition, secondVariableDefinition, linkingPhrase, explicitName, definingStatement, conjunctionDefinition)
   }
 }

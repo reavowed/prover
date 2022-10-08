@@ -3,7 +3,7 @@ package net.prover.model.entries
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.{EntryContext, ExpressionParsingContext, Inference, Parser, SimpleVariableDefinition}
+import net.prover.model.{EntryContext, EntryParsingContext, ExpressionParsingContext, Inference, Parser, SimpleVariableDefinition}
 
 trait ChapterEntry {
   @JsonSerialize
@@ -75,7 +75,7 @@ object ChapterEntry {
     DisplayShorthand,
     WritingShorthand)
 
-  def parser(context: EntryContext): Parser[Option[ChapterEntry]] = {
+  def parser(context: EntryParsingContext): Parser[Option[ChapterEntry]] = {
     Parser.singleWordIfAny.flatMapFlatMapReverse { entryType =>
       parsers.find(_.name == entryType).map(_.parser(context))
     }

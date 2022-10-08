@@ -75,7 +75,7 @@ case class TypeDefinition(
 
 object TypeDefinition extends ChapterEntryParser {
   override def name: String = "type"
-  override def parser(implicit context: EntryContext): Parser[ChapterEntry] = {
+  override def parser(implicit context: EntryParsingContext): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       mainVariableDefinition <- SimpleVariableDefinition.parser

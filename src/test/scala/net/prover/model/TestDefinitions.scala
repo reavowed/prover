@@ -10,6 +10,8 @@ import net.prover.model.expressions._
 import net.prover.model.proof._
 import org.specs2.matcher.Matcher
 
+import java.nio.file.Paths
+
 trait Placeholder[T <: ExpressionVariable[_ <: Expression]] {
   def name: String
   def index: Int
@@ -438,6 +440,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     }
   }
   implicit def entryContextToProvingContext(implicit entryContext: EntryContext): ProvingContext = ProvingContext(entryContext, new Definitions(entryContext))
+  implicit def entryContextToEntryParsingContext(entryContext: EntryContext): EntryParsingContext = EntryParsingContext(entryContext)
   implicit def entryContextAndStepContextToStepProvingContext(implicit entryContext: EntryContext, stepContext: StepContext): StepProvingContext = {
     StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
   }

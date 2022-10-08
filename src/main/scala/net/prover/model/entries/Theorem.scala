@@ -226,14 +226,13 @@ object Theorem extends Inference.EntryParser {
     } yield first +: rest
   }
 
-  override def parser(implicit entryContext: EntryContext): Parser[Theorem] = {
+  override def parser(implicit context: EntryParsingContext): Parser[Theorem] = {
     for {
       name <- Parser.toEndOfLine
       variableDefinitions <- VariableDefinitions.parser
       expressionParsingContext = ExpressionParsingContext.withDefinitions(variableDefinitions)
       premises <- premisesParser(expressionParsingContext)
       conclusion <- conclusionParser(expressionParsingContext)
-      proofs <- proofsParser(name, variableDefinitions, premises, conclusion)
-    } yield Theorem(name, variableDefinitions, premises, conclusion, proofs)
+    } yield Theorem(name, variableDefinitions, premises, conclusion, Nil)
   }
 }
