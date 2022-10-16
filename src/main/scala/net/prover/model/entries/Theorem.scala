@@ -1,6 +1,7 @@
 package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover.books.io.EntryParsingContext
 import net.prover.controllers.Identity
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException
@@ -207,32 +208,30 @@ object Theorem extends Inference.EntryParser {
     }
   }
 
-  def proofsParser(
+  def proofParser(
     theoremName: String,
     variableDefinitions: VariableDefinitions,
     premises: Seq[Statement],
     conclusion: Statement)(
     implicit entryContext: EntryContext
-  ): Parser[Seq[Proof]] = {
+  ): Parser[Proof] = {
     val initialStepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)
-    val proofParser = for {
-      steps <- Step.listParser(entryContext, initialStepContext).inBraces
+    for {
+      steps <- Step.listParser(entryContext, initialStepContext)
       _ = if (!steps.mapCollect(_.provenStatement).lastOption.contains(conclusion)) throw new Exception(s"Proof of theorem '$theoremName' did not prove $conclusion")
     } yield Proof(steps)
-
-    for {
-      first <- proofParser
-      rest <- proofParser.tryOrNone.whileDefined
-    } yield first +: rest
   }
 
   override def parser(implicit context: EntryParsingContext): Parser[Theorem] = {
+
     for {
       name <- Parser.toEndOfLine
       variableDefinitions <- VariableDefinitions.parser
       expressionParsingContext = ExpressionParsingContext.withDefinitions(variableDefinitions)
       premises <- premisesParser(expressionParsingContext)
       conclusion <- conclusionParser(expressionParsingContext)
-    } yield Theorem(name, variableDefinitions, premises, conclusion, Nil)
+      serializedProofs = context.proofFileReader.getSerializedProofs(name)
+      proofs = serializedProofs.mapWithIndex((proof, i) => proofParser(name, variableDefinitions, premises, conclusion).parseFromString(proof, s"proof ${i + 1}"))
+    } yield Theorem(name, variableDefinitions, premises, conclusion, proofs)
   }
 }

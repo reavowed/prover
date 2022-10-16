@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.books.io.{EntryParsingContext, ProofFileReader}
 import net.prover.model.TestDefinitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
@@ -9,8 +10,7 @@ import net.prover.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import org.specs2.matcher.Matcher
-
-import java.nio.file.Paths
+import org.specs2.mock.mockito.MockitoStubs
 
 trait Placeholder[T <: ExpressionVariable[_ <: Expression]] {
   def name: String
@@ -403,7 +403,7 @@ trait StepHelpers extends TestVariableDefinitions {
   }
 }
 
-object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with StepHelpers {
+object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with StepHelpers with MockitoStubs {
   import org.specs2.matcher.Matchers._
   import org.specs2.matcher.MustExpectations._
   val defaultEntryContext: EntryContext = EntryContext(
@@ -440,7 +440,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     }
   }
   implicit def entryContextToProvingContext(implicit entryContext: EntryContext): ProvingContext = ProvingContext(entryContext, new Definitions(entryContext))
-  implicit def entryContextToEntryParsingContext(entryContext: EntryContext): EntryParsingContext = EntryParsingContext(entryContext)
+  implicit def entryContextToEntryParsingContext(entryContext: EntryContext): EntryParsingContext = EntryParsingContext(entryContext, mock[ProofFileReader])
   implicit def entryContextAndStepContextToStepProvingContext(implicit entryContext: EntryContext, stepContext: StepContext): StepProvingContext = {
     StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
   }
@@ -450,8 +450,13 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
   }
 
   def beValidTheorem(implicit entryContext: EntryContext): Matcher[Theorem] = (theorem: Theorem) => {
-    val serializedTheorem = theorem.recalculateReferences(entryContextToProvingContext(entryContext))._1.serializedLines.mkString("\n").stripPrefix("theorem ")
-    val parsedTheorem = Theorem.parser(entryContext).parseFromString(serializedTheorem, "Theorem")
+    val recalculatedTheorem = theorem.recalculateReferences(entryContextToProvingContext(entryContext))._1
+    val serializedTheorem = recalculatedTheorem.serializedLines.mkString("\n").stripPrefix("theorem ")
+    val serializedProofs = recalculatedTheorem.proofs.map(_.serialized)
+    val proofFileReader = mock[ProofFileReader]
+    proofFileReader.getSerializedProofs(recalculatedTheorem.title) returns serializedProofs
+    val entryParsingContext = EntryParsingContext(entryContext, proofFileReader)
+    val parsedTheorem = Theorem.parser(entryParsingContext).parseFromString(serializedTheorem, "Theorem")
     parsedTheorem must beTypedEqualTo(theorem)
     parsedTheorem.isComplete(new Definitions(entryContext)) must beTrue
   }

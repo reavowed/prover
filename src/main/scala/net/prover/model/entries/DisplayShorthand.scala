@@ -3,9 +3,10 @@ package net.prover.model.entries
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
+import net.prover.books.io.EntryParsingContext
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Template
-import net.prover.model.{EntryContext, EntryParsingContext, Format, Inference, Parser}
+import net.prover.model.{EntryContext, Format, Inference, Parser}
 
 @JsonSerialize(using = classOf[DisplayShorthandSerializer])
 case class DisplayShorthand(template: Template, format: Format.Explicit, conditions: Seq[(String, String)]) extends ChapterEntry {

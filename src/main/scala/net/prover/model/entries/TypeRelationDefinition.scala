@@ -1,5 +1,6 @@
 package net.prover.model.entries
 
+import net.prover.books.io.EntryParsingContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent

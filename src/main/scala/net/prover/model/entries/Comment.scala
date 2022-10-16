@@ -1,7 +1,8 @@
 package net.prover.model.entries
 
+import net.prover.books.io.EntryParsingContext
 import net.prover.model.definitions.ExpressionDefinition
-import net.prover.model.{EntryContext, EntryParsingContext, Inference, Parser}
+import net.prover.model.{EntryContext, Inference, Parser}
 
 case class Comment(text: String) extends ChapterEntry {
   override def name: String = Comment.name

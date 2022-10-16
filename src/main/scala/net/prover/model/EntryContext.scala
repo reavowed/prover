@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.books.io.EntryParsingContext
 import net.prover.model.definitions.{ConjunctionDefinition, DeductionDefinition, GeneralizationDefinition, StatementDefinition, TermDefinition, UniqueExistenceDefinition}
 import net.prover.model.entries._
 import net.prover.model.expressions._

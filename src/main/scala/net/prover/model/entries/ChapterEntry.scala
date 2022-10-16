@@ -1,9 +1,10 @@
 package net.prover.model.entries
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.books.io.EntryParsingContext
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.{EntryContext, EntryParsingContext, ExpressionParsingContext, Inference, Parser, SimpleVariableDefinition}
+import net.prover.model.{EntryContext, ExpressionParsingContext, Inference, Parser, SimpleVariableDefinition}
 
 trait ChapterEntry {
   @JsonSerialize

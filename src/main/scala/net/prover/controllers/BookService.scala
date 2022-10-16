@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover.books.io.KeyAccumulator
 import net.prover.controllers.models.{InferenceSummary, MultipleStepReplacementProps, PathData, ProofUpdateProps, StepInsertionProps, StepReplacementProps, TheoremUpdateProps}
 import net.prover.model._
 import net.prover.model.definitions.Definitions
@@ -163,17 +164,10 @@ object BookService {
   def getEntriesWithKeys(chapter: Chapter): Seq[(ChapterEntry, String)] = getWithKeys(chapter.entries)(_.name)
 
   private def getWithKeys[T](seq: Seq[T])(keyProperty: T => String): Seq[(T, String)] = {
-    seq.foldLeft(Seq.empty[(T, String)]) { case (acc, t) =>
-      def keyExists(k: String): Boolean = acc.exists(_._2 == k)
-      val initialKey = keyProperty(t).formatAsKey
-      val key = if (keyExists(initialKey))
-        Stream.from(2)
-          .mapFind(i => Some(s"$initialKey-$i").filter(s => !keyExists(s)))
-          .getOrElse(throw new Exception("Map somehow contained every possible key"))
-      else
-        initialKey
-      acc :+ (t -> key)
-    }
+    seq.foldLeft((Seq.empty[(T, String)], KeyAccumulator.Empty)) { case ((results, acc), t) =>
+      val (key, newAcc) = acc.getNextKey(keyProperty(t).formatAsKey)
+      (results :+ (t -> key), newAcc)
+    }._1
   }
 
   def getInferenceLinks(inferenceIds: Set[String], books: Seq[Book], definitions: Definitions): Map[String, InferenceSummary] = {

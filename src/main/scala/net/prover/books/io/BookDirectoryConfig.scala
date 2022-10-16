@@ -18,11 +18,8 @@ object BookDirectoryConfig {
   private def getChapterKey(chapterTitle: String, chapterIndex: Int): String = {
     "%02d".format(chapterIndex + 1) + "." + chapterTitle.camelCase
   }
-  private def getChapterDirectoryPath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
+  def getChapterDirectoryPath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
     getBookDirectoryPath(bookTitle).resolve(getChapterKey(chapterTitle, chapterIndex))
-  }
-  def getOldChapterFilePath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
-    getChapterDirectoryPath(bookTitle, chapterTitle, chapterIndex).resolve(getChapterKey(chapterTitle, chapterIndex) + ".chapter")
   }
   def getChapterFilePath(bookTitle: String, chapterTitle: String, chapterIndex: Int): Path = {
     getChapterDirectoryPath(bookTitle, chapterTitle, chapterIndex).resolve(chapterTitle.camelCase + ".chapter")

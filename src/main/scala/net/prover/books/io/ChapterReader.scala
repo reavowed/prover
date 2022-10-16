@@ -1,7 +1,7 @@
 package net.prover.books.io
 
 import net.prover.model.entries.ChapterEntry
-import net.prover.model.{Chapter, EntryContext, EntryParsingContext, Parser}
+import net.prover.model.{Chapter, EntryContext, Parser}
 
 object ChapterReader {
   def readChapter(
@@ -10,8 +10,9 @@ object ChapterReader {
     chapterIndex: Int,
     entryContext: EntryContext
   ): (Chapter, EntryContext) = {
-    val path = BookDirectoryConfig.getOldChapterFilePath(bookOutline.title, chapterTitle, chapterIndex)
-    val entryParsingContext = EntryParsingContext(entryContext)
+    val filePath = BookDirectoryConfig.getChapterFilePath(bookOutline.title, chapterTitle, chapterIndex)
+    val directoryPath = BookDirectoryConfig.getChapterDirectoryPath(bookOutline.title, chapterTitle, chapterIndex)
+    val entryParsingContext = EntryParsingContext(entryContext, ProofFileReader(directoryPath, KeyAccumulator.Empty))
     val parser = for {
       summary <- Parser.toEndOfLine
       entriesAndContext <- Parser.foldWhileDefined[ChapterEntry, EntryParsingContext](entryParsingContext) { (_, _, currentContext) =>
@@ -22,7 +23,7 @@ object ChapterReader {
     } yield entriesAndContext.mapLeft(Chapter(chapterTitle, summary, _))
 
     parser
-      .parseFromFile(path, s"book '${bookOutline.title}' chapter '$chapterTitle''")
+      .parseFromFile(filePath, s"book '${bookOutline.title}' chapter '$chapterTitle''")
       .mapRight(_.entryContext)
   }
 }
