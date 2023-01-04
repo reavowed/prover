@@ -1,5 +1,7 @@
-package net.prover.books.io
+package net.prover.books.writing
 
+import net.prover.books.management.BookDirectoryConfig
+import net.prover.books.model.FileDefinition
 import net.prover.controllers.BookService
 import net.prover.model.entries.Theorem
 import net.prover.model.{Book, Chapter}
@@ -8,10 +10,10 @@ import org.apache.commons.io.filefilter.TrueFileFilter
 
 import scala.collection.JavaConverters._
 
-object BookWriter {
-  def write(book: Book): Unit = {
+object WriteBook {
+  def apply(book: Book): Unit = {
     val files = getBookFiles(book)
-    files.foreach(FileWriter.write)
+    files.foreach(WriteFile(_))
     deleteUnusedFiles(book, files)
   }
 

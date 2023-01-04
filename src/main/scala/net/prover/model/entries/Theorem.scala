@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import net.prover.books.io.EntryParsingContext
+import net.prover.books.model.EntryParsingContext
 import net.prover.controllers.Identity
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.exceptions.InferenceReplacementException

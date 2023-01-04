@@ -1,7 +1,8 @@
 package net.prover.controllers
 
-import net.prover.books.io.KeyAccumulator
-import net.prover.controllers.models.{InferenceSummary, MultipleStepReplacementProps, PathData, ProofUpdateProps, StepInsertionProps, StepReplacementProps, TheoremUpdateProps}
+import net.prover.books.management.{BookStateManager, ReloadBooks, UpdateBooks}
+import net.prover.books.model.KeyAccumulator
+import net.prover.controllers.models._
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
@@ -15,15 +16,15 @@ import scala.reflect.{ClassTag, classTag}
 import scala.util.Try
 
 @Service
-class BookService @Autowired() (bookRepository: BookRepository) {
-  def booksAndDefinitions: (Seq[Book], Definitions) = bookRepository.booksAndDefinitions
-  def books: Seq[Book] = bookRepository.books
+class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
+  def booksAndDefinitions: (Seq[Book], Definitions) = bookStateManager.booksAndDefinitions
+  def books: Seq[Book] = bookStateManager.books
   def getBooksWithKeys: Seq[(Book, String)] = BookService.getBooksWithKeys(books)
 
-  def reload(): Try[Any] = bookRepository.reload()
+  def reload(): Try[Any] = Try { ReloadBooks() }
 
   def findBook(bookKey: String): Try[Book] = {
-    findBook(bookRepository.books, bookKey)
+    findBook(books, bookKey)
   }
 
   def findBook(books: Seq[Book], bookKey: String): Try[Book] = {
@@ -54,7 +55,7 @@ class BookService @Autowired() (bookRepository: BookRepository) {
   }
 
   def findStep[T <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: PathData): Try[(T, StepProvingContext)] = {
-    val (books, definitions) = bookRepository.booksAndDefinitions
+    val (books, definitions) = booksAndDefinitions
     for {
       book <- findBook(books, bookKey)
       chapter <- findChapter(book, chapterKey)
@@ -65,10 +66,10 @@ class BookService @Autowired() (bookRepository: BookRepository) {
     } yield (step, StepProvingContext(stepContext, provingContext))
   }
 
-  def modifyBooks[F[_] : Functor](f: (Seq[Book], Definitions) => F[Seq[Book]]): F[(Seq[Book], Definitions)] = bookRepository.modifyBooks(f)
+  def modifyBooks[F[_] : Functor](f: (Seq[Book], Definitions) => F[Seq[Book]]): F[(Seq[Book], Definitions)] = UpdateBooks(f)
 
   def modifyBook[F[_] : Functor](bookKey: String, f: (Seq[Book], Definitions, Book) => Try[F[Book]]): Try[F[(Seq[Book], Definitions, Book)]] = {
-    bookRepository.modifyBooks[TryFWithValue[F, Book]#Type] { (books, definitions) =>
+    modifyBooks[TryFWithValue[F, Book]#Type] { (books, definitions) =>
       for {
         currentBook <- findBook(books, bookKey)
         newBookF <- f(books, definitions, currentBook)

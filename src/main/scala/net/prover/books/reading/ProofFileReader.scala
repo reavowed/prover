@@ -1,9 +1,10 @@
-package net.prover.books.io
+package net.prover.books.reading
 
-import java.nio.file.{Files, Path}
+import net.prover.books.model.KeyAccumulator
 import net.prover.model._
 import net.prover.model.entries.ChapterEntry
 
+import java.nio.file.{Files, Path}
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 import scala.collection.JavaConverters._

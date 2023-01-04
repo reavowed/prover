@@ -1,4 +1,4 @@
-package net.prover.books.io
+package net.prover.books.model
 
 import java.nio.file.Path
 

@@ -1,6 +1,6 @@
 package net.prover.model.entries
 
-import net.prover.books.io.EntryParsingContext
+import net.prover.books.model.EntryParsingContext
 import net.prover.model._
 
 trait ChapterEntryParser {

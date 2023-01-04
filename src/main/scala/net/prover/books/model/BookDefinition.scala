@@ -1,3 +1,3 @@
-package net.prover.books.io
+package net.prover.books.model
 
 case class BookDefinition(title: String)

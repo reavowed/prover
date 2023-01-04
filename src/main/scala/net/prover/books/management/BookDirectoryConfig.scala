@@ -1,8 +1,8 @@
-package net.prover.books.io
+package net.prover.books.management
+
+import net.prover.model._
 
 import java.nio.file.{Path, Paths}
-import net.prover.model._
-import net.prover.model.entries.Theorem
 
 object BookDirectoryConfig {
   val booksDirectoryPath: Path = Paths.get("books")
