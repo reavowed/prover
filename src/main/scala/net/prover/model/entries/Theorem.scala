@@ -74,17 +74,6 @@ case class Theorem(
     premises.map("premise " + _.serialized) ++
     Seq("conclusion " + conclusion.serialized)
 
-  def replaceInference(
-    oldInference: Inference,
-    newInference: Inference,
-    provingContext: ProvingContext
-  ): Try[Theorem] = {
-    proofs.zipWithIndex.map { case (proof, index) =>
-      proof.replaceInference(oldInference, newInference, StepProvingContext(initialStepContext, provingContext)).recoverWith {
-        case InferenceReplacementException.AtStep(message, stepPath) => Failure(InferenceReplacementException.AtTheorem(message, stepPath, index, name))
-      }
-    }.traverseTry.map(proofs => copy(proofs = proofs))
-  }
   def clearInference(inference: Inference): Theorem = {
     copy(proofs = proofs.map(_.clearInference(inference)))
   }
@@ -174,13 +163,6 @@ object Theorem extends Inference.EntryParser {
       forSteps(steps, initialStepContext)
     }
 
-    def replaceInference(
-      oldInference: Inference,
-      newInference: Inference,
-      stepProvingContext: StepProvingContext
-    ): Try[Proof] = {
-      steps.replaceInference(oldInference, newInference, stepProvingContext).map(Proof(_))
-    }
     def clearInference(inference: Inference): Proof = {
       Proof(steps.clearInference(inference))
     }

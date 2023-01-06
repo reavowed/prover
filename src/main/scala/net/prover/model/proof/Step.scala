@@ -24,11 +24,6 @@ sealed trait Step {
   def insertExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step]
   def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Step
-  def replaceInference(
-    oldInference: Inference,
-    newInference: Inference,
-    stepProvingContext: StepProvingContext
-  ): Try[Step]
   def clearInference(inferenceToClear: Inference): Step
   def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange])
   def isComplete(definitions: Definitions): Boolean
@@ -57,13 +52,6 @@ object Step {
         val innerStepContext = specifyStepContext(outerStepContext).addSteps(before).atIndex(index)
         (step, innerStepContext)
       }
-    }
-    override def replaceInference(
-      oldInference: Inference,
-      newInference: Inference,
-      stepProvingContext: StepProvingContext
-    ): Try[Step] = {
-      substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext)).map(replaceSubsteps(_, stepProvingContext.stepContext))
     }
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
       substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
@@ -221,26 +209,6 @@ object Step {
         entryContext.generalizationDefinitionOption.get,
         entryContext.deductionDefinitionOption.get)
     }
-    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = {
-      if (inference == oldInference) {
-        for {
-          updatedStep <- Assertion(statement, inference, premises, substitutions).replaceInference(oldInference, newInference, stepProvingContext)
-          updatedAssertion <- updatedStep.asOptionalInstanceOf[Step.Assertion].failIfUndefined(InferenceReplacementException.AtStep("Cannot replace naming with an elided step")(stepProvingContext.stepContext))
-          updatedSubsteps <- substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext))
-        } yield Naming(
-          variableName,
-          assumption,
-          statement,
-          updatedSubsteps,
-          updatedAssertion.inference,
-          updatedAssertion.premises,
-          updatedAssertion.substitutions,
-          generalizationDefinition,
-          deductionDefinition)
-      } else {
-        super.replaceInference(oldInference, newInference, stepProvingContext)
-      }
-    }
     override def clearInference(inferenceToClear: Inference): Step = {
       if (inferenceToClear == inference) {
         Step.Target(statement)
@@ -351,7 +319,6 @@ object Step {
         s <- statement.removeExternalParameters(numberOfParametersToRemove, internalDepth)
       } yield copy(statement = s)
     }
-    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = Success(this)
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Target = Target(statement.replaceDefinitions(expressionDefinitionReplacements))
     override def clearInference(inferenceToClear: Inference): Step = {
       this
@@ -388,15 +355,6 @@ object Step {
       } yield Elided(newSubsteps, highlightedInference, description)
     }
 
-    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = {
-      if (highlightedInference.contains(oldInference)) {
-        for {
-          updatedSubsteps <- substeps.replaceInference(oldInference, newInference, stepProvingContext.updateStepContext(specifyStepContext))
-        } yield copy(highlightedInference = Some(newInference.summary), substeps = updatedSubsteps)
-      } else {
-        super.replaceInference(oldInference, newInference, stepProvingContext)
-      }
-    }
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Elided = {
       Elided(
         substeps.map(_.replaceDefinitions(expressionDefinitionReplacements,entryContext)),
@@ -474,21 +432,6 @@ object Step {
         newPremises <- premises.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
         newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove, internalDepth)
       } yield Assertion(newStatement, inference, newPremises, newSubstitutions)
-    }
-    override def replaceInference(oldInference: Inference, newInference: Inference, stepProvingContext: StepProvingContext): Try[Step] = {
-      implicit val spc = stepProvingContext
-      if (inference == oldInference) {
-        val substitutionsOption = (for {
-          inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(newInference.id)
-          substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(statement).toSeq
-          substitutionsAfterPremises <- inferenceExtraction.premises.zipStrict(premises).flatMap(_.foldLeft(Option(substitutionsAfterConclusion)) { case (so, (ep, p)) => so.flatMap(s => ep.calculateSubstitutions(p.statement, s)) }).toSeq
-          substitutions <- substitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).toSeq
-        } yield (inferenceExtraction, substitutions)).headOption
-        for {
-          (inferenceExtraction, substitutions) <- substitutionsOption.failIfUndefined(InferenceReplacementException.AtStep("Could not find extraction option")(stepProvingContext.stepContext))
-          extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions).failIfUndefined(InferenceReplacementException.AtStep("Could not apply extraction")(stepProvingContext.stepContext))
-        } yield extractionStep.step
-      } else Success(this)
     }
     override def clearInference(inferenceToClear: Inference): Step = {
       if (inferenceToClear == inference) {
@@ -591,18 +534,6 @@ object Step {
         val (newStep, stepsWithReferenceChanges) = step.recalculateReferences(innerStepContext, provingContext)
         currentStepContext.addStep(newStep, innerStepContext.stepReference) -> (newStep, stepsWithReferenceChanges)
       }._2.split.mapRight(_.flatten)
-    }
-    def replaceInference(
-      oldInference: Inference,
-      newInference: Inference,
-      outerStepProvingContext: StepProvingContext
-    ): Try[Seq[Step]] = {
-      steps.zipWithIndex.mapFoldTry(outerStepProvingContext) { case (currentStepProvingContext, (step, index)) =>
-        val innerStepProvingContext = currentStepProvingContext.updateStepContext(_.atIndex(index))
-        for {
-          newStep <- step.replaceInference(oldInference, newInference, innerStepProvingContext)
-        } yield currentStepProvingContext.updateStepContext(_.addStep(newStep, innerStepProvingContext.stepContext.stepReference)) -> newStep
-      }.map(_._2)
     }
     def clearInference(inference: Inference): Seq[Step] = steps.map(_.clearInference(inference))
   }
