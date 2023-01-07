@@ -11,12 +11,12 @@ sealed trait DerivationStep {
 object DerivationStep {
   def fromAssertion(step: Step.Assertion): DerivationStepWithSingleInference = DerivationStepWithSingleInference(step.statement, step.inference, step)
 
-  implicit class SeqOps(premiseSteps: Seq[DerivationStep]) {
-    def deduplicate: Seq[DerivationStep] = premiseSteps.distinctBy(_.statement)
-    def inferences: Seq[Inference] = premiseSteps.flatMap(_.inferences)
-    def steps: Seq[Step] = premiseSteps.map(_.step)
+  implicit class SeqOps(derivationSteps: Seq[DerivationStep]) {
+    def deduplicate: Seq[DerivationStep] = derivationSteps.distinctBy(_.statement)
+    def inferences: Seq[Inference] = derivationSteps.flatMap(_.inferences)
+    def steps: Seq[Step] = derivationSteps.map(_.step)
     def elideWithInference(inference: Inference): DerivationStepWithSingleInference = {
-      DerivationStepWithSingleInference(premiseSteps.last.statement, inference, Step.Elided.ifNecessary(premiseSteps.steps, inference).get)
+      DerivationStepWithSingleInference(derivationSteps.last.statement, inference, Step.Elided.ifNecessary(derivationSteps.steps, inference).get)
     }
   }
 }
