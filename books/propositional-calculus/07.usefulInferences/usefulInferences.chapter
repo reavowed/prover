@@ -1,18 +1,10 @@
 Some inferences that can be used to reduce boilerplate in proofs.
 
-comment A set of more complicated structural facts that are surprisingly useful later on.
-
-theorem First Part of Disjoined Conjunct Equivalence
+theorem Disjoined Conjunct Equivalence
 statementVariables(φ 0, χ 0, ψ 0, ω 0)
 premise s0
 premise ¬ s1
 conclusion ↔ ∨ ∧ s0 s2 ∧ s1 s3 s2
-
-theorem Second Part of Disjoined Conjunct Equivalence
-statementVariables(φ 0, χ 0, ψ 0, ω 0)
-premise ¬ s0
-premise s1
-conclusion ↔ ∨ ∧ s0 s2 ∧ s1 s3 s3
 
 comment Some tricks to simplify redundant statements.
 

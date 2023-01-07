@@ -9,9 +9,11 @@ assume s0 {
 }
 assume s1 {
   prove ¬ s0 cd6001b6685e6efd134062cc83085a05f31e3c2e205f0db675e8a53aadfe8a86 (s0, s1) () p0 1a
-  elided 5aab6ca759237c74f7c83672e9a60b1e04fd164457bc51b95ed496fa53c75694 {
+  elided bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 {
     take x {
-      prove ↔ ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1 = $0 t1 5aab6ca759237c74f7c83672e9a60b1e04fd164457bc51b95ed496fa53c75694 (s0, s1, = $0 t0, = $0 t1) () 1.0 1a
+      prove ↔ ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1 ∨ ∧ s1 = $0 t1 ∧ s0 = $0 t0 6a69a6d59764ffe4b9a2eeacc0888588de474f47ce04d36054eebbb1c3156ec2 (∧ s0 = $0 t0, ∧ s1 = $0 t1) ()
+      prove ↔ ∨ ∧ s1 = $0 t1 ∧ s0 = $0 t0 = $0 t1 bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 (s1, s0, = $0 t1, = $0 t0) () 1a 1.0
+      prove ↔ ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1 = $0 t1 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1, ∨ ∧ s1 = $0 t1 ∧ s0 = $0 t0, = $0 t1) () 1.1.0.0 1.1.0.1
     }
   }
   prove ∃! x ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1 4546cf0ca0a98d722f8a5ee8bb04599652c5fa3a3419cd6c8bb8de8a9002bcf6 (∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1) (t1) 1.1
