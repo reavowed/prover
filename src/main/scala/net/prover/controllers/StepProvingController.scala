@@ -3,9 +3,8 @@ package net.prover.controllers
 import net.prover.controllers.models._
 import net.prover.model._
 import net.prover.model.expressions.{FunctionParameter, Statement, StatementVariable, TermVariable}
-import net.prover.model.proof.SubstatementExtractor.VariableTracker
 import net.prover.model.proof._
-import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, UnwrappedStatement, Unwrapper}
+import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement, Unwrapper}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -39,9 +38,6 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     }
     definition.getFromInferenceOrPremise(withInference, withPremise)
   }
-
-
-
 
   @GetMapping(value = Array("/possibleInferencesForCurrentTarget"), produces = Array("application/json;charset=UTF-8"))
   def getPossibleInferencesForCurrentTarget(
@@ -143,7 +139,9 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
       premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-      baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '${premise.statement}'")
+      baseSubstitutions = Substitutions.Possible(
+        stepProvingContext.stepContext.variableDefinitions.statements.mapWithIndex((variableDefinition, index) => index -> StatementVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap,
+        stepProvingContext.stepContext.variableDefinitions.terms.mapWithIndex((variableDefinition, index) => index -> TermVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap)
     } yield {
       implicit val spc = stepProvingContext
       SubstatementExtractor.getPremiseExtractions(premise.statement)
