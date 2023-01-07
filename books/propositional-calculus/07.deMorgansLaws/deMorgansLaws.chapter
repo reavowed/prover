@@ -1,6 +1,0 @@
-De Morgan's Laws for conjunction and disjunction.
-
-theorem De Morgan's Law
-statementVariables(φ 0, ψ 0)
-premise ∨ ¬ s0 ¬ s1
-conclusion ¬ ∧ s0 s1
