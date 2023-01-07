@@ -20,7 +20,7 @@ take n {
         assume ∈ $0 ℕ {
           prove = apply +ℕ orderedPair successor $$0 $0 successor apply +ℕ orderedPair $$0 $0 5f2d42f27e4ef7f6f0fe1503b3a233613d851ed315837d00a7b7c6f4efc6cc9a () ($$0, $0) 1.0a 1.0.0.0.0a
           elided (Extracted) {
-            elided (Extracted) {
+            existingStatementExtraction {
               prove → ∈ $0 ℕ = apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℕ = apply +ℕ orderedPair $$0 $$$0 apply +ℕ orderedPair $$$0 $$0) ($0) 1.0.0a
               prove = apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair $0 $$0) () 1.0.0.0.0.1.0.0 1.0.0.0.0a
             }

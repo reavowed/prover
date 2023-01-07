@@ -105,7 +105,7 @@ take S {
             elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
               prove ¬ ∧ ∈ successor $$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ℕ fb0d51aff7d24130593e44be859ec813ffe65d04fe9f7e21ada002fe33e686c7 (∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ℕ, ∈ successor $$0 ℕ) () 3.0.0.1.1.1.3
               prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ℕ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∀ b → ∈ $0 $$$$0 ∈ orderedPair $$$$$0 $0 ≤ℕ) ($0, ℕ) 3.0.0.1.1a
-              elided (Extracted) {
+              existingStatementExtraction {
                 prove ↔ ∈ successor $$0 $0 ∧ ∈ successor $$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 $0 ∧ ∈ $$$$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair $$$$$0 $0 ≤ℕ) (successor $$0) 3.0.0.1.1.1.4.1
                 prove → ∈ successor $$0 $0 ∧ ∈ successor $$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ successor $$0 $0, ∧ ∈ successor $$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ℕ) () 3.0.0.1.1.1.4.2.0
                 prove ¬ ∈ successor $$0 $0 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ successor $$0 $0, ∧ ∈ successor $$0 ℕ ∀ b → ∈ $0 $$$$0 ∈ orderedPair successor $$$0 $0 ≤ℕ) () 3.0.0.1.1.1.4.2.1 3.0.0.1.1.1.4.0
@@ -245,7 +245,7 @@ take S {
                   prove → ∈ orderedPair $0 successor $$0 <ℕ ∈ orderedPair $0 $$0 ≤ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $0 successor $$0 <ℕ, ∈ orderedPair $0 $$0 ≤ℕ) () 3.0.0.1.1.3.1.3.2.0
                   prove ∈ orderedPair $0 $$0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 successor $$0 <ℕ, ∈ orderedPair $0 $$0 ≤ℕ) () 3.0.0.1.1.3.1.3.2.1 3.0.0.1.1.3.1.3.1
                 }
-                elided (Extracted) {
+                existingStatementExtraction {
                   prove → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$0 $$$$$0 ∈ orderedPair $$0 $$$$$$0 ≤ℕ) ($0) 3.0.0.1.1.3.0
                   prove ∈ orderedPair $$0 $0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$$$$0, ∈ orderedPair $$0 $0 ≤ℕ) () 3.0.0.1.1.3.1.3.3.0 3.0.0.1.1.3.1.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                 }

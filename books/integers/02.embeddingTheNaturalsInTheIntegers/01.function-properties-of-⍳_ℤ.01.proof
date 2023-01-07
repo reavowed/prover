@@ -27,11 +27,11 @@ subproof (Injective) {
       take b {
         assume ∈ $0 ℕ {
           assume = apply ⍳_ℤ $$0 apply ⍳_ℤ $0 {
-            elided (Extracted) {
+            existingStatementExtraction {
               prove → ∈ $$0 ℕ = apply ⍳_ℤ $$0 equivalenceClass orderedPair $$0 0ℕ ~_ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℕ = apply ⍳_ℤ $$$0 equivalenceClass orderedPair $$$0 0ℕ ~_ℤ) ($$0) 2
               prove = apply ⍳_ℤ $$0 equivalenceClass orderedPair $$0 0ℕ ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, = apply ⍳_ℤ $$0 equivalenceClass orderedPair $$0 0ℕ ~_ℤ) () 3.0.0.0.0.0.0.0 3.0.0a
             }
-            elided (Extracted) {
+            existingStatementExtraction {
               prove → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℕ = apply ⍳_ℤ $$$0 equivalenceClass orderedPair $$$0 0ℕ ~_ℤ) ($0) 2
               prove = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 3.0.0.0.0.0.1.0 3.0.0.0.0a
             }

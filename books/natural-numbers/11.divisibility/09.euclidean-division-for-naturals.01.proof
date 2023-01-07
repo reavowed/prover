@@ -37,7 +37,7 @@ subproof (Inductive case) {
         take y {
           assume ∈ $0 ℕ {
             assume ∈ orderedPair 0ℕ $0 <ℕ {
-              elided (Extracted) {
+              existingStatementExtraction {
                 prove → ∈ $0 ℕ → ∈ orderedPair 0ℕ $0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℕ → ∈ orderedPair 0ℕ $$$0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$$$0 $0 ∈ orderedPair $0 $$$$$0 <ℕ) ($0) 1.0.0.0a
                 prove → ∈ orderedPair 0ℕ $0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, → ∈ orderedPair 0ℕ $0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ) () 1.0.0.0.0.0.0.0.0 1.0.0.0.0.0a
                 prove ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair 0ℕ $0 <ℕ, ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ) () 1.0.0.0.0.0.0.0.1 1.0.0.0.0.0.0a
@@ -131,7 +131,7 @@ subproof (Inductive case) {
   }
 }
 prove ∀ x → ∈ $0 ℕ ∀ y → ∈ $0 ℕ → ∈ orderedPair 0ℕ $0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ 19929f12c2d837743d530233061fddca190c574115ac9b3835bea89d29e3e4d7 (∀ y → ∈ $0 ℕ → ∈ orderedPair 0ℕ $0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ) () 0 1
-elided (Extracted) {
+existingStatementExtraction {
   prove → ∈ t0 ℕ ∀ y → ∈ $0 ℕ → ∈ orderedPair 0ℕ $0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = t0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ y → ∈ $0 ℕ → ∈ orderedPair 0ℕ $0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ) (t0) 2
   prove ∀ y → ∈ $0 ℕ → ∈ orderedPair 0ℕ $0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = t0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ y → ∈ $0 ℕ → ∈ orderedPair 0ℕ $0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = t0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ) () 3.0 p0
   prove → ∈ t1 ℕ → ∈ orderedPair 0ℕ t1 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = t0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0 ∈ orderedPair $0 t1 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ → ∈ orderedPair 0ℕ $0 <ℕ ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = t0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ) (t1) 3.1

@@ -10,7 +10,7 @@ elided 39a4a0b58fd0350180fbaa5054a7ac890a57bb416bf5f07a71553e8d94706219 {
 elided 6f9d482ed3e2f6556597c50fa69557c764daac7d53092439e673f5c6a9d92028 {
   take n {
     assume ∈ $0 ℕ {
-      elided (Simplified) {
+      existingStatementExtraction {
         prove → ∈ $0 ℕ ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$$0 apply $$0 $0) t2) ($0) p0
         prove ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2) () 1.0.0.0.0 1.0.0a
       }
@@ -35,7 +35,7 @@ let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈
                   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
                   prove = apply $$0 orderedPair $0 0ℕ apply apply $$$0 $0 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ 0ℕ ℕ, = apply $$0 orderedPair $0 0ℕ apply apply $$$0 $0 0ℕ) () 3.1.0.0.0.0.0.0.0.2 3.1.0.0.0.0.0.0.0.3
                 }
-                elided (Simplified) {
+                existingStatementExtraction {
                   prove → ∈ $0 ℕ ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ ∧ = apply apply $$$0 $$$$0 0ℕ with ($$$$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$$$$0 successor $0 with ($$$$$0 apply apply $$$$0 $$$$$0 $0) t2) ($0) 3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   prove ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2) () 3.1.0.0.0.0.0.0.1.0 3.1.0.0.0.0.0.0a
                   prove = apply apply $$$0 $0 0ℕ with ($0) t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply apply $$$0 $0 0ℕ with ($0) t1, ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2) () 3.1.0.0.0.0.0.0.1.1
@@ -47,7 +47,7 @@ let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈
               assume ∈ $0 ℕ {
                 take m {
                   assume ∈ $0 ℕ {
-                    elided (Simplified) {
+                    existingStatementExtraction {
                       prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$$$$0 $0 apply apply $$$$$0 $$$$$$0 $0) ($$0) 3.1.0.0.0.0a
                       prove ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 $0 apply apply $$$$$0 $$$0 $0) () 3.1.0.0.0.0.1.0.0.0.0.0 3.1.0.0.0.0.1.0a
                       prove → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ = apply $$$0 orderedPair $$0 $$$$$0 apply apply $$$$0 $$0 $$$$$0) ($0) 3.1.0.0.0.0.1.0.0.0.0.1
@@ -60,7 +60,7 @@ let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈
                       prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 3.1.0.0.0.0.1.0.0.0a
                       prove = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ successor $0 ℕ, = apply $$$0 orderedPair $$0 successor $0 apply apply $$$$0 $$0 successor $0) () 3.1.0.0.0.0.1.0.0.0.1.2 3.1.0.0.0.0.1.0.0.0.1.3
                     }
-                    elided (Simplified) {
+                    existingStatementExtraction {
                       prove → ∈ $$0 ℕ ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∧ = apply apply $$$$0 $$$$$0 0ℕ with ($$$$$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$$$$0 successor $0 with ($$$$$$0 apply apply $$$$$0 $$$$$$0 $0) t2) ($$0) 3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                       prove ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2) () 3.1.0.0.0.0.1.0.0.0.2.0 3.1.0.0.0.0.1.0a
                       prove ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply apply $$$$0 $$0 0ℕ with ($$0) t1, ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2) () 3.1.0.0.0.0.1.0.0.0.2.1
@@ -81,11 +81,11 @@ let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈
           assume ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 {
             take n {
               assume ∈ $0 ℕ {
-                elided (Simplified) {
+                existingStatementExtraction {
                   prove → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ = apply $$0 orderedPair $$$$0 0ℕ with ($$$$0) t1) ($0) 3.1.0.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                   prove = apply $$0 orderedPair $0 0ℕ with ($0) t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply $$0 orderedPair $0 0ℕ with ($0) t1) () 3.1.0.0.1.0.0.0.0.0 3.1.0.0.1.0.0.0a
                 }
-                elided (Simplified) {
+                existingStatementExtraction {
                   prove → ∈ $0 ℕ ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ ∧ = apply apply $$$0 $$$$0 0ℕ with ($$$$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$$$$0 successor $0 with ($$$$$0 apply apply $$$$0 $$$$$0 $0) t2) ($0) 3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   prove ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ∧ = apply apply $$$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2) () 3.1.0.0.1.0.0.0.1.0 3.1.0.0.1.0.0.0a
                   prove = apply apply $$$0 $0 0ℕ with ($0) t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply apply $$$0 $0 0ℕ with ($0) t1, ∀ m → ∈ $0 ℕ = apply apply $$$$0 $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2) () 3.1.0.0.1.0.0.0.1.1
@@ -99,7 +99,7 @@ let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈
                 take m {
                   assume ∈ $0 ℕ {
                     assume = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 {
-                      elided (Simplified) {
+                      existingStatementExtraction {
                         prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 successor $0 with ($$$0 apply $$$$0 orderedPair $$$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$$$$0 successor $0 with ($$$$$$0 apply $$$$0 orderedPair $$$$$$0 $0) t2) ($$0) 3.1.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         prove ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 successor $0 with ($$$0 apply $$$$0 orderedPair $$$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$$0 successor $0 with ($$$0 apply $$$$0 orderedPair $$$0 $0) t2) () 3.1.0.0.1.0.0.0.4.0.0.0.0 3.1.0.0.1.0.0.0a
                         prove → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ = apply $$$0 orderedPair $$0 successor $$$$$0 with ($$0 apply $$$0 orderedPair $$0 $$$$$0) t2) ($0) 3.1.0.0.1.0.0.0.4.0.0.0.1
@@ -107,7 +107,7 @@ let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈
                       }
                       prove = with ($$0 apply $$$0 orderedPair $$0 $0) t2 with ($$0 apply apply $$$$0 $$0 $0) t2 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply $$$0 orderedPair $$0 $0, apply apply $$$$0 $$0 $0, with ($$0 $$$$$0) t2) 3.1.0.0.1.0.0.0.4.0.0a
                       prove = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply apply $$$$0 $$0 $0) t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply $$$0 orderedPair $$0 successor $0, with ($$0 apply $$$0 orderedPair $$0 $0) t2, with ($$0 apply apply $$$$0 $$0 $0) t2) 3.1.0.0.1.0.0.0.4.0.0.0 3.1.0.0.1.0.0.0.4.0.0.1
-                      elided (Simplified) {
+                      existingStatementExtraction {
                         prove → ∈ $$0 ℕ ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∧ = apply apply $$$$0 $$$$$0 0ℕ with ($$$$$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$$$$0 successor $0 with ($$$$$$0 apply apply $$$$$0 $$$$$$0 $0) t2) ($$0) 3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         prove ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∧ = apply apply $$$$0 $$0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2) () 3.1.0.0.1.0.0.0.4.0.0.3.0 3.1.0.0.1.0.0.0a
                         prove ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply apply $$$$0 $$0 0ℕ with ($$0) t1, ∀ m → ∈ $0 ℕ = apply apply $$$$$0 $$$0 successor $0 with ($$$0 apply apply $$$$$0 $$$0 $0) t2) () 3.1.0.0.1.0.0.0.4.0.0.3.1

@@ -192,7 +192,11 @@ object ExtractionHelper {
   ): Try[(Statement, Option[Step], Seq[Step.Target])] = {
     for {
       ExtractionApplication(extractionResult, _, extractionSteps, extractionPremises, extractionTargets) <- ExtractionHelper.applyExtractionsForPremise(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion, DerivationOrTargetFinder.findDerivationsOrTargets)
-      extractionStep = Step.Elided.ifNecessary(extractionSteps.steps, "Extracted")
+      extractionStep = extractionSteps.steps match {
+        case Nil => None
+        case singleStep +: Nil => Some(singleStep)
+        case steps => Some(Step.ExistingStatementExtraction(steps))
+      }
       assertionWithExtractionStep = Step.Elided.ifNecessary(extractionPremises.deduplicate.steps ++ extractionStep.toSeq, "Extracted")
     } yield (extractionResult, assertionWithExtractionStep, extractionTargets)
   }

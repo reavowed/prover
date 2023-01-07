@@ -4,7 +4,7 @@ assume ∀ x → ∈ $0 product t0 t1 with (first $0 second $0) s0 {
       take b {
         assume ∈ $0 t1 {
           prove ∈ orderedPair $$0 $0 product t0 t1 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t0, $0, t1) 0.0.0a 0.0.0.0.0a
-          elided (Extracted) {
+          existingStatementExtraction {
             prove → ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 product t0 t1 with (first $$$0 second $$$0) s0) (orderedPair $$0 $0) 0a
             prove with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 product t0 t1, with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 0.0.0.0.0.1.0 0.0.0.0.0.0
           }
@@ -28,7 +28,7 @@ assume ∀ a → ∈ $0 t0 ∀ b → ∈ $0 t1 with ($$0 $0) s0 {
     assume ∈ $0 product t0 t1 {
       prove ∈ first $0 t0 cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, t0, t1) 1.0.0a
       prove ∈ second $0 t1 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, t0, t1) 1.0.0a
-      elided (Extracted) {
+      existingStatementExtraction {
         prove → ∈ first $0 t0 ∀ b → ∈ $0 t1 with (first $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t0 ∀ b → ∈ $0 t1 with ($$$0 $0) s0) (first $0) 1a
         prove ∀ b → ∈ $0 t1 with (first $$0 $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first $0 t0, ∀ b → ∈ $0 t1 with (first $$0 $0) s0) () 1.0.0.2.0 1.0.0.0
         prove → ∈ second $0 t1 with (first $0 second $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 with (first $0 $$0) s0) (second $0) 1.0.0.2.1

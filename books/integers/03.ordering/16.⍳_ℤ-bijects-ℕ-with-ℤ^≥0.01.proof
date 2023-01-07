@@ -20,7 +20,7 @@ elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
         prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
         prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 1.0.0.0.0
       }
-      elided 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b {
+      existingStatementExtraction {
         prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℤ, ℕ, ℤ) 1.0.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function ⍳_ℤ, ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ) () 1.0.0.1.0
         prove = domain ⍳_ℤ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain ⍳_ℤ ℕ, ⊆ codomain ⍳_ℤ ℤ) () 1.0.0.1.1
@@ -34,7 +34,7 @@ elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
         prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
         prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 1.1.0.0.0
       }
-      elided 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b {
+      existingStatementExtraction {
         prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℤ, ℕ, ℤ) 1.1.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function ⍳_ℤ, ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ) () 1.1.0.1.0
         prove = domain ⍳_ℤ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain ⍳_ℤ ℕ, ⊆ codomain ⍳_ℤ ℤ) () 1.1.0.1.1

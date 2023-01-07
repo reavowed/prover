@@ -1,7 +1,7 @@
 assume surjectiveFunction t0 t1 t2 {
   take b {
     assume ∈ $0 t2 {
-      elided f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 {
+      existingStatementExtraction {
         prove ∧ ∧ function t0 functionFrom t0 t1 t2 ∀ b → ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0 f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 () (t0, t1, t2) 0a
         prove ∀ b → ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function t0 functionFrom t0 t1 t2, ∀ b → ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0) () 0.0.0.0.0
         prove → ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t2 ∃ a ∧ ∈ $0 t1 = $$$0 apply t0 $0) ($0) 0.0.0.0.1
@@ -18,11 +18,11 @@ assume surjectiveFunction t0 t1 t2 {
           prove ∃ a ∧ ∈ $0 t1 ∈ orderedPair $0 $$$0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 t1 ∈ orderedPair $$$0 $$0 t0) ($0) 0.0.0.1.1.0
         }
         elided 5d216992c8d22567fe99eb3320078b9f72154f2787ddff69923a834812da168f {
-          elided f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 {
+          existingStatementExtraction {
             prove ∧ ∧ function t0 functionFrom t0 t1 t2 ∀ b → ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0 f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 () (t0, t1, t2) 0a
             prove ∧ function t0 functionFrom t0 t1 t2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function t0 functionFrom t0 t1 t2, ∀ b → ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0) () 0.0.0.1.2.0.0
           }
-          elided 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b {
+          existingStatementExtraction {
             prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) 0.0.0.1.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 0.0.0.1.2.1.0
             prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 0.0.0.1.2.1.1
@@ -40,7 +40,7 @@ assume surjectiveFunction t0 t1 t2 {
     }
   }
   prove ⊆ t2 codomain t0 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (t2, codomain t0) 0.0
-  elided 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b {
+  existingStatementExtraction {
     prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 0.2.0
     prove ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= domain t0 t1, ⊆ codomain t0 t2) () 0.2.1
@@ -54,7 +54,7 @@ assume = t2 codomain t0 {
   }
   elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
     prove functionFrom t0 t1 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, functionFrom t0 t1 t2) () p0
-    elided 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b {
+    existingStatementExtraction {
       prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) 1.1.0
       prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 1.1.1.0
       prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 1.1.1.1

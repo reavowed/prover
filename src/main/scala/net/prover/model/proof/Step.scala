@@ -18,10 +18,11 @@ import scala.util.{Failure, Success, Try}
 
 @JsonIgnoreProperties(Array("substitutions", "isComplete"))
 sealed trait Step {
+  def `type`: String
   def provenStatement: Option[Statement]
   def getSubstep(index: Int, stepContext: StepContext): Option[(Step, StepContext)]
   def modifySubsteps[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]]
-  def insertExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Step
+  def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step]
   def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Step
   def clearInference(inferenceToClear: Inference): Step
@@ -527,6 +528,44 @@ object Step {
     }
   }
 
+  case class ExistingStatementExtraction(substeps: Seq[Step]) extends Step.WithSubsteps {
+    val `type` = "existingStatementExtraction"
+    override def provenStatement: Option[Statement] = {
+      substeps.flatMap(_.provenStatement.toSeq).lastOption
+    }
+    override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = {
+      copy(substeps = newSubsteps)
+    }
+    override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Step = {
+      ExistingStatementExtraction(substeps.map(_.insertExternalParameters(numberOfParametersToInsert, internalDepth)))
+    }
+    override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
+      for {
+        newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
+      } yield ExistingStatementExtraction(newSubsteps)
+    }
+    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Step = {
+      ExistingStatementExtraction(substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
+    }
+    override def clearInference(inferenceToClear: Inference): Step = {
+      ExistingStatementExtraction(substeps.map(_.clearInference(inferenceToClear)))
+    }
+    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
+    override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
+    override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
+    override def length: Int = substeps.map(_.length).sum
+    override def serializedLines: Seq[String] = Seq(s"existingStatementExtraction {") ++
+      substeps.flatMap(_.serializedLines).indent ++
+      Seq("}")
+  }
+  object ExistingStatementExtraction {
+    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[ExistingStatementExtraction] = {
+      for {
+        substeps <- listParser.inBraces
+      } yield ExistingStatementExtraction(substeps)
+    }
+  }
+
   implicit class StepSeqOps(steps: Seq[Step]) {
     def recalculateReferences(outerStepContext: StepContext, provingContext: ProvingContext): (Seq[Step], Seq[StepWithReferenceChange]) = {
       steps.zipWithIndex.mapFold(outerStepContext) { case (currentStepContext, (step, index)) =>
@@ -547,6 +586,7 @@ object Step {
       case "prove" => Assertion.parser
       case "elided" => Elided.parser
       case "subproof" => SubProof.parser
+      case "existingStatementExtraction" => ExistingStatementExtraction.parser
     }
   }
   def listParser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Seq[Step]] = {

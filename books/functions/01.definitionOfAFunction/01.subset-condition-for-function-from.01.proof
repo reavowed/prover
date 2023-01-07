@@ -14,7 +14,7 @@ assume ∧ function t0 functionFrom t0 t1 t2 {
               prove ∈ orderedPair $$0 $0 t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$$0 t0) ($$$0, orderedPair $$0 $0) 0.0.0.0.1.0a 0.0.0.0a
               prove ∧ ∈ $$0 domain t0 ∈ $0 codomain t0 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a () ($$0, $0, t0) 0.0.0.0.1.0.0.0
             }
-            elided 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b {
+            existingStatementExtraction {
               prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 0.0.0.0.1.0.1.0
             }
@@ -76,7 +76,7 @@ assume ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $
             prove ∈ $$0 t1 d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () ($$0, $0, t1, t2) 1.0.1.0.1.0.0
           }
         } 1.0.1.0.0
-        elided (Extracted) {
+        existingStatementExtraction {
           prove → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∃! b ∈ orderedPair $$$0 $0 t0) ($0) 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
           prove ∃! b ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∃! b ∈ orderedPair $$0 $0 t0) () 1.0.1.0.2.0 1.0.1.0.1
         }
@@ -109,7 +109,7 @@ assume ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $
           } 1.1.0.0.0.0
         }
         assume ∈ $0 t1 {
-          elided (Extracted) {
+          existingStatementExtraction {
             prove → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∃! b ∈ orderedPair $$$0 $0 t0) ($0) 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             prove ∃! b ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∃! b ∈ orderedPair $$0 $0 t0) () 1.1.0.0.1.0.0 1.1.0.0.1a
           }

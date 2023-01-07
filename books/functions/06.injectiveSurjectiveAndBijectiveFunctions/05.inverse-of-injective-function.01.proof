@@ -21,7 +21,7 @@ subproof (Function) {
   prove ⊆ inverseFunction t0 product codomain t0 domain t0 336cf098d26a1c282193f9314f3aa761e00a0ddf2824de849bf063cd47269fd1 () (inverseFunction t0, t0, orderedPair $1 $0, domain t0, codomain t0, product codomain t0 domain t0) 1 2.0 2.1
   take b {
     assume ∈ $0 codomain t0 {
-      elided f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 {
+      existingStatementExtraction {
         prove ∧ ∧ function t0 functionFrom t0 domain t0 codomain t0 ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0 f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 () (t0, domain t0, codomain t0) 0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function t0 functionFrom t0 domain t0 codomain t0, ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0) () 2.3.0.0.0
         prove → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$$0 apply t0 $0) ($0) 2.3.0.0.1
@@ -123,7 +123,7 @@ subproof (Right inverse) {
   take b {
     assume ∈ $0 codomain t0 {
       prove = apply compose t0 inverseFunction t0 $0 apply t0 apply inverseFunction t0 $0 dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc () (inverseFunction t0, codomain t0, domain t0, t0, codomain t0, $0) 2 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 4.2.0a
-      elided f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 {
+      existingStatementExtraction {
         prove ∧ ∧ function t0 functionFrom t0 domain t0 codomain t0 ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0 f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 () (t0, domain t0, codomain t0) 0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function t0 functionFrom t0 domain t0 codomain t0, ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0) () 4.2.0.1.0
         prove → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$$0 apply t0 $0) ($0) 4.2.0.1.1
@@ -175,7 +175,7 @@ subproof (Injective) {
           assume = apply inverseFunction t0 $$0 apply inverseFunction t0 $0 {
             elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
               prove functionFrom inverseFunction t0 codomain t0 domain t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function inverseFunction t0, functionFrom inverseFunction t0 codomain t0 domain t0) () 2
-              elided 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b {
+              existingStatementExtraction {
                 prove ∧ function inverseFunction t0 ∧ = domain inverseFunction t0 codomain t0 ⊆ codomain inverseFunction t0 domain t0 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (inverseFunction t0, codomain t0, domain t0) 5.0.0.0.0.0.0.0
                 prove ∧ = domain inverseFunction t0 codomain t0 ⊆ codomain inverseFunction t0 domain t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function inverseFunction t0, ∧ = domain inverseFunction t0 codomain t0 ⊆ codomain inverseFunction t0 domain t0) () 5.0.0.0.0.0.0.1.0
                 prove = domain inverseFunction t0 codomain t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain inverseFunction t0 codomain t0, ⊆ codomain inverseFunction t0 domain t0) () 5.0.0.0.0.0.0.1.1
@@ -184,7 +184,7 @@ subproof (Injective) {
             }
             elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
               prove functionFrom inverseFunction t0 codomain t0 domain t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function inverseFunction t0, functionFrom inverseFunction t0 codomain t0 domain t0) () 2
-              elided 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b {
+              existingStatementExtraction {
                 prove ∧ function inverseFunction t0 ∧ = domain inverseFunction t0 codomain t0 ⊆ codomain inverseFunction t0 domain t0 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (inverseFunction t0, codomain t0, domain t0) 5.0.0.0.0.0.1.0
                 prove ∧ = domain inverseFunction t0 codomain t0 ⊆ codomain inverseFunction t0 domain t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function inverseFunction t0, ∧ = domain inverseFunction t0 codomain t0 ⊆ codomain inverseFunction t0 domain t0) () 5.0.0.0.0.0.1.1.0
                 prove = domain inverseFunction t0 codomain t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain inverseFunction t0 codomain t0, ⊆ codomain inverseFunction t0 domain t0) () 5.0.0.0.0.0.1.1.1

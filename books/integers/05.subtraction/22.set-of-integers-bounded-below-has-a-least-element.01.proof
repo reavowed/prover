@@ -24,7 +24,7 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
                 prove ∈ $$0 ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$$$0 ℤ) (apply -ℤ orderedPair $0 $$$$0, $$0) 0.0.0.0.0.1.0.1.0 0.0.0.0.0.1.0.0
               }
             }
-            elided (Extracted) {
+            existingStatementExtraction {
               prove → ∈ $0 t0 ∈ orderedPair $$$$0 $0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 t0 ∈ orderedPair $$$$0 $$$$$0 ≤ℤ) ($0) 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove ∈ orderedPair $$$$0 $0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, ∈ orderedPair $$$$0 $0 ≤ℤ) () 0.0.0.0.0.1.1.0 0.0.0.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             }
@@ -158,7 +158,7 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
       elided f6c23f1d31f74adf3fc2e789729a077cfc0df1246f2943ca90f641972b190f21 {
         elided f6c23f1d31f74adf3fc2e789729a077cfc0df1246f2943ca90f641972b190f21 {
           prove bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, bijectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.1
-          elided ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd {
+          existingStatementExtraction {
             prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.6.1.0.0
             prove ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.6.1.0.1.0
             prove injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (injectiveFunction ⍳_ℤ, surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.6.1.0.1.1
@@ -244,7 +244,7 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
           assume ∈ $0 t0 {
             prove ∈ apply -ℤ orderedPair $0 $$$$$0 $$$$0 c9f2bb871030aba7cefe90ec5d1063e3fede02bed65e9e77472830a9b98bcc95 () ($$$$0, t0, apply -ℤ orderedPair $$$$$$0 $$$$$0, $0) 0.0a 0.0.6.3.2.0a
             prove ∈ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 applySet inverseFunction ⍳_ℤ $$$$0 607bd5a8ada96378f280d7c7cb8d745a371b352047e4ecc23ff766131cfce9b5 () (inverseFunction ⍳_ℤ, ℤ^≥0, ℕ, $$$$0, apply -ℤ orderedPair $0 $$$$$0) 0.0.2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0 0.0.6.3.2.0.0
-            elided (Extracted) {
+            existingStatementExtraction {
               prove → ∈ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 applySet inverseFunction ⍳_ℤ $$$$0 ∈ orderedPair $$$0 apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$0 applySet inverseFunction ⍳_ℤ $$$$0 ∈ orderedPair $$$0 $$$$$$0 ≤ℕ) (apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0) 0.0.6a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove ∈ orderedPair $$$0 apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 applySet inverseFunction ⍳_ℤ $$$$0, ∈ orderedPair $$$0 apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 ≤ℕ) () 0.0.6.3.2.0.2.0 0.0.6.3.2.0.1
             }
@@ -268,7 +268,7 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
             elided 80caebb81b56ae485470657bb18dfc522b3f2cd5dc427099905fae9d47526627 {
               elided 80caebb81b56ae485470657bb18dfc522b3f2cd5dc427099905fae9d47526627 {
                 prove bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, bijectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.1
-                elided ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd {
+                existingStatementExtraction {
                   prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.6.3.2.0.4.0.0
                   prove ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.6.3.2.0.4.0.1.0
                   prove injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (injectiveFunction ⍳_ℤ, surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.6.3.2.0.4.0.1.1

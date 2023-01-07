@@ -2,7 +2,7 @@ elided 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 {
   prove ∧ binaryOperation t0 ∧ ∈ t1 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t1 $0 = apply t0 orderedPair t1 $0 $0 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 () (t1, t0) p1
   prove ∧ ∈ t1 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t1 $0 = apply t0 orderedPair t1 $0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation t0, ∧ ∈ t1 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t1 $0 = apply t0 orderedPair t1 $0 $0) () 0.0
   prove ∈ t1 baseSet t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ t1 baseSet t0, ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t1 $0 = apply t0 orderedPair t1 $0 $0) () 0.1
-  elided 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 {
+  existingStatementExtraction {
     prove ∧ binaryOperation t0 ∧ ∈ t2 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t2 $0 = apply t0 orderedPair t2 $0 $0 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 () (t2, t0) p2
     prove ∧ ∈ t2 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t2 $0 = apply t0 orderedPair t2 $0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation t0, ∧ ∈ t2 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t2 $0 = apply t0 orderedPair t2 $0 $0) () 0.3.0
     prove ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t2 $0 = apply t0 orderedPair t2 $0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ t2 baseSet t0, ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t2 $0 = apply t0 orderedPair t2 $0 $0) () 0.3.1
@@ -16,7 +16,7 @@ elided 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 {
   prove ∧ binaryOperation t0 ∧ ∈ t2 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t2 $0 = apply t0 orderedPair t2 $0 $0 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 () (t2, t0) p2
   prove ∧ ∈ t2 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t2 $0 = apply t0 orderedPair t2 $0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation t0, ∧ ∈ t2 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t2 $0 = apply t0 orderedPair t2 $0 $0) () 1.0
   prove ∈ t2 baseSet t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ t2 baseSet t0, ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t2 $0 = apply t0 orderedPair t2 $0 $0) () 1.1
-  elided 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 {
+  existingStatementExtraction {
     prove ∧ binaryOperation t0 ∧ ∈ t1 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t1 $0 = apply t0 orderedPair t1 $0 $0 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 () (t1, t0) p1
     prove ∧ ∈ t1 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t1 $0 = apply t0 orderedPair t1 $0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation t0, ∧ ∈ t1 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t1 $0 = apply t0 orderedPair t1 $0 $0) () 1.3.0
     prove ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t1 $0 = apply t0 orderedPair t1 $0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ t1 baseSet t0, ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 t1 $0 = apply t0 orderedPair t1 $0 $0) () 1.3.1

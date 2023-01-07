@@ -98,7 +98,7 @@ take z {
 }
 elided (Extracted) {
   prove ∧ ∈ orderedPair t0 t1 |ℤ ¬ = t1 apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair t0 t1 |ℤ, ¬ = t1 apply ⍳_ℤ 0ℕ) () p2 p3
-  elided (Extracted) {
+  existingStatementExtraction {
     prove → ∈ t0 ℤ ∀ y → ∈ $0 ℤ → ∧ ∈ orderedPair t0 $0 |ℤ ¬ = $0 apply ⍳_ℤ 0ℕ ∈ orderedPair t0 absZ $0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ y → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 |ℤ ¬ = $0 apply ⍳_ℤ 0ℕ ∈ orderedPair $$0 absZ $0 ≤ℤ) (t0) 0
     prove ∀ y → ∈ $0 ℤ → ∧ ∈ orderedPair t0 $0 |ℤ ¬ = $0 apply ⍳_ℤ 0ℕ ∈ orderedPair t0 absZ $0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, ∀ y → ∈ $0 ℤ → ∧ ∈ orderedPair t0 $0 |ℤ ¬ = $0 apply ⍳_ℤ 0ℕ ∈ orderedPair t0 absZ $0 ≤ℤ) () 1.1.0 p0
     prove → ∈ t1 ℤ → ∧ ∈ orderedPair t0 t1 |ℤ ¬ = t1 apply ⍳_ℤ 0ℕ ∈ orderedPair t0 absZ t1 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ → ∧ ∈ orderedPair t0 $0 |ℤ ¬ = $0 apply ⍳_ℤ 0ℕ ∈ orderedPair t0 absZ $0 ≤ℤ) (t1) 1.1.1
@@ -117,7 +117,7 @@ elided (Extracted) {
     prove ∈ negatedZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t0 ℤ, ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ) () 3.0.0
   }
   prove ∧ ∈ orderedPair negatedZ t0 t1 |ℤ ¬ = t1 apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair negatedZ t0 t1 |ℤ, ¬ = t1 apply ⍳_ℤ 0ℕ) () 2 p3
-  elided (Extracted) {
+  existingStatementExtraction {
     prove → ∈ negatedZ t0 ℤ ∀ y → ∈ $0 ℤ → ∧ ∈ orderedPair negatedZ t0 $0 |ℤ ¬ = $0 apply ⍳_ℤ 0ℕ ∈ orderedPair negatedZ t0 absZ $0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ y → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 |ℤ ¬ = $0 apply ⍳_ℤ 0ℕ ∈ orderedPair $$0 absZ $0 ≤ℤ) (negatedZ t0) 0
     prove ∀ y → ∈ $0 ℤ → ∧ ∈ orderedPair negatedZ t0 $0 |ℤ ¬ = $0 apply ⍳_ℤ 0ℕ ∈ orderedPair negatedZ t0 absZ $0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ negatedZ t0 ℤ, ∀ y → ∈ $0 ℤ → ∧ ∈ orderedPair negatedZ t0 $0 |ℤ ¬ = $0 apply ⍳_ℤ 0ℕ ∈ orderedPair negatedZ t0 absZ $0 ≤ℤ) () 3.2.0 3.0
     prove → ∈ t1 ℤ → ∧ ∈ orderedPair negatedZ t0 t1 |ℤ ¬ = t1 apply ⍳_ℤ 0ℕ ∈ orderedPair negatedZ t0 absZ t1 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ → ∧ ∈ orderedPair negatedZ t0 $0 |ℤ ¬ = $0 apply ⍳_ℤ 0ℕ ∈ orderedPair negatedZ t0 absZ $0 ≤ℤ) (t1) 3.2.1

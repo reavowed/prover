@@ -4,7 +4,7 @@ import net.prover.books.management.BookStateManager
 import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.entries.Theorem
-import net.prover.refactoring.{ReplaceInference, UpdateEntries}
+import net.prover.refactoring.{ReplaceElidedSteps, ReplaceInference, UpdateEntries}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 
@@ -34,6 +34,11 @@ class OperationsController @Autowired() (implicit bookStateManager: BookStateMan
         (updatedEntry, updatedInferences)
       }
     })
+  }
+
+  @GetMapping(value = Array("replaceElidedSteps"))
+  def replaceElidedSteps(): Unit = {
+    ReplaceElidedSteps()
   }
 
   @GetMapping(value = Array("replaceInference"))

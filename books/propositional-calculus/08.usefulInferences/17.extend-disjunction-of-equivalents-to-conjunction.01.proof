@@ -1,12 +1,12 @@
 assume s0 {
-  elided (Extracted) {
+  existingStatementExtraction {
     prove → s0 s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (s0, s1) () p1
     prove s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s0, s1) () 0.0.0 0a
   }
   prove ∧ s0 s1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (s0, s1) () 0a 0.0
 }
 assume s1 {
-  elided (Extracted) {
+  existingStatementExtraction {
     prove → s1 s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (s0, s1) () p1
     prove s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (s1, s0) () 1.0.0 1a
   }

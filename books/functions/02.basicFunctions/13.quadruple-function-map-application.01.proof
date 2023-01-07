@@ -8,7 +8,7 @@ elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
     assume ∈ $0 product t1 t2 {
       take y {
         assume ∈ $0 product t3 t4 {
-          elided (Extracted) {
+          existingStatementExtraction {
             prove → ∈ $$0 product t1 t2 ∀ y → ∈ $0 product t3 t4 = apply t0 orderedPair $$$0 $0 with (first $$$0 second $$$0 first $0 second $0) t5 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 product t1 t2 ∀ y → ∈ $0 product t3 t4 = apply t0 orderedPair $$$$0 $0 with (first $$$$0 second $$$$0 first $0 second $0) t5) ($$0) 1
             prove ∀ y → ∈ $0 product t3 t4 = apply t0 orderedPair $$$0 $0 with (first $$$0 second $$$0 first $0 second $0) t5 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 product t1 t2, ∀ y → ∈ $0 product t3 t4 = apply t0 orderedPair $$$0 $0 with (first $$$0 second $$$0 first $0 second $0) t5) () 2.0.0.0.0.0.0 2.0.0a
             prove → ∈ $0 product t3 t4 = apply t0 orderedPair $$0 $0 with (first $$0 second $$0 first $0 second $0) t5 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 product t3 t4 = apply t0 orderedPair $$0 $$$0 with (first $$0 second $$0 first $$$0 second $$$0) t5) ($0) 2.0.0.0.0.0.1
@@ -32,7 +32,7 @@ elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
 elided c77bb73bca1f02d6d38280eab9fda22237ae20b85ed00393014b5566bfb5948b {
   take x {
     assume ∈ $0 product t1 t2 {
-      elided (Extracted) {
+      existingStatementExtraction {
         prove → ∈ $0 product t1 t2 ∀ y → ∈ $0 product t3 t4 = apply t0 orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) t5 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 product t1 t2 ∀ y → ∈ $0 product t3 t4 = apply t0 orderedPair orderedPair first $$$0 second $$$0 orderedPair first $0 second $0 with (first $$$0 second $$$0 first $0 second $0) t5) ($0) 2
         prove ∀ y → ∈ $0 product t3 t4 = apply t0 orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) t5 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 product t1 t2, ∀ y → ∈ $0 product t3 t4 = apply t0 orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) t5) () 3.0.0.0.0 3.0.0a
       }

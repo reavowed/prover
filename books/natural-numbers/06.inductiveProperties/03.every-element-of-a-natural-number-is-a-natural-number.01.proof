@@ -14,7 +14,7 @@ take a {
     assume ∀ x → ∈ $0 $$0 ∈ $0 ℕ {
       take x {
         assume ∈ $0 $$0 {
-          elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+          existingStatementExtraction {
             prove → ∈ $0 $$0 ∈ $0 ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 $$0 ∈ $$$0 ℕ) ($0) 2.0.0a
             prove ∈ $0 ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$0, ∈ $0 ℕ) () 2.0.0.0.0.0.0 2.0.0.0.0a
           }
@@ -37,7 +37,7 @@ take a {
   }
 }
 prove ∀ x → ∈ $0 t0 ∈ $0 ℕ 4f6fc5278d8806c2580ac552515ba0954b5447473eefeb89ad1a4379624bc059 (∀ x → ∈ $0 $$0 ∈ $0 ℕ) (t0) 1 2 p0
-elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+existingStatementExtraction {
   prove → ∈ t1 t0 ∈ t1 ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 t0 ∈ $0 ℕ) (t1) 3
   prove ∈ t1 ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 t0, ∈ t1 ℕ) () 4.0 p1
 }

@@ -8,7 +8,7 @@ take a {
     take b {
       assume ∈ $0 t2 {
         assume ∈ orderedPair $$0 $0 t0 {
-          elided (Extracted) {
+          existingStatementExtraction {
             prove ↔ ∈ orderedPair $$0 $0 t0 ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 t0 ∧ ∈ $$$0 product t1 t2 with (first $$$0 second $$$0) s0) (orderedPair $$0 $0) 1
             prove → ∈ orderedPair $$0 $0 t0 ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 t0, ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 2.0.0.0.0.0.0
             prove ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 t0, ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 2.0.0.0.0.0.1 2.0.0.0.0a

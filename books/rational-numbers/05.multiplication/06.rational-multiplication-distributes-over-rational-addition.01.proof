@@ -818,7 +818,7 @@ elided bfdbc6cd986842ec1146524948d2ae768e832cae11c60a8f0b3507111ec7f64a {
       prove ∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) () 1.2.0.0
       prove binaryOperationOn ×ℚ ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation ×ℚ, binaryOperationOn ×ℚ ℚ) () 1.2.0.1
     }
-    elided f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 {
+    existingStatementExtraction {
       prove ∧ binaryOperation ×ℚ = baseSet ×ℚ ℚ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (×ℚ, ℚ) 1.2.0
       prove = baseSet ×ℚ ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation ×ℚ, = baseSet ×ℚ ℚ) () 1.2.1.0
     }

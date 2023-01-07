@@ -28,7 +28,7 @@ let S = $0 comprehension n ℕ ¬ with ($0) s0 70db594f573e921867af9e9ef002f3a90
               prove ⊕ ∈ orderedPair $0 $$0 <ℕ ∈ orderedPair $$0 $0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ⊕ ∈ orderedPair $0 $$0 <ℕ ∈ orderedPair $$0 $0 ≤ℕ) () 0.0.2.1.0.0.0.3 0.0.2.0
               prove ¬ ∈ orderedPair $$0 $0 ≤ℕ 6c8066d1d6929a9884ff35ff44cde85658c881867f3da7c8459e41fb54febb61 (∈ orderedPair $0 $$0 <ℕ, ∈ orderedPair $$0 $0 ≤ℕ) () 0.0.2.1.0.0.0.4 0.0.2.1.0.0a
             }
-            elided (Extracted) {
+            existingStatementExtraction {
               prove → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 $$$0 ∈ orderedPair $$0 $$$$0 ≤ℕ) ($0) 0.0.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove ¬ ∈ $0 $$$0 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ $0 $$$0, ∈ orderedPair $$0 $0 ≤ℕ) () 0.0.2.1.0.0.1.0 0.0.2.1.0.0.0
             }
@@ -43,7 +43,7 @@ let S = $0 comprehension n ℕ ¬ with ($0) s0 70db594f573e921867af9e9ef002f3a90
           }
         }
       }
-      elided (Extracted) {
+      existingStatementExtraction {
         prove → ∈ $0 ℕ → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 <ℕ with ($0) s0 with ($0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℕ → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$$$0 <ℕ with ($0) s0 with ($$$0) s0) ($0) p0
         prove → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 <ℕ with ($0) s0 with ($0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, → ∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 <ℕ with ($0) s0 with ($0) s0) () 0.0.2.2.0 0.0.2.0
         prove with ($0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∀ m → ∈ $0 ℕ → ∈ orderedPair $0 $$0 <ℕ with ($0) s0, with ($0) s0) () 0.0.2.2.1 0.0.2.1

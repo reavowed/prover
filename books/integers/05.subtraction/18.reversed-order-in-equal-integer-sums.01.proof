@@ -229,7 +229,7 @@ take z {
 assume ∈ orderedPair t0 t2 <ℤ {
   elided (Extracted) {
     prove ∧ = apply +ℤ orderedPair t0 t1 apply +ℤ orderedPair t2 t3 ∈ orderedPair t0 t2 <ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= apply +ℤ orderedPair t0 t1 apply +ℤ orderedPair t2 t3, ∈ orderedPair t0 t2 <ℤ) () p4 1a
-    elided (Extracted) {
+    existingStatementExtraction {
       prove → ∈ t0 ℤ ∀ y → ∈ $0 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair t0 $$$0 apply +ℤ orderedPair $$0 $0 ∈ orderedPair t0 $$0 <ℤ ∈ orderedPair $0 $$$0 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ y → ∈ $0 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair $$$$0 $$$0 apply +ℤ orderedPair $$0 $0 ∈ orderedPair $$$$0 $$0 <ℤ ∈ orderedPair $0 $$$0 <ℤ) (t0) 0
       prove ∀ y → ∈ $0 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair t0 $$$0 apply +ℤ orderedPair $$0 $0 ∈ orderedPair t0 $$0 <ℤ ∈ orderedPair $0 $$$0 <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, ∀ y → ∈ $0 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair t0 $$$0 apply +ℤ orderedPair $$0 $0 ∈ orderedPair t0 $$0 <ℤ ∈ orderedPair $0 $$$0 <ℤ) () 1.0.1.0 p0
       prove → ∈ t1 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair t0 t1 apply +ℤ orderedPair $$0 $0 ∈ orderedPair t0 $$0 <ℤ ∈ orderedPair $0 t1 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair t0 $$$0 apply +ℤ orderedPair $$0 $0 ∈ orderedPair t0 $$0 <ℤ ∈ orderedPair $0 $$$0 <ℤ) (t1) 1.0.1.1
@@ -252,7 +252,7 @@ assume ∈ orderedPair t3 t1 <ℤ {
   }
   elided (Extracted) {
     prove ∧ = apply +ℤ orderedPair t3 t2 apply +ℤ orderedPair t1 t0 ∈ orderedPair t3 t1 <ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= apply +ℤ orderedPair t3 t2 apply +ℤ orderedPair t1 t0, ∈ orderedPair t3 t1 <ℤ) () 2.0 2a
-    elided (Extracted) {
+    existingStatementExtraction {
       prove → ∈ t3 ℤ ∀ y → ∈ $0 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair t3 $$$0 apply +ℤ orderedPair $$0 $0 ∈ orderedPair t3 $$0 <ℤ ∈ orderedPair $0 $$$0 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ y → ∈ $0 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair $$$$0 $$$0 apply +ℤ orderedPair $$0 $0 ∈ orderedPair $$$$0 $$0 <ℤ ∈ orderedPair $0 $$$0 <ℤ) (t3) 0
       prove ∀ y → ∈ $0 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair t3 $$$0 apply +ℤ orderedPair $$0 $0 ∈ orderedPair t3 $$0 <ℤ ∈ orderedPair $0 $$$0 <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t3 ℤ, ∀ y → ∈ $0 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair t3 $$$0 apply +ℤ orderedPair $$0 $0 ∈ orderedPair t3 $$0 <ℤ ∈ orderedPair $0 $$$0 <ℤ) () 2.1.1.0 p3
       prove → ∈ t2 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair t3 t2 apply +ℤ orderedPair $$0 $0 ∈ orderedPair t3 $$0 <ℤ ∈ orderedPair $0 t2 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ x → ∈ $0 ℤ ∀ w → ∈ $0 ℤ → ∧ = apply +ℤ orderedPair t3 $$$0 apply +ℤ orderedPair $$0 $0 ∈ orderedPair t3 $$0 <ℤ ∈ orderedPair $0 $$$0 <ℤ) (t2) 2.1.1.1

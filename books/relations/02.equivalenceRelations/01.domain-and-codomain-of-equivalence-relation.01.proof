@@ -1,9 +1,9 @@
 elided 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de {
-  elided 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de {
+  existingStatementExtraction {
     prove ∧ ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 transitiveRelation t0 t1 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de () (t0, t1) p0
     prove ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1, transitiveRelation t0 t1) () 0.0.0
   }
-  elided f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 {
+  existingStatementExtraction {
     prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0 f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 () (t0, t1) 0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     prove relation t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (relation t0 t1, ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0) () 0.1.0
   }
@@ -28,11 +28,11 @@ take a {
   }
   assume ∈ $0 t1 {
     elided 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de {
-      elided 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de {
+      existingStatementExtraction {
         prove ∧ ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 transitiveRelation t0 t1 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de () (t0, t1) p0
         prove ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1, transitiveRelation t0 t1) () 1.1.0.0.0
       }
-      elided f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 {
+      existingStatementExtraction {
         prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0 f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 () (t0, t1) 1.1.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation t0 t1, ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0) () 1.1.0.1.0
         prove → ∈ $0 t1 ∈ orderedPair $0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∈ orderedPair $$0 $$0 t0) ($0) 1.1.0.1.1
@@ -69,11 +69,11 @@ take b {
   }
   assume ∈ $0 t1 {
     elided 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de {
-      elided 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de {
+      existingStatementExtraction {
         prove ∧ ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 transitiveRelation t0 t1 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de () (t0, t1) p0
         prove ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1, transitiveRelation t0 t1) () 3.1.0.0.0
       }
-      elided f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 {
+      existingStatementExtraction {
         prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0 f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 () (t0, t1) 3.1.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation t0 t1, ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0) () 3.1.0.1.0
         prove → ∈ $0 t1 ∈ orderedPair $0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∈ orderedPair $$0 $$0 t0) ($0) 3.1.0.1.1

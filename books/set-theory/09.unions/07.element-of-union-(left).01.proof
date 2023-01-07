@@ -1,6 +1,6 @@
 prove ∨ ∈ t0 t1 ∈ t0 t2 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ t0 t1, ∈ t0 t2) () p0
 prove ∀ x ↔ ∈ $0 ∪ t1 t2 ∨ ∈ $0 t1 ∈ $0 t2 6df17685ff2fcdfe09e7677621a4ee11bf84d2594d923cf2839b7c7388bf089d () (t1, t2)
-elided (Extracted) {
+existingStatementExtraction {
   prove ↔ ∈ t0 ∪ t1 t2 ∨ ∈ t0 t1 ∈ t0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 ∪ t1 t2 ∨ ∈ $0 t1 ∈ $0 t2) (t0) 1
   prove → ∨ ∈ t0 t1 ∈ t0 t2 ∈ t0 ∪ t1 t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 ∪ t1 t2, ∨ ∈ t0 t1 ∈ t0 t2) () 2.0
   prove ∈ t0 ∪ t1 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ t0 t1 ∈ t0 t2, ∈ t0 ∪ t1 t2) () 2.1 0

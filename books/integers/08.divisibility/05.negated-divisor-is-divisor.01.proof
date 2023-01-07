@@ -21,7 +21,7 @@ take x {
     }
   }
 }
-elided (Extracted) {
+existingStatementExtraction {
   prove → ∈ t0 ℤ → ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ t0 $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ → ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t1 ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ $$0 $0 t1) (t0) 0
   prove → ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ t0 $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, → ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ t0 $0 t1) () 1.0 p0
 }
@@ -31,7 +31,7 @@ elided (Extracted) {
       prove ∧ ∈ negatedZ t0 ℤ ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t0) p0
       prove ∈ negatedZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t0 ℤ, ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ) () 2.0.0.0
     }
-    elided (Extracted) {
+    existingStatementExtraction {
       prove → ∈ negatedZ t0 ℤ → ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ t0 $0 t1 ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ negatedZ t0 $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ → ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t1 ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ $$0 $0 t1) (negatedZ t0) 0
       prove → ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ t0 $0 t1 ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ negatedZ t0 $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ negatedZ t0 ℤ, → ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ t0 $0 t1 ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ negatedZ t0 $0 t1) () 2.0.1.0 2.0.0
     }

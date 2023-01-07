@@ -15,7 +15,7 @@ take f {
           take a {
             assume ∈ $0 t1 {
               prove = t2 $$0 38ffda3c650335ebc0a91b154174e46dc3de5a3e283e17ef27b4ad1e0948f70d () (t0, t2, $$0) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.1.0.0.0a
-              elided (Extracted) {
+              existingStatementExtraction {
                 prove → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$$0 $0 t2 = apply t0 orderedPair apply $$$0 $0 $0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 ∧ = apply t0 orderedPair $$$$0 apply $$$0 $$$$0 t2 = apply t0 orderedPair apply $$$0 $$$$0 $$$$0 t2) ($0) 2.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                 prove ∧ = apply t0 orderedPair $0 apply $$$0 $0 t2 = apply t0 orderedPair apply $$$0 $0 $0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∧ = apply t0 orderedPair $0 apply $$$0 $0 t2 = apply t0 orderedPair apply $$$0 $0 $0 t2) () 2.1.0.0.0.0.0.1.0 2.1.0.0.0.0.0a
               }
@@ -28,7 +28,7 @@ take f {
         }
       }
       elided c7c50e523931e57f78524f0e8762169bf1a27281f9c823fc8f33ec82f2d11872 {
-        elided 19956c22b87fc2458c652d34a2a6273d056acf4206f8110cfb70f804cf48f5c7 {
+        existingStatementExtraction {
           prove ∧ binaryOperation t0 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 19956c22b87fc2458c652d34a2a6273d056acf4206f8110cfb70f804cf48f5c7 () (t0) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
           prove ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation t0, ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () 2.1.0.1.0.0
           prove ∃! e identityBinaryOperation $0 t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∃! e identityBinaryOperation $0 t0, ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () 2.1.0.1.0.1
@@ -41,7 +41,7 @@ take f {
     }
     assume invertingOperationBinaryOperation $0 t0 t1 {
       prove ∧ ∧ binaryOperation t0 binaryOperationOn t0 t1 ∧ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$$0 $0 $$0 = apply t0 orderedPair apply $$$0 $0 $0 $$0 476dae61e61409a7e90a657b24d6c2fb7104877637fc7d7e035008a11b9b4246 () ($0, t0, t1) 2.1.1a
-      elided (Extracted) {
+      existingStatementExtraction {
         prove → identityBinaryOperation t2 t0 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ identityBinaryOperation $$0 t0 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 $$$0 = apply t0 orderedPair apply $$0 $0 $0 $$$0) (t2) 2.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (identityBinaryOperation t2 t0, ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2) () 2.1.1.1.0 p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       }

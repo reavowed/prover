@@ -243,6 +243,13 @@ export class Parser {
           ++this.stepCounter,
           stepJson.name,
           this.parseSteps(stepJson.substeps, inferenceSummaries));
+      case "existingStatementExtraction":
+        return new ElidedStep(
+          ++this.stepCounter,
+          this.parseSteps(stepJson.substeps, inferenceSummaries),
+          null,
+          "Extraction from previous step");
+
       default:
         throw "Unrecognised step " + JSON.stringify(stepJson);
     }
