@@ -1,5 +1,6 @@
 package net.prover.model.definitions
 
+import net.prover.books.model.Book
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries.DisplayShorthand

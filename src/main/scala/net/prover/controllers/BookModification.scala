@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover.books.model.Book
 import net.prover.controllers.models.{InsertionAndReplacementProps, LinkSummary, PathData, ProofUpdateProps, StepInsertionProps, StepReplacementProps}
 import net.prover.exceptions.NotFoundException
 import net.prover.model._

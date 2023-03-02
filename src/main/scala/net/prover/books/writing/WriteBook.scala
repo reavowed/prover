@@ -1,10 +1,10 @@
 package net.prover.books.writing
 
 import net.prover.books.management.BookDirectoryConfig
-import net.prover.books.model.FileDefinition
+import net.prover.books.model.{Book, FileDefinition}
 import net.prover.controllers.BookService
 import net.prover.model.entries.Theorem
-import net.prover.model.{Book, Chapter}
+import net.prover.model.Chapter
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 

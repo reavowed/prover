@@ -1,6 +1,6 @@
 package net.prover.books.writing
 
-import net.prover.model.Book
+import net.prover.books.model.Book
 
 object WriteBooks {
   def apply(books: Seq[Book]): Unit = {

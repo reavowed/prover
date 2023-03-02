@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.books.model.EntryParsingContext
+import net.prover.books.model.{Book, EntryParsingContext}
 import net.prover.model.definitions._
 import net.prover.model.entries._
 import net.prover.model.expressions._

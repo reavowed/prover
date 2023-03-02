@@ -1,6 +1,7 @@
-package net.prover.model
+package net.prover.books.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover.model.{Chapter, SeqOps}
 
 @JsonIgnoreProperties(Array("dependencies"))
 case class Book(

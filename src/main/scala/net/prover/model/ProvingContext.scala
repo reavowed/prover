@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.books.model.Book
 import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}

@@ -1,8 +1,9 @@
 package net.prover.books.management
 
+import net.prover.books.model.Book
 import net.prover.books.writing.WriteBooks
 import net.prover.model.definitions.Definitions
-import net.prover.model.{Book, EntryContext}
+import net.prover.model.EntryContext
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.stereotype.Service
 

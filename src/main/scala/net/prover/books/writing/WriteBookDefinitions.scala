@@ -1,7 +1,7 @@
 package net.prover.books.writing
 
 import net.prover.books.management.BookDirectoryConfig
-import net.prover.model.Book
+import net.prover.books.model.Book
 
 object WriteBookDefinitions {
   def apply(books: Seq[Book]): Unit = {

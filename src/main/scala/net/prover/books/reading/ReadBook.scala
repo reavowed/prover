@@ -1,7 +1,7 @@
 package net.prover.books.reading
 
 import net.prover.books.management.BookStateManager
-import net.prover.books.model.BookDefinition
+import net.prover.books.model.{Book, BookDefinition}
 import net.prover.model._
 
 object ReadBook {

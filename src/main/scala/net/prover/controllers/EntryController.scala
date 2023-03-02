@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover.books.model.Book
 import net.prover.controllers.models.{DefinitionSummary, LinkSummary, StandalonePropertyDefinitionSummary, TypeDefinitionSummary, TypeRelationDefinitionSummary}
 import net.prover.exceptions.BadRequestException
 import net.prover.model._

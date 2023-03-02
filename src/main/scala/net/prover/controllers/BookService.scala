@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.books.management.{BookStateManager, ReloadBooks, UpdateBooks}
-import net.prover.books.model.KeyAccumulator
+import net.prover.books.model.{Book, KeyAccumulator}
 import net.prover.controllers.models._
 import net.prover.model._
 import net.prover.model.definitions.Definitions

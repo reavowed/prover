@@ -1,5 +1,6 @@
 package net.prover.books.management
 
+import net.prover.books.model.Book
 import net.prover.books.reading.{ReadBook, ReadBookDefinitions}
 import net.prover.model._
 

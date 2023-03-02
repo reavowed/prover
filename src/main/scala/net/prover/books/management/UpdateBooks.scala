@@ -1,6 +1,6 @@
 package net.prover.books.management
 
-import net.prover.model.Book
+import net.prover.books.model.Book
 import net.prover.model.definitions.Definitions
 import scalaz.Functor
 import scalaz.syntax.functor._

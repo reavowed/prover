@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover.books.model.Book
 import net.prover.controllers.ChapterController._
 import net.prover.controllers.models.ChapterProps._
 import net.prover.controllers.models._
