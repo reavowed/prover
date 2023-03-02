@@ -81,7 +81,7 @@ class StepProvingSpec extends ControllerSpec {
       checkModifySteps(
         service,
         fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ) :+ target(χ),
-        fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ) :+ elided("Extracted", Seq(
+        fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ) :+ existingStatementExtraction(Seq(
           assertion(modusPonens, Seq(φ, Conjunction(ψ, χ)), Nil),
           assertion(extractRightConjunct, Seq(ψ, χ), Nil))))
     }
@@ -190,13 +190,13 @@ class StepProvingSpec extends ControllerSpec {
         service,
         fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ(a)) :+ target(χ(a)),
         matchSteps(fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ(a)) :+
-          elided("Extracted", Seq(
+          existingStatementExtraction(Seq(
             assertion(specification, Seq(Implication(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
             assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil))) :+
           target(χ(a))
         ) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.Elided].substeps(0), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.Elided].substeps(1), Nil)})
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtraction].substeps(0), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtraction].substeps(1), Nil)})
     }
 
     "retain premise bound variable names when proving target by inference" in {

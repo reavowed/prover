@@ -391,6 +391,7 @@ trait StepHelpers extends TestVariableDefinitions {
   def target(statement: Statement): SubstitutionContext => Step.Target = _ => Step.Target(statement)
   def elided(inference: Inference, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Elided = sc => Step.Elided(steps(sc), Some(inference.summary), None)
   def elided(description: String, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Elided = sc => Step.Elided(steps(sc), None, Some(description))
+  def existingStatementExtraction(steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.ExistingStatementExtraction = sc => Step.ExistingStatementExtraction(steps(sc))
 
   def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = _ => (0 until number).map(i => Step.Target(StatementVariable(i)))
 
