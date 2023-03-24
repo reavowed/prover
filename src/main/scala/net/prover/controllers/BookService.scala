@@ -7,7 +7,7 @@ import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.proof.{Step, StepProvingContext}
-import net.prover.theorems.FindStep
+import net.prover.theorems.{FindStep, ReplaceSteps}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import scalaz.Functor
@@ -116,7 +116,7 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
 
   def replaceSteps[F[_]: Functor](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[F[Seq[Step]]]): Try[F[ProofUpdateProps[MultipleStepReplacementProps]]] = {
     modifyTheorem[FWithValue[F, MultipleStepReplacementProps]#Type](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      theorem.replaceSteps[TryFWithValue[F, MultipleStepReplacementProps]#Type](proofIndex, stepPath) { (steps, stepContext) =>
+      ReplaceSteps[TryFWithValue[F, MultipleStepReplacementProps]#Type](theorem, proofIndex, stepPath) { (steps, stepContext) =>
         Some(f(steps, StepProvingContext(stepContext, provingContext)).map(_.map { newSteps =>
           (newSteps, MultipleStepReplacementProps(stepPath, 0, steps.length, newSteps))
         }))

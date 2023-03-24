@@ -4,6 +4,7 @@ import net.prover.controllers.models.{InsertionAndDeletionProps, PathData, Proof
 import net.prover.model._
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof._
+import net.prover.theorems.ReplaceSteps
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -79,12 +80,12 @@ class ProofController @Autowired() (val bookService: BookService) {
       (proofUpdateProps, insertionAndDeletionProps) <- bookService.replaceSteps[WithValue[InsertionAndDeletionProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, sharedPath) { (sharedParentSteps, sharedContext) =>
         for {
           (substepsWithoutCurrent, (currentSteps, currentStepOuterContext)) <-
-            Proof.modifySteps[WithValue[(Seq[Step], StepContext)]#Type](sharedParentSteps, sourcePathInner, sharedContext.stepContext) { (currentSteps, currentStepOuterContext) =>
+            ReplaceSteps[WithValue[(Seq[Step], StepContext)]#Type](sharedParentSteps, sourcePathInner, sharedContext.stepContext) { (currentSteps, currentStepOuterContext) =>
               currentSteps.splitBetweenIndexesIfValid(sourceStartIndex, sourceEndIndex).map { case (before, steps, after) =>
                 (before ++ after, (steps, currentStepOuterContext))
               }
             }.orBadRequest("Invalid source path")
-          result <- Proof.modifySteps[TryWithValue[InsertionAndDeletionProps]#Type](substepsWithoutCurrent, destinationPathInner, sharedContext.stepContext) { (newSurroundingSteps, newStepOuterContext) =>
+          result <- ReplaceSteps[TryWithValue[InsertionAndDeletionProps]#Type](substepsWithoutCurrent, destinationPathInner, sharedContext.stepContext) { (newSurroundingSteps, newStepOuterContext) =>
             val sharedParameterDepth = Seq(currentStepOuterContext.externalDepth, newStepOuterContext.externalDepth).min
             val parametersToRemove = currentStepOuterContext.externalDepth - newStepOuterContext.externalDepth
             val parametersToAdd = -1 * parametersToRemove
