@@ -10,10 +10,10 @@ class StepCreationSpec extends ControllerSpec {
 
   "adding a target" should {
     "insert the new step before any transitivity" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertion(service)
 
-      val controller = new StepCreationController(service)
+      val controller = new StepCreationController
 
       controller.addTarget(
         bookKey,

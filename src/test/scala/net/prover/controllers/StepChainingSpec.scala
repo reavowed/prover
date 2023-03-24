@@ -14,7 +14,7 @@ class StepChainingSpec extends ControllerSpec {
   "adding a target" should {
 
     "add new chain correctly" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
@@ -30,7 +30,7 @@ class StepChainingSpec extends ControllerSpec {
     }
 
     "add into existing chain correctly" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
@@ -54,7 +54,7 @@ class StepChainingSpec extends ControllerSpec {
   "adding a premise" should {
     "add left premise to new transitivity" in {
       val premise = Equivalence(φ, ψ)
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
@@ -67,7 +67,7 @@ class StepChainingSpec extends ControllerSpec {
     }
     "add right premise to new transitivity" in {
       val premise = Equivalence(ψ, χ)
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
@@ -83,9 +83,9 @@ class StepChainingSpec extends ControllerSpec {
   "rewriting a component" should {
 
     "rewrite LHS using equality substitution" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
-      val controller = new StepRewriteController(service)
+      val controller = new StepRewriteController
 
       controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, Nil))))
 
@@ -100,9 +100,9 @@ class StepChainingSpec extends ControllerSpec {
             assertion(substitutionOfEquals, Seq(lessThan($, b)), Seq(add(a, Zero), a)))))
     }
     "rewrite RHS using equality substitution" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
-      val controller = new StepRewriteController(service)
+      val controller = new StepRewriteController
 
       controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, Nil))))
 
@@ -119,9 +119,9 @@ class StepChainingSpec extends ControllerSpec {
 
     "rewrite LHS using statement expansion" in {
       implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 1), Seq(a -> 0))
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
-      val controller = new StepRewriteController(service)
+      val controller = new StepRewriteController
 
       controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Seq(0), Nil))))
 
@@ -138,9 +138,9 @@ class StepChainingSpec extends ControllerSpec {
 
     "rewrite RHS using statement expansion" in {
       implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 1), Seq(a -> 0))
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
-      val controller = new StepRewriteController(service)
+      val controller = new StepRewriteController
 
       controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Seq(0), Nil))))
 
@@ -158,9 +158,9 @@ class StepChainingSpec extends ControllerSpec {
     }
 
     "rewrite RHS of a non-transitive relation" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
-      val controller = new StepRewriteController(service)
+      val controller = new StepRewriteController
 
       controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, Nil))))
 
@@ -178,7 +178,7 @@ class StepChainingSpec extends ControllerSpec {
 
   "proving with inference" should {
     "not add new RHS target if not necessary" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 

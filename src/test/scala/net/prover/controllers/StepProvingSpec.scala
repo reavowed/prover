@@ -25,8 +25,8 @@ class StepProvingSpec extends ControllerSpec {
   "proving a step" should {
 
     "suggest an extraction using modus tollens" in {
-      val service = mock[BookService]
-      val controller = new StepProvingController(service)
+      implicit val service = mock[BookService]
+      val controller = new StepProvingController
 
       service.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns Success((
         Step.Target(Negation(Equals(a, b))),
@@ -43,9 +43,9 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "remove unnecessary structural simplifications" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       val premise = Conjunction(φ, Implication(ψ, χ))
 
@@ -64,9 +64,9 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "not remove necessary structural simplifications" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       val premise = Implication(φ, Conjunction(ψ, χ))
 
@@ -87,9 +87,9 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain conclusion bound variable names when proving target by inference" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       val premise = ForAll("x")(Exists("y")(Equals($, $.^)))
       val statementToProve = Exists("z")(Equals($, a))
@@ -114,9 +114,9 @@ class StepProvingSpec extends ControllerSpec {
       implicit val entryContext = defaultEntryContext.addEntry(axiom)
       implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
 
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       val premise = φ(a)
       val statementToProve = Exists("z")(ψ(a, $))
@@ -147,9 +147,9 @@ class StepProvingSpec extends ControllerSpec {
     "retain conclusion bound variable names when adding target by inference" in {
       implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 0), Seq(a -> 0, b -> 0))
 
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertion(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       val premise = φ(b)
 
@@ -172,9 +172,9 @@ class StepProvingSpec extends ControllerSpec {
       implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
       val x = TermVariable(1, Nil)
 
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertion(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       val premise = ForAll("x")(Implication(φ($), Exists("y")(ψ($.^, $))))
 
@@ -201,9 +201,9 @@ class StepProvingSpec extends ControllerSpec {
 
     "retain premise bound variable names when proving target by inference" in {
       implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0))
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       val statementToProve = Exists("y")(Equals($, a))
 
@@ -228,9 +228,9 @@ class StepProvingSpec extends ControllerSpec {
       implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
       val x = TermVariable(0, Nil) // variable that will be generated when specifying the axiom
 
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       val premise = Exists("z")(ψ(a, $))
       val statementToProve = φ(a)
@@ -259,9 +259,9 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "prove a target inside a scoped deduction" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       controller.proveCurrentTarget(
         bookKey,
@@ -303,9 +303,9 @@ class StepProvingSpec extends ControllerSpec {
           additionProperty))
       implicit val entryContext = defaultEntryContext.addEntry(axiom)
 
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       controller.proveCurrentTarget(
         bookKey,
@@ -331,9 +331,9 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "prove a new target by extracting inside a bound variable" in {
-      val service = mock[BookService]
+      implicit val service = mock[BookService]
       mockReplaceStepsForInsertion(service)
-      val controller = new StepProvingController(service)
+      val controller = new StepProvingController
 
       val premise = ForAll("x")(φ($))
       val localVariableDefinitions = getVariableDefinitions(Seq(φ -> 1), Nil)

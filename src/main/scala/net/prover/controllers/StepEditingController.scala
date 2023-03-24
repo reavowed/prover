@@ -2,6 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models.PathData
 import net.prover.model.proof.Step
+import net.prover.proving.FindInference
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -23,7 +24,7 @@ class StepEditingController @Autowired() (val bookService: BookService) extends 
   ): ResponseEntity[_] = {
     bookService.modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) =>
       for {
-        inference <- findInference(inferenceId)(stepProvingContext)
+        inference <- FindInference(inferenceId)(stepProvingContext)
       } yield step.copy(highlightedInference = Some(inference))
     }.toResponseEntity
   }

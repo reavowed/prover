@@ -1,15 +1,16 @@
-package net.prover.controllers
+package net.prover.proving
 
+import net.prover.controllers.{BooleanWithResponseExceptionOps, ExtractionHelper, OptionWithResponseExceptionOps}
 import net.prover.controllers.models.StepDefinition
-import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepProvingContext, SubstatementExtractor}
+import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.{ExpressionParsingContext, Substitutions}
 
 import scala.util.{Success, Try}
 
-trait StepCreation extends BookModification {
-  def createAssertionStepForInference(
+object CreateAssertionStep {
+  def apply(
     inferenceId: String,
     getConclusionOption: (ExpressionParsingContext, Substitutions) => Try[Option[Statement]],
     definition: StepDefinition,
@@ -17,8 +18,8 @@ trait StepCreation extends BookModification {
     implicit stepProvingContext: StepProvingContext
   ): Try[(Statement, Step, Seq[Step.Target])] = {
     for {
-      inference <- findInference(inferenceId)
-      extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
+      inference <- FindInference(inferenceId)
+      extractionInferences <- definition.extractionInferenceIds.map(FindInference(_)).traverseTry
       extraction <- SubstatementExtractor.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
       wrappedStepProvingContext = StepProvingContext.updateStepContext(unwrappers.enhanceStepContext)
       substitutions <- definition.substitutions.parse(extraction.variableDefinitions)(ExpressionParsingContext.atStep(wrappedStepProvingContext))

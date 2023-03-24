@@ -7,6 +7,7 @@ import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term, TypedExpression}
 import net.prover.model.proof.Premise.SingleLinePremise
 import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
+import net.prover.proving.stepReplacement.AddTargetsBeforeChain
 import org.springframework.http.ResponseEntity
 
 import scala.util.{Failure, Try}
@@ -148,7 +149,7 @@ trait ChainingStepEditing extends BookModification {
             for {
               targetStep <- step.asOptionalInstanceOf[Step.Target].orBadRequest(s"Step was not target")
               (transitivitySteps, targetSteps, replacementProps) <- withRelation(targetStep.statement, forConnective, forRelation)
-              (finalSteps, insertionProps) = insertTargetsBeforeTransitivity(init, before, transitivitySteps, targetSteps)
+              (finalSteps, insertionProps) = AddTargetsBeforeChain(init, before, transitivitySteps, targetSteps)
             } yield (finalSteps, InsertionAndMultipleReplacementProps(insertionProps, replacementProps))
           }.orNotFound(s"Step $stepPath").flatten
         }.map { case (proofUpdateProps, stepUpdateProps) =>

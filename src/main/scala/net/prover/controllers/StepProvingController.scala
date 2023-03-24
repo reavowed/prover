@@ -2,44 +2,17 @@ package net.prover.controllers
 
 import net.prover.controllers.models._
 import net.prover.model._
-import net.prover.model.expressions.{FunctionParameter, Statement, StatementVariable, TermVariable}
 import net.prover.model.proof._
-import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement, Unwrapper}
+import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement}
 import net.prover.proving.fromExistingStatement.{SuggestExistingStatementsForCurrentTarget, SuggestExistingStatementsForNewTarget}
+import net.prover.proving.{FindInference, ProveCurrentTarget, ProveNewTarget}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.util.{Success, Try}
-
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepProvingController @Autowired() (implicit val bookService: BookService) extends BookModification with StepCreation with InferenceSearch {
-  def createStep(
-    definition: StepDefinition,
-    getConclusionOption: (ExpressionParsingContext, Substitutions) => Try[Option[Statement]],
-    unwrappers: Seq[Unwrapper])(
-    implicit stepProvingContext: StepProvingContext
-  ): Try[(Statement, Step, Seq[Step.Target])] = {
-    def withInference(inferenceId: String) = createAssertionStepForInference(inferenceId, getConclusionOption, definition, unwrappers)
-    def withPremise(serializedPremiseStatement: String) = {
-      for {
-        premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
-        premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
-        extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
-        extraction <- SubstatementExtractor.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
-        substitutions <- definition.substitutions.parse(extraction.variableDefinitions)
-        epc = implicitly[ExpressionParsingContext].addSimpleTermVariables(extraction.additionalVariableNames)
-        conclusionOption <- getConclusionOption(epc, substitutions)
-        newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
-        substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to intended new targets")).swap
-        (result, stepOption, extractionTargets) <- ExtractionHelper.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
-        step <- stepOption.orBadRequest("At least one step must be present")
-      } yield (result, step, extractionTargets)
-    }
-    definition.getFromInferenceOrPremise(withInference, withPremise)
-  }
-
+class StepProvingController @Autowired() (implicit val bookService: BookService) extends BookModification with InferenceSearch {
   @GetMapping(value = Array("/possibleInferencesForCurrentTarget"), produces = Array("application/json;charset=UTF-8"))
   def getPossibleInferencesForCurrentTarget(
     @PathVariable("bookKey") bookKey: String,
@@ -97,7 +70,7 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
   ): ResponseEntity[_] = {
     (for {
       (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      inference <- findInference(inferenceId)(stepProvingContext)
+      inference <- FindInference(inferenceId)(stepProvingContext)
       possibleTarget <- UnwrappedStatement.getUnwrappedStatements(step.statement)(stepProvingContext).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
       inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == conclusionExtractionInferenceIds.toSeq).orBadRequest(s"Could not find extraction option with inference ids ${conclusionExtractionInferenceIds.mkString(", ")}")
     } yield PossibleConclusionWithPremises.fromExtractionWithTarget(inferenceExtraction, possibleTarget.statement)(stepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceStepContext))).toResponseEntity
@@ -160,14 +133,7 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
     @PathVariable("stepPath") stepReference: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    replaceStepAndAddBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (targetStep, stepProvingContext) =>
-      implicit val spc = stepProvingContext
-      for {
-        (targetStatement, unwrappers) <- UnwrappedStatement.getUnwrappedStatements(targetStep.statement).find(_.definitionSymbols == definition.wrappingSymbols).map(x => (x.statement, x.unwrappers)).orBadRequest("Invalid wrapping symbols")
-        (result, newStep, targets) <- createStep(definition, (_, _) => Success(Some(targetStatement)), unwrappers)
-        _ <- (result == targetStep.statement).orBadRequest("Conclusion was incorrect")
-      } yield (newStep, targets)
-    }.toResponseEntity
+    ProveCurrentTarget(bookKey, chapterKey, theoremKey, proofIndex, stepReference, definition).toResponseEntity
   }
 
   @PostMapping(value = Array("/newTarget"))
@@ -179,14 +145,6 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
     @PathVariable("stepPath") stepReference: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    addBeforeTransitivity[Step](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { stepProvingContext =>
-      implicit val spc = stepProvingContext
-      for {
-        (_, newStep, targets) <- createStep(
-          definition,
-          definition.parseIntendedConclusion,
-          Nil)
-      } yield targets :+ newStep
-    }.toResponseEntity
+    ProveNewTarget(bookKey, chapterKey, theoremKey, proofIndex, stepReference, definition).toResponseEntity
   }
 }

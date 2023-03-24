@@ -6,6 +6,7 @@ import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.{ExpressionParsingContext, Inference, Substitutions}
+import net.prover.proving.FindInference
 import net.prover.util.Direction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -182,7 +183,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           applyExtractions: (Seq[Inference.Summary], (ExpressionParsingContext, Substitutions) => Try[Option[Statement]]) => Try[(Statement, Option[Step], Seq[Step.Target])]
         ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
           for {
-            extractionInferences <- definition.extractionInferenceIds.map(findInference).traverseTry
+            extractionInferences <- definition.extractionInferenceIds.map(FindInference(_)).traverseTry
             getIntendedConclusion = (expressionParsingContext: ExpressionParsingContext, substitutions: Substitutions) => definition.serializedIntendedConclusionStatement match {
               case Some(serializedIntendedConclusionStatement) =>
                 for {
@@ -206,7 +207,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
         def fromInference(inferenceId: String): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
           getResult { (extractionInferences, getIntendedTarget) =>
             for {
-              inference <- findInference(inferenceId)
+              inference <- FindInference(inferenceId)
               inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId.get(inferenceId).flatMap(_.find(_.extractionInferences == extractionInferences)).orBadRequest("Could not find extraction with given inferences")
               epc = ExpressionParsingContext.withDefinitions(inferenceExtraction.variableDefinitions)
               substitutions <- definition.substitutions.parse(inferenceExtraction.variableDefinitions)

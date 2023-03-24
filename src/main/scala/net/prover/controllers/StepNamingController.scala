@@ -4,13 +4,14 @@ import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, 
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof.{Premise, ProofHelper, SimplificationFinder, Step, SubstitutionContext}
 import net.prover.model._
+import net.prover.proving.CreateAssertionStep
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepNamingController @Autowired() (val bookService: BookService) extends BookModification with StepCreation with InferenceSearch {
+class StepNamingController @Autowired() (val bookService: BookService) extends BookModification with InferenceSearch {
 
   @GetMapping(value = Array("/suggestInferencesForNamingByInference"), produces = Array("application/json;charset=UTF-8"))
   def suggestInferencesForNamingByInference(
@@ -97,7 +98,7 @@ class StepNamingController @Autowired() (val bookService: BookService) extends B
 
       for {
         inferenceId <- definition.inferenceId.orBadRequest("Inference id must be provided")
-        (conclusion, assertionStep, targetSteps) <- createAssertionStepForInference(inferenceId, definition.parseIntendedConclusion, definition, Nil)
+        (conclusion, assertionStep, targetSteps) <- CreateAssertionStep(inferenceId, definition.parseIntendedConclusion, definition, Nil)
         (mainNamingAssumption, mainNamingConclusion, mainNamingContext, mainNamingWrapper) <- getNamingWrapper(conclusion, targetStep.statement).orBadRequest("Could not find naming step to apply")
         innerStep = recurseNamingWrappers(mainNamingAssumption, mainNamingConclusion)(mainNamingContext)
         namingStep = mainNamingWrapper(innerStep)

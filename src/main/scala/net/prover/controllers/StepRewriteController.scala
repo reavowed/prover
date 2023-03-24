@@ -8,7 +8,9 @@ import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.proof.EqualityRewriter.{RewriteMethods, RewritePossibility}
 import net.prover.model.proof._
+import net.prover.proving.FindInference
 import net.prover.proving.premiseFinding.DerivationFinder
+import net.prover.proving.stepReplacement.InsertStepBeforeChain
 import net.prover.util.Direction
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +21,7 @@ import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepRewriteController @Autowired() (val bookService: BookService) extends BookModification with InferenceSearch with ChainingStepEditing {
+class StepRewriteController @Autowired() (implicit val bookService: BookService) extends BookModification with InferenceSearch with ChainingStepEditing {
 
   private def getRewritePossibilities[T <: Expression : RewriteMethods](expression: T)(implicit stepProvingContext: StepProvingContext): Seq[RewritePossibility[T]] = {
     RewriteMethods[T].getRewritePossibilitiesFromOuterExpression(expression, Nil, Nil)
@@ -170,7 +172,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     implicit stepProvingContext: StepProvingContext
   ): Try[(Term, Term, Seq[Step], Option[Inference.Summary], Option[Inference.Summary], Seq[Unwrapper], TExpression)] = {
     for {
-      inference <- findInference(inferenceId)
+      inference <- FindInference(inferenceId)
       extractionInferenceIds = if (!direction.isReversed) {
         rewrite.extractionInferenceIds
       } else if (rewrite.extractionInferenceIds.lastOption.contains(equality.reversal.inference.id)) {
@@ -338,7 +340,7 @@ class StepRewriteController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody premiseRewrite: PremiseRewrite
   ): ResponseEntity[_] = {
-    addBeforeTransitivity[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepProvingContext =>
+    InsertStepBeforeChain(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepProvingContext =>
       implicit val spc = stepProvingContext
       for {
         equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")

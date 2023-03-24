@@ -4,6 +4,8 @@ import net.prover.controllers.models.{NamingDefinition, PathData}
 import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
+import net.prover.proving.FindInference
+import net.prover.proving.stepReplacement.InsertStepBeforeChain
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -12,7 +14,7 @@ import scala.util.Success
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepCreationController @Autowired() (val bookService: BookService) extends BookModification with ChainingStepEditing {
+class StepCreationController @Autowired() (implicit val bookService: BookService) extends BookModification with ChainingStepEditing {
 
   @PostMapping(value = Array("/introduceNaming"))
   def introduceNaming(
@@ -27,7 +29,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
       implicit val spc = stepProvingContext
       for {
         variableName <- Option(definition.variableName.trim).filter(_.nonEmpty).orBadRequest("Variable name must be provided")
-        inference <- findInference(definition.inferenceId)
+        inference <- FindInference(definition.inferenceId)
         (namingPremises, assumption, generalizationDefinition, deductionDefinition) <- ProofHelper.getNamingPremisesAndAssumption(inference).orBadRequest(s"Inference ${definition.inferenceId} is not a naming inference")
         substitutions <- definition.substitutions.parse(inference.variableDefinitions)
         _ <- inference.substituteConclusion(substitutions).filter(_ == step.statement).orBadRequest("Conclusion was incorrect")
@@ -179,7 +181,7 @@ class StepCreationController @Autowired() (val bookService: BookService) extends
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedStatement: String
   ): ResponseEntity[_] = {
-    addBeforeTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepProvingContext =>
+    InsertStepBeforeChain(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepProvingContext =>
       for {
         targetStatement <- Statement.parser(stepProvingContext).parseFromString(serializedStatement, "target statement").recoverWithBadRequest
       } yield Seq(Step.Target(targetStatement))
