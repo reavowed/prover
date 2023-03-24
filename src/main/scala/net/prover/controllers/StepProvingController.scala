@@ -5,6 +5,7 @@ import net.prover.model._
 import net.prover.model.expressions.{FunctionParameter, Statement, StatementVariable, TermVariable}
 import net.prover.model.proof._
 import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement, Unwrapper}
+import net.prover.proving.fromExistingStatement.{SuggestExistingStatementsForCurrentTarget, SuggestExistingStatementsForNewTarget}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -13,7 +14,7 @@ import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepProvingController @Autowired() (val bookService: BookService) extends BookModification with StepCreation with InferenceSearch {
+class StepProvingController @Autowired() (implicit val bookService: BookService) extends BookModification with StepCreation with InferenceSearch {
   def createStep(
     definition: StepDefinition,
     getConclusionOption: (ExpressionParsingContext, Substitutions) => Try[Option[Statement]],
@@ -135,18 +136,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("serializedPremiseStatement") serializedPremiseStatement: String
   ): ResponseEntity[_] = {
-    (for {
-      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
-      premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-      baseSubstitutions = Substitutions.Possible(
-        stepProvingContext.stepContext.variableDefinitions.statements.mapWithIndex((variableDefinition, index) => index -> StatementVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap,
-        stepProvingContext.stepContext.variableDefinitions.terms.mapWithIndex((variableDefinition, index) => index -> TermVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap)
-    } yield {
-      implicit val spc = stepProvingContext
-      SubstatementExtractor.getPremiseExtractions(premise.statement)
-        .flatMap(PossibleConclusionWithPremises.fromExtractionWithSubstitutions(_, _.calculateSubstitutions(step.statement, baseSubstitutions)))
-    }).toResponseEntity
+    SuggestExistingStatementsForCurrentTarget(bookKey, chapterKey, theoremKey, proofIndex, stepPath, serializedPremiseStatement).toResponseEntity
   }
 
   @GetMapping(value = Array("/possibleConclusionsForNewTargetByPremise"), produces = Array("application/json;charset=UTF-8"))
@@ -158,20 +148,7 @@ class StepProvingController @Autowired() (val bookService: BookService) extends 
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("serializedPremiseStatement") serializedPremiseStatement: String
   ): ResponseEntity[_] = {
-    (for {
-      (_, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
-      premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
-      // First of all, initialise the substitutions with all the existing variables in the theorem
-      baseSubstitutions = Substitutions.Possible(
-        stepProvingContext.stepContext.variableDefinitions.statements.mapWithIndex((variableDefinition, index) => index -> StatementVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap,
-        stepProvingContext.stepContext.variableDefinitions.terms.mapWithIndex((variableDefinition, index) => index -> TermVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap)
-      // Then add any premise-specific variables that might be missing
-    } yield {
-      implicit val spc = stepProvingContext
-      SubstatementExtractor.getPremiseExtractions(premise.statement)
-        .map(PossibleConclusionWithPremises.fromExtraction(_, Some(baseSubstitutions))(stepProvingContext))
-    }).toResponseEntity
+    SuggestExistingStatementsForNewTarget(bookKey, chapterKey, theoremKey, proofIndex, stepPath, serializedPremiseStatement).toResponseEntity
   }
 
   @PutMapping
