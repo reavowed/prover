@@ -47,6 +47,8 @@ trait StepUpdater extends TheoremUpdater {
         updateSubProof(subProof, stepWithContext).getOrElse(updateStepWithSubsteps(subProof, stepWithContext))
       case elided: Step.Elided =>
         updateElided(elided, stepWithContext).getOrElse(updateStepWithSubsteps(elided, stepWithContext))
+      case existingStatementExtraction: Step.ExistingStatementExtraction =>
+        updateExistingStatementExtraction(existingStatementExtraction, stepWithContext).getOrElse(updateStepWithSubsteps(existingStatementExtraction, stepWithContext))
     }
   }
 
@@ -57,6 +59,7 @@ trait StepUpdater extends TheoremUpdater {
   def updateNaming(step: Step.Naming, stepWithContext: StepWithContext): Option[Try[Step]] = None
   def updateSubProof(step: Step.SubProof, stepWithContext: StepWithContext): Option[Try[Step]] = None
   def updateElided(step: Step.Elided, stepWithContext: StepWithContext): Option[Try[Step]] = None
+  def updateExistingStatementExtraction(step: Step.ExistingStatementExtraction, stepWithContext: StepWithContext): Option[Try[Step]] = None
 
   def updateStepWithSubsteps(step: Step.WithSubsteps, stepWithContext: StepWithContext): Try[Step] = {
     updateSteps(stepWithContext.forSubsteps(step))
