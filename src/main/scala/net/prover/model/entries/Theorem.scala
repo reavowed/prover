@@ -39,9 +39,6 @@ case class Theorem(
     }
   }
 
-  def findStep(proofIndex: Int, stepIndexes: Seq[Int]): Option[(Step, StepContext)] = {
-    proofs.lift(proofIndex).flatMap(_.findStep(stepIndexes, initialStepContext))
-  }
   def replaceSteps[F[_] : Functor](proofIndex: Int, stepIndexes: Seq[Int])(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
     modifyProof(proofIndex, _.modifySteps(stepIndexes, initialStepContext, f))
   }
@@ -99,21 +96,6 @@ object Theorem extends Inference.EntryParser {
     def referencedDefinitions: Set[ExpressionDefinition] = steps.flatMap(_.referencedDefinitions).toSet
     def isComplete(definitions: Definitions): Boolean = steps.forall(_.isComplete(definitions))
 
-    def findStep(indexes: Seq[Int], initialStepContext: StepContext): Option[(Step, StepContext)] = {
-      indexes match {
-        case Nil =>
-          None
-        case head +: tail =>
-          val initialStepContextAndPathOption = steps.splitAtIndexIfValid(head).map { case (before, step, _) =>
-            (step, initialStepContext.addSteps(before).atIndex(head), Seq(head))
-          }
-          tail.foldLeft(initialStepContextAndPathOption) { case (currentStepContextAndPathOption, index) =>
-            currentStepContextAndPathOption.flatMap { case (step, stepContext, path) =>
-              step.getSubstep(index, stepContext).map { case (newStep, newStepContext) => (newStep, newStepContext, path :+ index) }
-            }
-          }.map { case (step, stepContext, _) => (step, stepContext) }
-      }
-    }
     def modifySteps[F[_] : Functor](indexes: Seq[Int], initialStepContext: StepContext, f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Proof]] = {
       Proof.modifySteps(steps, indexes, initialStepContext)(f).map(_.map(Proof(_)))
     }

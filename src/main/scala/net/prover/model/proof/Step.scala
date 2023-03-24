@@ -20,7 +20,6 @@ import scala.util.{Failure, Success, Try}
 sealed trait Step {
   def `type`: String
   def provenStatement: Option[Statement]
-  def getSubstep(index: Int, stepContext: StepContext): Option[(Step, StepContext)]
   def modifySubsteps[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]]
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Step
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step]
@@ -39,7 +38,6 @@ sealed trait Step {
 
 object Step {
   sealed trait WithoutSubsteps extends Step {
-    override def getSubstep(index: Int, outerContext: StepContext): Option[(Step, StepContext)] = None
     override def modifySubsteps[F[_] : Functor](outerContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]] = None
   }
   sealed trait WithSubsteps extends Step {
@@ -48,12 +46,6 @@ object Step {
     def contextForChild(outerContext: StepContext, index: Int): StepContext = specifyStepContext(outerContext).addSteps(substeps.take(index)).atIndex(index)
     def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step
     override def isComplete(definitions: Definitions): Boolean = substeps.forall(_.isComplete(definitions))
-    override def getSubstep(index: Int, outerStepContext: StepContext): Option[(Step, StepContext)] = {
-      substeps.splitAtIndexIfValid(index).map { case (before, step, _) =>
-        val innerStepContext = specifyStepContext(outerStepContext).addSteps(before).atIndex(index)
-        (step, innerStepContext)
-      }
-    }
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
       substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
         .mapLeft(replaceSubsteps(_, stepContext))

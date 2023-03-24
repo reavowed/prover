@@ -7,6 +7,7 @@ import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.proof.{Step, StepProvingContext}
+import net.prover.theorems.FindStep
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import scalaz.Functor
@@ -61,7 +62,7 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
       chapter <- findChapter(book, chapterKey)
       theorem <- findEntry[Theorem](chapter, theoremKey)
       provingContext = ProvingContext.forEntry(books, definitions, book, chapter, theorem)
-      (rawStep, stepContext) <- theorem.findStep(proofIndex, stepPath.indexes).orNotFound(s"Step $stepPath")
+      (rawStep, stepContext) <- FindStep(theorem, proofIndex, stepPath.indexes).orNotFound(s"Step $stepPath")
       step <- rawStep.asOptionalInstanceOf[T].orBadRequest(s"Step is not ${classTag[T].runtimeClass.getName}")
     } yield (step, StepProvingContext(stepContext, provingContext))
   }
@@ -126,7 +127,7 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
           stepPath,
           stepReplacementProps.startIndex,
           stepReplacementProps.endIndex,
-          if (stepPath.nonEmpty) theoremUpdateProps.theorem.findStep(proofIndex, stepPath).get._1.asInstanceOf[Step.WithSubsteps].substeps else theoremUpdateProps.theorem.proofs(proofIndex).steps),
+          if (stepPath.nonEmpty) FindStep(theoremUpdateProps.theorem, proofIndex, stepPath).get._1.asInstanceOf[Step.WithSubsteps].substeps else theoremUpdateProps.theorem.proofs(proofIndex).steps),
         theoremUpdateProps.newInferences,
         theoremUpdateProps.stepsWithReferenceChanges(proofIndex))
     })
