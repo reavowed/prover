@@ -12,16 +12,10 @@ import net.prover.proving.stepReplacement.AddTargetsBeforeChain
 import scala.reflect.{ClassTag, classTag}
 import scala.util.{Failure, Try}
 
-trait BookModification {
+trait UsageFinder {
   def bookService: BookService
 
-  implicit def toIndexes(pathData: PathData): Seq[Int] = pathData.indexes
-
-  protected def findInference(inferenceId: String)(implicit stepProvingContext: StepProvingContext): Try[Inference.Summary] = {
-    stepProvingContext.provingContext.entryContext.allInferences.find(_.id == inferenceId).map(_.summary).orBadRequest(s"Invalid inference $inferenceId")
-  }
-
-  def getInferenceUsages(entry: ChapterEntry, books: Seq[Book]): Seq[(String, String, Seq[(LinkSummary, Set[String])])] = {
+  def getInferenceUsages(entry: ChapterEntry): Seq[(String, String, Seq[(LinkSummary, Set[String])])] = {
     val allInferenceIds = entry.inferences.map(_.id).toSet
     def getInferenceLinks(bookKey: String, chapterKey: String, entries: Seq[(ChapterEntry, String)]): Seq[(LinkSummary, Set[String])] = {
       for {

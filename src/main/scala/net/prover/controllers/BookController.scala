@@ -13,7 +13,7 @@ import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}"))
-class BookController @Autowired() (val bookService: BookService) extends BookModification with ReactViews {
+class BookController @Autowired() (val bookService: BookService) extends UsageFinder with ReactViews {
 
   case class ChapterSummary(title: String, url: String, summary: String)
   case class BookProps(title: String, url: String, chapters: Seq[ChapterSummary], previous: Option[LinkSummary], next: Option[LinkSummary])

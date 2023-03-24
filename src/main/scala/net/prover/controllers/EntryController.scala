@@ -15,7 +15,7 @@ import scala.util.{Failure, Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{entryKey}"))
-class EntryController @Autowired() (val bookService: BookService) extends BookModification with ParameterValidation with ReactViews {
+class EntryController @Autowired() (val bookService: BookService) extends UsageFinder with ParameterValidation with ReactViews {
 
   @GetMapping(value = Array(""), produces = Array("text/html;charset=UTF-8"))
   def getEntry(
@@ -66,7 +66,7 @@ class EntryController @Autowired() (val bookService: BookService) extends BookMo
         "chapterLink" -> LinkSummary(chapter.title, BookService.getChapterUrl(bookKey, chapterKey)),
         "previous" -> previous,
         "next" -> next,
-        "usages" -> getInferenceUsages(entry, books),
+        "usages" -> getInferenceUsages(entry),
         "binaryRelations" -> getBinaryRelations(provingContext)) ++
         getGeneralDisplayProps(entryContext))
     }).toResponseEntity

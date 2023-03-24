@@ -12,7 +12,7 @@ import scala.util.{Failure, Success}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}"))
-class TheoremController @Autowired() (val bookService: BookService) extends BookModification with ParameterValidation {
+class TheoremController @Autowired() (val bookService: BookService) extends ParameterValidation {
 
   @PutMapping(value = Array("/variables"))
   def updateVariables(

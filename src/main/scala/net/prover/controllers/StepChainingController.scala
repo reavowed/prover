@@ -17,7 +17,7 @@ import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepChainingController @Autowired() (val bookService: BookService) extends BookModification with ChainingStepEditing with InferenceSearch {
+class StepChainingController @Autowired() (val bookService: BookService) extends ChainingStepEditing with InferenceSearch {
   private def getSubstitutionsWithTermOrSubterm(source: Expression, result: Expression, baseSubstitutions: Substitutions.Possible)(implicit substitutionContext: SubstitutionContext, stepContext: StepContext): Option[Substitutions.Possible] = {
     source.calculateSubstitutions(result, baseSubstitutions) orElse
       (result.getTerms().map(_._1).toSet diff result.asOptionalInstanceOf[Term].toSet).toSeq.mapCollect(source.calculateSubstitutions(_, baseSubstitutions)).single

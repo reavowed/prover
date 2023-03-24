@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation._
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepNamingController @Autowired() (val bookService: BookService) extends BookModification with InferenceSearch {
+class StepNamingController @Autowired() (val bookService: BookService) extends InferenceSearch {
 
   @GetMapping(value = Array("/suggestInferencesForNamingByInference"), produces = Array("application/json;charset=UTF-8"))
   def suggestInferencesForNamingByInference(

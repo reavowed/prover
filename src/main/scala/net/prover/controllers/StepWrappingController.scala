@@ -10,7 +10,7 @@ import scala.util.Success
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepWrappingController @Autowired() (val bookService: BookService) extends BookModification {
+class StepWrappingController @Autowired() (val bookService: BookService) {
   @PostMapping(value = Array("/introduceSubproof"))
   def introduceSubproof(
     @PathVariable("bookKey") bookKey: String,

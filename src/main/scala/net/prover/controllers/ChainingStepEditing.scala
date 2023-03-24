@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity
 
 import scala.util.{Failure, Try}
 
-trait ChainingStepEditing extends BookModification {
+trait ChainingStepEditing {
+  def bookService: BookService
+
   protected def withRelation[T](
     statement: Statement,
     forConnective: (BinaryConnective, Statement, Statement) => Try[T],

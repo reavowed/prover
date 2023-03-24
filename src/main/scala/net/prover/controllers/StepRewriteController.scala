@@ -21,7 +21,7 @@ import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepRewriteController @Autowired() (implicit val bookService: BookService) extends BookModification with InferenceSearch with ChainingStepEditing {
+class StepRewriteController @Autowired() (implicit val bookService: BookService) extends InferenceSearch with ChainingStepEditing {
 
   private def getRewritePossibilities[T <: Expression : RewriteMethods](expression: T)(implicit stepProvingContext: StepProvingContext): Seq[RewritePossibility[T]] = {
     RewriteMethods[T].getRewritePossibilitiesFromOuterExpression(expression, Nil, Nil)

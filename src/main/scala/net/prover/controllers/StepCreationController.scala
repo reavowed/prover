@@ -14,7 +14,7 @@ import scala.util.Success
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepCreationController @Autowired() (implicit val bookService: BookService) extends BookModification with ChainingStepEditing {
+class StepCreationController @Autowired() (implicit val bookService: BookService) extends ChainingStepEditing {
 
   @PostMapping(value = Array("/introduceNaming"))
   def introduceNaming(

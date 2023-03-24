@@ -18,7 +18,7 @@ import scala.util.{Failure, Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}"))
-class ChapterController @Autowired() (val bookService: BookService) extends BookModification with ParameterValidation with ReactViews {
+class ChapterController @Autowired() (val bookService: BookService) extends UsageFinder with ParameterValidation with ReactViews {
 
   private def getChapterProps(books: Seq[Book], definitions: Definitions, book: Book, bookKey: String, chapter: Chapter, chapterKey: String): Map[String, AnyRef] = {
     val chaptersWithKeys = BookService.getChaptersWithKeys(book)

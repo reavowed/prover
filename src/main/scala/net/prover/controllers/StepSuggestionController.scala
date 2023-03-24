@@ -12,7 +12,7 @@ import scala.util.Try
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepSuggestionController @Autowired() (val bookService: BookService) extends BookModification with InferenceSearch {
+class StepSuggestionController @Autowired() (val bookService: BookService) extends InferenceSearch {
 
 
   @GetMapping(value = Array("/suggestImmediateNamingPremises"), produces = Array("application/json;charset=UTF-8"))

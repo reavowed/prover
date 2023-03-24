@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation._
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepProvingController @Autowired() (implicit val bookService: BookService) extends BookModification with InferenceSearch {
+class StepProvingController @Autowired() (implicit val bookService: BookService) extends InferenceSearch {
   @GetMapping(value = Array("/possibleInferencesForCurrentTarget"), produces = Array("application/json;charset=UTF-8"))
   def getPossibleInferencesForCurrentTarget(
     @PathVariable("bookKey") bookKey: String,

@@ -12,7 +12,7 @@ import scala.util.Success
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}"))
-class ProofController @Autowired() (val bookService: BookService) extends BookModification {
+class ProofController @Autowired() (val bookService: BookService) {
 
   @PostMapping(value = Array("/{stepPath}/clear"))
   def clearStep(

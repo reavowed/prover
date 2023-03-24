@@ -11,7 +11,7 @@ import scala.util.Success
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepEditingController @Autowired() (val bookService: BookService) extends BookModification {
+class StepEditingController @Autowired() (val bookService: BookService) {
 
   @PostMapping(value = Array("/highlightedInference"))
   def setHighlightedInference(

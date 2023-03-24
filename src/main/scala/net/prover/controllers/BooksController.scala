@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation._
 
 @RestController
 @RequestMapping(Array("/books"))
-class BooksController @Autowired() (val bookService: BookService) extends BookModification with ReactViews {
+class BooksController @Autowired() (val bookService: BookService) extends ReactViews {
 
   case class BooksProps(books: Seq[LinkSummary])
   def createBooksProps(books: Seq[Book]): BooksProps = {

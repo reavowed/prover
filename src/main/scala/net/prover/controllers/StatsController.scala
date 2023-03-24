@@ -12,7 +12,7 @@ import java.util.regex.Pattern
 
 @RestController
 @RequestMapping(Array("/stats"))
-class StatsController @Autowired() (val bookService: BookService) extends BookModification  {
+class StatsController @Autowired() (val bookService: BookService) {
 
   @GetMapping(value = Array("longestProofs"))
   def getLongestProofs(
