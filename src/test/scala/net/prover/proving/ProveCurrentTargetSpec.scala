@@ -8,7 +8,7 @@ import org.specs2.mutable.Specification
 
 class ProveCurrentTargetSpec extends Specification with StepContextHelper with BookServiceHelper {
   implicit val entryContext = defaultEntryContext
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Nil)
+  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Nil)
 
   "prove current target" should {
     "replace target with assertion step" in {
@@ -44,6 +44,50 @@ class ProveCurrentTargetSpec extends Specification with StepContextHelper with B
             modusPonens,
             Seq(φ, ψ),
             Nil))
+    }
+
+    "add premise finding steps" in {
+      implicit val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+
+      ProveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        StepDefinition(
+          Some(modusPonens.id),
+          None,
+          SerializedSubstitutions(Seq(Conjunction(φ, ψ).serialized, χ.serialized), Nil),
+          Nil,
+          Nil,
+          None,
+          None,
+          None))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex - 3) :+
+          target(Implication(Conjunction(φ, ψ), χ)) :+
+          target(φ) :+
+          target(ψ) :+
+          target(χ),
+        fillerSteps(stepIndex - 3) :+
+          target(Implication(Conjunction(φ, ψ), χ)) :+
+          target(φ) :+
+          target(ψ) :+
+          elided(
+            modusPonens,
+            Seq(
+              assertion(
+                combineConjunction,
+                Seq(φ, ψ),
+                Nil),
+              assertion(
+                modusPonens,
+                Seq(Conjunction(φ, ψ), χ),
+                Nil))))
     }
   }
 }
