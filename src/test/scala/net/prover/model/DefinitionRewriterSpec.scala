@@ -1,12 +1,13 @@
 package net.prover.model
 
-import net.prover.model.expressions.{FunctionParameter, Statement}
+import net.prover.StepContextHelper
+import net.prover.model.TestDefinitions._
+import net.prover.model.expressions.Statement
+import net.prover.model.proof.DefinitionRewriter
 import org.specs2.matcher.MatchResult
-import TestDefinitions._
-import net.prover.model.proof.{DefinitionRewriter, StepContext}
 import org.specs2.mutable.Specification
 
-class DefinitionRewriterSpec extends Specification {
+class DefinitionRewriterSpec extends Specification with StepContextHelper {
 
   implicit val entryContext = defaultEntryContext
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Nil)
@@ -14,7 +15,7 @@ class DefinitionRewriterSpec extends Specification {
   "rewriting definitions" should {
 
     def testRewrite(source: Statement, target: Statement, depth: Int = 0)(implicit variableDefinitions: VariableDefinitions): MatchResult[Any] = {
-      implicit val stepContext = createBaseStepContext(Seq(source), Seq(target)).copy(boundVariableLists = (1 to depth).map(i => Seq(s"x_$i")))
+      implicit val stepContext = createBaseStepContext(Seq(source)).copy(boundVariableLists = (1 to depth).map(i => Seq(s"x_$i")))
       DefinitionRewriter.rewriteDefinitions(source, target) must beSome(beStepThatMakesValidTheorem(Seq(source), target, depth))
     }
 

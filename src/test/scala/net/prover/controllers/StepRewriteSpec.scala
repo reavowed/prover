@@ -244,7 +244,7 @@ class StepRewriteSpec extends ControllerSpec {
       val controller = new StepRewriteController(service)
 
       val statement = ForAll("x")(Implication(ElementOf($, Product(A, B)), Equals($, Zero)))
-      implicit val stepContext = createOuterStepContextForStatements(Seq(statement), Nil)
+      implicit val stepContext = createOuterStepContext(Nil)
 
       service.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
        Success((Step.Target(statement), implicitly[StepProvingContext]))
@@ -550,7 +550,7 @@ class StepRewriteSpec extends ControllerSpec {
       val premise = Equals($, $.^)
       val premiseReference = StepReference(outerStepPath :+ (stepIndex - 1))
       val target = ForAllIn("x", a)(φ($, $.^))
-      implicit val stepContext = createOuterStepContextForStatements(Seq(premise, target), Seq("a", "b")).addStatement(premise, premiseReference)
+      implicit val stepContext = createOuterStepContext(Seq("a", "b")).addStatement(premise, premiseReference)
 
       service.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
         Success((Step.Target(target), implicitly[StepProvingContext]))
@@ -584,7 +584,7 @@ class StepRewriteSpec extends ControllerSpec {
       val premise = Equals($, $.^)
       val premiseReference = StepReference(outerStepPath :+ (stepIndex - 1))
       val statement = ForAllIn("x", a)(φ($, $.^))
-      implicit val stepContext = createOuterStepContextForStatements(Seq(premise, statement), boundVariables).addStatement(premise, premiseReference)
+      implicit val stepContext = createOuterStepContext(boundVariables).addStatement(premise, premiseReference)
 
       controller.rewriteManually(
         bookKey,

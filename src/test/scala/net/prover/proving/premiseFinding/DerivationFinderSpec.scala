@@ -1,5 +1,6 @@
 package net.prover.proving.premiseFinding
 
+import net.prover.StepContextHelper
 import net.prover.model.TestDefinitions.{a, b, _}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
@@ -10,19 +11,12 @@ import net.prover.model.{EntryContext, Format, TermVariablePlaceholder, TestDefi
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
-class DerivationFinderSpec extends Specification {
+class DerivationFinderSpec extends Specification with StepContextHelper {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
   implicit val entryContext = defaultEntryContext
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "premise finder" should {
-    def getStepContext(premises: Seq[Statement], target: Statement, depth: Int): StepContext = {
-      val emptyContext = createBaseStepContext(Nil, premises :+ target)
-      val contextWithDepth = (0 until depth).foldLeft(emptyContext){ (stepContext, i) => stepContext.addBoundVariable(s"x_$i")}
-      premises.zipWithIndex.foldLeft(contextWithDepth) { case (context, (premise, index)) =>
-        context.addStatement(premise, PremiseReference(index))
-      }
-    }
 
     def checkFindPremiseSteps(target: Statement, premises: Seq[Statement], steps: SubstitutionContext => Seq[Step], depth: Int = 0)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
       findPremise(target, premises, depth)(entryContext) must beSome(
@@ -35,7 +29,7 @@ class DerivationFinderSpec extends Specification {
     }
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): Option[Seq[Step]] = {
-      DerivationFinder.findDerivationForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, getStepContext(premises, target, depth))).map(_.steps)
+      DerivationFinder.findDerivationForStatement(target)(entryContextAndStepContextToStepProvingContext(entryContext, createBaseStepContext(premises, depth))).map(_.steps)
     }
 
     "find a simplified premise without a derivation" in {

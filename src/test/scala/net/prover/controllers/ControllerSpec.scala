@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover.StepContextHelper
 import net.prover.controllers.models._
 import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.StatementDefinition
@@ -13,15 +14,7 @@ import org.specs2.mutable.Specification
 
 import scala.util.{Success, Try}
 
-trait ControllerSpec extends Specification with MockitoStubs with MockitoMatchers with CalledMatchers with ValueChecks {
-
-  val bookKey = "test-book-key"
-  val chapterKey = "test-chapter-key"
-  val theoremKey = "test-theorem-key"
-  val proofIndex = 3
-  val outerStepPath = Seq(3, 1, 4, 1)
-  val stepIndex = 5
-  val stepPath = outerStepPath :+ stepIndex
+trait ControllerSpec extends Specification with MockitoStubs with MockitoMatchers with CalledMatchers with ValueChecks with StepContextHelper {
 
   implicit class StepsConstructor(createSteps: SubstitutionContext => Seq[Step]) {
     def :+(other: SubstitutionContext => Step): SubstitutionContext => Seq[Step] = { sc =>
@@ -30,23 +23,6 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
   }
   implicit def seqConstructorToConstructorSeq(seq: Seq[SubstitutionContext => Step]): SubstitutionContext => Seq[Step] = { sc =>
     seq.map(_(sc))
-  }
-
-  def createOuterStepContextForStatements(
-    statements: Seq[Statement],
-    boundVariables: Seq[String])(
-    implicit variableDefinitions: VariableDefinitions
-  ): StepContext = {
-    val baseContext = createBaseStepContext(Nil, statements)
-    val contextWithBoundVariables = boundVariables.foldLeft(baseContext) { case (context, variable) => context.addBoundVariable(variable) }
-    outerStepPath.foldLeft(contextWithBoundVariables) { case (context, index) => context.atIndex(index) }
-  }
-  def createOuterStepContextForSteps(
-    steps: Seq[Step],
-    boundVariables: Seq[String])(
-    implicit variableDefinitions: VariableDefinitions
-  ): StepContext = {
-    createOuterStepContextForStatements(steps.mapCollect(_.provenStatement), boundVariables)
   }
 
   def definitionWithInference(
@@ -93,7 +69,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     implicit entryContext: EntryContext,
     variableDefinitions: VariableDefinitions
   ): StepDefinition = {
-    implicit val stepContext: StepContext = createOuterStepContextForStatements(Nil, Nil)
+    implicit val stepContext: StepContext = createOuterStepContext(Nil)
     val extraction = SubstatementExtractor.getPremiseExtractions(premise).find(_.extractionInferences == extractionInferences).get
     val serializedSubstitutions = SerializedSubstitutions(substitutions.statements.map(_.serialized), substitutions.terms.map(_.serialized))
     StepDefinition(
@@ -167,7 +143,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
   def buildStepsWithReferences(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Seq[Step] = {
     implicit val provingContext = entryContextToProvingContext(entryContext)
     val steps = stepsConstructor(SubstitutionContext.withExtraParameters(boundVariables.length) (SubstitutionContext.outsideProof))
-    val outerStepContext = createOuterStepContextForSteps(steps, boundVariables)
+    val outerStepContext = createOuterStepContext(boundVariables)
     steps.recalculateReferences(outerStepContext, provingContext)._1
   }
   def recalculateReferences(steps: Seq[Step], outerStepContext: StepContext)(implicit entryContext: EntryContext): Seq[Step] = {
@@ -247,7 +223,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     variableDefinitions: VariableDefinitions
   ): (Seq[Step], StepProvingContext) => Try[(Seq[Step], Seq[Step])] = {
     val existingSteps = existingStepsFn(SubstitutionContext.outsideProof)
-    implicit val outerStepContext = createOuterStepContextForSteps(existingSteps, boundVariables)
+    implicit val outerStepContext = createOuterStepContext(boundVariables)
     val existingStepsWithReferences = recalculateReferences(existingSteps, outerStepContext)
     (existingStepsWithReferences, implicitly[StepProvingContext]) -> beSuccessfulTry[(Seq[Step], Seq[Step])].withValue(stepsMatcher ^^ { t: (Seq[Step], Seq[Step]) => recalculateReferences(t._1, outerStepContext)(entryContext) })
   }
@@ -259,7 +235,7 @@ trait ControllerSpec extends Specification with MockitoStubs with MockitoMatcher
     variableDefinitions: VariableDefinitions
   ): (Seq[Step], StepProvingContext) => Try[(Seq[Step], InsertionAndReplacementProps)] = {
     val existingSteps = buildStepsWithReferences(existingStepsFn, boundVariables)
-    implicit val outerStepContext = createOuterStepContextForSteps(existingSteps, boundVariables)
+    implicit val outerStepContext = createOuterStepContext(boundVariables)
     (existingSteps, implicitly[StepProvingContext]) -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)].withValue(stepsMatcher ^^ { t: (Seq[Step], InsertionAndReplacementProps) => recalculateReferences(t._1, outerStepContext)(entryContext) })
   }
 }

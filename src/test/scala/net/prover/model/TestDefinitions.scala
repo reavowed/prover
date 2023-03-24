@@ -447,10 +447,6 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
   }
 
-  def createBaseStepContext(premises: Seq[Statement], otherStatements: Seq[Statement])(implicit variableDefinitions: VariableDefinitions): StepContext = {
-    StepContext.withPremisesAndVariables(premises, variableDefinitions)
-  }
-
   def beValidTheorem(implicit entryContext: EntryContext): Matcher[Theorem] = (theorem: Theorem) => {
     val recalculatedTheorem = theorem.recalculateReferences(entryContextToProvingContext(entryContext))._1
     val serializedTheorem = recalculatedTheorem.serializedLines.mkString("\n").stripPrefix("theorem ")
