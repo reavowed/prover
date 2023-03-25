@@ -4,7 +4,7 @@ import net.prover.controllers.models.{InsertionAndDeletionProps, PathData, Proof
 import net.prover.model._
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof._
-import net.prover.theorems.ReplaceSteps
+import net.prover.theorems.{InsertExternalParameters, ReplaceSteps}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -97,7 +97,7 @@ class ProofController @Autowired() (val bookService: BookService) {
                 stepsWithNewContext <- if (parametersToRemove > 0)
                   currentSteps.map(_.removeExternalParameters(parametersToRemove, 0)).traverseOption.orBadRequest("Could not remove extra parameters")
                 else if (parametersToAdd > 0)
-                  Success(currentSteps.map(_.insertExternalParameters(parametersToAdd, 0)))
+                  Success(InsertExternalParameters(currentSteps, parametersToAdd))
                 else
                   Success(currentSteps)
               } yield (before ++ stepsWithNewContext ++ after, InsertionAndDeletionProps(StepInsertionProps(destinationPath :+ destinationIndex, stepsWithNewContext), StepDeletionProps(sourcePath, sourceStartIndex, sourceEndIndex)))
