@@ -8,7 +8,7 @@ import org.specs2.mutable.Specification
 
 class ProveNewTargetSpec extends Specification with StepContextHelper with BookServiceHelper {
   implicit val entryContext = defaultEntryContext
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Nil)
+  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0))
 
   "prove new target" should {
     "insert assertion step" in {
@@ -45,6 +45,39 @@ class ProveNewTargetSpec extends Specification with StepContextHelper with BookS
             Seq(φ, ψ),
             Nil) :+
           target(χ))
+    }
+
+    "insert assertion in front of chain" in {
+      implicit val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+
+      ProveNewTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        StepDefinition(
+          Some(equalityIsReflexive.id),
+          None,
+          SerializedSubstitutions(Nil, Seq(a.serialized)),
+          Nil,
+          Nil,
+          None,
+          None,
+          None))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex - 1) :+
+          target(Implication(φ, ψ)) :+
+          target(Implication(ψ, χ)) :+
+          assertion(implicationIsTransitive, Seq(φ, ψ, χ), Nil),
+        fillerSteps(stepIndex - 1) :+
+          assertion(equalityIsReflexive, Nil, Seq(a)) :+
+          target(Implication(φ, ψ)) :+
+          target(Implication(ψ, χ)) :+
+          assertion(implicationIsTransitive, Seq(φ, ψ, χ), Nil))
     }
   }
 }

@@ -316,6 +316,7 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
   val existence = createInference("Existence", Seq(φ(a)), Exists("x")(φ($)))
   val modusPonens = createInference("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
   val modusTollens = createInference("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
+  val implicationIsTransitive = createInference("Implication Is Transitive", Seq(Implication(φ, ψ), Implication(ψ, χ)), Implication(φ, χ))
 
   val addDoubleNegation = createInference("Add Double Negation", Seq(φ), Negation(Negation(φ)))
   val removeDoubleNegation = createInference("Remove Double Negation", Seq(Negation(Negation(φ))), φ)
@@ -337,6 +338,7 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
 
   val reverseEquality = createInference("Reverse Equality", Seq(Equals(a, b)), Equals(b, a))
   val reverseNegatedEquality = createInference("Reverse Negated Equality", Seq(Negation(Equals(a, b))), Negation(Equals(b, a)))
+  val equalityIsReflexive = createInference("Equality Is Reflexive", Nil, Equals(a, a))
   val equalityIsTransitive = createInference("Equality Is Transitive", Seq(Equals(a, b), Equals(b, c)), Equals(a, c))
   val substitutionOfEquals = createInference("Substitution of Equals", Seq(Equals(a, b), φ(a)), φ(b))
   val substitutionOfEqualsIntoFunction = createInference("Substitution of Equals Into Function", Seq(Equals(a, b)), Equals(c(a), c(b)))
@@ -381,7 +383,7 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
   val negationOfIntegerMultiplication = createInference("Negation of Integer Multipliciation", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Conjunction(Equals(mulZ(a, IntegerNegation(b)), IntegerNegation(mulZ(a, b))), Equals(mulZ(IntegerNegation(a), b), IntegerNegation(mulZ(a, b)))))
 }
 
-trait StepHelpers extends TestVariableDefinitions {
+trait StepHelpers extends TestVariableDefinitions with TestExpressionDefinitions {
 
   def assertion(inference: Inference, statements: Seq[Statement], terms: Seq[Term]): SubstitutionContext => Step.Assertion = { substitutionContext =>
     Step.Assertion.forInference(inference, Substitutions(statements, terms))(substitutionContext).get
@@ -393,7 +395,7 @@ trait StepHelpers extends TestVariableDefinitions {
   def elided(description: String, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Elided = sc => Step.Elided(steps(sc), None, Some(description))
   def existingStatementExtraction(steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.ExistingStatementExtraction = sc => Step.ExistingStatementExtraction(steps(sc))
 
-  def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = _ => (0 until number).map(i => Step.Target(StatementVariable(i)))
+  def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = (0 until number).map(i => target(ForAll("x")(Equals($, TermVariable(i)))))
 
   implicit class StepsConstructor(createSteps: SubstitutionContext => Seq[Step]) {
     def :+(other: SubstitutionContext => Step): SubstitutionContext => Seq[Step] = { sc =>
@@ -420,13 +422,13 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
       NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, MultiplicationDefinition, Apply, LessThanDefinition,
       IntegersDefinition, IntegerEmbeddingDefinition, IntegerAdditionDefinition, IntegerNegation, IntegerMultiplicationDefinition) ++
     Seq(
-      specification, existence, modusPonens, modusTollens,
+      specification, existence, modusPonens, modusTollens, implicationIsTransitive,
       addDoubleNegation, removeDoubleNegation,
       extractLeftConjunct, extractRightConjunct, combineConjunction,
       addLeftDisjunct, addRightDisjunct,
       reverseEquivalence, equivalenceIsTransitive, forwardImplicationFromEquivalence, reverseImplicationFromEquivalence,
       distributeImplicationOverEquivalence, distributeUniversalQuantifierOverEquivalence,
-      reverseEquality, reverseNegatedEquality, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
+      reverseEquality, reverseNegatedEquality, equalityIsReflexive, equalityIsTransitive, substitutionOfEquals, substitutionOfEqualsIntoFunction, equivalenceOfSubstitutedEquals,
       membershipConditionForSingleton, elementOfCartesianProductFromCoordinates, firstCoordinateOfOrderedPairInCartesianProduct, firstCoordinateOfElementOfCartesianProduct, secondCoordinateOfElementOfCartesianProduct, orderedPairIsElementOfCartesianProduct, firstElement,
       functionApplicationIsElementOfRange,
       zeroIsANaturalNumber, oneIsANaturalNumber, successorOfNaturalIsNatural, additionIsClosed, additionIsAssociative, additionIsCommutative, zeroIsLeftIdentityForAddition, zeroIsRightIdentityForAddition,
