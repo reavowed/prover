@@ -8,8 +8,7 @@ import net.prover.model.definitions.{Definitions, ExpressionDefinition}
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
-import scalaz.Functor
-import scalaz.syntax.functor._
+import net.prover.theorems.ReplaceDefinitions
 
 import scala.reflect.ClassTag
 
@@ -64,12 +63,7 @@ case class Theorem(
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryContext: EntryContext
   ): Theorem = {
-    Theorem(
-      name,
-      variableDefinitions,
-      premises.map(_.replaceDefinitions(expressionDefinitionReplacements)),
-      conclusion.replaceDefinitions(expressionDefinitionReplacements),
-      proofs.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
+    ReplaceDefinitions(this, expressionDefinitionReplacements)(entryContext)
   }
 }
 
@@ -89,12 +83,6 @@ object Theorem extends Inference.EntryParser {
 
     def clearInference(inference: Inference): Proof = {
       Proof(steps.clearInference(inference))
-    }
-    def replaceDefinitions(
-      expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
-      entryContext: EntryContext
-    ): Proof = {
-      Proof(steps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
     }
 
     def serialized: String = steps.flatMap(_.serializedLines).mkString("\n") + "\n"

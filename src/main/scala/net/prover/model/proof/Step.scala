@@ -13,7 +13,6 @@ import scala.util.Try
 sealed trait Step {
   def `type`: String
   def provenStatement: Option[Statement]
-  def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Step
   def clearInference(inferenceToClear: Inference): Step
   def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange])
   def isComplete(definitions: Definitions): Boolean
@@ -71,12 +70,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Deduction = copy(substeps = newSubsteps)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Deduction = {
-      Deduction(
-        assumption.replaceDefinitions(expressionDefinitionReplacements),
-        substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)),
-        entryContext.deductionDefinitionOption.get)
-    }
     override def clearInference(inferenceToClear: Inference): Step = {
       Deduction(
         assumption,
@@ -138,18 +131,6 @@ object Step {
         deductionDefinition)
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Naming = {
-      Naming(
-        variableName,
-        assumption.replaceDefinitions(expressionDefinitionReplacements),
-        statement.replaceDefinitions(expressionDefinitionReplacements),
-        substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)),
-        inference.replaceDefinitions(expressionDefinitionReplacements),
-        premises.map(_.replaceDefinitions(expressionDefinitionReplacements)),
-        substitutions.replaceDefinitions(expressionDefinitionReplacements),
-        entryContext.generalizationDefinitionOption.get,
-        entryContext.deductionDefinitionOption.get)
-    }
     override def clearInference(inferenceToClear: Inference): Step = {
       if (inferenceToClear == inference) {
         Step.Target(statement)
@@ -209,12 +190,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Generalization = {
-      Generalization(
-        variableName,
-        substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)),
-        entryContext.generalizationDefinitionOption.get)
-    }
     override def clearInference(inferenceToClear: Inference): Step = {
       copy(substeps = substeps.clearInference(inferenceToClear))
     }
@@ -241,7 +216,6 @@ object Step {
     val `type` = "target"
     override def isComplete(definitions: Definitions): Boolean = false
     override def provenStatement: Option[Statement] = Some(statement)
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Target = Target(statement.replaceDefinitions(expressionDefinitionReplacements))
     override def clearInference(inferenceToClear: Inference): Step = {
       this
     }
@@ -265,12 +239,6 @@ object Step {
     val `type` = "elided"
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Elided = {
-      Elided(
-        substeps.map(_.replaceDefinitions(expressionDefinitionReplacements,entryContext)),
-        highlightedInference.map(_.replaceDefinitions(expressionDefinitionReplacements)),
-        description)
-    }
     override def clearInference(inferenceToClear: Inference): Step = {
       if (highlightedInference.contains(inferenceToClear)) {
         Target(provenStatement.get)
@@ -336,13 +304,6 @@ object Step {
         this
       }
     }
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Assertion = {
-      Assertion(
-        statement.replaceDefinitions(expressionDefinitionReplacements),
-        inference.replaceDefinitions(expressionDefinitionReplacements),
-        premises.map(_.replaceDefinitions(expressionDefinitionReplacements)),
-        substitutions.replaceDefinitions(expressionDefinitionReplacements))
-    }
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
       val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
       val newStep = copy(premises = newPremises)
@@ -388,11 +349,6 @@ object Step {
     val `type`: String = "subproof"
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): SubProof = {
-      SubProof(
-        name,
-        substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
-    }
     override def clearInference(inferenceToClear: Inference): Step = {
       copy(substeps = substeps.clearInference(inferenceToClear))
     }
@@ -420,9 +376,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = {
       copy(substeps = newSubsteps)
-    }
-    override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Step = {
-      ExistingStatementExtraction(substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
     }
     override def clearInference(inferenceToClear: Inference): Step = {
       ExistingStatementExtraction(substeps.map(_.clearInference(inferenceToClear)))
