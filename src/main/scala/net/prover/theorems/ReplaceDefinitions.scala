@@ -7,7 +7,7 @@ import net.prover.model.proof.Premise
 import net.prover.model.{EntryContext, Inference, Substitutions}
 import net.prover.util.FunctorTypes.Identity
 
-object ReplaceDefinitions extends TheoremStepUpdater[(Map[ExpressionDefinition, ExpressionDefinition], EntryContext), Identity] {
+object ReplaceDefinitions extends CompoundTheoremUpdater[(Map[ExpressionDefinition, ExpressionDefinition], EntryContext), Identity] {
   def apply(theorem: Theorem, replacements: Map[ExpressionDefinition, ExpressionDefinition])(implicit entryContext: EntryContext): Theorem = {
     apply(theorem, (replacements, entryContext))
   }
@@ -16,7 +16,7 @@ object ReplaceDefinitions extends TheoremStepUpdater[(Map[ExpressionDefinition, 
     statement: Statement,
     parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext),
     boundVariableNames: List[List[String]]
-  ): Identity[Statement] = {
+  ): Statement = {
     statement.replaceDefinitions(parameters._1)
   }
 
@@ -30,9 +30,9 @@ object ReplaceDefinitions extends TheoremStepUpdater[(Map[ExpressionDefinition, 
 
   override def updatePremise(
     premise: Premise,
-    parameters: (Map[ExpressionDefinition,
-    ExpressionDefinition], EntryContext), boundVariableNames: List[List[String]]
-  ): Identity[Premise] = {
+    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext),
+    boundVariableNames: List[List[String]]
+  ): Premise = {
     premise.replaceDefinitions(parameters._1)
   }
 
@@ -40,21 +40,21 @@ object ReplaceDefinitions extends TheoremStepUpdater[(Map[ExpressionDefinition, 
     substitutions: Substitutions,
     parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext),
     boundVariableNames: List[List[String]]
-  ): Identity[Substitutions] = {
+  ): Substitutions = {
     substitutions.replaceDefinitions(parameters._1)
   }
 
   override def updateDeductionDefinition(
     deductionDefinition: DeductionDefinition,
     parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
-  ): Identity[DeductionDefinition] = {
+  ): DeductionDefinition = {
     parameters._2.deductionDefinitionOption.get
   }
 
   override def updateGeneralizationDefinition(
     generalizationDefinition: GeneralizationDefinition,
     parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
-  ): Identity[GeneralizationDefinition] = {
+  ): GeneralizationDefinition = {
     parameters._2.generalizationDefinitionOption.get
   }
 }

@@ -5,7 +5,7 @@ import net.prover.model.proof.{Premise, Step}
 import net.prover.model.{Inference, Substitutions}
 import scalaz.Scalaz._
 
-object RemoveExternalParameters extends StepUpdater[Int, Option] {
+object RemoveExternalParameters extends CompoundStepUpdater[Int, Option] {
   def apply(steps: Seq[Step], numberOfParametersToRemove: Int): Option[Seq[Step]] = {
     apply(steps.toList, numberOfParametersToRemove, Nil)
   }

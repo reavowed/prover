@@ -13,7 +13,6 @@ import scala.util.Try
 sealed trait Step {
   def `type`: String
   def provenStatement: Option[Statement]
-  def clearInference(inferenceToClear: Inference): Step
   def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange])
   def isComplete(definitions: Definitions): Boolean
   def referencedInferenceIds: Set[String]
@@ -70,12 +69,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Deduction = copy(substeps = newSubsteps)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def clearInference(inferenceToClear: Inference): Step = {
-      Deduction(
-        assumption,
-        substeps.clearInference(inferenceToClear),
-        deductionDefinition)
-    }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet + deductionDefinition.statementDefinition
@@ -131,13 +124,6 @@ object Step {
         deductionDefinition)
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def clearInference(inferenceToClear: Inference): Step = {
-      if (inferenceToClear == inference) {
-        Step.Target(statement)
-      } else {
-        copy(substeps = substeps.clearInference(inferenceToClear))
-      }
-    }
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
       val (newSubsteps, innerStepsWithReferenceChanges) = substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
       val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
@@ -190,9 +176,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
-    override def clearInference(inferenceToClear: Inference): Step = {
-      copy(substeps = substeps.clearInference(inferenceToClear))
-    }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + generalizationDefinition.statementDefinition
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
@@ -216,9 +199,6 @@ object Step {
     val `type` = "target"
     override def isComplete(definitions: Definitions): Boolean = false
     override def provenStatement: Option[Statement] = Some(statement)
-    override def clearInference(inferenceToClear: Inference): Step = {
-      this
-    }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = (this, Nil)
     override def referencedInferenceIds: Set[String] = Set.empty
@@ -239,13 +219,6 @@ object Step {
     val `type` = "elided"
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
-    override def clearInference(inferenceToClear: Inference): Step = {
-      if (highlightedInference.contains(inferenceToClear)) {
-        Target(provenStatement.get)
-      } else {
-        copy(substeps = substeps.clearInference(inferenceToClear))
-      }
-    }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet ++ highlightedInference.map(_.id).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
@@ -297,13 +270,6 @@ object Step {
     val `type`: String = "assertion"
     override def isComplete(definitions: Definitions): Boolean = premises.forall(_.isComplete) && definitions.isInferenceComplete(inference)
     override def provenStatement: Option[Statement] = Some(statement)
-    override def clearInference(inferenceToClear: Inference): Step = {
-      if (inferenceToClear == inference) {
-        Target(statement)
-      } else {
-        this
-      }
-    }
     override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
       val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
       val newStep = copy(premises = newPremises)
@@ -349,9 +315,6 @@ object Step {
     val `type`: String = "subproof"
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
-    override def clearInference(inferenceToClear: Inference): Step = {
-      copy(substeps = substeps.clearInference(inferenceToClear))
-    }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
@@ -377,9 +340,6 @@ object Step {
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = {
       copy(substeps = newSubsteps)
     }
-    override def clearInference(inferenceToClear: Inference): Step = {
-      ExistingStatementExtraction(substeps.map(_.clearInference(inferenceToClear)))
-    }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
@@ -404,7 +364,6 @@ object Step {
         currentStepContext.addStep(newStep, innerStepContext.stepReference) -> (newStep, stepsWithReferenceChanges)
       }._2.split.mapRight(_.flatten)
     }
-    def clearInference(inference: Inference): Seq[Step] = steps.map(_.clearInference(inference))
   }
 
   def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Option[Step]] = {

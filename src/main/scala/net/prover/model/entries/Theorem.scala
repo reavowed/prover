@@ -55,9 +55,6 @@ case class Theorem(
     premises.map("premise " + _.serialized) ++
     Seq("conclusion " + conclusion.serialized)
 
-  def clearInference(inference: Inference): Theorem = {
-    copy(proofs = proofs.map(_.clearInference(inference)))
-  }
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
@@ -79,10 +76,6 @@ object Theorem extends Inference.EntryParser {
       val (newSteps, changedSteps) = steps.recalculateReferences(initialStepContext, provingContext)
       val newStepsWithTarget = if (newSteps.mapCollect(_.provenStatement).lastOption.contains(expectedConclusion)) newSteps else newSteps :+ Step.Target(expectedConclusion)
       (Proof(newStepsWithTarget), changedSteps)
-    }
-
-    def clearInference(inference: Inference): Proof = {
-      Proof(steps.clearInference(inference))
     }
 
     def serialized: String = steps.flatMap(_.serializedLines).mkString("\n") + "\n"

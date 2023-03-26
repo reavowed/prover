@@ -7,7 +7,7 @@ import net.prover.model.{Inference, Substitutions}
 import scalaz.Monad
 import scalaz.Scalaz._
 
-abstract class StepUpdater[TParameters, F[_] : Monad] {
+abstract class CompoundStepUpdater[TParameters, F[_] : Monad] {
   def monad = Monad[F]
 
   protected def apply(steps: List[Step], parameters: TParameters, boundVariableNames: List[List[String]]): F[List[Step]] = {

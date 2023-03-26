@@ -5,36 +5,13 @@ import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.entries.Theorem
 import net.prover.refactoring.{ReplaceElidedSteps, ReplaceInference, UpdateEntries}
+import net.prover.theorems.ClearInference
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 
 @RestController
 @RequestMapping(Array("/"))
 class OperationsController @Autowired() (implicit bookStateManager: BookStateManager) {
-
-  @GetMapping(value = Array("clearInferencesUsingOldFunction"))
-  def clearInferencesUsingOldFunction(): Unit = {
-    UpdateEntries[Seq[Inference]](Nil, definitions => {
-      val oldFunctionDefinition = definitions.rootEntryContext.typeDefinitions("oldFunction")
-      (entryWithContext, inferencesToClear) => {
-        import entryWithContext._
-        val referencedEntries = entry match {
-          case theorem: Theorem =>
-            (theorem.premises :+ theorem.conclusion).flatMap(_.referencedDefinitions).map(_.associatedChapterEntry).toSet
-          case other =>
-            other.referencedEntries
-        }
-        val updatedInferences = if (referencedEntries.contains(oldFunctionDefinition)) inferencesToClear ++ entry.inferences else inferencesToClear
-        val updatedEntry = entry.asOptionalInstanceOf[Theorem] match {
-          case Some(theorem) =>
-            inferencesToClear.foldLeft(theorem)(_.clearInference(_))
-          case _ =>
-            entry
-        }
-        (updatedEntry, updatedInferences)
-      }
-    })
-  }
 
   @GetMapping(value = Array("replaceElidedSteps"))
   def replaceElidedSteps(): Unit = {
@@ -58,7 +35,7 @@ class OperationsController @Autowired() (implicit bookStateManager: BookStateMan
       entryWithContext => {
         val updated = entryWithContext.entry.asOptionalInstanceOf[Theorem] match {
           case Some(theorem) =>
-            theorem.clearInference(inference)
+            ClearInference(theorem, inference)
           case _ =>
             entryWithContext.entry
         }

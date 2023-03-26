@@ -2,12 +2,12 @@ package net.prover.theorems
 
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
-import net.prover.theorems.steps.StepUpdater
+import net.prover.theorems.steps.CompoundStepUpdater
 import scalaz.Monad
 import scalaz.Scalaz._
 
-abstract class TheoremStepUpdater[TParameters, F[_] : Monad] extends StepUpdater[TParameters, F] {
-  protected def apply(theorem: Theorem, parameters: TParameters): F[Theorem] = {
+abstract class CompoundTheoremUpdater[TParameters, F[_] : Monad] extends CompoundStepUpdater[TParameters, F] {
+  def apply(theorem: Theorem, parameters: TParameters): F[Theorem] = {
     for {
       newPremises <- theorem.premises.map(updateStatement(_, parameters, Nil)).toList.sequence
       newConclusion <- updateStatement(theorem.conclusion, parameters, Nil)
