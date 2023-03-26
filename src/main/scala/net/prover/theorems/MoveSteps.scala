@@ -4,6 +4,7 @@ import net.prover.controllers.models.{InsertionAndDeletionProps, ProofUpdateProp
 import net.prover.controllers.{BookService, BooleanWithResponseExceptionOps, OptionWithResponseExceptionOps}
 import net.prover.model._
 import net.prover.model.proof.{Step, StepContext}
+import net.prover.theorems.steps.{InsertExternalParameters, RemoveExternalParameters}
 import net.prover.util.FunctorTypes._
 
 import scala.util.{Success, Try}

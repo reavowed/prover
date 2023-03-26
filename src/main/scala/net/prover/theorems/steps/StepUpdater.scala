@@ -1,4 +1,4 @@
-package net.prover.theorems
+package net.prover.theorems.steps
 
 import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
