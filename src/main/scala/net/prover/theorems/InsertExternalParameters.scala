@@ -1,13 +1,14 @@
 package net.prover.theorems
 
+import net.prover.controllers.Identity
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step}
 import net.prover.model.{Inference, Substitutions}
 
-object InsertExternalParameters extends StepUpdater[Int] {
+object InsertExternalParameters extends StepUpdater[Int, Identity] {
 
   def apply(steps: Seq[Step], numberOfParametersToInsert: Int): Seq[Step] = {
-    apply(steps, numberOfParametersToInsert, Nil)
+    apply(steps.toList, numberOfParametersToInsert, Nil)
   }
 
   override def updateStatement(

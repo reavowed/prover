@@ -4,7 +4,7 @@ import net.prover.controllers.models.{InsertionAndDeletionProps, PathData, Proof
 import net.prover.model._
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof._
-import net.prover.theorems.{InsertExternalParameters, ReplaceSteps}
+import net.prover.theorems.{InsertExternalParameters, RemoveExternalParameters, ReplaceSteps}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -94,9 +94,9 @@ class ProofController @Autowired() (val bookService: BookService) {
                 _ <- (0 until sharedParameterDepth).map { i =>
                   (currentStepOuterContext.boundVariableLists(i).size <= newStepOuterContext.boundVariableLists(i).size).orBadRequest("Cannot move step to one with a smaller bound variable list")
                 }.traverseTry
-                stepsWithNewContext <- if (parametersToRemove > 0)
-                  currentSteps.map(_.removeExternalParameters(parametersToRemove, 0)).traverseOption.orBadRequest("Could not remove extra parameters")
-                else if (parametersToAdd > 0)
+                stepsWithNewContext <- if (parametersToRemove > 0) {
+                  RemoveExternalParameters(currentSteps, parametersToRemove).orBadRequest("Could not remove extra parameters")
+                } else if (parametersToAdd > 0)
                   Success(InsertExternalParameters(currentSteps, parametersToAdd))
                 else
                   Success(currentSteps)

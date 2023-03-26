@@ -3,7 +3,7 @@ package net.prover
 import net.prover.model._
 import net.prover.exceptions.{BadRequestException, NotFoundException}
 import org.springframework.http.{HttpStatus, ResponseEntity}
-import scalaz.Functor
+import scalaz.{Functor, Monad}
 import scalaz.syntax.functor._
 
 import scala.util.{Failure, Success, Try}
@@ -23,9 +23,6 @@ package object controllers {
         case Failure(e) =>
           throw e
       }
-    }
-    def toEmptyResponseEntity: ResponseEntity[_] = {
-      t.map(_ => ()).toResponseEntity
     }
     def orBadRequest(message: String): Try[T] = {
       t.recoverWith {
@@ -67,13 +64,15 @@ package object controllers {
     }
   }
 
-  implicit val tryFunctor: Functor[Try] = new Functor[Try] {
-    override def map[A,B](fa: Try[A])(f: A ⇒ B): Try[B] = fa map f
+  implicit val tryMonad: Monad[Try] = new Monad[Try] {
+    override def point[A](a: => A): Try[A] = Success(a)
+    override def bind[A, B](fa: Try[A])(f: A => Try[B]): Try[B] = fa flatMap f
   }
 
   type Identity[A] = A
-  implicit val identityFunctor: Functor[Identity] = new Functor[Identity] {
-    override def map[A,B](a: Identity[A])(f: A ⇒ B): Identity[B] = f(a)
+  implicit val identityMonad: Monad[Identity] = new Monad[Identity] {
+    override def point[A](a: => A): Identity[A] = a
+    override def bind[A, B](fa: Identity[A])(f: A => Identity[B]): Identity[B] = f(fa)
   }
 
   class WithValue[B] {

@@ -13,7 +13,6 @@ import scala.util.Try
 sealed trait Step {
   def `type`: String
   def provenStatement: Option[Statement]
-  def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step]
   def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Step
   def clearInference(inferenceToClear: Inference): Step
   def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange])
@@ -72,12 +71,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Deduction = copy(substeps = newSubsteps)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
-      for {
-        newAssumption <- assumption.removeExternalParameters(numberOfParametersToRemove, internalDepth)
-        newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
-      } yield Deduction(newAssumption, newSubsteps, deductionDefinition)
-    }
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Deduction = {
       Deduction(
         assumption.replaceDefinitions(expressionDefinitionReplacements),
@@ -145,15 +138,6 @@ object Step {
         deductionDefinition)
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
-      for {
-        newAssumption <- assumption.removeExternalParameters(numberOfParametersToRemove, internalDepth + 1)
-        newStatement <- statement.removeExternalParameters(numberOfParametersToRemove, internalDepth)
-        newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth + 1)).traverseOption
-        newPremises <- premises.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
-        newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove, internalDepth)
-      } yield Naming(variableName, newAssumption, newStatement, newSubsteps, inference, newPremises, newSubstitutions, generalizationDefinition, deductionDefinition)
-    }
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Naming = {
       Naming(
         variableName,
@@ -225,11 +209,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
-    override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
-      for {
-        newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth + 1)).traverseOption
-      } yield Generalization(variableName, newSubsteps, generalizationDefinition)
-    }
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Generalization = {
       Generalization(
         variableName,
@@ -262,11 +241,6 @@ object Step {
     val `type` = "target"
     override def isComplete(definitions: Definitions): Boolean = false
     override def provenStatement: Option[Statement] = Some(statement)
-    override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
-      for {
-        s <- statement.removeExternalParameters(numberOfParametersToRemove, internalDepth)
-      } yield copy(statement = s)
-    }
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Target = Target(statement.replaceDefinitions(expressionDefinitionReplacements))
     override def clearInference(inferenceToClear: Inference): Step = {
       this
@@ -291,12 +265,6 @@ object Step {
     val `type` = "elided"
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
-    override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
-      for {
-        newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
-      } yield Elided(newSubsteps, highlightedInference, description)
-    }
-
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Elided = {
       Elided(
         substeps.map(_.replaceDefinitions(expressionDefinitionReplacements,entryContext)),
@@ -361,13 +329,6 @@ object Step {
     val `type`: String = "assertion"
     override def isComplete(definitions: Definitions): Boolean = premises.forall(_.isComplete) && definitions.isInferenceComplete(inference)
     override def provenStatement: Option[Statement] = Some(statement)
-    override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
-      for {
-        newStatement <- statement.removeExternalParameters(numberOfParametersToRemove, internalDepth)
-        newPremises <- premises.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
-        newSubstitutions <- substitutions.removeExternalParameters(numberOfParametersToRemove, internalDepth)
-      } yield Assertion(newStatement, inference, newPremises, newSubstitutions)
-    }
     override def clearInference(inferenceToClear: Inference): Step = {
       if (inferenceToClear == inference) {
         Target(statement)
@@ -427,11 +388,6 @@ object Step {
     val `type`: String = "subproof"
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
-    override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
-      for {
-        newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
-      } yield SubProof(name, newSubsteps)
-    }
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): SubProof = {
       SubProof(
         name,
@@ -464,11 +420,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = {
       copy(substeps = newSubsteps)
-    }
-    override def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Step] = {
-      for {
-        newSubsteps <- substeps.map(_.removeExternalParameters(numberOfParametersToRemove, internalDepth)).traverseOption
-      } yield ExistingStatementExtraction(newSubsteps)
     }
     override def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): Step = {
       ExistingStatementExtraction(substeps.map(_.replaceDefinitions(expressionDefinitionReplacements, entryContext)))
