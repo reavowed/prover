@@ -10,6 +10,7 @@ import net.prover.model.definitions.Definitions
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step
+import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._

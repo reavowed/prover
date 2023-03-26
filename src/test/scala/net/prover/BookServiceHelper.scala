@@ -1,11 +1,12 @@
 package net.prover
 
-import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, InsertionAndReplacementProps, MultipleStepReplacementProps, ProofUpdateProps, StepInsertionProps, StepReplacementProps}
-import net.prover.controllers.{BookService, WithValue}
+import net.prover.controllers.BookService
+import net.prover.controllers.models._
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.StatementVariable
 import net.prover.model.proof.{Step, StepContext, StepProvingContext, SubstitutionContext}
 import net.prover.model.{EntryContext, VariableDefinitions}
+import net.prover.util.FunctorTypes.WithValue
 import org.mockito.Mockito
 import org.specs2.SpecificationLike
 import org.specs2.matcher.{MatchResult, Matcher}

@@ -1,12 +1,13 @@
 package net.prover.controllers
 
 import net.prover.books.model.Book
-import net.prover.controllers.models.{DefinitionSummary, LinkSummary, StandalonePropertyDefinitionSummary, TypeDefinitionSummary, TypeRelationDefinitionSummary}
+import net.prover.controllers.models.LinkSummary
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
+import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._

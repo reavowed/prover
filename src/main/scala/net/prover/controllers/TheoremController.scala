@@ -1,9 +1,10 @@
 package net.prover.controllers
 
 import net.prover.exceptions.BadRequestException
-import net.prover.model.{ExpressionParsingContext, VariableDefinitions}
+import net.prover.model.ExpressionParsingContext
 import net.prover.model.entries.Theorem
 import net.prover.model.proof.Step
+import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._

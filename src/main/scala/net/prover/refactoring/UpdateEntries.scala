@@ -2,11 +2,11 @@ package net.prover.refactoring
 
 import net.prover.books.management.{BookStateManager, UpdateBooks}
 import net.prover.books.model.Book
-import net.prover.controllers.Identity
 import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.ChapterEntry
+import net.prover.util.FunctorTypes.Identity
 
 object UpdateEntries {
   def apply(

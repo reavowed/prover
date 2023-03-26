@@ -1,6 +1,6 @@
 package net.prover.controllers
 
-import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, MultipleStepReplacementProps, PathData, StepInsertionProps}
+import net.prover.controllers.models.{InsertionAndMultipleReplacementProps, MultipleStepReplacementProps, PathData}
 import net.prover.exceptions.NotFoundException
 import net.prover.model._
 import net.prover.model.definitions._
@@ -8,6 +8,7 @@ import net.prover.model.expressions.{Expression, Statement, Term, TypedExpressio
 import net.prover.model.proof.Premise.SingleLinePremise
 import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
 import net.prover.proving.stepReplacement.AddTargetsBeforeChain
+import net.prover.util.FunctorTypes._
 import org.springframework.http.ResponseEntity
 
 import scala.util.{Failure, Try}

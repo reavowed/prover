@@ -1,9 +1,10 @@
 package net.prover.proving.stepReplacement
 
-import net.prover.controllers.{BookService, WithValue}
+import net.prover.controllers.BookService
 import net.prover.controllers.models.{PathData, ProofUpdateProps, StepInsertionProps}
 import net.prover.exceptions.NotFoundException
 import net.prover.model.proof.{Step, StepProvingContext}
+import net.prover.util.FunctorTypes._
 
 import scala.util.{Failure, Try}
 

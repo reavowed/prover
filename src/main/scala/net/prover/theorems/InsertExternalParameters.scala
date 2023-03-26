@@ -1,9 +1,9 @@
 package net.prover.theorems
 
-import net.prover.controllers.Identity
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step}
 import net.prover.model.{Inference, Substitutions}
+import net.prover.util.FunctorTypes.Identity
 
 object InsertExternalParameters extends StepUpdater[Int, Identity] {
 

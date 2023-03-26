@@ -4,6 +4,7 @@ import net.prover.books.model.Book
 import net.prover.controllers.BookController.ChapterDefinition
 import net.prover.controllers.models.LinkSummary
 import net.prover.model._
+import net.prover.util.FunctorTypes._
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

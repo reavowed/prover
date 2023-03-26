@@ -8,6 +8,7 @@ import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.proof.{Step, StepProvingContext}
 import net.prover.theorems.{FindStep, ReplaceSteps}
+import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import scalaz.Functor
