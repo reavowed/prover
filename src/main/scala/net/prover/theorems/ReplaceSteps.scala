@@ -25,7 +25,7 @@ object ReplaceSteps {
   def apply[F[_] : Functor](step: Step, stepIndexes: Seq[Int], stepContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]] = {
     step match {
       case step: Step.WithSubsteps =>
-        apply(step.substeps, stepIndexes, stepContext)(f).map(_.map(step.replaceSubsteps(_, stepContext)))
+        apply(step.substeps, stepIndexes, step.specifyStepContext(stepContext))(f).map(_.map(step.replaceSubsteps(_, stepContext)))
       case _: Step.WithoutSubsteps =>
         None
     }
