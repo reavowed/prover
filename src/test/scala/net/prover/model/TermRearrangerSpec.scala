@@ -4,6 +4,7 @@ import net.prover.StepContextHelper
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{Step, TermRearranger}
+import net.prover.theorems.RecalculateReferences
 import net.prover.util.Direction
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
@@ -20,7 +21,7 @@ class TermRearrangerSpec extends Specification with StepContextHelper {
     def rearrange(targetStatement: Statement, premises: Seq[Statement])(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Option[Step] = {
       implicit val stepContext = createBaseStepContext(premises)
       TermRearranger.rearrange(targetStatement)
-        .map(_.recalculateReferences(stepContext, implicitly[ProvingContext])._1)
+        .map(RecalculateReferences(_, stepContext, implicitly[ProvingContext])._1)
     }
 
     def testRearranging(targetStatement: Statement, premises: Seq[Statement])(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): MatchResult[Any] = {

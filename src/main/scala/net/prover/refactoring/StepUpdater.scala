@@ -4,6 +4,7 @@ import net.prover.entries.{ProofWithContext, StepWithContext, StepsWithContext, 
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof.{Step, StepProvingContext}
+import net.prover.theorems.RecalculateReferences
 
 import scala.util.{Success, Try}
 
@@ -12,7 +13,7 @@ trait StepUpdater extends TheoremUpdater {
     import theoremWithContext._
     theorem.proofs.zipWithIndex.map { case (proof, proofIndex) =>
       updateProof(ProofWithContext(book, chapter, theorem, proof, proofIndex, provingContext))
-    }.traverseTry.map(updatedProofs => theorem.copy(proofs = updatedProofs).recalculateReferences(theoremWithContext.provingContext)._1)
+    }.traverseTry.map(updatedProofs => RecalculateReferences(theorem.copy(proofs = updatedProofs), theoremWithContext.provingContext)._1)
   }
 
   def updateProof(proofWithContext: ProofWithContext): Try[Proof] = {

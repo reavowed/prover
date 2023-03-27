@@ -10,6 +10,7 @@ import net.prover.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof._
+import net.prover.theorems.RecalculateReferences
 import org.specs2.matcher.Matcher
 import org.specs2.mock.mockito.MockitoStubs
 
@@ -450,7 +451,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
   }
 
   def beValidTheorem(implicit entryContext: EntryContext): Matcher[Theorem] = (theorem: Theorem) => {
-    val recalculatedTheorem = theorem.recalculateReferences(entryContextToProvingContext(entryContext))._1
+    val recalculatedTheorem = RecalculateReferences(theorem, entryContextToProvingContext(entryContext))._1
     val serializedTheorem = recalculatedTheorem.serializedLines.mkString("\n").stripPrefix("theorem ")
     val serializedProofs = recalculatedTheorem.proofs.map(_.serialized)
     val proofFileReader = mock[ProofFileReader]

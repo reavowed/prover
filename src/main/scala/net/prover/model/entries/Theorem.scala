@@ -29,10 +29,6 @@ case class Theorem(
   def isComplete(definitions: Definitions): Boolean = proofs.exists(_.isComplete(definitions))
   def initialStepContext: StepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)
 
-  def recalculateReferences(provingContext: ProvingContext): (Theorem, Seq[Seq[StepWithReferenceChange]]) = {
-    proofs.map(_.recalculateReferences(initialStepContext, provingContext, conclusion)).split.mapLeft(newProofs => copy(proofs = newProofs))
-  }
-
   def findSteps[T <: Step : ClassTag]: Seq[(T, StepContext)] = {
     def forStep(step: Step, context: StepContext): Seq[(T, StepContext)] = {
       step match {
@@ -71,13 +67,6 @@ object Theorem extends Inference.EntryParser {
     def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     def referencedDefinitions: Set[ExpressionDefinition] = steps.flatMap(_.referencedDefinitions).toSet
     def isComplete(definitions: Definitions): Boolean = steps.forall(_.isComplete(definitions))
-
-    def recalculateReferences(initialStepContext: StepContext, provingContext: ProvingContext, expectedConclusion: Statement): (Proof, Seq[StepWithReferenceChange]) = {
-      val (newSteps, changedSteps) = steps.recalculateReferences(initialStepContext, provingContext)
-      val newStepsWithTarget = if (newSteps.mapCollect(_.provenStatement).lastOption.contains(expectedConclusion)) newSteps else newSteps :+ Step.Target(expectedConclusion)
-      (Proof(newStepsWithTarget), changedSteps)
-    }
-
     def serialized: String = steps.flatMap(_.serializedLines).mkString("\n") + "\n"
   }
 

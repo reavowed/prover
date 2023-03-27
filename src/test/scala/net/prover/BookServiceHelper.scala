@@ -6,6 +6,7 @@ import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.StatementVariable
 import net.prover.model.proof.{Step, StepContext, StepProvingContext, SubstitutionContext}
 import net.prover.model.{EntryContext, VariableDefinitions}
+import net.prover.theorems.RecalculateReferences
 import net.prover.util.FunctorTypes.WithValue
 import org.mockito.Mockito
 import org.specs2.SpecificationLike
@@ -154,14 +155,11 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
   }
 
   def recalculateReferences(steps: Seq[Step], outerStepContext: StepContext)(implicit entryContext: EntryContext): Seq[Step] = {
-    steps.recalculateReferences(outerStepContext, entryContextToProvingContext(entryContext))._1
+    RecalculateReferences(steps.toList, outerStepContext, entryContextToProvingContext(entryContext))._1
   }
 
   def buildStepsWithReferences(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Seq[Step] = {
-    implicit val provingContext = entryContextToProvingContext(entryContext)
     val steps = stepsConstructor(SubstitutionContext.withExtraParameters(boundVariables.length)(SubstitutionContext.outsideProof))
-    val outerStepContext = createOuterStepContext(boundVariables)
-    steps.recalculateReferences(outerStepContext, provingContext)._1
+    recalculateReferences(steps, createOuterStepContext(boundVariables))
   }
-
 }

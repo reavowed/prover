@@ -13,7 +13,6 @@ import scala.util.Try
 sealed trait Step {
   def `type`: String
   def provenStatement: Option[Statement]
-  def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange])
   def isComplete(definitions: Definitions): Boolean
   def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ExpressionDefinition]
@@ -31,10 +30,6 @@ object Step {
     def specifyStepContext(outerContext: StepContext): StepContext = outerContext
     def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step
     override def isComplete(definitions: Definitions): Boolean = substeps.forall(_.isComplete(definitions))
-    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
-      substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
-        .mapLeft(replaceSubsteps(_, stepContext))
-    }
   }
   sealed trait WithVariable extends Step.WithSubsteps {
     def variableName: String
@@ -124,13 +119,6 @@ object Step {
         deductionDefinition)
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
-      val (newSubsteps, innerStepsWithReferenceChanges) = substeps.recalculateReferences(specifyStepContext(stepContext), provingContext)
-      val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
-      val newStep = copy(substeps = newSubsteps, premises = newPremises)
-      val stepsWithReferenceChanges = if (premises == newPremises) innerStepsWithReferenceChanges else innerStepsWithReferenceChanges :+ StepWithReferenceChange(newStep, stepContext.stepReference.stepPath)
-      (newStep, stepsWithReferenceChanges)
-    }
     override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet + inference.id
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = premises ++ substeps.flatMap(_.recursivePremises)
@@ -200,7 +188,6 @@ object Step {
     override def isComplete(definitions: Definitions): Boolean = false
     override def provenStatement: Option[Statement] = Some(statement)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
-    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = (this, Nil)
     override def referencedInferenceIds: Set[String] = Set.empty
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def recursivePremises: Seq[Premise] = Nil
@@ -270,11 +257,6 @@ object Step {
     val `type`: String = "assertion"
     override def isComplete(definitions: Definitions): Boolean = premises.forall(_.isComplete) && definitions.isInferenceComplete(inference)
     override def provenStatement: Option[Statement] = Some(statement)
-    override def recalculateReferences(stepContext: StepContext, provingContext: ProvingContext): (Step, Seq[StepWithReferenceChange]) = {
-      val newPremises = premises.map(p => StepProvingContext(stepContext, provingContext).createPremise(p.statement))
-      val newStep = copy(premises = newPremises)
-      (newStep, if (newPremises == premises) Nil else Seq(StepWithReferenceChange(newStep, stepContext.stepReference.stepPath)))
-    }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     @JsonSerialize
     def referencedLinesForAssertion: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
@@ -353,16 +335,6 @@ object Step {
       for {
         substeps <- listParser.inBraces
       } yield ExistingStatementExtraction(substeps)
-    }
-  }
-
-  implicit class StepSeqOps(steps: Seq[Step]) {
-    def recalculateReferences(outerStepContext: StepContext, provingContext: ProvingContext): (Seq[Step], Seq[StepWithReferenceChange]) = {
-      steps.zipWithIndex.mapFold(outerStepContext) { case (currentStepContext, (step, index)) =>
-        val innerStepContext = currentStepContext.atIndex(index)
-        val (newStep, stepsWithReferenceChanges) = step.recalculateReferences(innerStepContext, provingContext)
-        currentStepContext.addStep(newStep, innerStepContext.stepReference) -> (newStep, stepsWithReferenceChanges)
-      }._2.split.mapRight(_.flatten)
     }
   }
 

@@ -3,7 +3,7 @@ package net.prover.controllers.models
 import net.prover.model.entries.Theorem
 import net.prover.model.proof.Step
 
-case class TheoremUpdateProps(theorem: Theorem, newInferences: Map[String, InferenceSummary], stepsWithReferenceChanges: Seq[Seq[StepWithReferenceChange]])
+case class TheoremUpdateProps(theorem: Theorem, newInferences: Map[String, InferenceSummary], stepsWithReferenceChanges: Seq[List[StepWithReferenceChange]])
 case class ProofUpdateProps[T <: StepUpdateProps](stepUpdates: T, newInferences: Map[String, InferenceSummary], stepsWithReferenceChanges: Seq[StepWithReferenceChange]) {
   def withNewStepUpdateProps[S <: StepUpdateProps](newUpdateProps: S): ProofUpdateProps[S] = {
     ProofUpdateProps(newUpdateProps, newInferences, stepsWithReferenceChanges)

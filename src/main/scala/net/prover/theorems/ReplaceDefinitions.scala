@@ -3,7 +3,7 @@ package net.prover.theorems
 import net.prover.model.definitions.{DeductionDefinition, ExpressionDefinition, GeneralizationDefinition}
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.Premise
+import net.prover.model.proof.{Premise, StepContext}
 import net.prover.model.{EntryContext, Inference, Substitutions}
 import net.prover.util.FunctorTypes.Identity
 
@@ -14,32 +14,32 @@ object ReplaceDefinitions extends CompoundTheoremUpdater[(Map[ExpressionDefiniti
 
   override def updateStatement(
     statement: Statement,
-    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext),
-    boundVariableNames: List[List[String]]
+    stepContext: StepContext,
+    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
   ): Statement = {
     statement.replaceDefinitions(parameters._1)
   }
 
   override def updateInference(
     inference: Inference.Summary,
-    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext),
-    boundVariableNames: List[List[String]]
+    stepContext: StepContext,
+    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
   ): Identity[Inference.Summary] = {
     inference.replaceDefinitions(parameters._1)
   }
 
   override def updatePremise(
     premise: Premise,
-    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext),
-    boundVariableNames: List[List[String]]
+    stepContext: StepContext,
+    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
   ): Premise = {
     premise.replaceDefinitions(parameters._1)
   }
 
   override def updateSubstitutions(
     substitutions: Substitutions,
-    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext),
-    boundVariableNames: List[List[String]]
+    stepContext: StepContext,
+    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
   ): Substitutions = {
     substitutions.replaceDefinitions(parameters._1)
   }

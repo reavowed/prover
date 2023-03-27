@@ -4,7 +4,7 @@ import net.prover.controllers.models.{InsertionAndDeletionProps, ProofUpdateProp
 import net.prover.controllers.{BookService, BooleanWithResponseExceptionOps, OptionWithResponseExceptionOps}
 import net.prover.model._
 import net.prover.model.proof.{Step, StepContext}
-import net.prover.theorems.steps.{InsertExternalParameters, RemoveExternalParameters}
+import net.prover.theorems.steps.{InsertExternalBoundVariables, RemoveExternalBoundVariables}
 import net.prover.util.FunctorTypes._
 
 import scala.util.{Success, Try}
@@ -39,18 +39,17 @@ object MoveSteps {
               }
             }.orBadRequest("Invalid source path")
           result <- ReplaceSteps[TryWithValue[InsertionAndDeletionProps]#Type](substepsWithoutCurrent, destinationPathInner, sharedContext.stepContext) { (newSurroundingSteps, newStepOuterContext) =>
-            val sharedParameterDepth = Seq(currentStepOuterContext.externalDepth, newStepOuterContext.externalDepth).min
-            val parametersToRemove = currentStepOuterContext.externalDepth - newStepOuterContext.externalDepth
-            val parametersToAdd = -1 * parametersToRemove
+            val sharedBoundVariableDepth = Seq(currentStepOuterContext.externalDepth, newStepOuterContext.externalDepth).min
+            val boundVariablesToRemove = currentStepOuterContext.externalDepth - newStepOuterContext.externalDepth
             newSurroundingSteps.takeAndRemainingIfValid(destinationIndex).map { case (before, after) =>
               for {
-                _ <- (0 until sharedParameterDepth).map { i =>
+                _ <- (0 until sharedBoundVariableDepth).map { i =>
                   (currentStepOuterContext.boundVariableLists(i).size <= newStepOuterContext.boundVariableLists(i).size).orBadRequest("Cannot move step to one with a smaller bound variable list")
                 }.traverseTry
-                stepsWithNewContext <- if (parametersToRemove > 0) {
-                  RemoveExternalParameters(currentSteps, parametersToRemove).orBadRequest("Could not remove extra parameters")
-                } else if (parametersToAdd > 0)
-                  Success(InsertExternalParameters(currentSteps, parametersToAdd))
+                stepsWithNewContext <- if (boundVariablesToRemove > 0) {
+                  RemoveExternalBoundVariables(currentSteps, currentStepOuterContext, boundVariablesToRemove).orBadRequest("Could not remove extra parameters")
+                } else if (boundVariablesToRemove < 0)
+                  Success(InsertExternalBoundVariables(currentSteps, currentStepOuterContext, -boundVariablesToRemove))
                 else
                   Success(currentSteps)
               } yield (

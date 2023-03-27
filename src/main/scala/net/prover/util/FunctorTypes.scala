@@ -2,7 +2,7 @@ package net.prover.util
 
 import net.prover.model._
 import scalaz.syntax.functor._
-import scalaz.{Functor, Monad}
+import scalaz.{Functor, Monad, Monoid}
 
 import scala.util.{Success, Try}
 
@@ -26,6 +26,11 @@ object FunctorTypes {
 
   implicit def WithValueFunctor[B]: Functor[WithValue[B]#Type] = new Functor[WithValue[B]#Type] {
     override def map[A, C](input: (A, B))(f: A => C): (C, B) = input.mapLeft(f)
+  }
+
+  implicit def WithValueMonad[B : Monoid]: Monad[WithValue[B]#Type] = new Monad[WithValue[B]#Type] {
+    override def point[A](a: => A): (A, B) = (a, Monoid[B].zero)
+    override def bind[A, C](fa: (A, B))(f: A => (C, B)): (C, B) = f(fa._1).mapRight(Monoid[B].append(fa._2, _))
   }
 
   class TryWithValue[B] {
