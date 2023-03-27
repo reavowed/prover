@@ -9,6 +9,7 @@ import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
+import scalaz.Id.Id
 
 import scala.util.{Success, Try}
 
@@ -41,8 +42,8 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     @PathVariable("bookKey") bookKey: String,
     @RequestBody chapterDefinition: ChapterDefinition
   ): ResponseEntity[_] = {
-    bookService.modifyBook[Identity](bookKey, (_, _, book) => {
-      val chapter = new Chapter(chapterDefinition.title, chapterDefinition.summary, Nil)
+    bookService.modifyBook[Id](bookKey, (_, _, book) => {
+      val chapter = Chapter(chapterDefinition.title, chapterDefinition.summary, Nil)
       val newBook = book.copy(chapters = book.chapters :+ chapter)
       Success(newBook)
     }).map { case (books, _, book) => createBookProps(book, bookKey, BookService.getBooksWithKeys(books)) }.toResponseEntity
@@ -53,7 +54,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String
   ): ResponseEntity[_] = {
-    bookService.modifyBook[Identity](bookKey, (books, _, book) => {
+    bookService.modifyBook[Id](bookKey, (books, _, book) => {
       val entriesAfterInThisBook = BookService.getChaptersWithKeys(book).view
         .dropUntil { case (_, key) => key == chapterKey }
         .flatMap(_._1.entries)
@@ -87,7 +88,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
         } yield (previousChapters ++ chaptersToMoveAfter :+ chapter) ++ lastChapters
       } orBadRequest "Invalid index" flatten
     }
-    bookService.modifyBook[Identity](bookKey, (_, _, book) => {
+    bookService.modifyBook[Id](bookKey, (_, _, book) => {
       for {
         (previousChapters, chapter, nextChapters) <- BookService.getChaptersWithKeys(book).splitWhere(_._2 == chapterKey).orNotFound(s"Chapter $chapterKey")
         updatedChapters <- tryMove(chapter._1, previousChapters.map(_._1), nextChapters.map(_._1))

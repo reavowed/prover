@@ -6,7 +6,7 @@ import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.ChapterEntry
-import net.prover.util.FunctorTypes.Identity
+import scalaz.Id.Id
 
 object UpdateEntries {
   def apply(
@@ -25,7 +25,7 @@ object UpdateEntries {
     implicit bookStateManager: BookStateManager
   ): Unit = {
     println("Beginning update operation")
-    UpdateBooks[Identity]((books, definitions) => {
+    UpdateBooks[Id]((books, definitions) => {
       val updateOperation = getUpdateOperation(definitions)
 
       def modifyBook(changedInferences: TMetadata, previousBooks: Seq[Book], book: Book): (TMetadata, Book) = {

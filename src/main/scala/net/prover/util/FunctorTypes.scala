@@ -13,13 +13,6 @@ object FunctorTypes {
     override def bind[A, B](fa: Try[A])(f: A => Try[B]): Try[B] = fa flatMap f
   }
 
-  type Identity[A] = A
-  implicit val identityMonad: Monad[Identity] = new Monad[Identity] {
-    override def point[A](a: => A): Identity[A] = a
-
-    override def bind[A, B](fa: Identity[A])(f: A => Identity[B]): Identity[B] = f(fa)
-  }
-
   class WithValue[B] {
     type Type[A] = (A, B)
   }

@@ -1,12 +1,12 @@
 package net.prover.theorems
 
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, Step, StepContext}
 import net.prover.model.proof.Premise.Simplification
+import net.prover.model.proof.{Premise, Step, StepContext}
 import net.prover.model.{Inference, Substitutions}
-import net.prover.util.FunctorTypes.Identity
+import scalaz.Id.Id
 
-object ClearInference extends CompoundTheoremUpdater[Inference, Identity] {
+object ClearInference extends CompoundTheoremUpdater[Inference, Id] {
 
   override def updateNaming(
     step: Step.Naming,

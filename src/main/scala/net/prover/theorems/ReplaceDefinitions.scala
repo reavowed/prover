@@ -5,9 +5,9 @@ import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, StepContext}
 import net.prover.model.{EntryContext, Inference, Substitutions}
-import net.prover.util.FunctorTypes.Identity
+import scalaz.Id.Id
 
-object ReplaceDefinitions extends CompoundTheoremUpdater[(Map[ExpressionDefinition, ExpressionDefinition], EntryContext), Identity] {
+object ReplaceDefinitions extends CompoundTheoremUpdater[(Map[ExpressionDefinition, ExpressionDefinition], EntryContext), Id] {
   def apply(theorem: Theorem, replacements: Map[ExpressionDefinition, ExpressionDefinition])(implicit entryContext: EntryContext): Theorem = {
     apply(theorem, (replacements, entryContext))
   }
@@ -24,7 +24,7 @@ object ReplaceDefinitions extends CompoundTheoremUpdater[(Map[ExpressionDefiniti
     inference: Inference.Summary,
     stepContext: StepContext,
     parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
-  ): Identity[Inference.Summary] = {
+  ): Inference.Summary = {
     inference.replaceDefinitions(parameters._1)
   }
 

@@ -7,6 +7,7 @@ import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
 import org.springframework.web.bind.annotation._
+import scalaz.Id.Id
 
 @RestController
 @RequestMapping(Array("/books"))
@@ -37,7 +38,7 @@ class BooksController @Autowired() (val bookService: BookService) extends ReactV
     }
     (for {
       _ <- definition.imports.foreach(validateImport).recoverWithBadRequest
-      (newBooks, _) = bookService.modifyBooks[Identity] { (books, _) =>
+      (newBooks, _) = bookService.modifyBooks[Id] { (books, _) =>
         books :+ Book(definition.title, definition.imports, Nil)
       }
     } yield createBooksProps(newBooks)).toResponseEntity

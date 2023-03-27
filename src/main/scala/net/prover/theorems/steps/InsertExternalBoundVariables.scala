@@ -3,9 +3,9 @@ package net.prover.theorems.steps
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step, StepContext}
 import net.prover.model.{Inference, Substitutions}
-import net.prover.util.FunctorTypes.Identity
+import scalaz.Id.Id
 
-object InsertExternalBoundVariables extends CompoundStepUpdater[InsertExternalBoundVariablesRequest, Identity] {
+object InsertExternalBoundVariables extends CompoundStepUpdater[InsertExternalBoundVariablesRequest, Id] {
 
   def apply(steps: Seq[Step], stepContext: StepContext, numberOfParametersToInsert: Int): Seq[Step] = {
     apply(steps.toList, stepContext, InsertExternalBoundVariablesRequest(numberOfParametersToInsert, stepContext))

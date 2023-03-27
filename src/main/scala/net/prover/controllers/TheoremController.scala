@@ -8,6 +8,7 @@ import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
+import scalaz.Id.Id
 
 import scala.util.{Failure, Success}
 
@@ -22,7 +23,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
     @PathVariable("theoremKey") theoremKey: String,
     @RequestBody serializedNewVariables: String
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
       implicit val expressionParsingContext = ExpressionParsingContext.forInference(theorem)(provingContext.entryContext)
       for {
         newVariables <- getVariableDefinitions(serializedNewVariables)
@@ -38,7 +39,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
     @PathVariable("theoremKey") theoremKey: String,
     @RequestBody serializedNewPremises: Seq[String]
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
       implicit val expressionParsingContext = ExpressionParsingContext.forInference(theorem)(provingContext.entryContext)
       for {
         newPremises <- getPremises(serializedNewPremises)
@@ -52,7 +53,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
     @PathVariable("theoremKey") theoremKey: String,
     @RequestBody serializedNewConclusion: String
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
       implicit val expressionParsingContext = ExpressionParsingContext.forInference(theorem)(provingContext.entryContext)
       for {
         newConclusion <- getStatement(serializedNewConclusion, "conclusion")
@@ -67,7 +68,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
     @PathVariable("theoremKey") theoremKey: String,
     @RequestBody(required = false) proofIndexToCopy: java.lang.Integer
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, _) =>
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { (theorem, _) =>
       for {
         newProof <- Option(proofIndexToCopy) match {
           case Some(proofIndex) =>
@@ -86,7 +87,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("proofIndex") proofIndex: Int
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem[Identity](bookKey, chapterKey, theoremKey) { (theorem, _) =>
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { (theorem, _) =>
       if (theorem.proofs.length == 1)
         Failure(BadRequestException("Cannot delete the only proof on a theorem"))
       else

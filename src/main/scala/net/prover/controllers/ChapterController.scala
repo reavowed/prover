@@ -14,6 +14,7 @@ import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
+import scalaz.Id.Id
 
 import scala.util.{Failure, Success, Try}
 
@@ -86,7 +87,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTitle: String
   ): ResponseEntity[_] = {
-    bookService.modifyChapter[Identity](bookKey, chapterKey, (_, _, _, chapter) => {
+    bookService.modifyChapter[Id](bookKey, chapterKey, (_, _, _, chapter) => {
       Success(chapter.copy(title = newTitle))
     }).map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, BookService.getChaptersWithKeys(book).find(_._1.title == newTitle).get._2) }.toResponseEntity
   }
@@ -385,7 +386,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
         } yield (previousEntries ++ entriesToMoveAfter :+ entry) ++ lastEntries
       } orBadRequest "Invalid index" flatten
     }
-    bookService.modifyChapter[Identity](bookKey, chapterKey, (_, _, _, chapter) => {
+    bookService.modifyChapter[Id](bookKey, chapterKey, (_, _, _, chapter) => {
       for {
         (previousEntries, entry, nextEntries) <- BookService.getEntriesWithKeys(chapter).splitWhere(_._2 == entryKey).orNotFound(s"Entry $entryKey")
         updatedEntries <- tryMove(entry._1, previousEntries.map(_._1), nextEntries.map(_._1))
@@ -405,7 +406,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
         .map(_ => chapter.copy(entries = chapter.entries.filter(_ != chapterEntry)))
     }
 
-    bookService.modifyChapter[Identity](bookKey, chapterKey, (books, _, _, chapter) =>
+    bookService.modifyChapter[Id](bookKey, chapterKey, (books, _, _, chapter) =>
       for {
         entry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
         updatedChapter <- deleteEntry(entry, chapter, books)
@@ -414,7 +415,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
   }
 
   def addChapterEntry(bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => Try[ChapterEntry]): Try[(Seq[Book], Definitions, Book, Chapter)] = {
-    bookService.modifyChapter[Identity](bookKey, chapterKey, (books, _, book, chapter) =>
+    bookService.modifyChapter[Id](bookKey, chapterKey, (books, _, book, chapter) =>
       for {
         entry <- f(books, book, chapter)
         _ <- entry.validate().recoverWithBadRequest
