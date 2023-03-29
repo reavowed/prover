@@ -20,7 +20,8 @@ trait SuggestExistingStatementsBase {
     implicit bookService: BookService
   ): Try[Seq[PossibleConclusionWithPremises]] = {
     for {
-      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      stepWithContext <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      stepProvingContext = stepWithContext.stepProvingContext
       premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
       premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
       // First of all, initialise the substitutions with all the existing variables in the theorem
@@ -30,7 +31,7 @@ trait SuggestExistingStatementsBase {
       // Then add any premise-specific variables that might be missing
     } yield {
       implicit val spc = stepProvingContext
-      SubstatementExtractor.getPremiseExtractions(premise.statement).flatMap(getPossibleConclusionWithPremises(_, step, baseSubstitutions))
+      SubstatementExtractor.getPremiseExtractions(premise.statement).flatMap(getPossibleConclusionWithPremises(_, stepWithContext.step, baseSubstitutions))
     }
   }
 

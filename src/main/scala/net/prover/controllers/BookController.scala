@@ -3,8 +3,8 @@ package net.prover.controllers
 import net.prover.books.model.Book
 import net.prover.controllers.BookController.ChapterDefinition
 import net.prover.controllers.models.LinkSummary
+import net.prover.entries.BookWithContext
 import net.prover.model._
-import net.prover.util.FunctorTypes._
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -19,21 +19,24 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
 
   case class ChapterSummary(title: String, url: String, summary: String)
   case class BookProps(title: String, url: String, chapters: Seq[ChapterSummary], previous: Option[LinkSummary], next: Option[LinkSummary])
-  def createBookProps(book: Book, bookKey: String, booksWithKeys: Seq[(Book, String)]): BookProps = {
+  def createBookProps(bookWithContext: BookWithContext): BookProps = {
+    import bookWithContext._
+    import globalContext._
     val index = booksWithKeys.findIndexWhere(_._1 == book).getOrElse(throw new Exception("Book somehow didn't exist"))
-    val previous = booksWithKeys.lift(index - 1).map { case (b, key) => LinkSummary(b.title, key) }
-    val next = booksWithKeys.lift(index + 1).map { case (b, key) => LinkSummary(b.title, key) }
-    val chapterSummaries = BookService.getChaptersWithKeys(book).map { case (c, key) => ChapterSummary(c.title, BookService.getChapterUrl(bookKey, key), c.summary) }
+    val previous = booksWithKeys.lift(index - 1).map(getBookLinkSummary)
+    val next = booksWithKeys.lift(index + 1).map(getBookLinkSummary)
+    val chapterSummaries = BookService.getChaptersWithKeys(book).map { case (chapter, chapterKey) => ChapterSummary(chapter.title, BookService.getChapterUrl(bookKey, chapterKey), chapter.summary) }
     BookProps(book.title, BookService.getBookUrl(bookKey), chapterSummaries, previous, next)
   }
 
+  private def getBookLinkSummary(bookAndKey: (Book, String)): LinkSummary = LinkSummary(bookAndKey._1.title, bookAndKey._2)
+
   @GetMapping(produces = Array("text/html;charset=UTF-8"))
   def getBook(@PathVariable("bookKey") bookKey: String): ResponseEntity[_] = {
-    val booksWithKeys = bookService.getBooksWithKeys
     (for {
-      book <- bookService.findBook(booksWithKeys, bookKey)
+      bookWithContext <- bookService.findBook(bookKey)
     } yield {
-      createReactView("Book", createBookProps(book, bookKey, booksWithKeys))
+      createReactView("Book", createBookProps(bookWithContext))
     }).toResponseEntity
   }
 
@@ -42,11 +45,11 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     @PathVariable("bookKey") bookKey: String,
     @RequestBody chapterDefinition: ChapterDefinition
   ): ResponseEntity[_] = {
-    bookService.modifyBook[Id](bookKey, (_, _, book) => {
+    bookService.modifyBook[Id](bookKey, bookWithContext => {
       val chapter = Chapter(chapterDefinition.title, chapterDefinition.summary, Nil)
-      val newBook = book.copy(chapters = book.chapters :+ chapter)
+      val newBook = bookWithContext.book.copy(chapters = bookWithContext.book.chapters :+ chapter)
       Success(newBook)
-    }).map { case (books, _, book) => createBookProps(book, bookKey, BookService.getBooksWithKeys(books)) }.toResponseEntity
+    }).map(createBookProps).toResponseEntity
   }
 
   @DeleteMapping(value = Array("/{chapterKey}"), produces = Array("application/json;charset=UTF-8"))
@@ -54,11 +57,13 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String
   ): ResponseEntity[_] = {
-    bookService.modifyBook[Id](bookKey, (books, _, book) => {
+    bookService.modifyBook[Id](bookKey, bookWithContext => {
+      import bookWithContext.book
+      import bookWithContext.globalContext.booksWithKeys
       val entriesAfterInThisBook = BookService.getChaptersWithKeys(book).view
         .dropUntil { case (_, key) => key == chapterKey }
         .flatMap(_._1.entries)
-      val entriesInOtherBooks = (BookService.getBooksWithKeys(books).filter(_._1 != book)).view
+      val entriesInOtherBooks = booksWithKeys.filter(_._1 != book).view
         .dropUntil{ case (_, key) => key == bookKey }
         .flatMap(_._1.chapters)
         .flatMap(_.entries)
@@ -68,7 +73,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
       } yield {
         book.copy(chapters = BookService.getChaptersWithKeys(book).filter { case (_, key ) => key != chapterKey }.map(_._1))
       }
-    }).map { case (books, _, book) => createBookProps(book, bookKey, BookService.getBooksWithKeys(books)) }.toResponseEntity
+    }).map(createBookProps).toResponseEntity
   }
 
   @PutMapping(value = Array("/{chapterKey}/index"), produces = Array("application/json;charset=UTF-8"))
@@ -88,12 +93,13 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
         } yield (previousChapters ++ chaptersToMoveAfter :+ chapter) ++ lastChapters
       } orBadRequest "Invalid index" flatten
     }
-    bookService.modifyBook[Id](bookKey, (_, _, book) => {
+    bookService.modifyBook[Id](bookKey, bookWithContext => {
+      import bookWithContext._
       for {
         (previousChapters, chapter, nextChapters) <- BookService.getChaptersWithKeys(book).splitWhere(_._2 == chapterKey).orNotFound(s"Chapter $chapterKey")
         updatedChapters <- tryMove(chapter._1, previousChapters.map(_._1), nextChapters.map(_._1))
       } yield book.copy(chapters = updatedChapters)
-    }).map { case (books, _, book) => createBookProps(book, bookKey, BookService.getBooksWithKeys(books)) }.toResponseEntity
+    }).map(createBookProps).toResponseEntity
   }
 }
 

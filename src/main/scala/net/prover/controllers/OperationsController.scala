@@ -30,8 +30,8 @@ class OperationsController @Autowired() (implicit bookStateManager: BookStateMan
   def clearInference(
     @RequestParam("id") inferenceId: String
   ): Unit = {
-    UpdateEntries(definitions => {
-      val inference = definitions.allInferences.find(_.id == inferenceId).get
+    UpdateEntries(globalContext => {
+      val inference = globalContext.definitions.allInferences.find(_.id == inferenceId).get
       entryWithContext => {
         val updated = entryWithContext.entry.asOptionalInstanceOf[Theorem] match {
           case Some(theorem) =>

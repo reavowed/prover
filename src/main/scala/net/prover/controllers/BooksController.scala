@@ -3,6 +3,7 @@ package net.prover.controllers
 import net.prover.books.model.Book
 import net.prover.controllers.BooksController.BookDefinition
 import net.prover.controllers.models.LinkSummary
+import net.prover.entries.GlobalContext
 import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.{HttpStatus, ResponseEntity}
@@ -14,13 +15,13 @@ import scalaz.Id.Id
 class BooksController @Autowired() (val bookService: BookService) extends ReactViews {
 
   case class BooksProps(books: Seq[LinkSummary])
-  def createBooksProps(books: Seq[Book]): BooksProps = {
-    BooksProps(bookService.getBooksWithKeys.map { case (book, key) => LinkSummary(book.title, BookService.getBookUrl(key)) })
+  def createBooksProps(globalContext: GlobalContext): BooksProps = {
+    BooksProps(globalContext.booksWithKeys.map { case (book, key) => LinkSummary(book.title, BookService.getBookUrl(key)) })
   }
 
   @GetMapping(produces = Array("text/html;charset=UTF-8"))
   def get: ResponseEntity[_] = {
-    new ResponseEntity(createReactView("Books", createBooksProps(bookService.books)), HttpStatus.OK)
+    new ResponseEntity(createReactView("Books", createBooksProps(bookService.globalContext)), HttpStatus.OK)
   }
 
   @GetMapping(value = Array("reloadFromDisk"))
@@ -38,10 +39,10 @@ class BooksController @Autowired() (val bookService: BookService) extends ReactV
     }
     (for {
       _ <- definition.imports.foreach(validateImport).recoverWithBadRequest
-      (newBooks, _) = bookService.modifyBooks[Id] { (books, _) =>
+      newGlobalContext = bookService.modifyBooks[Id] { case GlobalContext(books, _) =>
         books :+ Book(definition.title, definition.imports, Nil)
       }
-    } yield createBooksProps(newBooks)).toResponseEntity
+    } yield createBooksProps(newGlobalContext)).toResponseEntity
   }
 
 

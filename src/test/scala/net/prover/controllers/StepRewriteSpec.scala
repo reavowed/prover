@@ -247,7 +247,7 @@ class StepRewriteSpec extends ControllerSpec {
       implicit val stepContext = createOuterStepContext(Nil)
 
       service.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
-       Success((Step.Target(statement), implicitly[StepProvingContext]))
+       Success(createTargetStepWithContext(statement))
 
       val responseEntity = controller.getSuggestions(
         bookKey,
@@ -553,7 +553,7 @@ class StepRewriteSpec extends ControllerSpec {
       implicit val stepContext = createOuterStepContext(Seq("a", "b")).addStatement(premise, premiseReference)
 
       service.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
-        Success((Step.Target(target), implicitly[StepProvingContext]))
+        Success(createTargetStepWithContext(target))
 
       val responseEntity = controller.getRewritePremiseSuggestions(
         bookKey,

@@ -11,25 +11,18 @@ import scala.util.{Success, Try}
 trait StepUpdater extends TheoremUpdater {
   override def updateTheorem(theoremWithContext: TheoremWithContext): Try[Theorem] = {
     import theoremWithContext._
-    theorem.proofs.zipWithIndex.map { case (proof, proofIndex) =>
-      updateProof(ProofWithContext(book, chapter, theorem, proof, proofIndex, provingContext))
-    }.traverseTry.map(updatedProofs => RecalculateReferences(theorem.copy(proofs = updatedProofs), theoremWithContext.provingContext)._1)
+    proofsWithContext
+      .map(updateProof).traverseTry
+      .map(updatedProofs => RecalculateReferences(theorem.copy(proofs = updatedProofs), theoremWithContext.provingContext)._1)
   }
 
   def updateProof(proofWithContext: ProofWithContext): Try[Proof] = {
-    import proofWithContext._
-    val stepsWithContext = StepsWithContext(book, chapter, theorem, proof, proofIndex, proof.steps, StepProvingContext(theorem.initialStepContext, provingContext))
-    updateSteps(stepsWithContext).map(newSteps => proof.copy(steps = newSteps))
+    updateSteps(proofWithContext.stepsWithContext).map(newSteps => proofWithContext.proof.copy(steps = newSteps))
   }
 
   def updateSteps(stepsWithContext: StepsWithContext): Try[Seq[Step]] = {
     import stepsWithContext._
-    steps.zipWithIndex.mapFoldTry(outerStepProvingContext) { case (currentStepProvingContext, (step, index)) =>
-      val innerStepProvingContext = currentStepProvingContext.updateStepContext(_.atIndex(index))
-      for {
-        newStep <- updateStep(StepWithContext(book, chapter, theorem, proof, proofIndex, step, innerStepProvingContext))
-      } yield (currentStepProvingContext.updateStepContext(_.addStep(newStep, innerStepProvingContext.stepContext.stepReference)) -> newStep)
-    }.map(_._2)
+    steps.mapReduceTryWithPrevious[Step]{ case (before, step) => updateStep(stepsWithContext.atChild(before, step)) }
   }
 
   def updateStep(stepWithContext: StepWithContext): Try[Step] = {

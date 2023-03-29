@@ -23,8 +23,8 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
     @PathVariable("theoremKey") theoremKey: String,
     @RequestBody serializedNewVariables: String
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      implicit val expressionParsingContext = ExpressionParsingContext.forInference(theorem)(provingContext.entryContext)
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { theoremWithContext =>
+      import theoremWithContext._
       for {
         newVariables <- getVariableDefinitions(serializedNewVariables)
         _ <- (newVariables.statements.length == theorem.variableDefinitions.statements.length).orBadRequest("Cannot change number of statement variables")
@@ -39,8 +39,8 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
     @PathVariable("theoremKey") theoremKey: String,
     @RequestBody serializedNewPremises: Seq[String]
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      implicit val expressionParsingContext = ExpressionParsingContext.forInference(theorem)(provingContext.entryContext)
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { theoremWithContext =>
+      import theoremWithContext._
       for {
         newPremises <- getPremises(serializedNewPremises)
       } yield theorem.copy(premises = newPremises)
@@ -53,8 +53,8 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
     @PathVariable("theoremKey") theoremKey: String,
     @RequestBody serializedNewConclusion: String
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { (theorem, provingContext) =>
-      implicit val expressionParsingContext = ExpressionParsingContext.forInference(theorem)(provingContext.entryContext)
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { theoremWithContext =>
+      import theoremWithContext._
       for {
         newConclusion <- getStatement(serializedNewConclusion, "conclusion")
       } yield theorem.copy(conclusion = newConclusion)
@@ -68,7 +68,8 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
     @PathVariable("theoremKey") theoremKey: String,
     @RequestBody(required = false) proofIndexToCopy: java.lang.Integer
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { (theorem, _) =>
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { theoremWithContext =>
+      import theoremWithContext._
       for {
         newProof <- Option(proofIndexToCopy) match {
           case Some(proofIndex) =>
@@ -87,7 +88,8 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
     @PathVariable("theoremKey") theoremKey: String,
     @PathVariable("proofIndex") proofIndex: Int
   ): ResponseEntity[_] = {
-    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { (theorem, _) =>
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { theoremWithContext =>
+      import theoremWithContext._
       if (theorem.proofs.length == 1)
         Failure(BadRequestException("Cannot delete the only proof on a theorem"))
       else

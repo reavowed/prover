@@ -42,6 +42,14 @@ object FunctorTypes {
     override def map[A, C](input: F[(A, B)])(f: A => C): F[(C, B)] = input.map(_.mapLeft(f))
   }
 
+  class TryF[F[_]] {
+    type Type[A] = Try[F[A]]
+  }
+
+  implicit def TryFFunctor[F[_] : Functor]: Functor[TryF[F]#Type] = new Functor[TryF[F]#Type] {
+    override def map[A, B](input: Try[F[A]])(f: A => B): Try[F[B]] = input.map(_.map(f))
+  }
+
   class TryFWithValue[F[_], B] {
     type Type[A] = Try[F[(A, B)]]
   }

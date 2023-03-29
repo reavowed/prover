@@ -33,8 +33,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     direction: Direction
   ): ResponseEntity[_] = {
 
-    def withJoiner[T <: Expression, TJoiner <: BinaryJoiner[T] : ClassTag](targetConnective: BinaryJoiner[T], targetLhs: T, targetRhs: T, stepProvingContext: StepProvingContext): Try[Seq[PossibleInference]] = {
-      implicit val spc = stepProvingContext
+    def withJoiner[T <: Expression, TJoiner <: BinaryJoiner[T] : ClassTag](targetConnective: BinaryJoiner[T], targetLhs: T, targetRhs: T)(implicit stepProvingContext: StepProvingContext): Try[Seq[PossibleInference]] = {
       val targetSource = direction.getSource(targetLhs, targetRhs)
       def getSubstitutions(extractionResult: Statement): Option[Substitutions.Possible] = {
         for {
@@ -59,11 +58,11 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
       }
       Success(getPossibleInferences(stepProvingContext.provingContext.entryContext.allInferences, searchText, getPossibleInference, getConclusionComplexity))
     }
-
-    (for {
-      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      possibleInferences <- withRelation(step.statement, withJoiner[Statement, BinaryConnective](_, _, _, stepProvingContext), withJoiner[Term, BinaryRelation](_, _, _, stepProvingContext))(stepProvingContext)
-    } yield possibleInferences).toResponseEntity
+    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      .flatMap(stepWithContext => {
+        import stepWithContext._
+        withRelation(step.statement, withJoiner[Statement, BinaryConnective], withJoiner[Term, BinaryRelation])
+      }).toResponseEntity
   }
 
   @GetMapping(value = Array("/suggestInferencesForChainingFromLeft"), produces = Array("application/json;charset=UTF-8"))
@@ -107,11 +106,12 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
         } yield substitutions)))
     }
     (for {
-      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      stepWithContext <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      stepProvingContext = stepWithContext.stepProvingContext
       premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
       premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
       baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement)(stepProvingContext.stepContext).orBadRequest(s"Somehow failed to calculate base substitutions for premise '${premise.statement}'")
-      result <- withRelation(step.statement, getPremises(_, _, _, premise.statement, baseSubstitutions)(stepProvingContext), getPremises(_, _, _, premise.statement, baseSubstitutions)(stepProvingContext))(stepProvingContext)
+      result <- withRelation(stepWithContext.step.statement, getPremises(_, _, _, premise.statement, baseSubstitutions)(stepProvingContext), getPremises(_, _, _, premise.statement, baseSubstitutions)(stepProvingContext))(stepProvingContext)
     } yield result).toResponseEntity
   }
 
@@ -289,8 +289,9 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     }
 
     (for {
-      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      result <- withRelation(step.statement, (c, _, _) => forConnective(c)(stepProvingContext), (r, _, _) => forRelation(r)(stepProvingContext))(stepProvingContext)
+      stepWithContext <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      stepProvingContext = stepWithContext.stepProvingContext
+      result <- withRelation(stepWithContext.step.statement, (c, _, _) => forConnective(c)(stepProvingContext), (r, _, _) => forRelation(r)(stepProvingContext))(stepProvingContext)
     } yield result).toResponseEntity
   }
 

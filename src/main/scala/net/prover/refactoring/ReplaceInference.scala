@@ -16,9 +16,9 @@ object ReplaceInference {
     newInferenceId: String)(
     implicit bookStateManager: BookStateManager
   ): Unit = {
-    UpdateTheorems(definitions => {
-      val oldInference = definitions.allInferences.find(_.id == oldInferenceId).get
-      val newInference = definitions.allInferences.find(_.id == newInferenceId).get
+    UpdateTheorems(globalContext => {
+      val oldInference = globalContext.definitions.allInferences.find(_.id == oldInferenceId).get
+      val newInference = globalContext.definitions.allInferences.find(_.id == newInferenceId).get
       val replacer = StepInferenceReplacer(oldInference, newInference)
       replacer.updateTheorem(_).get
     })
@@ -28,7 +28,6 @@ object ReplaceInference {
     override def updateAssertion(step: Step.Assertion, stepWithContext: StepWithContext): Option[Try[Step]] = {
       import step._
       import stepWithContext._
-      implicit val spc = stepProvingContext
       if (inference == oldInference) {
         val substitutionsOption = (for {
           inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(newInference.id)

@@ -1,8 +1,12 @@
 package net.prover
 
-import net.prover.model.VariableDefinitions
+import net.prover.entries.{ProofWithContext, StepsWithContext, TypedStepWithContext}
+import net.prover.model.TestDefinitions.{entryContextToProvingContext, mock, theStubbed}
+import net.prover.model.{EntryContext, VariableDefinitions}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.StepContext
+import net.prover.model.proof.{Step, StepContext, StepReference}
+
+import scala.reflect.ClassTag
 
 trait StepContextHelper {
 
@@ -30,5 +34,19 @@ trait StepContextHelper {
   def createOuterStepContext(boundVariables: Seq[String])(implicit variableDefinitions: VariableDefinitions): StepContext = {
     val baseContext = createBaseStepContext(Nil, boundVariables)
     outerStepPath.foldLeft(baseContext) { case (context, index) => context.atIndex(index) }
+  }
+
+  def createTargetStepWithContext(
+    statement: Statement)(
+    implicit entryContext: EntryContext,
+    stepContext: StepContext
+  ): TypedStepWithContext[Step.Target] = {
+    val stepsWithContext = mock[StepsWithContext]
+    stepsWithContext.provingContext returns entryContextToProvingContext(entryContext)
+    TypedStepWithContext(
+      Step.Target(statement),
+      stepIndex,
+      stepContext,
+      stepsWithContext)
   }
 }

@@ -1,6 +1,7 @@
 package net.prover.model
 
 import net.prover.books.model.{Book, EntryParsingContext}
+import net.prover.entries.{ChapterWithContext, EntryWithContext}
 import net.prover.model.definitions._
 import net.prover.model.entries._
 import net.prover.model.expressions._
@@ -112,14 +113,16 @@ object EntryContext {
   def forBookExclusive(allBooks: Seq[Book], book: Book): EntryContext = {
     forBooks(Book.getDependencies(book.imports, allBooks))
   }
-  def forChapterExclusive(allBooks: Seq[Book], book: Book, chapter: Chapter): EntryContext = {
+  def forChapterExclusive(chapterWithContext: ChapterWithContext): EntryContext = {
+    import chapterWithContext._
     forBookExclusive(allBooks, book).addEntries(book.chapters.until(chapter).flatMap(_.entries))
   }
-  def forChapterInclusive(allBooks: Seq[Book], book: Book, chapter: Chapter): EntryContext = {
-    forChapterExclusive(allBooks, book, chapter).addEntries(chapter.entries)
+  def forChapterInclusive(chapterWithContext: ChapterWithContext): EntryContext = {
+    forChapterExclusive(chapterWithContext).addEntries(chapterWithContext.chapter.entries)
   }
-  def forEntry(allBooks: Seq[Book], book: Book, chapter: Chapter, entry: ChapterEntry): EntryContext = {
-    forChapterExclusive(allBooks, book, chapter).addEntries(chapter.entries.until(entry))
+  def forEntry(entryWithContext: EntryWithContext): EntryContext = {
+    import entryWithContext._
+    forChapterExclusive(chapterWithContext).addEntries(chapter.entries.until(entry))
   }
 
   implicit def fromProvingContext(implicit provingContext: ProvingContext): EntryContext = provingContext.entryContext

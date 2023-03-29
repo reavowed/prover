@@ -28,9 +28,11 @@ class StepProvingSpec extends ControllerSpec {
       implicit val service = mock[BookService]
       val controller = new StepProvingController
 
-      service.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns Success((
-        Step.Target(Negation(Equals(a, b))),
-        entryContextAndStepContextToStepProvingContext(defaultEntryContext, createOuterStepContext(Nil))))
+      service.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns Success(
+        createTargetStepWithContext(
+          Negation(Equals(a, b)))(
+          defaultEntryContext,
+          createOuterStepContext(Nil)))
 
       controller.getPossibleInferencesForCurrentTarget(
         bookKey,

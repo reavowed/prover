@@ -2,53 +2,51 @@ package net.prover.refactoring
 
 import net.prover.books.management.{BookStateManager, UpdateBooks}
 import net.prover.books.model.Book
-import net.prover.entries.EntryWithContext
+import net.prover.entries.{BookWithContext, ChapterWithContext, EntryWithContext, GlobalContext}
 import net.prover.model._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.ChapterEntry
 import scalaz.Id.Id
 
+import scala.annotation.tailrec
+
 object UpdateEntries {
   def apply(
-    getUpdateOperation: Definitions => EntryWithContext => ChapterEntry)(
+    getUpdateOperation: GlobalContext => EntryWithContext => ChapterEntry)(
     implicit bookStateManager: BookStateManager
   ): Unit = {
-    apply[Unit]((), definitions => {
-      val updateOperation = getUpdateOperation(definitions)
-      (entryWithContext, _) => (updateOperation(entryWithContext), ())
+    apply[Unit]((), globalContext => { case (entryWithContext, _) =>
+      (getUpdateOperation(globalContext)(entryWithContext), ())
     })
   }
 
   def apply[TMetadata](
     initial: TMetadata,
-    getUpdateOperation: Definitions => (EntryWithContext, TMetadata) => (ChapterEntry, TMetadata))(
+    getUpdateOperation: GlobalContext => (EntryWithContext, TMetadata) => (ChapterEntry, TMetadata))(
     implicit bookStateManager: BookStateManager
   ): Unit = {
     println("Beginning update operation")
-    UpdateBooks[Id]((books, definitions) => {
-      val updateOperation = getUpdateOperation(definitions)
-
-      def modifyBook(changedInferences: TMetadata, previousBooks: Seq[Book], book: Book): (TMetadata, Book) = {
+    UpdateBooks[Id](globalContext => {
+      val updateOperation = getUpdateOperation(globalContext)
+      def modifyBook(metadata: TMetadata, previousBooks: Seq[Book], bookWithContext: BookWithContext): (TMetadata, Book) = {
+        import bookWithContext._
         println("- " + book.title)
-        val entryContext = EntryContext.forBookExclusive(previousBooks, book)
-        book.chapters.mapFold((changedInferences, entryContext))(modifyChapter(book, _, _))
-          .mapRight(chapters => book.copy(chapters = chapters))
-          .mapLeft(_._1)
+        val (newMetadata, newChapters) = book.chapters.mapFoldWithPrevious[TMetadata, Chapter](metadata) { case (metadata, updated, chapter) =>
+          modifyChapter(metadata, bookWithContext.copy(globalContext = GlobalContext(previousBooks.toList, definitions), book = book.copy(chapters = updated :+ chapter)).getChapter(chapter))
+        }
+        (newMetadata, book.copy(chapters = newChapters))
       }
 
-      def modifyChapter(book: Book, tuple: (TMetadata, EntryContext), chapter: Chapter): ((TMetadata, EntryContext), Chapter) = {
+      def modifyChapter(metadata: TMetadata, chapterWithContext: ChapterWithContext): (TMetadata, Chapter) = {
+        import chapterWithContext._
         println("  - " + chapter.title)
-        chapter.entries.mapFold(tuple)(modifyEntry(book, chapter, _, _))
-          .mapRight(entries => chapter.copy(entries = entries))
+        val (newMetadata, newEntries) = chapter.entries.mapFoldWithPrevious[TMetadata, ChapterEntry](metadata) { case (metadata, updated, entry) =>
+          updateOperation(chapterWithContext.copy(chapter = chapter.copy(entries = updated :+ entry)).getEntry(entry), metadata).swap
+        }
+        (newMetadata, chapter.copy(entries = newEntries))
       }
 
-      def modifyEntry(book: Book, chapter: Chapter, tuple: (TMetadata, EntryContext), chapterEntry: ChapterEntry): ((TMetadata, EntryContext), ChapterEntry) = {
-        val (metadata, entryContext) = tuple
-        val (newEntry, newMetadata) = updateOperation(EntryWithContext(book, chapter, chapterEntry, entryContext), metadata)
-        ((newMetadata, entryContext.addEntry(newEntry)), newEntry)
-      }
-
-      books.mapFoldWithPrevious(initial)(modifyBook)._2
+      globalContext.booksWithContexts.mapFoldWithPrevious(initial)(modifyBook)._2
     })
     println("Update operation complete")
   }

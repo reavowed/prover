@@ -1,16 +1,14 @@
 package net.prover.controllers
 
-import net.prover.books.model.Book
 import net.prover.controllers.ChapterController._
 import net.prover.controllers.models.ChapterProps._
 import net.prover.controllers.models._
+import net.prover.entries.{ChapterWithContext, EntryWithContext}
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
-import net.prover.model.definitions.Definitions
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step
-import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
@@ -22,12 +20,13 @@ import scala.util.{Failure, Success, Try}
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}"))
 class ChapterController @Autowired() (val bookService: BookService) extends UsageFinder with ParameterValidation with ReactViews {
 
-  private def getChapterProps(books: Seq[Book], definitions: Definitions, book: Book, bookKey: String, chapter: Chapter, chapterKey: String): Map[String, AnyRef] = {
-    val chaptersWithKeys = BookService.getChaptersWithKeys(book)
+  private def getChapterProps(chapterWithContext: ChapterWithContext): Map[String, AnyRef] = {
+    import chapterWithContext._
+    val chaptersWithKeys = chapterWithContext.bookWithContext.chaptersWithKeys
     val index = chaptersWithKeys.findIndexWhere(_._1 == chapter).getOrElse(throw new Exception("Book somehow didn't exist"))
     val previous = chaptersWithKeys.lift(index - 1).map { case (c, key) => LinkSummary(c.title, BookService.getChapterUrl(bookKey, key)) }
     val next = chaptersWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, BookService.getChapterUrl(bookKey, key)) }
-    implicit val entryContext = EntryContext.forChapterInclusive(books, book, chapter)
+    implicit val entryContext = EntryContext.forChapterInclusive(chapterWithContext)
 
     val entrySummaries = BookService.getEntriesWithKeys(chapter)
       .map(_.mapRight(key => BookService.getEntryUrl(bookKey, chapterKey, key)))
@@ -72,12 +71,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
 
   @GetMapping(produces = Array("text/html;charset=UTF-8"))
   def getChapter(@PathVariable("bookKey") bookKey: String, @PathVariable("chapterKey") chapterKey: String): ResponseEntity[_] = {
-    val (books, definitions) = bookService.booksAndDefinitions
     (for {
-      book <- bookService.findBook(books, bookKey)
-      chapter <- bookService.findChapter(book, chapterKey)
+      chapterWithContext <- bookService.findChapter(bookKey, chapterKey)
     } yield {
-      createReactView("Chapter", getChapterProps(books, definitions, book, bookKey, chapter, chapterKey))
+      createReactView("Chapter", getChapterProps(chapterWithContext))
     }).toResponseEntity
   }
 
@@ -87,9 +84,9 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTitle: String
   ): ResponseEntity[_] = {
-    bookService.modifyChapter[Id](bookKey, chapterKey, (_, _, _, chapter) => {
-      Success(chapter.copy(title = newTitle))
-    }).map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, BookService.getChaptersWithKeys(book).find(_._1.title == newTitle).get._2) }.toResponseEntity
+    bookService.modifyChapter[Id](bookKey, chapterKey, chapterWithContext => {
+      Success(chapterWithContext.chapter.copy(title = newTitle))
+    }).map{ getChapterProps }.toResponseEntity
   }
 
   @PostMapping(value = Array("/theorems"), produces = Array("application/json;charset=UTF-8"))
@@ -98,8 +95,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTheoremDefinition: NewTheoremModel
   ): ResponseEntity[_] = {
-    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+    addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
       for {
         name <- getMandatoryString(newTheoremDefinition.name, "Theorem name")
         variableDefinitions <- getVariableDefinitions(newTheoremDefinition.variableDefinitions)
@@ -120,7 +117,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
             Success(newTheorem)
         }
       } yield newTheorem
-    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    }.map(getChapterProps).toResponseEntity
   }
 
   @PostMapping(value = Array("/statementDefinitions"), produces = Array("application/json;charset=UTF-8"))
@@ -129,8 +126,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newStatementDefinition: NewStatementDefinitionModel
   ): ResponseEntity[_] = {
-    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+    addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newStatementDefinition.name)
       val shorthand = getOptionalString(newStatementDefinition.shorthand)
       val attributes = getWords(newStatementDefinition.attributes)
@@ -152,7 +149,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           shorthand,
           attributes)
       } yield newStatementDefinition
-    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    }.map(getChapterProps).toResponseEntity
   }
 
   @PostMapping(value = Array("/termDefinitions"), produces = Array("application/json;charset=UTF-8"))
@@ -161,8 +158,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTermDefinition: NewTermDefinitionModel
   ): ResponseEntity[_] = {
-    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+    addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newTermDefinition.name)
       val shorthand = getOptionalString(newTermDefinition.shorthand)
       val attributes = getWords(newTermDefinition.attributes)
@@ -189,7 +186,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           attributes,
           Nil)
       } yield newTerm
-    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    }.map(getChapterProps).toResponseEntity
   }
 
   @PostMapping(value = Array("/typeDefinitions"), produces = Array("application/json;charset=UTF-8"))
@@ -198,8 +195,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTypeDefinition: NewTypeDefinitionModel
   ): ResponseEntity[_] = {
-    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+    addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newTypeDefinition.name)
       for {
         symbol <- getMandatoryString(newTypeDefinition.symbol, "Symbol")
@@ -214,7 +211,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           name,
           definition)
       } yield newTypeDefinition
-    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    }.map(getChapterProps).toResponseEntity
   }
 
   @PostMapping(value = Array("/typeQualifierDefinitions"), produces = Array("application/json;charset=UTF-8"))
@@ -223,8 +220,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTypeQualifierDefinition: NewTypeQualifierDefinitionModel
   ): ResponseEntity[_] = {
-    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+    addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newTypeQualifierDefinition.name)
       for {
         symbol <- getMandatoryString(newTypeQualifierDefinition.symbol, "Symbol")
@@ -241,7 +238,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           definition,
           conjunctionDefinition)
       } yield newTypeQualifierDefinition
-    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    }.map(getChapterProps).toResponseEntity
   }
 
   @PostMapping(value = Array("/propertyDefinitions"), produces = Array("application/json;charset=UTF-8"))
@@ -250,8 +247,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newPropertyDefinition: NewPropertyDefinitionModel
   ): ResponseEntity[_] = {
-    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+    addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newPropertyDefinition.name)
       for {
         symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")
@@ -269,7 +266,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           name,
           definingStatement)
       } yield newPropertyDefinition
-    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    }.map(getChapterProps).toResponseEntity
   }
 
   @PostMapping(value = Array("/relatedObjectDefinitions"), produces = Array("application/json;charset=UTF-8"))
@@ -278,8 +275,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newRelatedObjectDefinition: NewRelatedObjectDefinitionModel
   ): ResponseEntity[_] = {
-    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+    addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newRelatedObjectDefinition.name)
       for {
         symbol <- getMandatoryString(newRelatedObjectDefinition.symbol, "Symbol")
@@ -298,7 +295,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           name,
           definingStatement)
       } yield newPropertyDefinition
-    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    }.map(getChapterProps).toResponseEntity
   }
 
   @PostMapping(value = Array("/typeRelationDefinitions"), produces = Array("application/json;charset=UTF-8"))
@@ -307,8 +304,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newTypeRelationDefinition: NewTypeRelationDefinitionModel
   ): ResponseEntity[_] = {
-    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+    addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newTypeRelationDefinition.name)
       for {
         symbol <- getMandatoryString(newTypeRelationDefinition.symbol, "Symbol")
@@ -331,7 +328,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           definition,
           conjunctionDefinition)
       } yield newPropertyDefinition
-    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    }.map(getChapterProps).toResponseEntity
   }
 
   @PostMapping(value = Array("/standalonePropertyDefinitions"), produces = Array("application/json;charset=UTF-8"))
@@ -340,8 +337,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newPropertyDefinition: NewStandalonePropertyDefinitionModel
   ): ResponseEntity[_] = {
-    addChapterEntry(bookKey, chapterKey) { (books, book, chapter) =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(books, book, chapter)
+    addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
+      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newPropertyDefinition.name)
       for {
         symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")
@@ -354,7 +351,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           name,
           definition)
       } yield newPropertyDefinition
-    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    }.map(getChapterProps).toResponseEntity
   }
 
   @PostMapping(value = Array("/comments"), produces = Array("application/json;charset=UTF-8"))
@@ -363,9 +360,9 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newCommentText: String
   ): ResponseEntity[_] = {
-    addChapterEntry(bookKey, chapterKey) { (_, _, _) =>
+    addChapterEntry(bookKey, chapterKey) { _ =>
       Option(newCommentText.trim).filter(_.nonEmpty).orBadRequest("Comment text must be provided").map(Comment(_))
-    }.map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    }.map(getChapterProps).toResponseEntity
   }
 
   @PutMapping(value = Array("/{entryKey}/index"), produces = Array("application/json;charset=UTF-8"))
@@ -386,12 +383,12 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
         } yield (previousEntries ++ entriesToMoveAfter :+ entry) ++ lastEntries
       } orBadRequest "Invalid index" flatten
     }
-    bookService.modifyChapter[Id](bookKey, chapterKey, (_, _, _, chapter) => {
+    bookService.modifyChapter[Id](bookKey, chapterKey, chapterWithContext => {
       for {
-        (previousEntries, entry, nextEntries) <- BookService.getEntriesWithKeys(chapter).splitWhere(_._2 == entryKey).orNotFound(s"Entry $entryKey")
+        (previousEntries, entry, nextEntries) <- chapterWithContext.entriesWithKeys.splitWhere(_._2 == entryKey).orNotFound(s"Entry $entryKey")
         updatedEntries <- tryMove(entry._1, previousEntries.map(_._1), nextEntries.map(_._1))
-      } yield chapter.copy(entries = updatedEntries)
-    }).map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+      } yield chapterWithContext.chapter.copy(entries = updatedEntries)
+    }).map(getChapterProps).toResponseEntity
   }
 
   @DeleteMapping(value = Array("/{entryKey}"), produces = Array("application/json;charset=UTF-8"))
@@ -400,26 +397,27 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String
   ): ResponseEntity[_] = {
-    def deleteEntry(chapterEntry: ChapterEntry, chapter: Chapter, books: Seq[Book]): Try[Chapter] = {
-      findUsage(books, chapterEntry)
+    def deleteEntry(entryWithContext: EntryWithContext): Try[Chapter] = {
+      import entryWithContext._
+      findUsage(allBooks, entry)
         .badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
-        .map(_ => chapter.copy(entries = chapter.entries.filter(_ != chapterEntry)))
+        .map(_ => chapter.copy(entries = chapter.entries.filter(_ != entry)))
     }
 
-    bookService.modifyChapter[Id](bookKey, chapterKey, (books, _, _, chapter) =>
+    bookService.modifyChapter[Id](bookKey, chapterKey, chapterWithContext =>
       for {
-        entry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
-        updatedChapter <- deleteEntry(entry, chapter, books)
+        entryWithContext <- chapterWithContext.getEntry(entryKey)
+        updatedChapter <- deleteEntry(entryWithContext)
       } yield updatedChapter
-    ).map{ case (books, definitions, book, chapter) => getChapterProps(books, definitions, book, bookKey, chapter, chapterKey) }.toResponseEntity
+    ).map(getChapterProps).toResponseEntity
   }
 
-  def addChapterEntry(bookKey: String, chapterKey: String)(f: (Seq[Book], Book, Chapter) => Try[ChapterEntry]): Try[(Seq[Book], Definitions, Book, Chapter)] = {
-    bookService.modifyChapter[Id](bookKey, chapterKey, (books, _, book, chapter) =>
+  def addChapterEntry(bookKey: String, chapterKey: String)(f: ChapterWithContext => Try[ChapterEntry]): Try[ChapterWithContext] = {
+    bookService.modifyChapter[Id](bookKey, chapterKey, chapterWithContext =>
       for {
-        entry <- f(books, book, chapter)
+        entry <- f(chapterWithContext)
         _ <- entry.validate().recoverWithBadRequest
-      } yield chapter.addEntry(entry)
+      } yield chapterWithContext.chapter.addEntry(entry)
     )
   }
 }

@@ -1,25 +1,21 @@
 package net.prover.refactoring
 
 import net.prover.books.management.BookStateManager
-import net.prover.entries.TheoremWithContext
-import net.prover.model.ProvingContext
-import net.prover.model.definitions.Definitions
+import net.prover.entries.{GlobalContext, TheoremWithContext}
 import net.prover.model.entries.Theorem
-
-import scala.util.Try
 
 object UpdateTheorems {
   def apply(
-    getUpdateOperation: Definitions => TheoremWithContext => Theorem)(
+    getUpdateOperation: GlobalContext => TheoremWithContext => Theorem)(
     implicit bookStateManager: BookStateManager
   ): Unit = {
-    UpdateEntries(definitions => {
-      val updateOperation = getUpdateOperation(definitions)
+    UpdateEntries(globalContext => {
+      val updateOperation = getUpdateOperation(globalContext)
       entryWithContext => {
         import entryWithContext._
         entry match {
-          case theorem: Theorem =>
-            updateOperation(TheoremWithContext(book, chapter, theorem, ProvingContext(entryContext, definitions)))
+          case _: Theorem =>
+            updateOperation(entryWithContext.asInstanceOf[TheoremWithContext])
           case other =>
             other
         }

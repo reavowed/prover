@@ -1,9 +1,17 @@
 package net.prover.controllers.models
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover.entries.TheoremWithContext
 import net.prover.model.entries.Theorem
 import net.prover.model.proof.Step
 
-case class TheoremUpdateProps(theorem: Theorem, newInferences: Map[String, InferenceSummary], stepsWithReferenceChanges: Seq[List[StepWithReferenceChange]])
+@JsonIgnoreProperties(Array("theoremWithContext"))
+case class TheoremUpdateProps(
+  theorem: Theorem,
+  theoremWithContext: TheoremWithContext,
+  newInferences: Map[String, InferenceSummary],
+  stepsWithReferenceChanges: Seq[List[StepWithReferenceChange]])
+
 case class ProofUpdateProps[T <: StepUpdateProps](stepUpdates: T, newInferences: Map[String, InferenceSummary], stepsWithReferenceChanges: Seq[StepWithReferenceChange]) {
   def withNewStepUpdateProps[S <: StepUpdateProps](newUpdateProps: S): ProofUpdateProps[S] = {
     ProofUpdateProps(newUpdateProps, newInferences, stepsWithReferenceChanges)

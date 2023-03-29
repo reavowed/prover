@@ -61,17 +61,15 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     @RequestParam("pathsAlreadyRewritten") pathsAlreadyRewrittenText: String
   ): ResponseEntity[_] = {
     (for {
-      (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      expression <- Expression.parser(stepProvingContext).parseFromString(serializedExpression, "expression").recoverWithBadRequest
+      stepWithContext <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      expression <- Expression.parser(stepWithContext.stepProvingContext).parseFromString(serializedExpression, "expression").recoverWithBadRequest
     } yield {
-      implicit val spc = stepProvingContext
+      implicit val stepProvingContext = stepWithContext.stepProvingContext
 
       val replacementPossibilities = getRewritePossibilities(expression, pathsAlreadyRewrittenText)
 
-      case class InferenceRewriteSuggestionWithMaximumMatchingComplexity(inferenceRewriteSuggestion: InferenceRewriteSuggestion, maximumMatchingComplexity: Int)
-
       def getRewritePath(termRewriteInference: TermRewriteInference, replacementPossibility: RewritePossibility[_ <: Expression]): Option[(Term, Term, Seq[Int])] = {
-        import replacementPossibility._
+        import replacementPossibility.{term, unwrappers, depth, path}
         for {
           substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
           (_, substitutionsAfterPremises) <- DerivationFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.premises, substitutionsAfterLhs)(StepProvingContext.updateStepContext(unwrappers.enhanceStepContext))
@@ -130,11 +128,11 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     @RequestParam("pathsAlreadyRewritten") pathsAlreadyRewrittenText: String
   ): ResponseEntity[_] = {
     (for {
-      (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      expression <- Expression.parser(stepProvingContext).parseFromString(serializedExpression, "expression").recoverWithBadRequest
-      equality <- stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
+      stepWithContext <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      expression <- Expression.parser(stepWithContext.stepProvingContext).parseFromString(serializedExpression, "expression").recoverWithBadRequest
+      equality <- stepWithContext.stepProvingContext.provingContext.equalityOption.orBadRequest("No equality found")
     } yield {
-      implicit val spc = stepProvingContext
+      implicit val stepProvingContext = stepWithContext.stepProvingContext
       val replacementPossibilities = getRewritePossibilities(expression, pathsAlreadyRewrittenText)
       val premisesWithReferencedLines = stepProvingContext.allPremises.map(p => (p.statement, Some(p.referencedLine)))
       val extractedPremises = stepProvingContext.knownStatementsFromPremises.map(_.statement).filter(s => !premisesWithReferencedLines.exists(_._1 == s)).map(_ -> None)
@@ -157,8 +155,8 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     (for {
-      (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-    } yield stepProvingContext.allPremises).toResponseEntity
+      stepWithContext <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+    } yield stepWithContext.stepProvingContext.allPremises).toResponseEntity
   }
 
   def getRewriteStepForInference[TExpression <: Expression with TypedExpression[TExpression] : RewriteMethods](

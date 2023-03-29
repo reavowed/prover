@@ -11,7 +11,6 @@ import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
-import scalaz.Id.Id
 
 import scala.util.{Failure, Success, Try}
 
@@ -25,18 +24,13 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("entryKey") entryKey: String
   ): ResponseEntity[_] = {
-    val (books, definitions) = bookService.booksAndDefinitions
     (for {
-      book <- bookService.findBook(books, bookKey)
-      chapter <- bookService.findChapter(book, chapterKey)
-      entriesWithKeys = BookService.getEntriesWithKeys(chapter).mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[ChapterEntry.Standalone]))
-      entry <- bookService.findEntry[ChapterEntry](entriesWithKeys, entryKey)
-      entryContext = EntryContext.forEntry(books, book, chapter, entry).addEntry(entry)
-      (viewName, baseProps) <- entry match {
+      entryWithContext <- bookService.findEntry[ChapterEntry](bookKey, chapterKey, entryKey)
+      (viewName, baseProps) <- entryWithContext.entry match {
         case axiom: Axiom =>
           Success(("Axiom", Map("axiom" -> axiom)))
         case theorem: Theorem =>
-          Success(("Theorem", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(theorem.referencedInferenceIds, books, definitions))))
+          Success(("Theorem", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(theorem.referencedInferenceIds, entryWithContext.globalContext))))
         case statementDefinition: StatementDefinitionEntry =>
           Success(("StatementDefinition", Map("definition" -> statementDefinition)))
         case termDefinition: TermDefinitionEntry =>
@@ -54,18 +48,18 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
         case standalonePropertyDefinition: StandalonePropertyDefinition =>
           Success(("StandalonePropertyDefinition", Map("definition" -> standalonePropertyDefinition)))
         case _ =>
-          Failure(BadRequestException(s"Cannot view ${entry.getClass.getSimpleName}"))
+          Failure(BadRequestException(s"Cannot view ${entryWithContext.entry.getClass.getSimpleName}"))
       }
     } yield {
-      val provingContext = ProvingContext(entryContext, definitions)
+      import entryWithContext._
       val entriesWithKeys = BookService.getEntriesWithKeys(chapter).mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[ChapterEntry.Standalone]))
       val index = entriesWithKeys.findIndexWhere(_._1 == entry).getOrElse(throw new Exception("Entry somehow didn't exist"))
       val previous = entriesWithKeys.lift(index - 1).map { case (c, key) => LinkSummary(c.title, key) }
       val next = entriesWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, key) }
       createReactView(viewName, baseProps ++ Map(
-        "url" -> BookService.getEntryUrl(bookKey, chapterKey, entryKey),
-        "bookLink" -> LinkSummary(book.title, BookService.getBookUrl(bookKey)),
-        "chapterLink" -> LinkSummary(chapter.title, BookService.getChapterUrl(bookKey, chapterKey)),
+        "url" -> BookService.getEntryUrl(entryWithContext),
+        "bookLink" -> LinkSummary(book.title, BookService.getBookUrl(chapterWithContext.bookWithContext)),
+        "chapterLink" -> LinkSummary(chapter.title, BookService.getChapterUrl(chapterWithContext)),
         "previous" -> previous,
         "next" -> next,
         "usages" -> getInferenceUsages(entry),
@@ -270,45 +264,43 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
     }
   }
 
-  private def modifyEntryWithReplacement(oldEntry: ChapterEntry, newEntry: ChapterEntry): Seq[Book] = {
-    bookService.modifyBooks[Id]((books, _) => {
-      books.mapFoldWithPrevious[(Map[ChapterEntry, ChapterEntry], Map[ExpressionDefinition, ExpressionDefinition]), Book]((Map.empty, Map.empty)) { case ((chapterEntries, expressionDefinitions), previousBooks, bookToModify) =>
-        bookToModify.chapters.mapFold((EntryContext.forBookExclusive(previousBooks, bookToModify), chapterEntries, expressionDefinitions)) { case ((entryContextForChapter, chapterEntries, expressionDefinitions), chapterToModify) =>
-          chapterToModify.entries.mapFold((entryContextForChapter, chapterEntries, expressionDefinitions)) { case ((entryContext, chapterEntries, expressionDefinitions), entryToModify) =>
-            val modifiedEntry = if (entryToModify == oldEntry) newEntry else entryToModify.replaceDefinitions(chapterEntries, expressionDefinitions, entryContext)
-            val newEntryContext = entryContext.addEntry(modifiedEntry)
-            val newChapterEntries = chapterEntries + (entryToModify -> modifiedEntry)
-            val newExpressionDefinitions = EntryContext.getStatementDefinitionFromEntry(entryToModify) match {
-              case Some(old) =>
-                expressionDefinitions + (old -> EntryContext.getStatementDefinitionFromEntry(modifiedEntry).get)
-              case None =>
-                entryToModify.asOptionalInstanceOf[TermDefinitionEntry] match {
-                  case Some(old) =>
-                    expressionDefinitions + (old -> modifiedEntry.asInstanceOf[TermDefinitionEntry])
-                  case None =>
-                    expressionDefinitions
-                }
-            }
-            ((newEntryContext, newChapterEntries, newExpressionDefinitions), modifiedEntry)
-          }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
-        }.mapRight(newChapters => bookToModify.copy(chapters = newChapters)).mapLeft { case (_, a, b) => (a, b)}
-      }._2
-    })._1
+  private def replaceEntryInBooks(allBooks: Seq[Book], oldEntry: ChapterEntry, newEntry: ChapterEntry): Seq[Book] = {
+    allBooks.mapFoldWithPrevious[(Map[ChapterEntry, ChapterEntry], Map[ExpressionDefinition, ExpressionDefinition]), Book]((Map.empty, Map.empty)) { case ((chapterEntries, expressionDefinitions), previousBooks, bookToModify) =>
+      bookToModify.chapters.mapFold((EntryContext.forBookExclusive(previousBooks, bookToModify), chapterEntries, expressionDefinitions)) { case ((entryContextForChapter, chapterEntries, expressionDefinitions), chapterToModify) =>
+        chapterToModify.entries.mapFold((entryContextForChapter, chapterEntries, expressionDefinitions)) { case ((entryContext, chapterEntries, expressionDefinitions), entryToModify) =>
+          val modifiedEntry = if (entryToModify == oldEntry) newEntry else entryToModify.replaceDefinitions(chapterEntries, expressionDefinitions, entryContext)
+          val newEntryContext = entryContext.addEntry(modifiedEntry)
+          val newChapterEntries = chapterEntries + (entryToModify -> modifiedEntry)
+          val newExpressionDefinitions = EntryContext.getStatementDefinitionFromEntry(entryToModify) match {
+            case Some(old) =>
+              expressionDefinitions + (old -> EntryContext.getStatementDefinitionFromEntry(modifiedEntry).get)
+            case None =>
+              entryToModify.asOptionalInstanceOf[TermDefinitionEntry] match {
+                case Some(old) =>
+                  expressionDefinitions + (old -> modifiedEntry.asInstanceOf[TermDefinitionEntry])
+                case None =>
+                  expressionDefinitions
+              }
+          }
+          ((newEntryContext, newChapterEntries, newExpressionDefinitions), modifiedEntry)
+        }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
+      }.mapRight(newChapters => bookToModify.copy(chapters = newChapters)).mapLeft { case (_, a, b) => (a, b)}
+    }._2
   }
 
   private def modifyEntryWithReplacement(bookKey: String, chapterKey: String, entryKey: String)(f: (ChapterEntry, EntryContext) => Try[ChapterEntry]): ResponseEntity[_] = {
-    val books = bookService.books
-    (for {
-      book <- bookService.findBook(books, bookKey)
-      chapter <- bookService.findChapter(book, chapterKey)
-      oldEntry <- bookService.findEntry[ChapterEntry](chapter, entryKey)
-      entryContext = EntryContext.forEntry(books, book, chapter, oldEntry)
-      newEntry <- f(oldEntry, entryContext)
-      newBooks = modifyEntryWithReplacement(oldEntry, newEntry)
-      newBook <- bookService.findBook(newBooks, bookKey)
-      newChapter <- bookService.findChapter(newBook, chapterKey)
-      newKey <- BookService.getEntriesWithKeys(newChapter).find(_._1 == newEntry).map(_._2).orException(new Exception("Couldn't find new entry"))
-      props = Map("entry" -> newEntry, "url" -> BookService.getEntryUrl(bookKey, chapterKey, newKey))
-    } yield props).toResponseEntity
+    bookService.modifyBooks[TryWithValue[ChapterEntry]#Type](globalContext => {
+      for {
+        oldEntryWithContext <- globalContext.findEntry(bookKey, chapterKey, entryKey)
+        newEntry <- f(oldEntryWithContext.entry, oldEntryWithContext.entryContext)
+        newBooks = replaceEntryInBooks(globalContext.allBooks, oldEntryWithContext.entry, newEntry)
+      } yield (newBooks, newEntry)
+    }).flatMap { case (globalContext, newEntry) =>
+      for {
+        chapterWithContext <- globalContext.findChapter(bookKey, chapterKey)
+        newKey <- chapterWithContext.entriesWithKeys.find(_._1 == newEntry).map(_._2).orException(new Exception("Couldn't find new entry"))
+        props = Map("entry" -> newEntry, "url" -> BookService.getEntryUrl(bookKey, chapterKey, newKey))
+      } yield props
+    }.toResponseEntity
   }
 }

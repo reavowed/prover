@@ -1,9 +1,20 @@
 package net.prover.entries
 
-import net.prover.books.model.Book
-import net.prover.model.entries.Theorem
-import net.prover.model.entries.Theorem.Proof
-import net.prover.model.proof.{Step, StepProvingContext}
-import net.prover.model.Chapter
+import net.prover.model.ProvingContext
+import net.prover.model.proof.{Step, StepContext, StepReference}
 
-case class StepsWithContext(book: Book, chapter: Chapter, theorem: Theorem, proof: Proof, proofIndex: Int, steps: Seq[Step], outerStepProvingContext: StepProvingContext)
+case class StepsWithContext(
+  steps: Seq[Step],
+  outerReference: StepReference,
+  outerStepContext: StepContext,
+  proofWithContext: ProofWithContext
+) {
+  implicit def provingContext: ProvingContext = proofWithContext.provingContext
+  def atIndex(index: Int): Option[StepWithContext] = {
+    steps.splitAtIndexIfValid(index).map { case (before, step, _) => atChild(before, step) }
+  }
+  def atChild(before: Seq[Step], step: Step): StepWithContext = {
+    val index = before.length
+    TypedStepWithContext[Step](step, index, outerStepContext.addSteps(before).atIndex(index), this)
+  }
+}

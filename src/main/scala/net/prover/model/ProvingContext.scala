@@ -251,8 +251,5 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 }
 
 object ProvingContext {
-  def forEntry(allBooks: Seq[Book], definitions: Definitions, book: Book, chapter: Chapter, entry: ChapterEntry): ProvingContext = {
-    ProvingContext(EntryContext.forEntry(allBooks, book, chapter, entry), definitions)
-  }
   implicit def fromStepProvingContext(implicit stepProvingContext: StepProvingContext): ProvingContext = stepProvingContext.provingContext
 }

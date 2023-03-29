@@ -1,13 +1,21 @@
 package net.prover.entries
 
-import net.prover.books.model.Book
-import net.prover.model.entries.Theorem
-import net.prover.model.entries.Theorem.Proof
-import net.prover.model.proof.{Step, StepProvingContext}
-import net.prover.model.Chapter
+import net.prover.model.ProvingContext
+import net.prover.model.proof.{Step, StepContext, StepProvingContext}
 
-case class StepWithContext(book: Book, chapter: Chapter, theorem: Theorem, proof: Proof, proofIndex: Int, step: Step, stepProvingContext: StepProvingContext) {
+import scala.reflect.ClassTag
+
+case class TypedStepWithContext[+T <: Step : ClassTag](
+  step: T,
+  index: Int,
+  stepContext: StepContext,
+  parentContext: StepsWithContext
+) {
+  implicit def provingContext: ProvingContext = parentContext.provingContext
+  implicit def stepProvingContext: StepProvingContext = StepProvingContext(stepContext, provingContext)
+
+  def nextSibling: Option[StepWithContext] = parentContext.atIndex(index + 1)
   def forSubsteps(step: Step.WithSubsteps): StepsWithContext = {
-    StepsWithContext(book, chapter, theorem, proof, proofIndex, step.substeps, stepProvingContext.updateStepContext(step.specifyStepContext))
+    StepsWithContext(step.substeps, stepContext.stepReference, step.specifyStepContext(stepContext), parentContext.proofWithContext)
   }
 }

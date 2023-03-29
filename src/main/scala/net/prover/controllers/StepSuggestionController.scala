@@ -24,9 +24,9 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     (for {
-      (_, stepProvingContext) <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      stepWithContext <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
-      implicit val spc = stepProvingContext
+      implicit val stepProvingContext = stepWithContext.stepProvingContext
       for {
         (_, Seq(singleNamingPremise: DefinedStatement), _, _, _) <- ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext)
         if singleNamingPremise.boundVariableNames.single.nonEmpty
@@ -46,15 +46,15 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
     (for {
-      (step, stepProvingContext) <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+      stepWithContext <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
-      implicit val spc = stepProvingContext
+      implicit val stepProvingContext = stepWithContext.stepProvingContext
       val filter = inferenceFilter(searchText.toLowerCase)
       ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext)
         .filter(x => filter(x._1))
         .reverse
         .mapCollect { case (inference, namingPremises, _, _, _) =>
-          inference.conclusion.calculateSubstitutions(step.statement)
+          inference.conclusion.calculateSubstitutions(stepWithContext.step.statement)
             .map(s => PossibleInferenceWithConclusions(
               inference.summary,
               Seq(PossibleConclusionWithPremises(
