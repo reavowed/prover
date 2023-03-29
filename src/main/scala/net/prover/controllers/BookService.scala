@@ -21,7 +21,6 @@ import scala.util.Try
 class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
   def globalContext: GlobalContext = bookStateManager.globalContext
   def books: Seq[Book] = bookStateManager.books
-  def getBooksWithKeys: Seq[(Book, String)] = BookService.getBooksWithKeys(books)
 
   def reload(): Try[Any] = Try { ReloadBooks() }
 

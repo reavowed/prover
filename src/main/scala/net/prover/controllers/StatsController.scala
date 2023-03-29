@@ -21,11 +21,10 @@ class StatsController @Autowired() (val bookService: BookService) {
     request: HttpServletRequest
   ): Seq[(String, Int)] = {
     val urlsWithLengths = for {
-      (book, bookKey) <- bookService.getBooksWithKeys
-      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
-      (theorem, theoremKey) <- BookService.getEntriesWithKeys(chapter)
-        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-    } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(bookKey, chapterKey, theoremKey), theorem.proofs.map(_.steps.map(_.length).sum).min)
+      bookWithContext <- bookService.globalContext.booksWithContexts
+      chapterWithContext <- bookWithContext.chaptersWithContexts
+      theoremWithContext <- chapterWithContext.theoremsWithContexts
+    } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext), theoremWithContext.theorem.proofs.map(_.steps.map(_.length).sum).min)
     urlsWithLengths
         .sortBy { case (_, length) => -1 * length }
         .take(10)
@@ -38,24 +37,22 @@ class StatsController @Autowired() (val bookService: BookService) {
     val entryContext = EntryContext.forBooks(bookService.books)
     val usedInferenceIds = entryContext.allInferences.ofType[Theorem].flatMap(_.referencedInferenceIds)
     for {
-      (book, bookKey) <- bookService.getBooksWithKeys
-      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
-      (inference, inferenceKey) <- BookService.getEntriesWithKeys(chapter)
-        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Inference]))
-      if !usedInferenceIds.contains(inference.id)
-    } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(bookKey, chapterKey, inferenceKey)
+      bookWithContext <- bookService.globalContext.booksWithContexts
+      chapterWithContext <- bookWithContext.chaptersWithContexts
+      inferenceWithContext <- chapterWithContext.inferencesWithContexts
+      if !usedInferenceIds.contains(inferenceWithContext.entry.id)
+    } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(inferenceWithContext)
   }
 
   @GetMapping(value = Array("unprovenTheorems"))
   def getUnprovenTheorems(request: HttpServletRequest): Seq[String] = {
     val globalContext = bookService.globalContext
     for {
-      (book, bookKey) <- globalContext.booksWithKeys
-      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
-      (theorem, theoremKey) <- BookService.getEntriesWithKeys(chapter)
-        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-      if !theorem.isComplete(globalContext.definitions)
-    } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(bookKey, chapterKey, theoremKey)
+      bookWithContext <- bookService.globalContext.booksWithContexts
+      chapterWithContext <- bookWithContext.chaptersWithContexts
+      theoremWithContext <- chapterWithContext.theoremsWithContexts
+      if !theoremWithContext.theorem.isComplete(globalContext.definitions)
+    } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext)
   }
 
   @GetMapping(value = Array("findAssertions"))
@@ -65,16 +62,15 @@ class StatsController @Autowired() (val bookService: BookService) {
     @RequestParam(required = false) statementSymbol: String
   ): Seq[(String, String)] = {
     for {
-      (book, bookKey) <- bookService.getBooksWithKeys
-      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
-      (theorem, inferenceKey) <- BookService.getEntriesWithKeys(chapter)
-        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-      (assertion, context) <- theorem.findSteps[Step.Assertion]
+      bookWithContext <- bookService.globalContext.booksWithContexts
+      chapterWithContext <- bookWithContext.chaptersWithContexts
+      theoremWithContext <- chapterWithContext.theoremsWithContexts
+      (assertion, context) <- theoremWithContext.theorem.findSteps[Step.Assertion]
       if assertion.inference.id == inferenceId
       if Option(statementSymbol).forall(symbol =>
         assertion.statement.asOptionalInstanceOf[DefinedStatement]
           .exists(_.definition.symbol == symbol))
-    } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
+    } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext), context.stepReference.stepPath.mkString("."))
   }
 
   @GetMapping(value = Array("findElisions"))
@@ -83,13 +79,12 @@ class StatsController @Autowired() (val bookService: BookService) {
     @RequestParam inferenceId: String
   ): Seq[(String, String)] = {
     for {
-      (book, bookKey) <- bookService.getBooksWithKeys
-      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
-      (theorem, inferenceKey) <- BookService.getEntriesWithKeys(chapter)
-        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-      (elision, context) <- theorem.findSteps[Step.Elided]
+      bookWithContext <- bookService.globalContext.booksWithContexts
+      chapterWithContext <- bookWithContext.chaptersWithContexts
+      theoremWithContext <- chapterWithContext.theoremsWithContexts
+      (elision, context) <- theoremWithContext.theorem.findSteps[Step.Elided]
       if elision.highlightedInference.exists(_.id == inferenceId)
-    } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(bookKey, chapterKey, inferenceKey), context.stepReference.stepPath.mkString("."))
+    } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext), context.stepReference.stepPath.mkString("."))
   }
 
   @GetMapping(value = Array("nonAlphanumericTheorems"))
@@ -97,11 +92,10 @@ class StatsController @Autowired() (val bookService: BookService) {
     request: HttpServletRequest
   ): Seq[String] = {
     for {
-      (book, bookKey) <- bookService.getBooksWithKeys
-      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
-      (theorem, inferenceKey) <- BookService.getEntriesWithKeys(chapter)
-        .mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[Theorem]))
-      if Pattern.compile("[^A-Za-z0-9-'()]").matcher(inferenceKey).find()
-    } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(bookKey, chapterKey, inferenceKey)
+      bookWithContext <- bookService.globalContext.booksWithContexts
+      chapterWithContext <- bookWithContext.chaptersWithContexts
+      theoremWithContext <- chapterWithContext.theoremsWithContexts
+      if Pattern.compile("[^A-Za-z0-9-'()]").matcher(theoremWithContext.entryKey).find()
+    } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext)
   }
 }
