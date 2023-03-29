@@ -1,10 +1,11 @@
 package net.prover
 
-import net.prover.entries.{ProofWithContext, StepsWithContext, TypedStepWithContext}
+import net.prover.entries.{ProofWithContext, StepsWithContext, TheoremWithContext, TypedStepWithContext}
 import net.prover.model.TestDefinitions.{entryContextToProvingContext, mock, theStubbed}
-import net.prover.model.{EntryContext, VariableDefinitions}
+import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, StepContext, StepReference}
+import net.prover.model.proof.{Step, StepContext}
+import net.prover.model.{EntryContext, VariableDefinitions}
 
 import scala.reflect.ClassTag
 
@@ -41,13 +42,19 @@ trait StepContextHelper {
     implicit entryContext: EntryContext,
     stepContext: StepContext
   ): TypedStepWithContext[Step.Target] = {
-    val stepsWithContext = mock[StepsWithContext]
-    stepsWithContext.provingContext returns entryContextToProvingContext(entryContext)
+    createStepWithContext(Step.Target(statement))
+  }
+
+  def createStepWithContext[T <: Step : ClassTag](
+    step: T)(
+    implicit entryContext: EntryContext,
+    stepContext: StepContext
+  ): TypedStepWithContext[T] = {
     TypedStepWithContext(
-      Step.Target(statement),
+      step,
       stepIndex,
       stepContext,
-      stepsWithContext)
+      createStepsWithContext(Seq(step)))
   }
 
   def createStepsWithContext(

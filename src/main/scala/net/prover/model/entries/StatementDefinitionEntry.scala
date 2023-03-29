@@ -1,6 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.books.model.EntryParsingContext
+import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
@@ -38,7 +39,7 @@ case class StatementDefinitionEntry(
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
-    entryContext: EntryContext
+    entryWithContext: EntryWithContext
   ): StatementDefinitionEntry = {
     StatementDefinitionEntry(
       baseSymbol,

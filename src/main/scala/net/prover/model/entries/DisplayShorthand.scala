@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.books.model.EntryParsingContext
+import net.prover.entries.EntryWithContext
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Template
 import net.prover.model.{EntryContext, Format, Inference, Parser}
@@ -23,7 +24,7 @@ case class DisplayShorthand(template: Template, format: Format.Explicit, conditi
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
-    entryContext: EntryContext
+    entryWithContext: EntryWithContext
   ): DisplayShorthand = {
     DisplayShorthand(
       template.replaceDefinitions(expressionDefinitionReplacements),

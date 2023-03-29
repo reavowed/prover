@@ -28,4 +28,3 @@ case class TypedEntryWithContext[+T <: ChapterEntry](
   lazy implicit val entryContext: EntryContext = EntryContext.forEntry(this)
   lazy implicit val provingContext: ProvingContext = ProvingContext(entryContext, chapterWithContext.bookWithContext.globalContext.definitions)
 }
-

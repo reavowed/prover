@@ -3,6 +3,7 @@ package net.prover.model.entries
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.books.keys.WithKeyProperty
 import net.prover.books.model.EntryParsingContext
+import net.prover.entries.EntryWithContext
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.{EntryContext, ExpressionParsingContext, Inference, Parser, SimpleVariableDefinition}
@@ -18,7 +19,7 @@ trait ChapterEntry {
   def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
-    entryContext: EntryContext
+    entryWithContext: EntryWithContext
   ): ChapterEntry
 
   def validate(): Unit = {}

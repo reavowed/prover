@@ -1,6 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.books.model.EntryParsingContext
+import net.prover.entries.EntryWithContext
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Template
 import net.prover.model.{EntryContext, Inference, Parser}
@@ -14,7 +15,7 @@ case class WritingShorthand(template: Template, symbol: String) extends ChapterE
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
-    entryContext: EntryContext
+    entryWithContext: EntryWithContext
   ): WritingShorthand = copy(template = template.replaceDefinitions(expressionDefinitionReplacements))
 }
 

@@ -49,9 +49,9 @@ object MoveSteps {
                   (currentStepsWithContext.outerStepContext.boundVariableLists(i).size <= newSurroundingStepsWithContext.outerStepContext.boundVariableLists(i).size).orBadRequest("Cannot move step to one with a smaller bound variable list")
                 }.traverseTry
                 stepsWithNewContext <- if (boundVariablesToRemove > 0) {
-                  RemoveExternalBoundVariables(currentStepsWithContext, boundVariablesToRemove).orBadRequest("Could not remove extra parameters")
+                  RemoveExternalBoundVariables(boundVariablesToRemove, currentStepsWithContext).orBadRequest("Could not remove extra parameters")
                 } else if (boundVariablesToRemove < 0)
-                  Success(InsertExternalBoundVariables(currentStepsWithContext, -boundVariablesToRemove))
+                  Success(InsertExternalBoundVariables(-boundVariablesToRemove, currentStepsWithContext))
                 else
                   Success(currentStepsWithContext.steps)
               } yield (

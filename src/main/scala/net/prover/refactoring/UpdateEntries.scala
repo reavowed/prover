@@ -4,11 +4,8 @@ import net.prover.books.management.{BookStateManager, UpdateBooks}
 import net.prover.books.model.Book
 import net.prover.entries.{BookWithContext, ChapterWithContext, EntryWithContext, GlobalContext}
 import net.prover.model._
-import net.prover.model.definitions.Definitions
 import net.prover.model.entries.ChapterEntry
 import scalaz.Id.Id
-
-import scala.annotation.tailrec
 
 object UpdateEntries {
   def apply(

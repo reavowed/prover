@@ -1,6 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.books.model.EntryParsingContext
+import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
@@ -51,11 +52,11 @@ case class PropertyDefinitionOnType(
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
-    entryContext: EntryContext
+    entryWithContext: EntryWithContext
   ): PropertyDefinitionOnType = {
     PropertyDefinitionOnType(
       symbol,
-      parentTypeConditions.replaceDefinitions(entryReplacements, expressionDefinitionReplacements, entryContext),
+      parentTypeConditions.replaceDefinitions(entryReplacements, expressionDefinitionReplacements, entryWithContext.entryContext),
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))
   }

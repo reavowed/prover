@@ -1,6 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.books.model.EntryParsingContext
+import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
@@ -51,7 +52,11 @@ case class TypeRelationDefinition(
     ( explicitName.map(n => Seq("name", n.inParens).mkString(" ")).toSeq :+
       Seq("definition", definingStatement.serialized.inParens).mkString(" ")).indent
 
-  override def replaceDefinitions(entryReplacements: Map[ChapterEntry, ChapterEntry], expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): ChapterEntry = {
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    entryWithContext: EntryWithContext
+  ): ChapterEntry = {
     TypeRelationDefinition(
       symbol,
       entryReplacements(firstType).asInstanceOf[TypeDefinition],
@@ -61,7 +66,7 @@ case class TypeRelationDefinition(
       linkingPhrase,
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements),
-      entryContext.conjunctionDefinitionOption.get)
+      entryWithContext.entryContext.conjunctionDefinitionOption.get)
   }
 }
 

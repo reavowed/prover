@@ -1,6 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.books.model.EntryParsingContext
+import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
 import net.prover.model.expressions.Statement
@@ -27,7 +28,7 @@ case class Axiom(
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
-    entryContext: EntryContext
+    entryWithContext: EntryWithContext
   ): Axiom = {
     Axiom(
       name,

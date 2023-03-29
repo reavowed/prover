@@ -21,7 +21,7 @@ class TermRearrangerSpec extends Specification with StepContextHelper {
     def rearrange(targetStatement: Statement, premises: Seq[Statement])(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Option[Step] = {
       implicit val stepContext = createBaseStepContext(premises)
       TermRearranger.rearrange(targetStatement)
-        .map(RecalculateReferences(_, stepContext, implicitly[ProvingContext])._1)
+        .map(step => RecalculateReferences(createStepWithContext(step))._1)
     }
 
     def testRearranging(targetStatement: Statement, premises: Seq[Statement])(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): MatchResult[Any] = {

@@ -1,47 +1,36 @@
 package net.prover.theorems.steps
 
 import net.prover.entries.StepsWithContext
+import net.prover.model.Substitutions
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, Step, StepContext}
-import net.prover.model.{Inference, Substitutions}
+import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
 import scalaz.Scalaz._
 
-object RemoveExternalBoundVariables extends CompoundStepUpdater[RemoveExternalBoundVariablesRequest, Option] {
-  def apply(stepsWithContext: StepsWithContext, numberOfParametersToRemove: Int): Option[Seq[Step]] = {
-    apply(stepsWithContext.steps.toList, stepsWithContext.outerStepContext, RemoveExternalBoundVariablesRequest(numberOfParametersToRemove, stepsWithContext.outerStepContext))
-  }
-
+case class RemoveExternalBoundVariables(numberOfVariablesToRemove: Int, outerStepContext: StepContext) extends CompoundStepUpdater[Option] {
   override def updateStatement(
     statement: Statement,
-    stepContext: StepContext,
-    request: RemoveExternalBoundVariablesRequest
+    stepContext: StepContext
   ): Option[Statement] = {
-    statement.removeExternalParameters(request.numberOfVariablesToRemove, stepContext.externalDepth - request.outerStepContext.externalDepth)
-  }
-
-  override def updateInference(
-    inference: Inference.Summary,
-    stepContext: StepContext,
-    request: RemoveExternalBoundVariablesRequest
-  ): Option[Inference.Summary] = {
-    Some(inference)
+    statement.removeExternalParameters(numberOfVariablesToRemove, stepContext.externalDepth - outerStepContext.externalDepth)
   }
 
   override def updatePremise(
     premise: Premise,
-    stepContext: StepContext,
-    request: RemoveExternalBoundVariablesRequest
+    stepProvingContext: StepProvingContext
   ): Option[Premise] = {
-    premise.removeExternalParameters(request.numberOfVariablesToRemove, stepContext.externalDepth - request.outerStepContext.externalDepth)
+    premise.removeExternalParameters(numberOfVariablesToRemove, stepProvingContext.stepContext.externalDepth - outerStepContext.externalDepth)
   }
 
   override def updateSubstitutions(
     substitutions: Substitutions,
-    stepContext: StepContext,
-    request: RemoveExternalBoundVariablesRequest
+    stepContext: StepContext
   ): Option[Substitutions] = {
-    substitutions.removeExternalParameters(request.numberOfVariablesToRemove, stepContext.externalDepth - request.outerStepContext.externalDepth)
+    substitutions.removeExternalParameters(numberOfVariablesToRemove, stepContext.externalDepth - outerStepContext.externalDepth)
   }
 }
 
-case class RemoveExternalBoundVariablesRequest(numberOfVariablesToRemove: Int, outerStepContext: StepContext)
+object RemoveExternalBoundVariables {
+  def apply(numberOfVariablesToRemove: Int, stepsWithContext: StepsWithContext): Option[List[Step]] = {
+    RemoveExternalBoundVariables(numberOfVariablesToRemove, stepsWithContext.outerStepContext)(stepsWithContext)
+  }
+}

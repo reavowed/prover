@@ -1,35 +1,34 @@
 package net.prover.theorems
 
 import net.prover.controllers.models.StepWithReferenceChange
+import net.prover.entries.{ProofWithContext, StepWithContext, TheoremWithContext}
+import net.prover.model._
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
-import net.prover.model.expressions.Statement
-import net.prover.model._
-import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
+import net.prover.model.proof.{Premise, Step, StepProvingContext}
 import net.prover.theorems.steps.CompoundStepUpdater
 import net.prover.util.FunctorTypes._
 import scalaz.Scalaz._
 
-object RecalculateReferences extends CompoundStepUpdater[ProvingContext, WithValue[List[StepWithReferenceChange]]#Type] {
-  def apply(theorem: Theorem, provingContext: ProvingContext): (Theorem, List[List[StepWithReferenceChange]]) = {
-    val (updatedProofs, referenceChanges) = theorem.proofs.map(apply(_, theorem.initialStepContext, theorem.conclusion, provingContext)).split
-    (theorem.copy(proofs = updatedProofs), referenceChanges.toList)
+object RecalculateReferences extends CompoundStepUpdater[WithValue[List[StepWithReferenceChange]]#Type] {
+  def apply(theoremWithContext: TheoremWithContext): (Theorem, List[List[StepWithReferenceChange]]) = {
+    val (updatedProofs, referenceChanges) = theoremWithContext.proofsWithContext.map(apply).split
+    (theoremWithContext.theorem.copy(proofs = updatedProofs), referenceChanges.toList)
   }
 
-  def apply(proof: Proof, initialStepContext: StepContext, expectedConclusion: Statement, provingContext: ProvingContext): (Proof, List[StepWithReferenceChange]) = {
-    val (newSteps, changedSteps) = apply(proof.steps.toList, initialStepContext, provingContext)
-    val newStepsWithTarget = if (newSteps.mapCollect(_.provenStatement).lastOption.contains(expectedConclusion)) newSteps else newSteps :+ Step.Target(expectedConclusion)
+  def apply(proof: ProofWithContext): (Proof, List[StepWithReferenceChange]) = {
+    val (newSteps, changedSteps) = apply(proof.stepsWithContext)
+    val newStepsWithTarget = if (newSteps.mapCollect(_.provenStatement).lastOption.contains(proof.theorem.conclusion)) newSteps else newSteps :+ Step.Target(proof.theorem.conclusion)
     (Proof(newStepsWithTarget), changedSteps)
   }
 
   override def updateAssertion(
     step: Step.Assertion,
-    stepContext: StepContext,
-    provingContext: ProvingContext
+    stepWithContext: StepWithContext
   ): (Step, List[StepWithReferenceChange]) = {
-    val (newStep, innerChanges) = super.updateAssertion(step, stepContext, provingContext)
+    val (newStep, innerChanges) = super.updateAssertion(step, stepWithContext)
     if (step.premises != newStep.asInstanceOf[Step.Assertion].premises) {
-      (newStep, innerChanges :+ StepWithReferenceChange(newStep, stepContext.stepReference.stepPath))
+      (newStep, innerChanges :+ StepWithReferenceChange(newStep, stepWithContext.stepContext.stepReference.stepPath))
     } else {
       (newStep, innerChanges)
     }
@@ -37,40 +36,20 @@ object RecalculateReferences extends CompoundStepUpdater[ProvingContext, WithVal
 
   override def updateNaming(
     step: Step.Naming,
-    stepContext: StepContext,
-    provingContext: ProvingContext
+    stepWithContext: StepWithContext
   ): (Step, List[StepWithReferenceChange]) = {
-    val (newStep, innerChanges) = super.updateNaming(step, stepContext, provingContext)
+    val (newStep, innerChanges) = super.updateNaming(step, stepWithContext)
     if (step.premises != newStep.asInstanceOf[Step.Naming].premises) {
-      (newStep, innerChanges :+ StepWithReferenceChange(newStep, stepContext.stepReference.stepPath))
+      (newStep, innerChanges :+ StepWithReferenceChange(newStep, stepWithContext.stepContext.stepReference.stepPath))
     } else {
       (newStep, innerChanges)
     }
   }
 
-  override def updateStatement(
-    statement: Statement,
-    stepContext: StepContext,
-    provingContext: ProvingContext
-  ): (Statement, List[StepWithReferenceChange]) = (statement, Nil)
-
-  override def updateInference(
-    inference: Inference.Summary,
-    stepContext: StepContext,
-    provingContext: ProvingContext
-  ): (Inference.Summary, List[StepWithReferenceChange]) = (inference, Nil)
-
   override def updatePremise(
     premise: Premise,
-    stepContext: StepContext,
-    provingContext: ProvingContext
+    stepProvingContext: StepProvingContext
   ): (Premise, List[StepWithReferenceChange]) = {
-    (StepProvingContext(stepContext, provingContext).createPremise(premise.statement), Nil)
+    (stepProvingContext.createPremise(premise.statement), Nil)
   }
-
-  override def updateSubstitutions(
-    substitutions: Substitutions,
-    stepContext: StepContext,
-    provingContext: ProvingContext
-  ): (Substitutions, List[StepWithReferenceChange]) = (substitutions, Nil)
 }

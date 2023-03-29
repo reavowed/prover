@@ -1,60 +1,49 @@
 package net.prover.theorems
 
 import net.prover.model.definitions.{DeductionDefinition, ExpressionDefinition, GeneralizationDefinition}
-import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, StepContext}
+import net.prover.model.proof.{Premise, StepContext, StepProvingContext}
 import net.prover.model.{EntryContext, Inference, Substitutions}
 import scalaz.Id.Id
 
-object ReplaceDefinitions extends CompoundTheoremUpdater[(Map[ExpressionDefinition, ExpressionDefinition], EntryContext), Id] {
-  def apply(theorem: Theorem, replacements: Map[ExpressionDefinition, ExpressionDefinition])(implicit entryContext: EntryContext): Theorem = {
-    apply(theorem, (replacements, entryContext))
-  }
-
+case class ReplaceDefinitions(definitionsToReplace: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext) extends CompoundTheoremUpdater[Id] {
   override def updateStatement(
     statement: Statement,
-    stepContext: StepContext,
-    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
+    stepContext: StepContext
   ): Statement = {
-    statement.replaceDefinitions(parameters._1)
+    statement.replaceDefinitions(definitionsToReplace)
   }
 
   override def updateInference(
     inference: Inference.Summary,
-    stepContext: StepContext,
-    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
+    stepContext: StepContext
   ): Inference.Summary = {
-    inference.replaceDefinitions(parameters._1)
+    inference.replaceDefinitions(definitionsToReplace)
   }
 
   override def updatePremise(
     premise: Premise,
-    stepContext: StepContext,
-    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
+    stepContext: StepProvingContext
   ): Premise = {
-    premise.replaceDefinitions(parameters._1)
+    premise.replaceDefinitions(definitionsToReplace)
   }
 
   override def updateSubstitutions(
     substitutions: Substitutions,
-    stepContext: StepContext,
-    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
+    stepContext: StepContext
   ): Substitutions = {
-    substitutions.replaceDefinitions(parameters._1)
+    substitutions.replaceDefinitions(definitionsToReplace)
   }
 
   override def updateDeductionDefinition(
-    deductionDefinition: DeductionDefinition,
-    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
+    deductionDefinition: DeductionDefinition
   ): DeductionDefinition = {
-    parameters._2.deductionDefinitionOption.get
+    entryContext.deductionDefinitionOption.get
   }
 
   override def updateGeneralizationDefinition(
-    generalizationDefinition: GeneralizationDefinition,
-    parameters: (Map[ExpressionDefinition, ExpressionDefinition], EntryContext)
+    generalizationDefinition: GeneralizationDefinition
   ): GeneralizationDefinition = {
-    parameters._2.generalizationDefinitionOption.get
+    entryContext.generalizationDefinitionOption.get
   }
 }

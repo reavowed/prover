@@ -1,6 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.books.model.EntryParsingContext
+import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
@@ -40,11 +41,15 @@ case class RelatedObjectDefinition(
     statementDefinition(FunctionParameter(0, 0) +: parentVariableDefinitions.indices.map(i => TermVariable(i + offset)): _*)
   }
 
-  override def replaceDefinitions(entryReplacements: Map[ChapterEntry, ChapterEntry], expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext): ChapterEntry = {
+  override def replaceDefinitions(
+    entryReplacements: Map[ChapterEntry, ChapterEntry],
+    expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
+    entryWithContext: EntryWithContext
+  ): ChapterEntry = {
     RelatedObjectDefinition(
       symbol,
       mainVariableDefinition,
-      parentTypeConditions.replaceDefinitions(entryReplacements, expressionDefinitionReplacements, entryContext),
+      parentTypeConditions.replaceDefinitions(entryReplacements, expressionDefinitionReplacements, entryWithContext.entryContext),
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))
   }

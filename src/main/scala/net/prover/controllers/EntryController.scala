@@ -2,6 +2,7 @@ package net.prover.controllers
 
 import net.prover.books.model.Book
 import net.prover.controllers.models.LinkSummary
+import net.prover.entries.{BookWithContext, GlobalContext}
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition
@@ -263,28 +264,42 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
         Failure(BadRequestException(s"Cannot set defining statement of ${entry.getClass.getName}"))
     }
   }
+  case class Changes(changedEntries: Map[ChapterEntry, ChapterEntry], changedDefinitions: Map[ExpressionDefinition, ExpressionDefinition]) {
+    def addChangedEntry(oldEntry: ChapterEntry, newEntry: ChapterEntry): Changes = {
+      copy(changedEntries = changedEntries + (oldEntry -> newEntry))
+    }
+    def addChangedDefinition(oldDefinition: ExpressionDefinition, newDefinition: ExpressionDefinition): Changes = {
+      copy(changedDefinitions = changedDefinitions + (oldDefinition -> newDefinition))
+    }
+  }
 
-  private def replaceEntryInBooks(allBooks: Seq[Book], oldEntry: ChapterEntry, newEntry: ChapterEntry): Seq[Book] = {
-    allBooks.mapFoldWithPrevious[(Map[ChapterEntry, ChapterEntry], Map[ExpressionDefinition, ExpressionDefinition]), Book]((Map.empty, Map.empty)) { case ((chapterEntries, expressionDefinitions), previousBooks, bookToModify) =>
-      bookToModify.chapters.mapFold((EntryContext.forBookExclusive(previousBooks, bookToModify), chapterEntries, expressionDefinitions)) { case ((entryContextForChapter, chapterEntries, expressionDefinitions), chapterToModify) =>
-        chapterToModify.entries.mapFold((entryContextForChapter, chapterEntries, expressionDefinitions)) { case ((entryContext, chapterEntries, expressionDefinitions), entryToModify) =>
-          val modifiedEntry = if (entryToModify == oldEntry) newEntry else entryToModify.replaceDefinitions(chapterEntries, expressionDefinitions, entryContext)
-          val newEntryContext = entryContext.addEntry(modifiedEntry)
-          val newChapterEntries = chapterEntries + (entryToModify -> modifiedEntry)
-          val newExpressionDefinitions = EntryContext.getStatementDefinitionFromEntry(entryToModify) match {
+  private def replaceEntryInBooks(globalContext: GlobalContext, oldEntry: ChapterEntry, newEntry: ChapterEntry): Seq[Book] = {
+    globalContext.booksWithContexts.mapFoldWithPrevious[Changes, Book](Changes(Map.empty, Map.empty)) { case (changes, previousBooks, bookToModify) =>
+      bookToModify.chaptersWithContexts.mapFoldWithPrevious[Changes, Chapter](changes) { case (changes, previousChapters, chapterToModify) =>
+        chapterToModify.entriesWithContexts.mapFoldWithPrevious[Changes, ChapterEntry](changes) { case (changes, previousEntries, entryContextToModify) =>
+          val entryToModify = entryContextToModify.entry
+          val updatedEntryWithContext = entryContextToModify.copy(
+            chapterWithContext = chapterToModify.copy(
+              chapter = chapterToModify.chapter.copy(entries = previousEntries),
+              bookWithContext = bookToModify.copy(
+                book = bookToModify.book.copy(chapters = previousChapters),
+                globalContext = globalContext.copy(allBooks = previousBooks.toList))))
+          val modifiedEntry = if (entryToModify == oldEntry) newEntry else entryToModify.replaceDefinitions(changes.changedEntries, changes.changedDefinitions, updatedEntryWithContext)
+          val changesWithEntry = changes.addChangedEntry(entryToModify, newEntry)
+          val changesWithExpressionDefinitions = EntryContext.getStatementDefinitionFromEntry(entryToModify) match {
             case Some(old) =>
-              expressionDefinitions + (old -> EntryContext.getStatementDefinitionFromEntry(modifiedEntry).get)
+              changesWithEntry.addChangedDefinition(old, EntryContext.getStatementDefinitionFromEntry(modifiedEntry).get)
             case None =>
               entryToModify.asOptionalInstanceOf[TermDefinitionEntry] match {
                 case Some(old) =>
-                  expressionDefinitions + (old -> modifiedEntry.asInstanceOf[TermDefinitionEntry])
+                  changesWithEntry.addChangedDefinition(old, modifiedEntry.asInstanceOf[TermDefinitionEntry])
                 case None =>
-                  expressionDefinitions
+                  changesWithEntry
               }
           }
-          ((newEntryContext, newChapterEntries, newExpressionDefinitions), modifiedEntry)
-        }.mapRight(newEntries => chapterToModify.copy(entries = newEntries))
-      }.mapRight(newChapters => bookToModify.copy(chapters = newChapters)).mapLeft { case (_, a, b) => (a, b)}
+          (changesWithExpressionDefinitions, modifiedEntry)
+        }.mapRight(newEntries => chapterToModify.chapter.copy(entries = newEntries))
+      }.mapRight(newChapters => bookToModify.book.copy(chapters = newChapters))
     }._2
   }
 
@@ -293,7 +308,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
       for {
         oldEntryWithContext <- globalContext.findEntry(bookKey, chapterKey, entryKey)
         newEntry <- f(oldEntryWithContext.entry, oldEntryWithContext.entryContext)
-        newBooks = replaceEntryInBooks(globalContext.allBooks, oldEntryWithContext.entry, newEntry)
+        newBooks = replaceEntryInBooks(globalContext, oldEntryWithContext.entry, newEntry)
       } yield (newBooks, newEntry)
     }).flatMap { case (globalContext, newEntry) =>
       for {

@@ -1,13 +1,12 @@
 package net.prover.controllers
 
-import net.prover.books.keys.KeyAccumulator
 import net.prover.books.management.{BookStateManager, ReloadBooks, UpdateBooks}
 import net.prover.books.model.Book
 import net.prover.controllers.models._
-import net.prover.entries.{StepsWithContext, _}
+import net.prover.entries._
 import net.prover.model._
 import net.prover.model.entries.{ChapterEntry, Theorem}
-import net.prover.model.proof.{Step, StepProvingContext}
+import net.prover.model.proof.Step
 import net.prover.theorems.{FindStep, RecalculateReferences, ReplaceSteps}
 import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
@@ -77,7 +76,7 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
       getUpdatedTheorem(theoremWithContext).map { fTheorem =>
         import theoremWithContext._
         fTheorem.map { newTheoremWithoutReferenceChanges =>
-          val (newTheoremWithReferenceChanges, stepsWithReferenceChanges) = RecalculateReferences(newTheoremWithoutReferenceChanges, provingContext)
+          val (newTheoremWithReferenceChanges, stepsWithReferenceChanges) = RecalculateReferences(theoremWithContext.copy(entry = newTheoremWithoutReferenceChanges))
           val newInferenceIds = newTheoremWithReferenceChanges.referencedInferenceIds.diff(entry.referencedInferenceIds)
           val inferenceLinks = BookService.getInferenceLinks(newInferenceIds, theoremWithContext.globalContext)
           (newTheoremWithReferenceChanges, TheoremUpdateProps(newTheoremWithReferenceChanges, theoremWithContext.copy(entry = newTheoremWithReferenceChanges), inferenceLinks, stepsWithReferenceChanges))

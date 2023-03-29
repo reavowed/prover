@@ -1,73 +1,81 @@
 package net.prover.theorems.steps
 
+import net.prover.entries.{StepWithContext, StepsWithContext}
 import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, Step, StepContext}
+import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
 import net.prover.model.{Inference, Substitutions}
 import scalaz.Monad
 import scalaz.Scalaz._
 
-abstract class CompoundStepUpdater[TParameters, F[_] : Monad] {
-  def apply(steps: List[Step], outerContext: StepContext, parameters: TParameters): F[List[Step]] = {
-    steps.zipWithIndex.foldLeft(Monad[F].point((outerContext, List.empty[Step]))) { case (fStepContextAndSteps, (step, index)) =>
-      for {
-        stepContextAndSteps <- fStepContextAndSteps
-        (currentStepContext, steps) = stepContextAndSteps
-        innerStepContext = currentStepContext.atIndex(index)
-        newStep <- apply(step, innerStepContext, parameters)
-      } yield (currentStepContext.addStep(newStep, innerStepContext.stepReference), steps :+ newStep)
-    }.map(_._2)
+import scala.annotation.tailrec
+
+abstract class CompoundStepUpdater[F[_] : Monad] {
+  def apply(stepsWithContext: StepsWithContext): F[List[Step]] = {
+    @tailrec def helper(fList: F[List[Step]], stepOption: Option[StepWithContext]): F[List[Step]] = {
+      stepOption match {
+        case Some(stepWithContext) =>
+          val newList = for {
+            list <- fList
+            step <- apply(stepWithContext)
+          } yield list :+ step
+          helper(newList, stepWithContext.nextSibling)
+        case None =>
+          fList
+      }
+    }
+    helper(Monad[F].point(Nil), stepsWithContext.atIndex(0))
   }
-  
-  def apply(step: Step, stepContext: StepContext, parameters: TParameters): F[Step] = {
-    step match {
-      case step: Step.Target => updateTarget(step, stepContext, parameters)
-      case step: Step.Assertion => updateAssertion(step, stepContext, parameters)
-      case step: Step.Deduction => updateDeduction(step, stepContext, parameters)
-      case step: Step.Generalization => updateGeneralization(step, stepContext, parameters)
-      case step: Step.Naming => updateNaming(step, stepContext, parameters)
-      case step: Step.SubProof => updateSubProof(step, stepContext, parameters)
-      case step: Step.Elided => updateElided(step, stepContext, parameters)
-      case step: Step.ExistingStatementExtraction => updateExistingStatementExtraction(step, stepContext, parameters)
+
+  def apply(stepWithContext: StepWithContext): F[Step] = {
+    stepWithContext.step match {
+      case step: Step.Target => updateTarget(step, stepWithContext)
+      case step: Step.Assertion => updateAssertion(step, stepWithContext)
+      case step: Step.Deduction => updateDeduction(step, stepWithContext)
+      case step: Step.Generalization => updateGeneralization(step, stepWithContext)
+      case step: Step.Naming => updateNaming(step, stepWithContext)
+      case step: Step.SubProof => updateSubProof(step, stepWithContext)
+      case step: Step.Elided => updateElided(step, stepWithContext)
+      case step: Step.ExistingStatementExtraction => updateExistingStatementExtraction(step, stepWithContext)
     }
   }
 
-  def updateTarget(step: Step.Target, stepContext: StepContext, parameters: TParameters): F[Step] = {
+  def updateTarget(step: Step.Target, stepWithContext: StepWithContext): F[Step] = {
     for {
-      newStatement <- updateStatement(step.statement, stepContext, parameters)
+      newStatement <- updateStatement(step.statement, stepWithContext.stepContext)
     } yield Step.Target(newStatement)
   }
-  def updateAssertion(step: Step.Assertion,  stepContext: StepContext, parameters: TParameters): F[Step] = {
+  def updateAssertion(step: Step.Assertion,  stepWithContext: StepWithContext): F[Step] = {
     for {
-      newStatement <- updateStatement(step.statement, stepContext, parameters)
-      newInference <- updateInference(step.inference, stepContext, parameters)
-      newPremises <- step.premises.toList.map(updatePremise(_, stepContext, parameters)).sequence
-      newSubstitutions <- updateSubstitutions(step.substitutions, stepContext, parameters)
+      newStatement <- updateStatement(step.statement, stepWithContext.stepContext)
+      newInference <- updateInference(step.inference, stepWithContext.stepContext)
+      newPremises <- step.premises.toList.map(updatePremise(_, stepWithContext.stepProvingContext)).sequence
+      newSubstitutions <- updateSubstitutions(step.substitutions, stepWithContext.stepContext)
     } yield Step.Assertion(newStatement, newInference, newPremises, newSubstitutions)
   }
-  def updateDeduction(step: Step.Deduction, stepContext: StepContext, parameters: TParameters): F[Step] = {
+  def updateDeduction(step: Step.Deduction, stepWithContext: StepWithContext): F[Step] = {
     for {
-      newAssumption <- updateStatement(step.assumption, stepContext, parameters)
-      newSubsteps <- apply(step.substeps.toList, stepContext.addStatement(newAssumption, "a"), parameters)
-      deductionDefinition <- updateDeductionDefinition(step.deductionDefinition, parameters)
+      newAssumption <- updateStatement(step.assumption, stepWithContext.stepContext)
+      newSubsteps <- apply(stepWithContext.forSubsteps(step))
+      deductionDefinition <- updateDeductionDefinition(step.deductionDefinition)
     } yield Step.Deduction(newAssumption, newSubsteps, deductionDefinition)
   }
-  def updateGeneralization(step: Step.Generalization, stepContext: StepContext, parameters: TParameters): F[Step] = {
+  def updateGeneralization(step: Step.Generalization, stepWithContext: StepWithContext): F[Step] = {
     for {
-      newSubsteps <- apply(step.substeps.toList, stepContext.addBoundVariable(step.variableName), parameters)
-      generalizationDefinition <- updateGeneralizationDefinition(step.generalizationDefinition, parameters)
+      newSubsteps <- apply(stepWithContext.forSubsteps(step))
+      generalizationDefinition <- updateGeneralizationDefinition(step.generalizationDefinition)
     } yield Step.Generalization(step.variableName, newSubsteps, generalizationDefinition)
   }
-  def updateNaming(step: Step.Naming, stepContext: StepContext, parameters: TParameters): F[Step] = {
+  def updateNaming(step: Step.Naming, stepWithContext: StepWithContext): F[Step] = {
     for {
-      newAssumption <- updateStatement(step.assumption, stepContext.addBoundVariable(step.variableName), parameters)
-      newStatement <- updateStatement(step.statement, stepContext, parameters)
-      newSubsteps <- apply(step.substeps.toList, stepContext.addBoundVariable(step.variableName).addStatement(newAssumption, "a"), parameters)
-      newInference <- updateInference(step.inference, stepContext, parameters)
-      newPremises <- step.premises.toList.map(updatePremise(_, stepContext, parameters)).sequence
-      newSubstitutions <- updateSubstitutions(step.substitutions, stepContext, parameters)
-      deductionDefinition <- updateDeductionDefinition(step.deductionDefinition, parameters)
-      generalizationDefinition <- updateGeneralizationDefinition(step.generalizationDefinition, parameters)
+      newAssumption <- updateStatement(step.assumption, stepWithContext.stepContext.addBoundVariable(step.variableName))
+      newStatement <- updateStatement(step.statement, stepWithContext.stepContext)
+      newSubsteps <- apply(stepWithContext.forSubsteps(step))
+      newInference <- updateInference(step.inference, stepWithContext.stepContext)
+      newPremises <- step.premises.toList.map(updatePremise(_, stepWithContext.stepProvingContext)).sequence
+      newSubstitutions <- updateSubstitutions(step.substitutions, stepWithContext.stepContext)
+      deductionDefinition <- updateDeductionDefinition(step.deductionDefinition)
+      generalizationDefinition <- updateGeneralizationDefinition(step.generalizationDefinition)
     } yield Step.Naming(
       step.variableName,
       newAssumption,
@@ -79,27 +87,27 @@ abstract class CompoundStepUpdater[TParameters, F[_] : Monad] {
       generalizationDefinition,
       deductionDefinition)
   }
-  def updateSubProof(step: Step.SubProof, stepContext: StepContext, parameters: TParameters): F[Step] = {
+  def updateSubProof(step: Step.SubProof, stepWithContext: StepWithContext): F[Step] = {
     for {
-      newSubsteps <- apply(step.substeps.toList, stepContext, parameters)
+      newSubsteps <- apply(stepWithContext.forSubsteps(step))
     } yield Step.SubProof(step.name, newSubsteps)
   }
-  def updateElided(step: Step.Elided, stepContext: StepContext, parameters: TParameters): F[Step] = {
+  def updateElided(step: Step.Elided, stepWithContext: StepWithContext): F[Step] = {
     for {
-      newSubsteps <- apply(step.substeps.toList, stepContext, parameters)
-      newHighlightedInference <- step.highlightedInference.map(updateInference(_, stepContext, parameters)).sequence
+      newSubsteps <- apply(stepWithContext.forSubsteps(step))
+      newHighlightedInference <- step.highlightedInference.map(updateInference(_, stepWithContext.stepContext)).sequence
     } yield Step.Elided(newSubsteps, newHighlightedInference, step.description)
   }
-  def updateExistingStatementExtraction(step: Step.ExistingStatementExtraction, stepContext: StepContext, parameters: TParameters): F[Step] = {
+  def updateExistingStatementExtraction(step: Step.ExistingStatementExtraction, stepWithContext: StepWithContext): F[Step] = {
     for {
-      newSubsteps <- apply(step.substeps.toList, stepContext, parameters)
+      newSubsteps <- apply(stepWithContext.forSubsteps(step))
     } yield Step.ExistingStatementExtraction(newSubsteps)
   }
 
-  def updateStatement(statement: Statement, stepContext: StepContext, parameters: TParameters): F[Statement]
-  def updateInference(inference: Inference.Summary, stepContext: StepContext, parameters: TParameters): F[Inference.Summary]
-  def updatePremise(premise: Premise, stepContext: StepContext, parameters: TParameters): F[Premise]
-  def updateSubstitutions(substitutions: Substitutions, stepContext: StepContext, parameters: TParameters): F[Substitutions]
-  def updateDeductionDefinition(deductionDefinition: DeductionDefinition, parameters: TParameters): F[DeductionDefinition] = Monad[F].point(deductionDefinition)
-  def updateGeneralizationDefinition(generalizationDefinition: GeneralizationDefinition, parameters: TParameters): F[GeneralizationDefinition] = Monad[F].point(generalizationDefinition)
+  def updateStatement(statement: Statement, stepContext: StepContext): F[Statement] = Monad[F].point(statement)
+  def updateInference(inference: Inference.Summary, stepContext: StepContext): F[Inference.Summary] = Monad[F].point(inference)
+  def updatePremise(premise: Premise, stepProvingContext: StepProvingContext): F[Premise] = Monad[F].point(premise)
+  def updateSubstitutions(substitutions: Substitutions, stepContext: StepContext): F[Substitutions] = Monad[F].point(substitutions)
+  def updateDeductionDefinition(deductionDefinition: DeductionDefinition): F[DeductionDefinition] = Monad[F].point(deductionDefinition)
+  def updateGeneralizationDefinition(generalizationDefinition: GeneralizationDefinition): F[GeneralizationDefinition] = Monad[F].point(generalizationDefinition)
 }

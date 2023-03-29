@@ -1,48 +1,36 @@
 package net.prover.theorems.steps
 
 import net.prover.entries.StepsWithContext
+import net.prover.model.Substitutions
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, Step, StepContext}
-import net.prover.model.{Inference, Substitutions}
+import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
 import scalaz.Id.Id
 
-object InsertExternalBoundVariables extends CompoundStepUpdater[InsertExternalBoundVariablesRequest, Id] {
-
-  def apply(stepsWithContext: StepsWithContext, numberOfParametersToInsert: Int): Seq[Step] = {
-    apply(stepsWithContext.steps.toList, stepsWithContext.outerStepContext, InsertExternalBoundVariablesRequest(numberOfParametersToInsert, stepsWithContext.outerStepContext))
-  }
-
+case class InsertExternalBoundVariables(numberOfVariablesToInsert: Int, outerStepContext: StepContext) extends CompoundStepUpdater[Id] {
   override def updateStatement(
     statement: Statement,
-    stepContext: StepContext,
-    request: InsertExternalBoundVariablesRequest
+    stepContext: StepContext
   ): Statement = {
-    statement.insertExternalParameters(request.numberOfVariablesToInsert, stepContext.externalDepth - request.outerStepContext.externalDepth)
-  }
-
-  override def updateInference(
-    inference: Inference.Summary,
-    stepContext: StepContext,
-    request: InsertExternalBoundVariablesRequest
-  ): Inference.Summary = {
-    inference
+    statement.insertExternalParameters(numberOfVariablesToInsert, stepContext.externalDepth - outerStepContext.externalDepth)
   }
 
   override def updatePremise(
     premise: Premise,
-    stepContext: StepContext,
-    request: InsertExternalBoundVariablesRequest
+    stepProvingContext: StepProvingContext
   ): Premise = {
-    premise.insertExternalParameters(request.numberOfVariablesToInsert, stepContext.externalDepth - request.outerStepContext.externalDepth)
+    premise.insertExternalParameters(numberOfVariablesToInsert, stepProvingContext.stepContext.externalDepth - outerStepContext.externalDepth)
   }
 
   override def updateSubstitutions(
     substitutions: Substitutions,
-    stepContext: StepContext,
-    request: InsertExternalBoundVariablesRequest
+    stepContext: StepContext
   ): Substitutions = {
-    substitutions.insertExternalParameters(request.numberOfVariablesToInsert, stepContext.externalDepth - request.outerStepContext.externalDepth)
+    substitutions.insertExternalParameters(numberOfVariablesToInsert, stepContext.externalDepth - outerStepContext.externalDepth)
   }
 }
 
-case class InsertExternalBoundVariablesRequest(numberOfVariablesToInsert: Int, outerStepContext: StepContext)
+object InsertExternalBoundVariables {
+  def apply(numberOfVariablesToInsert: Int, stepsWithContext: StepsWithContext): List[Step] = {
+    InsertExternalBoundVariables(numberOfVariablesToInsert, stepsWithContext.outerStepContext)(stepsWithContext)
+  }
+}

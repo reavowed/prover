@@ -2,6 +2,7 @@ package net.prover.model
 
 import net.prover.books.model.EntryParsingContext
 import net.prover.books.reading.ProofFileReader
+import net.prover.entries.TheoremWithContext
 import net.prover.model.TestDefinitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
@@ -11,6 +12,7 @@ import net.prover.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import net.prover.theorems.RecalculateReferences
+import org.mockito.Mockito.when
 import org.specs2.matcher.Matcher
 import org.specs2.mock.mockito.MockitoStubs
 
@@ -450,8 +452,18 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
   }
 
+  def createTheoremWithContext(theorem: Theorem)(implicit entryContext: EntryContext): TheoremWithContext = {
+    val theoremWithContext = mock[TheoremWithContext]
+    theoremWithContext.entry returns theorem
+    theoremWithContext.theorem returns theorem
+    theoremWithContext.entryContext returns entryContext
+    when(theoremWithContext.proofsWithContext).thenCallRealMethod()
+    theoremWithContext.provingContext returns entryContextToProvingContext
+    theoremWithContext
+  }
+
   def beValidTheorem(implicit entryContext: EntryContext): Matcher[Theorem] = (theorem: Theorem) => {
-    val recalculatedTheorem = RecalculateReferences(theorem, entryContextToProvingContext(entryContext))._1
+    val recalculatedTheorem = RecalculateReferences(createTheoremWithContext(theorem))._1
     val serializedTheorem = recalculatedTheorem.serializedLines.mkString("\n").stripPrefix("theorem ")
     val serializedProofs = recalculatedTheorem.proofs.map(_.serialized)
     val proofFileReader = mock[ProofFileReader]

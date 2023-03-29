@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.books.model.EntryParsingContext
-import net.prover.controllers.models.StepWithReferenceChange
+import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
 import net.prover.model.entries.Theorem.Proof
@@ -54,9 +54,9 @@ case class Theorem(
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
-    entryContext: EntryContext
+    entryWithContext: EntryWithContext
   ): Theorem = {
-    ReplaceDefinitions(this, expressionDefinitionReplacements)(entryContext)
+    ReplaceDefinitions(expressionDefinitionReplacements, entryWithContext.entryContext)(entryWithContext.copy(entry = this))
   }
 }
 
