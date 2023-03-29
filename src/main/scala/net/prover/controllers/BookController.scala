@@ -25,7 +25,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     val index = booksWithKeys.findIndexWhere(_._1 == book).getOrElse(throw new Exception("Book somehow didn't exist"))
     val previous = booksWithKeys.lift(index - 1).map(getBookLinkSummary)
     val next = booksWithKeys.lift(index + 1).map(getBookLinkSummary)
-    val chapterSummaries = BookService.getChaptersWithKeys(book).map { case (chapter, chapterKey) => ChapterSummary(chapter.title, BookService.getChapterUrl(bookKey, chapterKey), chapter.summary) }
+    val chapterSummaries = chaptersWithContexts.map { chapterWithContext => ChapterSummary(chapterWithContext.chapter.title, BookService.getChapterUrl(chapterWithContext), chapterWithContext.chapter.summary) }
     BookProps(book.title, BookService.getBookUrl(bookKey), chapterSummaries, previous, next)
   }
 
@@ -60,7 +60,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     bookService.modifyBook[Id](bookKey, bookWithContext => {
       import bookWithContext.book
       import bookWithContext.globalContext.booksWithKeys
-      val entriesAfterInThisBook = BookService.getChaptersWithKeys(book).view
+      val entriesAfterInThisBook = bookWithContext.chaptersWithKeys.view
         .dropUntil { case (_, key) => key == chapterKey }
         .flatMap(_._1.entries)
       val entriesInOtherBooks = booksWithKeys.filter(_._1 != book).view
@@ -68,10 +68,10 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
         .flatMap(_._1.chapters)
         .flatMap(_.entries)
       for {
-        (chapter, _) <- BookService.getChaptersWithKeys(book).find { case (_, key) => key == chapterKey } orNotFound s"Chapter $chapterKey"
-        _ <- findUsage(entriesAfterInThisBook ++ entriesInOtherBooks, chapter.entries).badRequestIfDefined { case (usedEntry, entryUsing) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+        chapterWithContext <- bookWithContext.chaptersWithContexts.find(_.chapterKey == chapterKey) orNotFound s"Chapter $chapterKey"
+        _ <- findUsage(entriesAfterInThisBook ++ entriesInOtherBooks, chapterWithContext.chapter.entries).badRequestIfDefined { case (usedEntry, entryUsing) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
       } yield {
-        book.copy(chapters = BookService.getChaptersWithKeys(book).filter { case (_, key ) => key != chapterKey }.map(_._1))
+        book.copy(chapters = bookWithContext.chaptersWithKeys.filter { case (_, key ) => key != chapterKey }.map(_._1))
       }
     }).map(createBookProps).toResponseEntity
   }
@@ -96,7 +96,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     bookService.modifyBook[Id](bookKey, bookWithContext => {
       import bookWithContext._
       for {
-        (previousChapters, chapter, nextChapters) <- BookService.getChaptersWithKeys(book).splitWhere(_._2 == chapterKey).orNotFound(s"Chapter $chapterKey")
+        (previousChapters, chapter, nextChapters) <- bookWithContext.chaptersWithKeys.splitWhere(_._2 == chapterKey).orNotFound(s"Chapter $chapterKey")
         updatedChapters <- tryMove(chapter._1, previousChapters.map(_._1), nextChapters.map(_._1))
       } yield book.copy(chapters = updatedChapters)
     }).map(createBookProps).toResponseEntity

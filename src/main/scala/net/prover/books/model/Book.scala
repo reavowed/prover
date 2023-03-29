@@ -1,6 +1,7 @@
 package net.prover.books.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import net.prover.books.keys.WithKeyProperty
 import net.prover.model.{Chapter, SeqOps}
 
 @JsonIgnoreProperties(Array("dependencies"))
@@ -32,6 +33,7 @@ case class Book(
 }
 
 object Book {
+  implicit val keyProperty: WithKeyProperty[Book] = _.title
   def getDependencies(imports: Seq[String], availableBooks: Seq[Book]): Seq[Book] = {
     imports
       .map { importTitle =>

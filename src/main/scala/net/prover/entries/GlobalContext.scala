@@ -1,5 +1,6 @@
 package net.prover.entries
 
+import net.prover.books.keys.GetWithKeys
 import net.prover.books.model.Book
 import net.prover.controllers.{BookService, OptionWithResponseExceptionOps}
 import net.prover.model.definitions.Definitions
@@ -12,7 +13,7 @@ case class GlobalContext(
     allBooks: List[Book],
     definitions: Definitions
 ) {
-  val booksWithKeys: List[(Book, String)] = BookService.getBooksWithKeys(allBooks)
+  val booksWithKeys: List[(Book, String)] = GetWithKeys(allBooks)
   def booksWithContexts: List[BookWithContext] = booksWithKeys.map { case (book, bookKey) => BookWithContext(book, bookKey, this) }
 
   def findBook(bookKey: String): Try[BookWithContext] = {

@@ -28,8 +28,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     val next = chaptersWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, BookService.getChapterUrl(bookKey, key)) }
     implicit val entryContext = EntryContext.forChapterInclusive(chapterWithContext)
 
-    val entrySummaries = BookService.getEntriesWithKeys(chapter)
-      .map(_.mapRight(key => BookService.getEntryUrl(bookKey, chapterKey, key)))
+    val entrySummaries = entriesWithContexts
+      .map(entryWithContext => (entryWithContext.entry, BookService.getEntryUrl(entryWithContext)))
       .mapCollect { case (entry, url) =>
         entry match {
           case axiom: Axiom =>

@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.books.keys.WithKeyProperty
 import net.prover.model.entries._
 
 case class Chapter(
@@ -26,4 +27,8 @@ case class Chapter(
   override def hashCode(): Int = {
     title.hashCode
   }
+}
+
+object Chapter {
+  implicit val keyProperty: WithKeyProperty[Chapter] = _.title
 }

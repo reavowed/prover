@@ -1,7 +1,8 @@
 package net.prover.controllers
 
+import net.prover.books.keys.KeyAccumulator
 import net.prover.books.management.{BookStateManager, ReloadBooks, UpdateBooks}
-import net.prover.books.model.{Book, KeyAccumulator}
+import net.prover.books.model.Book
 import net.prover.controllers.models._
 import net.prover.entries._
 import net.prover.model._
@@ -140,24 +141,13 @@ object BookService {
   def getEntryUrl(bookKey: String, chapterKey: String, entryKey: String): String = s"${getChapterUrl(bookKey, chapterKey)}/$entryKey"
   def getEntryUrl(entryWithContext: EntryWithContext): String = getEntryUrl(entryWithContext.bookKey, entryWithContext.chapterKey, entryWithContext.entryKey)
 
-  def getBooksWithKeys(books: Seq[Book]): List[(Book, String)] = getWithKeys(books)(_.title)
-  def getChaptersWithKeys(book: Book): List[(Chapter, String)] = getWithKeys(book.chapters)(_.title)
-  def getEntriesWithKeys(chapter: Chapter): List[(ChapterEntry, String)] = getWithKeys(chapter.entries)(_.name)
-
-  private def getWithKeys[T](seq: Seq[T])(keyProperty: T => String): List[(T, String)] = {
-    seq.foldLeft((List.empty[(T, String)], KeyAccumulator.Empty)) { case ((results, acc), t) =>
-      val (key, newAcc) = acc.getNextKey(keyProperty(t).formatAsKey)
-      (results :+ (t -> key), newAcc)
-    }._1
-  }
-
   def getInferenceLinks(inferenceIds: Set[String], globalContext: GlobalContext): Map[String, InferenceSummary] = {
     (for {
-      (book, bookKey) <- globalContext.booksWithKeys
-      (chapter, chapterKey) <- BookService.getChaptersWithKeys(book)
-      (inference, key) <- BookService.getEntriesWithKeys(chapter)
-        .flatMap { case (entry, key) => entry.inferences.map(_ -> key) }
-        .filter{ case (inference, _) => inferenceIds.contains(inference.id) }
-    } yield inference.id -> InferenceSummary(inference.name, getEntryUrl(bookKey, chapterKey, key), globalContext.definitions.isInferenceComplete(inference))).toMap
+      bookWithContext <- globalContext.booksWithContexts
+      chapterWithContext <- bookWithContext.chaptersWithContexts
+      entryWithContext <- chapterWithContext.inferencesWithContexts
+      inference <- entryWithContext.entry.inferences
+      if inferenceIds.contains(inference.id)
+    } yield inference.id -> InferenceSummary(inference.name, getEntryUrl(entryWithContext), globalContext.definitions.isInferenceComplete(inference))).toMap
   }
 }

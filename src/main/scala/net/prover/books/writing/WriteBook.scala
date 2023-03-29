@@ -1,5 +1,6 @@
 package net.prover.books.writing
 
+import net.prover.books.keys.GetWithKeys
 import net.prover.books.management.BookDirectoryConfig
 import net.prover.books.model.{Book, FileDefinition}
 import net.prover.controllers.BookService
@@ -36,7 +37,7 @@ object WriteBook {
   }
 
   private def getProofFiles(book: Book, chapter: Chapter, chapterIndex: Int): Seq[FileDefinition] = {
-    BookService.getEntriesWithKeys(chapter).collect {
+    GetWithKeys(chapter.entries).collect {
       case (theorem: Theorem, key) => (theorem, key)
     }.flatMapWithIndex { case ((theorem, key), index) =>
       theorem.proofs.mapWithIndex((proof, proofIndex) =>

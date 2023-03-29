@@ -19,6 +19,7 @@ case class TypedEntryWithContext[+T <: ChapterEntry](
   def chapterKey = chapterWithContext.chapterKey
 
   def theorem(implicit ev: <:<[T, Theorem]): Theorem = ev.apply(entry)
+  def inference(implicit ev: <:<[T, Inference]): Inference = ev.apply(entry)
   implicit def expressionParsingContext(implicit ev: <:<[T, Inference]): ExpressionParsingContext = ExpressionParsingContext.forInference(ev.apply(entry))
   def proofsWithContext(implicit ev: <:<[T, Theorem]): Seq[ProofWithContext] = ev.apply(entry).proofs.mapWithIndex((proof, i) => ProofWithContext(proof, i, this.asInstanceOf[TheoremWithContext]))
 

@@ -1,6 +1,7 @@
 package net.prover.model.entries
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.books.keys.WithKeyProperty
 import net.prover.books.model.EntryParsingContext
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.Statement
@@ -24,6 +25,8 @@ trait ChapterEntry {
 }
 
 object ChapterEntry {
+  implicit val keyProperty: WithKeyProperty[ChapterEntry] = _.name
+
   trait Standalone extends ChapterEntry {
     @JsonSerialize
     def title: String

@@ -1,5 +1,6 @@
 package net.prover.entries
 
+import net.prover.books.keys.GetWithKeys
 import net.prover.books.model.Book
 import net.prover.controllers.{BookService, OptionWithResponseExceptionOps}
 import net.prover.model.{Chapter, Inference}
@@ -20,7 +21,7 @@ case class ChapterWithContext(
   def book: Book = bookWithContext.book
   def bookKey: String = bookWithContext.bookKey
 
-  def entriesWithKeys: List[(ChapterEntry, String)] = BookService.getEntriesWithKeys(chapter)
+  def entriesWithKeys: List[(ChapterEntry, String)] = GetWithKeys(chapter.entries)
 
   def entriesWithContexts: Seq[EntryWithContext] = chapter.entries.map(getEntry[ChapterEntry])
   def inferencesWithContexts: Seq[TypedEntryWithContext[Inference.Entry]] = entriesWithContexts.ofType[TypedEntryWithContext[Inference.Entry]]

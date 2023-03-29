@@ -1,7 +1,8 @@
 package net.prover.books.reading
 
+import net.prover.books.keys.KeyAccumulator
 import net.prover.books.management.BookDirectoryConfig
-import net.prover.books.model.{BookOutline, EntryParsingContext, KeyAccumulator}
+import net.prover.books.model.{BookOutline, EntryParsingContext}
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.{Chapter, EntryContext, Parser}
 

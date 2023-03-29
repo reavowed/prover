@@ -1,5 +1,6 @@
 package net.prover.entries
 
+import net.prover.books.keys.GetWithKeys
 import net.prover.books.model.Book
 import net.prover.controllers.{BookService, OptionWithResponseExceptionOps}
 import net.prover.model.Chapter
@@ -15,7 +16,7 @@ case class BookWithContext(
   def allBooks: List[Book] = globalContext.allBooks
   def definitions: Definitions = globalContext.definitions
 
-  lazy val chaptersWithKeys: List[(Chapter, String)] = BookService.getChaptersWithKeys(book)
+  lazy val chaptersWithKeys: List[(Chapter, String)] = GetWithKeys(book.chapters)
   def chaptersWithContexts: Seq[ChapterWithContext] = book.chapters.map(getChapter)
 
   def getChapter(chapter: Chapter): ChapterWithContext = {

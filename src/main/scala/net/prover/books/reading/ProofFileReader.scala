@@ -1,6 +1,6 @@
 package net.prover.books.reading
 
-import net.prover.books.model.KeyAccumulator
+import net.prover.books.keys.KeyAccumulator
 import net.prover.model._
 import net.prover.model.entries.ChapterEntry
 

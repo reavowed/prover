@@ -1,4 +1,4 @@
-package net.prover.books.model
+package net.prover.books.keys
 
 case class KeyAccumulator(countsByKey: Map[String, Int]) {
   def getNextKey(baseKey: String): (String, KeyAccumulator) = {
