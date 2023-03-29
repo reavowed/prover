@@ -4,7 +4,7 @@ import net.prover.books.keys.KeyAccumulator
 import net.prover.books.management.{BookStateManager, ReloadBooks, UpdateBooks}
 import net.prover.books.model.Book
 import net.prover.controllers.models._
-import net.prover.entries._
+import net.prover.entries.{StepsWithContext, _}
 import net.prover.model._
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.proof.{Step, StepProvingContext}
@@ -86,16 +86,11 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
     }).map(_.map(_._2))
   }
 
-  def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Step]): Try[ProofUpdateProps[StepReplacementProps]] = {
-    replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, stepProvingContext) => f(step, stepProvingContext).map(Seq(_)) }
-  }
-
-  def replaceSteps[F[_]: Functor](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (Seq[Step], StepProvingContext) => Try[F[Seq[Step]]]): Try[F[ProofUpdateProps[MultipleStepReplacementProps]]] = {
+  def replaceSteps[F[_]: Functor](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: StepsWithContext => Try[F[Seq[Step]]]): Try[F[ProofUpdateProps[MultipleStepReplacementProps]]] = {
     modifyTheorem[FWithValue[F, MultipleStepReplacementProps]#Type](bookKey, chapterKey, theoremKey) { theoremWithContext =>
-      import theoremWithContext._
-      ReplaceSteps[TryFWithValue[F, MultipleStepReplacementProps]#Type](entry, proofIndex, stepPath) { (steps, stepContext) =>
-        Some(f(steps, StepProvingContext(stepContext, provingContext)).map(_.map { newSteps =>
-          (newSteps, MultipleStepReplacementProps(stepPath, 0, steps.length, newSteps))
+      ReplaceSteps[TryFWithValue[F, MultipleStepReplacementProps]#Type](theoremWithContext, proofIndex, stepPath) { stepsWithContext =>
+        Some(f(stepsWithContext).map(_.map { newSteps =>
+          (newSteps, MultipleStepReplacementProps(stepPath, 0, stepsWithContext.steps.length, newSteps))
         }))
       }.orNotFound(s"Step $stepPath").flatten
     }.map(_.map { case (theoremUpdateProps, stepReplacementProps) =>
@@ -110,13 +105,14 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
     })
   }
 
-  def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[ProofUpdateProps[StepReplacementProps]] = {
+  def replaceStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: TypedStepWithContext[TStep] => Try[Seq[Step]]): Try[ProofUpdateProps[StepReplacementProps]] = {
     stepPath.initAndLastOption.map { case (init, last) =>
-      replaceSteps[WithValue[Seq[Step]]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, stepProvingContext) =>
-        steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+      replaceSteps[WithValue[Seq[Step]]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { stepsWithContext =>
+        stepsWithContext.steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
           for {
             typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
-            replacementSteps <- f(typedStep, stepProvingContext.updateStepContext(_.addSteps(before).atIndex(last)))
+            stepWithContext = stepsWithContext.atChild(before, typedStep)
+            replacementSteps <- f(stepWithContext)
           } yield (before ++ replacementSteps ++ after, replacementSteps)
         }.orNotFound(s"Step $stepPath").flatten
       }.map { case (proofUpdateProps, replacementSteps) =>
@@ -125,8 +121,12 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
     }.orNotFound(s"Step $stepPath").flatten
   }
 
-  def insertSteps[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: (TStep, StepProvingContext) => Try[Seq[Step]]): Try[ProofUpdateProps[StepInsertionProps]] = {
-    replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath)((step, stepProvingContext) => f(step, stepProvingContext).map { steps => steps :+ step})
+  def modifyStep[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: TypedStepWithContext[TStep] => Try[Step]): Try[ProofUpdateProps[StepReplacementProps]] = {
+    replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext => f(stepWithContext).map(Seq(_)) }
+  }
+
+  def insertSteps[TStep <: Step : ClassTag](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: TypedStepWithContext[TStep] => Try[Seq[Step]]): Try[ProofUpdateProps[StepInsertionProps]] = {
+    replaceStep[TStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath)(stepWithContext => f(stepWithContext).map { steps => steps :+ stepWithContext.step})
       .map { proofUpdateProps =>
         proofUpdateProps.withNewStepUpdateProps(StepInsertionProps(proofUpdateProps.stepUpdates.path, proofUpdateProps.stepUpdates.newSteps.init))
       }

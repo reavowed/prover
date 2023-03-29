@@ -1,5 +1,6 @@
 package net.prover.theorems.steps
 
+import net.prover.entries.StepsWithContext
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step, StepContext}
 import net.prover.model.{Inference, Substitutions}
@@ -7,8 +8,8 @@ import scalaz.Id.Id
 
 object InsertExternalBoundVariables extends CompoundStepUpdater[InsertExternalBoundVariablesRequest, Id] {
 
-  def apply(steps: Seq[Step], stepContext: StepContext, numberOfParametersToInsert: Int): Seq[Step] = {
-    apply(steps.toList, stepContext, InsertExternalBoundVariablesRequest(numberOfParametersToInsert, stepContext))
+  def apply(stepsWithContext: StepsWithContext, numberOfParametersToInsert: Int): Seq[Step] = {
+    apply(stepsWithContext.steps.toList, stepsWithContext.outerStepContext, InsertExternalBoundVariablesRequest(numberOfParametersToInsert, stepsWithContext.outerStepContext))
   }
 
   override def updateStatement(

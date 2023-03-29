@@ -1,31 +1,34 @@
 package net.prover.theorems
 
+import net.prover.entries.{StepWithContext, StepsWithContext, TheoremWithContext}
+import net.prover.model.SeqOps
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
-import net.prover.model.proof.{Step, StepContext}
+import net.prover.model.proof.Step
 import scalaz.Functor
 import scalaz.syntax.functor._
 
 object ReplaceSteps {
-  def apply[F[_] : Functor](theorem: Theorem, proofIndex: Int, stepIndexes: Seq[Int])(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
-    theorem.proofs.splitAtIndexIfValid(proofIndex).flatMap { case (before, proof, after) =>
-      apply(proof.steps, stepIndexes, theorem.initialStepContext)(f).map(_.map(newSteps => theorem.copy(proofs = (before :+ Proof(newSteps)) ++ after)))
+  def apply[F[_] : Functor](theoremWithContext: TheoremWithContext, proofIndex: Int, stepIndexes: Seq[Int])(f: StepsWithContext => Option[F[Seq[Step]]]): Option[F[Theorem]] = {
+    theoremWithContext.theorem.proofs.splitAtIndexIfValid(proofIndex).flatMap { case (before, proof, after) =>
+      apply(theoremWithContext.atProof(proof).stepsWithContext, stepIndexes)(f)
+        .map(_.map(newSteps => theoremWithContext.theorem.copy(proofs = (before :+ Proof(newSteps)) ++ after)))
     }
   }
-  def apply[F[_] : Functor](steps: Seq[Step], stepIndexes: Seq[Int], outerStepContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Seq[Step]]] = {
+  def apply[F[_] : Functor](stepsWithContext: StepsWithContext, stepIndexes: Seq[Int])(f: StepsWithContext => Option[F[Seq[Step]]]): Option[F[Seq[Step]]] = {
     stepIndexes match {
       case Nil =>
-        f(steps, outerStepContext)
+        f(stepsWithContext)
       case head +: tail =>
-        steps.splitAtIndexIfValid(head).flatMap { case (before, step, after) =>
-          apply(step, tail, outerStepContext.addSteps(before).atIndex(head))(f).map(_.map(newStep => (before :+ newStep) ++ after))
+        stepsWithContext.steps.splitAtIndexIfValid(head).flatMap { case (before, step, after) =>
+          apply(stepsWithContext.atChild(before, step), tail)(f).map(_.map(newStep => (before :+ newStep) ++ after))
         }
     }
   }
-  def apply[F[_] : Functor](step: Step, stepIndexes: Seq[Int], stepContext: StepContext)(f: (Seq[Step], StepContext) => Option[F[Seq[Step]]]): Option[F[Step]] = {
-    step match {
+  def apply[F[_] : Functor](stepWithContext: StepWithContext, stepIndexes: Seq[Int])(f: StepsWithContext => Option[F[Seq[Step]]]): Option[F[Step]] = {
+    stepWithContext.step match {
       case step: Step.WithSubsteps =>
-        apply(step.substeps, stepIndexes, step.specifyStepContext(stepContext))(f).map(_.map(step.replaceSubsteps(_, stepContext)))
+        apply(stepWithContext.forSubsteps(step), stepIndexes)(f).map(_.map(step.replaceSubsteps(_, stepWithContext.stepContext)))
       case _: Step.WithoutSubsteps =>
         None
     }

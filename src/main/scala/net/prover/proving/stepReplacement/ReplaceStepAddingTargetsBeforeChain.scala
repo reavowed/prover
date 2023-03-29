@@ -21,12 +21,13 @@ object ReplaceStepAddingTargetsBeforeChain {
   ): Try[ProofUpdateProps[InsertionAndReplacementProps]] = {
     stepPath.indexes match {
       case init :+ last =>
-        bookService.replaceSteps[WithValue[InsertionAndReplacementProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { case (steps, stepProvingContext) =>
-          steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+        bookService.replaceSteps[WithValue[InsertionAndReplacementProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { case outerStepsWithContext =>
+          outerStepsWithContext.steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+            val stepWithContext = outerStepsWithContext.atChild(before, step)
             for {
               typedStep <- step.asOptionalInstanceOf[TStep].orBadRequest(s"Step was not ${classTag[TStep].runtimeClass.getSimpleName}")
-              (replacementStep, stepsToAddBeforeTransitive) <- f(typedStep, stepProvingContext.updateStepContext(_.addSteps(before).atIndex(last)))
-              (newSteps, stepInsertionProps) = AddTargetsBeforeChain(init, before, replacementStep +: after, stepsToAddBeforeTransitive)(stepProvingContext)
+              (replacementStep, stepsToAddBeforeTransitive) <- f(typedStep, stepWithContext.stepProvingContext)
+              (newSteps, stepInsertionProps) = AddTargetsBeforeChain(init, before, replacementStep +: after, stepsToAddBeforeTransitive)(outerStepsWithContext.outerStepProvingContext)
             } yield (newSteps, InsertionAndReplacementProps(stepInsertionProps, StepReplacementProps(stepPath.indexes, Seq(replacementStep))))
           }.orNotFound(s"Step $stepPath").flatten
         }.map { case (proofUpdateProps, stepProps) =>

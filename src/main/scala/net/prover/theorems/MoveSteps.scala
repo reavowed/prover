@@ -1,12 +1,14 @@
 package net.prover.theorems
 
-import net.prover.controllers.models.{InsertionAndDeletionProps, ProofUpdateProps, StepDeletionProps, StepInsertionProps, StepMoveRequest}
+import net.prover.controllers.models._
 import net.prover.controllers.{BookService, BooleanWithResponseExceptionOps, OptionWithResponseExceptionOps}
+import net.prover.entries.StepsWithContext
 import net.prover.model._
-import net.prover.model.proof.{Step, StepContext}
+import net.prover.model.proof.Step
 import net.prover.theorems.steps.{InsertExternalBoundVariables, RemoveExternalBoundVariables}
 import net.prover.util.FunctorTypes._
 
+import scala.annotation.tailrec
 import scala.util.{Success, Try}
 
 object MoveSteps {
@@ -19,7 +21,7 @@ object MoveSteps {
     implicit bookService: BookService
   ): Try[ProofUpdateProps[InsertionAndDeletionProps]] = {
     import stepMoveRequest._
-    def commonPrefix[T](a: Seq[T], b: Seq[T], acc: Seq[T] = Nil): (Seq[T], Seq[T], Seq[T]) = {
+    @tailrec def commonPrefix[T](a: Seq[T], b: Seq[T], acc: Seq[T] = Nil): (Seq[T], Seq[T], Seq[T]) = {
       (a, b) match {
         case (headA +: tailA, headB +: tailB) if headA == headB =>
           commonPrefix(tailA, tailB, acc :+ headA)
@@ -29,29 +31,29 @@ object MoveSteps {
     }
 
     val (sharedPath, sourcePathInner, destinationPathInner) = commonPrefix(sourcePath, destinationPath)
-    (for {
-      (proofUpdateProps, insertionAndDeletionProps) <- bookService.replaceSteps[WithValue[InsertionAndDeletionProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, sharedPath) { (sharedParentSteps, sharedContext) =>
+    for {
+      (proofUpdateProps, insertionAndDeletionProps) <- bookService.replaceSteps[WithValue[InsertionAndDeletionProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, sharedPath) { sharedParentStepsWithContext =>
         for {
-          (substepsWithoutCurrent, (currentSteps, currentStepOuterContext)) <-
-            ReplaceSteps[WithValue[(Seq[Step], StepContext)]#Type](sharedParentSteps, sourcePathInner, sharedContext.stepContext) { (currentSteps, currentStepOuterContext) =>
-              currentSteps.splitBetweenIndexesIfValid(sourceStartIndex, sourceEndIndex).map { case (before, steps, after) =>
-                (before ++ after, (steps, currentStepOuterContext))
+          (substepsWithoutCurrent, currentStepsWithContext) <-
+            ReplaceSteps[WithValue[StepsWithContext]#Type](sharedParentStepsWithContext, sourcePathInner) { currentStepsWithContext =>
+              currentStepsWithContext.steps.splitBetweenIndexesIfValid(sourceStartIndex, sourceEndIndex).map { case (before, steps, after) =>
+                (before ++ after, currentStepsWithContext.copy(steps = steps))
               }
             }.orBadRequest("Invalid source path")
-          result <- ReplaceSteps[TryWithValue[InsertionAndDeletionProps]#Type](substepsWithoutCurrent, destinationPathInner, sharedContext.stepContext) { (newSurroundingSteps, newStepOuterContext) =>
-            val sharedBoundVariableDepth = Seq(currentStepOuterContext.externalDepth, newStepOuterContext.externalDepth).min
-            val boundVariablesToRemove = currentStepOuterContext.externalDepth - newStepOuterContext.externalDepth
-            newSurroundingSteps.takeAndRemainingIfValid(destinationIndex).map { case (before, after) =>
+          result <- ReplaceSteps[TryWithValue[InsertionAndDeletionProps]#Type](sharedParentStepsWithContext.copy(steps = substepsWithoutCurrent), destinationPathInner) { newSurroundingStepsWithContext =>
+            val sharedBoundVariableDepth = Seq(currentStepsWithContext.outerStepContext.externalDepth, newSurroundingStepsWithContext.outerStepContext.externalDepth).min
+            val boundVariablesToRemove = currentStepsWithContext.outerStepContext.externalDepth - newSurroundingStepsWithContext.outerStepContext.externalDepth
+            newSurroundingStepsWithContext.steps.takeAndRemainingIfValid(destinationIndex).map { case (before, after) =>
               for {
                 _ <- (0 until sharedBoundVariableDepth).map { i =>
-                  (currentStepOuterContext.boundVariableLists(i).size <= newStepOuterContext.boundVariableLists(i).size).orBadRequest("Cannot move step to one with a smaller bound variable list")
+                  (currentStepsWithContext.outerStepContext.boundVariableLists(i).size <= newSurroundingStepsWithContext.outerStepContext.boundVariableLists(i).size).orBadRequest("Cannot move step to one with a smaller bound variable list")
                 }.traverseTry
                 stepsWithNewContext <- if (boundVariablesToRemove > 0) {
-                  RemoveExternalBoundVariables(currentSteps, currentStepOuterContext, boundVariablesToRemove).orBadRequest("Could not remove extra parameters")
+                  RemoveExternalBoundVariables(currentStepsWithContext, boundVariablesToRemove).orBadRequest("Could not remove extra parameters")
                 } else if (boundVariablesToRemove < 0)
-                  Success(InsertExternalBoundVariables(currentSteps, currentStepOuterContext, -boundVariablesToRemove))
+                  Success(InsertExternalBoundVariables(currentStepsWithContext, -boundVariablesToRemove))
                 else
-                  Success(currentSteps)
+                  Success(currentStepsWithContext.steps)
               } yield (
                 before ++ stepsWithNewContext ++ after,
                 InsertionAndDeletionProps(
@@ -66,6 +68,6 @@ object MoveSteps {
         StepInsertionProps(
           insertionAndDeletionProps.insertion.path,
           destinationPathInner.foldLeft(proofUpdateProps.stepUpdates.newSteps) { (steps, index) => steps(index).asInstanceOf[Step.WithSubsteps].substeps }.slice(destinationIndex, destinationIndex + insertionAndDeletionProps.insertion.newSteps.length)),
-        insertionAndDeletionProps.deletion)))
+        insertionAndDeletionProps.deletion))
   }
 }

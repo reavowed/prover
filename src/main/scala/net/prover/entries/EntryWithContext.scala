@@ -2,6 +2,7 @@ package net.prover.entries
 
 import net.prover.books.model.Book
 import net.prover.model.definitions.Definitions
+import net.prover.model.entries.Theorem.Proof
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.{EntryContext, ExpressionParsingContext, Inference, ProvingContext}
 
@@ -22,6 +23,7 @@ case class TypedEntryWithContext[+T <: ChapterEntry](
   def inference(implicit ev: <:<[T, Inference]): Inference = ev.apply(entry)
   implicit def expressionParsingContext(implicit ev: <:<[T, Inference]): ExpressionParsingContext = ExpressionParsingContext.forInference(ev.apply(entry))
   def proofsWithContext(implicit ev: <:<[T, Theorem]): Seq[ProofWithContext] = ev.apply(entry).proofs.mapWithIndex((proof, i) => ProofWithContext(proof, i, this.asInstanceOf[TheoremWithContext]))
+  def atProof(proof: Proof)(implicit ev: <:<[T, Theorem]): ProofWithContext = ProofWithContext(proof, ev.apply(entry).proofs.indexOf(proof), this.asInstanceOf[TheoremWithContext])
 
   lazy implicit val entryContext: EntryContext = EntryContext.forEntry(this)
   lazy implicit val provingContext: ProvingContext = ProvingContext(entryContext, chapterWithContext.bookWithContext.globalContext.definitions)

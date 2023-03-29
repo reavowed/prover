@@ -49,4 +49,18 @@ trait StepContextHelper {
       stepContext,
       stepsWithContext)
   }
+
+  def createStepsWithContext(
+    steps: Seq[Step])(
+    implicit entryContext: EntryContext,
+    outerStepContext: StepContext
+  ): StepsWithContext = {
+    val proofWithContext = mock[ProofWithContext]
+    proofWithContext.provingContext returns entryContextToProvingContext(entryContext)
+    StepsWithContext(
+      steps,
+      outerStepContext.stepReference,
+      outerStepContext,
+      proofWithContext)
+  }
 }

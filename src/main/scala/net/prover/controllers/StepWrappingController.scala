@@ -20,8 +20,8 @@ class StepWrappingController @Autowired() (val bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody name: String
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, _) =>
-      Success(Seq(Step.SubProof(name, Seq(step))))
+    bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
+      Success(Seq(Step.SubProof(name, Seq(stepWithContext.step))))
     }.toResponseEntity
   }
 
@@ -33,8 +33,8 @@ class StepWrappingController @Autowired() (val bookService: BookService) {
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.modifyStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (step, _) =>
-      Success(Step.Elided(Seq(step), None, None))
+    bookService.modifyStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
+      Success(Step.Elided(Seq(stepWithContext.step), None, None))
     }.toResponseEntity
   }
 }

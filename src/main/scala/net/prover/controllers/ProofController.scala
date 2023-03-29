@@ -22,8 +22,8 @@ class ProofController @Autowired() (implicit val bookService: BookService) {
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)((step, _) =>
-      Success(step.provenStatement.map(s => Step.Target(s)).toSeq)
+    bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)(stepWithContext =>
+      Success(stepWithContext.step.provenStatement.map(s => Step.Target(s)).toSeq)
     ).toResponseEntity
   }
 
@@ -35,8 +35,8 @@ class ProofController @Autowired() (implicit val bookService: BookService) {
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.WithSubsteps](bookKey, chapterKey, theoremKey, proofIndex, stepPath)((step, _) =>
-      Success(step.substeps)
+    bookService.replaceStep[Step.WithSubsteps](bookKey, chapterKey, theoremKey, proofIndex, stepPath)(stepWithContext =>
+      Success(stepWithContext.step.substeps)
     ).toResponseEntity
   }
 
@@ -48,9 +48,9 @@ class ProofController @Autowired() (implicit val bookService: BookService) {
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)((step, _) =>
+    bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)(stepWithContext =>
       // Deleting naming steps is confusing, just clear them
-      Success(step.asOptionalInstanceOf[Step.Naming]
+      Success(stepWithContext.step.asOptionalInstanceOf[Step.Naming]
         .flatMap(namingStep => namingStep.provenStatement)
         .map(s => Step.Target(s))
         .toSeq)

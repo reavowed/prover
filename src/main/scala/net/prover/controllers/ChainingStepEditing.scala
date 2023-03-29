@@ -91,21 +91,20 @@ trait ChainingStepEditing {
       case Nil =>
         Failure(NotFoundException(s"Step $stepPath"))
       case init :+ last =>
-        bookService.replaceSteps[WithValue[InsertionAndMultipleReplacementProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { (steps, outerStepProvingContext) =>
-          steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
-            val outerStepContext = outerStepProvingContext.stepContext
-            implicit val stepContext = outerStepContext.addSteps(before).atIndex(last)
-            implicit val stepProvingContext = StepProvingContext(stepContext, outerStepProvingContext.provingContext)
+        bookService.replaceSteps[WithValue[InsertionAndMultipleReplacementProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { outerStepsWithContext =>
+          outerStepsWithContext.steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+            val stepWithContext = outerStepsWithContext.atChild(before, step)
+            import stepWithContext.stepProvingContext
 
             def forConnective(connective: BinaryConnective, lhs: Statement, rhs: Statement): Try[(Seq[Step], Seq[Step.Target], MultipleStepReplacementProps)] = {
               for {
-                (firstChainingStep, secondChainingStep, targetSteps) <- createSteps.createStepsForConnective(connective, lhs, rhs, stepProvingContext)
+                (firstChainingStep, secondChainingStep, targetSteps) <- createSteps.createStepsForConnective(connective, lhs, rhs, stepWithContext.stepProvingContext)
                 (transitivitySteps, replacementProps) <- getTransitivitySteps(firstChainingStep, secondChainingStep, connective)
               } yield (transitivitySteps, targetSteps, replacementProps)
             }
             def forRelation(relation: BinaryRelation, lhs: Term, rhs: Term): Try[(Seq[Step], Seq[Step.Target], MultipleStepReplacementProps)] = {
               for {
-                (firstChainingStep, secondChainingStep, targetSteps) <- createSteps.createStepsForRelation(relation, lhs, rhs, stepProvingContext)
+                (firstChainingStep, secondChainingStep, targetSteps) <- createSteps.createStepsForRelation(relation, lhs, rhs, stepWithContext.stepProvingContext)
                 (transitivitySteps, replacementProps) <- getTransitivitySteps(firstChainingStep, secondChainingStep, relation)
               } yield (transitivitySteps, targetSteps, replacementProps)
             }
@@ -119,8 +118,8 @@ trait ChainingStepEditing {
                 followingStatement <- followingStep.provenStatement
                 (followingRelation, followingLhs, followingRhs) <- ChainingMethods.getJoiner(followingStatement)
                 if followingRhs == secondChainingStep.rhs
-                stepPath = stepContext.stepReference.stepPath
-                followingStepPath = outerStepContext.atIndex(last + 1).stepReference.stepPath
+                stepPath = stepWithContext.stepContext.stepReference.stepPath
+                followingStepPath = outerStepsWithContext.outerStepContext.atIndex(last + 1).stepReference.stepPath
                 followingPremises = followingStep.recursivePremises.filter(p => !p.asOptionalInstanceOf[SingleLinePremise].flatMap(_.referencedLine.asOptionalInstanceOf[StepReference]).exists(_.stepPath.startsWith(followingStepPath)))
                 if followingPremises.exists(p => p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath)))
                 otherPremise <- followingPremises.filter(p => !p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath))).single

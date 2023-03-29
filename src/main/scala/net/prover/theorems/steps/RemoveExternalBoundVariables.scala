@@ -1,13 +1,14 @@
 package net.prover.theorems.steps
 
+import net.prover.entries.StepsWithContext
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step, StepContext}
 import net.prover.model.{Inference, Substitutions}
 import scalaz.Scalaz._
 
 object RemoveExternalBoundVariables extends CompoundStepUpdater[RemoveExternalBoundVariablesRequest, Option] {
-  def apply(steps: Seq[Step], stepContext: StepContext, numberOfParametersToRemove: Int): Option[Seq[Step]] = {
-    apply(steps.toList, stepContext, RemoveExternalBoundVariablesRequest(numberOfParametersToRemove, stepContext))
+  def apply(stepsWithContext: StepsWithContext, numberOfParametersToRemove: Int): Option[Seq[Step]] = {
+    apply(stepsWithContext.steps.toList, stepsWithContext.outerStepContext, RemoveExternalBoundVariablesRequest(numberOfParametersToRemove, stepsWithContext.outerStepContext))
   }
 
   override def updateStatement(

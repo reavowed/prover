@@ -55,8 +55,9 @@ class StepNamingController @Autowired() (val bookService: BookService) extends I
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { (targetStep, stepProvingContext) =>
-      implicit val spc = stepProvingContext
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
+      import stepWithContext.step
+      import stepWithContext.stepProvingContext
 
       def getNamingWrapper(premiseStatement: Statement, resultStatement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Statement, SubstitutionContext, Step => Step.Naming)] = {
         for {
@@ -75,11 +76,11 @@ class StepNamingController @Autowired() (val bookService: BookService) extends I
           substitutedAssumption,
           substitutedConclusion,
           SubstitutionContext.withExtraParameter,
-          (step: Step) => Step.Naming(
+          (substep: Step) => Step.Naming(
             variableName,
             substitutedAssumption,
-            targetStep.statement,
-            Seq(step),
+            step.statement,
+            Seq(substep),
             namingInference.summary,
             Seq(Premise.Pending(premiseStatement)),
             substitutions,
@@ -99,7 +100,7 @@ class StepNamingController @Autowired() (val bookService: BookService) extends I
       for {
         inferenceId <- definition.inferenceId.orBadRequest("Inference id must be provided")
         (conclusion, assertionStep, targetSteps) <- CreateAssertionStep(inferenceId, definition.parseIntendedConclusion, definition, Nil)
-        (mainNamingAssumption, mainNamingConclusion, mainNamingContext, mainNamingWrapper) <- getNamingWrapper(conclusion, targetStep.statement).orBadRequest("Could not find naming step to apply")
+        (mainNamingAssumption, mainNamingConclusion, mainNamingContext, mainNamingWrapper) <- getNamingWrapper(conclusion, step.statement).orBadRequest("Could not find naming step to apply")
         innerStep = recurseNamingWrappers(mainNamingAssumption, mainNamingConclusion)(mainNamingContext)
         namingStep = mainNamingWrapper(innerStep)
       } yield targetSteps :+ assertionStep :+ namingStep

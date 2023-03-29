@@ -2,6 +2,7 @@ package net.prover
 
 import net.prover.controllers.BookService
 import net.prover.controllers.models._
+import net.prover.entries.StepsWithContext
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.StatementVariable
 import net.prover.model.proof.{Step, StepContext, StepProvingContext, SubstitutionContext}
@@ -64,12 +65,13 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
 
   def checkModifySteps(
     service: BookService,
-    existingSteps: SubstitutionContext => Seq[Step],
-    expectedSteps: SubstitutionContext => Seq[Step],
+    existingStepsConstructor: SubstitutionContext => Seq[Step],
+    expectedStepsConstructor: SubstitutionContext => Seq[Step],
     boundVariables: Seq[String] = Nil)(
     implicit entryContext: EntryContext,
     variableDefinitions: VariableDefinitions
   ): MatchResult[Any] = {
+    val existingSteps = createStepsWithContext(existingStepsConstructor, boundVariables)
     there was one(service).replaceSteps[WithValue[InsertionAndReplacementProps]#Type](
       eq(bookKey),
       eq(chapterKey),
@@ -78,19 +80,20 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
       eq(outerStepPath))(
       modifyStepsCallback(
         existingSteps,
-        matchSteps(expectedSteps, boundVariables)(entryContext, variableDefinitions),
+        matchSteps(expectedStepsConstructor, boundVariables)(entryContext, variableDefinitions),
         boundVariables))(
       any)
   }
 
   def checkModifyStepsWithoutProps(
     service: BookService,
-    existingSteps: SubstitutionContext => Seq[Step],
-    expectedSteps: SubstitutionContext => Seq[Step],
+    existingStepsConstructor: SubstitutionContext => Seq[Step],
+    expectedStepsConstructor: SubstitutionContext => Seq[Step],
     boundVariables: Seq[String] = Nil)(
     implicit entryContext: EntryContext,
     variableDefinitions: VariableDefinitions
   ): MatchResult[Any] = {
+    val existingSteps = createStepsWithContext(existingStepsConstructor, boundVariables)
     there was one(service).replaceSteps[WithValue[Seq[Step]]#Type](
       eq(bookKey),
       eq(chapterKey),
@@ -99,19 +102,20 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
       eq(outerStepPath))(
       modifyStepsCallbackWithoutProps(
         existingSteps,
-        matchSteps(expectedSteps, boundVariables)(entryContext, variableDefinitions),
+        matchSteps(expectedStepsConstructor, boundVariables)(entryContext, variableDefinitions),
         boundVariables))(
       any)
   }
 
   def checkModifyStepsWithMatcher(
     service: BookService,
-    existingSteps: SubstitutionContext => Seq[Step],
+    existingStepsConstructor: SubstitutionContext => Seq[Step],
     stepsMatcher: Matcher[Seq[Step]],
     boundVariables: Seq[String] = Nil)(
     implicit entryContext: EntryContext,
     variableDefinitions: VariableDefinitions
   ): MatchResult[Any] = {
+    val existingSteps = createStepsWithContext(existingStepsConstructor, boundVariables)
     there was one(service).replaceSteps[WithValue[InsertionAndReplacementProps]#Type](
       eq(bookKey),
       eq(chapterKey),
@@ -125,29 +129,32 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
       any)
   }
 
+  private def createStepsWithContext(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): StepsWithContext = {
+    val steps = buildStepsWithReferences(stepsConstructor, boundVariables)
+    implicit val outerStepContext = createOuterStepContext(boundVariables)
+    createStepsWithContext(steps)
+  }
+
   private def modifyStepsCallbackWithoutProps(
-    existingStepsFn: SubstitutionContext => Seq[Step],
+    existingSteps: StepsWithContext,
     stepsMatcher: Matcher[Seq[Step]],
     boundVariables: Seq[String])(
     implicit entryContext: EntryContext,
     variableDefinitions: VariableDefinitions
-  ): (Seq[Step], StepProvingContext) => Try[(Seq[Step], Seq[Step])] = {
-    val existingSteps = existingStepsFn(SubstitutionContext.outsideProof)
+  ): StepsWithContext => Try[(Seq[Step], Seq[Step])] = {
     implicit val outerStepContext = createOuterStepContext(boundVariables)
-    val existingStepsWithReferences = recalculateReferences(existingSteps, outerStepContext)
-    (existingStepsWithReferences, implicitly[StepProvingContext]) -> beSuccessfulTry[(Seq[Step], Seq[Step])].withValue(stepsMatcher ^^ { t: (Seq[Step], Seq[Step]) => recalculateReferences(t._1, outerStepContext)(entryContext) })
+    existingSteps  -> beSuccessfulTry[(Seq[Step], Seq[Step])].withValue(stepsMatcher ^^ { t: (Seq[Step], Seq[Step]) => recalculateReferences(t._1, outerStepContext)(entryContext) })
   }
 
   private def modifyStepsCallback(
-    existingStepsFn: SubstitutionContext => Seq[Step],
+    existingSteps: StepsWithContext,
     stepsMatcher: Matcher[Seq[Step]],
     boundVariables: Seq[String])(
     implicit entryContext: EntryContext,
     variableDefinitions: VariableDefinitions
-  ): (Seq[Step], StepProvingContext) => Try[(Seq[Step], InsertionAndReplacementProps)] = {
-    val existingSteps = buildStepsWithReferences(existingStepsFn, boundVariables)
+  ): StepsWithContext => Try[(Seq[Step], InsertionAndReplacementProps)] = {
     implicit val outerStepContext = createOuterStepContext(boundVariables)
-    (existingSteps, implicitly[StepProvingContext]) -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)].withValue(stepsMatcher ^^ { t: (Seq[Step], InsertionAndReplacementProps) => recalculateReferences(t._1, outerStepContext)(entryContext) })
+    existingSteps -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)].withValue(stepsMatcher ^^ { t: (Seq[Step], InsertionAndReplacementProps) => recalculateReferences(t._1, outerStepContext)(entryContext) })
   }
 
   def matchSteps(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {

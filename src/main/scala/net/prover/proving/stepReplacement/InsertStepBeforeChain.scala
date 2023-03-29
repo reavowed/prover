@@ -20,11 +20,12 @@ object InsertStepBeforeChain {
   ): Try[ProofUpdateProps[StepInsertionProps]] = {
     stepPath.indexes match {
       case init :+ last =>
-        bookService.replaceSteps[WithValue[StepInsertionProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { case (steps, stepProvingContext) =>
-          steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+        bookService.replaceSteps[WithValue[StepInsertionProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { case outerStepsWithContext =>
+          outerStepsWithContext.steps.splitAtIndexIfValid(last).map { case (before, step, after) =>
+            val stepWithContext = outerStepsWithContext.atChild(before, step)
             for {
-              stepsToAddBeforeTransitive <- f(stepProvingContext.updateStepContext(_.addSteps(before).atIndex(last)))
-            } yield AddTargetsBeforeChain(init, before, step +: after, stepsToAddBeforeTransitive)(stepProvingContext)
+              stepsToAddBeforeTransitive <- f(stepWithContext.stepProvingContext)
+            } yield AddTargetsBeforeChain(init, before, step +: after, stepsToAddBeforeTransitive)(stepWithContext.stepProvingContext)
           }.orNotFound(s"Step $stepPath").flatten
         }.map { case (proofUpdateProps, stepInsertionProps) =>
           proofUpdateProps.withNewStepUpdateProps(stepInsertionProps.updateStepsFrom(proofUpdateProps.stepUpdates))
