@@ -8,7 +8,7 @@ import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
 class OperatorTreeSpec extends Specification {
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   val e = TermVariablePlaceholder("e", 4)
   val f = TermVariablePlaceholder("f", 5)
 

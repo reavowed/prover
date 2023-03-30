@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.JsonMapping
 import net.prover.controllers.models.{DefinitionSummary, StandalonePropertyDefinitionSummary, TypeDefinitionSummary, TypeRelationDefinitionSummary}
-import net.prover.model.EntryContext
+import net.prover.model.AvailableEntries
 import net.prover.model.entries.DisplayShorthand
 
 import scala.xml.Unparsed
@@ -28,13 +28,13 @@ trait ReactViews {
     </html>.toString()
   }
 
-  protected def getGeneralDisplayProps(entryContext: EntryContext): Map[String, AnyRef] = {
+  protected def getGeneralDisplayProps(availableEntries: AvailableEntries): Map[String, AnyRef] = {
     Map(
-      "definitions" -> DefinitionSummary.getAllFromContext(entryContext),
-      "typeDefinitions" -> TypeDefinitionSummary.getAllFromContext(entryContext),
-      "standalonePropertyDefinitions" -> StandalonePropertyDefinitionSummary.getAllFromContext(entryContext),
-      "typeRelationDefinitions" -> TypeRelationDefinitionSummary.getAllFromContext(entryContext),
-      "displayShorthands" -> entryContext.availableEntries.ofType[DisplayShorthand],
-      "definitionShorthands" -> DefinitionSummary.getDefinitionShorthandsFromContext(entryContext))
+      "definitions" -> DefinitionSummary.getAllFromContext(availableEntries),
+      "typeDefinitions" -> TypeDefinitionSummary.getAllFromContext(availableEntries),
+      "standalonePropertyDefinitions" -> StandalonePropertyDefinitionSummary.getAllFromContext(availableEntries),
+      "typeRelationDefinitions" -> TypeRelationDefinitionSummary.getAllFromContext(availableEntries),
+      "displayShorthands" -> availableEntries.allEntries.ofType[DisplayShorthand],
+      "definitionShorthands" -> DefinitionSummary.getDefinitionShorthandsFromContext(availableEntries))
   }
 }

@@ -12,7 +12,7 @@ import DraggableList from "../DraggableList";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import {NavLinks} from "./components/NavLinks";
 import {Page} from "./Page";
-import EntryContext from "../EntryContext";
+import AvailableEntries from "../AvailableEntries";
 
 export class Chapter extends React.Component {
   constructor(props) {
@@ -81,11 +81,11 @@ export class Chapter extends React.Component {
 
     const context = {updateChapter: this.updateChapter, url, editing};
     const parser = new Parser(definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions);
-    const entryContext = EntryContext.create(parser, definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands);
+    const availableEntries = AvailableEntries.create(parser, definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands);
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <ChapterContext.Provider value={context}>
-        <EntryContext.Provider value={entryContext}>
+        <AvailableEntries.Provider value={availableEntries}>
           <Button className="ml-3 float-right" size="sm" onClick={() => this.setState({editing: !editing})}><i className={"fas fa-" + (editing ? "times" : "edit")}/></Button>
           <h3><InlineTextEditor text={title} callback={this.updateTitle}/></h3>
           <p>{summary}</p>
@@ -99,7 +99,7 @@ export class Chapter extends React.Component {
           </DndProvider>
           <hr/>
           <ChapterEntryAdder />
-        </EntryContext.Provider>
+        </AvailableEntries.Provider>
       </ChapterContext.Provider>
     </Page>;
   }

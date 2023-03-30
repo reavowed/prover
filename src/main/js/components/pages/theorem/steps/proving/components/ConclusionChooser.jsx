@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {replaceAtIndex} from "../../../../../../models/Helpers";
 import DisplayContext from "../../../../../DisplayContext";
-import EntryContext from "../../../../../EntryContext";
+import AvailableEntries from "../../../../../AvailableEntries";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
 import {InlineTextEditor} from "../../../../../helpers/InlineTextEditor";
 import InputWithShorthandReplacement from "../../../../../helpers/InputWithShorthandReplacement";
@@ -185,7 +185,7 @@ export default class ConclusionChooser extends React.Component {
       return <InlineTextEditor text={name} callback={callback} />;
     };
 
-    return <EntryContext.Consumer>{entryContext =>
+    return <AvailableEntries.Consumer>{availableEntries =>
       <DisplayContext.Consumer>{displayContext => {
         const conclusionDisplayContext = displayContext.withVariableDefinitions(conclusionVariableDefinitions);
         const PremiseSuggestions = () => {
@@ -202,7 +202,7 @@ export default class ConclusionChooser extends React.Component {
                     <option value="" />
                     {possibleMatches.map(({matchingPremise}, i) =>
                       <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                          <ExpressionComponent expression={matchingPremise} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} entryContext={entryContext} displayContext={displayContext} />
+                          <ExpressionComponent expression={matchingPremise} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} availableEntries={availableEntries} displayContext={displayContext} />
                         )}}/>
                     )}
                   </Form.Control>
@@ -224,7 +224,7 @@ export default class ConclusionChooser extends React.Component {
                   <option value="" />
                   {validValues.map(v =>
                     <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                        <ExpressionComponent expression={v} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} entryContext={entryContext} displayContext={displayContext}/>
+                        <ExpressionComponent expression={v} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} availableEntries={availableEntries} displayContext={displayContext}/>
                       )}}/>
                   )}
                 </Form.Control>
@@ -264,7 +264,7 @@ export default class ConclusionChooser extends React.Component {
               <option value="" />
               {possibleConclusions.map(({conclusion, additionalVariableNames}, index) => {
                 return <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(
-                    <ExpressionComponent expression={conclusion} boundVariableLists={boundVariableListsForPremises} entryContext={entryContext} displayContext={conclusionDisplayContext.addTermVariables(additionalVariableNames)}/>
+                    <ExpressionComponent expression={conclusion} boundVariableLists={boundVariableListsForPremises} availableEntries={availableEntries} displayContext={conclusionDisplayContext.addTermVariables(additionalVariableNames)}/>
                   )}}/>
               })}
             </Form.Control>
@@ -295,6 +295,6 @@ export default class ConclusionChooser extends React.Component {
           </div>
         </div>
       }}</DisplayContext.Consumer>
-    }</EntryContext.Consumer>
+    }</AvailableEntries.Consumer>
   }
 }

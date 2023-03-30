@@ -50,7 +50,7 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
       def getConclusionComplexity(possibleConclusion: PossibleConclusion): Int = possibleConclusion.conclusion.structuralComplexity
 
       getPossibleInferences(
-        stepProvingContext.provingContext.entryContext.allInferences,
+        stepProvingContext.provingContext.availableEntries.allInferences,
         searchText,
         findPossibleInference,
         getConclusionComplexity)
@@ -90,7 +90,7 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
       stepWithContext <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val stepProvingContext = stepWithContext.stepProvingContext
-      filterInferences(stepProvingContext.provingContext.entryContext.allInferences, searchText)
+      filterInferences(stepProvingContext.provingContext.availableEntries.allInferences, searchText)
         .reverse
         .take(10)
         .map { inference =>

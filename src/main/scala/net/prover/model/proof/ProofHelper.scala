@@ -14,15 +14,15 @@ object ProofHelper {
     }
   }
 
-  def findNamingInferences(implicit entryContext: EntryContext): Seq[(Inference, Seq[Statement], Statement, GeneralizationDefinition, DeductionDefinition)] = {
-    entryContext.allInferences.mapCollect(i =>
+  def findNamingInferences(implicit availableEntries: AvailableEntries): Seq[(Inference, Seq[Statement], Statement, GeneralizationDefinition, DeductionDefinition)] = {
+    availableEntries.allInferences.mapCollect(i =>
       getNamingPremisesAndAssumption(i).map {
         case (premises, assumption, generalizationDefinition, deductionDefinition) => (i, premises, assumption, generalizationDefinition, deductionDefinition)
       })
   }
 
-  def getNamingPremisesAndAssumption(inference: Inference)(implicit entryContext: EntryContext): Option[(Seq[Statement], Statement, GeneralizationDefinition, DeductionDefinition)] = {
-    (entryContext.generalizationDefinitionOption, entryContext.deductionDefinitionOption) match {
+  def getNamingPremisesAndAssumption(inference: Inference)(implicit availableEntries: AvailableEntries): Option[(Seq[Statement], Statement, GeneralizationDefinition, DeductionDefinition)] = {
+    (availableEntries.generalizationDefinitionOption, availableEntries.deductionDefinitionOption) match {
       case (Some(generalizationDefinition), Some(deductionDefinition)) =>
         inference match {
           case Inference(

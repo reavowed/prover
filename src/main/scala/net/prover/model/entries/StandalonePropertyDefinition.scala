@@ -53,7 +53,7 @@ case class StandalonePropertyDefinition(
 
 object StandalonePropertyDefinition extends ChapterEntryParser {
   override def name: String = "standaloneProperty"
-  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
+  override def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       mainVariableDefinition <- SimpleVariableDefinition.parser

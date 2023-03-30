@@ -56,7 +56,7 @@ case class Theorem(
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
     entryWithContext: EntryWithContext
   ): Theorem = {
-    ReplaceDefinitions(expressionDefinitionReplacements, entryWithContext.entryContext)(entryWithContext.copy(entry = this))
+    ReplaceDefinitions(expressionDefinitionReplacements, entryWithContext.availableEntries)(entryWithContext.copy(entry = this))
   }
 }
 
@@ -75,16 +75,16 @@ object Theorem extends Inference.EntryParser {
     variableDefinitions: VariableDefinitions,
     premises: Seq[Statement],
     conclusion: Statement)(
-    implicit entryContext: EntryContext
+    implicit availableEntries: AvailableEntries
   ): Parser[Proof] = {
     val initialStepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)
     for {
-      steps <- Step.listParser(entryContext, initialStepContext)
+      steps <- Step.listParser(availableEntries, initialStepContext)
       _ = if (!steps.mapCollect(_.provenStatement).lastOption.contains(conclusion)) throw new Exception(s"Proof of theorem '$theoremName' did not prove $conclusion")
     } yield Proof(steps)
   }
 
-  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[Theorem] = {
+  override def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[Theorem] = {
 
     for {
       name <- Parser.toEndOfLine

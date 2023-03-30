@@ -2,7 +2,7 @@ import _ from "lodash";
 import React from "react";
 import Button from "react-bootstrap/Button";
 import {matchTemplate} from "../../../../models/Expression";
-import EntryContext from "../../../EntryContext";
+import AvailableEntries from "../../../AvailableEntries";
 import {CopiableExpression} from "../../../ExpressionComponent";
 import ProofContext from "../ProofContext";
 import ProofLine from "./components/ProofLine";
@@ -33,7 +33,7 @@ class TargetStepProofLineInner extends React.Component {
   }
   onUpdate() {
     this.context.fetchJsonForStep(this.props.path, "premises")
-      .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, this.props.entryContext.parser.parsePremise)}))
+      .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, this.props.availableEntries.parser.parsePremise)}))
       .catch(console.log);
   }
 
@@ -68,9 +68,9 @@ class TargetStepProofLineInner extends React.Component {
 }
 
 export function TargetStepProofLine(props) {
-  return <EntryContext.Consumer>{entryContext =>
-    <TargetStepProofLineInner entryContext={entryContext} {...props} />
-  }</EntryContext.Consumer>
+  return <AvailableEntries.Consumer>{availableEntries =>
+    <TargetStepProofLineInner availableEntries={availableEntries} {...props} />
+  }</AvailableEntries.Consumer>
 }
 export class TargetStep extends React.Component {
   render() {

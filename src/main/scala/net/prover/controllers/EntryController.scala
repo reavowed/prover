@@ -66,7 +66,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
         "next" -> next,
         "usages" -> getInferenceUsages(entry),
         "binaryRelations" -> getBinaryRelations(provingContext)) ++
-        getGeneralDisplayProps(entryContext))
+        getGeneralDisplayProps(availableEntries))
     }).toResponseEntity
   }
 
@@ -134,9 +134,9 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
     @RequestBody(required = false) serializedNewDisambiguatorAdders: Seq[String]
   ): ResponseEntity[_] = {
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
-      case (definition: TermDefinitionEntry, entryContext) =>
+      case (definition: TermDefinitionEntry, availableEntries) =>
         for {
-          newDisambiguatorAdders <- serializedNewDisambiguatorAdders.mapWithIndex((s, i) => DisambiguatorAdder.parser(entryContext).parseFromString(s, s"disambiguator adder ${i + 1}").recoverWithBadRequest).traverseTry
+          newDisambiguatorAdders <- serializedNewDisambiguatorAdders.mapWithIndex((s, i) => DisambiguatorAdder.parser(availableEntries).parseFromString(s, s"disambiguator adder ${i + 1}").recoverWithBadRequest).traverseTry
         } yield definition.withDisambiguatorAdders(newDisambiguatorAdders)
       case (entry, _) =>
         Failure(BadRequestException(s"Cannot set disambiguator adders of ${entry.getClass.getName}"))
@@ -253,12 +253,12 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
     @RequestBody(required = false) newDefiningStatementText: String
   ): ResponseEntity[_] = {
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
-      case (entry: ChapterEntry.HasDefiningStatement, entryContext) =>
+      case (entry: ChapterEntry.HasDefiningStatement, availableEntries) =>
         for {
           _ <- bookService.books.flatMap(_.chapters).flatMap(_.entries)
             .find(_.referencedInferenceIds.exists(entry.inferences.map(_.id).contains))
             .badRequestIfDefined(entryUsing => "Cannot set defining statement - is already depended on by " + entryUsing.name)
-          expressionParsingContext = entry.definingStatementParsingContext(entryContext)
+          expressionParsingContext = entry.definingStatementParsingContext(availableEntries)
           newDefiningStatement <- Statement.parser(expressionParsingContext).parseFromString(newDefiningStatementText, "new defining statement").recoverWithBadRequest
         } yield entry.withDefiningStatement(newDefiningStatement)
       case (entry, _) =>
@@ -277,9 +277,9 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
   private def replaceEntryInBooks(globalContext: GlobalContext, oldEntry: ChapterEntry, newEntry: ChapterEntry): Seq[Book] = {
     globalContext.booksWithContexts.mapFoldWithPrevious[Changes, Book](Changes(Map.empty, Map.empty)) { case (changes, previousBooks, bookToModify) =>
       bookToModify.chaptersWithContexts.mapFoldWithPrevious[Changes, Chapter](changes) { case (changes, previousChapters, chapterToModify) =>
-        chapterToModify.entriesWithContexts.mapFoldWithPrevious[Changes, ChapterEntry](changes) { case (changes, previousEntries, entryContextToModify) =>
-          val entryToModify = entryContextToModify.entry
-          val updatedEntryWithContext = entryContextToModify.copy(
+        chapterToModify.entriesWithContexts.mapFoldWithPrevious[Changes, ChapterEntry](changes) { case (changes, previousEntries, entryWithContextToModify) =>
+          val entryToModify = entryWithContextToModify.entry
+          val updatedEntryWithContext = entryWithContextToModify.copy(
             chapterWithContext = chapterToModify.copy(
               chapter = chapterToModify.chapter.setEntries(previousEntries.toList),
               bookWithContext = bookToModify.copy(
@@ -287,9 +287,9 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
                 globalContext = globalContext.copy(booksWithKeys = ListWithKeys(previousBooks.toList)))))
           val modifiedEntry = if (entryToModify == oldEntry) newEntry else entryToModify.replaceDefinitions(changes.changedEntries, changes.changedDefinitions, updatedEntryWithContext)
           val changesWithEntry = changes.addChangedEntry(entryToModify, newEntry)
-          val changesWithExpressionDefinitions = EntryContext.getStatementDefinitionFromEntry(entryToModify) match {
+          val changesWithExpressionDefinitions = AvailableEntries.getStatementDefinitionFromEntry(entryToModify) match {
             case Some(old) =>
-              changesWithEntry.addChangedDefinition(old, EntryContext.getStatementDefinitionFromEntry(modifiedEntry).get)
+              changesWithEntry.addChangedDefinition(old, AvailableEntries.getStatementDefinitionFromEntry(modifiedEntry).get)
             case None =>
               entryToModify.asOptionalInstanceOf[TermDefinitionEntry] match {
                 case Some(old) =>
@@ -304,11 +304,11 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
     }._2
   }
 
-  private def modifyEntryWithReplacement(bookKey: String, chapterKey: String, entryKey: String)(f: (ChapterEntry, EntryContext) => Try[ChapterEntry]): ResponseEntity[_] = {
+  private def modifyEntryWithReplacement(bookKey: String, chapterKey: String, entryKey: String)(f: (ChapterEntry, AvailableEntries) => Try[ChapterEntry]): ResponseEntity[_] = {
     bookService.modifyBooks[TryWithValue[ChapterEntry]#Type](globalContext => {
       for {
         oldEntryWithContext <- globalContext.findEntry(bookKey, chapterKey, entryKey)
-        newEntry <- f(oldEntryWithContext.entry, oldEntryWithContext.entryContext)
+        newEntry <- f(oldEntryWithContext.entry, oldEntryWithContext.availableEntries)
         newBooks = replaceEntryInBooks(globalContext, oldEntryWithContext.entry, newEntry)
       } yield (newBooks, newEntry)
     }).flatMap { case (globalContext, newEntry) =>

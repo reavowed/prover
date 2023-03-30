@@ -3,10 +3,10 @@ package net.prover.theorems
 import net.prover.model.definitions.{DeductionDefinition, ExpressionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, StepContext, StepProvingContext}
-import net.prover.model.{EntryContext, Inference, Substitutions}
+import net.prover.model.{AvailableEntries, Inference, Substitutions}
 import scalaz.Id.Id
 
-case class ReplaceDefinitions(definitionsToReplace: Map[ExpressionDefinition, ExpressionDefinition], entryContext: EntryContext) extends CompoundTheoremUpdater[Id] {
+case class ReplaceDefinitions(definitionsToReplace: Map[ExpressionDefinition, ExpressionDefinition], availableEntries: AvailableEntries) extends CompoundTheoremUpdater[Id] {
   override def updateStatement(
     statement: Statement,
     stepContext: StepContext
@@ -38,12 +38,12 @@ case class ReplaceDefinitions(definitionsToReplace: Map[ExpressionDefinition, Ex
   override def updateDeductionDefinition(
     deductionDefinition: DeductionDefinition
   ): DeductionDefinition = {
-    entryContext.deductionDefinitionOption.get
+    availableEntries.deductionDefinitionOption.get
   }
 
   override def updateGeneralizationDefinition(
     generalizationDefinition: GeneralizationDefinition
   ): GeneralizationDefinition = {
-    entryContext.generalizationDefinitionOption.get
+    availableEntries.generalizationDefinitionOption.get
   }
 }

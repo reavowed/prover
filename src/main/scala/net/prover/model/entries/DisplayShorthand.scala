@@ -7,7 +7,7 @@ import net.prover.books.reading.ProofFileReader
 import net.prover.entries.EntryWithContext
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Template
-import net.prover.model.{EntryContext, Format, Inference, Parser}
+import net.prover.model.{AvailableEntries, Format, Inference, Parser}
 
 @JsonSerialize(using = classOf[DisplayShorthandSerializer])
 case class DisplayShorthand(template: Template, format: Format.Explicit, conditions: Seq[(String, String)]) extends ChapterEntry {
@@ -46,7 +46,7 @@ object DisplayShorthand extends ChapterEntryParser {
     ).whileDefined
   }
 
-  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[DisplayShorthand] = {
+  override def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[DisplayShorthand] = {
     for {
       template <- Template.parser
       format <- Parser.required("as", Format.parser(template.names))

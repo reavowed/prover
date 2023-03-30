@@ -3,7 +3,7 @@ import ProofContext from "../../ProofContext";
 import {InferenceFinder} from "./components/InferenceFinder";
 import Rewriter from "./components/Rewriter";
 
-export default function RewriteTransitiveFromLeft({path, leftComponent, onError, entryContext}) {
+export default function RewriteTransitiveFromLeft({path, leftComponent, onError, availableEntries}) {
   const context = useContext(ProofContext);
   const submit = (rewrites) => {
     return context.fetchJsonForStepAndInsertAndReplaceMultiple(path, "rewriteLeft", {method: "POST", body: rewrites})
@@ -14,5 +14,5 @@ export default function RewriteTransitiveFromLeft({path, leftComponent, onError,
     expression={leftComponent}
     path={path}
     onSave={submit}
-    entryContext={entryContext}/>
+    availableEntries={availableEntries}/>
 }

@@ -3,7 +3,7 @@ package net.prover.controllers
 import net.prover.entries.GlobalContext
 
 import javax.servlet.http.HttpServletRequest
-import net.prover.model.{EntryContext, Inference}
+import net.prover.model.{AvailableEntries, Inference}
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.DefinedStatement
 import net.prover.model.proof.Step
@@ -34,8 +34,8 @@ class StatsController @Autowired() (val bookService: BookService) {
   def getUnusedInferences(
     request: HttpServletRequest
   ): Seq[String] = {
-    val entryContext = EntryContext.forBooks(bookService.globalContext.booksWithContexts)
-    val usedInferenceIds = entryContext.allInferences.ofType[Theorem].flatMap(_.referencedInferenceIds)
+    val availableEntries = AvailableEntries.forBooks(bookService.globalContext.booksWithContexts)
+    val usedInferenceIds = availableEntries.allInferences.ofType[Theorem].flatMap(_.referencedInferenceIds)
     for {
       bookWithContext <- bookService.globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts

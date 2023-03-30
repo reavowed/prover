@@ -10,7 +10,7 @@ import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
 
-case class ProvingContext(entryContext: EntryContext, private val definitions: Definitions) {
+case class ProvingContext(availableEntries: AvailableEntries, private val definitions: Definitions) {
   trait Allowable[-T] {
     def isAllowed(t: T): Boolean
   }
@@ -42,16 +42,16 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
     implicit val alwaysAllowablePossibleSubstitutions: AlwaysAllowable[Substitutions.Possible] = alwaysAllowable
     implicit def allowableSeq[T](implicit inner: Allowable[T]): Allowable[Seq[T]] = allowable { x => x.forall(isAllowed) }
 
-    implicit val allowableInference: Allowable[Inference] = allowable(i => entryContext.allInferenceIds.contains(i.id))
-    implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(d => entryContext.statementDefinitionsBySymbol.contains(d.symbol))
-    implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(d => entryContext.termDefinitionsBySymbol.contains(d.symbol))
+    implicit val allowableInference: Allowable[Inference] = allowable(i => availableEntries.allInferenceIds.contains(i.id))
+    implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(d => availableEntries.statementDefinitionsBySymbol.contains(d.symbol))
+    implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(d => availableEntries.termDefinitionsBySymbol.contains(d.symbol))
 
     implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryJoiners.contains)
     implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
     implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.firstPremiseJoiner) && isAllowed(r.secondPremiseJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
-    implicit val allowableStep: Allowable[Step] = allowable(step => step.referencedInferenceIds.forall(entryContext.allInferenceIds.contains))
+    implicit val allowableStep: Allowable[Step] = allowable(step => step.referencedInferenceIds.forall(availableEntries.allInferenceIds.contains))
     implicit val allowableDerivationStepWithSingleInference: Allowable[DerivationStepWithSingleInference] = allowableGeneric(Generic[DerivationStepWithSingleInference])
     implicit val allowableDerivationStepWithMultipleInferences: Allowable[DerivationStepWithMultipleInferences] = allowableGeneric(Generic[DerivationStepWithMultipleInferences])
     implicit val allowableDerivationStep: Allowable[DerivationStep] = allowable {
@@ -155,21 +155,21 @@ case class ProvingContext(entryContext: EntryContext, private val definitions: D
 
   lazy val inferenceExtractionsByInferenceId: Map[String, Seq[InferenceExtraction]] = filter(definitions.inferenceExtractionsByInferenceId)
 
-  lazy val deductionDefinitionOption: Option[DeductionDefinition] = entryContext.deductionDefinitionOption
+  lazy val deductionDefinitionOption: Option[DeductionDefinition] = availableEntries.deductionDefinitionOption
   lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
     filter(definitions.deductionEliminationInferenceOption)
   }
 
-  lazy val generalizationDefinitionOption: Option[GeneralizationDefinition] = entryContext.generalizationDefinitionOption
+  lazy val generalizationDefinitionOption: Option[GeneralizationDefinition] = availableEntries.generalizationDefinitionOption
   lazy val specificationInferenceOption: Option[(Inference, Statement)] = {
     filter(definitions.specificationInferenceOption)
   }
 
   lazy val definedBinaryJoiners: Seq[BinaryJoiner[_ <: Expression]] = {
     Definitions.getDefinedBinaryStatements(
-      entryContext.statementDefinitions,
-      entryContext.displayShorthands,
-      entryContext.termDefinitions)
+      availableEntries.statementDefinitions,
+      availableEntries.displayShorthands,
+      availableEntries.termDefinitions)
   }
   lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryJoiners.ofType[BinaryConnective]
   lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryJoiners.ofType[BinaryRelation]

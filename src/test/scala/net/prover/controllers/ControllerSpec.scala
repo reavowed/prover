@@ -5,7 +5,7 @@ import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.StatementDefinition
 import net.prover.model.expressions.{Statement, StatementVariable, Term, TermVariable}
 import net.prover.model.proof._
-import net.prover.model.{EntryContext, Inference, Substitutions, VariableDefinitions}
+import net.prover.model.{AvailableEntries, Inference, Substitutions, VariableDefinitions}
 import net.prover.{BookServiceHelper, StepContextHelper}
 import org.mockito.Mockito
 import org.specs2.matcher.ValueChecks
@@ -32,7 +32,7 @@ trait ControllerSpec extends Specification with StepContextHelper with BookServi
     unwrappers: Seq[StatementDefinition] = Nil,
     premisesOption: Option[Seq[Statement]] = None,
     conclusionOption: Option[Statement] = None)(
-    implicit entryContext: EntryContext
+    implicit availableEntries: AvailableEntries
   ): StepDefinition = {
     val extraction = SubstatementExtractor.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).get
     val substitutions = Substitutions(statements, terms)
@@ -52,7 +52,7 @@ trait ControllerSpec extends Specification with StepContextHelper with BookServi
     terms: Seq[Term],
     extractionInferences: Seq[Inference],
     conclusionOption: Option[Statement])(
-    implicit entryContext: EntryContext,
+    implicit availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
   ): StepDefinition = {
     val substitutions = Substitutions(
@@ -65,7 +65,7 @@ trait ControllerSpec extends Specification with StepContextHelper with BookServi
     extractionInferences: Seq[Inference],
     substitutions: Substitutions,
     conclusionOption: Option[Statement])(
-    implicit entryContext: EntryContext,
+    implicit availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
   ): StepDefinition = {
     implicit val stepContext: StepContext = createOuterStepContext(Nil)

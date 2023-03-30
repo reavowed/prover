@@ -8,6 +8,6 @@ import scala.util.Try
 
 object FindInference {
   def apply(inferenceId: String)(implicit stepProvingContext: StepProvingContext): Try[Inference.Summary] = {
-    stepProvingContext.provingContext.entryContext.allInferences.find(_.id == inferenceId).map(_.summary).orBadRequest(s"Invalid inference $inferenceId")
+    stepProvingContext.provingContext.availableEntries.allInferences.find(_.id == inferenceId).map(_.summary).orBadRequest(s"Invalid inference $inferenceId")
   }
 }

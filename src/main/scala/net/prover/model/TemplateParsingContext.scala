@@ -1,7 +1,7 @@
 package net.prover.model
 
 case class TemplateParsingContext(
-    entryContext: EntryContext,
+    availableEntries: AvailableEntries,
     parameterLists: Seq[Seq[(String, Int)]])
   extends ParsingContextWithParameters[TemplateParsingContext]
 {

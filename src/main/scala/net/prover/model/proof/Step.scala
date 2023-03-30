@@ -73,12 +73,12 @@ object Step {
       Seq("}")
   }
   object Deduction {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Deduction] = {
-      val deductionDefinition = entryContext.deductionDefinitionOption
+    def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[Deduction] = {
+      val deductionDefinition = availableEntries.deductionDefinitionOption
         .getOrElse(throw new Exception("Cannot prove a deduction without an appropriate statement definition"))
       for {
         assumption <- Statement.parser
-        substeps <- listParser(entryContext, stepContext.addStatement(assumption, "a")).inBraces
+        substeps <- listParser(availableEntries, stepContext.addStatement(assumption, "a")).inBraces
       } yield Deduction(assumption, substeps, deductionDefinition)
     }
   }
@@ -130,20 +130,20 @@ object Step {
       Seq(Seq("}", Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
   }
   object Naming {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Naming] = {
+    def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[Naming] = {
       for {
         variableName <- Parser.singleWord
         assumption <- Statement.parser(ExpressionParsingContext.atStep(implicitly, stepContext.addBoundVariable(variableName)))
         innerStepContext = stepContext.addBoundVariable(variableName).addStatement(assumption, "a")
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
-        substeps <- listParser(entryContext, innerStepContext).inBraces
+        substeps <- listParser(availableEntries, innerStepContext).inBraces
         internalConclusion = substeps.flatMap(_.provenStatement).lastOption.getOrElse(throw new Exception("No conclusion for naming step"))
         extractedConclusion = internalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
         premiseStatements = inference.substitutePremisesAndValidateConclusion(extractedConclusion, substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
         premises <- premiseStatements.init.map(Premise.parser).traverse
-        generalizationDefinition = entryContext.generalizationDefinitionOption.getOrElse(throw new Exception("Naming step requires a generalization statement"))
-        deductionDefinition = entryContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
+        generalizationDefinition = availableEntries.generalizationDefinitionOption.getOrElse(throw new Exception("Naming step requires a generalization statement"))
+        deductionDefinition = availableEntries.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
         internalPremise = generalizationDefinition(variableName, deductionDefinition(assumption, internalConclusion))
         _ = if (internalPremise != premiseStatements.last) throw new Exception("Invalid naming premise")
       } yield {
@@ -173,12 +173,12 @@ object Step {
       Seq("}")
   }
   object Generalization {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Generalization] = {
-      val generalizationDefinition = entryContext.generalizationDefinitionOption
+    def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[Generalization] = {
+      val generalizationDefinition = availableEntries.generalizationDefinitionOption
         .getOrElse(throw new Exception("Generalization step could not find generalization statement"))
       for {
         variableName <- Parser.singleWord
-        substeps <- listParser(entryContext, stepContext.addBoundVariable(variableName)).inBraces
+        substeps <- listParser(availableEntries, stepContext.addBoundVariable(variableName)).inBraces
       } yield Generalization(variableName, substeps, generalizationDefinition)
     }
   }
@@ -195,7 +195,7 @@ object Step {
     def serializedLines: Seq[String] = Seq(s"target ${statement.serialized}")
   }
   object Target {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Target] = {
+    def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[Target] = {
       for {
         statement <- Statement.parser
       } yield Target(statement)
@@ -215,7 +215,7 @@ object Step {
       Seq("}")
   }
   object Elided {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Elided] = {
+    def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[Elided] = {
       for {
         highlightedInference <- Inference.parser.tryOrNone
         description <- Parser.allInParens.tryOrNone
@@ -272,7 +272,7 @@ object Step {
     }
   }
   object Assertion {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Assertion] = {
+    def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[Assertion] = {
       for {
         statement <- Statement.parser
         inference <- Inference.parser
@@ -306,7 +306,7 @@ object Step {
       Seq("}")
   }
   object SubProof {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[SubProof] = {
+    def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[SubProof] = {
       for {
         name <- Parser.allInParens
         substeps <- listParser.inBraces
@@ -331,14 +331,14 @@ object Step {
       Seq("}")
   }
   object ExistingStatementExtraction {
-    def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[ExistingStatementExtraction] = {
+    def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[ExistingStatementExtraction] = {
       for {
         substeps <- listParser.inBraces
       } yield ExistingStatementExtraction(substeps)
     }
   }
 
-  def parser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Option[Step]] = {
+  def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[Option[Step]] = {
     Parser.selectOptionalWordParser {
       case "assume" => Deduction.parser
       case "let" => Naming.parser
@@ -350,10 +350,10 @@ object Step {
       case "existingStatementExtraction" => ExistingStatementExtraction.parser
     }
   }
-  def listParser(implicit entryContext: EntryContext, stepContext: StepContext): Parser[Seq[Step]] = {
+  def listParser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[Seq[Step]] = {
     Parser.foldWhileDefined[Step, StepContext](stepContext) { (_, index, currentStepContext) =>
       val innerStepContext = currentStepContext.atIndex(index)
-      parser(entryContext, innerStepContext)
+      parser(availableEntries, innerStepContext)
         .mapMap(step => step -> currentStepContext.addStep(step, innerStepContext.stepReference))
     }.map(_._1)
   }

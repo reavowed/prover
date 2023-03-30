@@ -9,7 +9,7 @@ class StatementDefinitionSpec extends Specification {
 
   "statement definition parser" should {
     def parseStatementDefinition(text: String): StatementDefinitionEntry = {
-      StatementDefinitionEntry.parser(defaultEntryContext, mock[ProofFileReader]).parseAndDiscard(text)
+      StatementDefinitionEntry.parser(defaultAvailableEntries, mock[ProofFileReader]).parseAndDiscard(text)
     }
 
     "parse definition" in {

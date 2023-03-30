@@ -15,11 +15,11 @@ object Statement {
         } yield context.getStatementVariable(name, arguments).getOrElse(throw new Exception(s"Unrecognised statement variable $name"))
       case "is" =>
         typeOrPropertyStatementParser
-      case context.entryContext.RecognisedStatementDefinition(statementDefinition) =>
+      case context.availableEntries.RecognisedStatementDefinition(statementDefinition) =>
         statementDefinition.statementParser
       case context.SimpleStatementVariable(variable) =>
         Parser.constant(variable)
-      case context.entryContext.RecognisedStatementShorthand(template) =>
+      case context.availableEntries.RecognisedStatementShorthand(template) =>
         template.expressionParser.map(_.asInstanceOf[Statement])
     }
   }
@@ -28,8 +28,8 @@ object Statement {
     for {
       term <- Term.parser
       symbol <- Parser.singleWord
-      result <- context.entryContext.typeDefinitions.get(symbol).map(typeStatementParser(term, _)) orElse
-        context.entryContext.standalonePropertyDefinitions.find(_.symbol == symbol).map(propertyStatementParser(term, _)) orElse
+      result <- context.availableEntries.typeDefinitions.get(symbol).map(typeStatementParser(term, _)) orElse
+        context.availableEntries.standalonePropertyDefinitions.find(_.symbol == symbol).map(propertyStatementParser(term, _)) orElse
         typePropertyStatementParser(term, symbol) orElse
         typeObjectStatementParser(term, symbol) getOrElse
         (throw new Exception(s"Unrecognised type or property '$symbol'"))
@@ -43,7 +43,7 @@ object Statement {
           qualifier.variableDefinitions.map(_ => Term.parser).traverse.map(None -> _)
         case None =>
           for {
-            qualifierOption <- Parser.optional(qualifierSymbol => context.entryContext.qualifiersByType.get(typeDefinition.symbol).flatMap(_.find(_.symbol == qualifierSymbol)))
+            qualifierOption <- Parser.optional(qualifierSymbol => context.availableEntries.qualifiersByType.get(typeDefinition.symbol).flatMap(_.find(_.symbol == qualifierSymbol)))
             qualifierTerms <- qualifierOption match {
               case Some(qualifier) =>
                 qualifier.qualifier.variableDefinitions.map(_ => Term.parser).traverse
@@ -75,13 +75,13 @@ object Statement {
         }
       }
       def getProperty(w: String): Option[Parser[Statement]] = {
-        context.entryContext.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
+        context.availableEntries.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
           val terms = getTerms(d.parentTypeConditions.requiredParentQualifier, s"property ${d.symbol}")
           Parser.constant(d.statementDefinition(terms:_*))
         }
       }
       def getObject(w: String): Option[Parser[Statement]] = {
-        context.entryContext.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
+        context.availableEntries.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
           for {
             objectTerm <- Term.parser
             otherTerms = getTerms(d.parentTypeConditions.requiredParentQualifier, s"object ${d.symbol}")
@@ -104,11 +104,11 @@ object Statement {
     } yield {
       val baseStatement = DefinedStatement(term +: defaultQualifierComponents, typeDefinition.statementDefinition)(Nil)
       val statementWithQualifier = qualifierStatementOption.map { qualifierStatement =>
-        val conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add a qualifier to a type without a conjunction definition"))
+        val conjunctionDefinition = context.availableEntries.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add a qualifier to a type without a conjunction definition"))
         conjunctionDefinition(baseStatement, qualifierStatement)
       }.getOrElse(baseStatement)
       propertiesAndObjectStatements.foldLeft(statementWithQualifier) { (statement, propertyOrObjectStatement) =>
-        val conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add properties or objects to a type without a conjunction definition"))
+        val conjunctionDefinition = context.availableEntries.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot add properties or objects to a type without a conjunction definition"))
         conjunctionDefinition(statement, propertyOrObjectStatement)
       }
     }
@@ -121,14 +121,14 @@ object Statement {
   def typePropertyStatementParser(mainTerm: Term, symbol: String)(implicit context: ExpressionParsingContext): Option[Parser[Statement]] = {
     for {
       Seq(typeSymbol, propertySymbol) <- "^(\\w+)\\.(\\w+)$".r.unapplySeq(symbol)
-      propertyDefinition <- context.entryContext.propertyDefinitionsByType.getOrElse(typeSymbol, Nil).find(_.symbol == propertySymbol)
+      propertyDefinition <- context.availableEntries.propertyDefinitionsByType.getOrElse(typeSymbol, Nil).find(_.symbol == propertySymbol)
     } yield propertyDefinition.parentTypeConditions.qualifierVariableDefinitions.map(_ => Term.parser).traverse.map(qualifierTerms => propertyDefinition.statementDefinition(mainTerm +: qualifierTerms:_*))
   }
 
   def typeObjectStatementParser(mainTerm: Term, symbol: String)(implicit context: ExpressionParsingContext): Option[Parser[Statement]] = {
     for {
       Seq(typeSymbol, objectSymbol) <- "^(\\w+)\\.(\\w+)$".r.unapplySeq(symbol)
-      objectDefinition <- context.entryContext.relatedObjectsByType.getOrElse(typeSymbol, Nil).find(_.symbol == objectSymbol)
+      objectDefinition <- context.availableEntries.relatedObjectsByType.getOrElse(typeSymbol, Nil).find(_.symbol == objectSymbol)
     } yield objectDefinition.parentVariableDefinitions.map(_ => Term.parser).traverse.map(parentTerms => objectDefinition.statementDefinition(mainTerm +: parentTerms:_*))
   }
 
@@ -148,7 +148,7 @@ object Statement {
   def templateParserFunction(implicit templateParsingContext: TemplateParsingContext): PartialFunction[String, Parser[Template]] = {
       case ExpressionParsingContext.RecognisedStatementVariableName(name) =>
         Parser.constant(StatementVariableTemplate(name))
-      case templateParsingContext.entryContext.RecognisedStatementDefinition(definition) =>
+      case templateParsingContext.availableEntries.RecognisedStatementDefinition(definition) =>
         definition.templateParser
   }
 }

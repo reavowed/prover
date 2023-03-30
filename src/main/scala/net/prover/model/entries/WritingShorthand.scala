@@ -4,7 +4,7 @@ import net.prover.books.reading.ProofFileReader
 import net.prover.entries.EntryWithContext
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Template
-import net.prover.model.{EntryContext, Inference, Parser}
+import net.prover.model.{AvailableEntries, Inference, Parser}
 
 case class WritingShorthand(template: Template, symbol: String) extends ChapterEntry {
   override def name: String = symbol
@@ -21,7 +21,7 @@ case class WritingShorthand(template: Template, symbol: String) extends ChapterE
 
 object WritingShorthand extends ChapterEntryParser {
   override def name: String = "write"
-  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] =
+  override def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[ChapterEntry] =
     for {
       template <- Template.parser
       symbol <- Parser.required("as", Parser.singleWord)

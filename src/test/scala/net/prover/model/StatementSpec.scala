@@ -5,7 +5,7 @@ import net.prover.model.expressions._
 import org.specs2.mutable.Specification
 
 class StatementSpec extends Specification {
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   implicit def tupleToVariableDefinition(tuple: (String, Int)): VariableDefinition = VariableDefinition(tuple._1, tuple._2, Nil)
 
   def parseStatement(line: String)(implicit variableDefinitions: VariableDefinitions): Statement = {

@@ -3,7 +3,7 @@ package net.prover.model.entries
 import net.prover.model.definitions.{ConjunctionDefinition, ExpressionDefinition, TermListAdapter}
 import net.prover.model.expressions.{Statement, TermVariable}
 import net.prover.model.proof.SubstitutionContext
-import net.prover.model.{EntryContext, Parser, SimpleVariableDefinition}
+import net.prover.model.{AvailableEntries, Parser, SimpleVariableDefinition}
 
 case class ParentTypeConditions(
     parentType: TypeDefinition,
@@ -51,14 +51,14 @@ case class ParentTypeConditions(
   def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],
     expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition],
-    entryContext: EntryContext
+    availableEntries: AvailableEntries
   ): ParentTypeConditions = {
     ParentTypeConditions(
       entryReplacements(parentType).asInstanceOf[TypeDefinition],
       requiredParentQualifier.map(q => entryReplacements(q).asInstanceOf[TypeQualifierDefinition]),
-      requiredParentObjects.map(_.replaceDefinitions(entryReplacements, entryContext)),
+      requiredParentObjects.map(_.replaceDefinitions(entryReplacements, availableEntries)),
       termListAdapter.map(_.replaceDefinitions(expressionDefinitionReplacements)),
-      entryContext.conjunctionDefinitionOption.get)
+      availableEntries.conjunctionDefinitionOption.get)
   }
 
   def serializedFollowingLines: Seq[String] = requiredParentQualifier.map(q => Seq("parentQualifier", q.symbol).mkString(" ")).toSeq ++
@@ -67,7 +67,7 @@ case class ParentTypeConditions(
 }
 
 object ParentTypeConditions {
-  def parser(implicit context: EntryContext): Parser[ParentTypeConditions] = {
+  def parser(implicit context: AvailableEntries): Parser[ParentTypeConditions] = {
     for {
       parentType <- context.typeDefinitionParser
       requiredParentQualifier <- parentType.parentQualifierParser

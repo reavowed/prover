@@ -5,7 +5,7 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 import {matchTemplate} from "../../../../../models/Expression";
-import EntryContext from "../../../../EntryContext";
+import AvailableEntries from "../../../../AvailableEntries";
 import {CopiableExpression} from "../../../../ExpressionComponent";
 import AddTargetByInference from "./AddTargetByInference";
 import AddTargetByPremise from "./AddTargetByPremise";
@@ -31,7 +31,7 @@ import RewriteTransitiveFromLeft from "./RewriteTransitiveFromLeft";
 import RewriteTransitiveFromRight from "./RewriteTransitiveFromRight";
 
 export default class ProvingCard extends React.Component {
-  static contextType = EntryContext;
+  static contextType = AvailableEntries;
   constructor(props) {
     super(props);
     this.ref = createRef();
@@ -200,7 +200,7 @@ export default class ProvingCard extends React.Component {
     const currentRow = _.find(rows, r => r && r.label === currentRowLabel);
     const currentProver = currentRow && _.find(currentRow.provers, p => p && p.label === currentProverLabel);
 
-    return <EntryContext.Consumer>{entryContext => {
+    return <AvailableEntries.Consumer>{availableEntries => {
       const proverProps = {
         step,
         path,
@@ -210,7 +210,7 @@ export default class ProvingCard extends React.Component {
         onError: this.onError,
         onCancel: this.onCancel,
         onErrorCancel: this.onErrorCancel,
-        entryContext
+        availableEntries
       };
       return <div className="card" style={{margin: ".5rem", padding: ".5rem .75rem"}} ref={this.ref} tabIndex={0}>
         <ButtonToolbar style={{position:"absolute"}}>
@@ -248,6 +248,6 @@ export default class ProvingCard extends React.Component {
           </div>
         }
       </div>;
-    }}</EntryContext.Consumer>;
+    }}</AvailableEntries.Consumer>;
   }
 }

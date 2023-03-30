@@ -56,7 +56,7 @@ case class PropertyDefinitionOnType(
   ): PropertyDefinitionOnType = {
     PropertyDefinitionOnType(
       symbol,
-      parentTypeConditions.replaceDefinitions(entryReplacements, expressionDefinitionReplacements, entryWithContext.entryContext),
+      parentTypeConditions.replaceDefinitions(entryReplacements, expressionDefinitionReplacements, entryWithContext.availableEntries),
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))
   }
@@ -64,7 +64,7 @@ case class PropertyDefinitionOnType(
 
 object PropertyDefinitionOnType extends ChapterEntryParser {
   override def name: String = "property"
-  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
+  override def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       parentTypeConditions <- Parser.required("on", ParentTypeConditions.parser)

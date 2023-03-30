@@ -56,7 +56,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           .mapFind(j => j.unapply(possibleConclusion.conclusion).map { case (l, r) => direction.getSource(l, r).structuralComplexity })
           .getOrElse(0)
       }
-      Success(getPossibleInferences(stepProvingContext.provingContext.entryContext.allInferences, searchText, getPossibleInference, getConclusionComplexity))
+      Success(getPossibleInferences(stepProvingContext.provingContext.availableEntries.allInferences, searchText, getPossibleInference, getConclusionComplexity))
     }
     bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       .flatMap(stepWithContext => {

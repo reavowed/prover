@@ -1,13 +1,13 @@
 import _ from "lodash";
 import React, {useCallback, useContext, useState} from "react";
-import EntryContext from "../../EntryContext";
+import AvailableEntries from "../../AvailableEntries";
 import PrettifiedAutosuggest from "../../helpers/PrettifiedAutosuggest";
 
 export default function TypeQualifierAutocomplete({value, onChange, typeSymbol}) {
-  const entryContext = useContext(EntryContext);
+  const availableEntries = useContext(AvailableEntries);
   const [suggestions, setSuggestions] = useState([]);
 
-  const qualifiers = _.find(entryContext.typeDefinitions, d => d.symbol === typeSymbol)?.qualifiers ?? [];
+  const qualifiers = _.find(availableEntries.typeDefinitions, d => d.symbol === typeSymbol)?.qualifiers ?? [];
 
   const fetchSuggestions = useCallback(
     ({value}) => {

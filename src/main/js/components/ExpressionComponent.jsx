@@ -10,7 +10,7 @@ import {
   TypeQualifierExpression, TypeRelationExpression, Variable
 } from "../models/Expression";
 import DisplayContext from "./DisplayContext";
-import EntryContext from "./EntryContext";
+import AvailableEntries from "./AvailableEntries";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
 import {joinAsList} from "./helpers/reactFunctions";
 import BoundVariableLists from "./pages/theorem/steps/BoundVariableLists";
@@ -49,15 +49,15 @@ function filterPathsMultiple(actions, initialPaths) {
   return result;
 }
 
-export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, entryContext, displayContext, splitConjunction}) {
-  entryContext = entryContext || useContext(EntryContext);
+export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, availableEntries, displayContext, splitConjunction}) {
+  availableEntries = availableEntries || useContext(AvailableEntries);
   displayContext = displayContext || useContext(DisplayContext);
   wrapBoundVariable = wrapBoundVariable || ((name) => formatHtml(name));
 
   function renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, splitConjunction = false) {
 
     function matchDisplayShorthand(expression) {
-      for (const displayShorthand of _.reverse(entryContext.displayShorthands.slice())) {
+      for (const displayShorthand of _.reverse(availableEntries.displayShorthands.slice())) {
         const matches = matchTemplate(displayShorthand.template, expression, [], []);
         if (matches) {
           const matchesConditions = _.every(displayShorthand.conditions, condition => {
@@ -88,7 +88,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
       }
     }
     function matchDisambiguatorAdder(expression) {
-      for (const disambiguatorAdder of _.reverse(entryContext.disambiguatorAdders.slice())) {
+      for (const disambiguatorAdder of _.reverse(availableEntries.disambiguatorAdders.slice())) {
         const matches = matchTemplate(disambiguatorAdder.template, expression, [], []);
         if (matches && matches.length === 1) {
           return {disambiguatorAdder, match: matches[0]};

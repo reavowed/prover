@@ -1,6 +1,6 @@
 package net.prover.controllers.models
 
-import net.prover.model.{EntryContext, SimpleVariableDefinition}
+import net.prover.model.{AvailableEntries, SimpleVariableDefinition}
 import net.prover.model.definitions.Qualifier
 import net.prover.model.entries.{PropertyDefinitionOnType, TypeDefinition}
 
@@ -20,15 +20,15 @@ case class QualifierSummary(format: String, variableDefinitions: Seq[SimpleVaria
 case class TypeRelationDefinitionSummary(symbol: String, linkingPhrase: String)
 
 object TypeDefinitionSummary {
-  def getSummary(typeDefinition: TypeDefinition)(implicit entryContext: EntryContext): TypeDefinitionSummary = {
+  def getSummary(typeDefinition: TypeDefinition)(implicit availableEntries: AvailableEntries): TypeDefinitionSummary = {
     TypeDefinitionSummary(
       typeDefinition.symbol,
       typeDefinition.name,
       typeDefinition.article,
       typeDefinition.defaultQualifier.map(getQualifierSummary),
-      entryContext.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).map(getPropertyDefinitionSummary),
-      entryContext.qualifiersByType.getOrElse(typeDefinition.symbol, Nil).map(qd => TypeQualifierDefinitionSummary(qd.symbol, qd.qualifiedSymbol, qd.name, getQualifierSummary(qd.qualifier))),
-      entryContext.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).map(rod => RelatedObjectDefinitionSummary(rod.symbol, rod.qualifiedSymbol, rod.name, rod.article, rod.mainVariableDefinition, rod.parentTypeConditions.requiredParentQualifier.map(_.symbol))))
+      availableEntries.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).map(getPropertyDefinitionSummary),
+      availableEntries.qualifiersByType.getOrElse(typeDefinition.symbol, Nil).map(qd => TypeQualifierDefinitionSummary(qd.symbol, qd.qualifiedSymbol, qd.name, getQualifierSummary(qd.qualifier))),
+      availableEntries.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).map(rod => RelatedObjectDefinitionSummary(rod.symbol, rod.qualifiedSymbol, rod.name, rod.article, rod.mainVariableDefinition, rod.parentTypeConditions.requiredParentQualifier.map(_.symbol))))
   }
   def getQualifierSummary(qualifier: Qualifier): QualifierSummary = {
     QualifierSummary(qualifier.format.baseFormatString, qualifier.variableDefinitions)
@@ -36,14 +36,14 @@ object TypeDefinitionSummary {
   def getPropertyDefinitionSummary(pd: PropertyDefinitionOnType): PropertyDefinitionSummary = {
     PropertyDefinitionSummary(pd.symbol, pd.qualifiedSymbol, pd.name, pd.parentTypeConditions.requiredParentQualifier.map(_.symbol), pd.parentTypeConditions.requiredParentObjects.objectDefinitions.map(_.symbol))
   }
-  def getAllFromContext(entryContext: EntryContext): Map[String, TypeDefinitionSummary] = {
-    entryContext.typeDefinitions.mapValues(d => getSummary(d)(entryContext))
+  def getAllFromContext(availableEntries: AvailableEntries): Map[String, TypeDefinitionSummary] = {
+    availableEntries.typeDefinitions.mapValues(d => getSummary(d)(availableEntries))
   }
 }
 
 object StandalonePropertyDefinitionSummary {
-  def getAllFromContext(entryContext: EntryContext): Map[String, StandalonePropertyDefinitionSummary] = {
-    entryContext.standalonePropertyDefinitions
+  def getAllFromContext(availableEntries: AvailableEntries): Map[String, StandalonePropertyDefinitionSummary] = {
+    availableEntries.standalonePropertyDefinitions
       .map(d => d.symbol -> StandalonePropertyDefinitionSummary(
         d.symbol,
         d.qualifiedSymbol,
@@ -54,7 +54,7 @@ object StandalonePropertyDefinitionSummary {
 }
 
 object TypeRelationDefinitionSummary {
-  def getAllFromContext(entryContext: EntryContext): Map[String, TypeRelationDefinitionSummary] = {
-    entryContext.typeRelationDefinitions.map(d => d.symbol -> TypeRelationDefinitionSummary(d.symbol, d.linkingPhrase)).toMap
+  def getAllFromContext(availableEntries: AvailableEntries): Map[String, TypeRelationDefinitionSummary] = {
+    availableEntries.typeRelationDefinitions.map(d => d.symbol -> TypeRelationDefinitionSummary(d.symbol, d.linkingPhrase)).toMap
   }
 }

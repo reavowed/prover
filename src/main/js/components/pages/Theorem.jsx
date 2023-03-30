@@ -5,7 +5,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import {PremiseReference} from "../../models/Step";
 import {Parser} from "../../Parser";
 import DisplayContext from "../DisplayContext";
-import EntryContext from "../EntryContext";
+import AvailableEntries from "../AvailableEntries";
 import {HighlightableExpression} from "../ExpressionComponent";
 import HashParamsContext from "../HashParamsContext";
 import {Inference} from "./Inference";
@@ -20,9 +20,9 @@ function Premise({statement, index}) {
 export class Theorem extends React.Component {
   constructor(props) {
     super(props);
-    const [parser, entryContext] = EntryContext.fromEntryProps(props);
+    const [parser, availableEntries] = AvailableEntries.fromEntryProps(props);
     this.parser = parser;
-    this.entryContext = entryContext;
+    this.availableEntries = availableEntries;
     const theorem = this.parser.parseTheorem(props.theorem, props.inferences);
     this.state = {
       theorem,
@@ -35,7 +35,7 @@ export class Theorem extends React.Component {
       disableChaining: false,
       disableAssumptionCollapse: false,
       disableShorthands: false,
-      disambiguators: DisplayContext.disambiguatorsForInferenceSummary(theorem, this.entryContext)
+      disambiguators: DisplayContext.disambiguatorsForInferenceSummary(theorem, this.availableEntries)
     }
   }
 
@@ -45,7 +45,7 @@ export class Theorem extends React.Component {
     const {theorem, inferences, highlighting, disableChaining, disableShorthands, disableAssumptionCollapse, disambiguators} = this.state;
     const displayContext = DisplayContext.construct(theorem.variableDefinitions, disambiguators, disableChaining, disableShorthands, disableAssumptionCollapse);
     const theoremContext = {
-      entryContext: this.entryContext,
+      availableEntries: this.availableEntries,
       parser: this.parser,
       variableDefinitions: theorem.variableDefinitions,
       displayContext,
@@ -59,7 +59,7 @@ export class Theorem extends React.Component {
           self.setState({
             theorem: newTheorem,
             inferences: newInferences,
-            disambiguators: DisplayContext.disambiguatorsForInferenceSummary(newTheorem, self.entryContext)
+            disambiguators: DisplayContext.disambiguatorsForInferenceSummary(newTheorem, self.availableEntries)
           }, () => resolve());
         })
       },
@@ -208,7 +208,7 @@ export class Theorem extends React.Component {
       </Dropdown>;
 
     return <HashParamsContext.Provider value={hashParams}>
-      <EntryContext.Provider value={this.entryContext}>
+      <AvailableEntries.Provider value={this.availableEntries}>
         <TheoremContext.Provider value={theoremContext}>
           <DisplayContext.Provider value={displayContext}>
             <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" buttons={settingsDropdown} editable {...this.props}>
@@ -216,7 +216,7 @@ export class Theorem extends React.Component {
             </Inference>
           </DisplayContext.Provider>
         </TheoremContext.Provider>
-      </EntryContext.Provider>
+      </AvailableEntries.Provider>
     </HashParamsContext.Provider>;
   }
 }

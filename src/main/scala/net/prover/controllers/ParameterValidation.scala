@@ -37,8 +37,8 @@ trait ParameterValidation {
       .getOrElse(Format.default(boundVariableNames, componentTypes))
       .recoverWithBadRequest
   }
-  def getTypeDefinition(symbol: String)(implicit entryContext: EntryContext): Try[TypeDefinition] = {
-    entryContext.typeDefinitions.get(symbol).orBadRequest(s"Unknown type '$symbol'")
+  def getTypeDefinition(symbol: String)(implicit availableEntries: AvailableEntries): Try[TypeDefinition] = {
+    availableEntries.typeDefinitions.get(symbol).orBadRequest(s"Unknown type '$symbol'")
   }
   def getSimpleVariableDefinition(text: String, description: String): Try[SimpleVariableDefinition] = {
     SimpleVariableDefinition.parser.parseFromString(text, description).recoverWithBadRequest
@@ -63,27 +63,27 @@ trait ParameterValidation {
         Failure(BadRequestException("Both format and term names must be provided for qualifier"))
     }
   }
-  def getOptionalParentQualifier(parentType: TypeDefinition, qualifierSymbolText: String)(implicit entryContext: EntryContext): Try[Option[TypeQualifierDefinition]] = {
+  def getOptionalParentQualifier(parentType: TypeDefinition, qualifierSymbolText: String)(implicit availableEntries: AvailableEntries): Try[Option[TypeQualifierDefinition]] = {
     getOptionalString(qualifierSymbolText)
-      .map(qualifierSymbol => entryContext.qualifiersByType(parentType.symbol).find(_.symbol == qualifierSymbol).orBadRequest(s"Unknown qualifier '$qualifierSymbol' on type '${parentType.symbol}'"))
+      .map(qualifierSymbol => availableEntries.qualifiersByType(parentType.symbol).find(_.symbol == qualifierSymbol).orBadRequest(s"Unknown qualifier '$qualifierSymbol' on type '${parentType.symbol}'"))
       .swap
   }
-  def getParentObjects(parentType: TypeDefinition, objectSymbolsText: String)(implicit entryContext: EntryContext): Try[Option[RequiredParentObjects]] = {
+  def getParentObjects(parentType: TypeDefinition, objectSymbolsText: String)(implicit availableEntries: AvailableEntries): Try[Option[RequiredParentObjects]] = {
     getWords(objectSymbolsText) match {
       case Nil =>
         Success(None)
       case objectSymbols =>
         for {
-          objectDefinitions <- objectSymbols.map(s => entryContext.relatedObjectsByType(parentType.symbol).find(_.symbol == s)
+          objectDefinitions <- objectSymbols.map(s => availableEntries.relatedObjectsByType(parentType.symbol).find(_.symbol == s)
             .orBadRequest(s"Unknown object '$s' on type '${parentType.symbol}'"))
             .traverseTry
-          uniquenessDefinition <- entryContext.uniquenessDefinitionOption.orBadRequest("Cannot add related objects to property definition without uniqueness")
-          generalizationDefinition <- entryContext.generalizationDefinitionOption.orBadRequest("Cannot add related objects to property definition without generalization")
-          deductionDefinition <- entryContext.deductionDefinitionOption.orBadRequest("Cannot add related objects to property definition without deduction")
+          uniquenessDefinition <- availableEntries.uniquenessDefinitionOption.orBadRequest("Cannot add related objects to property definition without uniqueness")
+          generalizationDefinition <- availableEntries.generalizationDefinitionOption.orBadRequest("Cannot add related objects to property definition without generalization")
+          deductionDefinition <- availableEntries.deductionDefinitionOption.orBadRequest("Cannot add related objects to property definition without deduction")
         } yield Some(RequiredParentObjects(objectDefinitions, uniquenessDefinition, generalizationDefinition, deductionDefinition))
     }
   }
-  def getOptionalAdapter(variableDefinitionsText: String, possibleSerializedTemplates: String, qualifierVariableDefinitions: Seq[SimpleVariableDefinition])(implicit entryContext: EntryContext): Try[Option[TermListAdapter]] = {
+  def getOptionalAdapter(variableDefinitionsText: String, possibleSerializedTemplates: String, qualifierVariableDefinitions: Seq[SimpleVariableDefinition])(implicit availableEntries: AvailableEntries): Try[Option[TermListAdapter]] = {
     getOptionalString(possibleSerializedTemplates) match {
       case Some(serializedTemplates) =>
         for {

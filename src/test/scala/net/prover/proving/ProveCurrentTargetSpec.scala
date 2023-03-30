@@ -7,7 +7,7 @@ import net.prover.model.TestDefinitions._
 import org.specs2.mutable.Specification
 
 class ProveCurrentTargetSpec extends Specification with BookServiceHelper {
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Nil)
 
   "prove current target" should {

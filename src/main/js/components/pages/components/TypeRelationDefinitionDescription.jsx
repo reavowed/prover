@@ -1,11 +1,11 @@
 import React, {useContext} from "react";
 import DisplayContext from "../../DisplayContext";
-import EntryContext from "../../EntryContext";
+import AvailableEntries from "../../AvailableEntries";
 import {CopiableExpression} from "../../ExpressionComponent";
 import {joinWordElements} from "../../helpers/reactFunctions";
 
 export default function TypeRelationDefinitionDescription({typeRelationDefinition}) {
-  const entryContext = useContext(EntryContext);
+  const availableEntries = useContext(AvailableEntries);
   const variableDefinitions = [typeRelationDefinition.firstVariable, typeRelationDefinition.secondVariable];
   const words = [
     typeRelationDefinition.firstType.article.capitalize(),
@@ -19,7 +19,7 @@ export default function TypeRelationDefinitionDescription({typeRelationDefinitio
     <CopiableExpression expression={typeRelationDefinition.definingStatement} splitConjunction/>
   ];
 
-  return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(typeRelationDefinition.definingStatement, variableDefinitions, entryContext)}>
+  return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(typeRelationDefinition.definingStatement, variableDefinitions, availableEntries)}>
     {joinWordElements(words)}.
   </DisplayContext.Provider>;
 }

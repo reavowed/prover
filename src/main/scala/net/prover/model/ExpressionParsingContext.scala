@@ -5,7 +5,7 @@ import net.prover.model.expressions.{StatementVariable, Term, TermVariable}
 import net.prover.model.proof.{StepContext, StepProvingContext}
 
 case class ExpressionParsingContext(
-    entryContext: EntryContext,
+    availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions,
     parameterLists: Seq[Seq[(String, Int)]])
   extends ParsingContextWithParameters[ExpressionParsingContext]
@@ -80,25 +80,25 @@ object ExpressionParsingContext {
     def unapply(text: String): Option[String] = s"($TermVariableNamePattern$TermVariableSuffixPattern)".r.unapplySeq(text).flatMap(_.headOption)
   }
 
-  def forInference(inference: Inference)(implicit entryContext: EntryContext): ExpressionParsingContext = withDefinitions(inference.variableDefinitions)
-  def forComponentTypes(componentTypes: Seq[ComponentType])(implicit entryContext: EntryContext): ExpressionParsingContext = {
+  def forInference(inference: Inference)(implicit availableEntries: AvailableEntries): ExpressionParsingContext = withDefinitions(inference.variableDefinitions)
+  def forComponentTypes(componentTypes: Seq[ComponentType])(implicit availableEntries: AvailableEntries): ExpressionParsingContext = {
     withDefinitions(VariableDefinitions.fromComponentTypes(componentTypes))
   }
-  def forTypeDefinition(termVariableDefinitions: Seq[SimpleVariableDefinition])(implicit entryContext: EntryContext): ExpressionParsingContext = {
+  def forTypeDefinition(termVariableDefinitions: Seq[SimpleVariableDefinition])(implicit availableEntries: AvailableEntries): ExpressionParsingContext = {
     withDefinitions(VariableDefinitions.empty.addSimpleTermVariables(termVariableDefinitions))
   }
 
-  def withDefinitions(variableDefinitions: VariableDefinitions)(implicit entryContext: EntryContext): ExpressionParsingContext = {
-    ExpressionParsingContext(entryContext, variableDefinitions, Nil)
+  def withDefinitions(variableDefinitions: VariableDefinitions)(implicit availableEntries: AvailableEntries): ExpressionParsingContext = {
+    ExpressionParsingContext(availableEntries, variableDefinitions, Nil)
   }
 
-  implicit def atStep(implicit entryContext: EntryContext, stepContext: StepContext): ExpressionParsingContext = {
+  implicit def atStep(implicit availableEntries: AvailableEntries, stepContext: StepContext): ExpressionParsingContext = {
     ExpressionParsingContext(
-      entryContext,
+      availableEntries,
       stepContext.variableDefinitions,
       stepContext.boundVariableLists.map(_.zipWithIndex))
   }
   implicit def atStep(stepProvingContext: StepProvingContext): ExpressionParsingContext = {
-    atStep(stepProvingContext.provingContext.entryContext, stepProvingContext.stepContext)
+    atStep(stepProvingContext.provingContext.availableEntries, stepProvingContext.stepContext)
   }
 }

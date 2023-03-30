@@ -30,7 +30,7 @@ object Premise {
     helper(premise, "")
   }
 
-  def parser(statement: Statement)(implicit stepContext: StepContext, entryContext: EntryContext): Parser[Premise] = {
+  def parser(statement: Statement)(implicit stepContext: StepContext, availableEntries: AvailableEntries): Parser[Premise] = {
     @scala.annotation.tailrec
     def helper(inferences: Seq[Inference], premise: SingleLinePremise): SingleLinePremise = {
       inferences match {

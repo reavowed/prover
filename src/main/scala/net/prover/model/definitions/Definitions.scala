@@ -16,11 +16,11 @@ import scala.Ordering.Implicits._
 import scala.collection.mutable
 import scala.util.Try
 
-case class Definitions(rootEntryContext: EntryContext) {
+case class Definitions(allAvailableEntries: AvailableEntries) {
 
-  lazy val allInferences: Seq[Inference.FromEntry] = rootEntryContext.allInferences
-  lazy val inferenceEntries: Seq[Inference] = rootEntryContext.availableEntries.ofType[Inference]
-  private val provingContext: ProvingContext = ProvingContext(rootEntryContext, this)
+  lazy val allInferences: Seq[Inference.FromEntry] = allAvailableEntries.allInferences
+  lazy val inferenceEntries: Seq[Inference] = allAvailableEntries.allEntries.ofType[Inference]
+  private val provingContext: ProvingContext = ProvingContext(allAvailableEntries, this)
 
   val completenessByInference = mutable.Map.empty[String, Boolean]
   def isInferenceComplete(inference: Inference): Boolean = {
@@ -40,7 +40,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   }
 
   lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
-    rootEntryContext.deductionDefinitionOption.flatMap { deductionDefinition =>
+    allAvailableEntries.deductionDefinitionOption.flatMap { deductionDefinition =>
       inferenceEntries.iterator.collect {
         case inference @ Inference(
         _,
@@ -53,7 +53,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   }
 
   lazy val specificationInferenceOption: Option[(Inference, Statement)] = {
-    rootEntryContext.generalizationDefinitionOption.flatMap { generalizationDefinition =>
+    allAvailableEntries.generalizationDefinitionOption.flatMap { generalizationDefinition =>
       inferenceEntries.iterator.collect {
         case inference @ Inference(
           _,
@@ -65,7 +65,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     }
   }
 
-  lazy val definedBinaryStatements: Seq[BinaryJoiner[_ <: Expression]] = Definitions.getDefinedBinaryStatements(rootEntryContext.statementDefinitions, rootEntryContext.displayShorthands, rootEntryContext.termDefinitions)
+  lazy val definedBinaryStatements: Seq[BinaryJoiner[_ <: Expression]] = Definitions.getDefinedBinaryStatements(allAvailableEntries.statementDefinitions, allAvailableEntries.displayShorthands, allAvailableEntries.termDefinitions)
   lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryStatements.ofType[BinaryConnective]
   lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
 
@@ -156,7 +156,7 @@ case class Definitions(rootEntryContext: EntryContext) {
 
   lazy val equalityOption: Option[Equality] = {
     for {
-      definition <- rootEntryContext.statementDefinitions.find(_.attributes.contains("equality"))
+      definition <- allAvailableEntries.statementDefinitions.find(_.attributes.contains("equality"))
       relation = BinaryRelationFromDefinition(definition)
       expansion <- expansions.ofType[RelationExpansion].find(e => e.sourceJoiner == relation && e.resultJoiner == relation)
       substitution <- substitutions.find(_.relation == relation)
@@ -168,7 +168,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val generalizationDistributions: Map[BinaryJoiner[Statement], Inference] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     (for {
-      generalizationDefinition <- rootEntryContext.generalizationDefinitionOption.toSeq
+      generalizationDefinition <- allAvailableEntries.generalizationDefinitionOption.toSeq
       inference <- inferenceEntries
       connective <- definedBinaryConnectives
       (generalizationDefinition(_, StatementVariable(a, Seq(FunctionParameter(0, 0)))), generalizationDefinition(_, StatementVariable(b, Seq(FunctionParameter(0, 0))))) <- connective.unapply(inference.conclusion)
@@ -178,7 +178,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val deductionDistributions: Map[BinaryJoiner[Statement], Inference] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
     (for {
-      deductionDefinition <- rootEntryContext.deductionDefinitionOption.toSeq
+      deductionDefinition <- allAvailableEntries.deductionDefinitionOption.toSeq
       inference <- inferenceEntries
       connective <- definedBinaryConnectives
       (deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), deductionDefinition(StatementVariable(c, Nil), StatementVariable(d, Nil))) <- connective.unapply(inference.conclusion)
@@ -402,7 +402,7 @@ case class Definitions(rootEntryContext: EntryContext) {
     }
     def isValidInitialPremise(initialPremiseOption: Option[Statement], conclusion: BinaryRelationStatement) = {
       def isValidTypeStatement(initialPremise: Statement): Boolean = {
-        ExpressionUtils.getTypeLikeStatement(initialPremise)(rootEntryContext).exists { typeStatement =>
+        ExpressionUtils.getTypeLikeStatement(initialPremise)(allAvailableEntries).exists { typeStatement =>
           ExpressionUtils.isSimpleTermVariable(typeStatement.mainTerm)
         }
       }
@@ -514,7 +514,7 @@ case class Definitions(rootEntryContext: EntryContext) {
 
     def breakOffTypeStatement(premises: Seq[Statement]): (Option[TypeLikeStatement], Seq[Statement]) = {
       premises.headAndTailOption
-        .flatMap { case (head, tail) => ExpressionUtils.getTypeLikeStatement(head)(rootEntryContext).map(t => Some(t) -> tail)}
+        .flatMap { case (head, tail) => ExpressionUtils.getTypeLikeStatement(head)(allAvailableEntries).map(t => Some(t) -> tail)}
         .getOrElse(None -> premises)
     }
 
@@ -543,7 +543,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   }
 
   lazy val termDefinitionRemovals: Map[TermDefinition, Seq[InferenceExtraction]] = {
-    rootEntryContext.termDefinitions.map { termDefinition =>
+    allAvailableEntries.termDefinitions.map { termDefinition =>
       termDefinition -> (for {
         inferenceExtraction <- inferenceExtractionsByInferenceId(termDefinition.definitionInference.id)
         if inferenceExtraction.conclusion.referencedDefinitions.contains(termDefinition) &&
@@ -656,7 +656,7 @@ case class Definitions(rootEntryContext: EntryContext) {
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, Int, Int, Direction)] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {
-      deductionDefinition <- rootEntryContext.deductionDefinitionOption.toSeq
+      deductionDefinition <- allAvailableEntries.deductionDefinitionOption.toSeq
       result <- for {
         inference <- allInferences
         Seq(firstPremise @ deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
@@ -696,7 +696,7 @@ case class Definitions(rootEntryContext: EntryContext) {
 
 object Definitions {
   def apply(books: Seq[BookWithContext]): Definitions = {
-    Definitions(EntryContext.forBooks(books))
+    Definitions(AvailableEntries.forBooks(books))
   }
 
   def getDefinedBinaryStatements(statementDefinitions: Seq[StatementDefinition], shorthands: Seq[DisplayShorthand], termDefinitions: Seq[TermDefinition]): Seq[BinaryJoiner[_ <: Expression]] = {

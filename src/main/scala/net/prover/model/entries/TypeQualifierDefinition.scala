@@ -56,21 +56,21 @@ case class TypeQualifierDefinition(
       qualifier,
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements),
-      entryWithContext.entryContext.conjunctionDefinitionOption.get)
+      entryWithContext.availableEntries.conjunctionDefinitionOption.get)
   }
 }
 
 object TypeQualifierDefinition extends ChapterEntryParser {
   override def name: String = "qualifier"
-  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
+  override def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
-      parentType <- Parser.required("on", entryContext.typeDefinitionParser)
+      parentType <- Parser.required("on", availableEntries.typeDefinitionParser)
       qualifier <- Qualifier.parser
       expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.mainVariableDefinition +: qualifier.variableDefinitions)
       explicitName <- Parser.optional("name", Parser.allInParens)
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
-      conjunctionDefinition = entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
+      conjunctionDefinition = availableEntries.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
     } yield TypeQualifierDefinition(symbol, parentType, qualifier, explicitName, definingStatement, conjunctionDefinition)
   }
 }

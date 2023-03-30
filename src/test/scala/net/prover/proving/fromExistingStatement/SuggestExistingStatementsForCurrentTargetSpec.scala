@@ -10,7 +10,7 @@ import org.specs2.mutable.Specification
 import scala.util.Success
 
 class SuggestExistingStatementsForCurrentTargetSpec extends Specification with StepContextHelper with PossibleConclusionMatchers {
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1, χ -> 0), Seq(a -> 0))
 
   "SuggestExistingStatementsForCurrentTarget" should {

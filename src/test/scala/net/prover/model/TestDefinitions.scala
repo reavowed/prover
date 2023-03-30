@@ -411,7 +411,7 @@ trait StepHelpers extends TestVariableDefinitions with TestExpressionDefinitions
 object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with StepHelpers with MockitoStubs {
   import org.specs2.matcher.Matchers._
   import org.specs2.matcher.MustExpectations._
-  val defaultEntryContext: EntryContext = createEntryContext(
+  val defaultAvailableEntries: AvailableEntries = createAvailableEntries(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAllDefinition, ExistsDefinition, ExistsUniqueDefinition,
@@ -444,57 +444,57 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
       parser.parseFromString(text, "test")
     }
   }
-  implicit def entryContextToProvingContext(implicit entryContext: EntryContext): ProvingContext = ProvingContext(entryContext, new Definitions(entryContext))
-  implicit def entryContextAndStepContextToStepProvingContext(implicit entryContext: EntryContext, stepContext: StepContext): StepProvingContext = {
-    StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
+  implicit def availableEntriesToProvingContext(implicit availableEntries: AvailableEntries): ProvingContext = ProvingContext(availableEntries, new Definitions(availableEntries))
+  implicit def availableEntriesAndStepContextToStepProvingContext(implicit availableEntries: AvailableEntries, stepContext: StepContext): StepProvingContext = {
+    StepProvingContext(stepContext, availableEntriesToProvingContext(availableEntries))
   }
 
-  def createEntryContext(entries: Seq[ChapterEntry]): EntryContext = {
+  def createAvailableEntries(entries: Seq[ChapterEntry]): AvailableEntries = {
     val entriesWithContext = entries.map(createEntryWithContext(_)(null))
-    val entryContext = EntryContext(entriesWithContext)
+    val availableEntries = AvailableEntries(entriesWithContext)
     entriesWithContext.foreach(e => {
-      e.entryContext returns entryContext
-      e.provingContext returns entryContextToProvingContext(entryContext)
+      e.availableEntries returns availableEntries
+      e.provingContext returns availableEntriesToProvingContext(availableEntries)
     })
-    entryContext
+    availableEntries
   }
-  def defaultEntryContextWithAdditionalEntries(entries: ChapterEntry*): EntryContext = {
-    createEntryContext(defaultEntryContext.availableEntries ++ entries)
+  def defaultAvailableEntriesPlus(entries: ChapterEntry*): AvailableEntries = {
+    createAvailableEntries(defaultAvailableEntries.allEntries ++ entries)
   }
 
-  implicit class EntryContextOps(entryContext: EntryContext) {
-    def addEntry(chapterEntry: ChapterEntry): EntryContext = {
-      entryContext.addEntry(createEntryWithContext(chapterEntry)(entryContext))
+  implicit class AvailableEntriesOps(availableEntries: AvailableEntries) {
+    def addEntry(chapterEntry: ChapterEntry): AvailableEntries = {
+      availableEntries.addEntry(createEntryWithContext(chapterEntry)(availableEntries))
     }
   }
 
-  def createEntryWithContext[T <: ChapterEntry](entry: T)(implicit entryContext: EntryContext): TypedEntryWithContext[T] = {
+  def createEntryWithContext[T <: ChapterEntry](entry: T)(implicit availableEntries: AvailableEntries): TypedEntryWithContext[T] = {
     val entryWithContext = mock[TypedEntryWithContext[T]]
     entryWithContext.entry returns entry
-    entryWithContext.entryContext returns entryContext
-    entryWithContext.provingContext returns entryContextToProvingContext
+    entryWithContext.availableEntries returns availableEntries
+    entryWithContext.provingContext returns availableEntriesToProvingContext
     entryWithContext
   }
-  def createTheoremWithContext(theorem: Theorem)(implicit entryContext: EntryContext): TheoremWithContext = {
+  def createTheoremWithContext(theorem: Theorem)(implicit availableEntries: AvailableEntries): TheoremWithContext = {
     val theoremWithContext = createEntryWithContext(theorem)
     theoremWithContext.theorem returns theorem
     when(theoremWithContext.proofsWithContext).thenCallRealMethod()
     theoremWithContext
   }
 
-  def beValidTheorem(implicit entryContext: EntryContext): Matcher[Theorem] = (theorem: Theorem) => {
+  def beValidTheorem(implicit availableEntries: AvailableEntries): Matcher[Theorem] = (theorem: Theorem) => {
     val recalculatedTheorem = RecalculateReferences(createTheoremWithContext(theorem))._1
     val serializedTheorem = recalculatedTheorem.serializedLines.mkString("\n").stripPrefix("theorem ")
     val serializedProofs = recalculatedTheorem.proofs.map(_.serialized)
     val proofFileReader = mock[ProofFileReader]
     proofFileReader.getSerializedProofs(recalculatedTheorem.title) returns serializedProofs
-    val parsedTheorem = Theorem.parser(entryContext, proofFileReader).parseFromString(serializedTheorem, "Theorem")
+    val parsedTheorem = Theorem.parser(availableEntries, proofFileReader).parseFromString(serializedTheorem, "Theorem")
     parsedTheorem must beTypedEqualTo(theorem)
-    parsedTheorem.isComplete(new Definitions(entryContext)) must beTrue
+    parsedTheorem.isComplete(new Definitions(availableEntries)) must beTrue
   }
 
-  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
-    beValidTheorem(entryContext) ^^ { steps: Seq[Step] => {
+  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
+    beValidTheorem(availableEntries) ^^ { steps: Seq[Step] => {
       Theorem(
         "Test Theorem",
         variableDefinitions,
@@ -504,11 +504,11 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     }}
   }
 
-  def beStepThatMakesValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int = 0)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Matcher[Step] = {
+  def beStepThatMakesValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int = 0)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Step] = {
     beStepsThatMakeValidTheorem(premises, conclusion, depth) ^^ { step: Step => Seq(step) }
   }
 
-  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
+  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
     if (depth == 0)
       beStepsThatMakeValidTheorem(premises, conclusion)
     else {

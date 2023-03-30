@@ -9,9 +9,9 @@ import org.specs2.mutable.Specification
 
 class RelatedObjectDefinitionSpec extends Specification {
 
-  private def testParsingAndSerialization(relatedObjectDefinition: RelatedObjectDefinition)(implicit entryContext: EntryContext): MatchResult[Any] = {
+  private def testParsingAndSerialization(relatedObjectDefinition: RelatedObjectDefinition)(implicit availableEntries: AvailableEntries): MatchResult[Any] = {
     val serializedDefinition = relatedObjectDefinition.serializedLines.mkString("\n")
-    val reparsedDefinition = ChapterEntry.parser(entryContext, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
+    val reparsedDefinition = ChapterEntry.parser(availableEntries, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(relatedObjectDefinition)
   }
 
@@ -34,7 +34,7 @@ class RelatedObjectDefinitionSpec extends Specification {
           ConjunctionDefinition),
         None,
         ForAllIn("a", A)(Conjunction(Equals(Apply(f, Pair($, e)), $), Equals(Apply(f, Pair(e, $)), $))))
-      testParsingAndSerialization(definition)(defaultEntryContextWithAdditionalEntries(binaryOperationDefinition))
+      testParsingAndSerialization(definition)(defaultAvailableEntriesPlus(binaryOperationDefinition))
     }
   }
 }

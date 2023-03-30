@@ -5,7 +5,7 @@ import net.prover.model.TestDefinitions._
 
 class StepCreationSpec extends ControllerSpec {
 
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Nil)
 
   "adding a target" should {

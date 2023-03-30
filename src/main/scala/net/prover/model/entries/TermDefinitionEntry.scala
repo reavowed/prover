@@ -37,7 +37,7 @@ case class TermDefinitionEntry(
   def withDisambiguatorAdders(newDisambiguatorAdders: Seq[DisambiguatorAdder]): TermDefinitionEntry = copy(disambiguatorAdders = newDisambiguatorAdders)
   override def withDefiningStatement(newDefiningStatement: Statement) = copy(definitionPredicate = newDefiningStatement)
 
-  override def definingStatementParsingContext(implicit entryContext: EntryContext) = {
+  override def definingStatementParsingContext(implicit availableEntries: AvailableEntries) = {
     ExpressionParsingContext.forComponentTypes(componentTypes).addInitialParameter("_")
   }
 
@@ -84,7 +84,7 @@ object TermDefinitionEntry extends ChapterEntryParser {
     "name",
     Parser.allInParens)
 
-  def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[TermDefinitionEntry] = {
+  def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[TermDefinitionEntry] = {
     for {
       baseSymbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinitionEntry.boundVariablesAndComponentTypesParser

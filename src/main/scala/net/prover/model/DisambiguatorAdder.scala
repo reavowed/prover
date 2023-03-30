@@ -11,13 +11,13 @@ case class DisambiguatorAdder(template: Template, disambiguator: String) {
 }
 
 object DisambiguatorAdder {
-  def parser(implicit entryContext: EntryContext): Parser[DisambiguatorAdder] = {
+  def parser(implicit availableEntries: AvailableEntries): Parser[DisambiguatorAdder] = {
     for {
-      template <- Term.templateParser(TemplateParsingContext(entryContext, Seq(Seq("_" -> 0))))
+      template <- Term.templateParser(TemplateParsingContext(availableEntries, Seq(Seq("_" -> 0))))
       disambiguator <- Parser.singleWord
     } yield DisambiguatorAdder(template, disambiguator)
   }
-  def listParser(implicit entryContext: EntryContext): Parser[Seq[DisambiguatorAdder]] = {
+  def listParser(implicit availableEntries: AvailableEntries): Parser[Seq[DisambiguatorAdder]] = {
     parser.listInParens(Some(","))
   }
 

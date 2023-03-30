@@ -6,7 +6,7 @@ import net.prover.books.reading.ProofFileReader
 import net.prover.entries.EntryWithContext
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.{EntryContext, ExpressionParsingContext, Inference, Parser, SimpleVariableDefinition}
+import net.prover.model.{AvailableEntries, ExpressionParsingContext, Inference, Parser, SimpleVariableDefinition}
 
 trait ChapterEntry {
   @JsonSerialize
@@ -50,7 +50,7 @@ object ChapterEntry {
   trait HasDefiningStatement extends ChapterEntry {
     def definingStatement: Statement
     def withDefiningStatement(newDefiningStatement: Statement): ChapterEntry
-    def definingStatementParsingContext(implicit entryContext: EntryContext): ExpressionParsingContext
+    def definingStatementParsingContext(implicit availableEntries: AvailableEntries): ExpressionParsingContext
   }
   trait HasOptionalExplicitName extends ChapterEntry with HasSymbol {
     def explicitName: Option[String]
@@ -80,9 +80,9 @@ object ChapterEntry {
     DisplayShorthand,
     WritingShorthand)
 
-  def parser(entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[Option[ChapterEntry]] = {
+  def parser(availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[Option[ChapterEntry]] = {
     Parser.singleWordIfAny.flatMapFlatMapReverse { entryType =>
-      parsers.find(_.name == entryType).map(_.parser(entryContext, proofFileReader))
+      parsers.find(_.name == entryType).map(_.parser(availableEntries, proofFileReader))
     }
   }
 }

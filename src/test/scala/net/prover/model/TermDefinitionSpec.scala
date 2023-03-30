@@ -11,7 +11,7 @@ class TermDefinitionSpec extends Specification {
 
   private def testParsingAndSerialization(termDefinition: TermDefinitionEntry): MatchResult[Any] = {
     val serializedDefinition = termDefinition.serializedLines.mkString("\n")
-    val reparsedDefinition = ChapterEntry.parser(defaultEntryContext, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
+    val reparsedDefinition = ChapterEntry.parser(defaultAvailableEntries, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(termDefinition)
   }
 

@@ -4,7 +4,7 @@ import net.prover.books.keys.ListWithKeys
 import net.prover.books.management.BookDirectoryConfig
 import net.prover.entries.{BookWithContext, ChapterWithContext}
 import net.prover.model.entries.ChapterEntry
-import net.prover.model.{Chapter, EntryContext, Parser}
+import net.prover.model.{Chapter, AvailableEntries, Parser}
 
 object ReadChapter {
   def apply(
@@ -21,9 +21,9 @@ object ReadChapter {
       chapterKey = bookWithContext.book.chaptersWithKeys.keyAccumulator.getNextKey(initialChapter)._1
       chapter <- Parser.foldWhileDefined[Chapter](initialChapter) { chapter: Chapter =>
         val chapterWithContext = ChapterWithContext(chapter, chapterKey, bookWithContext)
-        val entryContext = EntryContext.forChapterInclusive(chapterWithContext)
+        val availableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
         val proofFileReader = ProofFileReader(chapterDirectoryPath, chapter.entriesWithKeys.keyAccumulator)
-        ChapterEntry.parser(entryContext, proofFileReader).mapMap {chapter.addEntry}
+        ChapterEntry.parser(availableEntries, proofFileReader).mapMap {chapter.addEntry}
       }
     } yield chapter
 

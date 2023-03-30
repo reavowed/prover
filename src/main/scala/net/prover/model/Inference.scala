@@ -161,11 +161,11 @@ object Inference {
     String.format("%064x", new java.math.BigInteger(1, sha.digest()))
   }
 
-  def parser(implicit entryContext: EntryContext): Parser[Inference.Summary] = {
+  def parser(implicit availableEntries: AvailableEntries): Parser[Inference.Summary] = {
     for {
       inferenceId <- Parser.singleWord
     } yield {
-      entryContext.inferencesById
+      availableEntries.inferencesById
         .getOrElse(inferenceId, throw new Exception(s"Could not find inference with id $inferenceId"))
         .summary
     }

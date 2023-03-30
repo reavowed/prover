@@ -32,7 +32,7 @@ case class TypeDefinition(
   def withMainVariableDefinition(newMainVariableDefinition: SimpleVariableDefinition): TypeDefinition = copy(mainVariableDefinition = newMainVariableDefinition)
   override def withDefiningStatement(newDefiningStatement: Statement) = copy(definingStatement = newDefiningStatement)
 
-  override def definingStatementParsingContext(implicit entryContext: EntryContext) = {
+  override def definingStatementParsingContext(implicit availableEntries: AvailableEntries) = {
     ExpressionParsingContext.forTypeDefinition(allVariableDefinitions)
   }
 
@@ -70,14 +70,14 @@ case class TypeDefinition(
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))
   }
 
-  def parentQualifierParser(implicit entryContext: EntryContext): Parser[Option[TypeQualifierDefinition]] = {
-    Parser.optional("parentQualifier", Parser.singleWord.map(qualifierSymbol => entryContext.qualifiersByType(symbol).find(_.symbol == qualifierSymbol).getOrElse(throw new Exception(s"Unrecognised qualifier '$qualifierSymbol'"))))
+  def parentQualifierParser(implicit availableEntries: AvailableEntries): Parser[Option[TypeQualifierDefinition]] = {
+    Parser.optional("parentQualifier", Parser.singleWord.map(qualifierSymbol => availableEntries.qualifiersByType(symbol).find(_.symbol == qualifierSymbol).getOrElse(throw new Exception(s"Unrecognised qualifier '$qualifierSymbol'"))))
   }
 }
 
 object TypeDefinition extends ChapterEntryParser {
   override def name: String = "type"
-  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
+  override def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       mainVariableDefinition <- SimpleVariableDefinition.parser

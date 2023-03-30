@@ -6,7 +6,7 @@ import net.prover.entries.StepsWithContext
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.StatementVariable
 import net.prover.model.proof.{Step, StepContext, StepProvingContext, SubstitutionContext}
-import net.prover.model.{EntryContext, VariableDefinitions}
+import net.prover.model.{AvailableEntries, VariableDefinitions}
 import net.prover.theorems.RecalculateReferences
 import net.prover.util.FunctorTypes.WithValue
 import org.mockito.Mockito
@@ -68,7 +68,7 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
     existingStepsConstructor: SubstitutionContext => Seq[Step],
     expectedStepsConstructor: SubstitutionContext => Seq[Step],
     boundVariables: Seq[String] = Nil)(
-    implicit entryContext: EntryContext,
+    implicit availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
   ): MatchResult[Any] = {
     val existingSteps = createStepsWithContext(existingStepsConstructor, boundVariables)
@@ -80,7 +80,7 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
       eq(outerStepPath))(
       modifyStepsCallback(
         existingSteps,
-        matchSteps(expectedStepsConstructor, boundVariables)(entryContext, variableDefinitions),
+        matchSteps(expectedStepsConstructor, boundVariables)(availableEntries, variableDefinitions),
         boundVariables))(
       any)
   }
@@ -90,7 +90,7 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
     existingStepsConstructor: SubstitutionContext => Seq[Step],
     expectedStepsConstructor: SubstitutionContext => Seq[Step],
     boundVariables: Seq[String] = Nil)(
-    implicit entryContext: EntryContext,
+    implicit availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
   ): MatchResult[Any] = {
     val existingSteps = createStepsWithContext(existingStepsConstructor, boundVariables)
@@ -102,7 +102,7 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
       eq(outerStepPath))(
       modifyStepsCallbackWithoutProps(
         existingSteps,
-        matchSteps(expectedStepsConstructor, boundVariables)(entryContext, variableDefinitions),
+        matchSteps(expectedStepsConstructor, boundVariables)(availableEntries, variableDefinitions),
         boundVariables))(
       any)
   }
@@ -112,7 +112,7 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
     existingStepsConstructor: SubstitutionContext => Seq[Step],
     stepsMatcher: Matcher[Seq[Step]],
     boundVariables: Seq[String] = Nil)(
-    implicit entryContext: EntryContext,
+    implicit availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
   ): MatchResult[Any] = {
     val existingSteps = createStepsWithContext(existingStepsConstructor, boundVariables)
@@ -129,7 +129,7 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
       any)
   }
 
-  private def createStepsWithContext(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): StepsWithContext = {
+  private def createStepsWithContext(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): StepsWithContext = {
     val steps = buildStepsWithReferences(stepsConstructor, boundVariables)
     implicit val outerStepContext = createOuterStepContext(boundVariables)
     createStepsWithContext(steps)
@@ -139,7 +139,7 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
     existingSteps: StepsWithContext,
     stepsMatcher: Matcher[Seq[Step]],
     boundVariables: Seq[String])(
-    implicit entryContext: EntryContext,
+    implicit availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
   ): StepsWithContext => Try[(Seq[Step], Seq[Step])] = {
     implicit val outerStepContext = createOuterStepContext(boundVariables)
@@ -150,22 +150,22 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
     existingSteps: StepsWithContext,
     stepsMatcher: Matcher[Seq[Step]],
     boundVariables: Seq[String])(
-    implicit entryContext: EntryContext,
+    implicit availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
   ): StepsWithContext => Try[(Seq[Step], InsertionAndReplacementProps)] = {
     implicit val outerStepContext = createOuterStepContext(boundVariables)
     existingSteps -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)].withValue(stepsMatcher ^^ { t: (Seq[Step], InsertionAndReplacementProps) => recalculateReferences(t._1) })
   }
 
-  def matchSteps(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
-    beEqualTo(buildStepsWithReferences(stepsConstructor, boundVariables)(entryContext, variableDefinitions))
+  def matchSteps(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
+    beEqualTo(buildStepsWithReferences(stepsConstructor, boundVariables)(availableEntries, variableDefinitions))
   }
 
-  def recalculateReferences(steps: Seq[Step])(implicit outerStepContext: StepContext, entryContext: EntryContext): Seq[Step] = {
+  def recalculateReferences(steps: Seq[Step])(implicit outerStepContext: StepContext, availableEntries: AvailableEntries): Seq[Step] = {
     RecalculateReferences(createStepsWithContext(steps))._1
   }
 
-  def buildStepsWithReferences(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Seq[Step] = {
+  def buildStepsWithReferences(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Seq[Step] = {
     val steps = stepsConstructor(SubstitutionContext.withExtraParameters(boundVariables.length)(SubstitutionContext.outsideProof))
     implicit val outerStepContext = createOuterStepContext(boundVariables)
     recalculateReferences(steps)

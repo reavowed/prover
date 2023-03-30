@@ -66,25 +66,25 @@ case class TypeRelationDefinition(
       linkingPhrase,
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements),
-      entryWithContext.entryContext.conjunctionDefinitionOption.get)
+      entryWithContext.availableEntries.conjunctionDefinitionOption.get)
   }
 }
 
 
 object TypeRelationDefinition extends ChapterEntryParser {
   override def name: String = "typeRelation"
-  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
+  override def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       linkingPhrase <- Parser.allInParens
-      firstType <- entryContext.typeDefinitionParser
+      firstType <- availableEntries.typeDefinitionParser
       firstVariableDefinition <- SimpleVariableDefinition.parser
-      secondType <- entryContext.typeDefinitionParser
+      secondType <- availableEntries.typeDefinitionParser
       secondVariableDefinition <- SimpleVariableDefinition.parser
       explicitName <- Parser.optional("name", Parser.allInParens)
       expressionParsingContext = ExpressionParsingContext.forTypeDefinition(Seq(firstVariableDefinition, secondVariableDefinition))
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
-      conjunctionDefinition = entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
+      conjunctionDefinition = availableEntries.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
     } yield TypeRelationDefinition(symbol, firstType, secondType, firstVariableDefinition, secondVariableDefinition, linkingPhrase, explicitName, definingStatement, conjunctionDefinition)
   }
 }

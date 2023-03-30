@@ -11,12 +11,12 @@ case class RequiredParentObjects(
   deductionDefinition: DeductionDefinition)
 {
   def referencedEntries: Set[ChapterEntry] = objectDefinitions.flatMap(_.referencedEntries).toSet ++ Set(uniqueExistenceDefinition, generalizationDefinition, deductionDefinition).map(_.referencedEntry)
-  def replaceDefinitions(entryReplacements: Map[ChapterEntry, ChapterEntry], entryContext: EntryContext): RequiredParentObjects = {
+  def replaceDefinitions(entryReplacements: Map[ChapterEntry, ChapterEntry], availableEntries: AvailableEntries): RequiredParentObjects = {
     RequiredParentObjects(
       objectDefinitions.map(d => entryReplacements(d).asInstanceOf[RelatedObjectDefinition]),
-      entryContext.uniquenessDefinitionOption.get,
-      entryContext.generalizationDefinitionOption.get,
-      entryContext.deductionDefinitionOption.get)
+      availableEntries.uniquenessDefinitionOption.get,
+      availableEntries.generalizationDefinitionOption.get,
+      availableEntries.deductionDefinitionOption.get)
   }
   def conditionConstructor(conjunctionDefinition: ConjunctionDefinition, offset: Int)(statement: Statement): Statement = {
     val existenceStatements = objectDefinitions.map { objectDefinition =>
@@ -46,7 +46,7 @@ object RequiredParentObjects {
         .getOrElse(expressionParsingContext)
     }
   }
-  def parser(parentType: TypeDefinition)(implicit context: EntryContext): Parser[Option[RequiredParentObjects]] = {
+  def parser(parentType: TypeDefinition)(implicit context: AvailableEntries): Parser[Option[RequiredParentObjects]] = {
     Parser.optional(
       "parentObjects",
       for {

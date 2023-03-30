@@ -41,9 +41,9 @@ object Term {
           arguments <- Term.parser.listInParensOrSingle(None)
           name <- Parser.singleWord
         } yield context.getTermVariable(name, arguments).getOrElse(throw new Exception(s"Unrecognised statement variable $name"))
-      case context.entryContext.RecognisedTermDefinition(termDefinition) =>
+      case context.availableEntries.RecognisedTermDefinition(termDefinition) =>
         termDefinition.termParser
-      case context.entryContext.RecognisedTermShorthand(template) =>
+      case context.availableEntries.RecognisedTermShorthand(template) =>
         template.expressionParser.map(_.asInstanceOf[Term])
       case context.SimpleTermVariable(variable) =>
         Parser.constant(variable)
@@ -67,7 +67,7 @@ object Term {
   }
 
   def templateParserFunction(implicit context: TemplateParsingContext): PartialFunction[String, Parser[Template]] = {
-    case context.entryContext.RecognisedTermDefinition(definition) =>
+    case context.availableEntries.RecognisedTermDefinition(definition) =>
       definition.templateParser
     case context.RecognisedParameter(parameter) =>
       Parser.constant(FunctionParameterTemplate(parameter))

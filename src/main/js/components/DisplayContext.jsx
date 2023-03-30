@@ -2,7 +2,7 @@ import _ from "lodash";
 import * as React from "react";
 import {useContext} from "react";
 import {DefinedExpression, matchTemplate, TypeLikeExpression, TypeRelationExpression} from "../models/Expression";
-import EntryContext from "./EntryContext";
+import AvailableEntries from "./AvailableEntries";
 
 const DisplayContext = React.createContext();
 
@@ -42,18 +42,18 @@ function mergeDisambiguators(results) {
   return _.fromPairs(_.map(keys, k => [k, _.uniq(_.flatten(_.filter(_.map(results, k))))]));
 }
 
-function getDisambiguatorsForExpressions(expressions, entryContext) {
-  return mergeDisambiguators(_.map(expressions, e => getDisambiguatorsForExpression(e, entryContext)));
+function getDisambiguatorsForExpressions(expressions, availableEntries) {
+  return mergeDisambiguators(_.map(expressions, e => getDisambiguatorsForExpression(e, availableEntries)));
 }
 
-function getBaseDisambiguator(expression, entryContext) {
+function getBaseDisambiguator(expression, availableEntries) {
   if (expression.symbol && expression.disambiguator && _.isEqual(expression.components, [])) {
     return { symbol: expression.symbol, disambiguator: expression.disambiguator };
   } else {
-    for (const disambiguatorAdder of _.reverse(entryContext.disambiguatorAdders.slice())) {
+    for (const disambiguatorAdder of _.reverse(availableEntries.disambiguatorAdders.slice())) {
       const matches = matchTemplate(disambiguatorAdder.template, expression, [], []);
       if (matches && matches.length === 1) {
-        const inner = getBaseDisambiguator(matches[0].expression, entryContext);
+        const inner = getBaseDisambiguator(matches[0].expression, availableEntries);
         if (inner) {
           return { symbol: inner.symbol, disambiguator: disambiguatorAdder.disambiguator };
         }
@@ -62,27 +62,27 @@ function getBaseDisambiguator(expression, entryContext) {
   }
 }
 
-function getDisambiguatorsForExpression(expression, entryContext) {
-  const base = getBaseDisambiguator(expression, entryContext);
+function getDisambiguatorsForExpression(expression, availableEntries) {
+  const base = getBaseDisambiguator(expression, availableEntries);
   if (base) {
     return {[base.symbol]: [base.disambiguator]}
   } else if (expression instanceof DefinedExpression) {
-    const componentDisambiguators = getDisambiguatorsForExpressions(expression.components, entryContext);
+    const componentDisambiguators = getDisambiguatorsForExpressions(expression.components, availableEntries);
     if (expression.symbol && expression.disambiguator) {
       return mergeDisambiguators([{[expression.symbol]: [expression.disambiguator]}, componentDisambiguators]);
     } else {
       return componentDisambiguators;
     }
   } else if (expression instanceof TypeLikeExpression) {
-    return getDisambiguatorsForExpressions([expression.term, ...expression.qualifierComponents], entryContext);
+    return getDisambiguatorsForExpressions([expression.term, ...expression.qualifierComponents], availableEntries);
   } else if (expression instanceof TypeRelationExpression) {
-    return getDisambiguatorsForExpressions([expression.firstTerm, expression.secondTerm], entryContext);
+    return getDisambiguatorsForExpressions([expression.firstTerm, expression.secondTerm], availableEntries);
   }
   return {};
 }
 
-DisplayContext.forExpressionDefinition = function(definition, entryContext) {
-  definition = entryContext.definitions[definition.symbol];
+DisplayContext.forExpressionDefinition = function(definition, availableEntries) {
+  definition = availableEntries.definitions[definition.symbol];
 
   const variableDefinitions = {
     statements: _.filter(definition.components, c => c.type === "statement"),
@@ -90,7 +90,7 @@ DisplayContext.forExpressionDefinition = function(definition, entryContext) {
   };
 
   const relevantStatements = _.filter([definition.definingStatement, ...(definition.premises || [])]);
-  const statementDisambiguators = getDisambiguatorsForExpressions(relevantStatements, entryContext);
+  const statementDisambiguators = getDisambiguatorsForExpressions(relevantStatements, availableEntries);
   const disambiguators = definition.disambiguator ?
     mergeDisambiguators([{[definition.symbol]: [definition.disambiguator]}, statementDisambiguators]):
     statementDisambiguators;
@@ -98,35 +98,35 @@ DisplayContext.forExpressionDefinition = function(definition, entryContext) {
   return DisplayContext.construct(variableDefinitions, disambiguators);
 };
 
-DisplayContext.forDefinitionWithDefiningStatement = function(definition, entryContext) {
-  const disambiguators = getDisambiguatorsForExpression(definition.definingStatement, entryContext);
+DisplayContext.forDefinitionWithDefiningStatement = function(definition, availableEntries) {
+  const disambiguators = getDisambiguatorsForExpression(definition.definingStatement, availableEntries);
   return DisplayContext.construct(null, disambiguators);
 };
 
-DisplayContext.forTypeLikeDefinition = function(definingStatement, termVariableDefinitions, entryContext) {
+DisplayContext.forTypeLikeDefinition = function(definingStatement, termVariableDefinitions, availableEntries) {
   const variableDefinitions = {
     statements: [],
     terms: termVariableDefinitions.map(d => { return {...d, arity: 0}})
   };
-  const disambiguators = getDisambiguatorsForExpression(definingStatement, entryContext);
+  const disambiguators = getDisambiguatorsForExpression(definingStatement, availableEntries);
   return DisplayContext.construct(variableDefinitions, disambiguators);
 };
 
-DisplayContext.disambiguatorsForInferenceSummary = function(inference, entryContext) {
+DisplayContext.disambiguatorsForInferenceSummary = function(inference, availableEntries) {
   const expressions = [...inference.premises, inference.conclusion];
-  return getDisambiguatorsForExpressions(expressions, entryContext);
+  return getDisambiguatorsForExpressions(expressions, availableEntries);
 };
 
-DisplayContext.forInferenceSummary = function(inference, entryContext) {
-  const disambiguators = DisplayContext.disambiguatorsForInferenceSummary(inference, entryContext);
+DisplayContext.forInferenceSummary = function(inference, availableEntries) {
+  const disambiguators = DisplayContext.disambiguatorsForInferenceSummary(inference, availableEntries);
   return DisplayContext.construct(inference.variableDefinitions, disambiguators);
 };
 
 DisplayContext.AddSteps = function({steps, children}) {
-  const entryContext = useContext(EntryContext);
+  const availableEntries = useContext(AvailableEntries);
   const existingDisplayContext = useContext(DisplayContext);
   const statements = _.chain(steps).map(s => s.provenStatement).filter().value();
-  const newDisambiguators = getDisambiguatorsForExpressions(statements, entryContext);
+  const newDisambiguators = getDisambiguatorsForExpressions(statements, availableEntries);
   return <DisplayContext.Provider value={{...existingDisplayContext, disambiguators: mergeDisambiguators([existingDisplayContext.disambiguators, newDisambiguators])}}>
     {children}
   </DisplayContext.Provider>;

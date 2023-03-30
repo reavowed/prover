@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import DisplayContext from "../../DisplayContext";
-import EntryContext from "../../EntryContext";
+import AvailableEntries from "../../AvailableEntries";
 import {formatHtml} from "../../helpers/Formatter";
 import {InferenceSummary} from "../../InferenceSummary";
 import ChapterEntryWrapper from "./ChapterEntryWrapper";

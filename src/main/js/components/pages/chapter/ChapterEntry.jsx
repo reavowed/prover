@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import {DefinedExpression} from "../../../models/Expression";
-import EntryContext from "../../EntryContext";
+import AvailableEntries from "../../AvailableEntries";
 import {CopiableExpression} from "../../ExpressionComponent";
 import {formatHtml} from "../../helpers/Formatter";
 import {ResultWithPremises} from "../../ResultWithPremises";
@@ -17,7 +17,7 @@ import DeleteEntryButton from "./DeleteEntryButton";
 import InferenceEntry from "./InferenceEntry";
 
 export default function ChapterEntry({entry, url, type, title}) {
-  const entryContext = useContext(EntryContext);
+  const availableEntries = useContext(AvailableEntries);
   switch (type) {
     case "axiom":
       return <InferenceEntry type="Axiom" inference={entry} url={url} />;
@@ -28,7 +28,7 @@ export default function ChapterEntry({entry, url, type, title}) {
         {entry.definingStatement && <><CopiableExpression expression={entry.defaultValue}/> is defined as <CopiableExpression expression={entry.definingStatement}/>.</>}
       </DefinitionEntry>;
     case "termDefinition":
-      const equality = _.find(entryContext.definitions, d => _.includes(d.attributes, "equality"));
+      const equality = _.find(availableEntries.definitions, d => _.includes(d.attributes, "equality"));
       const result = (equality && entry.definingStatement instanceof DefinedExpression && entry.definingStatement.definition === equality && entry.definingStatement.components[0].serialize() === entry.defaultValue.serialize()) ?
         <><CopiableExpression expression={entry.defaultValue}/> is defined to be equal to <CopiableExpression expression={entry.definingStatement.components[1]}/></> :
         <><CopiableExpression expression={entry.defaultValue}/> is defined such that <CopiableExpression expression={entry.definingStatement} splitConjunction /></>;

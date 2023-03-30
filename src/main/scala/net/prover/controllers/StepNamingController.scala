@@ -26,7 +26,7 @@ class StepNamingController @Autowired() (val bookService: BookService) extends I
       stepWithContext <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
     } yield {
       implicit val stepProvingContext = stepWithContext.stepProvingContext
-      filterInferences(stepProvingContext.provingContext.entryContext.allInferences, searchText)
+      filterInferences(stepProvingContext.provingContext.availableEntries.allInferences, searchText)
           .iterator
           .mapCollect { inference =>
             val conclusions = for {

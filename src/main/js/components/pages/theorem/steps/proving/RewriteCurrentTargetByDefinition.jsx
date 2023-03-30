@@ -26,7 +26,7 @@ export default class RewriteCurrentTargetByDefinition extends React.Component {
       .catch(this.props.onError);
   };
   render() {
-    const {availablePremises, entryContext} = this.props;
+    const {availablePremises, availableEntries} = this.props;
     const {saving, selectedPremise} = this.state;
 
     return <BoundVariableLists.Consumer>{boundVariableLists =>
@@ -40,7 +40,7 @@ export default class RewriteCurrentTargetByDefinition extends React.Component {
               <option key={p.serializedReference} value={p.serializedReference} dangerouslySetInnerHTML={{
                 __html: renderToString(
                   <ExpressionComponent expression={p.statement} boundVariableLists={boundVariableLists}
-                                       entryContext={entryContext}/>
+                                       availableEntries={availableEntries}/>
                 )
               }}/>
             )}

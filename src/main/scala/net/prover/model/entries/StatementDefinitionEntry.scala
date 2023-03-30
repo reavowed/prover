@@ -64,7 +64,7 @@ object StatementDefinitionEntry extends ChapterEntryParser {
     "definition",
     Statement.parser.inParens)
 
-  def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[StatementDefinitionEntry] = {
+  def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[StatementDefinitionEntry] = {
     for {
       symbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinitionEntry.boundVariablesAndComponentTypesParser

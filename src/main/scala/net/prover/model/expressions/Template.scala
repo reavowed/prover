@@ -224,8 +224,8 @@ object Template {
     case class Component(expression: Expression, boundVariableNames: Seq[Seq[String]], internalPath: Seq[Int]) extends Match
   }
 
-  def parser(implicit entryContext: EntryContext): Parser[Template] = {
-    implicit val templateParsingContext: TemplateParsingContext = TemplateParsingContext(entryContext, Nil)
+  def parser(implicit availableEntries: AvailableEntries): Parser[Template] = {
+    implicit val templateParsingContext: TemplateParsingContext = TemplateParsingContext(availableEntries, Nil)
     Parser.selectWordParser("template")(Statement.templateParserFunction orElse Term.templateParserFunction)
   }
 }

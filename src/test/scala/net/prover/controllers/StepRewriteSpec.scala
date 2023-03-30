@@ -13,7 +13,7 @@ class StepRewriteSpec extends ControllerSpec {
 
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
 
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "proving a step" should {

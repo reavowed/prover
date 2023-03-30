@@ -12,19 +12,19 @@ import org.specs2.specification.core.Fragments
 
 class TermRearrangerSpec extends Specification with StepContextHelper {
 
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   val e = TermVariablePlaceholder("e", 4)
   val f = TermVariablePlaceholder("f", 5)
   implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, e -> 0, f -> 0))
 
   "rearranging a statement" should {
-    def rearrange(targetStatement: Statement, premises: Seq[Statement])(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Option[Step] = {
+    def rearrange(targetStatement: Statement, premises: Seq[Statement])(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Option[Step] = {
       implicit val stepContext = createBaseStepContext(premises)
       TermRearranger.rearrange(targetStatement)
         .map(step => RecalculateReferences(createStepWithContext(step))._1)
     }
 
-    def testRearranging(targetStatement: Statement, premises: Seq[Statement])(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
+    def testRearranging(targetStatement: Statement, premises: Seq[Statement])(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
       val step = rearrange(targetStatement, premises)
       step must beSome(beStepThatMakesValidTheorem(premises, targetStatement))
     }

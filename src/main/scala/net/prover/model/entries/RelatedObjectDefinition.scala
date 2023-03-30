@@ -49,7 +49,7 @@ case class RelatedObjectDefinition(
     RelatedObjectDefinition(
       symbol,
       mainVariableDefinition,
-      parentTypeConditions.replaceDefinitions(entryReplacements, expressionDefinitionReplacements, entryWithContext.entryContext),
+      parentTypeConditions.replaceDefinitions(entryReplacements, expressionDefinitionReplacements, entryWithContext.availableEntries),
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))
   }
@@ -63,7 +63,7 @@ case class RelatedObjectDefinition(
 
 object RelatedObjectDefinition extends ChapterEntryParser {
   override def name: String = "relatedObject"
-  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
+  override def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       mainVariableDefinition <- SimpleVariableDefinition.parser

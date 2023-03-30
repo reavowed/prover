@@ -1,11 +1,10 @@
 package net.prover
 
-import net.prover.entries.{ProofWithContext, StepsWithContext, TheoremWithContext, TypedStepWithContext}
-import net.prover.model.TestDefinitions.{entryContextToProvingContext, mock, theStubbed}
-import net.prover.model.entries.Theorem
+import net.prover.entries.{ProofWithContext, StepsWithContext, TypedStepWithContext}
+import net.prover.model.TestDefinitions.{availableEntriesToProvingContext, mock, theStubbed}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepContext}
-import net.prover.model.{EntryContext, VariableDefinitions}
+import net.prover.model.{AvailableEntries, VariableDefinitions}
 
 import scala.reflect.ClassTag
 
@@ -39,7 +38,7 @@ trait StepContextHelper {
 
   def createTargetStepWithContext(
     statement: Statement)(
-    implicit entryContext: EntryContext,
+    implicit availableEntries: AvailableEntries,
     stepContext: StepContext
   ): TypedStepWithContext[Step.Target] = {
     createStepWithContext(Step.Target(statement))
@@ -47,7 +46,7 @@ trait StepContextHelper {
 
   def createStepWithContext[T <: Step : ClassTag](
     step: T)(
-    implicit entryContext: EntryContext,
+    implicit availableEntries: AvailableEntries,
     stepContext: StepContext
   ): TypedStepWithContext[T] = {
     TypedStepWithContext(
@@ -59,11 +58,11 @@ trait StepContextHelper {
 
   def createStepsWithContext(
     steps: Seq[Step])(
-    implicit entryContext: EntryContext,
+    implicit availableEntries: AvailableEntries,
     outerStepContext: StepContext
   ): StepsWithContext = {
     val proofWithContext = mock[ProofWithContext]
-    proofWithContext.provingContext returns entryContextToProvingContext(entryContext)
+    proofWithContext.provingContext returns availableEntriesToProvingContext(availableEntries)
     StepsWithContext(
       steps,
       outerStepContext.stepReference,

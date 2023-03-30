@@ -8,11 +8,11 @@ import org.specs2.mutable.Specification
 
 class TypeRelationDefinitionSpec extends Specification {
 
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
 
-  private def testParsingAndSerialization(typeRelationDefinition: TypeRelationDefinition)(implicit entryContext: EntryContext): MatchResult[Any] = {
+  private def testParsingAndSerialization(typeRelationDefinition: TypeRelationDefinition)(implicit availableEntries: AvailableEntries): MatchResult[Any] = {
     val serializedDefinition = typeRelationDefinition.serializedLines.mkString("\n")
-    val reparsedDefinition = ChapterEntry.parser(entryContext, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
+    val reparsedDefinition = ChapterEntry.parser(availableEntries, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(typeRelationDefinition)
   }
 

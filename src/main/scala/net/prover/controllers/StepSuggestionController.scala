@@ -28,7 +28,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     } yield {
       implicit val stepProvingContext = stepWithContext.stepProvingContext
       for {
-        (_, Seq(singleNamingPremise: DefinedStatement), _, _, _) <- ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext)
+        (_, Seq(singleNamingPremise: DefinedStatement), _, _, _) <- ProofHelper.findNamingInferences(stepProvingContext.provingContext.availableEntries)
         if singleNamingPremise.boundVariableNames.single.nonEmpty
         premise <- stepProvingContext.allPremises
         if singleNamingPremise.calculateSubstitutions(premise.statement).nonEmpty
@@ -50,7 +50,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     } yield {
       implicit val stepProvingContext = stepWithContext.stepProvingContext
       val filter = inferenceFilter(searchText.toLowerCase)
-      ProofHelper.findNamingInferences(stepProvingContext.provingContext.entryContext)
+      ProofHelper.findNamingInferences(stepProvingContext.provingContext.availableEntries)
         .filter(x => filter(x._1))
         .reverse
         .mapCollect { case (inference, namingPremises, _, _, _) =>

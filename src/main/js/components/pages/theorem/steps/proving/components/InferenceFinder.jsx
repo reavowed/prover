@@ -3,7 +3,7 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import DisplayContext from "../../../../../DisplayContext";
-import EntryContext from "../../../../../EntryContext";
+import AvailableEntries from "../../../../../AvailableEntries";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
 import ProofContext from "../../../ProofContext";
 import BoundVariableLists from "../../BoundVariableLists";
@@ -70,11 +70,11 @@ export class InferenceFinder extends React.Component {
     let getSuggestionValue = s => s.inference.name;
     let renderSuggestion = s => <SuggestionDropdownElement
       mainElement={getSuggestionValue(s)}
-      hoverElement={<EntryContext.Consumer>{entryContext =>
-        <DisplayContext.Provider value={DisplayContext.forInferenceSummary(s.inference, entryContext)}>
+      hoverElement={<AvailableEntries.Consumer>{availableEntries =>
+        <DisplayContext.Provider value={DisplayContext.forInferenceSummary(s.inference, availableEntries)}>
           <CopiableExpression expression={s.inference.conclusion}/>
         </DisplayContext.Provider>
-      }</EntryContext.Consumer>} />;
+      }</AvailableEntries.Consumer>} />;
 
     const possibleTargets = selectedInference && selectedInference.possibleTargets;
     const possibleConclusions = (selectedInference && selectedInference.possibleConclusions) || (selectedTarget && selectedTarget.possibleConclusions);
@@ -99,7 +99,7 @@ export class InferenceFinder extends React.Component {
       }</BoundVariableLists.Consumer>
       }
       {possibleTargets && possibleTargets.length > 1 && <BoundVariableLists.Consumer>{boundVariableLists =>
-        <EntryContext.Consumer>{entryContext =>
+        <AvailableEntries.Consumer>{availableEntries =>
           <DisplayContext.Consumer>{displayContext =>
           <Form.Group>
             <Form.Label><strong>Choose target</strong></Form.Label>
@@ -109,12 +109,12 @@ export class InferenceFinder extends React.Component {
                           readOnly={disabled}>
               <option value=""/>
               {possibleTargets.map(({target, additionalBoundVariables}, index) =>
-                <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(<ExpressionComponent expression={target} boundVariableLists={[...boundVariableLists, ...additionalBoundVariables]} entryContext={entryContext} displayContext={displayContext}/>)}}/>
+                <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(<ExpressionComponent expression={target} boundVariableLists={[...boundVariableLists, ...additionalBoundVariables]} availableEntries={availableEntries} displayContext={displayContext}/>)}}/>
               )}
             </Form.Control>
           </Form.Group>
           }</DisplayContext.Consumer>
-        }</EntryContext.Consumer>
+        }</AvailableEntries.Consumer>
       }</BoundVariableLists.Consumer>}
       {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
                                                  conclusionVariableDefinitions={selectedInference.inference.variableDefinitions}

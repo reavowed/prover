@@ -8,11 +8,11 @@ import org.specs2.mutable.Specification
 
 class TypeQualifierDefinitionSpec extends Specification {
 
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
 
-  private def testParsingAndSerialization(typeQualifierDefinition: TypeQualifierDefinition)(implicit entryContext: EntryContext): MatchResult[Any] = {
+  private def testParsingAndSerialization(typeQualifierDefinition: TypeQualifierDefinition)(implicit availableEntries: AvailableEntries): MatchResult[Any] = {
     val serializedDefinition = typeQualifierDefinition.serializedLines.mkString("\n")
-    val reparsedDefinition = ChapterEntry.parser(entryContext, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
+    val reparsedDefinition = ChapterEntry.parser(availableEntries, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(typeQualifierDefinition)
   }
 

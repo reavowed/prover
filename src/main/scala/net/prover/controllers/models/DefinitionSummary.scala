@@ -20,8 +20,8 @@ case class DefinitionSummary(
 case class ComponentSummary(`type`: String, name: String, arity: Int)
 
 object DefinitionSummary {
-  def getAllFromContext(entryContext: EntryContext): Map[String, DefinitionSummary] = {
-    entryContext.availableEntries.ofType[ExpressionDefinitionEntry]
+  def getAllFromContext(availableEntries: AvailableEntries): Map[String, DefinitionSummary] = {
+    availableEntries.allEntries.ofType[ExpressionDefinitionEntry]
       .map(d =>
         d.disambiguatedSymbol.serialized -> DefinitionSummary(
           d.disambiguatedSymbol,
@@ -50,8 +50,8 @@ object DefinitionSummary {
         ComponentSummary("term", name, arguments.length)
     }
   }
-  def getDefinitionShorthandsFromContext(entryContext: EntryContext): Map[String, DisambiguatedSymbol] = {
-    val shorthandsFromDefinitions = entryContext.availableEntries.ofType[ExpressionDefinitionEntry].mapCollect(d => d.shorthand.map(_ -> d.disambiguatedSymbol)).toMap
+  def getDefinitionShorthandsFromContext(availableEntries: AvailableEntries): Map[String, DisambiguatedSymbol] = {
+    val shorthandsFromDefinitions = availableEntries.allEntries.ofType[ExpressionDefinitionEntry].mapCollect(d => d.shorthand.map(_ -> d.disambiguatedSymbol)).toMap
     val greekLetterShorthands = 'α'.to('ω')
       .map(c => Character.getName(c).splitByWhitespace().last.toLowerCase -> DisambiguatedSymbol(c.toString, None))
       .toMap

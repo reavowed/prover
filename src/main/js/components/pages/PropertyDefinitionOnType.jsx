@@ -1,5 +1,5 @@
 import React from "react";
-import EntryContext from "../EntryContext";
+import AvailableEntries from "../AvailableEntries";
 import {Breadcrumbs} from "./components/Breadcrumbs";
 import EditableProperties from "./components/EditableProperties";
 import {NavLinks} from "./components/NavLinks";
@@ -10,7 +10,7 @@ import {useMappedState} from "./utils/entryFunctions";
 
 export function PropertyDefinitionOnType(props) {
   const {definition: definitionJson, bookLink, chapterLink, url, previous, next, usages} = props;
-  const [parser, entryContext] = EntryContext.fromEntryProps(props);
+  const [parser, availableEntries] = AvailableEntries.fromEntryProps(props);
   const [definition, setDefinition] = useMappedState(definitionJson, parser.parseDefinitionWithDefiningStatement);
 
   const editableProperties = [
@@ -18,7 +18,7 @@ export function PropertyDefinitionOnType(props) {
     {label: "Explicit Name", initialValue: definition.explicitName, endpointName: "name"}
   ];
 
-  return <EntryContext.Provider value={entryContext}>
+  return <AvailableEntries.Provider value={availableEntries}>
     <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <h3>{definition.title.capitalize()}</h3>
@@ -26,5 +26,5 @@ export function PropertyDefinitionOnType(props) {
       <EditableProperties url={url} updateEntry={setDefinition} definitions={editableProperties} />
       <StatementDefinitionUsages usages={usages} statementDefinition={definition.statementDefinition} />
     </Page>
-  </EntryContext.Provider>;
+  </AvailableEntries.Provider>;
 }

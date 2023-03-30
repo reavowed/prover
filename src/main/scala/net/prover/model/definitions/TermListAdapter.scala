@@ -14,7 +14,7 @@ case class TermListAdapter(variableDefinitions: Seq[SimpleVariableDefinition], t
 }
 
 object TermListAdapter {
-  def parser(implicit entryContext: EntryContext): Parser[TermListAdapter] = {
+  def parser(implicit availableEntries: AvailableEntries): Parser[TermListAdapter] = {
     for {
       variableDefinitions <- SimpleVariableDefinition.listParser
       expressionParsingContext = ExpressionParsingContext.forTypeDefinition(variableDefinitions)

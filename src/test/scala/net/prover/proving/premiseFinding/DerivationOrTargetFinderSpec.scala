@@ -4,19 +4,19 @@ import net.prover.StepContextHelper
 import net.prover.model.TestDefinitions.{a, b, _}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
-import net.prover.model.{EntryContext, TestDefinitions}
+import net.prover.model.{AvailableEntries, TestDefinitions}
 import org.specs2.mutable.Specification
 
 class DerivationOrTargetFinderSpec extends Specification with StepContextHelper {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "premise finder" should {
 
-    def findPremiseOrTarget(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit entryContext: EntryContext): (Seq[Step], Seq[Statement]) = {
+    def findPremiseOrTarget(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries): (Seq[Step], Seq[Statement]) = {
       implicit val stepContext = createBaseStepContext(premises, depth)
-      DerivationOrTargetFinder.findDerivationsOrTargets(Seq(target))(entryContextAndStepContextToStepProvingContext(entryContext, stepContext))
+      DerivationOrTargetFinder.findDerivationsOrTargets(Seq(target))(availableEntriesAndStepContextToStepProvingContext(availableEntries, stepContext))
         .mapLeft(_.steps)
         .mapRight(_.map(_.statement))
     }
@@ -42,7 +42,7 @@ class DerivationOrTargetFinderSpec extends Specification with StepContextHelper 
       findPremiseOrTarget(
         ForAllIn("x", Domain(Addition))(ForAllIn("y", Domain(Addition))(φ($.^, $))),
         Nil)(
-        defaultEntryContextWithAdditionalEntries(axiom)
+        defaultAvailableEntriesPlus(axiom)
       ) mustEqual (
         Seq(
           elided(axiom, Seq(

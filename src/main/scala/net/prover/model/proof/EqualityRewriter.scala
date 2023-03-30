@@ -313,7 +313,7 @@ object EqualityRewriter {
       }
       override def getRewritePossibilitiesFromOuterExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepProvingContext: StepProvingContext): Seq[RewritePossibility[Statement]] = {
         def byGeneralization = for {
-          generalizationDefinition <- stepProvingContext.provingContext.entryContext.generalizationDefinitionOption
+          generalizationDefinition <- stepProvingContext.provingContext.availableEntries.generalizationDefinitionOption
           (specificationInference, _) <- stepProvingContext.provingContext.specificationInferenceOption
           (variableName, predicate) <- generalizationDefinition.unapply(statement)
           unwrapper = GeneralizationUnwrapper(variableName, generalizationDefinition, specificationInference)

@@ -26,7 +26,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     val index = chaptersWithKeys.findIndexWhere(_._1 == chapter).getOrElse(throw new Exception("Chapter somehow didn't exist"))
     val previous = chaptersWithKeys.lift(index - 1).map { case (c, key) => LinkSummary(c.title, BookService.getChapterUrl(bookKey, key)) }
     val next = chaptersWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, BookService.getChapterUrl(bookKey, key)) }
-    implicit val entryContext = EntryContext.forChapterInclusive(chapterWithContext)
+    implicit val availableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
 
     val entrySummaries = entriesWithContexts
       .map(entryWithContext => (entryWithContext.entry, BookService.getEntryUrl(entryWithContext)))
@@ -66,7 +66,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
       "entries" -> entrySummaries,
       "previous" -> previous,
       "next" -> next
-    ) ++ getGeneralDisplayProps(entryContext)
+    ) ++ getGeneralDisplayProps(availableEntries)
   }
 
   @GetMapping(produces = Array("text/html;charset=UTF-8"))
@@ -96,7 +96,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @RequestBody newTheoremDefinition: NewTheoremModel
   ): ResponseEntity[_] = {
     addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
+      implicit val availableEntries: AvailableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
       for {
         name <- getMandatoryString(newTheoremDefinition.name, "Theorem name")
         variableDefinitions <- getVariableDefinitions(newTheoremDefinition.variableDefinitions)
@@ -109,7 +109,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           premises,
           conclusion,
           Seq(Theorem.Proof(Seq(Step.Target(conclusion)))))
-        existingTheoremOption = entryContext.allInferences.find(_.id == newTheorem.id)
+        existingTheoremOption = availableEntries.allInferences.find(_.id == newTheorem.id)
         _ <- existingTheoremOption match {
           case Some(_) =>
             Failure(BadRequestException("An inference with these premises and conclusion already exists"))
@@ -127,7 +127,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @RequestBody newStatementDefinition: NewStatementDefinitionModel
   ): ResponseEntity[_] = {
     addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
+      implicit val availableEntries: AvailableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newStatementDefinition.name)
       val shorthand = getOptionalString(newStatementDefinition.shorthand)
       val attributes = getWords(newStatementDefinition.attributes)
@@ -159,7 +159,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @RequestBody newTermDefinition: NewTermDefinitionModel
   ): ResponseEntity[_] = {
     addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
+      implicit val availableEntries: AvailableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newTermDefinition.name)
       val shorthand = getOptionalString(newTermDefinition.shorthand)
       val attributes = getWords(newTermDefinition.attributes)
@@ -196,7 +196,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @RequestBody newTypeDefinition: NewTypeDefinitionModel
   ): ResponseEntity[_] = {
     addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
+      implicit val availableEntries: AvailableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newTypeDefinition.name)
       for {
         symbol <- getMandatoryString(newTypeDefinition.symbol, "Symbol")
@@ -221,7 +221,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @RequestBody newTypeQualifierDefinition: NewTypeQualifierDefinitionModel
   ): ResponseEntity[_] = {
     addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
+      implicit val availableEntries: AvailableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newTypeQualifierDefinition.name)
       for {
         symbol <- getMandatoryString(newTypeQualifierDefinition.symbol, "Symbol")
@@ -229,7 +229,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
         qualifier <- getQualifier(newTypeQualifierDefinition.qualifierTermNames, newTypeQualifierDefinition.qualifierFormat)
         expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.mainVariableDefinition +: qualifier.variableDefinitions)
         definition <- Statement.parser(expressionParsingContext).parseFromString(newTypeQualifierDefinition.definition, "definition").recoverWithBadRequest
-        conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
+        conjunctionDefinition <- availableEntries.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newTypeQualifierDefinition = TypeQualifierDefinition(
           symbol,
           parentType,
@@ -248,7 +248,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @RequestBody newPropertyDefinition: NewPropertyDefinitionModel
   ): ResponseEntity[_] = {
     addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
+      implicit val availableEntries: AvailableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newPropertyDefinition.name)
       for {
         symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")
@@ -256,7 +256,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newPropertyDefinition.requiredParentQualifier)
         requiredParentObjects <- getParentObjects(parentType, newPropertyDefinition.requiredParentObjects)
         adapter <- getOptionalAdapter(newPropertyDefinition.ownTermNames, newPropertyDefinition.parentTerms, (requiredParentQualifier.map(_.qualifier) orElse parentType.defaultQualifier).variableDefinitions)
-        conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
+        conjunctionDefinition <- availableEntries.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         parentTypeConditions = ParentTypeConditions(parentType, requiredParentQualifier, requiredParentObjects, adapter, conjunctionDefinition)
         expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(parentTypeConditions.allVariableDefinitions))
         definingStatement <- Statement.parser(expressionParsingContext).parseFromString(newPropertyDefinition.definingStatement, "definition").recoverWithBadRequest
@@ -276,7 +276,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @RequestBody newRelatedObjectDefinition: NewRelatedObjectDefinitionModel
   ): ResponseEntity[_] = {
     addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
+      implicit val availableEntries: AvailableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newRelatedObjectDefinition.name)
       for {
         symbol <- getMandatoryString(newRelatedObjectDefinition.symbol, "Symbol")
@@ -284,7 +284,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
         parentType <- getTypeDefinition(newRelatedObjectDefinition.parentType)
         requiredParentQualifier <- getOptionalParentQualifier(parentType, newRelatedObjectDefinition.requiredParentQualifier)
         requiredParentObjects <- getParentObjects(parentType, newRelatedObjectDefinition.requiredParentObjects)
-        conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
+        conjunctionDefinition <- availableEntries.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         parentTypeConditions = ParentTypeConditions(parentType, requiredParentQualifier, requiredParentObjects, None, conjunctionDefinition)
         expressionParsingContext = requiredParentObjects.addParametersToParsingContext(ExpressionParsingContext.forTypeDefinition(mainVariableDefinition +: parentTypeConditions.allVariableDefinitions))
         definingStatement <- Statement.parser(expressionParsingContext).parseFromString(newRelatedObjectDefinition.definingStatement, "definition").recoverWithBadRequest
@@ -305,7 +305,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @RequestBody newTypeRelationDefinition: NewTypeRelationDefinitionModel
   ): ResponseEntity[_] = {
     addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
+      implicit val availableEntries: AvailableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newTypeRelationDefinition.name)
       for {
         symbol <- getMandatoryString(newTypeRelationDefinition.symbol, "Symbol")
@@ -316,7 +316,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
         linkingPhrase <- getMandatoryString(newTypeRelationDefinition.linkingPhrase, "Linking phrase")
         expressionParsingContext = ExpressionParsingContext.forTypeDefinition(Seq(firstVariableDefinition, secondVariableDefinition))
         definition <- Statement.parser(expressionParsingContext).parseFromString(newTypeRelationDefinition.definingStatement, "definition").recoverWithBadRequest
-        conjunctionDefinition <- entryContext.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
+        conjunctionDefinition <- availableEntries.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newPropertyDefinition = TypeRelationDefinition(
           symbol,
           firstType,
@@ -338,7 +338,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @RequestBody newPropertyDefinition: NewStandalonePropertyDefinitionModel
   ): ResponseEntity[_] = {
     addChapterEntry(bookKey, chapterKey) { chapterWithContext =>
-      implicit val entryContext: EntryContext = EntryContext.forChapterInclusive(chapterWithContext)
+      implicit val availableEntries: AvailableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
       val name = getOptionalString(newPropertyDefinition.name)
       for {
         symbol <- getMandatoryString(newPropertyDefinition.symbol, "Symbol")

@@ -26,8 +26,8 @@ import {matchElidableVariableDescription} from "./stepDisplayFunctions";
 import {SubproofStep} from "./SubproofStep";
 import {TargetStep, TargetStepProofLine} from "./TargetStep";
 
-function findBinaryRelation(statement, entryContext) {
-  return _.find(entryContext.binaryRelations, x => matchTemplate(x.template, statement, [], []));
+function findBinaryRelation(statement, availableEntries) {
+  return _.find(availableEntries.binaryRelations, x => matchTemplate(x.template, statement, [], []));
 }
 
 function updateWidth(element) {
@@ -191,7 +191,7 @@ export class Steps extends React.Component {
     }
   }
 
-  static getChainingDetails(stepsWithIndexes, firstStep, firstBinaryRelation, basePath, firstIndex, entryContext) {
+  static getChainingDetails(stepsWithIndexes, firstStep, firstBinaryRelation, basePath, firstIndex, availableEntries) {
     const firstStepMatch = matchTemplate(firstBinaryRelation.template, firstStep.provenStatement, [], []);
     const firstLinePath = [...basePath, firstIndex];
     const firstLineReference = new StepReference(firstLinePath);
@@ -222,9 +222,9 @@ export class Steps extends React.Component {
         stepsWithIndexes[1].step.isComplete &&
         stepsWithIndexes[0].step.provenStatement &&
         stepsWithIndexes[1].step.provenStatement &&
-        (nextRelation = findBinaryRelation(stepsWithIndexes[0].step.provenStatement, entryContext)) &&
+        (nextRelation = findBinaryRelation(stepsWithIndexes[0].step.provenStatement, availableEntries)) &&
         (continuingStepMatch = matchTemplate(nextRelation.template, stepsWithIndexes[0].step.provenStatement, [], [])) &&
-        (linkingRelation = findBinaryRelation(stepsWithIndexes[1].step.provenStatement, entryContext)) &&
+        (linkingRelation = findBinaryRelation(stepsWithIndexes[1].step.provenStatement, availableEntries)) &&
         (linkingStepMatch = matchTemplate(linkingRelation.template, stepsWithIndexes[1].step.provenStatement, [], [])) &&
         continuingStepMatch[0].expression.serialize() === previousRightHandSide.expression.serialize() &&
         linkingStepMatch[0].expression.serialize() === leftHandSideExpression.serialize() &&
@@ -252,7 +252,7 @@ export class Steps extends React.Component {
         _.includes(allowableChainedStepTypes, stepsWithIndexes[0].step.type) &&
         stepsWithIndexes[0].step.provenStatement &&
         _.some(stepsWithIndexes[0].step.referencedLines, r => r.matches(previousReference)) &&
-        (nextRelation = findBinaryRelation(stepsWithIndexes[0].step.provenStatement, entryContext)) &&
+        (nextRelation = findBinaryRelation(stepsWithIndexes[0].step.provenStatement, availableEntries)) &&
         nextRelation.symbol === previousRightHandSide.symbol &&
         isChainable(nextRelation) &&
         (linkingStepMatch = matchTemplate(nextRelation.template, stepsWithIndexes[0].step.provenStatement, [], [])) &&
@@ -303,9 +303,9 @@ export class Steps extends React.Component {
       const {step, index} = stepsWithIndexes.shift();
       const stepPath = [...path, index];
       if (!theoremContext.displayContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.provenStatement && step.provenStatement.definition) {
-        const binaryRelation = findBinaryRelation(step.provenStatement, theoremContext.entryContext);
+        const binaryRelation = findBinaryRelation(step.provenStatement, theoremContext.availableEntries);
         if (binaryRelation && isChainable(binaryRelation)) {
-          const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, theoremContext.entryContext);
+          const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, theoremContext.availableEntries);
           if (chainingDetails) {
             return {
               key: `chain-${++currentChainingNumber}`,

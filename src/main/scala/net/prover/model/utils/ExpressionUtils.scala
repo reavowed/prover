@@ -28,39 +28,39 @@ object ExpressionUtils {
     override def typeDefinition: TypeDefinition = propertyDefinitionOnType.parentType
   }
 
-  private def getBaseTypeStatement(statement: Statement)(implicit entryContext: EntryContext): Option[TypeStatement] = {
+  private def getBaseTypeStatement(statement: Statement)(implicit availableEntries: AvailableEntries): Option[TypeStatement] = {
     for {
       definedStatement <- statement.asOptionalInstanceOf[DefinedStatement]
-      typeDefinition <- entryContext.typeDefinitions.values.find(_.statementDefinition == definedStatement.definition)
+      typeDefinition <- availableEntries.typeDefinitions.values.find(_.statementDefinition == definedStatement.definition)
       mainTerm +: qualifierTerms <- definedStatement.components.map(_.asOptionalInstanceOf[Term]).traverseOption
     } yield TypeStatement(typeDefinition, mainTerm, qualifierTerms, None, Nil, statement)
   }
-  def getTypeQualifierStatement(statement: Statement)(implicit entryContext: EntryContext): Option[TypeQualifierStatement] = {
+  def getTypeQualifierStatement(statement: Statement)(implicit availableEntries: AvailableEntries): Option[TypeQualifierStatement] = {
     for {
       definedStatement <- statement.asOptionalInstanceOf[DefinedStatement]
-      typeQualifierDefinition <- entryContext.qualifiersByType.values.flatten.find(_.statementDefinition == definedStatement.definition)
+      typeQualifierDefinition <- availableEntries.qualifiersByType.values.flatten.find(_.statementDefinition == definedStatement.definition)
       mainTerm +: qualifierTerms <- definedStatement.components.map(_.asOptionalInstanceOf[Term]).traverseOption
     } yield TypeQualifierStatement(typeQualifierDefinition, mainTerm, qualifierTerms, statement)
   }
-  def getTypePropertyStatement(statement: Statement)(implicit entryContext: EntryContext): Option[TypePropertyStatement] = {
+  def getTypePropertyStatement(statement: Statement)(implicit availableEntries: AvailableEntries): Option[TypePropertyStatement] = {
     for {
       definedStatement <- statement.asOptionalInstanceOf[DefinedStatement]
-      propertyDefinitionOnType <- entryContext.propertyDefinitionsByType.values.flatten.find(_.statementDefinition == definedStatement.definition)
+      propertyDefinitionOnType <- availableEntries.propertyDefinitionsByType.values.flatten.find(_.statementDefinition == definedStatement.definition)
       mainTerm +: qualifierTerms <- definedStatement.components.map(_.asOptionalInstanceOf[Term]).traverseOption
     } yield TypePropertyStatement(propertyDefinitionOnType, mainTerm, qualifierTerms, statement)
   }
-  private def getTypeStatementWithOptionalQualifier(statement: Statement)(implicit entryContext: EntryContext): Option[TypeStatement] = {
+  private def getTypeStatementWithOptionalQualifier(statement: Statement)(implicit availableEntries: AvailableEntries): Option[TypeStatement] = {
     getBaseTypeStatement(statement) orElse (for {
-      conjunctionDefinition <- entryContext.conjunctionDefinitionOption
+      conjunctionDefinition <- availableEntries.conjunctionDefinitionOption
       (first, second) <- conjunctionDefinition.unapply(statement)
       baseTypeStatement <- getTypeStatement(first)
       typeQualifierStatement <- getTypeQualifierStatement(second)
       if baseTypeStatement.matchesBase(typeQualifierStatement) && baseTypeStatement.qualifierTerms.isEmpty && baseTypeStatement.explicitQualifier.isEmpty
     } yield TypeStatement(baseTypeStatement.typeDefinition, baseTypeStatement.mainTerm, typeQualifierStatement.qualifierTerms, Some(typeQualifierStatement.typeQualifierDefinition), baseTypeStatement.properties, statement))
   }
-  private def getTypeStatementWithProperties(statement: Statement)(implicit entryContext: EntryContext): Option[TypeStatement] = {
+  private def getTypeStatementWithProperties(statement: Statement)(implicit availableEntries: AvailableEntries): Option[TypeStatement] = {
     getTypeStatementWithOptionalQualifier(statement) orElse (for {
-      conjunctionDefinition <- entryContext.conjunctionDefinitionOption
+      conjunctionDefinition <- availableEntries.conjunctionDefinitionOption
       (first, second) <- conjunctionDefinition.unapply(statement)
       baseTypeStatement <- getTypeStatementWithProperties(first)
       typePropertyStatement <- getTypePropertyStatement(second)
@@ -70,13 +70,13 @@ object ExpressionUtils {
     } yield TypeStatement(baseTypeStatement.typeDefinition, baseTypeStatement.mainTerm, typePropertyStatement.qualifierTerms, baseTypeStatement.explicitQualifier, baseTypeStatement.properties :+ typePropertyStatement.propertyDefinitionOnType, statement))
   }
 
-  def getTypeStatement(statement: Statement)(implicit entryContext: EntryContext): Option[TypeStatement] = {
+  def getTypeStatement(statement: Statement)(implicit availableEntries: AvailableEntries): Option[TypeStatement] = {
     getTypeStatementWithProperties(statement)
   }
-  def getTypeLikeStatement(statement: Statement)(implicit entryContext: EntryContext): Option[TypeLikeStatement] = {
+  def getTypeLikeStatement(statement: Statement)(implicit availableEntries: AvailableEntries): Option[TypeLikeStatement] = {
     getTypeStatementWithOptionalQualifier(statement) orElse getTypeQualifierStatement(statement) orElse getTypePropertyStatement(statement)
   }
-  def isTypeLikeStatement(statement: Statement)(implicit entryContext: EntryContext): Boolean = {
+  def isTypeLikeStatement(statement: Statement)(implicit availableEntries: AvailableEntries): Boolean = {
     getTypeLikeStatement(statement).nonEmpty
   }
 

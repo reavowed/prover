@@ -102,7 +102,7 @@ export default class Rewriter extends React.Component {
   };
 
   render() {
-    const {title, entryContext} = this.props;
+    const {title, availableEntries} = this.props;
     const {currentExpression, availableRewrites, chosenRewrites, saving, premiseSuggestions, selectedPremiseSuggestion} = this.state;
     const currentPaths = this.getCurrentPaths();
 
@@ -134,7 +134,7 @@ export default class Rewriter extends React.Component {
           renderSuggestion={renderSuggestion}
           readOnly={saving} />
       </Form.Group>
-      <PremiseChooser availablePremises={premiseSuggestions || []} premise={selectedPremiseSuggestion} setPremise={this.onPremiseSelected} entryContext={entryContext} title="Premise" />
+      <PremiseChooser availablePremises={premiseSuggestions || []} premise={selectedPremiseSuggestion} setPremise={this.onPremiseSelected} availableEntries={availableEntries} title="Premise" />
       <Form.Group>
         <Button variant="success" onClick={this.save} disabled={saveDisabled}>{saving ? <span className="fas fa-spin fa-spinner"/>  : "Save"}</Button>
         <Button variant="primary" className="ml-1" onClick={this.again} disabled={saveDisabled}>Again</Button>

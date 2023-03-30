@@ -1,10 +1,10 @@
 import _ from "lodash";
 import React, {useContext} from "react";
-import EntryContext from "../EntryContext";
+import AvailableEntries from "../AvailableEntries";
 import PrettifiedAutosuggestOnIndividualWords from "./PrettifiedAutosuggestOnIndividualWords";
 
 export default function InputWithShorthandReplacement({value, onChange, ...inputProps}) {
-  const context = useContext(EntryContext);
+  const context = useContext(AvailableEntries);
 
   function replaceCompletedWord(word) {
     return _.has(context.definitionShorthands, word) ?

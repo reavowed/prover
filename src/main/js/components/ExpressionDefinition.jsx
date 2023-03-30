@@ -1,6 +1,6 @@
 import React from "react";
 import DisplayContext from "./DisplayContext";
-import EntryContext from "./EntryContext";
+import AvailableEntries from "./AvailableEntries";
 import {CopiableExpression} from "./ExpressionComponent";
 import InputWithShorthandReplacement from "./helpers/InputWithShorthandReplacement";
 import {Breadcrumbs} from "./pages/components/Breadcrumbs";
@@ -9,8 +9,8 @@ import {NavLinks} from "./pages/components/NavLinks";
 import {Usages} from "./pages/components/Usages";
 import {Page} from "./pages/Page";
 
-export function ExpressionDefinition({url, title, definition, setDefinition, bookLink, chapterLink, previous, next, usages, hasDisambiguator, children, entryContext}) {
-  const displayContext = DisplayContext.forExpressionDefinition(definition, entryContext);
+export function ExpressionDefinition({url, title, definition, setDefinition, bookLink, chapterLink, previous, next, usages, hasDisambiguator, children, availableEntries}) {
+  const displayContext = DisplayContext.forExpressionDefinition(definition, availableEntries);
   const serializedFormat = definition.format.originalValue ?
     "(" + definition.format.originalValue + ")" + (definition.format.requiresBrackets ? " requires-brackets" : "") + (definition.format.requiresComponentBrackets ? "" : " no-component-brackets") :
     "";
@@ -38,7 +38,7 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
     }
   ];
 
-  return <EntryContext.Provider value={entryContext}>
+  return <AvailableEntries.Provider value={availableEntries}>
     <DisplayContext.Provider value={displayContext}>
       <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
         <NavLinks previous={previous} next={next} />
@@ -50,5 +50,5 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
         {definition.deconstructionInference && <Usages.ForInference usages={usages} inferenceId={definition.deconstructionInference.id} title="Deconstruction" />}
       </Page>
     </DisplayContext.Provider>
-  </EntryContext.Provider>;
+  </AvailableEntries.Provider>;
 }

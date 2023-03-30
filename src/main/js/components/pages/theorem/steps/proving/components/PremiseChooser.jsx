@@ -6,7 +6,7 @@ import DisplayContext from "../../../../../DisplayContext";
 import {ExpressionComponent} from "../../../../../ExpressionComponent";
 import BoundVariableLists from "../../BoundVariableLists";
 
-export default function PremiseChooser({premise, setPremise, availablePremises, entryContext, title, autoFocus}) {
+export default function PremiseChooser({premise, setPremise, availablePremises, availableEntries, title, autoFocus}) {
   return <BoundVariableLists.Consumer>{boundVariableLists =>
     <DisplayContext.Consumer>{displayContext =>
       <Form.Group>
@@ -15,7 +15,7 @@ export default function PremiseChooser({premise, setPremise, availablePremises, 
           <option value="" />
           {availablePremises.map(p =>
             <option key={p.statement.serialize()} value={p.statement.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                <ExpressionComponent expression={p.statement} boundVariableLists={boundVariableLists} entryContext={entryContext} displayContext={displayContext} />
+                <ExpressionComponent expression={p.statement} boundVariableLists={boundVariableLists} availableEntries={availableEntries} displayContext={displayContext} />
               )}}/>
           )}
         </Form.Control>

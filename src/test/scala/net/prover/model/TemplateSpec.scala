@@ -6,7 +6,7 @@ import TestDefinitions._
 
 class TemplateSpec extends Specification {
 
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
   implicit val expressionParsingContext = ExpressionParsingContext.withDefinitions(variableDefinitions)
 

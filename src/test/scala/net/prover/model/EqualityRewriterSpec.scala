@@ -8,11 +8,11 @@ import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
 class EqualityRewriterSpec extends Specification with StepContextHelper {
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "rewriting a statement" should {
-    def testRewrite(premises: Seq[Statement], target: Statement)(implicit entryContext: EntryContext, variableDefinitions: VariableDefinitions): Result = {
+    def testRewrite(premises: Seq[Statement], target: Statement)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Result = {
       implicit val stepContext = createBaseStepContext(premises)
 
       val stepOption = EqualityRewriter.rewrite(target)

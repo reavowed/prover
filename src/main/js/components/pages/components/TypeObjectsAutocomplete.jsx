@@ -1,11 +1,11 @@
 import _ from "lodash";
 import React, {useCallback, useContext} from "react";
-import EntryContext from "../../EntryContext";
+import AvailableEntries from "../../AvailableEntries";
 import PrettifiedAutosuggestOnIndividualWords from "../../helpers/PrettifiedAutosuggestOnIndividualWords";
 
 export default function TypeObjectsAutocomplete({value, onChange, typeSymbol}) {
-  const entryContext = useContext(EntryContext);
-  const objects = _.find(entryContext.typeDefinitions, d => d.symbol === typeSymbol)?.relatedObjects ?? [];
+  const availableEntries = useContext(AvailableEntries);
+  const objects = _.find(availableEntries.typeDefinitions, d => d.symbol === typeSymbol)?.relatedObjects ?? [];
   const getSuggestions = useCallback(
     (value) => _.chain(objects).map(q => q.symbol).filter(s => _.startsWith(s, value)).value(),
     [value, objects]);

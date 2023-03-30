@@ -17,7 +17,7 @@ export default class IntroduceName extends React.Component {
 
   componentDidMount() {
     this.context.fetchJsonForStep(this.props.path, "suggestImmediateNamingPremises")
-      .then(premiseJson => _.map(premiseJson, this.props.entryContext.parser.parsePremise))
+      .then(premiseJson => _.map(premiseJson, this.props.availableEntries.parser.parsePremise))
       .then((premises) => {
         const highlightingActions = _.map(premises, p => {return {reference: p.referencedLine, action: () => this.handleImmediateNamingPremiseSelected(p.statement)}});
         this.context.setHighlightingAction(highlightingActions);

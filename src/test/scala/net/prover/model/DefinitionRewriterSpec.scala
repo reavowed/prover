@@ -9,7 +9,7 @@ import org.specs2.mutable.Specification
 
 class DefinitionRewriterSpec extends Specification with StepContextHelper {
 
-  implicit val entryContext = defaultEntryContext
+  implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Nil)
 
   "rewriting definitions" should {

@@ -119,7 +119,7 @@ object SubstatementExtractor {
     for {
       definedStatement <- sourceStatement.asOptionalInstanceOf[DefinedStatement].toSeq
       definition = definedStatement.definition
-      if implicitly[EntryContext].typeStatementDefinitions.contains(definition)
+      if implicitly[AvailableEntries].typeStatementDefinitions.contains(definition)
       inference <- definedStatement.definition.deconstructionInference.toSeq
       premise <- inference.premises.single.toSeq
       substitutions <- premise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
@@ -192,7 +192,7 @@ object SubstatementExtractor {
   }
 
   def groupStepsByDefinition(steps: Seq[DerivationStep], initialMainStep: Option[DerivationStepWithSingleInference])(implicit provingContext: ProvingContext): Seq[DerivationStep] = {
-    val deconstructionInferenceIds = provingContext.entryContext.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
+    val deconstructionInferenceIds = provingContext.availableEntries.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
     val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
 
     var currentMainStep: Option[DerivationStepWithSingleInference] = initialMainStep

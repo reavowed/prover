@@ -2,29 +2,29 @@ package net.prover.model
 
 import net.prover.books.model.Book
 import net.prover.entries.{BookWithContext, ChapterWithContext, EntryWithContext}
-import net.prover.model.EntryContext.getStatementDefinitionFromEntry
+import net.prover.model.AvailableEntries.getStatementDefinitionFromEntry
 import net.prover.model.definitions._
 import net.prover.model.entries._
 import net.prover.model.expressions._
 
-case class EntryContext(entriesWithContexts: Seq[EntryWithContext])
+case class AvailableEntries(entriesWithContexts: Seq[EntryWithContext])
 {
-  lazy val availableEntries: Seq[ChapterEntry] = entriesWithContexts.map(_.entry)
-  lazy val inferencesById: Map[String, Inference] = availableEntries.flatMap(_.inferences).toMapWithKey(_.id)
-  lazy val statementDefinitionsBySymbol: Map[String, StatementDefinition] = availableEntries.mapCollect(getStatementDefinitionFromEntry).toMapWithKey(_.symbol)
-  lazy val termDefinitionsBySymbol: Map[String, TermDefinition] = availableEntries.ofType[TermDefinition].toMapWithKey(_.disambiguatedSymbol.serialized)
-  lazy val allInferences: Seq[Inference.FromEntry] = availableEntries.flatMap(_.inferences)
+  lazy val allEntries: Seq[ChapterEntry] = entriesWithContexts.map(_.entry)
+  lazy val inferencesById: Map[String, Inference] = allEntries.flatMap(_.inferences).toMapWithKey(_.id)
+  lazy val statementDefinitionsBySymbol: Map[String, StatementDefinition] = allEntries.mapCollect(getStatementDefinitionFromEntry).toMapWithKey(_.symbol)
+  lazy val termDefinitionsBySymbol: Map[String, TermDefinition] = allEntries.ofType[TermDefinition].toMapWithKey(_.disambiguatedSymbol.serialized)
+  lazy val allInferences: Seq[Inference.FromEntry] = allEntries.flatMap(_.inferences)
   lazy val allInferenceIds: Set[String] = inferencesById.keySet
-  lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.mapCollect(EntryContext.getStatementDefinitionFromEntry)
-  lazy val termDefinitions: Seq[TermDefinition] = availableEntries.ofType[TermDefinition]
-  lazy val typeDefinitions: Map[String, TypeDefinition] = availableEntries.ofType[TypeDefinition].map(t => t.symbol -> t).toMap
-  lazy val propertyDefinitionsByType: Map[String, Seq[PropertyDefinitionOnType]] = availableEntries.ofType[PropertyDefinitionOnType].groupBy(_.parentType.symbol)
-  lazy val qualifiersByType: Map[String, Seq[TypeQualifierDefinition]] = availableEntries.ofType[TypeQualifierDefinition].groupBy(_.parentType.symbol)
-  lazy val relatedObjectsByType: Map[String, Seq[RelatedObjectDefinition]] = availableEntries.ofType[RelatedObjectDefinition].groupBy(_.parentType.symbol)
-  lazy val standalonePropertyDefinitions: Seq[StandalonePropertyDefinition] = availableEntries.ofType[StandalonePropertyDefinition]
-  lazy val typeRelationDefinitions: Seq[TypeRelationDefinition] = availableEntries.ofType[TypeRelationDefinition]
-  lazy val displayShorthands: Seq[DisplayShorthand] = availableEntries.ofType[DisplayShorthand]
-  lazy val writingShorthands: Seq[WritingShorthand] = availableEntries.ofType[WritingShorthand]
+  lazy val statementDefinitions: Seq[StatementDefinition] = allEntries.mapCollect(AvailableEntries.getStatementDefinitionFromEntry)
+  lazy val termDefinitions: Seq[TermDefinition] = allEntries.ofType[TermDefinition]
+  lazy val typeDefinitions: Map[String, TypeDefinition] = allEntries.ofType[TypeDefinition].map(t => t.symbol -> t).toMap
+  lazy val propertyDefinitionsByType: Map[String, Seq[PropertyDefinitionOnType]] = allEntries.ofType[PropertyDefinitionOnType].groupBy(_.parentType.symbol)
+  lazy val qualifiersByType: Map[String, Seq[TypeQualifierDefinition]] = allEntries.ofType[TypeQualifierDefinition].groupBy(_.parentType.symbol)
+  lazy val relatedObjectsByType: Map[String, Seq[RelatedObjectDefinition]] = allEntries.ofType[RelatedObjectDefinition].groupBy(_.parentType.symbol)
+  lazy val standalonePropertyDefinitions: Seq[StandalonePropertyDefinition] = allEntries.ofType[StandalonePropertyDefinition]
+  lazy val typeRelationDefinitions: Seq[TypeRelationDefinition] = allEntries.ofType[TypeRelationDefinition]
+  lazy val displayShorthands: Seq[DisplayShorthand] = allEntries.ofType[DisplayShorthand]
+  lazy val writingShorthands: Seq[WritingShorthand] = allEntries.ofType[WritingShorthand]
 
   lazy val deductionDefinitionOption: Option[DeductionDefinition] = {
     statementDefinitions.find(_.attributes.contains("deduction")).map(DeductionDefinition)
@@ -46,11 +46,11 @@ case class EntryContext(entriesWithContexts: Seq[EntryWithContext])
   }
   lazy val typeStatementDefinitions: Seq[StatementDefinition] = typeStatementDefinitionsByType.values.flatten.toSeq ++ typeRelationDefinitions.map(_.statementDefinition)
 
-  def addEntry(newEntry: EntryWithContext): EntryContext = {
-    EntryContext(entriesWithContexts :+ newEntry)
+  def addEntry(newEntry: EntryWithContext): AvailableEntries = {
+    AvailableEntries(entriesWithContexts :+ newEntry)
   }
-  def addEntries(newEntries: Seq[EntryWithContext]): EntryContext = {
-    EntryContext(entriesWithContexts ++ newEntries)
+  def addEntries(newEntries: Seq[EntryWithContext]): AvailableEntries = {
+    AvailableEntries(entriesWithContexts ++ newEntries)
   }
 
 
@@ -80,7 +80,7 @@ case class EntryContext(entriesWithContexts: Seq[EntryWithContext])
 
 }
 
-object EntryContext {
+object AvailableEntries {
 
   def getStatementDefinitionFromEntry(entry: ChapterEntry): Option[StatementDefinition] = entry match {
     case statementDefinition: StatementDefinition =>
@@ -92,23 +92,23 @@ object EntryContext {
   }
 
 
-  def forBooks(books: Seq[BookWithContext]): EntryContext = {
-    EntryContext(books.flatMap(_.chaptersWithContexts).flatMap(_.entriesWithContexts))
+  def forBooks(books: Seq[BookWithContext]): AvailableEntries = {
+    AvailableEntries(books.flatMap(_.chaptersWithContexts).flatMap(_.entriesWithContexts))
   }
-  def forBookExclusive(allBooks: Seq[BookWithContext], book: Book): EntryContext = {
+  def forBookExclusive(allBooks: Seq[BookWithContext], book: Book): AvailableEntries = {
     forBooks(Book.getDependencies(book.imports, allBooks))
   }
-  def forChapterExclusive(chapterWithContext: ChapterWithContext): EntryContext = {
+  def forChapterExclusive(chapterWithContext: ChapterWithContext): AvailableEntries = {
     import chapterWithContext._
     forBookExclusive(globalContext.booksWithContexts, book).addEntries(bookWithContext.chaptersWithContexts.takeWhile(_.chapter != chapter).flatMap(_.entriesWithContexts))
   }
-  def forChapterInclusive(chapterWithContext: ChapterWithContext): EntryContext = {
+  def forChapterInclusive(chapterWithContext: ChapterWithContext): AvailableEntries = {
     forChapterExclusive(chapterWithContext).addEntries(chapterWithContext.entriesWithContexts)
   }
-  def forEntry(entryWithContext: EntryWithContext): EntryContext = {
+  def forEntry(entryWithContext: EntryWithContext): AvailableEntries = {
     import entryWithContext._
     forChapterExclusive(chapterWithContext).addEntries(chapterWithContext.entriesWithContexts.takeWhile(_.entry != entry))
   }
 
-  implicit def fromProvingContext(implicit provingContext: ProvingContext): EntryContext = provingContext.entryContext
+  implicit def fromProvingContext(implicit provingContext: ProvingContext): AvailableEntries = provingContext.availableEntries
 }
