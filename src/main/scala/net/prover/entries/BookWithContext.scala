@@ -14,6 +14,7 @@ case class BookWithContext(
 ) {
   def allBooks: List[Book] = globalContext.allBooks
   def definitions: Definitions = globalContext.definitions
+  def dependencies = Book.getDependencies(book.imports, allBooks)
 
   def chaptersWithContexts: Seq[ChapterWithContext] = book.chaptersWithKeys.listWithKeys.map(getChapter)
 

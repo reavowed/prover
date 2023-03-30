@@ -23,9 +23,9 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
   def createBookProps(bookWithContext: BookWithContext): BookProps = {
     import bookWithContext._
     import globalContext._
-    val index = booksWithKeys.findIndexWhere(_._1 == book).getOrElse(throw new Exception("Book somehow didn't exist"))
-    val previous = booksWithKeys.lift(index - 1).map(getBookLinkSummary)
-    val next = booksWithKeys.lift(index + 1).map(getBookLinkSummary)
+    val index = booksWithKeys.listWithKeys.findIndexWhere(_._1 == book).getOrElse(throw new Exception("Book somehow didn't exist"))
+    val previous = booksWithKeys.listWithKeys.lift(index - 1).map(getBookLinkSummary)
+    val next = booksWithKeys.listWithKeys.lift(index + 1).map(getBookLinkSummary)
     val chapterSummaries = chaptersWithContexts.map { chapterWithContext => ChapterSummary(chapterWithContext.chapter.title, BookService.getChapterUrl(chapterWithContext), chapterWithContext.chapter.summary) }
     BookProps(book.title, BookService.getBookUrl(bookKey), chapterSummaries, previous, next)
   }
@@ -64,7 +64,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
       val entriesAfterInThisBook = bookWithContext.book.chaptersWithKeys.listWithKeys.view
         .dropUntil { case (_, key) => key == chapterKey }
         .flatMap(_._1.entries)
-      val entriesInOtherBooks = booksWithKeys.filter(_._1 != book).view
+      val entriesInOtherBooks = booksWithKeys.listWithKeys.filter(_._1 != book).view
         .dropUntil{ case (_, key) => key == bookKey }
         .flatMap(_._1.chapters)
         .flatMap(_.entries)

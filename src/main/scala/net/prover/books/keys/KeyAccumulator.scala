@@ -6,6 +6,7 @@ case class KeyAccumulator(countsByKey: Map[String, Int]) {
     val key = if (number == 1) baseKey else s"$baseKey-$number"
     (key, KeyAccumulator(countsByKey.updated(baseKey, number)))
   }
+  def getNextKey[T: WithKeyProperty](t: T): (String, KeyAccumulator) = getNextKey(WithKeyProperty[T].getKey(t))
 }
 
 object KeyAccumulator {

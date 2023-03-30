@@ -1,5 +1,6 @@
 package net.prover.books.management
 
+import net.prover.books.keys.ListWithKeys
 import net.prover.books.model.Book
 import net.prover.books.writing.WriteBooks
 import net.prover.entries.GlobalContext
@@ -12,17 +13,17 @@ import scala.concurrent.ExecutionContext
 
 @Service
 class BookStateManager {
-  private var _globalContext: GlobalContext = GlobalContext(Nil, Definitions(EntryContext(Nil)))
+  private var _globalContext: GlobalContext = GlobalContext(ListWithKeys.empty, Definitions(EntryContext(Nil)))
 
   def globalContext: GlobalContext = _globalContext
   def books: Seq[Book] = _globalContext.allBooks
 
-  def updateBooks[T](performUpdate: (Seq[Book] => GlobalContext) => T): T = {
+  def updateBooks[T](performUpdate: (ListWithKeys[Book] => GlobalContext) => T): T = {
     this.synchronized {
       var wasUpdated = false
       val result = performUpdate(newBooks => {
         val newDefinitions = Definitions(books)
-        _globalContext = GlobalContext(newBooks.toList, newDefinitions)
+        _globalContext = GlobalContext(newBooks, newDefinitions)
         wasUpdated = true
         _globalContext
       })

@@ -1,5 +1,6 @@
 package net.prover.refactoring
 
+import net.prover.books.keys.ListWithKeys
 import net.prover.books.management.{BookStateManager, UpdateBooks}
 import net.prover.books.model.Book
 import net.prover.entries.{BookWithContext, ChapterWithContext, EntryWithContext, GlobalContext}
@@ -29,7 +30,7 @@ object UpdateEntries {
         import bookWithContext._
         println("- " + book.title)
         val (newMetadata, newChapters) = book.chapters.mapFoldWithPrevious[TMetadata, Chapter](metadata) { case (metadata, updated, chapter) =>
-          modifyChapter(metadata, bookWithContext.copy(globalContext = GlobalContext(previousBooks.toList, definitions), book = book.setChapters((updated :+ chapter).toList)).getChapter(chapter))
+          modifyChapter(metadata, bookWithContext.copy(globalContext = GlobalContext(ListWithKeys(previousBooks.toList), definitions), book = book.setChapters((updated :+ chapter).toList)).getChapter(chapter))
         }
         (newMetadata, book.setChapters(newChapters.toList))
       }

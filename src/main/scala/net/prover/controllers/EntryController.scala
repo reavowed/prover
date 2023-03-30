@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover.books.keys.ListWithKeys
 import net.prover.books.model.Book
 import net.prover.controllers.models.LinkSummary
 import net.prover.entries.{BookWithContext, GlobalContext}
@@ -283,7 +284,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
               chapter = chapterToModify.chapter.setEntries(previousEntries.toList),
               bookWithContext = bookToModify.copy(
                 book = bookToModify.book.setChapters(previousChapters.toList),
-                globalContext = globalContext.copy(allBooks = previousBooks.toList))))
+                globalContext = globalContext.copy(booksWithKeys = ListWithKeys(previousBooks.toList)))))
           val modifiedEntry = if (entryToModify == oldEntry) newEntry else entryToModify.replaceDefinitions(changes.changedEntries, changes.changedDefinitions, updatedEntryWithContext)
           val changesWithEntry = changes.addChangedEntry(entryToModify, newEntry)
           val changesWithExpressionDefinitions = EntryContext.getStatementDefinitionFromEntry(entryToModify) match {

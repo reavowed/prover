@@ -1,11 +1,13 @@
 package net.prover.books.keys
 
 case class ListWithKeys[T : WithKeyProperty](listWithKeys: List[(T, String)], keyAccumulator: KeyAccumulator) {
+  def addAndGetKey(newItem: T): (ListWithKeys[T], String) = {
+    val (key, newAccumulator) = keyAccumulator.getNextKey(newItem)
+    val newList = ListWithKeys(listWithKeys :+ (newItem, key), newAccumulator)
+    (newList, key)
+  }
   def :+(newItem: T): ListWithKeys[T] = {
-    val (key, newAccumulator) = keyAccumulator.getNextKey(WithKeyProperty[T].getKeyProperty(newItem))
-    ListWithKeys(
-      listWithKeys :+ (newItem, key),
-      newAccumulator)
+    addAndGetKey(newItem)._1
   }
   def -(t: T): ListWithKeys[T] = {
     ListWithKeys(list.filter(_ != t))

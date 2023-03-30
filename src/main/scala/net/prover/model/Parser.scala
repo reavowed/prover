@@ -333,6 +333,24 @@ object Parser {
     parseRemaining(Nil, 0, initialTokenStream)
   }
 
+  def foldWhileDefined[R](
+    initial: R)(
+    getParser: R => Parser[Option[R]]
+  ): Parser[R] = {
+    Parser { initialTokenStream =>
+      def parseRemaining(currentAccumulator: R, currentTokenStream: TokenStream): (R, TokenStream) = {
+        val (newAccumulatorOption, newTokenStream) = getParser(currentAccumulator).parse(currentTokenStream)
+        newAccumulatorOption match {
+          case Some(newAccumulator) =>
+            parseRemaining(newAccumulator, newTokenStream)
+          case None =>
+            (currentAccumulator, currentTokenStream)
+        }
+      }
+      parseRemaining(initial, initialTokenStream)
+    }
+  }
+
   def foldWhileDefined[T, R](
     initial: R)(
     getParser: (Seq[T], Int, R) => Parser[Option[(T, R)]]

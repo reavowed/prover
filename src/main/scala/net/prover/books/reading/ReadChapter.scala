@@ -1,34 +1,33 @@
 package net.prover.books.reading
 
-import net.prover.books.keys.{KeyAccumulator, ListWithKeys}
+import net.prover.books.keys.ListWithKeys
 import net.prover.books.management.BookDirectoryConfig
-import net.prover.books.model.{BookOutline, EntryParsingContext}
+import net.prover.books.model.EntryParsingContext
+import net.prover.entries.{BookWithContext, ChapterWithContext}
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.{Chapter, EntryContext, Parser}
 
 object ReadChapter {
   def apply(
-    bookOutline: BookOutline,
+    bookWithContext: BookWithContext,
     chapterTitle: String,
-    chapterIndex: Int,
-    entryContext: EntryContext
-  ): (Chapter, EntryContext) = {
-
-    val filePath = BookDirectoryConfig.getChapterFilePath(bookOutline.title, chapterTitle, chapterIndex)
-    val directoryPath = BookDirectoryConfig.getChapterDirectoryPath(bookOutline.title, chapterTitle, chapterIndex)
-    val entryParsingContext = EntryParsingContext(entryContext, ProofFileReader(directoryPath, KeyAccumulator.Empty))
-
+    chapterIndex: Int
+  ): Chapter = {
+    import bookWithContext.book
+    val filePath = BookDirectoryConfig.getChapterFilePath(book.title, chapterTitle, chapterIndex)
+    val chapterDirectoryPath = BookDirectoryConfig.getChapterDirectoryPath(book.title, chapterTitle, chapterIndex)
     val parser = for {
       summary <- Parser.toEndOfLine
-      entriesAndContext <- Parser.foldWhileDefined[ChapterEntry, EntryParsingContext](entryParsingContext) { (_, _, currentContext) =>
-        ChapterEntry.parser(currentContext).mapMap { entry =>
-          (entry, currentContext.addEntry(entry))
-        }
+      initialChapter = Chapter(chapterTitle, summary, ListWithKeys.empty)
+      chapterKey = bookWithContext.book.chaptersWithKeys.keyAccumulator.getNextKey(initialChapter)._1
+      chapter <- Parser.foldWhileDefined[Chapter](initialChapter) { chapter: Chapter =>
+        val chapterWithContext = ChapterWithContext(chapter, chapterKey, bookWithContext)
+        val entryContext = EntryContext.forChapterInclusive(chapterWithContext)
+        val proofFileReader = ProofFileReader(chapterDirectoryPath, chapter.entriesWithKeys.keyAccumulator)
+        ChapterEntry.parser(EntryParsingContext(entryContext, proofFileReader)).mapMap {chapter.addEntry}
       }
-    } yield entriesAndContext.mapLeft(entries => Chapter(chapterTitle, summary, ListWithKeys(entries.toList)))
+    } yield chapter
 
-    parser
-      .parseFromFile(filePath, s"book '${bookOutline.title}' chapter '$chapterTitle''")
-      .mapRight(_.entryContext)
+    parser.parseFromFile(filePath, s"book '${bookWithContext.book.title}' chapter '$chapterTitle''")
   }
 }
