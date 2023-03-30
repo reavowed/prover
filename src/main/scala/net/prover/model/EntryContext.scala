@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.books.model.{Book, EntryParsingContext}
+import net.prover.books.model.Book
 import net.prover.entries.{BookWithContext, ChapterWithContext, EntryWithContext}
 import net.prover.model.EntryContext.getStatementDefinitionFromEntry
 import net.prover.model.definitions._
@@ -111,5 +111,4 @@ object EntryContext {
   }
 
   implicit def fromProvingContext(implicit provingContext: ProvingContext): EntryContext = provingContext.entryContext
-  implicit def fromEntryParsingContext(implicit entryParsingContext: EntryParsingContext): EntryContext = entryParsingContext.entryContext
 }

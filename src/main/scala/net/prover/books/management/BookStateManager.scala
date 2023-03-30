@@ -4,8 +4,6 @@ import net.prover.books.keys.ListWithKeys
 import net.prover.books.model.Book
 import net.prover.books.writing.WriteBooks
 import net.prover.entries.GlobalContext
-import net.prover.model.definitions.Definitions
-import net.prover.model.EntryContext
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.stereotype.Service
 

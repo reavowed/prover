@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import net.prover.books.model.EntryParsingContext
+import net.prover.books.reading.ProofFileReader
 import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
@@ -84,7 +84,7 @@ object Theorem extends Inference.EntryParser {
     } yield Proof(steps)
   }
 
-  override def parser(implicit context: EntryParsingContext): Parser[Theorem] = {
+  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[Theorem] = {
 
     for {
       name <- Parser.toEndOfLine
@@ -92,7 +92,7 @@ object Theorem extends Inference.EntryParser {
       expressionParsingContext = ExpressionParsingContext.withDefinitions(variableDefinitions)
       premises <- premisesParser(expressionParsingContext)
       conclusion <- conclusionParser(expressionParsingContext)
-      serializedProofs = context.proofFileReader.getSerializedProofs(name)
+      serializedProofs = proofFileReader.getSerializedProofs(name)
       proofs = serializedProofs.mapWithIndex((proof, i) => proofParser(name, variableDefinitions, premises, conclusion).parseFromString(proof, s"proof ${i + 1}"))
     } yield Theorem(name, variableDefinitions, premises, conclusion, proofs)
   }

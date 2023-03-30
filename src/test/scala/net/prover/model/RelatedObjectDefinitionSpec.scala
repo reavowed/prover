@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.books.reading.ProofFileReader
 import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.Qualifier
 import net.prover.model.entries.{ChapterEntry, ParentTypeConditions, RelatedObjectDefinition, TypeDefinition}
@@ -10,7 +11,7 @@ class RelatedObjectDefinitionSpec extends Specification {
 
   private def testParsingAndSerialization(relatedObjectDefinition: RelatedObjectDefinition)(implicit entryContext: EntryContext): MatchResult[Any] = {
     val serializedDefinition = relatedObjectDefinition.serializedLines.mkString("\n")
-    val reparsedDefinition = ChapterEntry.parser(entryContext).parseAndDiscard(serializedDefinition)
+    val reparsedDefinition = ChapterEntry.parser(entryContext, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(relatedObjectDefinition)
   }
 

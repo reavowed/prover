@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.books.reading.ProofFileReader
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.{ChapterEntry, TypeQualifierDefinition, TypeRelationDefinition}
 import org.specs2.matcher.MatchResult
@@ -11,7 +12,7 @@ class TypeRelationDefinitionSpec extends Specification {
 
   private def testParsingAndSerialization(typeRelationDefinition: TypeRelationDefinition)(implicit entryContext: EntryContext): MatchResult[Any] = {
     val serializedDefinition = typeRelationDefinition.serializedLines.mkString("\n")
-    val reparsedDefinition = ChapterEntry.parser(entryContext).parseAndDiscard(serializedDefinition)
+    val reparsedDefinition = ChapterEntry.parser(entryContext, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(typeRelationDefinition)
   }
 

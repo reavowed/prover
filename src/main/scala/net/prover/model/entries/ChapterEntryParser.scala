@@ -1,9 +1,9 @@
 package net.prover.model.entries
 
-import net.prover.books.model.EntryParsingContext
+import net.prover.books.reading.ProofFileReader
 import net.prover.model._
 
 trait ChapterEntryParser {
   def name: String
-  def parser(implicit context: EntryParsingContext): Parser[ChapterEntry]
+  def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry]
 }

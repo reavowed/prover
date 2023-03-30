@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.books.reading.ProofFileReader
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.Axiom
 import org.specs2.mutable.Specification
@@ -7,7 +8,7 @@ import org.specs2.mutable.Specification
 class AxiomSpec extends Specification {
 
   def parseAxiom(text: String*): Axiom = {
-    Axiom.parser(defaultEntryContext).parseAndDiscard(text.mkString("\n"))
+    Axiom.parser(defaultEntryContext, mock[ProofFileReader]).parseAndDiscard(text.mkString("\n"))
   }
 
   "axiom parser" should {

@@ -1,6 +1,6 @@
 package net.prover.model.entries
 
-import net.prover.books.model.EntryParsingContext
+import net.prover.books.reading.ProofFileReader
 import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
@@ -62,15 +62,15 @@ case class TypeQualifierDefinition(
 
 object TypeQualifierDefinition extends ChapterEntryParser {
   override def name: String = "qualifier"
-  override def parser(implicit context: EntryParsingContext): Parser[ChapterEntry] = {
+  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
-      parentType <- Parser.required("on", context.entryContext.typeDefinitionParser)
+      parentType <- Parser.required("on", entryContext.typeDefinitionParser)
       qualifier <- Qualifier.parser
       expressionParsingContext = ExpressionParsingContext.forTypeDefinition(parentType.mainVariableDefinition +: qualifier.variableDefinitions)
       explicitName <- Parser.optional("name", Parser.allInParens)
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
-      conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
+      conjunctionDefinition = entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
     } yield TypeQualifierDefinition(symbol, parentType, qualifier, explicitName, definingStatement, conjunctionDefinition)
   }
 }

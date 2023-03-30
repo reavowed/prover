@@ -3,7 +3,7 @@ package net.prover.model.entries
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
-import net.prover.books.model.EntryParsingContext
+import net.prover.books.reading.ProofFileReader
 import net.prover.entries.EntryWithContext
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Template
@@ -46,7 +46,7 @@ object DisplayShorthand extends ChapterEntryParser {
     ).whileDefined
   }
 
-  override def parser(implicit context: EntryParsingContext): Parser[DisplayShorthand] = {
+  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[DisplayShorthand] = {
     for {
       template <- Template.parser
       format <- Parser.required("as", Format.parser(template.names))

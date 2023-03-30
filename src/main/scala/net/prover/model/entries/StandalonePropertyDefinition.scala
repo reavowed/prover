@@ -1,6 +1,6 @@
 package net.prover.model.entries
 
-import net.prover.books.model.EntryParsingContext
+import net.prover.books.reading.ProofFileReader
 import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
@@ -53,7 +53,7 @@ case class StandalonePropertyDefinition(
 
 object StandalonePropertyDefinition extends ChapterEntryParser {
   override def name: String = "standaloneProperty"
-  override def parser(implicit context: EntryParsingContext): Parser[ChapterEntry] = {
+  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       mainVariableDefinition <- SimpleVariableDefinition.parser

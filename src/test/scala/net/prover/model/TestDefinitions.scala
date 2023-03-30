@@ -1,9 +1,7 @@
 package net.prover.model
 
-import net.prover.books.model.EntryParsingContext
 import net.prover.books.reading.ProofFileReader
 import net.prover.entries.{TheoremWithContext, TypedEntryWithContext}
-import net.prover.model.TestDefinitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
 import net.prover.model.definitions._
@@ -447,7 +445,6 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     }
   }
   implicit def entryContextToProvingContext(implicit entryContext: EntryContext): ProvingContext = ProvingContext(entryContext, new Definitions(entryContext))
-  implicit def entryContextToEntryParsingContext(entryContext: EntryContext): EntryParsingContext = EntryParsingContext(entryContext, mock[ProofFileReader])
   implicit def entryContextAndStepContextToStepProvingContext(implicit entryContext: EntryContext, stepContext: StepContext): StepProvingContext = {
     StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
   }
@@ -491,8 +488,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     val serializedProofs = recalculatedTheorem.proofs.map(_.serialized)
     val proofFileReader = mock[ProofFileReader]
     proofFileReader.getSerializedProofs(recalculatedTheorem.title) returns serializedProofs
-    val entryParsingContext = EntryParsingContext(entryContext, proofFileReader)
-    val parsedTheorem = Theorem.parser(entryParsingContext).parseFromString(serializedTheorem, "Theorem")
+    val parsedTheorem = Theorem.parser(entryContext, proofFileReader).parseFromString(serializedTheorem, "Theorem")
     parsedTheorem must beTypedEqualTo(theorem)
     parsedTheorem.isComplete(new Definitions(entryContext)) must beTrue
   }

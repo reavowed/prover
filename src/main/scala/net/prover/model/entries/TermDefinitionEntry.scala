@@ -1,6 +1,6 @@
 package net.prover.model.entries
 
-import net.prover.books.model.EntryParsingContext
+import net.prover.books.reading.ProofFileReader
 import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
@@ -84,7 +84,7 @@ object TermDefinitionEntry extends ChapterEntryParser {
     "name",
     Parser.allInParens)
 
-  def parser(implicit context: EntryParsingContext): Parser[TermDefinitionEntry] = {
+  def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[TermDefinitionEntry] = {
     for {
       baseSymbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinitionEntry.boundVariablesAndComponentTypesParser

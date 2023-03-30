@@ -1,6 +1,6 @@
 package net.prover.model.entries
 
-import net.prover.books.model.EntryParsingContext
+import net.prover.books.reading.ProofFileReader
 import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
@@ -41,7 +41,7 @@ case class Axiom(
 object Axiom extends Inference.EntryParser {
   override val name: String = "axiom"
 
-  def parser(implicit context: EntryParsingContext): Parser[Axiom] = {
+  def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[Axiom] = {
     for {
       name <- Parser.toEndOfLine
       variableDefinitions <- VariableDefinitions.parser

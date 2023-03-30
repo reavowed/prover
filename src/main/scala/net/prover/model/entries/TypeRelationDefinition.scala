@@ -1,6 +1,6 @@
 package net.prover.model.entries
 
-import net.prover.books.model.EntryParsingContext
+import net.prover.books.reading.ProofFileReader
 import net.prover.entries.EntryWithContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
@@ -73,18 +73,18 @@ case class TypeRelationDefinition(
 
 object TypeRelationDefinition extends ChapterEntryParser {
   override def name: String = "typeRelation"
-  override def parser(implicit context: EntryParsingContext): Parser[ChapterEntry] = {
+  override def parser(implicit entryContext: EntryContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
     for {
       symbol <- Parser.singleWord
       linkingPhrase <- Parser.allInParens
-      firstType <- context.entryContext.typeDefinitionParser
+      firstType <- entryContext.typeDefinitionParser
       firstVariableDefinition <- SimpleVariableDefinition.parser
-      secondType <- context.entryContext.typeDefinitionParser
+      secondType <- entryContext.typeDefinitionParser
       secondVariableDefinition <- SimpleVariableDefinition.parser
       explicitName <- Parser.optional("name", Parser.allInParens)
       expressionParsingContext = ExpressionParsingContext.forTypeDefinition(Seq(firstVariableDefinition, secondVariableDefinition))
       definingStatement <- Parser.required("definition", Statement.parser(expressionParsingContext).inParens)
-      conjunctionDefinition = context.entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
+      conjunctionDefinition = entryContext.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create type qualifier definition without conjunction"))
     } yield TypeRelationDefinition(symbol, firstType, secondType, firstVariableDefinition, secondVariableDefinition, linkingPhrase, explicitName, definingStatement, conjunctionDefinition)
   }
 }
