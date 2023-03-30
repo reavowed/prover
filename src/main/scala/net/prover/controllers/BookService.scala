@@ -22,8 +22,6 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
   def globalContext: GlobalContext = bookStateManager.globalContext
   def books: Seq[Book] = bookStateManager.books
 
-  def reload(): Try[Any] = Try { ReloadBooks() }
-
   def findBook(bookKey: String): Try[BookWithContext] = {
     bookStateManager.globalContext.findBook(bookKey)
   }
