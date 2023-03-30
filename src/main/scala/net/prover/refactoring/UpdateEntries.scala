@@ -38,9 +38,9 @@ object UpdateEntries {
         import chapterWithContext._
         println("  - " + chapter.title)
         val (newMetadata, newEntries) = chapter.entries.mapFoldWithPrevious[TMetadata, ChapterEntry](metadata) { case (metadata, updated, entry) =>
-          updateOperation(chapterWithContext.copy(chapter = chapter.copy(entries = updated :+ entry)).getEntry(entry), metadata).swap
+          updateOperation(chapterWithContext.copy(chapter = chapter.setEntries((updated :+ entry).toList)).getEntry(entry), metadata).swap
         }
-        (newMetadata, chapter.copy(entries = newEntries))
+        (newMetadata, chapter.setEntries(newEntries.toList))
       }
 
       globalContext.booksWithContexts.mapFoldWithPrevious(initial)(modifyBook)._2

@@ -53,7 +53,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
       }
     } yield {
       import entryWithContext._
-      val entriesWithKeys = chapterWithContext.entriesWithKeys.mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[ChapterEntry.Standalone]))
+      val entriesWithKeys = chapterWithContext.chapter.entriesWithKeys.listWithKeys.mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[ChapterEntry.Standalone]))
       val index = entriesWithKeys.findIndexWhere(_._1 == entry).getOrElse(throw new Exception("Entry somehow didn't exist"))
       val previous = entriesWithKeys.lift(index - 1).map { case (c, key) => LinkSummary(c.title, key) }
       val next = entriesWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, key) }
@@ -280,7 +280,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
           val entryToModify = entryContextToModify.entry
           val updatedEntryWithContext = entryContextToModify.copy(
             chapterWithContext = chapterToModify.copy(
-              chapter = chapterToModify.chapter.copy(entries = previousEntries),
+              chapter = chapterToModify.chapter.setEntries(previousEntries.toList),
               bookWithContext = bookToModify.copy(
                 book = bookToModify.book.setChapters(previousChapters.toList),
                 globalContext = globalContext.copy(allBooks = previousBooks.toList))))
@@ -298,7 +298,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
               }
           }
           (changesWithExpressionDefinitions, modifiedEntry)
-        }.mapRight(newEntries => chapterToModify.chapter.copy(entries = newEntries))
+        }.mapRight(newEntries => chapterToModify.chapter.setEntries(newEntries.toList))
       }.mapRight(newChapters => bookToModify.book.setChapters(newChapters.toList))
     }._2
   }
@@ -313,7 +313,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
     }).flatMap { case (globalContext, newEntry) =>
       for {
         chapterWithContext <- globalContext.findChapter(bookKey, chapterKey)
-        newKey <- chapterWithContext.entriesWithKeys.find(_._1 == newEntry).map(_._2).orException(new Exception("Couldn't find new entry"))
+        newKey <- chapterWithContext.chapter.entriesWithKeys.listWithKeys.find(_._1 == newEntry).map(_._2).orException(new Exception("Couldn't find new entry"))
         props = Map("entry" -> newEntry, "url" -> BookService.getEntryUrl(bookKey, chapterKey, newKey))
       } yield props
     }.toResponseEntity

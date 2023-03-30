@@ -385,9 +385,9 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     }
     bookService.modifyChapter[Id](bookKey, chapterKey, chapterWithContext => {
       for {
-        (previousEntries, entry, nextEntries) <- chapterWithContext.entriesWithKeys.splitWhere(_._2 == entryKey).orNotFound(s"Entry $entryKey")
+        (previousEntries, entry, nextEntries) <- chapterWithContext.chapter.entriesWithKeys.listWithKeys.splitWhere(_._2 == entryKey).orNotFound(s"Entry $entryKey")
         updatedEntries <- tryMove(entry._1, previousEntries.map(_._1), nextEntries.map(_._1))
-      } yield chapterWithContext.chapter.copy(entries = updatedEntries)
+      } yield chapterWithContext.chapter.setEntries(updatedEntries.toList)
     }).map(getChapterProps).toResponseEntity
   }
 
@@ -401,7 +401,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
       import entryWithContext._
       findUsage(allBooks, entry)
         .badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
-        .map(_ => chapter.copy(entries = chapter.entries.filter(_ != entry)))
+        .map(_ => chapter.copy(entriesWithKeys = chapter.entriesWithKeys - entry))
     }
 
     bookService.modifyChapter[Id](bookKey, chapterKey, chapterWithContext =>

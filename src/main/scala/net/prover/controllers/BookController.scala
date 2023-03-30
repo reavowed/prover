@@ -1,5 +1,6 @@
 package net.prover.controllers
 
+import net.prover.books.keys.ListWithKeys
 import net.prover.books.model.Book
 import net.prover.controllers.BookController.ChapterDefinition
 import net.prover.controllers.models.LinkSummary
@@ -46,7 +47,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     @RequestBody chapterDefinition: ChapterDefinition
   ): ResponseEntity[_] = {
     bookService.modifyBook[Id](bookKey, bookWithContext => {
-      val chapter = Chapter(chapterDefinition.title, chapterDefinition.summary, Nil)
+      val chapter = Chapter(chapterDefinition.title, chapterDefinition.summary, ListWithKeys.empty)
       val newBook = bookWithContext.book.addChapter(chapter)
       Success(newBook)
     }).map(createBookProps).toResponseEntity

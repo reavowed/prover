@@ -65,7 +65,7 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
       for {
         entryWithContext <- chapterWithContext.getEntry(entryKey)
         newEntryF <- f(entryWithContext)
-      } yield newEntryF.map(newEntry => (chapterWithContext.chapter.copy(entries = chapterWithContext.chapter.entries.replaceValue(entryWithContext.entry, newEntry)), newEntry))
+      } yield newEntryF.map(newEntry => (chapterWithContext.chapter.updateEntry(entryKey, newEntry), newEntry))
     ).map(_.map { case (newChapterWithContext, newEntry) => newChapterWithContext.getEntry(newEntry) })
   }
 

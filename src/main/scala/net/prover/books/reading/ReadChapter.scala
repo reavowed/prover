@@ -1,6 +1,6 @@
 package net.prover.books.reading
 
-import net.prover.books.keys.KeyAccumulator
+import net.prover.books.keys.{KeyAccumulator, ListWithKeys}
 import net.prover.books.management.BookDirectoryConfig
 import net.prover.books.model.{BookOutline, EntryParsingContext}
 import net.prover.model.entries.ChapterEntry
@@ -25,7 +25,7 @@ object ReadChapter {
           (entry, currentContext.addEntry(entry))
         }
       }
-    } yield entriesAndContext.mapLeft(Chapter(chapterTitle, summary, _))
+    } yield entriesAndContext.mapLeft(entries => Chapter(chapterTitle, summary, ListWithKeys(entries.toList)))
 
     parser
       .parseFromFile(filePath, s"book '${bookOutline.title}' chapter '$chapterTitle''")

@@ -1,19 +1,22 @@
 package net.prover.model
 
-import net.prover.books.keys.WithKeyProperty
+import net.prover.books.keys.{ListWithKeys, WithKeyProperty}
 import net.prover.model.entries._
 
 case class Chapter(
     title: String,
     summary: String,
-    entries: Seq[ChapterEntry])
+    entriesWithKeys: ListWithKeys[ChapterEntry])
 {
+  val entries: List[ChapterEntry] = entriesWithKeys.list
   def serialized: String = {
     val entryTexts = entries.map(_.serializedLines.mkString("\n"))
     (summary +: entryTexts).mkString("\n\n") + "\n"
   }
 
-  def addEntry(newEntry: ChapterEntry): Chapter = copy(entries = entries :+ newEntry)
+  def addEntry(newEntry: ChapterEntry): Chapter = copy(entriesWithKeys = entriesWithKeys :+ newEntry)
+  def updateEntry(key: String, entry: ChapterEntry) = copy(entriesWithKeys = entriesWithKeys.updated(key, entry))
+  def setEntries(entries: List[ChapterEntry]): Chapter = copy(entriesWithKeys = ListWithKeys(entries))
 
   def canEqual(other: Any): Boolean = other.isInstanceOf[Chapter]
 

@@ -1,11 +1,10 @@
 package net.prover.entries
 
-import net.prover.books.keys.GetWithKeys
 import net.prover.books.model.Book
-import net.prover.controllers.{BookService, OptionWithResponseExceptionOps}
-import net.prover.model.{Chapter, Inference}
+import net.prover.controllers.OptionWithResponseExceptionOps
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.ChapterEntry
+import net.prover.model.{Chapter, Inference}
 
 import scala.reflect.{ClassTag, classTag}
 import scala.util.Try
@@ -21,21 +20,23 @@ case class ChapterWithContext(
   def book: Book = bookWithContext.book
   def bookKey: String = bookWithContext.bookKey
 
-  def entriesWithKeys: List[(ChapterEntry, String)] = GetWithKeys(chapter.entries)
-
-  def entriesWithContexts: Seq[EntryWithContext] = chapter.entries.map(getEntry[ChapterEntry])
+  def entriesWithContexts: Seq[EntryWithContext] = chapter.entriesWithKeys.listWithKeys.map(getEntry[ChapterEntry])
   def inferencesWithContexts: Seq[TypedEntryWithContext[Inference.Entry]] = entriesWithContexts.ofType[TypedEntryWithContext[Inference.Entry]]
   def theoremsWithContexts: Seq[TheoremWithContext] = entriesWithContexts.ofType[TheoremWithContext]
 
   def getEntry[T <: ChapterEntry : ClassTag](entryKey: String): Try[TypedEntryWithContext[T]] = {
-    entriesWithKeys.find(_._2 == entryKey)
+    chapter.entriesWithKeys.listWithKeys.find(_._2 == entryKey)
       .orNotFound(s"Chapter $chapterKey")
       .flatMap(_._1.asOptionalInstanceOf[T].orBadRequest(s"Entry is not a ${classTag[T].runtimeClass.getSimpleName}"))
       .map(TypedEntryWithContext(_, entryKey, this))
   }
 
   def getEntry[T <: ChapterEntry : ClassTag](entry: T): TypedEntryWithContext[T] = {
-    val key = entriesWithKeys.find(_._1 == entry).map(_._2).get
+    val key = chapter.entriesWithKeys.listWithKeys.find(_._1 == entry).map(_._2).get
     TypedEntryWithContext(entry, key, this)
+  }
+
+  private def getEntry[T <: ChapterEntry : ClassTag](tuple: (T, String)): TypedEntryWithContext[T] = {
+    TypedEntryWithContext(tuple._1, tuple._2, this)
   }
 }
