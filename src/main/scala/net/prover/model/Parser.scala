@@ -251,7 +251,7 @@ object Parser {
     }
     def isDefined: Parser[Boolean] = parser.map(_.isDefined)
     def isUndefined: Parser[Boolean] = parser.map(_.isEmpty)
-    def whileDefined: Parser[Seq[T]] = {
+    def whileDefined: Parser[List[T]] = {
       Parser.whileDefined[T]((_, _) => parser)
     }
   }
@@ -320,8 +320,8 @@ object Parser {
       .flatMap(_ => parser)
   }
 
-  def whileDefined[T](getParser: (Seq[T], Int) => Parser[Option[T]]): Parser[Seq[T]] = Parser { initialTokenStream =>
-    def parseRemaining(valuesSoFar: Seq[T], currentIndex: Int, currentTokenStream: TokenStream): (Seq[T], TokenStream) = {
+  def whileDefined[T](getParser: (List[T], Int) => Parser[Option[T]]): Parser[List[T]] = Parser { initialTokenStream =>
+    def parseRemaining(valuesSoFar: List[T], currentIndex: Int, currentTokenStream: TokenStream): (List[T], TokenStream) = {
       val (newValueOption, newTokenStream) = getParser(valuesSoFar, currentIndex).parse(currentTokenStream)
       newValueOption match {
         case Some(newValue) =>

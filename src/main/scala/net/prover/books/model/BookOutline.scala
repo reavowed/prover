@@ -1,3 +1,3 @@
 package net.prover.books.model
 
-case class BookOutline(title: String, imports: Seq[String], chapterTitles: Seq[String])
+case class BookOutline(title: String, imports: List[String], chapterTitles: List[String])

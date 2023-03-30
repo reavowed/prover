@@ -47,7 +47,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
   ): ResponseEntity[_] = {
     bookService.modifyBook[Id](bookKey, bookWithContext => {
       val chapter = Chapter(chapterDefinition.title, chapterDefinition.summary, Nil)
-      val newBook = bookWithContext.book.copy(chapters = bookWithContext.book.chapters :+ chapter)
+      val newBook = bookWithContext.book.addChapter(chapter)
       Success(newBook)
     }).map(createBookProps).toResponseEntity
   }
@@ -60,7 +60,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     bookService.modifyBook[Id](bookKey, bookWithContext => {
       import bookWithContext.book
       import bookWithContext.globalContext.booksWithKeys
-      val entriesAfterInThisBook = bookWithContext.chaptersWithKeys.view
+      val entriesAfterInThisBook = bookWithContext.book.chaptersWithKeys.listWithKeys.view
         .dropUntil { case (_, key) => key == chapterKey }
         .flatMap(_._1.entries)
       val entriesInOtherBooks = booksWithKeys.filter(_._1 != book).view
@@ -71,7 +71,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
         chapterWithContext <- bookWithContext.chaptersWithContexts.find(_.chapterKey == chapterKey) orNotFound s"Chapter $chapterKey"
         _ <- findUsage(entriesAfterInThisBook ++ entriesInOtherBooks, chapterWithContext.chapter.entries).badRequestIfDefined { case (usedEntry, entryUsing) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
       } yield {
-        book.copy(chapters = bookWithContext.chaptersWithKeys.filter { case (_, key ) => key != chapterKey }.map(_._1))
+        book.copy(chaptersWithKeys = book.chaptersWithKeys - chapterWithContext.chapter)
       }
     }).map(createBookProps).toResponseEntity
   }
@@ -96,9 +96,9 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     bookService.modifyBook[Id](bookKey, bookWithContext => {
       import bookWithContext._
       for {
-        (previousChapters, chapter, nextChapters) <- bookWithContext.chaptersWithKeys.splitWhere(_._2 == chapterKey).orNotFound(s"Chapter $chapterKey")
+        (previousChapters, chapter, nextChapters) <- bookWithContext.book.chaptersWithKeys.listWithKeys.splitWhere(_._2 == chapterKey).orNotFound(s"Chapter $chapterKey")
         updatedChapters <- tryMove(chapter._1, previousChapters.map(_._1), nextChapters.map(_._1))
-      } yield book.copy(chapters = updatedChapters)
+      } yield book.setChapters(updatedChapters.toList)
     }).map(createBookProps).toResponseEntity
   }
 }

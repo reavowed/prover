@@ -1,13 +1,9 @@
 package net.prover
 
-import java.nio.file.Path
-
 import net.prover.util.PossibleSingleMatch
 import net.prover.util.PossibleSingleMatch.{MultipleMatches, NoMatches, SingleMatch}
-import org.apache.commons.io.FileUtils
-import org.apache.commons.io.filefilter.TrueFileFilter
 
-import scala.collection.JavaConverters._
+import scala.annotation.tailrec
 import scala.collection.generic.CanBuildFrom
 import scala.collection.{AbstractIterator, Iterator, TraversableLike, immutable, mutable}
 import scala.reflect.ClassTag
@@ -15,14 +11,6 @@ import scala.util.{Failure, Success, Try}
 
 package object model {
   implicit class AnyOps[T](t: T) {
-    def ifDefined[S](f: T => Option[S])(action: => Unit): T = {
-      f(t).ifDefined(action)
-      t
-    }
-    def ifEmpty[S](f: T => Option[S])(action: => Unit): T = {
-      f(t).ifEmpty(action)
-      t
-    }
     def asOptionalInstanceOf[S : ClassTag]: Option[S] = {
       if (isRuntimeInstance[S]) {
         Some(t.asInstanceOf[S])
@@ -32,9 +20,6 @@ package object model {
     }
     def isRuntimeInstance[S : ClassTag]: Boolean = {
       implicitly[ClassTag[S]].runtimeClass.isInstance(t)
-    }
-    def onlyIf(f: T => Boolean): Option[T] = {
-      Some(t).filter(f)
     }
   }
 
@@ -57,21 +42,9 @@ package object model {
   implicit class Tuple2Ops[S,T](tuple: (S, T)) {
     def mapLeft[R](f: S => R): (R, T) = (f(tuple._1), tuple._2)
     def mapRight[R](f: T => R): (S, R) = (tuple._1, f(tuple._2))
-    def mapBoth[U, R](f: S => U, g: T => R): (U, R) = (f(tuple._1), g(tuple._2))
     def optionMapLeft[R](f: S => Option[R]): Option[(R, T)] = f(tuple._1).map((_, tuple._2))
-    def optionMapRight[R](f: T => Option[R]): Option[(S, R)] = f(tuple._2).map((tuple._1, _))
     def reverse: (T, S) = (tuple._2, tuple._1)
     def toSet(implicit f: S =:= T): Set[T] = Set(f(tuple._1), tuple._2)
-  }
-
-  implicit class Tuple2SameOps[T](tuple: (T, T)) {
-    def mapBoth[S](f: T => S): (S, S) = (f(tuple._1), f(tuple._2))
-    def mapBothOption[S](f: T => Option[S]): Option[(S, S)] = {
-      for {
-        first <- f(tuple._1)
-        second <- f(tuple._2)
-      } yield (first, second)
-    }
   }
 
   implicit class Tuple3Ops[S,T,U](tuple: (S, T, U)) {
@@ -101,16 +74,6 @@ package object model {
         case _ => MultipleMatches
       }
     }
-    def mapFold[R, S](initial: R)(f: (R, T) => (R, S)): (R, Seq[S]) = {
-      seq.foldLeft((initial, Seq.empty[S])) { case ((acc, ss), t) =>
-          f(acc, t).mapRight(ss :+ _)
-      }
-    }
-    def mapFoldRight[R, S](initial: R)(f: (R, T) => (R, S)): (R, Seq[S]) = {
-      seq.foldRight((initial, Seq.empty[S])) { case (t, (acc, ss)) =>
-        f(acc, t).mapRight(_ +: ss)
-      }
-    }
     def flatMapFold[R, S](initial: R)(f: (R, T) => (R, Seq[S])): (R, Seq[S]) = {
       seq.foldLeft((initial, Seq.empty[S])) { case ((acc, ss), t) =>
         f(acc, t).mapRight(ss ++ _)
@@ -122,45 +85,9 @@ package object model {
       }
     }
 
-    def mapReduceTryWithPrevious[S](f: (Seq[S], T) => Try[S]): Try[Seq[S]] = {
-      seq.foldLeft(Try(Seq.empty[S])) { case (tryAcc, t) =>
-        tryAcc.flatMap(acc => f(acc, t).map(t => acc :+ t))
-      }
-    }
     def mapFoldWithPrevious[R, S](initial: R)(f: (R, Seq[S], T) => (R, S)): (R, Seq[S]) = {
       seq.foldLeft((initial, Seq.empty[S])) { case ((acc, ss), t) =>
         f(acc, ss, t).mapRight(ss :+ _)
-      }
-    }
-    def mapTry[S](f: T => Try[S]): Try[Seq[S]] = {
-      seq.foldLeft(Try(Seq.empty[S])) { (previousOption, t) =>
-        for {
-          previous <- previousOption
-          s <- f(t)
-        } yield previous :+ s
-      }
-    }
-    def mapFoldTry[R, S](initial: R)(f: (R, T) => Try[(R, S)]): Try[(R, Seq[S])] = {
-      seq.foldLeft(Try((initial, Seq.empty[S]))) { case (currentTry, t) =>
-        for {
-          (currentAccumulator, currentValues) <- currentTry
-          (newAccumulator, newValue) <- f(currentAccumulator, t)
-        } yield (newAccumulator, currentValues :+ newValue)
-      }
-    }
-    def mapFoldOption[R, S](initial: R)(f: (R, T) => Option[(R, S)]): Option[(R, Seq[S])] = {
-      seq.foldLeft(Option((initial, Seq.empty[S]))) { case (accOption, t) =>
-        for {
-          (acc, ss) <- accOption
-          (next, s) <- f(acc, t)
-        } yield (next, ss :+ s)
-      }
-    }
-    def mapFoldOption[S](f: (Seq[S], T) => Option[S]): Option[Seq[S]] = {
-      seq.foldLeft(Option(Seq.empty[S])) { case (accOption, t) =>
-        accOption.flatMap { acc =>
-          f(acc, t).map(acc :+ _)
-        }
       }
     }
     def mapWithIndex[S](f: (T, Int) => S): Seq[S] = {
@@ -191,15 +118,6 @@ package object model {
       case _ =>
         None
     }.traverseOption
-    def areAllOfType[S: ClassTag]: Boolean = seq.forall {
-      case _: S =>
-        true
-      case _ =>
-        false
-    }
-    def collectOption[S](f: PartialFunction[T, Option[S]]): Seq[S] = {
-      seq.collect(f).collectDefined
-    }
     def mapCollect[S](f: T => Option[S]): Seq[S] = {
       seq.map(f).collect {
         case Some(t) => t
@@ -234,51 +152,11 @@ package object model {
         } yield ss :+ s
       }
     }
-    def flatMapFoldProduct[S](init: S)(f: (S, T) => Seq[S]): Seq[S] = {
-      seq.foldLeft(Seq(init)) { case (acc, t) =>
-        acc.flatMap(f(_, t))
-      }
-    }
-    def splitAtAll(f: T => Boolean): Seq[(Seq[T], T, Seq[T])] = {
-      def helper(previous: Seq[T], next: Seq[T], acc: Seq[(Seq[T], T, Seq[T])]): Seq[(Seq[T], T, Seq[T])] = {
-        next match {
-          case t +: more =>
-            if (f(t))
-              helper(previous :+ t, more, acc :+ (previous, t, more))
-            else
-              helper(previous :+ t, more, acc)
-          case Nil =>
-            acc
-        }
-      }
-      helper(Nil, seq, Nil)
-    }
-    def interleave[S >: T](s: S): Seq[S] = {
-      seq match {
-        case head +: tail =>
-          head +: tail.flatMap(Seq(s, _))
-        case _ =>
-          seq
-      }
-    }
-    def foreachWithIndex[U](f: (T, Int) => U): Unit = {
-      seq.zipWithIndex.foreach(f.tupled)
-    }
     def replaceValue(oldValue: T, newValue: T): Seq[T] = {
       seq.updated(seq.indexOf(oldValue), newValue)
     }
-    def replaceWhere(f: T => Boolean)(t: T): Seq[T] = {
-      seq.map(x => if (f(x)) t else x)
-    }
     def until(value: T): Seq[T] = {
       seq.takeWhile(_ != value)
-    }
-    def updateSingleIfDefinedWithResult[S](update: PartialFunction[T, Try[(T, S)]]): Option[Try[(Seq[T], S)]] = {
-      seq.findWithIndex(update.isDefinedAt).map { case (currentValue, index) =>
-        update(currentValue).map { case (newValue, result) =>
-          (seq.updated(index, newValue), result)
-        }
-      }
     }
     def splitAtIndexIfValid(index: Int): Option[(Seq[T], T, Seq[T])] = {
       if (0 <= index && index < seq.length) {
@@ -307,17 +185,6 @@ package object model {
       }
     }
 
-    def tryUpdateAtIndexIfDefined[S](index: Int, f: T => Option[Try[T]]): Option[Try[Seq[T]]] = {
-      seq.lift(index).flatMap(f).mapMap(seq.updated(index, _))
-    }
-    def mapTryToMap[S](f: T => Try[S]): Try[Map[T, S]] = {
-      seq.foldLeft(Try(Map.empty[T, S])) { (mapTry, key) =>
-        for {
-          map <- mapTry
-          value <- f(key)
-        } yield map + (key -> value)
-      }
-    }
     def removeSingleValue(t: T): Option[Seq[T]] = {
       val index = seq.indexOf(t)
       if (index == -1)
@@ -345,9 +212,6 @@ package object model {
   implicit class IterableOps[T](iterable: Iterable[T]) {
     def mapFind[S](f: T => Option[S]): Option[S] = {
       iterable.iterator.map(f).find(_.isDefined).flatten
-    }
-    def mapToMap[S](f: T => S): Map[T, S] = {
-      iterable.map(t => t -> f(t)).toMap
     }
   }
 
@@ -378,6 +242,14 @@ package object model {
     }
   }
 
+  implicit class TraversableOps[T, Repr](traversable: TraversableLike[T, Repr]) {
+    def mapFold[R, S, That](initial: R)(f: (R, T) => (R, S))(implicit bf: CanBuildFrom[Repr, S, That]): (R, That) = {
+      traversable.foldLeft((initial, bf())) { case ((accumulator, builder), t) =>
+        f(accumulator, t).mapRight(builder += _)
+      }.mapRight(_.result())
+    }
+  }
+
   implicit class TraversableOptionOps[T, Repr](traversable: TraversableLike[Option[T], Repr]) {
     def collectDefined[That](implicit bf: CanBuildFrom[Repr, T, That]): That = {
       traversable.collect {
@@ -405,17 +277,6 @@ package object model {
     }.map(_.result())
   }
 
-  implicit class SeqSetOps[T](seq: Seq[Set[T]]) {
-    def knownCommonValues: Set[T] = {
-      seq match {
-        case Nil =>
-          Set.empty
-        case head +: tail =>
-          tail.foldLeft(head)(_ intersect _)
-      }
-    }
-  }
-
   implicit class IteratorOps[T](iterator: Iterator[T]) {
     def headOption: Option[T] = {
       if (iterator.hasNext)
@@ -425,9 +286,6 @@ package object model {
     }
     def findFirst[S](f: T => Option[S]): Option[S] = {
       iterator.map(f).collect { case Some(t) => t }.headOption
-    }
-    def collectFirst[S](f: PartialFunction[T, Option[S]]): Option[S] = {
-      iterator.collectOption(f).headOption
     }
     def mapCollect[S](f: T => Option[S]): Iterator[S] = {
       iterator.map(f).collect {
@@ -440,7 +298,7 @@ package object model {
       }
     }
     def singleDistinctMatch: PossibleSingleMatch[T] = {
-      def hasDifferentMatch(i: Iterator[T], t: T): Boolean = {
+      @tailrec def hasDifferentMatch(i: Iterator[T], t: T): Boolean = {
         if (!i.hasNext)
           false
         else if (i.next() != t)
@@ -456,28 +314,6 @@ package object model {
           SingleMatch(firstMatch)
         } else {
           MultipleMatches
-        }
-      }
-    }
-
-    def matchingFirst(predicate: T => Boolean): Iterator[T] = {
-      new AbstractIterator[T] {
-        private val queue = mutable.Queue.empty[T]
-        override def hasNext: Boolean = iterator.hasNext || queue.nonEmpty
-        override def next(): T = {
-          if (iterator.hasNext) {
-            val item = iterator.next()
-            if (predicate(item)) {
-              item
-            } else {
-              queue.enqueue(item)
-              next()
-            }
-          } else if (queue.nonEmpty) {
-            queue.dequeue()
-          } else {
-            Iterator.empty.next()
-          }
         }
       }
     }
@@ -498,7 +334,7 @@ package object model {
           status = 1
           false
         }
-      def next() =
+      def next(): T =
         if (hasNext) {
           iterator.next()
         }
@@ -507,7 +343,6 @@ package object model {
   }
 
   implicit class OptionOps[T](x: Option[T]) {
-    def toMatch: PossibleSingleMatch[T] = x.map(PossibleSingleMatch.SingleMatch(_)).getOrElse(PossibleSingleMatch.NoMatches)
     def ifDefined(action: => Unit): Option[T] = {
       if (x.nonEmpty) action
       x
@@ -527,17 +362,6 @@ package object model {
       case Some(None) => None
       case None => Some(None)
       case _ => x
-    }
-  }
-
-  implicit class TryOps[T](x: Try[T]) {
-    def ifFailed(action: Throwable => Unit): Try[T] = {
-      x match {
-        case Failure(e) =>
-          action(e)
-        case _ =>
-      }
-      x
     }
   }
 
@@ -571,11 +395,6 @@ package object model {
           Some(map.updated(key, value))
       }
     }
-    def merge(other: Map[S, T]): Option[Map[S, T]] = {
-      other.foldLeft(Option(map)) { case (mapOptionSoFar, (key, value)) =>
-        mapOptionSoFar.flatMap(_.tryAdd(key, value))
-      }
-    }
     def replace(key: S, f: T => T): Map[S, T] = {
       map.get(key).map(t => map.updated(key, f(t))) getOrElse map
     }
@@ -586,26 +405,6 @@ package object model {
       map.map { case (s, tOption) => tOption.map(s -> _) }
         .traverseOption
         .map(_.toMap)
-    }
-  }
-
-  implicit class PathOps(path: Path) {
-    def getAllChildFiles: Seq[Path] = {
-      if (path.toFile.isDirectory)
-        FileUtils.listFiles(path.toFile, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE).asScala
-          .map(_.toPath)
-          .toSeq
-      else
-        Nil
-    }
-  }
-
-  implicit class BooleanOps(boolean: Boolean) {
-    def ifTrue[S](s: => S): Option[S] = {
-      if (boolean) Some(s) else None
-    }
-    def ifFalse[S](s: => S): Option[S] = {
-      if (!boolean) Some(s) else None
     }
   }
 

@@ -22,8 +22,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
 
   private def getChapterProps(chapterWithContext: ChapterWithContext): Map[String, AnyRef] = {
     import chapterWithContext._
-    val chaptersWithKeys = chapterWithContext.bookWithContext.chaptersWithKeys
-    val index = chaptersWithKeys.findIndexWhere(_._1 == chapter).getOrElse(throw new Exception("Book somehow didn't exist"))
+    val chaptersWithKeys = chapterWithContext.book.chaptersWithKeys.listWithKeys
+    val index = chaptersWithKeys.findIndexWhere(_._1 == chapter).getOrElse(throw new Exception("Chapter somehow didn't exist"))
     val previous = chaptersWithKeys.lift(index - 1).map { case (c, key) => LinkSummary(c.title, BookService.getChapterUrl(bookKey, key)) }
     val next = chaptersWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, BookService.getChapterUrl(bookKey, key)) }
     implicit val entryContext = EntryContext.forChapterInclusive(chapterWithContext)

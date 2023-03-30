@@ -1,5 +1,6 @@
 package net.prover.books.management
 
+import net.prover.books.keys.ListWithKeys
 import net.prover.books.model.{Book, BookDefinition}
 import net.prover.controllers.AnyWithResponseExceptionOps
 import net.prover.entries.GlobalContext
@@ -17,7 +18,7 @@ object CreateBook {
       }
       for {
        _ <- bookDefinition.imports.foreach(validateImport).recoverWithBadRequest
-      } yield globalContext.allBooks :+ Book(bookDefinition.title, bookDefinition.imports, Nil)
+      } yield globalContext.allBooks :+ Book(bookDefinition.title, bookDefinition.imports, ListWithKeys.empty)
     })
   }
 }

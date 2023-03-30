@@ -282,7 +282,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
             chapterWithContext = chapterToModify.copy(
               chapter = chapterToModify.chapter.copy(entries = previousEntries),
               bookWithContext = bookToModify.copy(
-                book = bookToModify.book.copy(chapters = previousChapters),
+                book = bookToModify.book.setChapters(previousChapters.toList),
                 globalContext = globalContext.copy(allBooks = previousBooks.toList))))
           val modifiedEntry = if (entryToModify == oldEntry) newEntry else entryToModify.replaceDefinitions(changes.changedEntries, changes.changedDefinitions, updatedEntryWithContext)
           val changesWithEntry = changes.addChangedEntry(entryToModify, newEntry)
@@ -299,7 +299,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
           }
           (changesWithExpressionDefinitions, modifiedEntry)
         }.mapRight(newEntries => chapterToModify.chapter.copy(entries = newEntries))
-      }.mapRight(newChapters => bookToModify.book.copy(chapters = newChapters))
+      }.mapRight(newChapters => bookToModify.book.setChapters(newChapters.toList))
     }._2
   }
 

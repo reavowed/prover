@@ -1,15 +1,20 @@
 package net.prover.books.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import net.prover.books.keys.WithKeyProperty
+import net.prover.books.keys.{ListWithKeys, WithKeyProperty}
 import net.prover.model.{Chapter, SeqOps}
 
 @JsonIgnoreProperties(Array("dependencies"))
 case class Book(
     title: String,
     imports: Seq[String],
-    chapters: Seq[Chapter])
+    chaptersWithKeys: ListWithKeys[Chapter])
 {
+  val chapters: List[Chapter] = chaptersWithKeys.list
+  def addChapter(chapter: Chapter): Book = copy(chaptersWithKeys = chaptersWithKeys :+ chapter)
+  def updateChapter(key: String, chapter: Chapter) = copy(chaptersWithKeys = chaptersWithKeys.updated(key, chapter))
+  def setChapters(chapters: List[Chapter]): Book = copy(chaptersWithKeys = ListWithKeys(chapters))
+
   def serialized: String = {
     val sections = Seq(
       imports.map(i => s"import $i"),
