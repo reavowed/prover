@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.books.model.EntryParsingContext
 import net.prover.books.reading.ProofFileReader
-import net.prover.entries.TheoremWithContext
+import net.prover.entries.{TheoremWithContext, TypedEntryWithContext}
 import net.prover.model.TestDefinitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
@@ -413,7 +413,7 @@ trait StepHelpers extends TestVariableDefinitions with TestExpressionDefinitions
 object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with StepHelpers with MockitoStubs {
   import org.specs2.matcher.Matchers._
   import org.specs2.matcher.MustExpectations._
-  val defaultEntryContext: EntryContext = EntryContext(
+  val defaultEntryContext: EntryContext = createEntryContext(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
       ForAllDefinition, ExistsDefinition, ExistsUniqueDefinition,
@@ -452,13 +452,36 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     StepProvingContext(stepContext, entryContextToProvingContext(entryContext))
   }
 
+  def createEntryContext(entries: Seq[ChapterEntry]): EntryContext = {
+    val entriesWithContext = entries.map(createEntryWithContext(_)(null))
+    val entryContext = EntryContext(entriesWithContext)
+    entriesWithContext.foreach(e => {
+      e.entryContext returns entryContext
+      e.provingContext returns entryContextToProvingContext(entryContext)
+    })
+    entryContext
+  }
+  def defaultEntryContextWithAdditionalEntries(entries: ChapterEntry*): EntryContext = {
+    createEntryContext(defaultEntryContext.availableEntries ++ entries)
+  }
+
+  implicit class EntryContextOps(entryContext: EntryContext) {
+    def addEntry(chapterEntry: ChapterEntry): EntryContext = {
+      entryContext.addEntry(createEntryWithContext(chapterEntry)(entryContext))
+    }
+  }
+
+  def createEntryWithContext[T <: ChapterEntry](entry: T)(implicit entryContext: EntryContext): TypedEntryWithContext[T] = {
+    val entryWithContext = mock[TypedEntryWithContext[T]]
+    entryWithContext.entry returns entry
+    entryWithContext.entryContext returns entryContext
+    entryWithContext.provingContext returns entryContextToProvingContext
+    entryWithContext
+  }
   def createTheoremWithContext(theorem: Theorem)(implicit entryContext: EntryContext): TheoremWithContext = {
-    val theoremWithContext = mock[TheoremWithContext]
-    theoremWithContext.entry returns theorem
+    val theoremWithContext = createEntryWithContext(theorem)
     theoremWithContext.theorem returns theorem
-    theoremWithContext.entryContext returns entryContext
     when(theoremWithContext.proofsWithContext).thenCallRealMethod()
-    theoremWithContext.provingContext returns entryContextToProvingContext
     theoremWithContext
   }
 

@@ -2,6 +2,7 @@ package net.prover.books.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.books.keys.{ListWithKeys, WithKeyProperty}
+import net.prover.entries.BookWithContext
 import net.prover.model.{Chapter, SeqOps}
 
 @JsonIgnoreProperties(Array("dependencies"))
@@ -39,14 +40,14 @@ case class Book(
 
 object Book {
   implicit val keyProperty: WithKeyProperty[Book] = _.title
-  def getDependencies(imports: Seq[String], availableBooks: Seq[Book]): Seq[Book] = {
+  def getDependencies(imports: Seq[String], availableBooks: Seq[BookWithContext]): Seq[BookWithContext] = {
     imports
       .map { importTitle =>
-        availableBooks.find(_.title == importTitle).getOrElse(throw new Exception(s"Could not find imported book '$importTitle'"))
+        availableBooks.find(_.book.title == importTitle).getOrElse(throw new Exception(s"Could not find imported book '$importTitle'"))
       }
       .flatMap { importedBook =>
-        getDependencies(importedBook.imports, availableBooks) :+ importedBook
+        getDependencies(importedBook.book.imports, availableBooks) :+ importedBook
       }
-      .distinctBy(_.title)
+      .distinctBy(_.book.title)
   }
 }

@@ -113,7 +113,7 @@ class StepProvingSpec extends ControllerSpec {
 
     "retain conclusion bound variable names when proving target by inference inside extraction" in {
       val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
-      implicit val entryContext = defaultEntryContext.addEntry(axiom)
+      implicit val entryContext = defaultEntryContextWithAdditionalEntries(axiom)
       implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
 
       implicit val service = mock[BookService]
@@ -226,7 +226,7 @@ class StepProvingSpec extends ControllerSpec {
 
     "retain bound variable names in extraction premise when proving target by inference" in {
       val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
-      implicit val entryContext = defaultEntryContext.copy(availableEntries = defaultEntryContext.availableEntries :+ axiom)
+      implicit val entryContext = defaultEntryContextWithAdditionalEntries(axiom)
       implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
       val x = TermVariable(0, Nil) // variable that will be generated when specifying the axiom
 
@@ -303,7 +303,7 @@ class StepProvingSpec extends ControllerSpec {
             Function(Addition),
             FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)),
           additionProperty))
-      implicit val entryContext = defaultEntryContext.addEntry(axiom)
+      implicit val entryContext = defaultEntryContextWithAdditionalEntries(axiom)
 
       implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)

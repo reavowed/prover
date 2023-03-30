@@ -9,10 +9,9 @@ import net.prover.model.entries.ChapterEntry
 import scala.reflect.ClassTag
 import scala.util.Try
 
-case class GlobalContext(
-    booksWithKeys: ListWithKeys[Book],
-    definitions: Definitions
-) {
+case class GlobalContext(booksWithKeys: ListWithKeys[Book])
+{
+  lazy val definitions: Definitions = Definitions(booksWithContexts)
   val allBooks: List[Book] = booksWithKeys.list
   def booksWithContexts: List[BookWithContext] = booksWithKeys.listWithKeys.map { case (book, bookKey) => BookWithContext(book, bookKey, this) }
 

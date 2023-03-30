@@ -42,7 +42,7 @@ class DerivationOrTargetFinderSpec extends Specification with StepContextHelper 
       findPremiseOrTarget(
         ForAllIn("x", Domain(Addition))(ForAllIn("y", Domain(Addition))(φ($.^, $))),
         Nil)(
-        defaultEntryContext.addEntry(axiom)
+        defaultEntryContextWithAdditionalEntries(axiom)
       ) mustEqual (
         Seq(
           elided(axiom, Seq(

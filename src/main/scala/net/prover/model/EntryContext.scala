@@ -1,18 +1,18 @@
 package net.prover.model
 
 import net.prover.books.model.{Book, EntryParsingContext}
-import net.prover.entries.{ChapterWithContext, EntryWithContext}
+import net.prover.entries.{BookWithContext, ChapterWithContext, EntryWithContext}
+import net.prover.model.EntryContext.getStatementDefinitionFromEntry
 import net.prover.model.definitions._
 import net.prover.model.entries._
 import net.prover.model.expressions._
 
-case class EntryContext(
-  availableEntries: Seq[ChapterEntry],
-  inferencesById: Map[String, Inference],
-  statementDefinitionsBySymbol: Map[String, StatementDefinition],
-  termDefinitionsBySymbol: Map[String, TermDefinition]
-) {
-
+case class EntryContext(entriesWithContexts: Seq[EntryWithContext])
+{
+  lazy val availableEntries: Seq[ChapterEntry] = entriesWithContexts.map(_.entry)
+  lazy val inferencesById: Map[String, Inference] = availableEntries.flatMap(_.inferences).toMapWithKey(_.id)
+  lazy val statementDefinitionsBySymbol: Map[String, StatementDefinition] = availableEntries.mapCollect(getStatementDefinitionFromEntry).toMapWithKey(_.symbol)
+  lazy val termDefinitionsBySymbol: Map[String, TermDefinition] = availableEntries.ofType[TermDefinition].toMapWithKey(_.disambiguatedSymbol.serialized)
   lazy val allInferences: Seq[Inference.FromEntry] = availableEntries.flatMap(_.inferences)
   lazy val allInferenceIds: Set[String] = inferencesById.keySet
   lazy val statementDefinitions: Seq[StatementDefinition] = availableEntries.mapCollect(EntryContext.getStatementDefinitionFromEntry)
@@ -46,11 +46,11 @@ case class EntryContext(
   }
   lazy val typeStatementDefinitions: Seq[StatementDefinition] = typeStatementDefinitionsByType.values.flatten.toSeq ++ typeRelationDefinitions.map(_.statementDefinition)
 
-  def addEntry(entry: ChapterEntry): EntryContext = {
-    addEntries(Seq(entry))
+  def addEntry(newEntry: EntryWithContext): EntryContext = {
+    EntryContext(entriesWithContexts :+ newEntry)
   }
-  def addEntries(entries: Seq[ChapterEntry]): EntryContext = {
-    this ++ EntryContext(entries)
+  def addEntries(newEntries: Seq[EntryWithContext]): EntryContext = {
+    EntryContext(entriesWithContexts ++ newEntries)
   }
 
 
@@ -78,13 +78,6 @@ case class EntryContext(
 
   def typeDefinitionParser: Parser[TypeDefinition] = Parser.singleWord.map(typeName => typeDefinitions.getOrElse(typeName, throw new Exception(s"Unrecognised type '$typeName'")))
 
-  def ++ (other: EntryContext) = {
-    EntryContext(
-      availableEntries ++ other.availableEntries,
-      inferencesById ++ other.inferencesById,
-      statementDefinitionsBySymbol ++ other.statementDefinitionsBySymbol,
-      termDefinitionsBySymbol ++ other.termDefinitionsBySymbol)
-  }
 }
 
 object EntryContext {
@@ -98,31 +91,23 @@ object EntryContext {
       None
   }
 
-  def apply(entries: Seq[ChapterEntry]): EntryContext = {
-    EntryContext(
-      entries,
-      entries.flatMap(_.inferences).toMapWithKey(_.id),
-      entries.mapCollect(getStatementDefinitionFromEntry).toMapWithKey(_.symbol),
-      entries.ofType[TermDefinition].toMapWithKey(_.disambiguatedSymbol.serialized))
-  }
 
-
-  def forBooks(books: Seq[Book]): EntryContext = {
-    EntryContext(books.flatMap(_.chapters).flatMap(_.entries))
+  def forBooks(books: Seq[BookWithContext]): EntryContext = {
+    EntryContext(books.flatMap(_.chaptersWithContexts).flatMap(_.entriesWithContexts))
   }
-  def forBookExclusive(allBooks: Seq[Book], book: Book): EntryContext = {
+  def forBookExclusive(allBooks: Seq[BookWithContext], book: Book): EntryContext = {
     forBooks(Book.getDependencies(book.imports, allBooks))
   }
   def forChapterExclusive(chapterWithContext: ChapterWithContext): EntryContext = {
     import chapterWithContext._
-    forBookExclusive(allBooks, book).addEntries(book.chapters.until(chapter).flatMap(_.entries))
+    forBookExclusive(globalContext.booksWithContexts, book).addEntries(bookWithContext.chaptersWithContexts.takeWhile(_.chapter != chapter).flatMap(_.entriesWithContexts))
   }
   def forChapterInclusive(chapterWithContext: ChapterWithContext): EntryContext = {
-    forChapterExclusive(chapterWithContext).addEntries(chapterWithContext.chapter.entries)
+    forChapterExclusive(chapterWithContext).addEntries(chapterWithContext.entriesWithContexts)
   }
   def forEntry(entryWithContext: EntryWithContext): EntryContext = {
     import entryWithContext._
-    forChapterExclusive(chapterWithContext).addEntries(chapter.entries.until(entry))
+    forChapterExclusive(chapterWithContext).addEntries(chapterWithContext.entriesWithContexts.takeWhile(_.entry != entry))
   }
 
   implicit def fromProvingContext(implicit provingContext: ProvingContext): EntryContext = provingContext.entryContext

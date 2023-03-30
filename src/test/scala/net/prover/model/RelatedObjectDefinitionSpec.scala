@@ -33,7 +33,7 @@ class RelatedObjectDefinitionSpec extends Specification {
           ConjunctionDefinition),
         None,
         ForAllIn("a", A)(Conjunction(Equals(Apply(f, Pair($, e)), $), Equals(Apply(f, Pair(e, $)), $))))
-      testParsingAndSerialization(definition)(defaultEntryContext.addEntry(binaryOperationDefinition))
+      testParsingAndSerialization(definition)(defaultEntryContextWithAdditionalEntries(binaryOperationDefinition))
     }
   }
 }

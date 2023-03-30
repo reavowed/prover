@@ -34,7 +34,7 @@ class StatsController @Autowired() (val bookService: BookService) {
   def getUnusedInferences(
     request: HttpServletRequest
   ): Seq[String] = {
-    val entryContext = EntryContext.forBooks(bookService.books)
+    val entryContext = EntryContext.forBooks(bookService.globalContext.booksWithContexts)
     val usedInferenceIds = entryContext.allInferences.ofType[Theorem].flatMap(_.referencedInferenceIds)
     for {
       bookWithContext <- bookService.globalContext.booksWithContexts

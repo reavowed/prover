@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext
 
 @Service
 class BookStateManager {
-  private var _globalContext: GlobalContext = GlobalContext(ListWithKeys.empty, Definitions(EntryContext(Nil)))
+  private var _globalContext: GlobalContext = GlobalContext(ListWithKeys.empty)
 
   def globalContext: GlobalContext = _globalContext
   def books: Seq[Book] = _globalContext.allBooks
@@ -22,8 +22,7 @@ class BookStateManager {
     this.synchronized {
       var wasUpdated = false
       val result = performUpdate(newBooks => {
-        val newDefinitions = Definitions(books)
-        _globalContext = GlobalContext(newBooks, newDefinitions)
+        _globalContext = GlobalContext(newBooks)
         wasUpdated = true
         _globalContext
       })

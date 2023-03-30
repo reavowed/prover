@@ -1,6 +1,7 @@
 package net.prover.model.definitions
 
 import net.prover.books.model.Book
+import net.prover.entries.BookWithContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries.DisplayShorthand
@@ -694,7 +695,7 @@ case class Definitions(rootEntryContext: EntryContext) {
 }
 
 object Definitions {
-  def apply(books: Seq[Book]): Definitions = {
+  def apply(books: Seq[BookWithContext]): Definitions = {
     Definitions(EntryContext.forBooks(books))
   }
 
