@@ -23,7 +23,7 @@ trait UsageFinder {
         theoremWithContext <- chapterWithContext.theoremsWithContexts
         usedInferenceIds = theoremWithContext.theorem.referencedInferenceIds.intersect(allInferenceIds)
         if usedInferenceIds.nonEmpty
-      } yield (LinkSummary(theoremWithContext.theorem.name, BookService.getEntryUrl(theoremWithContext)), usedInferenceIds)
+      } yield (LinkSummary(theoremWithContext), usedInferenceIds)
     }
     for {
       bookWithContext <- bookService.globalContext.booksWithContexts

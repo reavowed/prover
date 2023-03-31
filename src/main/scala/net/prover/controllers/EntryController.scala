@@ -55,13 +55,13 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
     } yield {
       import entryWithContext._
       val entriesWithKeys = chapterWithContext.chapter.entriesWithKeys.listWithKeys.mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[ChapterEntry.Standalone]))
-      val index = entriesWithKeys.findIndexWhere(_._1 == entry).getOrElse(throw new Exception("Entry somehow didn't exist"))
-      val previous = entriesWithKeys.lift(index - 1).map { case (c, key) => LinkSummary(c.title, key) }
-      val next = entriesWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, key) }
+      val index = chapterWithContext.entriesWithContexts.findIndexWhere(_.entry == entry).getOrElse(throw new Exception("Entry somehow didn't exist"))
+      val previous = chapterWithContext.entriesWithContexts.lift(index - 1).map(LinkSummary(_))
+      val next = chapterWithContext.entriesWithContexts.lift(index + 1).map(LinkSummary(_))
       createReactView(viewName, baseProps ++ Map(
         "url" -> BookService.getEntryUrl(entryWithContext),
-        "bookLink" -> LinkSummary(book.title, BookService.getBookUrl(chapterWithContext.bookWithContext)),
-        "chapterLink" -> LinkSummary(chapter.title, BookService.getChapterUrl(chapterWithContext)),
+        "bookLink" -> LinkSummary(chapterWithContext.bookWithContext),
+        "chapterLink" -> LinkSummary(chapterWithContext),
         "previous" -> previous,
         "next" -> next,
         "usages" -> getInferenceUsages(entry),

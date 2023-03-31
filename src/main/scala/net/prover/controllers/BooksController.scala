@@ -16,7 +16,7 @@ class BooksController @Autowired() (implicit val bookStateManager: BookStateMana
 
   case class BooksProps(books: Seq[LinkSummary])
   private def createBooksProps(globalContext: GlobalContext): BooksProps = {
-    BooksProps(globalContext.booksWithContexts.map { bookWithContext => LinkSummary(bookWithContext.book.title, BookService.getBookUrl(bookWithContext)) })
+    BooksProps(globalContext.booksWithContexts.map(LinkSummary(_)))
   }
 
   @GetMapping(produces = Array("text/html;charset=UTF-8"))

@@ -21,21 +21,22 @@ import scala.util.{Failure, Success, Try}
 class ChapterController @Autowired() (val bookService: BookService) extends UsageFinder with ParameterValidation with ReactViews {
 
   private def getChapterProps(chapterWithContext: ChapterWithContext): Map[String, AnyRef] = {
-    import chapterWithContext._
-    val chaptersWithKeys = chapterWithContext.book.chaptersWithKeys.listWithKeys
-    val index = chaptersWithKeys.findIndexWhere(_._1 == chapter).getOrElse(throw new Exception("Chapter somehow didn't exist"))
-    val previous = chaptersWithKeys.lift(index - 1).map { case (c, key) => LinkSummary(c.title, BookService.getChapterUrl(bookKey, key)) }
-    val next = chaptersWithKeys.lift(index + 1).map { case (c, key) => LinkSummary(c.title, BookService.getChapterUrl(bookKey, key)) }
+    import chapterWithContext.globalContext
+    import chapterWithContext.bookWithContext
+    import chapterWithContext.chapter
+    val index = bookWithContext.chaptersWithContexts.findIndexWhere(_.chapter == chapter).getOrElse(throw new Exception("Chapter somehow didn't exist"))
+    val previous = bookWithContext.chaptersWithContexts.lift(index - 1).map(LinkSummary(_))
+    val next = bookWithContext.chaptersWithContexts.lift(index + 1).map(LinkSummary(_))
     implicit val availableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
 
-    val entrySummaries = entriesWithContexts
+    val entrySummaries = chapterWithContext.entriesWithContexts
       .map(entryWithContext => (entryWithContext.entry, BookService.getEntryUrl(entryWithContext)))
       .mapCollect { case (entry, url) =>
         entry match {
           case axiom: Axiom =>
-            Some(EntryProps("axiom", url, axiom.title, ChapterProps.InferenceSummaryForChapter(axiom, definitions)))
+            Some(EntryProps("axiom", url, axiom.title, ChapterProps.InferenceSummaryForChapter(axiom, globalContext.definitions)))
           case theorem: Theorem =>
-            Some(EntryProps("theorem", url, theorem.title, ChapterProps.InferenceSummaryForChapter(theorem, definitions)))
+            Some(EntryProps("theorem", url, theorem.title, ChapterProps.InferenceSummaryForChapter(theorem, globalContext.definitions)))
           case statementDefinition: StatementDefinitionEntry =>
             Some(EntryProps("statementDefinition", url, statementDefinition.title, statementDefinition))
           case termDefinition: TermDefinitionEntry =>
@@ -60,8 +61,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
       }
     Map(
       "title" -> chapter.title,
-      "url" -> BookService.getChapterUrl(bookKey, chapterKey),
-      "bookLink" -> LinkSummary(book.title, BookService.getBookUrl(bookKey)),
+      "url" -> BookService.getChapterUrl(chapterWithContext),
+      "bookLink" -> LinkSummary(bookWithContext),
       "summary" -> chapter.summary,
       "entries" -> entrySummaries,
       "previous" -> previous,

@@ -4,7 +4,7 @@ import net.prover.books.keys.ListWithKeys
 import net.prover.books.model.Book
 import net.prover.controllers.BookController.ChapterDefinition
 import net.prover.controllers.models.LinkSummary
-import net.prover.entries.BookWithContext
+import net.prover.entries.{BookWithContext, ChapterWithContext}
 import net.prover.model._
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,25 +19,31 @@ import scala.util.{Success, Try}
 class BookController @Autowired() (val bookService: BookService) extends UsageFinder with ReactViews {
 
   case class ChapterSummary(title: String, url: String, summary: String)
-  case class BookProps(title: String, url: String, chapters: Seq[ChapterSummary], previous: Option[LinkSummary], next: Option[LinkSummary])
-  def createBookProps(bookWithContext: BookWithContext): BookProps = {
-    import bookWithContext._
-    import globalContext._
-    val index = booksWithKeys.listWithKeys.findIndexWhere(_._1 == book).getOrElse(throw new Exception("Book somehow didn't exist"))
-    val previous = booksWithKeys.listWithKeys.lift(index - 1).map(getBookLinkSummary)
-    val next = booksWithKeys.listWithKeys.lift(index + 1).map(getBookLinkSummary)
-    val chapterSummaries = chaptersWithContexts.map { chapterWithContext => ChapterSummary(chapterWithContext.chapter.title, BookService.getChapterUrl(chapterWithContext), chapterWithContext.chapter.summary) }
-    BookProps(book.title, BookService.getBookUrl(bookKey), chapterSummaries, previous, next)
+  object ChapterSummary {
+    def apply(chapterWithContext: ChapterWithContext): ChapterSummary = {
+      import chapterWithContext.chapter
+      ChapterSummary(chapter.title, BookService.getChapterUrl(chapterWithContext), chapter.summary)
+    }
   }
-
-  private def getBookLinkSummary(bookAndKey: (Book, String)): LinkSummary = LinkSummary(bookAndKey._1.title, bookAndKey._2)
+  case class BookProps(title: String, url: String, chapters: Seq[ChapterSummary], previous: Option[LinkSummary], next: Option[LinkSummary])
+  object BookProps {
+    def apply(bookWithContext: BookWithContext): BookProps = {
+      import bookWithContext.book
+      import bookWithContext.globalContext
+      val index = globalContext.booksWithContexts.findIndexWhere(_.book == book).getOrElse(throw new Exception("Book somehow didn't exist"))
+      val previous = globalContext.booksWithContexts.lift(index - 1).map(LinkSummary(_))
+      val next = globalContext.booksWithContexts.lift(index + 1).map(LinkSummary(_))
+      val chapterSummaries = bookWithContext.chaptersWithContexts.map(ChapterSummary(_))
+      BookProps(book.title, BookService.getBookUrl(bookWithContext), chapterSummaries, previous, next)
+    }
+  }
 
   @GetMapping(produces = Array("text/html;charset=UTF-8"))
   def getBook(@PathVariable("bookKey") bookKey: String): ResponseEntity[_] = {
     (for {
       bookWithContext <- bookService.findBook(bookKey)
     } yield {
-      createReactView("Book", createBookProps(bookWithContext))
+      createReactView("Book", BookProps(bookWithContext))
     }).toResponseEntity
   }
 
@@ -50,7 +56,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
       val chapter = Chapter(chapterDefinition.title, chapterDefinition.summary, ListWithKeys.empty)
       val newBook = bookWithContext.book.addChapter(chapter)
       Success(newBook)
-    }).map(createBookProps).toResponseEntity
+    }).map(BookProps(_)).toResponseEntity
   }
 
   @DeleteMapping(value = Array("/{chapterKey}"), produces = Array("application/json;charset=UTF-8"))
@@ -74,7 +80,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
       } yield {
         book.copy(chaptersWithKeys = book.chaptersWithKeys - chapterWithContext.chapter)
       }
-    }).map(createBookProps).toResponseEntity
+    }).map(BookProps(_)).toResponseEntity
   }
 
   @PutMapping(value = Array("/{chapterKey}/index"), produces = Array("application/json;charset=UTF-8"))
@@ -100,7 +106,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
         (previousChapters, chapter, nextChapters) <- bookWithContext.book.chaptersWithKeys.listWithKeys.splitWhere(_._2 == chapterKey).orNotFound(s"Chapter $chapterKey")
         updatedChapters <- tryMove(chapter._1, previousChapters.map(_._1), nextChapters.map(_._1))
       } yield book.setChapters(updatedChapters.toList)
-    }).map(createBookProps).toResponseEntity
+    }).map(BookProps(_)).toResponseEntity
   }
 }
 
