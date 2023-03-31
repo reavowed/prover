@@ -1,6 +1,5 @@
 package net.prover.model.definitions
 
-import net.prover.books.model.Book
 import net.prover.entries.BookWithContext
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
@@ -18,13 +17,15 @@ import scala.util.Try
 
 case class Definitions(allAvailableEntries: AvailableEntries) {
 
-  lazy val allInferences: Seq[Inference.FromEntry] = allAvailableEntries.allInferences
-  lazy val inferenceEntries: Seq[Inference] = allAvailableEntries.allEntries.ofType[Inference]
+  def allInferences: Seq[Inference.FromEntry] = allAvailableEntries.allInferences
+  lazy val inferenceEntries: Seq[Inference.Entry] = allAvailableEntries.allEntries.ofType[Inference.Entry]
   private val provingContext: ProvingContext = ProvingContext(allAvailableEntries, this)
 
-  val completenessByInference = mutable.Map.empty[String, Boolean]
+  private val completenessByInference = mutable.Map.empty[String, Boolean]
   def isInferenceComplete(inference: Inference): Boolean = {
-    completenessByInference.getOrElseUpdate(inference.id, allInferences.find(_.id == inference.id).exists(_.isComplete(this)))
+    completenessByInference.getOrElseUpdate(
+      inference.id,
+      allAvailableEntries.allInferencesWithContext.find(_._1.id == inference.id).exists { case (inference, entryWithContext) => inference.isComplete(entryWithContext) })
   }
 
   private lazy val inferencesWithExtractions: Seq[(Inference, Seq[InferenceExtraction])] = {

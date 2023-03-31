@@ -16,7 +16,7 @@ case class Axiom(
   override def withName(newName: String): Axiom = copy(name = newName)
   override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = (premises.flatMap(_.referencedDefinitions).toSet ++ conclusion.referencedDefinitions).map(_.associatedChapterEntry)
-  override def isComplete(definitions: Definitions): Boolean = true
+  override def isComplete(entryWithContext: EntryWithContext): Boolean = true
   override def inferences: Seq[Inference.FromEntry] = Seq(this)
   override def serializedLines: Seq[String] = {
     Seq(s"axiom $name") ++

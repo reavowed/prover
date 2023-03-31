@@ -10,6 +10,7 @@ case class ProofWithContext(proof: Proof, proofIndex: Int, theoremWithContext: T
   implicit def expressionParsingContext: ExpressionParsingContext = theoremWithContext.expressionParsingContext
   implicit def availableEntries: AvailableEntries = theoremWithContext.availableEntries
   implicit def provingContext: ProvingContext = theoremWithContext.provingContext
+  def globalContext: GlobalContext = theoremWithContext.globalContext
 
   def stepsWithContext: StepsWithContext = {
     StepsWithContext(proof.steps, StepReference(Nil), theorem.initialStepContext, this)

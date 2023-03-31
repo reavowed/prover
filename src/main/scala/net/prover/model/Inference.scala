@@ -1,9 +1,9 @@
 package net.prover.model
 
 import java.security.MessageDigest
-
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.entries.EntryWithContext
 import net.prover.model.Inference._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
 import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
@@ -87,7 +87,7 @@ object Inference {
     val id: String = Inference.calculateHash(premises, conclusion)
   }
   trait FromEntry extends WithCalculatedId {
-    def isComplete(definitions: Definitions): Boolean
+    def isComplete(entryWithContext: EntryWithContext): Boolean
   }
   trait Entry extends Inference.FromEntry with ChapterEntry.Standalone with ChapterEntry.HasChangeableName {
     override def title: String = name
@@ -130,7 +130,7 @@ object Inference {
   trait Definition extends Inference.FromEntry {
     def nameOfDefinition: String
     override def name: String = s"Definition of ${nameOfDefinition.capitalizeWords}"
-    override def isComplete(definitions: Definitions): Boolean = true
+    override def isComplete(entryWithContext: EntryWithContext): Boolean = true
   }
 
   case class StatementDefinition(

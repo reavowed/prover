@@ -1,7 +1,7 @@
 package net.prover.model
 
 import net.prover.books.reading.ProofFileReader
-import net.prover.entries.{TheoremWithContext, TypedEntryWithContext}
+import net.prover.entries.{GlobalContext, TheoremWithContext, TypedEntryWithContext}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
 import net.prover.model.definitions._
@@ -473,6 +473,8 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     entryWithContext.entry returns entry
     entryWithContext.availableEntries returns availableEntries
     entryWithContext.provingContext returns availableEntriesToProvingContext
+    entryWithContext.globalContext returns mock[GlobalContext]
+    entryWithContext.globalContext.definitions returns Definitions(availableEntries)
     entryWithContext
   }
   def createTheoremWithContext(theorem: Theorem)(implicit availableEntries: AvailableEntries): TheoremWithContext = {
@@ -490,7 +492,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     proofFileReader.getSerializedProofs(recalculatedTheorem.title) returns serializedProofs
     val parsedTheorem = Theorem.parser(availableEntries, proofFileReader).parseFromString(serializedTheorem, "Theorem")
     parsedTheorem must beTypedEqualTo(theorem)
-    parsedTheorem.isComplete(new Definitions(availableEntries)) must beTrue
+    parsedTheorem.isComplete(createTheoremWithContext(parsedTheorem)) must beTrue
   }
 
   def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {

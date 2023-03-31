@@ -13,7 +13,11 @@ case class AvailableEntries(entriesWithContexts: Seq[EntryWithContext])
   lazy val inferencesById: Map[String, Inference] = allEntries.flatMap(_.inferences).toMapWithKey(_.id)
   lazy val statementDefinitionsBySymbol: Map[String, StatementDefinition] = allEntries.mapCollect(getStatementDefinitionFromEntry).toMapWithKey(_.symbol)
   lazy val termDefinitionsBySymbol: Map[String, TermDefinition] = allEntries.ofType[TermDefinition].toMapWithKey(_.disambiguatedSymbol.serialized)
-  lazy val allInferences: Seq[Inference.FromEntry] = allEntries.flatMap(_.inferences)
+  lazy val allInferencesWithContext: Seq[(Inference.FromEntry, EntryWithContext)] = for {
+    entryWithContext <- entriesWithContexts
+    inference <- entryWithContext.entry.inferences
+  } yield (inference, entryWithContext)
+  lazy val allInferences: Seq[Inference.FromEntry] = allInferencesWithContext.map(_._1)
   lazy val allInferenceIds: Set[String] = inferencesById.keySet
   lazy val statementDefinitions: Seq[StatementDefinition] = allEntries.mapCollect(AvailableEntries.getStatementDefinitionFromEntry)
   lazy val termDefinitions: Seq[TermDefinition] = allEntries.ofType[TermDefinition]

@@ -2,13 +2,13 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.books.reading.ProofFileReader
-import net.prover.entries.EntryWithContext
+import net.prover.entries.{EntryWithContext, TheoremWithContext}
 import net.prover.model._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
-import net.prover.theorems.ReplaceDefinitions
+import net.prover.theorems.{IsComplete, ReplaceDefinitions}
 
 import scala.reflect.ClassTag
 
@@ -26,7 +26,7 @@ case class Theorem(
   override def referencedEntries: Set[ChapterEntry] =  ((premises :+ conclusion).flatMap(_.referencedDefinitions).toSet ++ proofs.flatMap(_.referencedDefinitions).toSet).map(_.associatedChapterEntry)
   override def inferences: Seq[Inference.FromEntry] = Seq(this)
 
-  def isComplete(definitions: Definitions): Boolean = proofs.exists(_.isComplete(definitions))
+  def isComplete(entryWithContext: EntryWithContext): Boolean = IsComplete(entryWithContext.asInstanceOf[TheoremWithContext])
   def initialStepContext: StepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)
 
   def findSteps[T <: Step : ClassTag]: Seq[(T, StepContext)] = {

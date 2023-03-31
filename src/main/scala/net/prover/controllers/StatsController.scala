@@ -51,7 +51,7 @@ class StatsController @Autowired() (val bookService: BookService) {
       bookWithContext <- bookService.globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts
       theoremWithContext <- chapterWithContext.theoremsWithContexts
-      if !theoremWithContext.theorem.isComplete(globalContext.definitions)
+      if !theoremWithContext.theorem.isComplete(theoremWithContext)
     } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext)
   }
 
