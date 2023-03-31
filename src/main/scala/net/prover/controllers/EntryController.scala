@@ -314,8 +314,8 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
     }).flatMap { case (globalContext, newEntry) =>
       for {
         chapterWithContext <- globalContext.findChapter(bookKey, chapterKey)
-        newKey <- chapterWithContext.chapter.entriesWithKeys.listWithKeys.find(_._1 == newEntry).map(_._2).orException(new Exception("Couldn't find new entry"))
-        props = Map("entry" -> newEntry, "url" -> BookService.getEntryUrl(bookKey, chapterKey, newKey))
+        newEntryWithContext <- chapterWithContext.entriesWithContexts.find(_.entry == newEntry).orException(new Exception("Couldn't find new entry"))
+        props = Map("entry" -> newEntry, "url" -> BookService.getEntryUrl(newEntryWithContext))
       } yield props
     }.toResponseEntity
   }

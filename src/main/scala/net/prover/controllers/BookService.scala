@@ -131,12 +131,9 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
 }
 
 object BookService {
-  def getBookUrl(bookKey: String): String = s"/books/$bookKey"
-  def getBookUrl(bookWithContext: BookWithContext): String = getBookUrl(bookWithContext.bookKey)
-  def getChapterUrl(bookKey: String, chapterKey: String): String = s"${getBookUrl(bookKey)}/$chapterKey"
-  def getChapterUrl(chapterWithContext: ChapterWithContext): String = getChapterUrl(chapterWithContext.bookKey, chapterWithContext.chapterKey)
-  def getEntryUrl(bookKey: String, chapterKey: String, entryKey: String): String = s"${getChapterUrl(bookKey, chapterKey)}/$entryKey"
-  def getEntryUrl(entryWithContext: EntryWithContext): String = getEntryUrl(entryWithContext.bookKey, entryWithContext.chapterKey, entryWithContext.entryKey)
+  def getBookUrl(bookWithContext: BookWithContext): String = s"/books/${bookWithContext.bookKey}"
+  def getChapterUrl(chapterWithContext: ChapterWithContext): String = s"${getBookUrl(chapterWithContext.bookWithContext)}/${chapterWithContext.chapterKey}"
+  def getEntryUrl(entryWithContext: EntryWithContext): String = s"${getChapterUrl(entryWithContext.chapterWithContext)}/${entryWithContext.entryKey}"
 
   def getInferenceLinks(inferenceIds: Set[String], globalContext: GlobalContext): Map[String, InferenceSummary] = {
     (for {
