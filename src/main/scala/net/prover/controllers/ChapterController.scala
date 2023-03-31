@@ -400,7 +400,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
   ): ResponseEntity[_] = {
     def deleteEntry(entryWithContext: EntryWithContext): Try[Chapter] = {
       import entryWithContext._
-      findUsage(allBooks, entry)
+      import chapterWithContext.chapter
+      findUsage(globalContext.allBooks, entry)
         .badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
         .map(_ => chapter.copy(entriesWithKeys = chapter.entriesWithKeys - entry))
     }

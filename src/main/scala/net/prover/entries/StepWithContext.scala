@@ -11,9 +11,9 @@ case class TypedStepWithContext[+T <: Step : ClassTag](
   stepContext: StepContext,
   parentContext: StepsWithContext
 ) {
+  def globalContext: GlobalContext = parentContext.globalContext
   implicit def provingContext: ProvingContext = parentContext.provingContext
   implicit def stepProvingContext: StepProvingContext = StepProvingContext(stepContext, provingContext)
-  def globalContext: GlobalContext = parentContext.globalContext
 
   def nextSibling: Option[StepWithContext] = parentContext.atIndex(index + 1)
   def forSubsteps(step: Step.WithSubsteps): StepsWithContext = {

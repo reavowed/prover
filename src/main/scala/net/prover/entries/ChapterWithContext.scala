@@ -1,8 +1,6 @@
 package net.prover.entries
 
-import net.prover.books.model.Book
 import net.prover.controllers.OptionWithResponseExceptionOps
-import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.{Chapter, Inference}
 
@@ -14,11 +12,7 @@ case class ChapterWithContext(
     chapterKey: String,
     bookWithContext: BookWithContext
 ) {
-  def allBooks: List[Book] = bookWithContext.allBooks
-  def definitions: Definitions = bookWithContext.definitions
   def globalContext: GlobalContext = bookWithContext.globalContext
-  def book: Book = bookWithContext.book
-  def bookKey: String = bookWithContext.bookKey
 
   def entriesWithContexts: Seq[EntryWithContext] = chapter.entriesWithKeys.listWithKeys.map(getEntry[ChapterEntry])
   def inferencesWithContexts: Seq[TypedEntryWithContext[Inference.Entry]] = entriesWithContexts.ofType[TypedEntryWithContext[Inference.Entry]]

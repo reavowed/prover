@@ -1,17 +1,10 @@
 package net.prover.controllers
 
 import net.prover.books.model.Book
-import net.prover.controllers.models.{InsertionAndReplacementProps, LinkSummary, PathData, ProofUpdateProps, StepInsertionProps, StepReplacementProps}
+import net.prover.controllers.models.LinkSummary
 import net.prover.entries.ChapterWithContext
-import net.prover.exceptions.NotFoundException
 import net.prover.model._
-import net.prover.model.entries.{ChapterEntry, Theorem}
-import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
-import net.prover.proving.stepReplacement.AddTargetsBeforeChain
-
-import scala.reflect.{ClassTag, classTag}
-import scala.util.{Failure, Try}
+import net.prover.model.entries.ChapterEntry
 
 trait UsageFinder {
   def bookService: BookService
@@ -30,7 +23,7 @@ trait UsageFinder {
       chapterWithContext <- bookWithContext.chaptersWithContexts
       inferenceLinks = getInferenceLinks(chapterWithContext)
       if inferenceLinks.nonEmpty
-    } yield (chapterWithContext.book.title, chapterWithContext.chapter.title, inferenceLinks)
+    } yield (chapterWithContext.bookWithContext.book.title, chapterWithContext.chapter.title, inferenceLinks)
   }
 
   def findUsage(entriesPotentiallyUsing: Seq[ChapterEntry], entriesPotentiallyBeingUsed: Seq[ChapterEntry]): Option[(ChapterEntry, ChapterEntry)] = {

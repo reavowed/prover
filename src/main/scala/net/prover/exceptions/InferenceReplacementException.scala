@@ -12,6 +12,8 @@ object InferenceReplacementException {
     import parentContext._
     import proofWithContext._
     import theoremWithContext._
+    import chapterWithContext._
+    import bookWithContext._
     s"Book ${book.title}, chapter ${chapter.title}, theorem '${theoremWithContext.theorem.title}', proof $proofIndex ${stepProvingContext.stepContext.stepReference.serialize} - $message"
   }
 }

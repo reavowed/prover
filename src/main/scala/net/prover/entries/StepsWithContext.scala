@@ -11,9 +11,10 @@ case class StepsWithContext(
   outerStepContext: StepContext,
   proofWithContext: ProofWithContext
 ) {
+  def globalContext: GlobalContext = proofWithContext.globalContext
   implicit def provingContext: ProvingContext = proofWithContext.provingContext
   def outerStepProvingContext: StepProvingContext = StepProvingContext(outerStepContext, provingContext)
-  def globalContext: GlobalContext = proofWithContext.globalContext
+
   def atIndex(index: Int): Option[StepWithContext] = {
     steps.splitAtIndexIfValid(index).map { case (before, step, _) => atChild(before, step) }
   }

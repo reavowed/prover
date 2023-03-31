@@ -99,12 +99,12 @@ object AvailableEntries {
   def forBooks(books: Seq[BookWithContext]): AvailableEntries = {
     AvailableEntries(books.flatMap(_.chaptersWithContexts).flatMap(_.entriesWithContexts))
   }
-  def forBookExclusive(allBooks: Seq[BookWithContext], book: Book): AvailableEntries = {
-    forBooks(Book.getDependencies(book.imports, allBooks))
+  def forBookExclusive(allBooks: Seq[BookWithContext], bookWithContext: BookWithContext): AvailableEntries = {
+    forBooks(Book.getDependencies(bookWithContext.book.imports, allBooks))
   }
   def forChapterExclusive(chapterWithContext: ChapterWithContext): AvailableEntries = {
     import chapterWithContext._
-    forBookExclusive(globalContext.booksWithContexts, book).addEntries(bookWithContext.chaptersWithContexts.takeWhile(_.chapter != chapter).flatMap(_.entriesWithContexts))
+    forBookExclusive(globalContext.booksWithContexts, bookWithContext).addEntries(bookWithContext.chaptersWithContexts.takeWhile(_.chapter != chapter).flatMap(_.entriesWithContexts))
   }
   def forChapterInclusive(chapterWithContext: ChapterWithContext): AvailableEntries = {
     forChapterExclusive(chapterWithContext).addEntries(chapterWithContext.entriesWithContexts)

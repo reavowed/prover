@@ -3,7 +3,6 @@ package net.prover.entries
 import net.prover.books.model.Book
 import net.prover.controllers.OptionWithResponseExceptionOps
 import net.prover.model.Chapter
-import net.prover.model.definitions.Definitions
 
 import scala.util.Try
 
@@ -12,9 +11,6 @@ case class BookWithContext(
     bookKey: String,
     globalContext: GlobalContext
 ) {
-  def allBooks: List[Book] = globalContext.allBooks
-  def definitions: Definitions = globalContext.definitions
-
   def chaptersWithContexts: Seq[ChapterWithContext] = book.chaptersWithKeys.listWithKeys.map(getChapter)
 
   def getChapter(chapter: Chapter): ChapterWithContext = {
