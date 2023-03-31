@@ -13,7 +13,6 @@ import scala.util.Try
 sealed trait Step {
   def `type`: String
   def provenStatement: Option[Statement]
-  def isComplete(definitions: Definitions): Boolean
   def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ExpressionDefinition]
   def referencedLines: Set[PreviousLineReference] = recursivePremises.flatMap(_.referencedLines).toSet
@@ -29,7 +28,6 @@ object Step {
     def substeps: Seq[Step]
     def specifyStepContext(outerContext: StepContext): StepContext = outerContext
     def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step
-    override def isComplete(definitions: Definitions): Boolean = substeps.forall(_.isComplete(definitions))
   }
   sealed trait WithVariable extends Step.WithSubsteps {
     def variableName: String
@@ -96,7 +94,6 @@ object Step {
     extends Step.WithSubsteps with WithTopLevelStatement with WithVariable with WithAssumption
   {
     val `type` = "naming"
-    override def isComplete(definitions: Definitions): Boolean = super.isComplete(definitions) && premises.forall(_.isComplete) && definitions.isInferenceComplete(inference)
     override def provenStatement: Option[Statement] = Some(statement)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = {
@@ -185,7 +182,6 @@ object Step {
 
   case class Target(statement: Statement) extends Step.WithoutSubsteps with Step.WithTopLevelStatement {
     val `type` = "target"
-    override def isComplete(definitions: Definitions): Boolean = false
     override def provenStatement: Option[Statement] = Some(statement)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def referencedInferenceIds: Set[String] = Set.empty
@@ -255,7 +251,6 @@ object Step {
     extends Step.WithoutSubsteps with Step.WithTopLevelStatement
   {
     val `type`: String = "assertion"
-    override def isComplete(definitions: Definitions): Boolean = premises.forall(_.isComplete) && definitions.isInferenceComplete(inference)
     override def provenStatement: Option[Statement] = Some(statement)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     @JsonSerialize

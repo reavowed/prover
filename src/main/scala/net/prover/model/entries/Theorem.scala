@@ -66,7 +66,6 @@ object Theorem extends Inference.EntryParser {
   case class Proof(steps: Seq[Step]) {
     def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     def referencedDefinitions: Set[ExpressionDefinition] = steps.flatMap(_.referencedDefinitions).toSet
-    def isComplete(definitions: Definitions): Boolean = steps.forall(_.isComplete(definitions))
     def serialized: String = steps.flatMap(_.serializedLines).mkString("\n") + "\n"
   }
 
