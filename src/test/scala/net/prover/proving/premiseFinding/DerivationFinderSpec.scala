@@ -1,6 +1,6 @@
 package net.prover.proving.premiseFinding
 
-import net.prover.StepContextHelper
+import net.prover.{StepBuilderHelper, StepContextHelper}
 import net.prover.model.TestDefinitions.{a, b, _}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
@@ -11,7 +11,7 @@ import net.prover.model.{AvailableEntries, Format, TermVariablePlaceholder, Test
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
-class DerivationFinderSpec extends Specification with StepContextHelper {
+class DerivationFinderSpec extends Specification with StepBuilderHelper {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
   implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))

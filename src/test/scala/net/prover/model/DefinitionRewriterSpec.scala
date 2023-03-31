@@ -1,13 +1,13 @@
 package net.prover.model
 
-import net.prover.StepContextHelper
+import net.prover.{StepBuilderHelper, StepContextHelper}
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.DefinitionRewriter
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
-class DefinitionRewriterSpec extends Specification with StepContextHelper {
+class DefinitionRewriterSpec extends Specification with StepBuilderHelper {
 
   implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Nil)

@@ -22,7 +22,9 @@ object FindStep {
   }
 
   def apply(stepWithContext: StepWithContext, stepIndexes: Seq[Int]): Option[StepWithContext] = {
-    stepWithContext.step match {
+    if (stepIndexes.isEmpty)
+      Some(stepWithContext)
+    else stepWithContext.step match {
       case step: Step.WithSubsteps =>
         apply(stepWithContext.forSubsteps(step), stepIndexes)
       case _: Step.WithoutSubsteps =>

@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.books.reading.ProofFileReader
+import net.prover.StepBuilderHelper
 import net.prover.entries.{GlobalContext, TheoremWithContext, TypedEntryWithContext}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
@@ -9,9 +9,7 @@ import net.prover.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.model.entries._
 import net.prover.model.expressions._
 import net.prover.model.proof._
-import net.prover.theorems.RecalculateReferences
 import org.mockito.Mockito.when
-import org.specs2.matcher.Matcher
 import org.specs2.mock.mockito.MockitoStubs
 
 trait Placeholder[T <: ExpressionVariable[_ <: Expression]] {
@@ -409,8 +407,6 @@ trait StepHelpers extends TestVariableDefinitions with TestExpressionDefinitions
 }
 
 object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with StepHelpers with MockitoStubs {
-  import org.specs2.matcher.Matchers._
-  import org.specs2.matcher.MustExpectations._
   val defaultAvailableEntries: AvailableEntries = createAvailableEntries(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
@@ -482,50 +478,5 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     theoremWithContext.theorem returns theorem
     when(theoremWithContext.proofsWithContext).thenCallRealMethod()
     theoremWithContext
-  }
-
-  def beValidTheorem(implicit availableEntries: AvailableEntries): Matcher[Theorem] = (theorem: Theorem) => {
-    val recalculatedTheorem = RecalculateReferences(createTheoremWithContext(theorem))._1
-    val serializedTheorem = recalculatedTheorem.serializedLines.mkString("\n").stripPrefix("theorem ")
-    val serializedProofs = recalculatedTheorem.proofs.map(_.serialized)
-    val proofFileReader = mock[ProofFileReader]
-    proofFileReader.getSerializedProofs(recalculatedTheorem.title) returns serializedProofs
-    val parsedTheorem = Theorem.parser(availableEntries, proofFileReader).parseFromString(serializedTheorem, "Theorem")
-    parsedTheorem must beTypedEqualTo(theorem)
-    parsedTheorem.isComplete(createTheoremWithContext(parsedTheorem)) must beTrue
-  }
-
-  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
-    beValidTheorem(availableEntries) ^^ { steps: Seq[Step] => {
-      Theorem(
-        "Test Theorem",
-        variableDefinitions,
-        premises,
-        conclusion,
-        Seq(Theorem.Proof(steps)))
-    }}
-  }
-
-  def beStepThatMakesValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int = 0)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Step] = {
-    beStepsThatMakeValidTheorem(premises, conclusion, depth) ^^ { step: Step => Seq(step) }
-  }
-
-  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
-    if (depth == 0)
-      beStepsThatMakeValidTheorem(premises, conclusion)
-    else {
-      def generalizeOnce(statement: Statement, i: Int): Statement = ForAll(s"x_$i")(statement)
-      def generalizeToDepth(statement: Statement, parameterDepth: Int): Statement = (0 until parameterDepth).foldLeft(statement)(generalizeOnce)
-      def specificationStep(statement: Statement, parameterDepth: Int) = {
-        Step.Assertion(
-          statement,
-          specification.summary,
-          Seq(Premise.Pending(generalizeOnce(statement, parameterDepth).insertExternalParameters(1))),
-          Substitutions(Seq(statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get), Seq($)))
-      }
-      beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>
-        (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.Generalization(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, GeneralizationDefinition))}
-      }
-    }
   }
 }

@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.StepContextHelper
+import net.prover.{StepBuilderHelper, StepContextHelper}
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{Step, TermRearranger}
@@ -10,7 +10,7 @@ import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 import org.specs2.specification.core.Fragments
 
-class TermRearrangerSpec extends Specification with StepContextHelper {
+class TermRearrangerSpec extends Specification with StepBuilderHelper {
 
   implicit val availableEntries = defaultAvailableEntries
   val e = TermVariablePlaceholder("e", 4)

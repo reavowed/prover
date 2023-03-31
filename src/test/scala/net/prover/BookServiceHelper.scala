@@ -16,7 +16,7 @@ import org.specs2.mock.mockito.{CalledMatchers, MockitoMatchers, MockitoStubs}
 
 import scala.util.{Success, Try}
 
-trait BookServiceHelper extends SpecificationLike with StepContextHelper with MockitoStubs with MockitoMatchers with CalledMatchers {
+trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with StepContextHelper with MockitoStubs with MockitoMatchers with CalledMatchers {
   private def eq[T](t: T) = org.mockito.Matchers.eq(t)
 
   def createService = {
@@ -130,7 +130,7 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
   }
 
   private def createStepsWithContext(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): StepsWithContext = {
-    val steps = buildStepsWithReferences(stepsConstructor, boundVariables)
+    val steps = createSteps(stepsConstructor, boundVariables)
     implicit val outerStepContext = createOuterStepContext(boundVariables)
     createStepsWithContext(steps)
   }
@@ -158,16 +158,6 @@ trait BookServiceHelper extends SpecificationLike with StepContextHelper with Mo
   }
 
   def matchSteps(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
-    beEqualTo(buildStepsWithReferences(stepsConstructor, boundVariables)(availableEntries, variableDefinitions))
-  }
-
-  def recalculateReferences(steps: Seq[Step])(implicit outerStepContext: StepContext, availableEntries: AvailableEntries): Seq[Step] = {
-    RecalculateReferences(createStepsWithContext(steps))._1
-  }
-
-  def buildStepsWithReferences(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Seq[Step] = {
-    val steps = stepsConstructor(SubstitutionContext.withExtraParameters(boundVariables.length)(SubstitutionContext.outsideProof))
-    implicit val outerStepContext = createOuterStepContext(boundVariables)
-    recalculateReferences(steps)
+    beEqualTo(createSteps(stepsConstructor, boundVariables)(availableEntries, variableDefinitions))
   }
 }
