@@ -1,8 +1,10 @@
 package net.prover.theorems
 
-import net.prover.model.definitions.ExpressionDefinition
+import net.prover.model.definitions.{DeductionDefinition, ExpressionDefinition, GeneralizationDefinition}
 import net.prover.model.entries.Theorem.Proof
-import net.prover.model.proof.Step
+import net.prover.model.expressions.Statement
+import net.prover.model.proof.Premise
+import net.prover.model.{Inference, Substitutions}
 import net.prover.theorems.steps.RecursiveStepFinder
 import scalaz.Scalaz._
 
@@ -11,31 +13,11 @@ object GetReferencedDefinitions extends RecursiveStepFinder[Set[ExpressionDefini
     apply(proof.steps)
   }
 
-  override def getFromTarget(step: Step.Target): Set[ExpressionDefinition] = {
-    step.statement.referencedDefinitions
-  }
-  override def getFromAssertion(step: Step.Assertion): Set[ExpressionDefinition] = {
-    step.statement.referencedDefinitions
-  }
-  override def getFromDeduction(step: Step.Deduction): Set[ExpressionDefinition] = {
-    import step._
-    assumption.referencedDefinitions ++ apply(substeps) + deductionDefinition.statementDefinition
-  }
-  override def getFromGeneralization(step: Step.Generalization): Set[ExpressionDefinition] = {
-    import step._
-    apply(step.substeps) + generalizationDefinition.statementDefinition
-  }
-  override def getFromNaming(step: Step.Naming): Set[ExpressionDefinition] = {
-    import step._
-    assumption.referencedDefinitions ++ apply(substeps) + deductionDefinition.statementDefinition + generalizationDefinition.statementDefinition
-  }
-  override def getFromSubProof(step: Step.SubProof): Set[ExpressionDefinition] = {
-    apply(step.substeps)
-  }
-  override def getFromElided(step: Step.Elided): Set[ExpressionDefinition] = {
-    apply(step.substeps)
-  }
-  override def getFromExistingStatementExtraction(step: Step.ExistingStatementExtraction): Set[ExpressionDefinition] = {
-    apply(step.substeps)
-  }
+  override def apply(statement: Statement): Set[ExpressionDefinition] = statement.referencedDefinitions
+  override def apply(inference: Inference.Summary): Set[ExpressionDefinition] = Set.empty
+  override def apply(premise: Premise): Set[ExpressionDefinition] = Set.empty
+  override def apply(substitutions: Substitutions): Set[ExpressionDefinition] = Set.empty
+  override def apply(deductionDefinition: DeductionDefinition): Set[ExpressionDefinition] = Set(deductionDefinition.statementDefinition)
+  override def apply(generalizationDefinition: GeneralizationDefinition): Set[ExpressionDefinition] = Set(generalizationDefinition.statementDefinition)
+
 }
