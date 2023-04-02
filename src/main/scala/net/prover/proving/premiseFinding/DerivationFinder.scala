@@ -13,19 +13,19 @@ import net.prover.model.unwrapping.UnwrappedStatement
 object DerivationFinder {
   def findDerivationForStatement(
     targetStatement: Statement)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Seq[Step.PremiseDerivation]] = {
-    stepContext.cachedDerivations.getOrElseUpdate(
+    stepProvingContext.cachedDerivations.getOrElseUpdate(
       targetStatement.serializedForHash,
       findDerivationForStatementUncached(targetStatement))
   }
 
   private def findDerivationForStatementUncached(
     targetStatement: Statement)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Seq[Step.PremiseDerivation]] = {
     UnwrappedStatement.getUnwrappedStatements(targetStatement).mapFind { unwrappedStatement =>
-      findDerivationForUnwrappedStatement(unwrappedStatement.statement)(unwrappedStatement.unwrappers.enhanceStepContext)
+      findDerivationForUnwrappedStatement(unwrappedStatement.statement)(unwrappedStatement.unwrappers.enhanceStepProvingContext)
         .map { derivation =>
           if (unwrappedStatement.unwrappers.nonEmpty) {
             Seq(Step.WrappedPremiseDerivation(unwrappedStatement.unwrappers, derivation))
@@ -38,16 +38,16 @@ object DerivationFinder {
 
   def findDerivationForUnwrappedStatements(
     targetStatement: Seq[Statement])(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
     targetStatement.map(findDerivationForUnwrappedStatement).traverseOption.map(_.flatten)
   }
 
   def findDerivationForUnwrappedStatement(
     targetStatement: Statement)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
-    stepContext.provingContext.findRelation(targetStatement).map(BinaryRelationDerivationFinder.findDirectDerivationForBinaryRelationStatement)
+    stepProvingContext.provingContext.findRelation(targetStatement).map(BinaryRelationDerivationFinder.findDirectDerivationForBinaryRelationStatement)
       .getOrElse(DirectDerivationFinder.findDirectDerivationForStatement(targetStatement))
       .map(_.distinctBy(_.statement))
   }
@@ -68,7 +68,7 @@ object DerivationFinder {
     unsubstitutedPremiseStatement: Statement,
     initialSubstitutions: Substitutions.Possible,
     knownStatements: Seq[KnownStatement])(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Seq[(KnownStatement, Substitutions.Possible)] = {
     def directly = findKnownStatementBySubstituting(unsubstitutedPremiseStatement, initialSubstitutions, knownStatements)
 
@@ -77,7 +77,7 @@ object DerivationFinder {
     } yield (fact.toKnownStatement, substitutions)
 
     def byDeconstructing = for {
-      deconstructionInference <- stepContext.provingContext.statementDefinitionDeconstructions
+      deconstructionInference <- stepProvingContext.provingContext.statementDefinitionDeconstructions
       initialDeconstructionSubstitutions <- deconstructionInference.conclusion.calculateSubstitutions(unsubstitutedPremiseStatement).flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
       deconstructedUnsubstitutedPremiseStatements <- deconstructionInference.premises.map(_.applySubstitutions(initialDeconstructionSubstitutions)).traverseOption
       (foundStatements, innerSubstitutions) <- findDerivationsForStatementsBySubstituting(deconstructedUnsubstitutedPremiseStatements, initialSubstitutions, knownStatements)
@@ -102,7 +102,7 @@ object DerivationFinder {
     unsubstitutedPremiseStatements: Seq[Statement],
     substitutions: Substitutions.Possible,
     knownStatements: Seq[KnownStatement])(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[(Seq[KnownStatement], Substitutions.Possible)] = {
     def helper(remainingUnsubstitutedPremises: Seq[Statement], currentSubstitutions: Substitutions.Possible, foundStatementsSoFar: Seq[KnownStatement]): Option[(Seq[KnownStatement], Substitutions.Possible)] = {
       remainingUnsubstitutedPremises match {
@@ -122,8 +122,8 @@ object DerivationFinder {
   def findDerivationsForStatementsBySubstituting(
     unsubstitutedPremiseStatements: Seq[Statement],
     substitutions: Substitutions.Possible)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[(Seq[KnownStatement], Substitutions.Possible)] = {
-    findDerivationsForStatementsBySubstituting(unsubstitutedPremiseStatements, substitutions, stepContext.knownStatementsFromPremises)
+    findDerivationsForStatementsBySubstituting(unsubstitutedPremiseStatements, substitutions, stepProvingContext.knownStatementsFromPremises)
   }
 }

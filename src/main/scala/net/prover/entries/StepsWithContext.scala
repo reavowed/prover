@@ -1,7 +1,7 @@
 package net.prover.entries
 
-import net.prover.model.{AvailableEntries, ProvingContext}
 import net.prover.model.proof.{Step, StepContext}
+import net.prover.model.{AvailableEntries, ProvingContext}
 
 import scala.annotation.tailrec
 import scala.reflect.ClassTag
@@ -13,7 +13,7 @@ case class StepsWithContext(
 {
   def globalContext: GlobalContext = proofWithContext.globalContext
   def availableEntries: AvailableEntries = proofWithContext.availableEntries
-  def provingContext: ProvingContext = outerStepContext.provingContext
+  def provingContext: ProvingContext = proofWithContext.provingContext
   def stepsWithContexts: Seq[StepWithContext] = {
     @tailrec def helper(before: Seq[Step], next: Seq[Step], soFar: Seq[StepWithContext]): Seq[StepWithContext] = {
       next match {

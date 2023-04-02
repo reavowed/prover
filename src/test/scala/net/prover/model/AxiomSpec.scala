@@ -8,7 +8,9 @@ import org.specs2.mutable.Specification
 class AxiomSpec extends Specification {
 
   def parseAxiom(text: String*): Axiom = {
-    Axiom.parser(defaultAvailableEntries, implicitly, mock[ProofFileReader]).parseAndDiscard(text.mkString("\n"))
+    implicit val availableEntries = defaultAvailableEntries
+    implicit val proofFileReader = mock[ProofFileReader]
+    Axiom.parser.parseAndDiscard(text.mkString("\n"))
   }
 
   "axiom parser" should {

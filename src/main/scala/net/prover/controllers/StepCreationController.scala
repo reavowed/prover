@@ -26,7 +26,7 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @RequestBody definition: NamingDefinition
   ): ResponseEntity[_] = {
     bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
-      import stepWithContext.{provingContext, step, stepContext}
+      import stepWithContext.{provingContext, step, stepContext, stepProvingContext}
       for {
         variableName <- Option(definition.variableName.trim).filter(_.nonEmpty).orBadRequest("Variable name must be provided")
         inference <- FindInference(definition.inferenceId)
@@ -36,7 +36,7 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
         premiseStatements <- namingPremises.map(inference.substituteStatement(_, substitutions)).traverseOption.orBadRequest("Could not substitute premises")
         substitutedAssumption <- assumption.applySubstitutions(substitutions, 1, stepContext.externalDepth).orBadRequest("Could not substitute assumption")
       } yield {
-        val premises = premiseStatements.map(stepContext.createPremise)
+        val premises = premiseStatements.map(stepProvingContext.createPremise)
         val targetSteps = premises.ofType[Premise.Pending].map(p => provingContext.factsBySerializedStatement.get(p.statement.serialized).map(_.toStep).getOrElse(Step.Target(p.statement)))
         targetSteps :+ Step.Naming(
           variableName,
@@ -62,10 +62,10 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @RequestBody serializedPremise: String
   ): ResponseEntity[_] = {
     bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
-      import stepWithContext.{step, stepContext}
+      import stepWithContext.{step, stepContext, stepProvingContext}
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremise, "premise").recoverWithBadRequest
-        premise <- stepContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
+        premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).orBadRequest("Premise did not have single bound variable")
         (namingInference, namingInferenceAssumption, substitutionsAfterPremise, generalizationDefinition, deductionDefinition) <- ProofHelper.findNamingInferences.mapFind {
           case (i, Seq(singlePremise), a, generalizationDefinition, deductionDefinition) =>
@@ -202,10 +202,10 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @RequestBody serializedPremiseStatement: String
   ): ResponseEntity[_] = {
     bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
-      import stepWithContext.{step, stepContext}
+      import stepWithContext.{step, stepContext, stepProvingContext}
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
-        premise <- stepContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
+        premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
         newStep <- DefinitionRewriter.rewriteDefinitions(premise.statement, step.statement).orBadRequest("Could not rewrite definition")
       } yield Seq(newStep)
     }.toResponseEntity

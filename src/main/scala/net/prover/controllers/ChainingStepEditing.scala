@@ -7,7 +7,7 @@ import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.Premise.SingleLinePremise
-import net.prover.model.proof.{Step, StepContext, StepReference, SubstitutionContext}
+import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
 import net.prover.proving.stepReplacement.AddTargetsBeforeChain
 import net.prover.theorems.GetAllPremises
 import net.prover.util.FunctorTypes._
@@ -62,8 +62,8 @@ trait ChainingStepEditing {
     }
   }
   object ChainingStepDefinition {
-    def forTarget[T <: Expression : ChainingMethods](lhs: T, rhs: T, joiner: BinaryJoiner[T])(implicit stepContext: StepContext): ChainingStepDefinition[T] = {
-      val stepOption = Some(Step.Target(joiner(lhs, rhs))).filter(step => !stepContext.allPremises.exists(_.statement == step.statement))
+    def forTarget[T <: Expression : ChainingMethods](lhs: T, rhs: T, joiner: BinaryJoiner[T])(implicit stepProvingContext: StepProvingContext): ChainingStepDefinition[T] = {
+      val stepOption = Some(Step.Target(joiner(lhs, rhs))).filter(step => !stepProvingContext.allPremises.exists(_.statement == step.statement))
       ChainingStepDefinition(lhs, rhs, joiner, stepOption)
     }
   }

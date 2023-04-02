@@ -182,7 +182,7 @@ object ExtractionCalculator {
       .map(innerExtraction => InferenceExtraction(inference.summary, innerExtraction))
   }
 
-  def getPremiseExtractions(premise: Statement)(implicit stepContext: StepContext): Seq[PremiseExtraction] = {
+  def getPremiseExtractions(premise: Statement)(implicit stepContext: StepContext, provingContext: ProvingContext): Seq[PremiseExtraction] = {
     getExtractions(premise, VariableTracker.fromStepContext)
       .map(innerExtraction => PremiseExtraction(innerExtraction, stepContext))
   }

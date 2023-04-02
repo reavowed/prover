@@ -1,17 +1,17 @@
 package net.prover.proving.premiseFinding
 
-import net.prover.model.{Inference, Substitutions}
 import net.prover.model.definitions.TermDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
+import net.prover.model.{Inference, Substitutions}
 import net.prover.proving.extraction.ExtractionApplier
 
 object DirectDerivationFinder {
   def findDirectDerivationForStatement(
     targetStatement: Statement)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
-    import stepContext._
+    import stepProvingContext._
     def fromPremises = knownStatementsFromPremisesBySerializedStatement.get(targetStatement.serializedForHash).map(_.derivation)
 
     def fromFact = findDerivationForStatementFromFact(targetStatement).map(Seq(_))
@@ -39,9 +39,9 @@ object DirectDerivationFinder {
 
   private def findDerivationForStatementFromFact(
     targetStatement: Statement)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Step.AssertionOrExtraction] = {
-    import stepContext.provingContext._
+    import stepProvingContext.provingContext._
 
     def findDerivationWithFactInferences(targetStatement: Statement): Option[(Seq[Step.AssertionOrExtraction], Option[Inference])] = {
       def directly = factsBySerializedStatement.get(targetStatement.serialized).map(fact => (fact.derivation, Some(fact.inference)))

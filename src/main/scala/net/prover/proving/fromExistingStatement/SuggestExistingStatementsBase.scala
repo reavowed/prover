@@ -4,7 +4,7 @@ import net.prover.controllers._
 import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises}
 import net.prover.model.Substitutions
 import net.prover.model.expressions.{FunctionParameter, Statement, StatementVariable, TermVariable}
-import net.prover.model.proof.{Step, StepContext}
+import net.prover.model.proof.{Step, StepProvingContext}
 import net.prover.proving.extraction.ExtractionCalculator
 import net.prover.proving.extraction.ExtractionCalculator.PremiseExtraction
 
@@ -23,7 +23,7 @@ trait SuggestExistingStatementsBase {
     bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
-        premise <- stepWithContext.stepContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
+        premise <- stepWithContext.stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
         // First of all, initialise the substitutions with all the existing variables in the theorem
         baseSubstitutions = Substitutions.Possible(
           stepWithContext.stepContext.variableDefinitions.statements.mapWithIndex((variableDefinition, index) => index -> StatementVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap,
@@ -37,6 +37,6 @@ trait SuggestExistingStatementsBase {
     premiseExtraction: PremiseExtraction,
     step: Step.Target,
     baseSubstitutions: Substitutions.Possible)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[PossibleConclusionWithPremises]
 }

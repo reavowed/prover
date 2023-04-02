@@ -3,7 +3,7 @@ package net.prover.proving
 import net.prover.controllers.models.StepDefinition
 import net.prover.controllers.{BooleanWithResponseExceptionOps, OptionWithResponseExceptionOps}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, StepContext}
+import net.prover.model.proof.{Step, StepProvingContext}
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.{ExpressionParsingContext, Substitutions}
 import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
@@ -16,14 +16,14 @@ object CreateAssertionStep {
     getConclusionOption: (ExpressionParsingContext, Substitutions) => Try[Option[Statement]],
     definition: StepDefinition,
     unwrappers: Seq[Unwrapper])(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Try[(Statement, Step, Seq[Step.Target])] = {
     for {
       inference <- FindInference(inferenceId)
       extractionInferences <- definition.extractionInferenceIds.map(FindInference(_)).traverseTry
       extraction <- ExtractionCalculator.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
-      wrappedStepContext = unwrappers.enhanceStepContext(stepContext)
-      substitutions <- definition.substitutions.parse(extraction.variableDefinitions)(ExpressionParsingContext.atStep(wrappedStepContext))
+      wrappedStepProvingContext = unwrappers.enhanceStepProvingContext
+      substitutions <- definition.substitutions.parse(extraction.variableDefinitions)(ExpressionParsingContext.atStep(wrappedStepProvingContext))
       epc = ExpressionParsingContext.forInference(inference).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
       conclusionOption <- getConclusionOption(epc, substitutions)
       newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
@@ -43,8 +43,7 @@ object CreateAssertionStep {
         substitutions,
         unwrappers,
         newTargetStatementsForExtractionOption,
-        conclusionOption)(
-        stepContext)
+        conclusionOption)
     } yield (derivationStep.statement, derivationStep, targets)
   }
 }

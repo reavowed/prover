@@ -10,8 +10,10 @@ import org.specs2.mutable.Specification
 class TermDefinitionSpec extends Specification {
 
   private def testParsingAndSerialization(termDefinition: TermDefinitionEntry): MatchResult[Any] = {
+    implicit val availableEntries = defaultAvailableEntries
+    implicit val proofFileReader = mock[ProofFileReader]
     val serializedDefinition = termDefinition.serializedLines.mkString("\n")
-    val reparsedDefinition = ChapterEntry.parser(defaultAvailableEntries, implicitly, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
+    val reparsedDefinition = ChapterEntry.parser.parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(termDefinition)
   }
 

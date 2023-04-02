@@ -55,16 +55,17 @@ object Theorem extends Inference.EntryParser {
     variableDefinitions: VariableDefinitions,
     premises: Seq[Statement],
     conclusion: Statement)(
-    implicit availableEntries: AvailableEntries
+    implicit provingContext: ProvingContext
   ): Parser[Proof] = {
-    val initialStepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)(ProvingContext(availableEntries, Definitions(availableEntries)))
+    val initialStepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)
     for {
-      steps <- Step.listParser(availableEntries, initialStepContext)
+      steps <- Step.listParser(initialStepContext, provingContext)
       _ = if (!steps.lastOption.exists(_.statement == conclusion)) throw new Exception(s"Proof of theorem '$theoremName' did not prove $conclusion")
     } yield Proof(steps)
   }
 
   override def parser(implicit availableEntries: AvailableEntries, chapterWithContext: ChapterWithContext, proofFileReader: ProofFileReader): Parser[Theorem] = {
+    implicit val provingContext = ProvingContext(availableEntries, Definitions(availableEntries))
     for {
       name <- Parser.toEndOfLine
       variableDefinitions <- VariableDefinitions.parser

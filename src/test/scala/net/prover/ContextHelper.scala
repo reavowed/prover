@@ -6,7 +6,7 @@ import net.prover.model.TestDefinitions.{mock, theStubbed}
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, StepContext}
+import net.prover.model.proof.{Step, StepContext, StepProvingContext}
 import net.prover.model.{AvailableEntries, Chapter, ProvingContext, VariableDefinitions}
 import org.mockito.Mockito.when
 
@@ -42,25 +42,29 @@ trait ContextHelper {
 
   def createTargetStepWithContext(
     statement: Statement)(
-    implicit outerStepContext: StepContext
+    implicit outerStepContext: StepContext,
+    availableEntries: AvailableEntries
   ): TypedStepWithContext[Step.Target] = {
     createStepWithContext(Step.Target(statement))
   }
 
   def createStepWithContext[T <: Step : ClassTag](
     step: T)(
-    implicit outerStepContext: StepContext
+    implicit outerStepContext: StepContext,
+    availableEntries: AvailableEntries
   ): TypedStepWithContext[T] = {
     createStepsWithContext(Seq(step)).atChild(Nil, step)
   }
 
   def createStepsWithContext(
     steps: Seq[Step])(
-    implicit outerStepContext: StepContext
+    implicit outerStepContext: StepContext,
+    availableEntries: AvailableEntries
   ): StepsWithContext = {
+    val provingContext = availableEntriesToProvingContext(availableEntries)
     val proofWithContext = mock[ProofWithContext]
-    proofWithContext.provingContext returns outerStepContext.provingContext
-    proofWithContext.availableEntries returns outerStepContext.provingContext.availableEntries
+    proofWithContext.provingContext returns provingContext
+    proofWithContext.availableEntries returns availableEntries
     StepsWithContext(
       steps,
       outerStepContext,
@@ -68,6 +72,7 @@ trait ContextHelper {
   }
 
   implicit def availableEntriesToProvingContext(implicit availableEntries: AvailableEntries): ProvingContext = ProvingContext(availableEntries, new Definitions(availableEntries))
+  implicit def availableEntriesToStepProvingContext(implicit availableEntries: AvailableEntries, stepContext: StepContext): StepProvingContext = new StepProvingContext()
 
   def createAvailableEntries(entries: Seq[ChapterEntry]): AvailableEntries = {
     val entriesWithContext = entries.map(createEntryWithContext(_)(null))
@@ -101,7 +106,7 @@ trait ContextHelper {
     theoremWithContext
   }
 
-  def createChapterWithContext(): ChapterWithContext = {
+  implicit def createChapterWithContext(implicit availableEntries: AvailableEntries): ChapterWithContext = {
     val chapterWithContext = mock[ChapterWithContext]
     chapterWithContext.chapter returns mock[Chapter]
     chapterWithContext.chapter.title returns "Test Chapter"
@@ -110,7 +115,8 @@ trait ContextHelper {
     chapterWithContext.bookWithContext.book returns mock[Book]
     chapterWithContext.bookWithContext.book.title returns "Test Book"
     chapterWithContext.bookWithContext.bookKey returns bookKey
+    chapterWithContext.globalContext returns mock[GlobalContext]
+    chapterWithContext.globalContext.definitions returns new Definitions(availableEntries)
     chapterWithContext
   }
-  implicit def chapterWithContext = createChapterWithContext()
 }

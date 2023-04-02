@@ -6,7 +6,7 @@ import net.prover.model.proof.Step
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.proving.extraction.ExtractionCalculator
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
-import net.prover.theorems.{CompoundTheoremUpdater, GetAllPremises, RecalculateReferences}
+import net.prover.theorems.{CompoundTheoremUpdater, RecalculateReferences}
 import scalaz.Scalaz._
 
 import scala.annotation.tailrec
@@ -24,7 +24,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
   }
 
   private def replaceWithWrapped(baseStep: Step.Elided, stepWithContext: StepWithContext): Option[Step] = {
-    import stepWithContext.stepContext
+    import stepWithContext.stepProvingContext
     @tailrec def helper(unwrappers: Seq[Unwrapper], steps: Seq[Step]): Option[Step] = {
       steps match {
         case Seq(Step.Generalization(variableName, substeps, generalizationDefinition)) =>
@@ -34,7 +34,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
         case steps if unwrappers.nonEmpty =>
           for {
             assertionStep <- steps.last.asOptionalInstanceOf[Step.Assertion]
-            premises = assertionStep.premises.map(_.statement).filter(s => !stepContext.allPremises.exists(p => p.statement == s))
+            premises = assertionStep.premises.map(_.statement).filter(s => !stepProvingContext.allPremises.exists(p => p.statement == s))
             (wrappedStep, _) = unwrappers.addNecessaryExtractions(assertionStep, premises)
             updatedStep = RecalculateReferences(stepWithContext.copy(step = wrappedStep))._1
             if updatedStep.asOptionalInstanceOf[Step.WithSubsteps].map(_.substeps).contains(baseStep.substeps)
@@ -51,7 +51,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
       assertionSteps <- step.substeps.map(_.asOptionalInstanceOf[Step.Assertion]).toList.sequence
       firstAssertion <- assertionSteps.headOption
       mainPremise <- firstAssertion.premises.headOption.map(_.statement)
-      _ <- ExtractionCalculator.getPremiseExtractions(mainPremise)(stepWithContext.stepContext)
+      _ <- ExtractionCalculator.getPremiseExtractions(mainPremise)(stepWithContext.stepContext, stepWithContext.provingContext)
         .find(_.extractionInferences.toList == assertionSteps.map(_.inference))
     } yield Step.ExistingStatementExtraction(assertionSteps)
   }
@@ -61,7 +61,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
       assertionStep <- step.substeps.lastOption.flatMap(_.asOptionalInstanceOf[Step.Assertion])
       if step.highlightedInference.contains(assertionStep.inference)
       if step.substeps.forall(_.isInstanceOf[Step.Assertion])
-      (premiseSteps, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(assertionStep.premises.map(_.statement))(stepWithContext.stepContext)
+      (premiseSteps, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(assertionStep.premises.map(_.statement))(stepWithContext.stepProvingContext)
       if targetSteps.isEmpty
     } yield Step.InferenceWithPremiseDerivations(premiseSteps, assertionStep)
   }

@@ -2,16 +2,16 @@ package net.prover.proving.premiseFinding
 
 import net.prover.model.definitions.{BinaryRelationStatement, Wrapper}
 import net.prover.model.expressions.{Statement, Term}
-import net.prover.model.proof.{KnownEquality, Step, StepContext}
+import net.prover.model.proof.{KnownEquality, Step, StepProvingContext}
 import net.prover.model.utils.ExpressionUtils
 
 object BinaryRelationDerivationFinder {
   def findDirectDerivationForBinaryRelationStatement(
     binaryRelationStatement: BinaryRelationStatement)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
     def withoutRewriting(binaryRelationStatement: BinaryRelationStatement): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
-      def bySimplifyingTargetRelation = stepContext.provingContext.conclusionRelationSimplificationInferences.getOrElse(binaryRelationStatement.relation, Nil).iterator.findFirst { conclusionRelationSimplificationInference =>
+      def bySimplifyingTargetRelation = stepProvingContext.provingContext.conclusionRelationSimplificationInferences.getOrElse(binaryRelationStatement.relation, Nil).iterator.findFirst { conclusionRelationSimplificationInference =>
         for {
           (directTargets, binaryRelationTargets, derivationForInference) <- conclusionRelationSimplificationInference.getConclusionSimplification(binaryRelationStatement.baseStatement)
           derivationForDirectTargets <- directTargets.map(DerivationFinder.findDerivationForUnwrappedStatement).traverseOption.map(_.flatten)
@@ -26,7 +26,7 @@ object BinaryRelationDerivationFinder {
     def withoutRenaming(binaryRelationStatement: BinaryRelationStatement): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
       withoutRewriting(binaryRelationStatement) orElse {
         (for {
-          inference <- stepContext.provingContext.conclusionRelationRewriteInferences.getOrElse(binaryRelationStatement.relation, Nil)
+          inference <- stepProvingContext.provingContext.conclusionRelationRewriteInferences.getOrElse(binaryRelationStatement.relation, Nil)
           (rewrittenStatement, rewriteDerivation) <- inference.rewriteTarget(binaryRelationStatement.baseStatement)
           innerDerivation <- withoutRewriting(rewrittenStatement)
         } yield innerDerivation ++ rewriteDerivation).headOption
@@ -35,17 +35,17 @@ object BinaryRelationDerivationFinder {
 
     def byRenaming: Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
       def directly = (for {
-        KnownEquality(source, result, equality, equalityDerivation) <- stepContext.knownEqualities
+        KnownEquality(source, result, equality, equalityDerivation) <- stepProvingContext.knownEqualities
         if result == binaryRelationStatement.right
         innerDerivation <- withoutRenaming(binaryRelationStatement.withNewRight(source))
         renameStep = equality.substitution.assertionStep(source, result, Wrapper[Term, Statement]((t, c) => binaryRelationStatement.relation(binaryRelationStatement.left, t)(c)))
       } yield innerDerivation ++ equalityDerivation :+ renameStep).headOption
 
       def transitively = (for {
-        secondEquality <- stepContext.knownEqualities
+        secondEquality <- stepProvingContext.knownEqualities
         equality = secondEquality.equality
         if secondEquality.rhs == binaryRelationStatement.right && ExpressionUtils.isSimpleTermVariableOrCombinationOfTermConstants(secondEquality.lhs)
-        firstEquality <- stepContext.knownEqualities
+        firstEquality <- stepProvingContext.knownEqualities
         if firstEquality.rhs == secondEquality.lhs
         innerDerivation <- withoutRenaming(binaryRelationStatement.withNewRight(firstEquality.lhs))
         transitivityStep = equality.transitivity.assertionStep(firstEquality.lhs, firstEquality.rhs, secondEquality.rhs)
