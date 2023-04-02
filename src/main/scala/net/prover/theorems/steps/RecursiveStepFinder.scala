@@ -1,6 +1,8 @@
 package net.prover.theorems.steps
 
 import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
+import net.prover.model.entries.Theorem
+import net.prover.model.entries.Theorem.Proof
 import net.prover.model.{Inference, Substitutions}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step}
@@ -8,9 +10,9 @@ import scalaz.Monoid
 import scalaz.Scalaz._
 
 abstract class RecursiveStepFinder[T : Monoid] {
-  def apply(steps: Seq[Step]): T = {
-    steps.toList.foldMap(apply)
-  }
+  def apply(theorem: Theorem): T = theorem.proofs.toList.foldMap(apply)
+  def apply(proof: Proof): T = apply(proof.steps)
+  def apply(steps: Seq[Step]): T = steps.toList.foldMap(apply)
 
   def apply(step: Step): T = {
     step match {

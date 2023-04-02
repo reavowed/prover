@@ -4,6 +4,7 @@ import net.prover.controllers.ChainingMethods
 import net.prover.entries.StepsWithContext
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.{Step, StepReference}
+import net.prover.theorems.GetReferencedLines
 
 object SplitPrecedingStepsBeforeChain {
   def apply(before: Seq[Step], after: Seq[Step], outerPath: Seq[Int])(implicit stepsWithContext: StepsWithContext): (Seq[Step], Seq[Step]) = {
@@ -43,7 +44,7 @@ object SplitPrecedingStepsBeforeChain {
 
 
   private def matchTransitiveChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, stepThree: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit stepsWithContext: StepsWithContext): Option[(T, T, T)] = {
-    if (stepThree.referencedLines.flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath) == Set(outerPath :+ firstStepIndex, outerPath :+ (firstStepIndex + 1)))
+    if (GetReferencedLines(stepThree).flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath) == Set(outerPath :+ firstStepIndex, outerPath :+ (firstStepIndex + 1)))
       for {
         statementOne <- stepOne.provenStatement
         (_, lhsOne, rhsOne) <- ChainingMethods.getJoiner(statementOne)
@@ -57,7 +58,7 @@ object SplitPrecedingStepsBeforeChain {
   }
 
   private def matchReplacementChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit stepsWithContext: StepsWithContext): Option[(T, T, T)] = {
-    if (stepTwo.referencedLines.flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath).contains(outerPath :+ firstStepIndex))
+    if (GetReferencedLines(stepTwo).flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath).contains(outerPath :+ firstStepIndex))
       for {
         statementOne <- stepOne.provenStatement
         (_, lhsOne, rhsOne) <- ChainingMethods.getJoiner(statementOne)

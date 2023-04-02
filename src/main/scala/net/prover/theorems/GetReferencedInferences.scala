@@ -12,7 +12,7 @@ import scalaz.Scalaz._
 object GetReferencedInferences extends RecursiveStepFinder[Set[Inference]] {
   def apply(entryWithContext: EntryWithContext): Set[Inference] = {
     if (entryWithContext.entry.isInstanceOf[Theorem]) {
-      entryWithContext.asInstanceOf[TheoremWithContext].theorem.proofs.flatMap(p => apply(p.steps)).toSet
+      apply(entryWithContext.asInstanceOf[TheoremWithContext].theorem)
     } else {
       Set.empty
     }

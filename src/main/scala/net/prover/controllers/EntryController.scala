@@ -33,7 +33,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
         case axiom: Axiom =>
           Success(("Axiom", Map("axiom" -> axiom)))
         case theorem: Theorem =>
-          Success(("Theorem", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(GetReferencedInferences(entryWithContext.asInstanceOf[TheoremWithContext]), entryWithContext.globalContext))))
+          Success(("Theorem", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(GetReferencedInferences(entryWithContext), entryWithContext.globalContext))))
         case statementDefinition: StatementDefinitionEntry =>
           Success(("StatementDefinition", Map("definition" -> statementDefinition)))
         case termDefinition: TermDefinitionEntry =>

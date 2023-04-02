@@ -3,7 +3,7 @@ package net.prover.model.proof
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
-import net.prover.model.definitions.{DeductionDefinition, ExpressionDefinition, GeneralizationDefinition}
+import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
 
 import scala.util.Try
@@ -12,8 +12,6 @@ import scala.util.Try
 sealed trait Step {
   def `type`: String
   def provenStatement: Option[Statement]
-  def referencedLines: Set[PreviousLineReference] = recursivePremises.flatMap(_.referencedLines).toSet
-  def recursivePremises: Seq[Premise]
   def length: Int
   def serializedLines: Seq[String]
   override def toString: String = serializedLines.mkString("\n")
@@ -59,7 +57,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Deduction = copy(substeps = newSubsteps)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"assume ${assumption.serialized} {") ++
       substeps.flatMap(_.serializedLines).indent ++
@@ -111,7 +108,6 @@ object Step {
         deductionDefinition)
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def recursivePremises: Seq[Premise] = premises ++ substeps.flatMap(_.recursivePremises)
     @JsonSerialize
     def referencedLinesForExtraction: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum + 1
@@ -154,7 +150,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
-    override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"take $variableName {") ++
       substeps.flatMap(_.serializedLines).indent ++
@@ -175,7 +170,6 @@ object Step {
     val `type` = "target"
     override def provenStatement: Option[Statement] = Some(statement)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
-    override def recursivePremises: Seq[Premise] = Nil
     override def length = 1
     def serializedLines: Seq[String] = Seq(s"target ${statement.serialized}")
   }
@@ -191,7 +185,6 @@ object Step {
     val `type` = "elided"
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
-    override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(("elided" +: (highlightedInference.map(_.id).toSeq ++ description.map(_.inParens).toSeq) :+ "{").mkString(" ")) ++
       substeps.flatMap(_.serializedLines).indent ++
@@ -242,7 +235,6 @@ object Step {
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     @JsonSerialize
     def referencedLinesForAssertion: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
-    override def recursivePremises: Seq[Premise] = premises
     override def length: Int = 1
     override def serializedLines: Seq[String] = {
       Seq(Seq("prove", statement.serialized, inference.id, substitutions.serialize, Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
@@ -277,7 +269,6 @@ object Step {
     val `type`: String = "subproof"
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
-    override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"subproof ($name) {") ++
       substeps.flatMap(_.serializedLines).indent ++
@@ -300,7 +291,6 @@ object Step {
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = {
       copy(substeps = newSubsteps)
     }
-    override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
     override def serializedLines: Seq[String] = Seq(s"existingStatementExtraction {") ++
       substeps.flatMap(_.serializedLines).indent ++

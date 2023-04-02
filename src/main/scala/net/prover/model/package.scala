@@ -61,12 +61,6 @@ package object model {
   implicit class SeqOps[T](seq: Seq[T]) {
     def headAndTailOption: Option[(T, Seq[T])] = +:.unapply(seq)
     def initAndLastOption: Option[(Seq[T], T)] = :+.unapply(seq)
-    def single: Option[T]= {
-      seq match {
-        case Seq(singleElement) => Some(singleElement)
-        case _ => None
-      }
-    }
     def singleMatch: PossibleSingleMatch[T]= {
       seq match {
         case Nil => NoMatches
@@ -212,6 +206,14 @@ package object model {
   implicit class IterableOps[T](iterable: Iterable[T]) {
     def mapFind[S](f: T => Option[S]): Option[S] = {
       iterable.iterator.map(f).find(_.isDefined).flatten
+    }
+
+    def single: Option[T] = {
+      val iterator = iterable.iterator
+      Some(())
+        .filter(_ => iterator.hasNext)
+        .map(_ => iterator.next())
+        .filter(_ => !iterator.hasNext)
     }
   }
 

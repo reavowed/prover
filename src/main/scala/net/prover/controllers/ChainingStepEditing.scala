@@ -9,6 +9,7 @@ import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.Premise.SingleLinePremise
 import net.prover.model.proof.{Step, StepContext, StepReference, SubstitutionContext}
 import net.prover.proving.stepReplacement.AddTargetsBeforeChain
+import net.prover.theorems.GetAllPremises
 import net.prover.util.FunctorTypes._
 import org.springframework.http.ResponseEntity
 
@@ -112,7 +113,7 @@ trait ChainingStepEditing {
                 if followingRhs == secondChainingStep.rhs
                 stepPath = stepWithContext.stepContext.stepReference.stepPath
                 followingStepPath = outerStepsWithContext.outerStepContext.stepReference.forChild(last + 1).stepPath
-                followingPremises = followingStep.recursivePremises.filter(p => !p.asOptionalInstanceOf[SingleLinePremise].flatMap(_.referencedLine.asOptionalInstanceOf[StepReference]).exists(_.stepPath.startsWith(followingStepPath)))
+                followingPremises = GetAllPremises(followingStep).filter(p => !p.asOptionalInstanceOf[SingleLinePremise].flatMap(_.referencedLine.asOptionalInstanceOf[StepReference]).exists(_.stepPath.startsWith(followingStepPath)))
                 if followingPremises.exists(p => p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath)))
                 otherPremise <- followingPremises.filter(p => !p.asOptionalInstanceOf[SingleLinePremise].exists(_.referencedLine == StepReference(stepPath))).single
                 (initialRelation, initialLhs, _) <- ChainingMethods.getJoiner(otherPremise.statement)
