@@ -8,7 +8,7 @@ import net.prover.model.definitions.{Definitions, ExpressionDefinition}
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
-import net.prover.theorems.{IsComplete, ReplaceDefinitions}
+import net.prover.theorems.{GetReferencedDefinitions, IsComplete, ReplaceDefinitions}
 
 @JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
@@ -20,7 +20,10 @@ case class Theorem(
   extends Inference.Entry
 {
   override def withName(newName: String): Theorem = copy(name = newName)
-  override def referencedEntries: Set[ChapterEntry] =  ((premises :+ conclusion).flatMap(_.referencedDefinitions).toSet ++ proofs.flatMap(_.referencedDefinitions).toSet).map(_.associatedChapterEntry)
+  override def referencedEntries: Set[ChapterEntry] = {
+    ((premises :+ conclusion).flatMap(_.referencedDefinitions).toSet ++
+      proofs.flatMap(GetReferencedDefinitions(_)).toSet).map(_.associatedChapterEntry)
+  }
   override def inferences: Seq[Inference.FromEntry] = Seq(this)
 
   def isComplete(entryWithContext: EntryWithContext): Boolean = IsComplete(entryWithContext.asInstanceOf[TheoremWithContext])
@@ -44,7 +47,6 @@ object Theorem extends Inference.EntryParser {
   override val name: String = "theorem"
 
   case class Proof(steps: Seq[Step]) {
-    def referencedDefinitions: Set[ExpressionDefinition] = steps.flatMap(_.referencedDefinitions).toSet
     def serialized: String = steps.flatMap(_.serializedLines).mkString("\n") + "\n"
   }
 
