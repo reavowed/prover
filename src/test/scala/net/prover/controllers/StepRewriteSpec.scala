@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.StepRewriteController.{InferenceRewriteSuggestion, PremiseRewritePath, PremiseSuggestion}
 import net.prover.controllers.models.{PathData, PremiseRewrite}
-import net.prover.model.TestDefinitions.{target, _}
+import net.prover.model.TestDefinitions._
 import net.prover.model.proof.{Step, StepReference}
 import net.prover.model.{TermVariablePlaceholder, TestDefinitions}
 import org.springframework.http.ResponseEntity

@@ -1,12 +1,12 @@
 package net.prover.proving
 
-import net.prover.BookServiceHelper
+import net.prover.{BookServiceHelper, StepHelpers}
 import net.prover.controllers.BookService
 import net.prover.controllers.models.{PathData, SerializedSubstitutions, StepDefinition}
 import net.prover.model.TestDefinitions._
 import org.specs2.mutable.Specification
 
-class ProveCurrentTargetSpec extends Specification with BookServiceHelper {
+class ProveCurrentTargetSpec extends Specification with BookServiceHelper with StepHelpers {
   implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Nil)
 
@@ -77,17 +77,15 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper {
           target(Implication(Conjunction(φ, ψ), χ)) :+
           target(φ) :+
           target(ψ) :+
-          elided(
-            modusPonens,
-            Seq(
-              assertion(
-                combineConjunction,
-                Seq(φ, ψ),
-                Nil),
-              assertion(
-                modusPonens,
-                Seq(Conjunction(φ, ψ), χ),
-                Nil))))
+          premiseDerivation(Seq(
+            assertion(
+              combineConjunction,
+              Seq(φ, ψ),
+              Nil),
+            assertion(
+              modusPonens,
+              Seq(Conjunction(φ, ψ), χ),
+              Nil))))
     }
 
     "add targets that don't exist" in {

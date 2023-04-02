@@ -4,7 +4,7 @@ import net.prover.controllers.models.PathData
 import net.prover.model.Substitutions
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{DefinedStatement, TermVariable}
-import net.prover.model.proof.Step
+import net.prover.model.proof.{Step, SubstitutionContext}
 import org.specs2.matcher.Matcher
 import org.springframework.http.ResponseEntity
 
@@ -79,10 +79,15 @@ class StepProvingSpec extends ControllerSpec {
         PathData(stepPath),
         definitionWithPremise(premise, Nil, Seq(modusPonens, extractRightConjunct), None))
 
+      val x: SubstitutionContext => Seq[Step.Assertion] = Seq(
+        assertion(modusPonens, Seq(φ, Conjunction(ψ, χ)), Nil),
+        assertion(extractRightConjunct, Seq(ψ, χ), Nil)
+      )
+
       checkModifySteps(
         service,
         fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ) :+ target(χ),
-        fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ) :+ existingStatementExtraction(Seq(
+        fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ) :+ existingStatementExtraction(Seq[SubstitutionContext => Step.Assertion](
           assertion(modusPonens, Seq(φ, Conjunction(ψ, χ)), Nil),
           assertion(extractRightConjunct, Seq(ψ, χ), Nil))))
     }

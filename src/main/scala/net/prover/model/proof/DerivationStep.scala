@@ -16,7 +16,10 @@ object DerivationStep {
     def inferences: Seq[Inference] = derivationSteps.flatMap(_.inferences)
     def steps: Seq[Step] = derivationSteps.map(_.step)
     def elideWithInference(inference: Inference): DerivationStepWithSingleInference = {
-      DerivationStepWithSingleInference(derivationSteps.last.statement, inference, Step.Elided.ifNecessary(derivationSteps.steps, inference).get)
+      DerivationStepWithSingleInference(
+        derivationSteps.last.statement,
+        inference,
+        Step.Elided.ifNecessary(derivationSteps.steps, inference).get)
     }
   }
 }
@@ -27,7 +30,7 @@ case class DerivationStepWithSingleInference(statement: Statement, inference: In
     if (premiseSteps.isEmpty)
       this
     else
-      DerivationStepWithSingleInference(statement, inference, Step.Elided.forInference(inference)(premiseSteps.steps :+ step))
+      DerivationStepWithSingleInference(statement, inference, Step.PremiseDerivation(premiseSteps.map(_.step), step))
   }
   def elideWithFollowingSteps(followingSteps: Seq[DerivationStep]): DerivationStepWithSingleInference = {
     if (followingSteps.isEmpty)

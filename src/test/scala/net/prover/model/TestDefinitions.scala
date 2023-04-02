@@ -12,6 +12,8 @@ import net.prover.model.proof._
 import org.mockito.Mockito.when
 import org.specs2.mock.mockito.MockitoStubs
 
+import scala.language.implicitConversions
+
 trait Placeholder[T <: ExpressionVariable[_ <: Expression]] {
   def name: String
   def index: Int
@@ -382,31 +384,7 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
   val negationOfIntegerMultiplication = createInference("Negation of Integer Multipliciation", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Conjunction(Equals(mulZ(a, IntegerNegation(b)), IntegerNegation(mulZ(a, b))), Equals(mulZ(IntegerNegation(a), b), IntegerNegation(mulZ(a, b)))))
 }
 
-trait StepHelpers extends TestVariableDefinitions with TestExpressionDefinitions {
-
-  def assertion(inference: Inference, statements: Seq[Statement], terms: Seq[Term]): SubstitutionContext => Step.Assertion = { substitutionContext =>
-    Step.Assertion.forInference(inference, Substitutions(statements, terms))(substitutionContext).get
-  }
-  def generalization(variableName: String, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Generalization = sc => Step.Generalization(variableName, steps(SubstitutionContext.withExtraParameter(sc)), GeneralizationDefinition)
-  def deduction(antecedent: Statement, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Deduction = sc => Step.Deduction(antecedent, steps(sc), DeductionDefinition)
-  def target(statement: Statement): SubstitutionContext => Step.Target = _ => Step.Target(statement)
-  def elided(inference: Inference, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Elided = sc => Step.Elided(steps(sc), Some(inference.summary), None)
-  def elided(description: String, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Elided = sc => Step.Elided(steps(sc), None, Some(description))
-  def existingStatementExtraction(steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.ExistingStatementExtraction = sc => Step.ExistingStatementExtraction(steps(sc))
-
-  def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = (0 until number).map(i => target(ForAll("x")(Equals($, TermVariable(i)))))
-
-  implicit class StepsConstructor(createSteps: SubstitutionContext => Seq[Step]) {
-    def :+(other: SubstitutionContext => Step): SubstitutionContext => Seq[Step] = { sc =>
-      createSteps(sc) :+ other(sc)
-    }
-  }
-  implicit def seqConstructorToConstructorSeq(seq: Seq[SubstitutionContext => Step]): SubstitutionContext => Seq[Step] = { sc =>
-    seq.map(_(sc))
-  }
-}
-
-object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with StepHelpers with ContextHelper with MockitoStubs {
+object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with ContextHelper with MockitoStubs {
   val defaultAvailableEntries: AvailableEntries = createAvailableEntries(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,

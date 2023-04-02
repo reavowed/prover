@@ -1,12 +1,12 @@
 package net.prover.theorems
 
-import net.prover.BookServiceHelper
+import net.prover.{BookServiceHelper, StepHelpers}
 import net.prover.controllers.BookService
 import net.prover.controllers.models.StepMoveRequest
 import net.prover.model.TestDefinitions._
 import org.specs2.mutable.Specification
 
-class MoveStepsSpec extends Specification with BookServiceHelper {
+class MoveStepsSpec extends Specification with BookServiceHelper with StepHelpers {
   implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Seq(a -> 0))
 

@@ -3,10 +3,10 @@ package net.prover.proving
 import net.prover.controllers.BookService
 import net.prover.controllers.models.{PathData, SerializedSubstitutions, StepDefinition}
 import net.prover.model.TestDefinitions._
-import net.prover.{BookServiceHelper, ContextHelper}
+import net.prover.{BookServiceHelper, ContextHelper, StepHelpers}
 import org.specs2.mutable.Specification
 
-class ProveNewTargetSpec extends Specification with ContextHelper with BookServiceHelper {
+class ProveNewTargetSpec extends Specification with ContextHelper with BookServiceHelper with StepHelpers {
   implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0))
 

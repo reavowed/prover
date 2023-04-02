@@ -11,7 +11,7 @@ import org.specs2.matcher.Matcher
 import org.specs2.mock.mockito.MockitoStubs
 import org.specs2.mutable.SpecificationLike
 
-trait StepBuilderHelper extends SpecificationLike with MockitoStubs with ContextHelper {
+trait StepBuilderHelper extends SpecificationLike with MockitoStubs with ContextHelper with StepHelpers {
 
   def createTheorem(premises: Seq[Statement], steps: Seq[Step])(implicit variableDefinitions: VariableDefinitions): Theorem = {
     createTheorem(premises, steps.last.provenStatement.get, steps)

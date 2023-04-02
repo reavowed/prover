@@ -1,13 +1,13 @@
 package net.prover.proving.premiseFinding
 
-import net.prover.ContextHelper
+import net.prover.{ContextHelper, StepHelpers}
 import net.prover.model.TestDefinitions.{a, b, _}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.model.{AvailableEntries, TestDefinitions}
 import org.specs2.mutable.Specification
 
-class DerivationOrTargetFinderSpec extends Specification with ContextHelper {
+class DerivationOrTargetFinderSpec extends Specification with ContextHelper with StepHelpers {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
   implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))

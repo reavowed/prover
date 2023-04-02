@@ -7,20 +7,11 @@ import net.prover.model.expressions.{Statement, StatementVariable, Term, TermVar
 import net.prover.model.proof._
 import net.prover.model.{AvailableEntries, Inference, Substitutions, VariableDefinitions}
 import net.prover.proving.extraction.SubstatementExtractor
-import net.prover.{BookServiceHelper, ContextHelper}
+import net.prover.{BookServiceHelper, ContextHelper, StepHelpers}
 import org.specs2.matcher.ValueChecks
 import org.specs2.mutable.Specification
 
-trait ControllerSpec extends Specification with ContextHelper with BookServiceHelper with ValueChecks {
-
-  implicit class StepsConstructor(createSteps: SubstitutionContext => Seq[Step]) {
-    def :+(other: SubstitutionContext => Step): SubstitutionContext => Seq[Step] = { sc =>
-      createSteps(sc) :+ other(sc)
-    }
-  }
-  implicit def seqConstructorToConstructorSeq(seq: Seq[SubstitutionContext => Step]): SubstitutionContext => Seq[Step] = { sc =>
-    seq.map(_(sc))
-  }
+trait ControllerSpec extends Specification with ContextHelper with BookServiceHelper with StepHelpers with ValueChecks {
 
   def definitionWithInference(
     inference: Inference,
