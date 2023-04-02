@@ -3,7 +3,7 @@ package net.prover.proving
 import net.prover.controllers.models.StepDefinition
 import net.prover.controllers.{AnyWithResponseExceptionOps, OptionWithResponseExceptionOps}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, StepContext}
+import net.prover.model.proof.{Step, StepProvingContext}
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.{ExpressionParsingContext, Substitutions}
 import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
@@ -15,14 +15,14 @@ object CreateProofStep {
     definition: StepDefinition,
     getConclusionOption: (ExpressionParsingContext, Substitutions) => Try[Option[Statement]],
     unwrappers: Seq[Unwrapper])(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Try[(Statement, Step, Seq[Step.Target])] = {
     def withInference(inferenceId: String) = CreateAssertionStep(inferenceId, getConclusionOption, definition, unwrappers)
 
     def withPremise(serializedPremiseStatement: String) = {
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
-        premise <- stepContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
+        premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         extractionInferences <- definition.extractionInferenceIds.map(FindInference(_)).traverseTry
         extraction <- ExtractionCalculator.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
         substitutions <- definition.substitutions.parse(extraction.variableDefinitions)

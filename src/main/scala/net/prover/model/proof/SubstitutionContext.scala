@@ -6,7 +6,11 @@ trait SubstitutionContext {
   def externalDepth: Int
 }
 
-object SubstitutionContext {
+trait LowPrioritySubstitutionContextImplicits {
+  implicit def fromStepProvingContext(stepProvingContext: StepProvingContext): SubstitutionContext = stepProvingContext.stepContext
+  implicit def implicitlyFromStepProvingContext(implicit stepProvingContext: StepProvingContext): SubstitutionContext = stepProvingContext.stepContext
+}
+object SubstitutionContext extends LowPrioritySubstitutionContextImplicits {
   def withDepth(depth: Int) = new SubstitutionContext {
     override def externalDepth: Int = depth
   }

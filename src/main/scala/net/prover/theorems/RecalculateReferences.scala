@@ -56,6 +56,6 @@ object RecalculateReferences extends CompoundStepUpdater[WithValue[List[StepWith
     premise: Premise,
     stepWithContext: StepWithContext
   ): (Premise, List[StepWithReferenceChange]) = {
-    (stepWithContext.stepContext.createPremise(premise.statement), Nil)
+    (stepWithContext.stepProvingContext.createPremise(premise.statement), Nil)
   }
 }

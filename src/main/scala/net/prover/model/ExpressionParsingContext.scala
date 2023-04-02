@@ -2,7 +2,7 @@ package net.prover.model
 
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.expressions.{StatementVariable, Term, TermVariable}
-import net.prover.model.proof.StepContext
+import net.prover.model.proof.{StepContext, StepProvingContext}
 
 case class ExpressionParsingContext(
     availableEntries: AvailableEntries,
@@ -92,10 +92,13 @@ object ExpressionParsingContext {
     ExpressionParsingContext(availableEntries, variableDefinitions, Nil)
   }
 
-  implicit def atStep(implicit stepContext: StepContext): ExpressionParsingContext = {
+  implicit def atStep(implicit stepContext: StepContext, provingContext: ProvingContext): ExpressionParsingContext = {
     ExpressionParsingContext(
-      stepContext.provingContext.availableEntries,
+      provingContext.availableEntries,
       stepContext.variableDefinitions,
       stepContext.boundVariableLists.map(_.zipWithIndex))
+  }
+  def atStep(stepProvingContext: StepProvingContext): ExpressionParsingContext = {
+    atStep(stepProvingContext.stepContext, stepProvingContext.provingContext)
   }
 }

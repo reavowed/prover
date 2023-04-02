@@ -254,6 +254,6 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
 }
 
 object ProvingContext {
-  implicit def fromStepContext(implicit stepContext: StepContext): ProvingContext = stepContext.provingContext
+  implicit def fromStepContext(implicit stepProvingContext: StepProvingContext): ProvingContext = stepProvingContext.provingContext
   implicit def fromStepsWithContext(implicit stepsWithContext: StepsWithContext): ProvingContext = stepsWithContext.provingContext
 }

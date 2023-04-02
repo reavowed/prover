@@ -11,9 +11,9 @@ import net.prover.util.{Direction, PossibleSingleMatch}
 import scala.Ordering.Implicits._
 import scala.util.{Failure, Success, Try}
 
-case class EqualityRewriter(equality: Equality)(implicit stepContext: StepContext)
+case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: StepProvingContext)
 {
-  import stepContext.provingContext._
+  import stepProvingContext.provingContext._
 
   private case class SimplificationStepWithInference(result: Term, rearrangementStep: RearrangementStep[Term], inference: Inference.Summary)
   private case class RearrangementStepWithInference(rearrangementStep: RearrangementStep[Term], inference: Option[Inference.Summary])
@@ -242,7 +242,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepContext: StepContex
         findEquality(premiseTerm, targetTerm, Wrapper.identity, None).map(_.step)
       case _ =>
         None
-    }) orElse stepContext.allPremises.mapFind(rewritePremise)
+    }) orElse stepProvingContext.allPremises.mapFind(rewritePremise)
   }
 }
 
@@ -255,10 +255,10 @@ object EqualityRewriter {
 
   def rewrite(
     targetStatement: Statement)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Option[Step] = {
     for {
-      equality <- stepContext.provingContext.equalityOption
+      equality <- stepProvingContext.provingContext.equalityOption
       rewriter = EqualityRewriter(equality)
       result <- rewriter.rewrite(targetStatement)
     } yield result
@@ -289,8 +289,8 @@ object EqualityRewriter {
   case class RewritePossibility[T <: Expression : RewriteMethods](term: Term, function: T, depth: Int, path: Seq[Int], unwrappers: Seq[Unwrapper], stepContext: StepContext)
 
   trait RewriteMethods[T <: Expression] {
-    def getRewritePossibilitiesFromOuterExpression(t: T, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext): Seq[RewritePossibility[T]]
-    def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[T], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, T], inferenceOption: Option[Inference])(implicit stepContext: StepContext): Try[(Seq[Step], Wrapper[Term, T])]
+    def getRewritePossibilitiesFromOuterExpression(t: T, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext, provingContext: ProvingContext): Seq[RewritePossibility[T]]
+    def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[T], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, T], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, T])]
     def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperExpression: T, unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext): (Seq[Unwrapper], Term, Seq[Statement], T)
   }
   object RewriteMethods {
@@ -311,24 +311,24 @@ object EqualityRewriter {
           RewritePossibility[Statement](term, wrapper(predicate), depth, path ++ innerPath, unwrappers, stepContext)
         }
       }
-      override def getRewritePossibilitiesFromOuterExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext): Seq[RewritePossibility[Statement]] = {
+      override def getRewritePossibilitiesFromOuterExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext, provingContext: ProvingContext): Seq[RewritePossibility[Statement]] = {
         def byGeneralization = for {
-          generalizationDefinition <- stepContext.provingContext.availableEntries.generalizationDefinitionOption
-          (specificationInference, _) <- stepContext.provingContext.specificationInferenceOption
+          generalizationDefinition <- provingContext.availableEntries.generalizationDefinitionOption
+          (specificationInference, _) <- provingContext.specificationInferenceOption
           (variableName, predicate) <- generalizationDefinition.unapply(statement)
           unwrapper = GeneralizationUnwrapper(variableName, generalizationDefinition, specificationInference)
-        } yield getRewritePossibilitiesFromOuterExpression(predicate, path :+ 0, unwrappers :+ unwrapper)(unwrapper.enhanceContext)
+        } yield getRewritePossibilitiesFromOuterExpression(predicate, path :+ 0, unwrappers :+ unwrapper)(unwrapper.enhanceStepContext, provingContext)
 
         def byDeduction = for {
-          deductionDefinition <- stepContext.provingContext.deductionDefinitionOption
-          (deductionEliminationInference, _, _) <- stepContext.provingContext.deductionEliminationInferenceOption
+          deductionDefinition <- provingContext.deductionDefinitionOption
+          (deductionEliminationInference, _, _) <- provingContext.deductionEliminationInferenceOption
           (antecedent, consequent) <- deductionDefinition.unapply(statement)
           unwrapper = DeductionUnwrapper(antecedent, deductionDefinition, deductionEliminationInference)
-        } yield getRewritePossibilitiesFromExpression(antecedent, path :+ 0, unwrappers, deductionDefinition(_, consequent)) ++ getRewritePossibilitiesFromOuterExpression(consequent, path :+ 1, unwrappers :+ unwrapper)(unwrapper.enhanceContext)
+        } yield getRewritePossibilitiesFromExpression(antecedent, path :+ 0, unwrappers, deductionDefinition(_, consequent)) ++ getRewritePossibilitiesFromOuterExpression(consequent, path :+ 1, unwrappers :+ unwrapper)(unwrapper.enhanceStepContext, provingContext)
 
         byGeneralization orElse byDeduction getOrElse getRewritePossibilitiesFromExpression(statement, path, unwrappers, identity)
       }
-      override def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[Statement], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Statement], inferenceOption: Option[Inference])(implicit stepContext: StepContext): Try[(Seq[Step], Wrapper[Term, Statement])] = {
+      override def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[Statement], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Statement], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Statement])] = {
         unwrappers.rewrapWithDistribution(joiner, source, result, steps, wrapper, inferenceOption)
       }
       def removeUnwrappers(source: Term, premises: Seq[Statement], wrapperStatement: Statement, unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext): (Seq[Unwrapper], Term, Seq[Statement], Statement) = {
@@ -336,12 +336,12 @@ object EqualityRewriter {
       }
     }
     object TermRewriteMethods extends RewriteMethods[Term] {
-      override def getRewritePossibilitiesFromOuterExpression(term: Term, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext): Seq[RewritePossibility[Term]] = {
+      override def getRewritePossibilitiesFromOuterExpression(term: Term, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext, provingContext: ProvingContext): Seq[RewritePossibility[Term]] = {
         term.getTerms() map { case (innerTerm, function, depth, innerPath) =>
           RewritePossibility[Term](innerTerm, function, depth, path ++ innerPath, unwrappers, stepContext)
         }
       }
-      override def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[Term], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Term], inferenceOption: Option[Inference])(implicit stepContext: StepContext): Try[(Seq[Step], Wrapper[Term, Term])] = {
+      override def rewrapWithDistribution(unwrappers: Seq[Unwrapper], joiner: BinaryJoiner[Term], source: Term, result: Term, steps: Seq[Step], wrapper: Wrapper[Term, Term], inferenceOption: Option[Inference])(implicit stepProvingContext: StepProvingContext): Try[(Seq[Step], Wrapper[Term, Term])] = {
         if (unwrappers.nonEmpty) {
           Failure(new Exception("Unwrappers for term somehow"))
         } else {

@@ -1,7 +1,6 @@
 package net.prover.controllers
 
 import net.prover.controllers.models._
-import net.prover.entries.TypedStepWithContext
 import net.prover.model._
 import net.prover.model.proof._
 import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement}
@@ -71,7 +70,7 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
         inference <- FindInference(inferenceId)
         possibleTarget <- UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
         inferenceExtraction <- stepWithContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == conclusionExtractionInferenceIds.toSeq).orBadRequest(s"Could not find extraction option with inference ids ${conclusionExtractionInferenceIds.mkString(", ")}")
-      } yield PossibleConclusionWithPremises.fromExtractionWithTarget(inferenceExtraction, possibleTarget.statement)(possibleTarget.unwrappers.enhanceStepContext(stepWithContext))
+      } yield PossibleConclusionWithPremises.fromExtractionWithTarget(inferenceExtraction, possibleTarget.statement)(possibleTarget.unwrappers.enhanceStepProvingContext)
     ).toResponseEntity
   }
 

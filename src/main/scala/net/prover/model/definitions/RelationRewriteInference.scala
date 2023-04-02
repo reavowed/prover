@@ -1,7 +1,7 @@
 package net.prover.model.definitions
 
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{DerivationStep, Step, StepContext, SubstitutionContext}
+import net.prover.model.proof.{Step, StepProvingContext, SubstitutionContext}
 import net.prover.model.{ProvingContext, Substitutions}
 import net.prover.proving.extraction.ExtractionApplier
 import net.prover.proving.extraction.ExtractionCalculator.InferenceExtraction
@@ -29,19 +29,19 @@ case class RelationRewriteInference(
       derivationStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
     } yield currentStatement.extend(premiseDerivation :+ derivationStep)
   }
-  def rewriteTarget(targetStatement: Statement)(implicit stepContext: StepContext): Option[(BinaryRelationStatement, Seq[Step.InferenceApplicationWithoutPremises])] = {
+  def rewriteTarget(targetStatement: Statement)(implicit stepProvingContext: StepProvingContext): Option[(BinaryRelationStatement, Seq[Step.InferenceApplicationWithoutPremises])] = {
     for {
       substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement, initialSubstitutions)
       (premiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
         case Some(initialPremise) =>
-          DerivationFinder.findDerivationForStatementBySubstituting(initialPremise, substitutionsAfterConclusion, stepContext.knownStatementsFromPremises).headOption.map(_.mapLeft(_.derivation))
+          DerivationFinder.findDerivationForStatementBySubstituting(initialPremise, substitutionsAfterConclusion, stepProvingContext.knownStatementsFromPremises).headOption.map(_.mapLeft(_.derivation))
         case None =>
           Some((Nil, substitutionsAfterConclusion))
       }
       substitutions <- substitutionsAfterInitialPremise.confirmTotality(inferenceExtraction.variableDefinitions)
       derivationStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
       substitutedPremise <- mainPremise.applySubstitutions(substitutions)
-      premiseRelationStatement <- stepContext.provingContext.findRelation(substitutedPremise)
+      premiseRelationStatement <- stepProvingContext.provingContext.findRelation(substitutedPremise)
     } yield (premiseRelationStatement, premiseDerivation :+ derivationStep)
   }
 }

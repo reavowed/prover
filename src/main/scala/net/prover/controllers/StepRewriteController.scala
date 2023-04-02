@@ -71,7 +71,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
           import replacementPossibility.{depth, path, term, unwrappers}
           for {
             substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
-            (_, substitutionsAfterPremises) <- DerivationFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.premises, substitutionsAfterLhs)(unwrappers.enhanceStepContext(stepWithContext))
+            (_, substitutionsAfterPremises) <- DerivationFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.premises, substitutionsAfterLhs)(unwrappers.enhanceStepProvingContext)
             substitutions <- substitutionsAfterPremises.confirmTotality(termRewriteInference.variableDefinitions)
             result <- termRewriteInference.rhs.applySubstitutions(substitutions)(SubstitutionContext.withExtraParameters(unwrappers.depth)).map(_.insertExternalParameters(depth))
           } yield (term, result, path)
@@ -133,8 +133,8 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
         equality <- stepWithContext.provingContext.equalityOption.orBadRequest("No equality found")
       } yield {
         val replacementPossibilities = getRewritePossibilities(expression, pathsAlreadyRewrittenText)
-        val premisesWithReferencedLines = stepWithContext.stepContext.allPremises.map(p => (p.statement, Some(p.referencedLine)))
-        val extractedPremises = stepWithContext.stepContext.knownStatementsFromPremises.map(_.statement).filter(s => !premisesWithReferencedLines.exists(_._1 == s)).map(_ -> None)
+        val premisesWithReferencedLines = stepWithContext.stepProvingContext.allPremises.map(p => (p.statement, Some(p.referencedLine)))
+        val extractedPremises = stepWithContext.stepProvingContext.knownStatementsFromPremises.map(_.statement).filter(s => !premisesWithReferencedLines.exists(_._1 == s)).map(_ -> None)
         (premisesWithReferencedLines ++ extractedPremises).mapCollect { case (statement, reference) =>
           for {
             (lhs, rhs) <- equality.unapply(statement)
@@ -156,7 +156,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
   ): ResponseEntity[_] = {
     (for {
       stepWithContext <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-    } yield stepWithContext.stepContext.allPremises).toResponseEntity
+    } yield stepWithContext.stepProvingContext.allPremises).toResponseEntity
   }
 
   def getRewriteStepForInference[TExpression <: Expression with TypedExpression[TExpression] : RewriteMethods](
@@ -167,7 +167,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     wrapperExpression: TExpression,
     direction: Direction,
     equality: Equality)(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Try[(Term, Term, Seq[Step], Option[Inference.Summary], Option[Inference.Summary], Seq[Unwrapper], TExpression)] = {
     for {
       inference <- FindInference(inferenceId)
@@ -178,7 +178,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       } else {
         rewrite.extractionInferenceIds :+ equality.reversal.inference.id
       }
-      inferenceExtraction <- stepContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == extractionInferenceIds).orBadRequest(s"Could not find extraction for inference ${inference.id}")
+      inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == extractionInferenceIds).orBadRequest(s"Could not find extraction for inference ${inference.id}")
       (lhs, rhs) <- equality.unapply(inferenceExtraction.conclusion).orBadRequest("Rewrite conclusion was not equality")
       (sourceTemplate, targetTemplate) = direction.swapSourceAndResult(lhs, rhs)
       substitutions <- sourceTemplate.calculateSubstitutions(baseTerm).orBadRequest("Could not find substitutions")
@@ -211,7 +211,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       (premiseLhs, premiseRhs) <- equality.unapply(removedPremiseStatement).orBadRequest("Premise was not equality")
       _ <- (removedSource == premiseLhs).orBadRequest("Premise did not match term at path")
       statementToFind = (equality.apply _).tupled(direction.swapSourceAndResult(premiseLhs, premiseRhs))
-      knownStatement <- stepWithContext.stepContext.knownStatementsFromPremisesBySerializedStatement.get(statementToFind.serializedForHash).orBadRequest(s"Could not find premise ${statementToFind.toString}")
+      knownStatement <- stepWithContext.stepProvingContext.knownStatementsFromPremisesBySerializedStatement.get(statementToFind.serializedForHash).orBadRequest(s"Could not find premise ${statementToFind.toString}")
     } yield (premiseLhs, premiseRhs, knownStatement.derivation, None, knownStatement.derivation.flatMap(_.inferences).toSet.single.map(_.summary), removedUnwrappers, removedWrapperExpression)
   }
 
@@ -233,8 +233,8 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
             for {
               (currentInnerExpression, stepsSoFar, inferencesSoFar) <- trySoFar
               rewritePossibilities = getRewritePossibilities(currentInnerExpression)
-              RewritePossibility(baseTerm, function, _, _, baseUnwrappers, replacementStepProvingContext) <- rewritePossibilities.find(_.path == rewrite.path).orBadRequest(s"No term at path ${rewrite.path.mkString(".")}")
-              (term, rewrittenTerm, rewriteSteps, inferenceOption, fallbackInferenceOption, unwrappers, wrapperExpression) <- ((rewrite.inferenceId.map(getRewriteStepForInference(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality)(implicitly, replacementStepProvingContext)) orElse
+              RewritePossibility(baseTerm, function, _, _, baseUnwrappers, replacementStepContext) <- rewritePossibilities.find(_.path == rewrite.path).orBadRequest(s"No term at path ${rewrite.path.mkString(".")}")
+              (term, rewrittenTerm, rewriteSteps, inferenceOption, fallbackInferenceOption, unwrappers, wrapperExpression) <- ((rewrite.inferenceId.map(getRewriteStepForInference(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality)(implicitly, stepWithContext.stepProvingContext.withStepContext(replacementStepContext))) orElse
                 rewrite.serializedPremiseStatement.map(getRewriteStepForPremise(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality))) orBadRequest
                 "Neither inference nor premise supplied").flatten
               wrapper = Wrapper.fromExpression(wrapperExpression)
@@ -309,7 +309,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
         } {
           (_, steps, inferences) => Success(EqualityRewriter.optionalRewriteElider(inferences)(steps))
         }
-        targetStepOption = if (stepWithContext.stepContext.allPremises.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
+        targetStepOption = if (stepWithContext.stepProvingContext.allPremises.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
       } yield targetStepOption.toSeq ++ step.toSeq
     }.toResponseEntity
   }

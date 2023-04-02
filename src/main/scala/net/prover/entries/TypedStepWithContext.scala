@@ -1,6 +1,6 @@
 package net.prover.entries
 
-import net.prover.model.proof.{Step, StepContext}
+import net.prover.model.proof.{Step, StepContext, StepProvingContext}
 import net.prover.model.{AvailableEntries, ProvingContext}
 
 import scala.reflect.ClassTag
@@ -11,7 +11,8 @@ case class TypedStepWithContext[+T <: Step : ClassTag](
     implicit val stepContext: StepContext)
 {
   def globalContext: GlobalContext = proofWithContext.globalContext
-  implicit def provingContext: ProvingContext = stepContext.provingContext
+  implicit def provingContext: ProvingContext = proofWithContext.provingContext
+  implicit lazy val stepProvingContext: StepProvingContext = new StepProvingContext()
   def availableEntries: AvailableEntries = provingContext.availableEntries
 
   def withStep[NewStep <: Step : ClassTag](newStep: NewStep): TypedStepWithContext[NewStep] = {

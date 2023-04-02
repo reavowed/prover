@@ -109,7 +109,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
-        premise <- stepWithContext.stepContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
+        premise <- stepWithContext.stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
         baseSubstitutions <- premise.statement.calculateSubstitutions(premise.statement).orBadRequest(s"Somehow failed to calculate base substitutions for premise '${premise.statement}'")
         result <- withRelation(stepWithContext.step.statement, getPremises(_, _, _, premise.statement, baseSubstitutions), getPremises(_, _, _, premise.statement, baseSubstitutions))
       } yield result
@@ -231,7 +231,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
             for {
               premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
               extraction <- ExtractionCalculator.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
-              premise <- stepWithContext.stepContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
+              premise <- stepWithContext.stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
               epc = ExpressionParsingContext.withDefinitions(extraction.variableDefinitions)
               substitutions <- definition.substitutions.parse(extraction.variableDefinitions)
               intendedConclusionOption <- getIntendedConclusion(epc, substitutions)

@@ -137,7 +137,7 @@ object ExtractionApplier {
     substitutions: Substitutions,
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement])(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
     applyExtractions(premise.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext)
   }
@@ -161,9 +161,9 @@ object ExtractionApplier {
     unwrappers: Seq[Unwrapper],
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement])(
-    implicit stepContext: StepContext,
+    implicit stepProvingContext: StepProvingContext,
   ): Try[(Step.InferenceApplication, Seq[Step.Target])] = {
-    val wrappedStepContext = unwrappers.enhanceStepContext(stepContext)
+    val wrappedStepContext = unwrappers.enhanceStepProvingContext
     for {
       mainAssertion <- Step.Assertion.forInference(inference, substitutions)(wrappedStepContext).orBadRequest("Could not apply substitutions to inference")
       ExtractionApplication(_, mainPremise, extractionSteps, extractionPremises) <-
@@ -194,7 +194,7 @@ object ExtractionApplier {
     substitutions: Substitutions,
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement])(
-    implicit stepContext: StepContext
+    implicit stepProvingContext: StepProvingContext
   ): Try[(Statement, Option[Step], Seq[Step.Target])] = {
     for {
       ExtractionApplication(extractionResult, _, extractionSteps, extractionPremises) <- ExtractionApplier.applyExtractionsForPremise(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion)
