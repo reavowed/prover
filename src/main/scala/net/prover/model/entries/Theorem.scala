@@ -10,8 +10,6 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.theorems.{IsComplete, ReplaceDefinitions}
 
-import scala.reflect.ClassTag
-
 @JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
     name: String,
@@ -27,24 +25,7 @@ case class Theorem(
   override def inferences: Seq[Inference.FromEntry] = Seq(this)
 
   def isComplete(entryWithContext: EntryWithContext): Boolean = IsComplete(entryWithContext.asInstanceOf[TheoremWithContext])
-  def initialStepContext: StepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)
-
-  def findSteps[T <: Step : ClassTag]: Seq[(T, StepContext)] = {
-    def forStep(step: Step, context: StepContext): Seq[(T, StepContext)] = {
-      step match {
-        case assertion: T =>
-          Seq((assertion, context))
-        case stepWithSubsteps: Step.WithSubsteps =>
-          forSteps(stepWithSubsteps.substeps, stepWithSubsteps.specifyStepContext(context))
-        case _ =>
-          Nil
-      }
-    }
-    def forSteps(steps: Seq[Step], context: StepContext): Seq[(T, StepContext)] = {
-      steps.zipWithIndex.flatMap { case (step, index) => forStep(step, context.atIndex(index))}
-    }
-    proofs.flatMap(proof => forSteps(proof.steps, initialStepContext))
-  }
+  def initialStepContext(implicit provingContext: ProvingContext): StepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)
 
   override def serializedLines: Seq[String] = Seq(s"theorem $name") ++
     variableDefinitions.serializedLines ++
@@ -76,7 +57,7 @@ object Theorem extends Inference.EntryParser {
     conclusion: Statement)(
     implicit availableEntries: AvailableEntries
   ): Parser[Proof] = {
-    val initialStepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)
+    val initialStepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)(ProvingContext(availableEntries, Definitions(availableEntries)))
     for {
       steps <- Step.listParser(availableEntries, initialStepContext)
       _ = if (!steps.mapCollect(_.provenStatement).lastOption.contains(conclusion)) throw new Exception(s"Proof of theorem '$theoremName' did not prove $conclusion")
@@ -84,7 +65,6 @@ object Theorem extends Inference.EntryParser {
   }
 
   override def parser(implicit availableEntries: AvailableEntries, proofFileReader: ProofFileReader): Parser[Theorem] = {
-
     for {
       name <- Parser.toEndOfLine
       variableDefinitions <- VariableDefinitions.parser

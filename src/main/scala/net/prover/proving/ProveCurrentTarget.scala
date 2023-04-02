@@ -18,12 +18,11 @@ object ProveCurrentTarget {
     definition: StepDefinition)(
     implicit bookService: BookService
   ): Try[ProofUpdateProps[InsertionAndReplacementProps]] = {
-    ReplaceStepAddingTargetsBeforeChain[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { (targetStep, stepProvingContext) =>
-      implicit val spc = stepProvingContext
+    ReplaceStepAddingTargetsBeforeChain[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { implicit stepWithContext =>
       for {
-        (targetStatement, unwrappers) <- UnwrappedStatement.getUnwrappedStatements(targetStep.statement).find(_.definitionSymbols == definition.wrappingSymbols).map(x => (x.statement, x.unwrappers)).orBadRequest("Invalid wrapping symbols")
+        (targetStatement, unwrappers) <- UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement).find(_.definitionSymbols == definition.wrappingSymbols).map(x => (x.statement, x.unwrappers)).orBadRequest("Invalid wrapping symbols")
         (result, newStep, targets) <- CreateProofStep(definition, (_, _) => Success(Some(targetStatement)), unwrappers)
-        _ <- (result == targetStep.statement).orBadRequest("Conclusion was incorrect")
+        _ <- (result == stepWithContext.step.statement).orBadRequest("Conclusion was incorrect")
       } yield (newStep, targets)
     }
   }

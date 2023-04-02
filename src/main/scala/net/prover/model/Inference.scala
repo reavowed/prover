@@ -1,14 +1,15 @@
 package net.prover.model
 
-import java.security.MessageDigest
-import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.entries.EntryWithContext
 import net.prover.model.Inference._
-import net.prover.model.definitions.{Definitions, ExpressionDefinition}
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
 import net.prover.model.expressions._
-import net.prover.model.proof.{StepContext, SubstitutionContext}
+import net.prover.model.proof.SubstitutionContext
+
+import java.security.MessageDigest
 
 @JsonIgnoreProperties(Array("rearrangementType", "allowsRearrangement"))
 trait Inference {
@@ -40,7 +41,7 @@ trait Inference {
     }
   }
 
-  def validatePremisesAndConclusion(expectedPremises: Seq[Statement], expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Option[Unit] = {
+  def validatePremisesAndConclusion(expectedPremises: Seq[Statement], expectedConclusion: Statement, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Unit] = {
     for {
       substitutedConclusion <- substituteConclusion(substitutions)
       if substitutedConclusion == expectedConclusion
@@ -49,7 +50,7 @@ trait Inference {
     } yield ()
   }
 
-  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions)(implicit stepContext: StepContext): Option[Seq[Statement]] = {
+  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Seq[Statement]] = {
     for {
       substitutedConclusion <- substituteConclusion(substitutions)
       if substitutedConclusion == expectedConclusion

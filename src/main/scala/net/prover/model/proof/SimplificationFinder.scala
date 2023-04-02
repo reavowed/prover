@@ -1,56 +1,47 @@
 package net.prover.model.proof
 
-import net.prover.model.{Inference, ProvingContext}
 import net.prover.model.expressions.Statement
+import net.prover.model.{Inference, ProvingContext, Substitutions}
 
 object SimplificationFinder {
-  private def getSimplification(premise: Premise.SingleLinePremise, simplificationInference: Inference, inferencePremise: Statement)(implicit stepContext: StepContext): Option[Premise.Simplification] = {
+  private def getSimplification(statement: Statement, simplificationInference: Inference, inferencePremise: Statement)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Substitutions)] = {
     for {
-      substitutions <- inferencePremise.calculateSubstitutions(premise.statement).flatMap(_.confirmTotality(simplificationInference.variableDefinitions))
+      substitutions <- inferencePremise.calculateSubstitutions(statement).flatMap(_.confirmTotality(simplificationInference.variableDefinitions))
       simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions)
+    } yield {
+      (simplifiedTarget, substitutions)
+    }
+  }
+  private def getSimplification(premise: Premise.SingleLinePremise, simplificationInference: Inference, inferencePremise: Statement)(implicit substitutionContext: SubstitutionContext): Option[Premise.Simplification] = {
+    for {
+      (simplifiedTarget, substitutions) <- getSimplification(premise.statement, simplificationInference, inferencePremise)
       path <- inferencePremise.findComponentPath(simplificationInference.conclusion)
     } yield {
       Premise.Simplification(simplifiedTarget, premise, simplificationInference.summary, substitutions, path)
     }
   }
-  def getSimplifications(premise: Premise.Given)(implicit stepProvingContext: StepProvingContext): Seq[Premise.Simplification] = {
-    @scala.annotation.tailrec
-    def helper(acc: Seq[Premise.Simplification], toCalculate: Seq[Premise.SingleLinePremise]): Seq[Premise.Simplification] = {
+
+  private def getSimplifications[T, S <: T](t: T, getSimplification: (T, Inference, Statement) => Option[S])(implicit provingContext: ProvingContext): Seq[S] = {
+    def helper(acc: Seq[S], toCalculate: Seq[T]): Seq[S] = {
       if (toCalculate.isEmpty)
         acc
       else {
         val next = for {
-          premise <- toCalculate
-          (inference, inferencePremise) <- stepProvingContext.provingContext.structuralSimplificationInferences
-          simplification <- getSimplification(premise, inference, inferencePremise)
+          t <- toCalculate
+          (inference, inferencePremise) <- provingContext.structuralSimplificationInferences
+          simplification <- getSimplification(t, inference, inferencePremise)
         } yield simplification
         helper(acc ++ next, next)
       }
     }
-    helper(Nil, Seq(premise))
+    helper(Nil, Seq(t))
   }
 
-  private def getSimplification(statement: Statement, simplificationInference: Inference, inferencePremise: Statement)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {
-    for {
-      substitutions <- inferencePremise.calculateSubstitutions(statement).flatMap(_.confirmTotality(simplificationInference.variableDefinitions))
-      simplifiedTarget <- simplificationInference.conclusion.applySubstitutions(substitutions)
-    } yield {
-      simplifiedTarget
-    }
-  }
   def getSimplifications(statement: Statement)(implicit substitutionContext: SubstitutionContext, provingContext: ProvingContext): Seq[Statement] = {
-    def helper(acc: Seq[Statement], toCalculate: Seq[Statement]): Seq[Statement] = {
-      if (toCalculate.isEmpty)
-        acc
-      else {
-        val next = for {
-          s <- toCalculate
-          (inference, inferencePremise) <- provingContext.structuralSimplificationInferences
-          simplification <- getSimplification(s, inference, inferencePremise)
-        } yield simplification
-        helper(acc ++ next, next)
-      }
-    }
-    helper(Nil, Seq(statement))
+    getSimplifications[Statement, Statement](statement, getSimplification(_, _, _).map(_._1))
   }
+  def getSimplifications(premise: Premise.Given)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Seq[Premise.Simplification] = {
+    getSimplifications(premise, getSimplification)
+  }
+
 }

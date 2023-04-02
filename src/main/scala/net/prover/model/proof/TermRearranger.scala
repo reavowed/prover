@@ -10,9 +10,9 @@ case class TermRearranger[T <: Expression](
     expansion: Expansion[T],
     reversal: Reversal[T],
     mainWrapper: Wrapper[Term, T])(
-    implicit stepProvingContext: StepProvingContext)
+    implicit stepContext: StepContext)
 {
-  import stepProvingContext._
+  import stepContext._
 
   trait DeconstructionStep {
     def addToWrapper(wrapper: Wrapper[Term, T]): Wrapper[Term, T]
@@ -500,7 +500,7 @@ object TermRearranger {
     equality: Equality,
     expansion: Expansion[T],
     reversal: Reversal[T])(
-    implicit stepProvingContext: StepProvingContext
+    implicit stepContext: StepContext
   ): Option[Seq[RearrangementStep[T]]] = {
     if (lhs == rhs)
       Some(Nil)
@@ -522,7 +522,7 @@ object TermRearranger {
     equality: Equality,
     expansion: Expansion[T],
     reversal: Reversal[T])(
-    implicit stepProvingContext: StepProvingContext
+    implicit stepContext: StepContext
   ): Option[Seq[RearrangementStep[T]]] = {
     if (lhsStatement == rhsStatement)
       Some(Nil)
@@ -542,7 +542,7 @@ object TermRearranger {
     equality: Equality,
     expansion: Expansion[T],
     reversal: Reversal[T])(
-    implicit stepProvingContext: StepProvingContext
+    implicit stepContext: StepContext
   ): Option[Seq[RearrangementStep[T]]] = {
     def helper(previousComponents: Seq[(Expression, Expression)], nextComponents: Seq[(Expression, Expression)], currentSteps: Seq[RearrangementStep[T]]): Option[Seq[RearrangementStep[T]]] = {
       nextComponents match {
@@ -561,7 +561,7 @@ object TermRearranger {
     lhsComponents.zipStrict(rhsComponents).flatMap(helper(Nil, _, Nil))
   }
 
-  def rearrangeEquality(targetStatement: Statement, equality: Equality)(implicit stepProvingContext: StepProvingContext): Option[Step] = {
+  def rearrangeEquality(targetStatement: Statement, equality: Equality)(implicit stepContext: StepContext): Option[Step] = {
     for {
       (lhs, rhs) <- equality.unapply(targetStatement)
       rearrangementSteps <- rearrangeTerm(lhs, rhs, Wrapper.identity, equality, equality.expansion, equality.reversal)
@@ -570,26 +570,26 @@ object TermRearranger {
     } yield result
   }
 
-  def rearrangeByExpanding(targetStatement: Statement, equality: Equality)(implicit stepProvingContext: StepProvingContext): Option[Step] = {
+  def rearrangeByExpanding(targetStatement: Statement, equality: Equality)(implicit stepContext: StepContext): Option[Step] = {
 
     def byJoiner[T <: Expression](joiners: Seq[BinaryJoiner[T]], rearrange: (T, T, Wrapper[T, T], Equality, Expansion[T], Reversal[T]) => Option[Seq[RearrangementStep[T]]]): Option[Step] = (for {
       joiner <- joiners.iterator
       (lhs, rhs) <- joiner.unapply(targetStatement)
-      expansion <- stepProvingContext.provingContext.expansions.ofType[Expansion[T]].find(e => e.sourceJoiner == equality.relation && e.resultJoiner == joiner)
-      reversal <- stepProvingContext.provingContext.reversals.ofType[Reversal[T]].find(_.joiner == joiner)
-      transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[T]].find(_.isTransitivityForJoiner(joiner))
+      expansion <- stepContext.provingContext.expansions.ofType[Expansion[T]].find(e => e.sourceJoiner == equality.relation && e.resultJoiner == joiner)
+      reversal <- stepContext.provingContext.reversals.ofType[Reversal[T]].find(_.joiner == joiner)
+      transitivity <- stepContext.provingContext.transitivities.ofType[Transitivity[T]].find(_.isTransitivityForJoiner(joiner))
       rearrangementSteps <- rearrange(lhs, rhs, Wrapper.identity, equality, expansion, reversal)
       steps = transitivity.addToRearrangement(lhs, rearrangementSteps)
       result <- Step.Elided.ifNecessary(steps, "Rearranged")
     } yield result).headOption
 
-    byJoiner(stepProvingContext.provingContext.definedBinaryConnectives, rearrangeStatement[Statement]) orElse
-      byJoiner(stepProvingContext.provingContext.definedBinaryRelations, rearrangeTerm[Term])
+    byJoiner(stepContext.provingContext.definedBinaryConnectives, rearrangeStatement[Statement]) orElse
+      byJoiner(stepContext.provingContext.definedBinaryRelations, rearrangeTerm[Term])
   }
 
-  def rearrange(targetStatement: Statement)(implicit stepProvingContext: StepProvingContext): Option[Step] = {
+  def rearrange(targetStatement: Statement)(implicit stepContext: StepContext): Option[Step] = {
     for {
-      equality <- stepProvingContext.provingContext.equalityOption
+      equality <- stepContext.provingContext.equalityOption
       result <- rearrangeEquality(targetStatement, equality) orElse rearrangeByExpanding(targetStatement, equality)
     } yield result
   }

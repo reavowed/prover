@@ -177,9 +177,9 @@ object SubstatementExtractor {
       .map(innerExtraction => InferenceExtraction(inference.summary, innerExtraction))
   }
 
-  def getPremiseExtractions(premise: Statement)(implicit stepProvingContext: StepProvingContext): Seq[PremiseExtraction] = {
+  def getPremiseExtractions(premise: Statement)(implicit stepContext: StepContext): Seq[PremiseExtraction] = {
     getExtractions(premise, VariableTracker.fromStepContext)
-      .map(innerExtraction => PremiseExtraction(innerExtraction, stepProvingContext.stepContext))
+      .map(innerExtraction => PremiseExtraction(innerExtraction, stepContext))
   }
 
   def createDerivationForInferenceExtraction(

@@ -31,7 +31,6 @@ class StepProvingSpec extends ControllerSpec {
       service.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns Success(
         createTargetStepWithContext(
           Negation(Equals(a, b)))(
-          defaultAvailableEntries,
           createOuterStepContext(Nil)))
 
       controller.getPossibleInferencesForCurrentTarget(

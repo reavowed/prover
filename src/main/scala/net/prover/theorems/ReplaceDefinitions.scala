@@ -1,36 +1,37 @@
 package net.prover.theorems
 
+import net.prover.entries.StepWithContext
 import net.prover.model.definitions.{DeductionDefinition, ExpressionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, StepContext, StepProvingContext}
+import net.prover.model.proof.{Premise, SubstitutionContext}
 import net.prover.model.{AvailableEntries, Inference, Substitutions}
 import scalaz.Id.Id
 
 case class ReplaceDefinitions(definitionsToReplace: Map[ExpressionDefinition, ExpressionDefinition], availableEntries: AvailableEntries) extends CompoundTheoremUpdater[Id] {
   override def updateStatement(
     statement: Statement,
-    stepContext: StepContext
+    substitutionContext: SubstitutionContext
   ): Statement = {
     statement.replaceDefinitions(definitionsToReplace)
   }
 
   override def updateInference(
     inference: Inference.Summary,
-    stepContext: StepContext
+    stepWithContext: StepWithContext
   ): Inference.Summary = {
     inference.replaceDefinitions(definitionsToReplace)
   }
 
   override def updatePremise(
     premise: Premise,
-    stepContext: StepProvingContext
+    stepWithContext: StepWithContext
   ): Premise = {
     premise.replaceDefinitions(definitionsToReplace)
   }
 
   override def updateSubstitutions(
     substitutions: Substitutions,
-    stepContext: StepContext
+    stepWithContext: StepWithContext
   ): Substitutions = {
     substitutions.replaceDefinitions(definitionsToReplace)
   }

@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.StepBuilderHelper
+import net.prover.{ContextHelper, StepBuilderHelper}
 import net.prover.entries.{GlobalContext, TheoremWithContext, TypedEntryWithContext}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
@@ -406,7 +406,7 @@ trait StepHelpers extends TestVariableDefinitions with TestExpressionDefinitions
   }
 }
 
-object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with StepHelpers with MockitoStubs {
+object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with StepHelpers with ContextHelper with MockitoStubs {
   val defaultAvailableEntries: AvailableEntries = createAvailableEntries(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,
@@ -440,20 +440,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
       parser.parseFromString(text, "test")
     }
   }
-  implicit def availableEntriesToProvingContext(implicit availableEntries: AvailableEntries): ProvingContext = ProvingContext(availableEntries, new Definitions(availableEntries))
-  implicit def availableEntriesAndStepContextToStepProvingContext(implicit availableEntries: AvailableEntries, stepContext: StepContext): StepProvingContext = {
-    StepProvingContext(stepContext, availableEntriesToProvingContext(availableEntries))
-  }
 
-  def createAvailableEntries(entries: Seq[ChapterEntry]): AvailableEntries = {
-    val entriesWithContext = entries.map(createEntryWithContext(_)(null))
-    val availableEntries = AvailableEntries(entriesWithContext)
-    entriesWithContext.foreach(e => {
-      e.availableEntries returns availableEntries
-      e.provingContext returns availableEntriesToProvingContext(availableEntries)
-    })
-    availableEntries
-  }
   def defaultAvailableEntriesPlus(entries: ChapterEntry*): AvailableEntries = {
     createAvailableEntries(defaultAvailableEntries.allEntries ++ entries)
   }
@@ -462,21 +449,5 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     def addEntry(chapterEntry: ChapterEntry): AvailableEntries = {
       availableEntries.addEntry(createEntryWithContext(chapterEntry)(availableEntries))
     }
-  }
-
-  def createEntryWithContext[T <: ChapterEntry](entry: T)(implicit availableEntries: AvailableEntries): TypedEntryWithContext[T] = {
-    val entryWithContext = mock[TypedEntryWithContext[T]]
-    entryWithContext.entry returns entry
-    entryWithContext.availableEntries returns availableEntries
-    entryWithContext.provingContext returns availableEntriesToProvingContext
-    entryWithContext.globalContext returns mock[GlobalContext]
-    entryWithContext.globalContext.definitions returns Definitions(availableEntries)
-    entryWithContext
-  }
-  def createTheoremWithContext(theorem: Theorem)(implicit availableEntries: AvailableEntries): TheoremWithContext = {
-    val theoremWithContext = createEntryWithContext(theorem)
-    theoremWithContext.theorem returns theorem
-    when(theoremWithContext.proofsWithContext).thenCallRealMethod()
-    theoremWithContext
   }
 }

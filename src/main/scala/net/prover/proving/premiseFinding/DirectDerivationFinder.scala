@@ -9,9 +9,9 @@ import net.prover.model.proof._
 object DirectDerivationFinder {
   def findDirectDerivationForStatement(
     targetStatement: Statement)(
-    implicit stepProvingContext: StepProvingContext
+    implicit stepContext: StepContext
   ): Option[Seq[DerivationStep]] = {
-    import stepProvingContext._
+    import stepContext._
     def fromPremises = knownStatementsFromPremisesBySerializedStatement.get(targetStatement.serialized).map(_.derivation)
 
     def fromFact = findDerivationForStatementFromFacts(targetStatement)
@@ -39,10 +39,9 @@ object DirectDerivationFinder {
 
   private def findDerivationForStatementFromFacts(
     targetStatement: Statement)(
-    implicit stepProvingContext: StepProvingContext
+    implicit stepContext: StepContext
   ): Option[Seq[DerivationStep]] = {
-    import stepProvingContext._
-    import provingContext._
+    import stepContext.provingContext._
     def findDerivationWithFactInferences(targetStatement: Statement): Option[(Seq[DerivationStepWithSingleInference], Seq[Inference])] = {
       def directly = factsBySerializedStatement.get(targetStatement.serialized).map(derivationStep => (Seq(derivationStep), Seq(derivationStep.inference)))
 

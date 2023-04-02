@@ -4,7 +4,7 @@ import net.prover.books.management.BookStateManager
 import net.prover.entries.StepWithContext
 import net.prover.model.Inference
 import net.prover.model.proof.Premise.Simplification
-import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
+import net.prover.model.proof.{Premise, Step}
 import net.prover.refactoring.UpdateTheorems
 import scalaz.Id.Id
 
@@ -44,12 +44,12 @@ case class ClearInference(inferenceToClear: Inference) extends CompoundTheoremUp
 
   override def updatePremise(
     premise: Premise,
-    stepProvingContext: StepProvingContext
+    stepWithContext: StepWithContext
   ): Premise = {
     premise match {
       case Simplification(statement, _, `inferenceToClear`, _, _) =>
         Premise.Pending(statement)
-      case Simplification(statement, inner, _, _, _) if updatePremise(inner, stepProvingContext) != inner =>
+      case Simplification(statement, inner, _, _, _) if updatePremise(inner, stepWithContext) != inner =>
         Premise.Pending(statement)
       case premise =>
         premise

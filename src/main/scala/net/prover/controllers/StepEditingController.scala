@@ -22,12 +22,10 @@ class StepEditingController @Autowired() (val bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody inferenceId: String
   ): ResponseEntity[_] = {
-    bookService.modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
-      import stepWithContext.step
-      import stepWithContext.stepProvingContext
+    bookService.modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
       for {
-        inference <- FindInference(inferenceId)(stepProvingContext)
-      } yield step.copy(highlightedInference = Some(inference))
+        inference <- FindInference(inferenceId)
+      } yield stepWithContext.step.copy(highlightedInference = Some(inference))
     }.toResponseEntity
   }
 

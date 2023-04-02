@@ -9,11 +9,10 @@ case class InferenceReplacementException(message: String, stepWithContext: StepW
 object InferenceReplacementException {
   def getMessage(message: String, stepWithContext: StepWithContext): String = {
     import stepWithContext._
-    import parentContext._
     import proofWithContext._
     import theoremWithContext._
     import chapterWithContext._
     import bookWithContext._
-    s"Book ${book.title}, chapter ${chapter.title}, theorem '${theoremWithContext.theorem.title}', proof $proofIndex ${stepProvingContext.stepContext.stepReference.serialize} - $message"
+    s"Book ${book.title}, chapter ${chapter.title}, theorem '${theoremWithContext.theorem.title}', proof $proofIndex ${stepContext.stepReference.serialize} - $message"
   }
 }

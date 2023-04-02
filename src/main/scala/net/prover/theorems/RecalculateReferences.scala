@@ -5,7 +5,7 @@ import net.prover.entries.{ProofWithContext, StepWithContext, TheoremWithContext
 import net.prover.model._
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
-import net.prover.model.proof.{Premise, Step, StepProvingContext}
+import net.prover.model.proof.{Premise, Step}
 import net.prover.theorems.steps.CompoundStepUpdater
 import net.prover.util.FunctorTypes._
 import scalaz.Scalaz._
@@ -48,8 +48,8 @@ object RecalculateReferences extends CompoundStepUpdater[WithValue[List[StepWith
 
   override def updatePremise(
     premise: Premise,
-    stepProvingContext: StepProvingContext
+    stepWithContext: StepWithContext
   ): (Premise, List[StepWithReferenceChange]) = {
-    (stepProvingContext.createPremise(premise.statement), Nil)
+    (stepWithContext.stepContext.createPremise(premise.statement), Nil)
   }
 }

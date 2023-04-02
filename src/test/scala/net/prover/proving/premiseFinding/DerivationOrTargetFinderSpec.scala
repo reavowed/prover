@@ -1,13 +1,13 @@
 package net.prover.proving.premiseFinding
 
-import net.prover.StepContextHelper
+import net.prover.ContextHelper
 import net.prover.model.TestDefinitions.{a, b, _}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.model.{AvailableEntries, TestDefinitions}
 import org.specs2.mutable.Specification
 
-class DerivationOrTargetFinderSpec extends Specification with StepContextHelper {
+class DerivationOrTargetFinderSpec extends Specification with ContextHelper {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
   implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
@@ -16,7 +16,7 @@ class DerivationOrTargetFinderSpec extends Specification with StepContextHelper 
 
     def findPremiseOrTarget(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries): (Seq[Step], Seq[Statement]) = {
       implicit val stepContext = createBaseStepContext(premises, depth)
-      DerivationOrTargetFinder.findDerivationsOrTargets(Seq(target))(availableEntriesAndStepContextToStepProvingContext(availableEntries, stepContext))
+      DerivationOrTargetFinder.findDerivationsOrTargets(Seq(target))
         .mapLeft(_.steps)
         .mapRight(_.map(_.statement))
     }

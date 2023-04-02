@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.{StepBuilderHelper, StepContextHelper}
+import net.prover.{StepBuilderHelper, ContextHelper}
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.DefinitionRewriter
@@ -15,7 +15,7 @@ class DefinitionRewriterSpec extends Specification with StepBuilderHelper {
   "rewriting definitions" should {
 
     def testRewrite(source: Statement, target: Statement, depth: Int = 0)(implicit variableDefinitions: VariableDefinitions): MatchResult[Any] = {
-      implicit val stepContext = createBaseStepContext(Seq(source)).copy(boundVariableLists = (1 to depth).map(i => Seq(s"x_$i")))
+      implicit val stepContext = (1 to depth).foldLeft(createBaseStepContext(Seq(source))) {(c, i) => c.addBoundVariable(s"x_$i") }
       DefinitionRewriter.rewriteDefinitions(source, target) must beSome(beStepThatMakesValidTheorem(Seq(source), target, depth))
     }
 

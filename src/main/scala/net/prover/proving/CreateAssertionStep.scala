@@ -1,9 +1,9 @@
 package net.prover.proving
 
-import net.prover.controllers.{BooleanWithResponseExceptionOps, ExtractionHelper, OptionWithResponseExceptionOps}
 import net.prover.controllers.models.StepDefinition
+import net.prover.controllers.{BooleanWithResponseExceptionOps, ExtractionHelper, OptionWithResponseExceptionOps}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, StepProvingContext, SubstatementExtractor}
+import net.prover.model.proof.{Step, StepContext, SubstatementExtractor}
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.{ExpressionParsingContext, Substitutions}
 
@@ -15,14 +15,14 @@ object CreateAssertionStep {
     getConclusionOption: (ExpressionParsingContext, Substitutions) => Try[Option[Statement]],
     definition: StepDefinition,
     unwrappers: Seq[Unwrapper])(
-    implicit stepProvingContext: StepProvingContext
+    implicit stepContext: StepContext
   ): Try[(Statement, Step, Seq[Step.Target])] = {
     for {
       inference <- FindInference(inferenceId)
       extractionInferences <- definition.extractionInferenceIds.map(FindInference(_)).traverseTry
       extraction <- SubstatementExtractor.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
-      wrappedStepProvingContext = StepProvingContext.updateStepContext(unwrappers.enhanceStepContext)
-      substitutions <- definition.substitutions.parse(extraction.variableDefinitions)(ExpressionParsingContext.atStep(wrappedStepProvingContext))
+      wrappedStepContext = unwrappers.enhanceStepContext(stepContext)
+      substitutions <- definition.substitutions.parse(extraction.variableDefinitions)(ExpressionParsingContext.atStep(wrappedStepContext))
       epc = ExpressionParsingContext.forInference(inference).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
       conclusionOption <- getConclusionOption(epc, substitutions)
       newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
@@ -36,7 +36,7 @@ object CreateAssertionStep {
         case None =>
           Success((inference, None))
       }
-      (derivationStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, newTargetStatementsForExtractionOption, conclusionOption)(wrappedStepProvingContext)
+      (derivationStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, newTargetStatementsForExtractionOption, conclusionOption)(wrappedStepContext)
       (wrappedResult, wrappedStep, wrappedTargets) = if (unwrappers.nonEmpty)
         unwrappers
           .addNecessaryExtractions(derivationStep.statement, derivationStep.step, targets)

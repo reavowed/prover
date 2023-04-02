@@ -1,7 +1,7 @@
 package net.prover.model.unwrapping
 
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.StepProvingContext
+import net.prover.model.proof.StepContext
 import net.prover.model.proof.SubstatementExtractor.VariableTracker
 
 case class UnwrappedStatement(statement: Statement, unwrappers: Seq[Unwrapper]) {
@@ -9,8 +9,8 @@ case class UnwrappedStatement(statement: Statement, unwrappers: Seq[Unwrapper]) 
 }
 
 object UnwrappedStatement {
-  def getUnwrappedStatements(statement: Statement)(implicit stepProvingContext: StepProvingContext): Seq[UnwrappedStatement] = {
-    val provingContext = stepProvingContext.provingContext
+  def getUnwrappedStatements(statement: Statement)(implicit stepContext: StepContext): Seq[UnwrappedStatement] = {
+    import stepContext.provingContext
     def helper(currentUnwrappedStatement: UnwrappedStatement, resultsSoFar: Seq[UnwrappedStatement], variableTracker: VariableTracker): Seq[UnwrappedStatement] = {
       def byGeneralization = for {
         generalizationDefinition <- provingContext.generalizationDefinitionOption

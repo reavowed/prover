@@ -1,9 +1,9 @@
 package net.prover.controllers.models
 
-import net.prover.model.{Inference, Substitutions, VariableDefinitions}
 import net.prover.model.expressions.{Expression, Statement}
-import net.prover.model.proof.StepProvingContext
+import net.prover.model.proof.StepContext
 import net.prover.model.proof.SubstatementExtractor.Extraction
+import net.prover.model.{Inference, Substitutions, VariableDefinitions}
 
 sealed trait PossibleInference {
   def inference: Inference.Summary
@@ -50,13 +50,13 @@ case class PossibleConclusionWithPremises(
 ) extends PossibleConclusion
 
 object PossibleConclusionWithPremises {
-  def fromExtractionWithTarget(extraction: Extraction, target: Statement)(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
+  def fromExtractionWithTarget(extraction: Extraction, target: Statement)(implicit stepContext: StepContext): Option[PossibleConclusionWithPremises] = {
     fromExtractionWithSubstitutions(extraction, _.calculateSubstitutions(target))
   }
-  def fromExtractionWithSubstitutions(extraction: Extraction, getSubstitutions: Statement => Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): Option[PossibleConclusionWithPremises] = {
+  def fromExtractionWithSubstitutions(extraction: Extraction, getSubstitutions: Statement => Option[Substitutions.Possible])(implicit stepContext: StepContext): Option[PossibleConclusionWithPremises] = {
     getSubstitutions(extraction.conclusion).map(s => fromExtraction(extraction, Some(s)))
   }
-  def fromExtraction(extraction: Extraction, substitutions: Option[Substitutions.Possible])(implicit stepProvingContext: StepProvingContext): PossibleConclusionWithPremises = {
+  def fromExtraction(extraction: Extraction, substitutions: Option[Substitutions.Possible])(implicit stepContext: StepContext): PossibleConclusionWithPremises = {
     PossibleConclusionWithPremises(
       extraction.conclusion,
       PossiblePremise.fromAvailablePremises(extraction.premises, substitutions, extraction.variableDefinitions),
@@ -76,10 +76,10 @@ object PossiblePremise {
     premises: Seq[Statement],
     substitutions: Option[Substitutions.Possible],
     variableDefinitions: VariableDefinitions)(
-    implicit stepProvingContext: StepProvingContext
+    implicit stepContext: StepContext
   ): Seq[PossiblePremise] = {
     premises.map { premise =>
-      val matches = (stepProvingContext.allPremises.map(_.statement) ++ stepProvingContext.provingContext.facts.map(_.statement)).mapCollect { availablePremise =>
+      val matches = (stepContext.allPremises.map(_.statement) ++ stepContext.provingContext.facts.map(_.statement)).mapCollect { availablePremise =>
         premise.calculateSubstitutions(availablePremise, substitutions.getOrElse(Substitutions.Possible.empty))
           .map(s => PossiblePremiseMatch(availablePremise, SuggestedSubstitutions(variableDefinitions, s)))
       }

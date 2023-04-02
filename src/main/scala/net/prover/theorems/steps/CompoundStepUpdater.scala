@@ -3,28 +3,14 @@ package net.prover.theorems.steps
 import net.prover.entries.{StepWithContext, StepsWithContext}
 import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
+import net.prover.model.proof.{Premise, Step, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
 import scalaz.Monad
 import scalaz.Scalaz._
 
-import scala.annotation.tailrec
-
 abstract class CompoundStepUpdater[F[_] : Monad] {
   def apply(stepsWithContext: StepsWithContext): F[List[Step]] = {
-    @tailrec def helper(fList: F[List[Step]], stepOption: Option[StepWithContext]): F[List[Step]] = {
-      stepOption match {
-        case Some(stepWithContext) =>
-          val newList = for {
-            list <- fList
-            step <- apply(stepWithContext)
-          } yield list :+ step
-          helper(newList, stepWithContext.nextSibling)
-        case None =>
-          fList
-      }
-    }
-    helper(Monad[F].point(Nil), stepsWithContext.atIndex(0))
+    stepsWithContext.stepsWithContexts.toList.map(apply).sequence
   }
 
   def apply(stepWithContext: StepWithContext): F[Step] = {
@@ -42,20 +28,20 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
 
   def updateTarget(step: Step.Target, stepWithContext: StepWithContext): F[Step] = {
     for {
-      newStatement <- updateStatement(step.statement, stepWithContext.stepContext)
+      newStatement <- updateStatement(step.statement, stepWithContext)
     } yield Step.Target(newStatement)
   }
   def updateAssertion(step: Step.Assertion,  stepWithContext: StepWithContext): F[Step] = {
     for {
-      newStatement <- updateStatement(step.statement, stepWithContext.stepContext)
-      newInference <- updateInference(step.inference, stepWithContext.stepContext)
-      newPremises <- step.premises.toList.map(updatePremise(_, stepWithContext.stepProvingContext)).sequence
-      newSubstitutions <- updateSubstitutions(step.substitutions, stepWithContext.stepContext)
+      newStatement <- updateStatement(step.statement, stepWithContext)
+      newInference <- updateInference(step.inference, stepWithContext)
+      newPremises <- step.premises.toList.map(updatePremise(_, stepWithContext)).sequence
+      newSubstitutions <- updateSubstitutions(step.substitutions, stepWithContext)
     } yield Step.Assertion(newStatement, newInference, newPremises, newSubstitutions)
   }
   def updateDeduction(step: Step.Deduction, stepWithContext: StepWithContext): F[Step] = {
     for {
-      newAssumption <- updateStatement(step.assumption, stepWithContext.stepContext)
+      newAssumption <- updateStatement(step.assumption, stepWithContext)
       newSubsteps <- apply(stepWithContext.forSubsteps(step))
       deductionDefinition <- updateDeductionDefinition(step.deductionDefinition)
     } yield Step.Deduction(newAssumption, newSubsteps, deductionDefinition)
@@ -69,11 +55,11 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
   def updateNaming(step: Step.Naming, stepWithContext: StepWithContext): F[Step] = {
     for {
       newAssumption <- updateStatement(step.assumption, stepWithContext.stepContext.addBoundVariable(step.variableName))
-      newStatement <- updateStatement(step.statement, stepWithContext.stepContext)
+      newStatement <- updateStatement(step.statement, stepWithContext)
       newSubsteps <- apply(stepWithContext.forSubsteps(step))
-      newInference <- updateInference(step.inference, stepWithContext.stepContext)
-      newPremises <- step.premises.toList.map(updatePremise(_, stepWithContext.stepProvingContext)).sequence
-      newSubstitutions <- updateSubstitutions(step.substitutions, stepWithContext.stepContext)
+      newInference <- updateInference(step.inference, stepWithContext)
+      newPremises <- step.premises.toList.map(updatePremise(_, stepWithContext)).sequence
+      newSubstitutions <- updateSubstitutions(step.substitutions, stepWithContext)
       deductionDefinition <- updateDeductionDefinition(step.deductionDefinition)
       generalizationDefinition <- updateGeneralizationDefinition(step.generalizationDefinition)
     } yield Step.Naming(
@@ -95,7 +81,7 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
   def updateElided(step: Step.Elided, stepWithContext: StepWithContext): F[Step] = {
     for {
       newSubsteps <- apply(stepWithContext.forSubsteps(step))
-      newHighlightedInference <- step.highlightedInference.map(updateInference(_, stepWithContext.stepContext)).sequence
+      newHighlightedInference <- step.highlightedInference.map(updateInference(_, stepWithContext)).sequence
     } yield Step.Elided(newSubsteps, newHighlightedInference, step.description)
   }
   def updateExistingStatementExtraction(step: Step.ExistingStatementExtraction, stepWithContext: StepWithContext): F[Step] = {
@@ -104,10 +90,10 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
     } yield Step.ExistingStatementExtraction(newSubsteps)
   }
 
-  def updateStatement(statement: Statement, stepContext: StepContext): F[Statement] = Monad[F].point(statement)
-  def updateInference(inference: Inference.Summary, stepContext: StepContext): F[Inference.Summary] = Monad[F].point(inference)
-  def updatePremise(premise: Premise, stepProvingContext: StepProvingContext): F[Premise] = Monad[F].point(premise)
-  def updateSubstitutions(substitutions: Substitutions, stepContext: StepContext): F[Substitutions] = Monad[F].point(substitutions)
+  def updateStatement(statement: Statement, substitutionContext: SubstitutionContext): F[Statement] = Monad[F].point(statement)
+  def updateInference(inference: Inference.Summary, stepWithContext: StepWithContext): F[Inference.Summary] = Monad[F].point(inference)
+  def updatePremise(premise: Premise, stepWithContext: StepWithContext): F[Premise] = Monad[F].point(premise)
+  def updateSubstitutions(substitutions: Substitutions, stepWithContext: StepWithContext): F[Substitutions] = Monad[F].point(substitutions)
   def updateDeductionDefinition(deductionDefinition: DeductionDefinition): F[DeductionDefinition] = Monad[F].point(deductionDefinition)
   def updateGeneralizationDefinition(generalizationDefinition: GeneralizationDefinition): F[GeneralizationDefinition] = Monad[F].point(generalizationDefinition)
 }

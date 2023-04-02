@@ -1,11 +1,10 @@
 package net.prover.model
 
-import net.prover.books.model.Book
+import net.prover.entries.StepsWithContext
 import net.prover.model.definitions._
-import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.SubstatementExtractor.{Extraction, ExtractionFromSinglePremise, InferenceExtraction}
-import net.prover.model.proof.{DerivationStep, DerivationStepWithMultipleInferences, DerivationStepWithSingleInference, Step, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof.SubstatementExtractor.{ExtractionFromSinglePremise, InferenceExtraction}
+import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
@@ -251,5 +250,6 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
 }
 
 object ProvingContext {
-  implicit def fromStepProvingContext(implicit stepProvingContext: StepProvingContext): ProvingContext = stepProvingContext.provingContext
+  implicit def fromStepContext(implicit stepContext: StepContext): ProvingContext = stepContext.provingContext
+  implicit def fromStepsWithContext(implicit stepsWithContext: StepsWithContext): ProvingContext = stepsWithContext.provingContext
 }

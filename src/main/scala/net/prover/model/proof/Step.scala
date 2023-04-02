@@ -2,9 +2,8 @@ package net.prover.model.proof
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.model._
-import net.prover.model.definitions.{DeductionDefinition, Definitions, ExpressionDefinition, GeneralizationDefinition}
+import net.prover.model.definitions.{DeductionDefinition, ExpressionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
 
 import scala.util.Try
@@ -42,7 +41,7 @@ object Step {
   sealed trait WithAssumption extends Step.WithSubsteps {
     def assumption: Statement
     override def specifyStepContext(outerContext: StepContext): StepContext = {
-      super.specifyStepContext(outerContext).addStatement(assumption, "a")
+      super.specifyStepContext(outerContext).addAssumption(assumption)
     }
   }
 
@@ -76,7 +75,7 @@ object Step {
         .getOrElse(throw new Exception("Cannot prove a deduction without an appropriate statement definition"))
       for {
         assumption <- Statement.parser
-        substeps <- listParser(availableEntries, stepContext.addStatement(assumption, "a")).inBraces
+        substeps <- listParser(availableEntries, stepContext.addAssumption(assumption)).inBraces
       } yield Deduction(assumption, substeps, deductionDefinition)
     }
   }
@@ -130,8 +129,8 @@ object Step {
     def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[Naming] = {
       for {
         variableName <- Parser.singleWord
-        assumption <- Statement.parser(ExpressionParsingContext.atStep(implicitly, stepContext.addBoundVariable(variableName)))
-        innerStepContext = stepContext.addBoundVariable(variableName).addStatement(assumption, "a")
+        assumption <- Statement.parser(ExpressionParsingContext.atStep(stepContext.addBoundVariable(variableName)))
+        innerStepContext = stepContext.addBoundVariable(variableName).addAssumption(assumption)
         inference <- Inference.parser
         substitutions <- inference.substitutionsParser
         substeps <- listParser(availableEntries, innerStepContext).inBraces

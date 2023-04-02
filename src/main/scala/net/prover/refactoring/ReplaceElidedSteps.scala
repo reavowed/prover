@@ -16,7 +16,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
       assertionSteps <- step.substeps.map(_.asOptionalInstanceOf[Step.Assertion]).toList.sequence
       firstAssertion <- assertionSteps.headOption
       mainPremise <- firstAssertion.premises.headOption.map(_.statement)
-      _ <- SubstatementExtractor.getPremiseExtractions(mainPremise)(stepWithContext.stepProvingContext)
+      _ <- SubstatementExtractor.getPremiseExtractions(mainPremise)(stepWithContext.stepContext)
         .find(_.extractionInferences.toList == assertionSteps.map(_.inference))
     } yield Step.ExistingStatementExtraction(assertionSteps)) getOrElse super.updateElided(step, stepWithContext)
   }

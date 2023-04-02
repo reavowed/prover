@@ -1,6 +1,6 @@
 package net.prover.model
 
-import net.prover.{StepBuilderHelper, StepContextHelper}
+import net.prover.{StepBuilderHelper, ContextHelper}
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{Step, TermRearranger}

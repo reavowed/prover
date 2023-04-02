@@ -17,12 +17,12 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
     stepWithContext: StepWithContext
   ): Try[Step] = {
     import step._
-    import stepWithContext.stepProvingContext
+    import stepWithContext.{stepContext, provingContext}
     if (inference == oldInference) {
       val substitutionsOption = (for {
-        inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(newInference.id)
-        substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(statement).toSeq
-        substitutionsAfterPremises <- inferenceExtraction.premises.zipStrict(premises).flatMap(_.foldLeft(Option(substitutionsAfterConclusion)) { case (so, (ep, p)) => so.flatMap(s => ep.calculateSubstitutions(p.statement, s)) }).toSeq
+        inferenceExtraction <- stepWithContext.provingContext.inferenceExtractionsByInferenceId(newInference.id)
+        substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(statement)(stepWithContext).toSeq
+        substitutionsAfterPremises <- inferenceExtraction.premises.zipStrict(premises).flatMap(_.foldLeft(Option(substitutionsAfterConclusion)) { case (so, (ep, p)) => so.flatMap(s => ep.calculateSubstitutions(p.statement, s)(stepWithContext)) }).toSeq
         substitutions <- substitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).toSeq
       } yield (inferenceExtraction, substitutions)).headOption
       for {

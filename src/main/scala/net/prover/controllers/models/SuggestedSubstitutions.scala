@@ -1,9 +1,9 @@
 package net.prover.controllers.models
 
 import monocle.Lens
-import net.prover.model.{Substitutions, VariableDefinition, VariableDefinitions}
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.StepContext
+import net.prover.model.proof.SubstitutionContext
+import net.prover.model.{Substitutions, VariableDefinition, VariableDefinitions}
 
 case class SuggestedSubstitutions(
   statements: Seq[Option[Statement]],
@@ -12,7 +12,7 @@ case class SuggestedSubstitutions(
   termApplications: Seq[Seq[Term]])
 
 object SuggestedSubstitutions {
-  def apply(variableDefinitions: VariableDefinitions, possibleSubstitutions: Substitutions.Possible)(implicit stepContext: StepContext): SuggestedSubstitutions = {
+  def apply(variableDefinitions: VariableDefinitions, possibleSubstitutions: Substitutions.Possible)(implicit substitutionContext: SubstitutionContext): SuggestedSubstitutions = {
     def filterValues[T <: Expression](
       definitions: Seq[VariableDefinition],
       map: Map[Int, T]
@@ -30,7 +30,7 @@ object SuggestedSubstitutions {
         applicationsMap.getOrElse(index, Nil)
           .find { case (arguments, _, _) => (0 until definition.arity).forall(i => arguments(i).tryApplySubstitutions(possibleSubstitutions).nonEmpty) }
           .map { case (arguments, value, depth) =>
-            value.calculateApplicatives(arguments, possibleSubstitutions, 0, depth, stepContext.externalDepth).map(_._1.asInstanceOf[T]).toSeq
+            value.calculateApplicatives(arguments, possibleSubstitutions, 0, depth, substitutionContext.externalDepth).map(_._1.asInstanceOf[T]).toSeq
           }
           .getOrElse(Nil)
       }

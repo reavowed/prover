@@ -2,9 +2,9 @@ package net.prover.controllers
 
 import net.prover.controllers.StepRewriteController.{InferenceRewriteSuggestion, PremiseRewritePath, PremiseSuggestion}
 import net.prover.controllers.models.{PathData, PremiseRewrite}
-import net.prover.model.{TermVariablePlaceholder, TestDefinitions}
 import net.prover.model.TestDefinitions.{target, _}
-import net.prover.model.proof.{Step, StepProvingContext, StepReference}
+import net.prover.model.proof.{Step, StepReference}
+import net.prover.model.{TermVariablePlaceholder, TestDefinitions}
 import org.springframework.http.ResponseEntity
 
 import scala.util.Success

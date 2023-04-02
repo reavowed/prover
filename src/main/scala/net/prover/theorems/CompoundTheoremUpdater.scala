@@ -3,6 +3,7 @@ package net.prover.theorems
 import net.prover.entries.{ProofWithContext, TheoremWithContext}
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
+import net.prover.model.proof.SubstitutionContext
 import net.prover.theorems.steps.CompoundStepUpdater
 import scalaz.Monad
 import scalaz.Scalaz._
@@ -11,8 +12,8 @@ abstract class CompoundTheoremUpdater[F[_] : Monad] extends CompoundStepUpdater[
   def apply(theoremWithContext: TheoremWithContext): F[Theorem] = {
     import theoremWithContext._
     for {
-      newPremises <- theorem.premises.map(updateStatement(_, theorem.initialStepContext)).toList.sequence
-      newConclusion <- updateStatement(theorem.conclusion, theorem.initialStepContext)
+      newPremises <- theorem.premises.map(updateStatement(_, SubstitutionContext.outsideProof)).toList.sequence
+      newConclusion <- updateStatement(theorem.conclusion, SubstitutionContext.outsideProof)
       newProofs <- proofsWithContext.map(apply).toList.sequence
     } yield Theorem(
       theorem.name,

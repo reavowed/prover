@@ -1,6 +1,7 @@
 package net.prover.controllers
 
 import net.prover.controllers.models._
+import net.prover.entries.TypedStepWithContext
 import net.prover.model._
 import net.prover.model.proof._
 import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement}
@@ -22,17 +23,13 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    (for {
-      stepWithContext <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-    } yield {
-      implicit val stepProvingContext = stepWithContext.stepProvingContext
-
+    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map(implicit stepWithContext => {
       val possibleUnwrappedTargetStatements = UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement)
 
       def findPossibleInference(inference: Inference): Option[PossibleInferenceWithTargets] = {
         val possibleTargets = for {
           possibleUnwrappedTargetStatement <- possibleUnwrappedTargetStatements
-          possibleConclusions = stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
+          possibleConclusions = stepWithContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
             .filter(_.conclusion.calculateSubstitutions(possibleUnwrappedTargetStatement.statement).nonEmpty)
             .map(e => PossibleConclusionWithoutPremises(e.conclusion, e.extractionInferences.map(_.id), e.additionalVariableNames))
           if possibleConclusions.nonEmpty
@@ -47,10 +44,11 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
         else
           None
       }
+
       def getConclusionComplexity(possibleConclusion: PossibleConclusion): Int = possibleConclusion.conclusion.structuralComplexity
 
       getPossibleInferences(
-        stepProvingContext.provingContext.availableEntries.allInferences,
+        stepWithContext.availableEntries.allInferences,
         searchText,
         findPossibleInference,
         getConclusionComplexity)
@@ -68,13 +66,13 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
     @RequestParam("targetUnwrappers") targetUnwrappers: Array[String],
     @RequestParam("conclusionExtractionInferenceIds") conclusionExtractionInferenceIds: Array[String]
   ): ResponseEntity[_] = {
-    (for {
-      stepWithContext <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-      stepProvingContext = stepWithContext.stepProvingContext
-      inference <- FindInference(inferenceId)(stepProvingContext)
-      possibleTarget <- UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement)(stepProvingContext).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
-      inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == conclusionExtractionInferenceIds.toSeq).orBadRequest(s"Could not find extraction option with inference ids ${conclusionExtractionInferenceIds.mkString(", ")}")
-    } yield PossibleConclusionWithPremises.fromExtractionWithTarget(inferenceExtraction, possibleTarget.statement)(stepProvingContext.updateStepContext(possibleTarget.unwrappers.enhanceStepContext))).toResponseEntity
+    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
+      for {
+        inference <- FindInference(inferenceId)
+        possibleTarget <- UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
+        inferenceExtraction <- stepWithContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == conclusionExtractionInferenceIds.toSeq).orBadRequest(s"Could not find extraction option with inference ids ${conclusionExtractionInferenceIds.mkString(", ")}")
+      } yield PossibleConclusionWithPremises.fromExtractionWithTarget(inferenceExtraction, possibleTarget.statement)(possibleTarget.unwrappers.enhanceStepContext(stepWithContext))
+    ).toResponseEntity
   }
 
   @GetMapping(value = Array("/possibleInferencesForNewTarget"), produces = Array("application/json;charset=UTF-8"))
@@ -86,19 +84,16 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    (for {
-      stepWithContext <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-    } yield {
-      implicit val stepProvingContext = stepWithContext.stepProvingContext
-      filterInferences(stepProvingContext.provingContext.availableEntries.allInferences, searchText)
+    bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map(implicit stepWithContext =>
+      filterInferences(stepWithContext.provingContext.availableEntries.allInferences, searchText)
         .reverse
         .take(10)
         .map { inference =>
-          val possibleConclusions = stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
+          val possibleConclusions = stepWithContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
             .map(PossibleConclusionWithPremises.fromExtraction(_, None))
           PossibleInferenceWithConclusions(inference.summary, possibleConclusions)
         }
-    }).toResponseEntity
+    ).toResponseEntity
   }
 
   @GetMapping(value = Array("/possibleConclusionsForCurrentTargetByPremise"), produces = Array("application/json;charset=UTF-8"))

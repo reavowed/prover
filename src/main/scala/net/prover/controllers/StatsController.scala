@@ -1,16 +1,15 @@
 package net.prover.controllers
 
-import net.prover.entries.GlobalContext
-
-import javax.servlet.http.HttpServletRequest
-import net.prover.model.{AvailableEntries, Inference}
+import net.prover.model.AvailableEntries
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.DefinedStatement
 import net.prover.model.proof.Step
+import net.prover.theorems.steps.FindStepsOfType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 
 import java.util.regex.Pattern
+import javax.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping(Array("/stats"))
@@ -65,12 +64,13 @@ class StatsController @Autowired() (val bookService: BookService) {
       bookWithContext <- bookService.globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts
       theoremWithContext <- chapterWithContext.theoremsWithContexts
-      (assertion, context) <- theoremWithContext.theorem.findSteps[Step.Assertion]
+      assertionWithContext <- FindStepsOfType[Step.Assertion](theoremWithContext)
+      assertion = assertionWithContext.step
       if assertion.inference.id == inferenceId
       if Option(statementSymbol).forall(symbol =>
         assertion.statement.asOptionalInstanceOf[DefinedStatement]
           .exists(_.definition.symbol == symbol))
-    } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext), context.stepReference.stepPath.mkString("."))
+    } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext), assertionWithContext.stepContext.stepReference.stepPath.mkString("."))
   }
 
   @GetMapping(value = Array("findElisions"))
@@ -82,9 +82,9 @@ class StatsController @Autowired() (val bookService: BookService) {
       bookWithContext <- bookService.globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts
       theoremWithContext <- chapterWithContext.theoremsWithContexts
-      (elision, context) <- theoremWithContext.theorem.findSteps[Step.Elided]
-      if elision.highlightedInference.exists(_.id == inferenceId)
-    } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext), context.stepReference.stepPath.mkString("."))
+      stepWithContext <- FindStepsOfType[Step.Elided](theoremWithContext)
+      if stepWithContext.step.highlightedInference.exists(_.id == inferenceId)
+    } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext), stepWithContext.stepContext.stepReference.stepPath.mkString("."))
   }
 
   @GetMapping(value = Array("nonAlphanumericTheorems"))

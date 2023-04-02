@@ -1,9 +1,9 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, PossibleInferenceWithConclusions, StepDefinition}
-import net.prover.model.expressions.{DefinedStatement, Statement}
-import net.prover.model.proof.{Premise, ProofHelper, SimplificationFinder, Step, SubstitutionContext}
 import net.prover.model._
+import net.prover.model.expressions.{DefinedStatement, Statement}
+import net.prover.model.proof._
 import net.prover.proving.CreateAssertionStep
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -22,28 +22,25 @@ class StepNamingController @Autowired() (val bookService: BookService) extends I
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    (for {
-      stepWithContext <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-    } yield {
-      implicit val stepProvingContext = stepWithContext.stepProvingContext
-      filterInferences(stepProvingContext.provingContext.availableEntries.allInferences, searchText)
-          .iterator
-          .mapCollect { inference =>
-            val conclusions = for {
-              inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
-              if ProofHelper.findNamingInferences.exists { case (_, initialPremises, _, _, _) =>
-                initialPremises.single.exists(_.calculateSubstitutions(inferenceExtraction.conclusion)(SubstitutionContext.outsideProof).nonEmpty)
-              }
-            } yield PossibleConclusionWithPremises.fromExtraction(inferenceExtraction, None)
-            if (conclusions.nonEmpty) {
-              Some(PossibleInferenceWithConclusions(inference.summary, conclusions))
-            } else {
-              None
+    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map { implicit stepWithContext =>
+      filterInferences(stepWithContext.provingContext.availableEntries.allInferences, searchText)
+        .iterator
+        .mapCollect { inference =>
+          val conclusions = for {
+            inferenceExtraction <- stepWithContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
+            if ProofHelper.findNamingInferences.exists { case (_, initialPremises, _, _, _) =>
+              initialPremises.single.exists(_.calculateSubstitutions(inferenceExtraction.conclusion)(SubstitutionContext.outsideProof).nonEmpty)
             }
+          } yield PossibleConclusionWithPremises.fromExtraction(inferenceExtraction, None)
+          if (conclusions.nonEmpty) {
+            Some(PossibleInferenceWithConclusions(inference.summary, conclusions))
+          } else {
+            None
           }
-          .take(NumberOfSuggestionsToReturn)
-          .toList
-    }).toResponseEntity
+        }
+        .take(NumberOfSuggestionsToReturn)
+        .toList
+    }.toResponseEntity
   }
 
   @PostMapping(value = Array("/introduceNamingByInference"))
@@ -55,10 +52,8 @@ class StepNamingController @Autowired() (val bookService: BookService) extends I
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
       import stepWithContext.step
-      import stepWithContext.stepProvingContext
-
       def getNamingWrapper(premiseStatement: Statement, resultStatement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Statement, SubstitutionContext, Step => Step.Naming)] = {
         for {
           variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single)

@@ -37,7 +37,7 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
       theoremWithContext <- findEntry[Theorem](bookKey, chapterKey, theoremKey)
       stepWithContext <- FindStep(theoremWithContext, proofIndex, stepPath.indexes).orNotFound(s"Step $stepPath")
       step <- stepWithContext.step.asOptionalInstanceOf[T].orBadRequest(s"Step is not ${classTag[T].runtimeClass.getName}")
-    } yield stepWithContext.copy(step = step)
+    } yield stepWithContext.withStep(step)
   }
 
   def modifyBooks[F[_] : Functor](f: GlobalContext => F[Seq[Book]]): F[GlobalContext] = UpdateBooks(f)

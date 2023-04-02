@@ -6,8 +6,8 @@ import net.prover.model.expressions._
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 
 object ProofHelper {
-  def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit stepProvingContext: StepProvingContext): Option[(DerivationStep, Substitutions.Possible)] = {
-    stepProvingContext.provingContext.facts.mapFind { fact =>
+  def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(DerivationStep, Substitutions.Possible)] = {
+    provingContext.facts.mapFind { fact =>
       for {
         substitutions <- target.calculateSubstitutions(fact.statement, substitutionsSoFar)
       } yield (fact, substitutions)
@@ -42,7 +42,7 @@ object ProofHelper {
   def getAssertionWithPremises(
     inference: Inference,
     substitutions: Substitutions)(
-    implicit stepProvingContext: StepProvingContext
+    implicit stepContext: StepContext
   ): Option[(Step.Assertion, Seq[DerivationStep], Seq[Step.Target])] = {
     for {
       premiseStatements <- inference.substitutePremises(substitutions)
@@ -54,16 +54,5 @@ object ProofHelper {
         premiseStatements.map(Premise.Pending),
         substitutions.restrictTo(inference.variableDefinitions))
     } yield (assertionStep, premiseSteps, targetSteps)
-  }
-
-  def getAssertionWithPremisesAndElide(
-    inference: Inference,
-    substitutions: Substitutions)(
-    implicit stepProvingContext: StepProvingContext
-  ): Option[(Step, Seq[Step.Target])] = {
-    for {
-      (assertionStep, premiseSteps, targetSteps) <- getAssertionWithPremises(inference, substitutions)
-      elidedStep <- Step.Elided.ifNecessary(premiseSteps.steps :+ assertionStep, inference)
-    } yield (elidedStep, targetSteps)
   }
 }

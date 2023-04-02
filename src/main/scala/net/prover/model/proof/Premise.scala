@@ -16,7 +16,6 @@ sealed trait Premise {
     statement.removeExternalParameters(numberOfParametersToRemove, internalDepth).map(Pending)
   }
   def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): Premise
-  def toPending: Pending = Pending(statement)
   def isComplete: Boolean
 }
 object Premise {
@@ -30,7 +29,7 @@ object Premise {
     helper(premise, "")
   }
 
-  def parser(statement: Statement)(implicit stepContext: StepContext, availableEntries: AvailableEntries): Parser[Premise] = {
+  def parser(statement: Statement)(implicit stepContext: StepContext): Parser[Premise] = {
     @scala.annotation.tailrec
     def helper(inferences: Seq[Inference], premise: SingleLinePremise): SingleLinePremise = {
       inferences match {

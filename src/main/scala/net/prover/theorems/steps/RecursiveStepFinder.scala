@@ -3,20 +3,11 @@ package net.prover.theorems.steps
 import net.prover.entries.{StepWithContext, StepsWithContext}
 import net.prover.model.proof.Step
 import scalaz.Monoid
-
-import scala.annotation.tailrec
+import scalaz.Scalaz._
 
 abstract class RecursiveStepFinder[T : Monoid] {
   def apply(stepsWithContext: StepsWithContext): T = {
-    @tailrec def helper(t: T, stepOption: Option[StepWithContext]): T = {
-      stepOption match {
-        case Some(stepWithContext) =>
-          helper(Monoid[T].append(t, apply(stepWithContext)), stepWithContext.nextSibling)
-        case None =>
-          t
-      }
-    }
-    helper(Monoid[T].zero, stepsWithContext.atIndex(0))
+    stepsWithContext.stepsWithContexts.toList.foldMap(apply)
   }
 
   def apply(stepWithContext: StepWithContext): T = {

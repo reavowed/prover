@@ -2,7 +2,7 @@ package net.prover.entries
 
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
-import net.prover.model.proof.StepReference
+import net.prover.model.proof.{Premise, PremiseReference, StepReference}
 import net.prover.model.{AvailableEntries, ExpressionParsingContext, ProvingContext}
 
 case class ProofWithContext(proof: Proof, proofIndex: Int, theoremWithContext: TheoremWithContext) {
@@ -13,6 +13,9 @@ case class ProofWithContext(proof: Proof, proofIndex: Int, theoremWithContext: T
   def globalContext: GlobalContext = theoremWithContext.globalContext
 
   def stepsWithContext: StepsWithContext = {
-    StepsWithContext(proof.steps, StepReference(Nil), theorem.initialStepContext, this)
+    StepsWithContext(
+      proof.steps,
+      theorem.initialStepContext,
+      this)
   }
 }

@@ -1,6 +1,6 @@
 package net.prover.proving.premiseFinding
 
-import net.prover.{StepBuilderHelper, StepContextHelper}
+import net.prover.StepBuilderHelper
 import net.prover.model.TestDefinitions.{a, b, _}
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
@@ -29,7 +29,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
     }
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries): Option[Seq[Step]] = {
-      DerivationFinder.findDerivationForStatement(target)(availableEntriesAndStepContextToStepProvingContext(availableEntries, createBaseStepContext(premises, depth))).map(_.steps)
+      DerivationFinder.findDerivationForStatement(target)(createBaseStepContext(premises, depth)).map(_.steps)
     }
 
     "find a simplified premise without a derivation" in {

@@ -3,11 +3,9 @@ package net.prover
 import net.prover.controllers.BookService
 import net.prover.controllers.models._
 import net.prover.entries.StepsWithContext
-import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.StatementVariable
-import net.prover.model.proof.{Step, StepContext, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof.{Step, SubstitutionContext}
 import net.prover.model.{AvailableEntries, VariableDefinitions}
-import net.prover.theorems.RecalculateReferences
 import net.prover.util.FunctorTypes.WithValue
 import org.mockito.Mockito
 import org.specs2.SpecificationLike
@@ -16,7 +14,7 @@ import org.specs2.mock.mockito.{CalledMatchers, MockitoMatchers, MockitoStubs}
 
 import scala.util.{Success, Try}
 
-trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with StepContextHelper with MockitoStubs with MockitoMatchers with CalledMatchers {
+trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with ContextHelper with MockitoStubs with MockitoMatchers with CalledMatchers {
   private def eq[T](t: T) = org.mockito.Matchers.eq(t)
 
   def createService = {

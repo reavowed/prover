@@ -1,5 +1,6 @@
 package net.prover.model
 
+import net.prover.ContextHelper
 import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.OperatorTree
 import net.prover.model.expressions.Term
@@ -7,7 +8,7 @@ import net.prover.model.proof.SubstitutionContext
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
-class OperatorTreeSpec extends Specification {
+class OperatorTreeSpec extends Specification with ContextHelper {
   implicit val availableEntries = defaultAvailableEntries
   val e = TermVariablePlaceholder("e", 4)
   val f = TermVariablePlaceholder("f", 5)

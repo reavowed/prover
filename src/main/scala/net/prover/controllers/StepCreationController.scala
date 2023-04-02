@@ -25,9 +25,8 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: NamingDefinition
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
-      import stepWithContext.step
-      import stepWithContext.stepProvingContext
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
+      import stepWithContext.{provingContext, step, stepContext}
       for {
         variableName <- Option(definition.variableName.trim).filter(_.nonEmpty).orBadRequest("Variable name must be provided")
         inference <- FindInference(definition.inferenceId)
@@ -35,10 +34,10 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
         substitutions <- definition.substitutions.parse(inference.variableDefinitions)
         _ <- inference.substituteConclusion(substitutions).filter(_ == step.statement).orBadRequest("Conclusion was incorrect")
         premiseStatements <- namingPremises.map(inference.substituteStatement(_, substitutions)).traverseOption.orBadRequest("Could not substitute premises")
-        substitutedAssumption <- assumption.applySubstitutions(substitutions, 1, stepProvingContext.stepContext.externalDepth).orBadRequest("Could not substitute assumption")
+        substitutedAssumption <- assumption.applySubstitutions(substitutions, 1, stepContext.externalDepth).orBadRequest("Could not substitute assumption")
       } yield {
-        val premises = premiseStatements.map(stepProvingContext.createPremise)
-        val targetSteps = premises.ofType[Premise.Pending].map(p => stepProvingContext.provingContext.factsBySerializedStatement.get(p.statement.serialized).map(_.step).getOrElse(Step.Target(p.statement)))
+        val premises = premiseStatements.map(stepContext.createPremise)
+        val targetSteps = premises.ofType[Premise.Pending].map(p => provingContext.factsBySerializedStatement.get(p.statement.serialized).map(_.step).getOrElse(Step.Target(p.statement)))
         targetSteps :+ Step.Naming(
           variableName,
           substitutedAssumption,
@@ -62,12 +61,11 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedPremise: String
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
-      import stepWithContext.step
-      import stepWithContext.stepProvingContext
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
+      import stepWithContext.{step, stepContext}
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremise, "premise").recoverWithBadRequest
-        premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
+        premise <- stepContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).orBadRequest("Premise did not have single bound variable")
         (namingInference, namingInferenceAssumption, substitutionsAfterPremise, generalizationDefinition, deductionDefinition) <- ProofHelper.findNamingInferences.mapFind {
           case (i, Seq(singlePremise), a, generalizationDefinition, deductionDefinition) =>
@@ -77,7 +75,7 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
         }.orBadRequest("Could not find naming inference matching premise")
         substitutionsAfterConclusion <- namingInference.conclusion.calculateSubstitutions(step.statement, substitutionsAfterPremise).orBadRequest("Could not calculate substitutions for conclusion")
         substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.variableDefinitions).orBadRequest("Substitutions for naming inference were not total")
-        substitutedAssumption <- namingInferenceAssumption.applySubstitutions(substitutions, 1, stepProvingContext.stepContext.externalDepth).orBadRequest("Could not substitute assumption")
+        substitutedAssumption <- namingInferenceAssumption.applySubstitutions(substitutions, 1, stepContext.externalDepth).orBadRequest("Could not substitute assumption")
       } yield {
         Seq(Step.Naming(
           variableName,
@@ -101,11 +99,10 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
-      import stepWithContext.step
-      import stepWithContext.stepProvingContext
+    bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
+      import stepWithContext.{provingContext, step}
       for {
-        generalizationDefinition <- stepProvingContext.provingContext.generalizationDefinitionOption.orBadRequest("No generalization definition provided")
+        generalizationDefinition <- provingContext.generalizationDefinitionOption.orBadRequest("No generalization definition provided")
         (variableName, predicate) <- generalizationDefinition.unapply(step.statement).orBadRequest("Target statement is not a generalized statement")
       } yield {
         Step.Generalization(
@@ -124,11 +121,10 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
-      import stepWithContext.step
-      import stepWithContext.stepProvingContext
+    bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
+      import stepWithContext.{provingContext, step}
       for {
-        deductionDefinition <- stepProvingContext.provingContext.deductionDefinitionOption.orBadRequest("No deduction definition provided")
+        deductionDefinition <- provingContext.deductionDefinitionOption.orBadRequest("No deduction definition provided")
         (antecedent, consequent) <- deductionDefinition.unapply(step.statement).orBadRequest("Target statement is not a deduction statement")
       } yield {
         Step.Deduction(
@@ -147,16 +143,15 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
-      import stepWithContext.step
-      import stepWithContext.stepProvingContext
+    bookService.modifyStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
+      import stepWithContext.{provingContext, step}
       def getNestedIntroductionStepForStatement(statement: Statement): Step = {
         def byGeneralization = for {
-          generalizationDefinition <- stepProvingContext.provingContext.generalizationDefinitionOption
+          generalizationDefinition <- provingContext.generalizationDefinitionOption
           (variableName, predicate) <- generalizationDefinition.unapply(statement)
         } yield Step.Generalization(variableName, Seq(getNestedIntroductionStepForStatement(predicate)), generalizationDefinition)
         def byDeduction = for {
-          deductionDefinition <- stepProvingContext.provingContext.deductionDefinitionOption
+          deductionDefinition <- provingContext.deductionDefinitionOption
           (antecedent, consequent) <- deductionDefinition.unapply(statement)
         } yield Step.Deduction(antecedent, Seq(getNestedIntroductionStepForStatement(consequent)), deductionDefinition)
         byGeneralization orElse byDeduction getOrElse Step.Target(statement)
@@ -173,11 +168,10 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
       import stepWithContext.step
-      import stepWithContext.stepProvingContext
       for {
-        newStep <- TermRearranger.rearrange(step.statement)(stepProvingContext).orBadRequest(s"Could not rearrange statement ${step.statement}")
+        newStep <- TermRearranger.rearrange(step.statement).orBadRequest(s"Could not rearrange statement ${step.statement}")
       } yield Seq(newStep)
     }.toResponseEntity
   }
@@ -191,9 +185,9 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedStatement: String
   ): ResponseEntity[_] = {
-    InsertStepBeforeChain(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepProvingContext =>
+    InsertStepBeforeChain(bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
       for {
-        targetStatement <- Statement.parser(stepProvingContext).parseFromString(serializedStatement, "target statement").recoverWithBadRequest
+        targetStatement <- Statement.parser.parseFromString(serializedStatement, "target statement").recoverWithBadRequest
       } yield Seq(Step.Target(targetStatement))
     }.toResponseEntity
   }
@@ -207,12 +201,11 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody serializedPremiseStatement: String
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
-      import stepWithContext.step
-      import stepWithContext.stepProvingContext
+    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
+      import stepWithContext.{step, stepContext}
       for {
-        premiseStatement <- Statement.parser(stepProvingContext).parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
-        premise <- stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
+        premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
+        premise <- stepContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
         newStep <- DefinitionRewriter.rewriteDefinitions(premise.statement, step.statement).orBadRequest("Could not rewrite definition")
       } yield Seq(newStep)
     }.toResponseEntity

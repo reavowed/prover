@@ -1,12 +1,12 @@
 package net.prover.proving.stepReplacement
 
 import net.prover.controllers.ChainingMethods
-import net.prover.model.ProvingContext
+import net.prover.entries.StepsWithContext
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
+import net.prover.model.proof.{Step, StepReference}
 
 object SplitPrecedingStepsBeforeChain {
-  def apply(before: Seq[Step], after: Seq[Step], outerPath: Seq[Int])(implicit stepProvingContext: StepProvingContext): (Seq[Step], Seq[Step]) = {
+  def apply(before: Seq[Step], after: Seq[Step], outerPath: Seq[Int])(implicit stepsWithContext: StepsWithContext): (Seq[Step], Seq[Step]) = {
     def splitPrecedingStepsWhileTransitiveGeneric[T <: Expression : ChainingMethods]: Option[(Seq[Step], Seq[Step])] = {
       @scala.annotation.tailrec
       def removeWhileTransitive(currentBefore: Seq[Step], currentStep: Step, currentTransitive: Seq[Step], targetLhs: T): (Seq[Step], Seq[Step]) = {
@@ -42,7 +42,7 @@ object SplitPrecedingStepsBeforeChain {
   }
 
 
-  private def matchTransitiveChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, stepThree: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(T, T, T)] = {
+  private def matchTransitiveChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, stepThree: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit stepsWithContext: StepsWithContext): Option[(T, T, T)] = {
     if (stepThree.referencedLines.flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath) == Set(outerPath :+ firstStepIndex, outerPath :+ (firstStepIndex + 1)))
       for {
         statementOne <- stepOne.provenStatement
@@ -51,12 +51,12 @@ object SplitPrecedingStepsBeforeChain {
         (_, lhsTwo, rhsTwo) <- ChainingMethods.getJoiner(statementTwo)
         statementThree <- stepThree.provenStatement
         (_, lhsThree, rhsThree) <- ChainingMethods.getJoiner(statementThree)
-        if (lhsOne == lhsThree && rhsOne == lhsTwo && rhsTwo == rhsThree)
+        if lhsOne == lhsThree && rhsOne == lhsTwo && rhsTwo == rhsThree
       } yield (lhsOne, rhsOne, rhsTwo)
     else None
   }
 
-  private def matchReplacementChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(T, T, T)] = {
+  private def matchReplacementChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit stepsWithContext: StepsWithContext): Option[(T, T, T)] = {
     if (stepTwo.referencedLines.flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath).contains(outerPath :+ firstStepIndex))
       for {
         statementOne <- stepOne.provenStatement

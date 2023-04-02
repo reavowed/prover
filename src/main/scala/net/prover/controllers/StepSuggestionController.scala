@@ -8,12 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
-import scala.util.Try
-
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
 class StepSuggestionController @Autowired() (val bookService: BookService) extends InferenceSearch {
-
 
   @GetMapping(value = Array("/suggestImmediateNamingPremises"), produces = Array("application/json;charset=UTF-8"))
   def suggestImmediateNamingPremises(
@@ -23,17 +20,14 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    (for {
-      stepWithContext <- bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-    } yield {
-      implicit val stepProvingContext = stepWithContext.stepProvingContext
+    bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map(implicit stepWithContext =>
       for {
-        (_, Seq(singleNamingPremise: DefinedStatement), _, _, _) <- ProofHelper.findNamingInferences(stepProvingContext.provingContext.availableEntries)
+        (_, Seq(singleNamingPremise: DefinedStatement), _, _, _) <- ProofHelper.findNamingInferences
         if singleNamingPremise.boundVariableNames.single.nonEmpty
-        premise <- stepProvingContext.allPremises
+        premise <- stepWithContext.stepContext.allPremises
         if singleNamingPremise.calculateSubstitutions(premise.statement).nonEmpty
       } yield premise
-    }).toResponseEntity
+    ).toResponseEntity
   }
 
   @GetMapping(value = Array("/suggestNamingInferences"), produces = Array("application/json;charset=UTF-8"))
@@ -45,12 +39,9 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    (for {
-      stepWithContext <- bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
-    } yield {
-      implicit val stepProvingContext = stepWithContext.stepProvingContext
+    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map(implicit stepWithContext => {
       val filter = inferenceFilter(searchText.toLowerCase)
-      ProofHelper.findNamingInferences(stepProvingContext.provingContext.availableEntries)
+      ProofHelper.findNamingInferences
         .filter(x => filter(x._1))
         .reverse
         .mapCollect { case (inference, namingPremises, _, _, _) =>
