@@ -18,7 +18,6 @@ case class DisplayShorthand(template: Template, format: Format.Explicit, conditi
     ).mkString(" "))
 
   override def inferences: Seq[Inference.FromEntry] = Nil
-  override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = template.referencedDefinitions.map(_.associatedChapterEntry)
 
   override def replaceDefinitions(

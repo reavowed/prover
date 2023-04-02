@@ -13,7 +13,6 @@ trait ChapterEntry {
   def name: String
   def inferences: Seq[Inference.FromEntry]
   def serializedLines: Seq[String]
-  def referencedInferenceIds: Set[String]
   def referencedEntries: Set[ChapterEntry]
 
   def replaceDefinitions(

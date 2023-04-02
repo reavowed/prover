@@ -20,7 +20,6 @@ case class PropertyDefinitionOnType(
   override def title: String = s"Definition: ${name.capitalizeWords} ${parentType.name.capitalizeWords}"
   def qualifiedSymbol: String = symbol + parentType.symbol.capitalize
 
-  override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry) ++ parentTypeConditions.referencedEntries
 
   override def withSymbol(newSymbol: String): PropertyDefinitionOnType = copy(symbol = newSymbol)

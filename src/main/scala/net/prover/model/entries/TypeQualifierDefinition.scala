@@ -20,7 +20,6 @@ case class TypeQualifierDefinition(
   override def title: String = s"Definition: ${parentType.name.capitalizeWords} ${name.capitalizeWords}"
   def qualifiedSymbol: String = parentType.symbol + symbol.capitalize
 
-  override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry) + conjunctionDefinition.referencedEntry + parentType
 
   override def withSymbol(newSymbol: String): TypeQualifierDefinition = copy(symbol = newSymbol)

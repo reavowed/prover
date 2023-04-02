@@ -10,7 +10,6 @@ case class Comment(text: String) extends ChapterEntry {
   override def serializedLines: Seq[String] = Seq(s"comment $text")
 
   override def inferences: Seq[Inference.FromEntry] = Nil
-  override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = Set.empty
   override def replaceDefinitions(
     entryReplacements: Map[ChapterEntry, ChapterEntry],

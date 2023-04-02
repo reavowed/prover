@@ -7,7 +7,7 @@ import net.prover.entries._
 import net.prover.model._
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.proof.Step
-import net.prover.theorems.{FindStep, RecalculateReferences, ReplaceSteps}
+import net.prover.theorems.{FindStep, GetReferencedInferences, RecalculateReferences, ReplaceSteps}
 import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -72,12 +72,12 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
   def modifyTheorem[F[_] : Functor](bookKey: String, chapterKey: String, theoremKey: String)(getUpdatedTheorem: TheoremWithContext => Try[F[Theorem]]): Try[F[TheoremUpdateProps]] = {
     modifyEntry[Theorem, FWithValue[F, TheoremUpdateProps]#Type](bookKey, chapterKey, theoremKey, theoremWithContext => {
       getUpdatedTheorem(theoremWithContext).map { fTheorem =>
-        import theoremWithContext._
         fTheorem.map { newTheoremWithoutReferenceChanges =>
           val (newTheoremWithReferenceChanges, stepsWithReferenceChanges) = RecalculateReferences(theoremWithContext.copy(entry = newTheoremWithoutReferenceChanges))
-          val newInferenceIds = newTheoremWithReferenceChanges.referencedInferenceIds.diff(entry.referencedInferenceIds)
-          val inferenceLinks = BookService.getInferenceLinks(newInferenceIds, theoremWithContext.globalContext)
-          (newTheoremWithReferenceChanges, TheoremUpdateProps(newTheoremWithReferenceChanges, theoremWithContext.copy(entry = newTheoremWithReferenceChanges), inferenceLinks, stepsWithReferenceChanges))
+          val newTheoremWithContext = theoremWithContext.copy(entry = newTheoremWithReferenceChanges)
+          val newInferences = GetReferencedInferences(newTheoremWithContext).diff(GetReferencedInferences(theoremWithContext))
+          val inferenceLinks = BookService.getInferenceLinks(newInferences, theoremWithContext.globalContext)
+          (newTheoremWithReferenceChanges, TheoremUpdateProps(newTheoremWithReferenceChanges, newTheoremWithContext, inferenceLinks, stepsWithReferenceChanges))
         }
       }
     }).map(_.map(_._2))
@@ -135,13 +135,13 @@ object BookService {
   def getChapterUrl(chapterWithContext: ChapterWithContext): String = s"${getBookUrl(chapterWithContext.bookWithContext)}/${chapterWithContext.chapterKey}"
   def getEntryUrl(entryWithContext: EntryWithContext): String = s"${getChapterUrl(entryWithContext.chapterWithContext)}/${entryWithContext.entryKey}"
 
-  def getInferenceLinks(inferenceIds: Set[String], globalContext: GlobalContext): Map[String, InferenceSummary] = {
+  def getInferenceLinks(inferences: Set[Inference], globalContext: GlobalContext): Map[String, InferenceSummary] = {
     (for {
       bookWithContext <- globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts
       entryWithContext <- chapterWithContext.inferencesWithContexts
       inference <- entryWithContext.entry.inferences
-      if inferenceIds.contains(inference.id)
+      if inferences.contains(inference)
     } yield inference.id -> InferenceSummary(inference.name, getEntryUrl(entryWithContext), globalContext.definitions.isInferenceComplete(inference))).toMap
   }
 }

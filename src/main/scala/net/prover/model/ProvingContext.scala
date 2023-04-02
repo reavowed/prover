@@ -6,6 +6,7 @@ import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.proving.extraction.SubstatementExtractor.{ExtractionFromSinglePremise, InferenceExtraction}
+import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
 
@@ -50,7 +51,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.firstPremiseJoiner) && isAllowed(r.secondPremiseJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
-    implicit val allowableStep: Allowable[Step] = allowable(step => step.referencedInferenceIds.forall(availableEntries.allInferenceIds.contains))
+    implicit val allowableStep: Allowable[Step] = allowable(step => GetReferencedInferences(step).forall(availableEntries.allInferences.contains))
     implicit val allowableDerivationStepWithSingleInference: Allowable[DerivationStepWithSingleInference] = allowableGeneric(Generic[DerivationStepWithSingleInference])
     implicit val allowableDerivationStepWithMultipleInferences: Allowable[DerivationStepWithMultipleInferences] = allowableGeneric(Generic[DerivationStepWithMultipleInferences])
     implicit val allowableDerivationStep: Allowable[DerivationStep] = allowable {

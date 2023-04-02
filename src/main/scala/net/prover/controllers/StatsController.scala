@@ -1,9 +1,8 @@
 package net.prover.controllers
 
-import net.prover.model.AvailableEntries
-import net.prover.model.entries.Theorem
 import net.prover.model.expressions.DefinedStatement
 import net.prover.model.proof.Step
+import net.prover.theorems.GetReferencedInferences
 import net.prover.theorems.steps.FindStepsOfType
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
@@ -33,13 +32,12 @@ class StatsController @Autowired() (val bookService: BookService) {
   def getUnusedInferences(
     request: HttpServletRequest
   ): Seq[String] = {
-    val availableEntries = AvailableEntries.forBooks(bookService.globalContext.booksWithContexts)
-    val usedInferenceIds = availableEntries.allInferences.ofType[Theorem].flatMap(_.referencedInferenceIds)
+    val usedInferences = bookService.globalContext.allTheorems.flatMap(GetReferencedInferences(_))
     for {
       bookWithContext <- bookService.globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts
       inferenceWithContext <- chapterWithContext.inferencesWithContexts
-      if !usedInferenceIds.contains(inferenceWithContext.entry.id)
+      if !usedInferences.contains(inferenceWithContext.entry)
     } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(inferenceWithContext)
   }
 

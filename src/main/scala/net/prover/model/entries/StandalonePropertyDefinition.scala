@@ -17,7 +17,6 @@ case class StandalonePropertyDefinition(
   override def title: String = s"Definition: ${name.capitalizeWords}"
   def qualifiedSymbol: String = symbol
 
-  override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry)
 
   override def withSymbol(newSymbol: String): StandalonePropertyDefinition = copy(symbol = newSymbol)

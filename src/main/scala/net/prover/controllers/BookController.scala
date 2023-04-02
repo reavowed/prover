@@ -67,16 +67,16 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     bookService.modifyBook[Id](bookKey, bookWithContext => {
       import bookWithContext.book
       import bookWithContext.globalContext.booksWithKeys
-      val entriesAfterInThisBook = bookWithContext.book.chaptersWithKeys.listWithKeys.view
-        .dropUntil { case (_, key) => key == chapterKey }
-        .flatMap(_._1.entries)
-      val entriesInOtherBooks = booksWithKeys.listWithKeys.filter(_._1 != book).view
-        .dropUntil{ case (_, key) => key == bookKey }
-        .flatMap(_._1.chapters)
-        .flatMap(_.entries)
+      val entriesAfterInThisBook = bookWithContext.chaptersWithContexts.view
+        .dropUntil { _.chapterKey == chapterKey }
+        .flatMap(_.entriesWithContexts)
+      val entriesInOtherBooks = bookWithContext.globalContext.booksWithContexts.filter(_.book != book).view
+        .dropUntil{ _.bookKey == bookKey }
+        .flatMap(_.chaptersWithContexts)
+        .flatMap(_.entriesWithContexts)
       for {
         chapterWithContext <- bookWithContext.chaptersWithContexts.find(_.chapterKey == chapterKey) orNotFound s"Chapter $chapterKey"
-        _ <- findUsage(entriesAfterInThisBook ++ entriesInOtherBooks, chapterWithContext.chapter.entries).badRequestIfDefined { case (usedEntry, entryUsing) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+        _ <- checkNoUsages(entriesAfterInThisBook ++ entriesInOtherBooks, chapterWithContext.entriesWithContexts)
       } yield {
         book.copy(chaptersWithKeys = book.chaptersWithKeys - chapterWithContext.chapter)
       }
@@ -89,23 +89,23 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     @PathVariable("chapterKey") chapterKey: String,
     @RequestBody newIndex: Int
   ): ResponseEntity[_] = {
-    def tryMove(chapter: Chapter, previousChapters: Seq[Chapter], nextChapters: Seq[Chapter]): Try[Seq[Chapter]] = {
+    def tryMove(chapter: ChapterWithContext, previousChapters: Seq[ChapterWithContext], nextChapters: Seq[ChapterWithContext]): Try[Seq[ChapterWithContext]] = {
       previousChapters.takeAndRemainingIfValid(newIndex).map { case (firstChapters, chaptersToMoveBefore) =>
         for {
-          _ <- findUsage(chapter.entries, chaptersToMoveBefore.flatMap(_.entries)).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+          _ <- checkNoUsages(chapter.entriesWithContexts, chaptersToMoveBefore.flatMap(_.entriesWithContexts))
         } yield (firstChapters :+ chapter) ++ chaptersToMoveBefore ++ nextChapters
       } orElse nextChapters.takeAndRemainingIfValid(newIndex - previousChapters.length).map { case (chaptersToMoveAfter, lastChapters) =>
         for {
-          _ <- findUsage(chaptersToMoveAfter.flatMap(_.entries), chapter.entries).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+          _ <- checkNoUsages(chaptersToMoveAfter.flatMap(_.entriesWithContexts), chapter.entriesWithContexts)
         } yield (previousChapters ++ chaptersToMoveAfter :+ chapter) ++ lastChapters
       } orBadRequest "Invalid index" flatten
     }
     bookService.modifyBook[Id](bookKey, bookWithContext => {
       import bookWithContext._
       for {
-        (previousChapters, chapter, nextChapters) <- bookWithContext.book.chaptersWithKeys.listWithKeys.splitWhere(_._2 == chapterKey).orNotFound(s"Chapter $chapterKey")
-        updatedChapters <- tryMove(chapter._1, previousChapters.map(_._1), nextChapters.map(_._1))
-      } yield book.setChapters(updatedChapters.toList)
+        (previousChapters, chapter, nextChapters) <- bookWithContext.chaptersWithContexts.splitWhere(_.chapterKey == chapterKey).orNotFound(s"Chapter $chapterKey")
+        updatedChapters <- tryMove(chapter, previousChapters, nextChapters)
+      } yield book.setChapters(updatedChapters.map(_.chapter).toList)
     }).map(BookProps(_)).toResponseEntity
   }
 }

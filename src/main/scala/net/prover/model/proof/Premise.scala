@@ -8,7 +8,7 @@ import net.prover.model.proof.Premise.Pending
 
 sealed trait Premise {
   def statement: Statement
-  def referencedInferenceIds: Set[String]
+  def referencedInferences: Set[Inference]
   def referencedLines: Set[PreviousLineReference]
   def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending]
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise
@@ -63,7 +63,7 @@ object Premise {
 
   case class Pending(statement: Statement) extends Premise {
     val `type` = "pending"
-    override def referencedInferenceIds: Set[String] = Set.empty
+    override def referencedInferences: Set[Inference] = Set.empty
     override def referencedLines: Set[PreviousLineReference] = Set.empty
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending] = Map(path -> this)
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Pending = {
@@ -77,7 +77,7 @@ object Premise {
 
   case class Given(statement: Statement, referencedLine: PreviousLineReference) extends SingleLinePremise {
     val `type` = "given"
-    override def referencedInferenceIds: Set[String] = Set.empty
+    override def referencedInferences: Set[Inference] = Set.empty
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending] = Map.empty
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Given = {
       copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))
@@ -93,7 +93,7 @@ object Premise {
   case class Simplification(statement: Statement, premise: Premise.SingleLinePremise, inference: Inference.Summary, substitutions: Substitutions, path: Seq[Int]) extends SingleLinePremise {
     val `type` = "simplification"
     override def referencedLine: PreviousLineReference = premise.referencedLine.addInternalPath(path)
-    override def referencedInferenceIds: Set[String] = premise.referencedInferenceIds + inference.id
+    override def referencedInferences: Set[Inference] = premise.referencedInferences + inference
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Pending] = premise.getPendingPremises(path :+ 0)
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Simplification = {
       copy(

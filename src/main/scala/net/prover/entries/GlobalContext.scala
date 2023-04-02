@@ -15,6 +15,9 @@ case class GlobalContext(booksWithKeys: ListWithKeys[Book])
   val allBooks: List[Book] = booksWithKeys.list
   def booksWithContexts: List[BookWithContext] = booksWithKeys.listWithKeys.map { case (book, bookKey) => BookWithContext(book, bookKey, this) }
 
+  def allEntries: List[EntryWithContext] = booksWithContexts.flatMap(_.chaptersWithContexts).flatMap(_.entriesWithContexts)
+  def allTheorems: List[TheoremWithContext] = booksWithContexts.flatMap(_.chaptersWithContexts).flatMap(_.theoremsWithContexts)
+
   def findBook(bookKey: String): Try[BookWithContext] = {
     booksWithKeys.listWithKeys.find(_._2 == bookKey).map(_._1).map(BookWithContext(_, bookKey, this)).orNotFound(s"Book $bookKey")
   }

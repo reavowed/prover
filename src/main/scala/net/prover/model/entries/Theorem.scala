@@ -20,7 +20,6 @@ case class Theorem(
   extends Inference.Entry
 {
   override def withName(newName: String): Theorem = copy(name = newName)
-  override def referencedInferenceIds: Set[String] = proofs.flatMap(_.referencedInferenceIds).toSet
   override def referencedEntries: Set[ChapterEntry] =  ((premises :+ conclusion).flatMap(_.referencedDefinitions).toSet ++ proofs.flatMap(_.referencedDefinitions).toSet).map(_.associatedChapterEntry)
   override def inferences: Seq[Inference.FromEntry] = Seq(this)
 
@@ -45,7 +44,6 @@ object Theorem extends Inference.EntryParser {
   override val name: String = "theorem"
 
   case class Proof(steps: Seq[Step]) {
-    def referencedInferenceIds: Set[String] = steps.flatMap(_.referencedInferenceIds).toSet
     def referencedDefinitions: Set[ExpressionDefinition] = steps.flatMap(_.referencedDefinitions).toSet
     def serialized: String = steps.flatMap(_.serializedLines).mkString("\n") + "\n"
   }

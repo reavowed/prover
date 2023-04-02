@@ -373,22 +373,22 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     @PathVariable("entryKey") entryKey: String,
     @RequestBody newIndex: Int
   ): ResponseEntity[_] = {
-    def tryMove(entry: ChapterEntry, previousEntries: Seq[ChapterEntry], nextEntries: Seq[ChapterEntry]): Try[Seq[ChapterEntry]] = {
+    def tryMove(entry: EntryWithContext, previousEntries: Seq[EntryWithContext], nextEntries: Seq[EntryWithContext]): Try[Seq[EntryWithContext]] = {
       previousEntries.takeAndRemainingIfValid(newIndex).map { case (firstEntries, entriesToMoveBefore) =>
         for {
-          _ <- findUsage(Seq(entry), entriesToMoveBefore).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+          _ <- checkNoUsages(Seq(entry), entriesToMoveBefore)
         } yield (firstEntries :+ entry) ++ entriesToMoveBefore ++ nextEntries
       } orElse nextEntries.takeAndRemainingIfValid(newIndex - previousEntries.length).map { case (entriesToMoveAfter, lastEntries) =>
         for {
-          _ <- findUsage(entriesToMoveAfter, Seq(entry)).badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+          _ <- checkNoUsages(entriesToMoveAfter, Seq(entry))
         } yield (previousEntries ++ entriesToMoveAfter :+ entry) ++ lastEntries
       } orBadRequest "Invalid index" flatten
     }
     bookService.modifyChapter[Id](bookKey, chapterKey, chapterWithContext => {
       for {
-        (previousEntries, entry, nextEntries) <- chapterWithContext.chapter.entriesWithKeys.listWithKeys.splitWhere(_._2 == entryKey).orNotFound(s"Entry $entryKey")
-        updatedEntries <- tryMove(entry._1, previousEntries.map(_._1), nextEntries.map(_._1))
-      } yield chapterWithContext.chapter.setEntries(updatedEntries.toList)
+        (previousEntries, entry, nextEntries) <- chapterWithContext.entriesWithContexts.splitWhere(_.entryKey == entryKey).orNotFound(s"Entry $entryKey")
+        updatedEntries <- tryMove(entry, previousEntries, nextEntries)
+      } yield chapterWithContext.chapter.setEntries(updatedEntries.map(_.entry).toList)
     }).map(getChapterProps).toResponseEntity
   }
 
@@ -401,8 +401,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     def deleteEntry(entryWithContext: EntryWithContext): Try[Chapter] = {
       import entryWithContext._
       import chapterWithContext.chapter
-      findUsage(globalContext.allBooks, entry)
-        .badRequestIfDefined { case (entryUsing, usedEntry) => s"""Entry "${entryUsing.name}" depends on "${usedEntry.name}""""}
+      checkNoUsages(globalContext.allEntries, Seq(entryWithContext))
         .map(_ => chapter.copy(entriesWithKeys = chapter.entriesWithKeys - entry))
     }
 

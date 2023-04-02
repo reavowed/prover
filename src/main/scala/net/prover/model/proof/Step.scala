@@ -12,7 +12,6 @@ import scala.util.Try
 sealed trait Step {
   def `type`: String
   def provenStatement: Option[Statement]
-  def referencedInferenceIds: Set[String]
   def referencedDefinitions: Set[ExpressionDefinition]
   def referencedLines: Set[PreviousLineReference] = recursivePremises.flatMap(_.referencedLines).toSet
   def recursivePremises: Seq[Premise]
@@ -61,7 +60,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Deduction = copy(substeps = newSubsteps)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet + deductionDefinition.statementDefinition
     override def length: Int = substeps.map(_.length).sum
@@ -115,7 +113,6 @@ object Step {
         deductionDefinition)
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet + inference.id
     override def referencedDefinitions: Set[ExpressionDefinition] = assumption.referencedDefinitions ++ substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = premises ++ substeps.flatMap(_.recursivePremises)
     @JsonSerialize
@@ -160,7 +157,6 @@ object Step {
     }
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
-    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet + generalizationDefinition.statementDefinition
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
@@ -183,7 +179,6 @@ object Step {
     val `type` = "target"
     override def provenStatement: Option[Statement] = Some(statement)
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
-    override def referencedInferenceIds: Set[String] = Set.empty
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def recursivePremises: Seq[Premise] = Nil
     override def length = 1
@@ -201,7 +196,6 @@ object Step {
     val `type` = "elided"
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
-    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet ++ highlightedInference.map(_.id).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
@@ -254,7 +248,6 @@ object Step {
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     @JsonSerialize
     def referencedLinesForAssertion: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
-    override def referencedInferenceIds: Set[String] = Set(inference.id) ++ premises.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = statement.referencedDefinitions
     override def recursivePremises: Seq[Premise] = premises
     override def length: Int = 1
@@ -291,7 +284,6 @@ object Step {
     val `type`: String = "subproof"
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = copy(substeps = newSubsteps)
     override def provenStatement: Option[Statement] = substeps.flatMap(_.provenStatement).lastOption
-    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum
@@ -316,7 +308,6 @@ object Step {
     override def replaceSubsteps(newSubsteps: Seq[Step], stepContext: StepContext): Step = {
       copy(substeps = newSubsteps)
     }
-    override def referencedInferenceIds: Set[String] = substeps.flatMap(_.referencedInferenceIds).toSet
     override def referencedDefinitions: Set[ExpressionDefinition] = substeps.flatMap(_.referencedDefinitions).toSet
     override def recursivePremises: Seq[Premise] = substeps.flatMap(_.recursivePremises)
     override def length: Int = substeps.map(_.length).sum

@@ -22,7 +22,6 @@ case class TypeRelationDefinition(
 {
   override val title: String = s"Definition: ${name.capitalizeWords}"
 
-  override def referencedInferenceIds: Set[String] = Set.empty
   override def referencedEntries: Set[ChapterEntry] = definingStatement.referencedDefinitions.map(_.associatedChapterEntry) + conjunctionDefinition.referencedEntry + firstType + secondType
 
   override def withSymbol(newSymbol: String): ChapterEntry = copy(symbol = newSymbol)

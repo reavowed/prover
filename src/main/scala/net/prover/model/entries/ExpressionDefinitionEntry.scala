@@ -12,7 +12,6 @@ trait TypedExpressionDefinitionEntry[+ExpressionDefinitionType <: ExpressionDefi
   override def name: String = super[ExpressionDefinition].name
   override def format: Format.Basic
   override def title: String = s"$typeName Definition: $name"
-  override def referencedInferenceIds: Set[String] = Set.empty
   override def associatedChapterEntry: ChapterEntry = this
 
   def withSymbol(newSymbol: String): ExpressionDefinitionType

@@ -3,12 +3,13 @@ package net.prover.controllers
 import net.prover.books.keys.ListWithKeys
 import net.prover.books.model.Book
 import net.prover.controllers.models.LinkSummary
-import net.prover.entries.{BookWithContext, GlobalContext}
+import net.prover.entries.{GlobalContext, TheoremWithContext}
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.entries._
 import net.prover.model.expressions.Statement
+import net.prover.theorems.GetReferencedInferences
 import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -32,7 +33,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
         case axiom: Axiom =>
           Success(("Axiom", Map("axiom" -> axiom)))
         case theorem: Theorem =>
-          Success(("Theorem", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(theorem.referencedInferenceIds, entryWithContext.globalContext))))
+          Success(("Theorem", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(GetReferencedInferences(entryWithContext.asInstanceOf[TheoremWithContext]), entryWithContext.globalContext))))
         case statementDefinition: StatementDefinitionEntry =>
           Success(("StatementDefinition", Map("definition" -> statementDefinition)))
         case termDefinition: TermDefinitionEntry =>
@@ -255,9 +256,9 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
     modifyEntryWithReplacement(bookKey, chapterKey, entryKey) {
       case (entry: ChapterEntry.HasDefiningStatement, availableEntries) =>
         for {
-          _ <- bookService.books.flatMap(_.chapters).flatMap(_.entries)
-            .find(_.referencedInferenceIds.exists(entry.inferences.map(_.id).contains))
-            .badRequestIfDefined(entryUsing => "Cannot set defining statement - is already depended on by " + entryUsing.name)
+          _ <- bookService.globalContext.allTheorems
+            .find(t => GetReferencedInferences(t).exists(entry.inferences.contains))
+            .badRequestIfDefined(theoremUsing => "Cannot set defining statement - is already depended on by " + theoremUsing.theorem.name)
           expressionParsingContext = entry.definingStatementParsingContext(availableEntries)
           newDefiningStatement <- Statement.parser(expressionParsingContext).parseFromString(newDefiningStatementText, "new defining statement").recoverWithBadRequest
         } yield entry.withDefiningStatement(newDefiningStatement)
