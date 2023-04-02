@@ -1,11 +1,12 @@
 package net.prover.proving
 
 import net.prover.controllers.models.StepDefinition
-import net.prover.controllers.{AnyWithResponseExceptionOps, ExtractionHelper, OptionWithResponseExceptionOps}
+import net.prover.controllers.{AnyWithResponseExceptionOps, OptionWithResponseExceptionOps}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, StepContext, SubstatementExtractor}
+import net.prover.model.proof.{Step, StepContext}
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.{ExpressionParsingContext, Substitutions}
+import net.prover.proving.extraction.{ExtractionHelper, SubstatementExtractor}
 
 import scala.util.Try
 

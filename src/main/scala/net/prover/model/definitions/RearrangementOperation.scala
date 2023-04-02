@@ -1,10 +1,10 @@
 package net.prover.model.definitions
 
-import net.prover.controllers.ExtractionHelper
 import net.prover.model.expressions.{Expression, Term}
-import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{StepContext, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
+import net.prover.proving.extraction.ExtractionHelper
+import net.prover.proving.extraction.SubstatementExtractor.InferenceExtraction
 import net.prover.util.Direction
 
 sealed trait RearrangementOperation {

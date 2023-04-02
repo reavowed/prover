@@ -1,10 +1,10 @@
-package net.prover.model.proof
+package net.prover.proving.extraction
 
 import net.prover.model._
 import net.prover.model.expressions._
+import net.prover.model.proof._
 
 object SubstatementExtractor {
-
   trait Extraction {
     def premises: Seq[Statement]
     def conclusion: Statement

@@ -2,14 +2,15 @@ package net.prover.controllers
 
 import net.prover.controllers.StepRewriteController._
 import net.prover.controllers.models._
-import net.prover.entries.{StepWithContext, TypedStepWithContext}
-import net.prover.model.unwrapping.Unwrapper
+import net.prover.entries.StepWithContext
 import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.proof.EqualityRewriter.{RewriteMethods, RewritePossibility}
 import net.prover.model.proof._
+import net.prover.model.unwrapping.Unwrapper
 import net.prover.proving.FindInference
+import net.prover.proving.extraction.ExtractionHelper
 import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.proving.stepReplacement.InsertStepBeforeChain
 import net.prover.util.Direction
@@ -67,7 +68,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
         val replacementPossibilities = getRewritePossibilities(expression, pathsAlreadyRewrittenText)
 
         def getRewritePath(termRewriteInference: TermRewriteInference, replacementPossibility: RewritePossibility[_ <: Expression]): Option[(Term, Term, Seq[Int])] = {
-          import replacementPossibility.{term, unwrappers, depth, path}
+          import replacementPossibility.{depth, path, term, unwrappers}
           for {
             substitutionsAfterLhs <- termRewriteInference.lhs.calculateSubstitutions(term)(SubstitutionContext.withExtraParameters(unwrappers.depth))
             (_, substitutionsAfterPremises) <- DerivationFinder.findDerivationsForStatementsBySubstituting(termRewriteInference.premises, substitutionsAfterLhs)(unwrappers.enhanceStepContext(stepWithContext))

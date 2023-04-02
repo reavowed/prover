@@ -1,11 +1,11 @@
 package net.prover.model.definitions
 
-import net.prover.controllers.ExtractionHelper
 import net.prover.model.ProvingContext
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStep, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
+import net.prover.proving.extraction.ExtractionHelper
+import net.prover.proving.extraction.SubstatementExtractor.InferenceExtraction
 
 case class ConclusionRelationSimplificationInference(inferenceExtraction: InferenceExtraction, typePremiseOption: Option[TypeLikeStatement], derivedPremises: Seq[DerivedPremise]) extends DerivedInference {
   def getConclusionSimplification(target: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(Seq[Statement], Seq[BinaryRelationStatement], Seq[DerivationStep])] = {

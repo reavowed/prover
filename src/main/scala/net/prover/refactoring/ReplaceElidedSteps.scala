@@ -2,7 +2,8 @@ package net.prover.refactoring
 
 import net.prover.books.management.BookStateManager
 import net.prover.entries.StepWithContext
-import net.prover.model.proof.{Step, SubstatementExtractor}
+import net.prover.model.proof.Step
+import net.prover.proving.extraction.SubstatementExtractor
 import net.prover.theorems.CompoundTheoremUpdater
 import scalaz.Scalaz._
 

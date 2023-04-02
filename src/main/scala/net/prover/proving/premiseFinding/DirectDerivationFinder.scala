@@ -1,10 +1,10 @@
 package net.prover.proving.premiseFinding
 
-import net.prover.controllers.ExtractionHelper
 import net.prover.model.Inference
 import net.prover.model.definitions.TermDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
+import net.prover.proving.extraction.ExtractionHelper
 
 object DirectDerivationFinder {
   def findDirectDerivationForStatement(

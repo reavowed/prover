@@ -1,10 +1,10 @@
 package net.prover.model.proof
 
-import net.prover.controllers.ExtractionHelper
 import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
+import net.prover.proving.extraction.ExtractionHelper
 import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.util.{Direction, PossibleSingleMatch}
 

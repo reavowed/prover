@@ -1,10 +1,11 @@
-package net.prover.controllers
+package net.prover.proving.extraction
 
+import net.prover.controllers.OptionWithResponseExceptionOps
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
-import net.prover.model.proof.SubstatementExtractor.{InferenceExtraction, VariableTracker}
 import net.prover.model.proof._
+import net.prover.proving.extraction.SubstatementExtractor.{InferenceExtraction, VariableTracker}
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 
 import scala.util.{Failure, Success, Try}

@@ -1,11 +1,11 @@
 package net.prover.refactoring
 
 import net.prover.books.management.BookStateManager
-import net.prover.controllers.ExtractionHelper
 import net.prover.entries.StepWithContext
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model.Inference
 import net.prover.model.proof.Step
+import net.prover.proving.extraction.ExtractionHelper
 import net.prover.theorems.CompoundTheoremUpdater
 import net.prover.util.FunctorTypes._
 
@@ -17,7 +17,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
     stepWithContext: StepWithContext
   ): Try[Step] = {
     import step._
-    import stepWithContext.{stepContext, provingContext}
+    import stepWithContext.{provingContext, stepContext}
     if (inference == oldInference) {
       val substitutionsOption = (for {
         inferenceExtraction <- stepWithContext.provingContext.inferenceExtractionsByInferenceId(newInference.id)

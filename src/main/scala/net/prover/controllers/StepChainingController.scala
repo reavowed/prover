@@ -6,8 +6,9 @@ import net.prover.entries.StepWithContext
 import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
-import net.prover.model.{ExpressionParsingContext, Inference, ProvingContext, Substitutions}
+import net.prover.model.{ExpressionParsingContext, Inference, ProvingContext, SeqOps, Substitutions}
 import net.prover.proving.FindInference
+import net.prover.proving.extraction.{ExtractionHelper, SubstatementExtractor}
 import net.prover.util.Direction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity

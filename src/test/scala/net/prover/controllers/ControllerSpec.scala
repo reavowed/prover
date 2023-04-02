@@ -5,13 +5,11 @@ import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.StatementDefinition
 import net.prover.model.expressions.{Statement, StatementVariable, Term, TermVariable}
 import net.prover.model.proof._
-import net.prover.model.{AvailableEntries, Inference, Substitutions, TestDefinitions, VariableDefinitions}
+import net.prover.model.{AvailableEntries, Inference, Substitutions, VariableDefinitions}
+import net.prover.proving.extraction.SubstatementExtractor
 import net.prover.{BookServiceHelper, ContextHelper}
-import org.mockito.Mockito
 import org.specs2.matcher.ValueChecks
 import org.specs2.mutable.Specification
-
-import scala.util.Success
 
 trait ControllerSpec extends Specification with ContextHelper with BookServiceHelper with ValueChecks {
 

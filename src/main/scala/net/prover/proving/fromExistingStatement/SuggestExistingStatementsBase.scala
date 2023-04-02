@@ -2,11 +2,11 @@ package net.prover.proving.fromExistingStatement
 
 import net.prover.controllers._
 import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises}
-import net.prover.entries.TypedStepWithContext
 import net.prover.model.Substitutions
 import net.prover.model.expressions.{FunctionParameter, Statement, StatementVariable, TermVariable}
-import net.prover.model.proof.SubstatementExtractor.PremiseExtraction
-import net.prover.model.proof.{Step, StepContext, SubstatementExtractor}
+import net.prover.model.proof.{Step, StepContext}
+import net.prover.proving.extraction.SubstatementExtractor
+import net.prover.proving.extraction.SubstatementExtractor.PremiseExtraction
 
 import scala.util.Try
 

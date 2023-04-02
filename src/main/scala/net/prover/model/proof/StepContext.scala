@@ -1,10 +1,11 @@
 package net.prover.model.proof
 
 import net.prover.entries.StepWithContext
-import net.prover.model.{ProvingContext, VariableDefinitions}
 import net.prover.model.definitions.{BinaryRelation, KnownStatement, PremiseSimplificationInference}
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.utils.ExpressionUtils
+import net.prover.model.{ProvingContext, VariableDefinitions}
+import net.prover.proving.extraction.SubstatementExtractor
 
 import scala.collection.mutable
 

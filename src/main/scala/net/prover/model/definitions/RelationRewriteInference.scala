@@ -1,10 +1,10 @@
 package net.prover.model.definitions
 
-import net.prover.controllers.ExtractionHelper
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.SubstatementExtractor.InferenceExtraction
 import net.prover.model.proof.{DerivationStep, StepContext, SubstitutionContext}
 import net.prover.model.{ProvingContext, Substitutions}
+import net.prover.proving.extraction.ExtractionHelper
+import net.prover.proving.extraction.SubstatementExtractor.InferenceExtraction
 import net.prover.proving.premiseFinding.DerivationFinder
 
 case class RelationRewriteInference(
