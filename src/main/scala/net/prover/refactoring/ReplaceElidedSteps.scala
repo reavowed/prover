@@ -35,6 +35,6 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
       if step.substeps.forall(_.isInstanceOf[Step.Assertion])
       (newAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(oldAssertion.inference, oldAssertion.substitutions)(stepWithContext)
       if mainTargets.isEmpty
-    } yield Step.PremiseDerivation(mainPremises.map(_.step), newAssertion)
+    } yield Step.InferenceWithPremiseDerivations(mainPremises.map(_.step), newAssertion)
   }
 }

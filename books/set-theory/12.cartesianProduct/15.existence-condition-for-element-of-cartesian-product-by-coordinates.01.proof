@@ -2,11 +2,11 @@ assume ∃ x ∧ ∈ $0 product t0 t1 with (first $0 second $0) s0 {
   let x ∧ ∈ $0 product t0 t1 with (first $0 second $0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 product t0 t1 with (first $0 second $0) s0, ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 with ($$0 $0) s0) () {
     prove ∈ first $0 t0 cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, t0, t1) 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
     prove ∈ second $0 t1 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, t0, t1) 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-    premiseDerivation {
+    inferenceWithPremiseDerivations {
       prove ∧ ∈ second $0 t1 with (first $0 second $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ second $0 t1, with (first $0 second $0) s0) () 0.0.1 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       prove ∃ x ∧ ∈ $0 t1 with (first $$0 $0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 t1 with (first $0 $$0) s0) (second $0) 0.0.2.0
     }
-    premiseDerivation {
+    inferenceWithPremiseDerivations {
       prove ∧ ∈ first $0 t0 ∃ b ∧ ∈ $0 t1 with (first $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ first $0 t0, ∃ b ∧ ∈ $0 t1 with (first $$0 $0) s0) () 0.0.0 0.0.2
       prove ∃ x ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 with ($$0 $0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 t0 ∃ b ∧ ∈ $0 t1 with ($$$0 $0) s0) (first $0) 0.0.3.0
     }
@@ -27,7 +27,7 @@ assume ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 with ($$0 $0) s0 {
           prove with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with (first orderedPair $$0 $0 $$$0) s0) ($0, second orderedPair $$0 $0) 1.0.0.0.1.1 1.0.0.0.0
         }
       }
-      premiseDerivation {
+      inferenceWithPremiseDerivations {
         prove ∈ orderedPair $$0 $0 product t0 t1 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t0, $0, t1) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         prove ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $$0 $0 product t0 t1, with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 1.0.0.1.0 1.0.0.0
         prove ∃ x ∧ ∈ $0 product t0 t1 with (first $0 second $0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 product t0 t1 with (first $$$0 second $$$0) s0) (orderedPair $$0 $0) 1.0.0.1.1

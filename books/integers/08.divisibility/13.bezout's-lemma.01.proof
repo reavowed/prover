@@ -6,7 +6,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
           assume ∈ $0 ℤ {
             take b_1 {
               assume ∈ $0 ℤ {
-                premiseDerivation {
+                inferenceWithPremiseDerivations {
                   prove ∈ apply ×ℤ orderedPair t0 $$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t0, $$0) p0 0.0.0.0.0.0a
                   prove ∈ apply ×ℤ orderedPair t1 $0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t1, $0) p1 0.0.0.0.0.0.0.0a
                   prove ∈ apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 ℤ 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 () (apply ×ℤ orderedPair t0 $$0, apply ×ℤ orderedPair t1 $0) 0.0.0.0.0.0.0.0.0.0 0.0.0.0.0.0.0.0.0.1
@@ -55,11 +55,11 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
             }
             prove = t0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (t0, apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 0ℕ) 0.0.1.0.1.0.2 0.0.1.0.1.0.3
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove = t0 absZ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (absZ t0, t0) 0.0.1.0.1a
             prove = absZ t0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 0ℕ) (t0, absZ t0) 0.0.1.0.1.1.0 0.0.1.0.1.0
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
             prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0.1.0.1.2.0
             prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
@@ -69,7 +69,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
             prove ∧ ∈ apply ⍳_ℤ 0ℕ ℤ ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ product ℤ ℤ = absZ t0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 0ℕ ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ product ℤ ℤ = absZ t0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 0ℕ) () 0.0.1.0.1.2.1 0.0.1.0.1.2.5
             prove ∃ x ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ $0 product ℤ ℤ = absZ t0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ $$$0 product ℤ ℤ = absZ t0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 $$$0) (apply ⍳_ℤ 0ℕ) 0.0.1.0.1.2.6
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
             prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 0.0.1.0.1.3.0
             prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ∃ y ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ $0 product ℤ ℤ = absZ t0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 1ℕ ℤ, ∃ y ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ $0 product ℤ ℤ = absZ t0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 $0) () 0.0.1.0.1.3.1 0.0.1.0.1.2
@@ -117,7 +117,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
             }
             prove = negatedZ t0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 negatedZ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (negatedZ t0, apply +ℤ orderedPair apply ×ℤ orderedPair t0 negatedZ apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, apply +ℤ orderedPair apply ×ℤ orderedPair t0 negatedZ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 0ℕ) 0.0.1.0.2.0.4 0.0.1.0.2.0.5
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove = negatedZ t0 absZ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (absZ t0, negatedZ t0) 0.0.1.0.2a
             prove = absZ t0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 negatedZ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 negatedZ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 0ℕ) (negatedZ t0, absZ t0) 0.0.1.0.2.1.0 0.0.1.0.2.0
           }
@@ -227,11 +227,11 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
             }
             prove = t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 1ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (t1, apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ t1, apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 1ℕ) 0.0.1.1.1.0.2 0.0.1.1.1.0.3
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove = t1 absZ t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (absZ t1, t1) 0.0.1.1.1a
             prove = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 1ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 1ℕ) (t1, absZ t1) 0.0.1.1.1.1.0 0.0.1.1.1.0
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
             prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 0.0.1.1.1.2.0
             prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
@@ -241,7 +241,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
             prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 1ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 1ℕ ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 apply ⍳_ℤ 1ℕ) () 0.0.1.1.1.2.1 0.0.1.1.1.2.5
             prove ∃ x ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 $$$0) (apply ⍳_ℤ 1ℕ) 0.0.1.1.1.2.6
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
             prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0.1.1.1.3.0
             prove ∧ ∈ apply ⍳_ℤ 0ℕ ℤ ∃ b ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 0ℕ ℤ, ∃ b ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 $0) () 0.0.1.1.1.3.1 0.0.1.1.1.2
@@ -289,7 +289,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
             }
             prove = negatedZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 negatedZ apply ⍳_ℤ 1ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (negatedZ t1, apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ negatedZ apply ×ℤ orderedPair t1 apply ⍳_ℤ 1ℕ, apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 negatedZ apply ⍳_ℤ 1ℕ) 0.0.1.1.2.0.4 0.0.1.1.2.0.5
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove = negatedZ t1 absZ t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (absZ t1, negatedZ t1) 0.0.1.1.2a
             prove = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 negatedZ apply ⍳_ℤ 1ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 negatedZ apply ⍳_ℤ 1ℕ) (negatedZ t1, absZ t1) 0.0.1.1.2.1.0 0.0.1.1.2.0
           }
@@ -313,7 +313,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
             prove ∧ ∈ negatedZ apply ⍳_ℤ 1ℕ ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ apply ⍳_ℤ 1ℕ product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 negatedZ apply ⍳_ℤ 1ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ negatedZ apply ⍳_ℤ 1ℕ ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ apply ⍳_ℤ 1ℕ product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 negatedZ apply ⍳_ℤ 1ℕ) () 0.0.1.1.2.2.7 0.0.1.1.2.2.9
             prove ∃ b ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 $$$0) (negatedZ apply ⍳_ℤ 1ℕ) 0.0.1.1.2.2.10
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
             prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0.1.1.2.3.0
             prove ∧ ∈ apply ⍳_ℤ 0ℕ ℤ ∃ b ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 0ℕ ℤ, ∃ b ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 product ℤ ℤ = absZ t1 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair t1 $0) () 0.0.1.1.2.3.1 0.0.1.1.2.2
@@ -403,7 +403,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
           }
         }
       }
-      premiseDerivation {
+      inferenceWithPremiseDerivations {
         prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
         prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0.2.1.0
         prove ∧ ∈ apply ⍳_ℤ 0ℕ ℤ ∀ s → ∈ $0 $$0 ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 0ℕ ℤ, ∀ s → ∈ $0 $$0 ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ) () 0.0.2.1.1 0.0.2.0
@@ -536,7 +536,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                       }
                       prove = $0 apply -ℤ orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 apply ×ℤ orderedPair $$0 $$$$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($0, apply +ℤ orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 negatedZ apply ×ℤ orderedPair $$0 $$$$$0, apply -ℤ orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 apply ×ℤ orderedPair $$0 $$$$$0) 0.0.4.0.3.0.0.1.0.0.0.6 0.0.4.0.3.0.0.1.0.0.0.7
                     }
-                    premiseDerivation {
+                    inferenceWithPremiseDerivations {
                       prove = apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0) 0.0.4.0.3.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                       prove = $0 apply -ℤ orderedPair t0 apply ×ℤ orderedPair $$0 $$$$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $0 apply -ℤ orderedPair $$$$$$$$0 apply ×ℤ orderedPair $$0 $$$$$0) (apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0, t0) 0.0.4.0.3.0.0.1.0.0.1.0 0.0.4.0.3.0.0.1.0.0.0
                     }
@@ -556,7 +556,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                         }
                       }
                       elided 86d1258023cb394734e7d22f4b5337dcd432c219804e25851a1bf39d8ed4fc72 {
-                        premiseDerivation {
+                        inferenceWithPremiseDerivations {
                           prove ∈ apply ×ℤ orderedPair t0 $$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t0, $$$$0) p0 0.0.4.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                           prove ∈ apply ×ℤ orderedPair t1 $$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t1, $$$0) p1 0.0.4.0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                           prove = apply ×ℤ orderedPair $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair t1 $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t1 $$$0 86d1258023cb394734e7d22f4b5337dcd432c219804e25851a1bf39d8ed4fc72 () ($$0, apply ×ℤ orderedPair t0 $$$$0, apply ×ℤ orderedPair t1 $$$0) 0.0.4.0.3.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3.0.0.1.0.0.3.1.0.0 0.0.4.0.3.0.0.1.0.0.3.1.0.1
@@ -565,7 +565,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                       }
                       prove = apply -ℤ orderedPair t0 apply ×ℤ orderedPair $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair t1 $$$0 apply +ℤ orderedPair t0 negatedZ apply +ℤ orderedPair apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t1 $$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply -ℤ orderedPair t0 apply ×ℤ orderedPair $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair t1 $$$0, apply +ℤ orderedPair t0 negatedZ apply ×ℤ orderedPair $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair t1 $$$0, apply +ℤ orderedPair t0 negatedZ apply +ℤ orderedPair apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t1 $$$0) 0.0.4.0.3.0.0.1.0.0.3.0 0.0.4.0.3.0.0.1.0.0.3.1
                       elided 0b16d65f2f7337586a1e9b2ddd1b71897c6d2d5e750cd5f8cc23e00d9bb4b70f {
-                        premiseDerivation {
+                        inferenceWithPremiseDerivations {
                           prove ∈ apply ×ℤ orderedPair t0 $$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t0, $$$$0) p0 0.0.4.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                           prove ∈ apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t0 $$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () ($$0, apply ×ℤ orderedPair t0 $$$$0) 0.0.4.0.3.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3.0.0.1.0.0.3.3.0.0
                           prove ∈ apply ×ℤ orderedPair t1 $$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t1, $$$0) p1 0.0.4.0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -713,7 +713,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                       prove ∧ ∈ negatedZ apply ×ℤ orderedPair $$0 $$$0 ℤ ∧ ∈ orderedPair apply -ℤ orderedPair apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair $$0 $$$$0 negatedZ apply ×ℤ orderedPair $$0 $$$0 product ℤ ℤ = $0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply -ℤ orderedPair apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair $$0 $$$$0 apply ×ℤ orderedPair t1 negatedZ apply ×ℤ orderedPair $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ negatedZ apply ×ℤ orderedPair $$0 $$$0 ℤ, ∧ ∈ orderedPair apply -ℤ orderedPair apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair $$0 $$$$0 negatedZ apply ×ℤ orderedPair $$0 $$$0 product ℤ ℤ = $0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply -ℤ orderedPair apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair $$0 $$$$0 apply ×ℤ orderedPair t1 negatedZ apply ×ℤ orderedPair $$0 $$$0) () 0.0.4.0.3.0.0.1.0.0.5.7 0.0.4.0.3.0.0.1.0.0.5.9
                       prove ∃ y ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply -ℤ orderedPair apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair $$$0 $$$$$0 $0 product ℤ ℤ = $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply -ℤ orderedPair apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair $$$0 $$$$$0 apply ×ℤ orderedPair t1 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$$$$0 ℤ ∧ ∈ orderedPair apply -ℤ orderedPair apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair $$0 $$$$0 $$$$$$$$0 product ℤ ℤ = $0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 apply -ℤ orderedPair apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair $$0 $$$$0 apply ×ℤ orderedPair t1 $$$$$$$$0) (negatedZ apply ×ℤ orderedPair $$0 $$$0) 0.0.4.0.3.0.0.1.0.0.5.10
                     }
-                    premiseDerivation {
+                    inferenceWithPremiseDerivations {
                       prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
                       prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 0.0.4.0.3.0.0.1.0.0.6.0
                       prove ∈ apply ×ℤ orderedPair $$0 $$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () ($$0, $$$$0) 0.0.4.0.3.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -778,7 +778,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                             }
                           }
                         }
-                        premiseDerivation {
+                        inferenceWithPremiseDerivations {
                           prove = absZ $$$$$0 $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, absZ $$$$$0) 0.0.4.0.3.0.0.1.0.0.8.2.0
                           prove ∈ orderedPair $0 $$$$$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $0 $$$$$$$$0 <ℤ) (absZ $$$$$0, $$$$$0) 0.0.4.0.3.0.0.1.0.0.8.2.1.0 0.0.4.0.3.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         }
@@ -797,7 +797,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                         }
                         prove ¬ ∧ ∈ orderedPair $0 $$$$$0 <ℤ ∈ orderedPair $$$$$0 $0 ≤ℤ de80533240b6a013871c2f0d3852de540696ecfcdfd321da7a571cee16435e26 (∈ orderedPair $0 $$$$$0 <ℤ, ∈ orderedPair $$$$$0 $0 ≤ℤ) () 0.0.4.0.3.0.0.1.0.0.8.3.0
                       }
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove ∧ ∈ orderedPair $0 $$$$$0 <ℤ ∈ orderedPair $$$$$0 $0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $0 $$$$$0 <ℤ, ∈ orderedPair $$$$$0 $0 ≤ℤ) () 0.0.4.0.3.0.0.1.0.0.8.2 0.0.4.0.3.0.0.1.0.0.8.1
                         prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∧ ∈ orderedPair $0 $$$$$0 <ℤ ∈ orderedPair $$$$$0 $0 ≤ℤ) () 0.0.4.0.3.0.0.1.0.0.8.4.0 0.0.4.0.3.0.0.1.0.0.8.3
                       }
@@ -842,14 +842,14 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                     }
                     prove = apply ×ℤ orderedPair $$$$$0 $$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair $$$$$0 $$0, apply ×ℤ orderedPair $$0 $$$$$0, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ⍳_ℤ 0ℕ) 0.0.4.0.3.0.0.1.0.1.0 0.0.4.0.3.0.0.1.0.1.1
                   }
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove = apply ⍳_ℤ 0ℕ $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, apply ⍳_ℤ 0ℕ) 0.0.4.0.3.0.0.1.0.0
                     prove = apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ⍳_ℤ 0ℕ apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ⍳_ℤ 0ℕ, $0, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $$$$$$$$0) 0.0.4.0.3.0.0.1.0.2.0
                   }
                   prove = apply ×ℤ orderedPair $$$$$0 $$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair $$$$$0 $$0, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ⍳_ℤ 0ℕ, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0) 0.0.4.0.3.0.0.1.0.1 0.0.4.0.3.0.0.1.0.2
                   prove = apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0) 0.0.4.0.3.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                   prove = apply ×ℤ orderedPair $$$$$0 $$0 t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair $$$$$0 $$0, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0, t0) 0.0.4.0.3.0.0.1.0.3 0.0.4.0.3.0.0.1.0.4
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove ∧ ∈ $$0 ℤ = apply ×ℤ orderedPair $$$$$0 $$0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 ℤ, = apply ×ℤ orderedPair $$$$$0 $$0 t0) () 0.0.4.0.3.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3.0.0.1.0.5
                     prove ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$$$$0 $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$$$$0 ℤ = apply ×ℤ orderedPair $$$$$0 $$$$$$$$0 t0) ($$0) 0.0.4.0.3.0.0.1.0.6.0
                   }
@@ -965,7 +965,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                         }
                       }
                       prove = $0 apply -ℤ orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 apply ×ℤ orderedPair $$0 $$$$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($0, apply +ℤ orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 negatedZ apply ×ℤ orderedPair $$0 $$$$$0, apply -ℤ orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 apply ×ℤ orderedPair $$0 $$$$$0) 0.0.4.0.3.0.1.1.0.0.0.6 0.0.4.0.3.0.1.1.0.0.0.7
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove = apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0) 0.0.4.0.3.0.1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                         prove = apply -ℤ orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 apply ×ℤ orderedPair $$0 $$$$$0 apply -ℤ orderedPair t1 apply ×ℤ orderedPair $$0 $$$$$0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0, t1, apply -ℤ orderedPair $$$$$$$$0 apply ×ℤ orderedPair $$0 $$$$$0) 0.0.4.0.3.0.1.1.0.0.0.9.0
                       }
@@ -988,7 +988,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                         }
                       }
                       elided 86d1258023cb394734e7d22f4b5337dcd432c219804e25851a1bf39d8ed4fc72 {
-                        premiseDerivation {
+                        inferenceWithPremiseDerivations {
                           prove ∈ apply ×ℤ orderedPair t0 $$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t0, $$$$0) p0 0.0.4.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                           prove ∈ apply ×ℤ orderedPair t1 $$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t1, $$$0) p1 0.0.4.0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                           prove = apply ×ℤ orderedPair $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair t1 $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t1 $$$0 86d1258023cb394734e7d22f4b5337dcd432c219804e25851a1bf39d8ed4fc72 () ($$0, apply ×ℤ orderedPair t0 $$$$0, apply ×ℤ orderedPair t1 $$$0) 0.0.4.0.3.0.1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3.0.1.1.0.0.3.1.0.0 0.0.4.0.3.0.1.1.0.0.3.1.0.1
@@ -997,7 +997,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                       }
                       prove = apply -ℤ orderedPair t1 apply ×ℤ orderedPair $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair t1 $$$0 apply +ℤ orderedPair t1 negatedZ apply +ℤ orderedPair apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t1 $$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply -ℤ orderedPair t1 apply ×ℤ orderedPair $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair t1 $$$0, apply +ℤ orderedPair t1 negatedZ apply ×ℤ orderedPair $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair t1 $$$0, apply +ℤ orderedPair t1 negatedZ apply +ℤ orderedPair apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t0 $$$$0 apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t1 $$$0) 0.0.4.0.3.0.1.1.0.0.3.0 0.0.4.0.3.0.1.1.0.0.3.1
                       elided 0b16d65f2f7337586a1e9b2ddd1b71897c6d2d5e750cd5f8cc23e00d9bb4b70f {
-                        premiseDerivation {
+                        inferenceWithPremiseDerivations {
                           prove ∈ apply ×ℤ orderedPair t0 $$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t0, $$$$0) p0 0.0.4.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                           prove ∈ apply ×ℤ orderedPair $$0 apply ×ℤ orderedPair t0 $$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () ($$0, apply ×ℤ orderedPair t0 $$$$0) 0.0.4.0.3.0.1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3.0.1.1.0.0.3.3.0.0
                           prove ∈ apply ×ℤ orderedPair t1 $$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t1, $$$0) p1 0.0.4.0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -1242,7 +1242,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                             }
                           }
                         }
-                        premiseDerivation {
+                        inferenceWithPremiseDerivations {
                           prove = absZ $$$$$0 $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, absZ $$$$$0) 0.0.4.0.3.0.1.1.0.0.8.2.0
                           prove ∈ orderedPair $0 $$$$$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $0 $$$$$$$$0 <ℤ) (absZ $$$$$0, $$$$$0) 0.0.4.0.3.0.1.1.0.0.8.2.1.0 0.0.4.0.3.0.1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         }
@@ -1261,7 +1261,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                         }
                         prove ¬ ∧ ∈ orderedPair $0 $$$$$0 <ℤ ∈ orderedPair $$$$$0 $0 ≤ℤ de80533240b6a013871c2f0d3852de540696ecfcdfd321da7a571cee16435e26 (∈ orderedPair $0 $$$$$0 <ℤ, ∈ orderedPair $$$$$0 $0 ≤ℤ) () 0.0.4.0.3.0.1.1.0.0.8.3.0
                       }
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove ∧ ∈ orderedPair $0 $$$$$0 <ℤ ∈ orderedPair $$$$$0 $0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $0 $$$$$0 <ℤ, ∈ orderedPair $$$$$0 $0 ≤ℤ) () 0.0.4.0.3.0.1.1.0.0.8.2 0.0.4.0.3.0.1.1.0.0.8.1
                         prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∧ ∈ orderedPair $0 $$$$$0 <ℤ ∈ orderedPair $$$$$0 $0 ≤ℤ) () 0.0.4.0.3.0.1.1.0.0.8.4.0 0.0.4.0.3.0.1.1.0.0.8.3
                       }
@@ -1306,14 +1306,14 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                     }
                     prove = apply ×ℤ orderedPair $$$$$0 $$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair $$$$$0 $$0, apply ×ℤ orderedPair $$0 $$$$$0, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ⍳_ℤ 0ℕ) 0.0.4.0.3.0.1.1.0.1.0 0.0.4.0.3.0.1.1.0.1.1
                   }
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove = apply ⍳_ℤ 0ℕ $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, apply ⍳_ℤ 0ℕ) 0.0.4.0.3.0.1.1.0.0
                     prove = apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ⍳_ℤ 0ℕ apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ⍳_ℤ 0ℕ, $0, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $$$$$$$$0) 0.0.4.0.3.0.1.1.0.2.0
                   }
                   prove = apply ×ℤ orderedPair $$$$$0 $$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair $$$$$0 $$0, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ⍳_ℤ 0ℕ, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0) 0.0.4.0.3.0.1.1.0.1 0.0.4.0.3.0.1.1.0.2
                   prove = apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0) 0.0.4.0.3.0.1.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                   prove = apply ×ℤ orderedPair $$$$$0 $$0 t1 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair $$$$$0 $$0, apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0, t1) 0.0.4.0.3.0.1.1.0.3 0.0.4.0.3.0.1.1.0.4
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove ∧ ∈ $$0 ℤ = apply ×ℤ orderedPair $$$$$0 $$0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 ℤ, = apply ×ℤ orderedPair $$$$$0 $$0 t1) () 0.0.4.0.3.0.1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3.0.1.1.0.5
                     prove ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$$$$0 $0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$$$$0 ℤ = apply ×ℤ orderedPair $$$$$0 $$$$$$$$0 t1) ($$0) 0.0.4.0.3.0.1.1.0.6.0
                   }
@@ -1360,7 +1360,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                     }
                     let v ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$$0 ℤ = apply ×ℤ orderedPair $$0 $$$$$$$$0 t1, ∈ orderedPair $$0 $$$$$0 |ℤ) () {
                       elided (Rearranged) {
-                        premiseDerivation {
+                        inferenceWithPremiseDerivations {
                           prove ∈ apply ×ℤ orderedPair $$0 $$$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () ($$0, $$$$$0) 0.0.4.0.3.0.2.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                           prove ∈ apply ×ℤ orderedPair $0 $$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () ($0, $$$$0) 0.0.4.0.3.0.2.0.0.1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                           prove = apply ×ℤ orderedPair $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ×ℤ orderedPair $0 $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$$0 apply ×ℤ orderedPair $$0 $$$$$0 apply ×ℤ orderedPair $$$0 apply ×ℤ orderedPair $0 $$$$0 86d1258023cb394734e7d22f4b5337dcd432c219804e25851a1bf39d8ed4fc72 () ($$$0, apply ×ℤ orderedPair $$0 $$$$$0, apply ×ℤ orderedPair $0 $$$$0) 0.0.4.0.3.0.2.0a 0.0.4.0.3.0.2.0.0.1.1.0.0.0 0.0.4.0.3.0.2.0.0.1.1.0.0.1
@@ -1386,7 +1386,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                       prove = apply ×ℤ orderedPair $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ×ℤ orderedPair $0 $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$$0 apply ×ℤ orderedPair t1 $$$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ×ℤ orderedPair $0 $$$$0, apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$0 $$0 $$$$$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$0 $0 $$$$0, apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$$0 apply ×ℤ orderedPair t1 $$$$0) 0.0.4.0.3.0.2.0.0.1.1.0 0.0.4.0.3.0.2.0.0.1.1.1
                       prove = apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$$0 apply ×ℤ orderedPair t1 $$$$0 $$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$0, apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$$0 apply ×ℤ orderedPair t1 $$$$0) 0.0.4.0.3.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                       prove = apply ×ℤ orderedPair $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ×ℤ orderedPair $0 $$$$0 $$$$$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ×ℤ orderedPair $0 $$$$0, apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$$0 apply ×ℤ orderedPair t1 $$$$0, $$$$$$0) 0.0.4.0.3.0.2.0.0.1.1.2 0.0.4.0.3.0.2.0.0.1.1.3
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove ∈ apply ×ℤ orderedPair $$0 $$$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () ($$0, $$$$$0) 0.0.4.0.3.0.2.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                         prove ∈ apply ×ℤ orderedPair $0 $$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () ($0, $$$$0) 0.0.4.0.3.0.2.0.0.1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                         prove ∈ apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 apply ×ℤ orderedPair $0 $$$$0 ℤ 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 () (apply ×ℤ orderedPair $$0 $$$$$0, apply ×ℤ orderedPair $0 $$$$0) 0.0.4.0.3.0.2.0.0.1.1.5.0 0.0.4.0.3.0.2.0.0.1.1.5.1
@@ -1456,7 +1456,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                         }
                       }
                     }
-                    premiseDerivation {
+                    inferenceWithPremiseDerivations {
                       prove = absZ $$$$0 $$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$0, absZ $$$$0) 0.0.4.0.3.0.2.0.0.3.0
                       prove ∈ orderedPair $0 $$$$0 ≤ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $0 $$$$$$$0 ≤ℤ) (absZ $$$$0, $$$$0) 0.0.4.0.3.0.2.0.0.3.1.0 0.0.4.0.3.0.2.0.0.2
                     }

@@ -249,7 +249,7 @@ export class Parser {
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           null,
           "Extraction from previous step");
-      case "premiseDerivation":
+      case "inferenceWithPremiseDerivations":
         const premiseDerivationSteps = this.parseSteps(stepJson.premiseDerivationSteps, inferenceSummaries);
         const assertionStep = this.parseStep(stepJson.assertion, inferenceSummaries);
         return new ElidedStep(

@@ -2,7 +2,7 @@ elided 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b {
   prove = 1ℕ successor 0ℕ 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b () ()
   prove = apply ×ℕ orderedPair t0 1ℕ apply ×ℕ orderedPair t0 successor 0ℕ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (1ℕ, successor 0ℕ, apply ×ℕ orderedPair t0 $0) 0.0
 }
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
   prove = apply ×ℕ orderedPair t0 successor 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair t0 0ℕ t0 87f6eec65ee7b1f694fbef11260c2086b2f9d533d365c0b343118eb3017dbcf5 () (t0, 0ℕ) p0 1.0
 }

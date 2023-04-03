@@ -3,7 +3,7 @@ elided 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 {
   prove = apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t0, = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ t0 t0) () 0.0
 }
 elided 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 {
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
     prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 1.0.0
     prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ = apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 1ℕ ℤ, = apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t0) () 1.0.1 0

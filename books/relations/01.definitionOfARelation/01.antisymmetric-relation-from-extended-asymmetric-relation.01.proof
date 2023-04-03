@@ -46,7 +46,7 @@ subproof (Antisymmetric) {
       }
     }
   }
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∧ relation t2 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∧ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∧ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2 = $$0 $0) () 0 1.0
     prove antisymmetricRelation t2 t1 cb1284569ffa347649446660d990757db547f1d23030fe98d48880bf8873e698 () (t2, t1) 1.1.0
   }

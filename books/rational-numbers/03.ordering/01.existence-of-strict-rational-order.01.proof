@@ -22,11 +22,11 @@ take a {
                 prove ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ, ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ) () 0.0.0.0.2.0.0.5.1 0.0.0.0.2.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               }
             }
-            premiseDerivation {
+            inferenceWithPremiseDerivations {
               prove ∧ ∈ $0 ℤ^+ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 ℤ^+, ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ) () 0.0.0.0.2.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0.0.2.0.0
               prove ∃ x ∧ ∈ $0 ℤ^+ ∈ orderedPair orderedPair $$$$$0 $$$$0 orderedPair $$$0 $0 ~_ℚ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$0 ℤ^+ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $$$$$0 ~_ℚ) ($0) 0.0.0.0.2.0.1.0
             }
-            premiseDerivation {
+            inferenceWithPremiseDerivations {
               prove ∧ ∈ $$0 ℤ ∃ d ∧ ∈ $0 ℤ^+ ∈ orderedPair orderedPair $$$$$0 $$$$0 orderedPair $$$0 $0 ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 ℤ, ∃ d ∧ ∈ $0 ℤ^+ ∈ orderedPair orderedPair $$$$$0 $$$$0 orderedPair $$$0 $0 ~_ℚ) () 0.0.0.0.2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0.0.2.0.1
               prove ∃ x ∧ ∈ $0 ℤ ∃ d ∧ ∈ $0 ℤ^+ ∈ orderedPair orderedPair $$$$$$0 $$$$$0 orderedPair $$0 $0 ~_ℚ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$0 ℤ ∃ d ∧ ∈ $0 ℤ^+ ∈ orderedPair orderedPair $$$$$0 $$$$0 orderedPair $$$$$$0 $0 ~_ℚ) ($$0) 0.0.0.0.2.0.2.0
             }
@@ -154,7 +154,7 @@ subproof (Replace single equivalent pair) {
                                 prove ↔ ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$$$0 $$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $$$$0 <ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$$$0 $$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair $$$$$0 apply ×ℤ orderedPair $$0 $$$$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $$$$0 <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.2.2.2 1.0.0.0.0.0.0.0.0.0.0.0.0.0.2.2.3
                               }
                               prove ↔ ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $$$$0 <ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$$$0 $$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $$$$0 <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.2.1 1.0.0.0.0.0.0.0.0.0.0.0.0.0.2.2
-                              premiseDerivation {
+                              inferenceWithPremiseDerivations {
                                 prove = apply ×ℤ orderedPair $$$$$0 $$0 apply ×ℤ orderedPair $$$$$$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair $$$$$$0 $0, apply ×ℤ orderedPair $$$$$0 $$0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0
                                 prove ↔ ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $$$$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $0 $$$$0 <ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 apply ×ℤ orderedPair $$$$$$$0 $$$$0 <ℤ) (apply ×ℤ orderedPair $$$$$0 $$0, apply ×ℤ orderedPair $$$$$$0 $0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.2.4.0
                               }
@@ -239,7 +239,7 @@ subproof (Replace single equivalent pair) {
                                   prove = apply ⍳_ℤ 0ℕ $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$0, apply ⍳_ℤ 0ℕ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.0.1.2
                                 }
                               }
-                              premiseDerivation {
+                              inferenceWithPremiseDerivations {
                                 prove = $$$$$$0 apply ⍳_ℤ 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ⍳_ℤ 0ℕ, $$$$$$0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3a
                                 prove ↔ ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair apply ×ℤ orderedPair $$$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ) ($$$$$$0, apply ⍳_ℤ 0ℕ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.1.0
                               }
@@ -278,7 +278,7 @@ subproof (Replace single equivalent pair) {
                               }
                               prove ↔ ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair $$$$$0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair $$$$$0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.3 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.4
                               elided 74780f0abf9cfbbf15e897b5bd41430d789996311931d98813855e642387c016 {
-                                premiseDerivation {
+                                inferenceWithPremiseDerivations {
                                   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
                                   prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.6.0.0
                                 }
@@ -303,7 +303,7 @@ subproof (Replace single equivalent pair) {
                               }
                               prove ↔ ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 <ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair $$$$$0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.5 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.6
                               elided 74780f0abf9cfbbf15e897b5bd41430d789996311931d98813855e642387c016 {
-                                premiseDerivation {
+                                inferenceWithPremiseDerivations {
                                   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
                                   prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3.8.0.0
                                 }
@@ -428,7 +428,7 @@ subproof (Replace single equivalent pair) {
                                 prove ↔ ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $$$$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair $$$$$0 apply ×ℤ orderedPair $$0 $$$$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $$$$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.4.2.2 1.0.0.0.0.0.0.0.0.0.0.0.0.0.4.2.3
                               }
                               prove ↔ ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $$$$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$$$0 $$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $$$$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.4.1 1.0.0.0.0.0.0.0.0.0.0.0.0.0.4.2
-                              premiseDerivation {
+                              inferenceWithPremiseDerivations {
                                 prove = apply ×ℤ orderedPair $$$$$0 $$0 apply ×ℤ orderedPair $$$$$$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair $$$$$$0 $0, apply ×ℤ orderedPair $$$$$0 $$0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0
                                 prove ↔ ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$0 $$$$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $0 $$$$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair apply ×ℤ orderedPair $$$$$$$0 $$$$0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $$0 <ℤ) (apply ×ℤ orderedPair $$$$$0 $$0, apply ×ℤ orderedPair $$$$$$0 $0) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.4.4.0
                               }
@@ -503,7 +503,7 @@ subproof (Replace single equivalent pair) {
                               }
                               prove ↔ ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 apply ×ℤ orderedPair $0 $$$$0 apply ×ℤ orderedPair $$$$$$0 apply ×ℤ orderedPair $$0 $$$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.4.7 1.0.0.0.0.0.0.0.0.0.0.0.0.0.4.8
                             }
-                            premiseDerivation {
+                            inferenceWithPremiseDerivations {
                               prove → ∨ = apply ⍳_ℤ 0ℕ $$$$$$0 ∈ orderedPair $$$$$$0 apply ⍳_ℤ 0ℕ <ℤ ↔ ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ d5ae154dc36200c1ad1fefe3cb0c30a20b73733c5a8fc1c3f892825368309ad9 (= apply ⍳_ℤ 0ℕ $$$$$$0, ↔ ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ, ∈ orderedPair $$$$$$0 apply ⍳_ℤ 0ℕ <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.3 1.0.0.0.0.0.0.0.0.0.0.0.0.0.4
                               prove ↔ ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$0 <ℤ, ∨ = apply ⍳_ℤ 0ℕ $$$$$$0 ∈ orderedPair $$$$$$0 apply ⍳_ℤ 0ℕ <ℤ, ↔ ∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ ∈ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1 1.0.0.0.0.0.0.0.0.0.0.0.0.0.2 1.0.0.0.0.0.0.0.0.0.0.0.0.0.5.0
                             }

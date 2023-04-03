@@ -14,7 +14,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
       prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair 1ℕ 0ℕ ~_ℤ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ⍳_ℤ 1ℕ, equivalenceClass orderedPair 1ℕ 0ℕ ~_ℤ, apply ×ℤ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ $$$0) 1.0.1.0
     }
     prove = apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ apply ×ℤ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair 1ℕ 0ℕ ~_ℤ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ, apply ×ℤ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ apply ⍳_ℤ 1ℕ, apply ×ℤ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair 1ℕ 0ℕ ~_ℤ) 1.0.0 1.0.1
-    premiseDerivation {
+    inferenceWithPremiseDerivations {
       prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
       prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
       prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair 1ℕ 0ℕ ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$0 1ℕ apply ×ℕ orderedPair $0 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair $$0 0ℕ apply ×ℕ orderedPair $0 1ℕ ~_ℤ 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 () ($$0, $0, 1ℕ, 0ℕ) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.3.0 1.0.3.1

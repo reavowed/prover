@@ -8,13 +8,13 @@ elided 38ffda3c650335ebc0a91b154174e46dc3de5a3e283e17ef27b4ad1e0948f70d {
     }
   }
 }
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∧ ∃ x identityBinaryOperation $0 t0 ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x identityBinaryOperation $0 t0, ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 = $$0 $0) () 0 1
   prove ∃! x identityBinaryOperation $0 t0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (identityBinaryOperation $0 t0) () 2.0
 }
 take e' {
   assume identityBinaryOperation $0 t0 {
-    premiseDerivation {
+    inferenceWithPremiseDerivations {
       prove = t1 $0 38ffda3c650335ebc0a91b154174e46dc3de5a3e283e17ef27b4ad1e0948f70d () (t0, t1, $0) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 3.0a
     }
     elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {

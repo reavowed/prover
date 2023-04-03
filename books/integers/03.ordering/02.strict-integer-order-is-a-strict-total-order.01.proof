@@ -71,11 +71,11 @@ subproof (Asymmetric) {
                       prove ¬ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ, ∈ orderedPair apply +ℕ orderedPair $$0 $$$0 apply +ℕ orderedPair $0 $$$$0 <ℕ) () 1.0.0.0.0.0.2.0.0.0.4.9 1.0.0.0.0.0.2.0.0.0.3
                     }
                     elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove = equivalenceClass orderedPair $$0 $0 ~_ℤ $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.0.0.0.0.2.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         prove ¬ ∈ orderedPair $$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ orderedPair $$$$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ) (equivalenceClass orderedPair $$0 $0 ~_ℤ, $$$$$0) 1.0.0.0.0.0.2.0.0.0.5.0.0 1.0.0.0.0.0.2.0.0.0.4
                       }
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ $$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 1.0.0.0.0.0.2.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         prove ¬ ∈ orderedPair $$$$$0 $$$$$$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ orderedPair $$$$$0 $$$$$$$0 <ℤ) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, $$$$$$0) 1.0.0.0.0.0.2.0.0.0.5.1.0 1.0.0.0.0.0.2.0.0.0.5.0
                       }
@@ -89,7 +89,7 @@ subproof (Asymmetric) {
       }
     }
   }
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∧ relation <ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∈ orderedPair $$0 $0 <ℤ ¬ ∈ orderedPair $0 $$0 <ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation <ℤ ℤ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∈ orderedPair $$0 $0 <ℤ ¬ ∈ orderedPair $0 $$0 <ℤ) () 0 1.0
     prove asymmetricRelation <ℤ ℤ 798efceb152c8600bd247483a3e9ffe0bb7f533572df7f1754e832dac479ee64 () (<ℤ, ℤ) 1.1.0
   }
@@ -147,14 +147,14 @@ subproof (Transitive) {
                             }
                             elided (Rearranged) {
                               elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
-                                premiseDerivation {
+                                inferenceWithPremiseDerivations {
                                   prove ∈ apply +ℕ orderedPair $$$$0 $$$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$$0, $$$0) 2.0.0.0.0.0.0.0.3.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                                   prove = apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $0 apply +ℕ orderedPair $$$$0 $$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () ($$$$$$0, $0, apply +ℕ orderedPair $$$$0 $$$0) 2.0.0.0.0.0.0.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0.0.4.0.0.0
                                 }
                                 prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0 apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $0 apply +ℕ orderedPair $$$$0 $$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $0 apply +ℕ orderedPair $$$$0 $$$0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.4.0.0
                               }
                               elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-                                premiseDerivation {
+                                inferenceWithPremiseDerivations {
                                   prove ∈ apply +ℕ orderedPair $$$$0 $$$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$$0, $$$0) 2.0.0.0.0.0.0.0.3.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                                   prove = apply +ℕ orderedPair $0 apply +ℕ orderedPair $$$$0 $$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $$$0 $0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () ($0, apply +ℕ orderedPair $$$$0 $$$0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0.0.4.1.0.0
                                 }
@@ -172,7 +172,7 @@ subproof (Transitive) {
                                 prove = apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$0 $$$$0 $0 apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$$$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$$$0 $0, apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$0 $$$$0 $0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.4.5.1
                               }
                               prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0 apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$$$0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0, apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$0 $$$$0 $0, apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$$$0 $0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.4.4 2.0.0.0.0.0.0.0.3.0.0.0.0.0.4.5
-                              premiseDerivation {
+                              inferenceWithPremiseDerivations {
                                 prove ∈ apply +ℕ orderedPair $$$$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$$0, $0) 2.0.0.0.0.0.0.0.3.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                                 prove = apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$$$0 $0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () ($$$$$$0, $$$0, apply +ℕ orderedPair $$$$0 $0) 2.0.0.0.0.0.0.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0.0.4.7.0
                               }
@@ -188,7 +188,7 @@ subproof (Transitive) {
                                 prove ∈ orderedPair apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$$0 $0 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$$$$0 $$$$0 <ℕ, ∈ orderedPair apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$$0 $0 <ℕ) () 2.0.0.0.0.0.0.0.3.0.0.0.0.0.5.3.1 2.0.0.0.0.0.0.0.3.0.0.0.0.0.2
                               }
                             }
-                            premiseDerivation {
+                            inferenceWithPremiseDerivations {
                               prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$$$0 $0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.4
                               prove ∈ orderedPair apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$$0 $0 <ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$$0 $0 <ℕ) (apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$$$0 $0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.6.0 2.0.0.0.0.0.0.0.3.0.0.0.0.0.5
                             }
@@ -205,14 +205,14 @@ subproof (Transitive) {
                             prove ∈ orderedPair apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$0 $$0 <ℕ 1f7bb894b49d0cb9296bcce3d3321d832f8c11b832e53955c1976ca28a712ac7 () (apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$0 $$$0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$$0 $0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$0 $$0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.6 2.0.0.0.0.0.0.0.3.0.0.0.0.0.7
                             elided (Rearranged) {
                               elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
-                                premiseDerivation {
+                                inferenceWithPremiseDerivations {
                                   prove ∈ apply +ℕ orderedPair $$$0 $$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$0, $$0) 2.0.0.0.0.0.0.0.3.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                                   prove = apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$$0 $$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$0 $$0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () ($$$$$0, $$$$0, apply +ℕ orderedPair $$$0 $$0) 2.0.0.0.0.0.0.0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0.0.9.0.0.0
                                 }
                                 prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$0 $$0 apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$$0 $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$$0 $$0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$0 $$0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.9.0.0
                               }
                               elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-                                premiseDerivation {
+                                inferenceWithPremiseDerivations {
                                   prove ∈ apply +ℕ orderedPair $$$0 $$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$0, $$0) 2.0.0.0.0.0.0.0.3.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                                   prove = apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$$0 $$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$0 $$0 $$$$0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () ($$$$0, apply +ℕ orderedPair $$$0 $$0) 2.0.0.0.0.0.0.0.3.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0.0.9.1.0.0
                                 }
@@ -230,7 +230,7 @@ subproof (Transitive) {
                                 prove = apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$0 $$$0 $$$$0 apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$0 apply +ℕ orderedPair $$$0 $$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$0 apply +ℕ orderedPair $$$0 $$$$0, apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$0 $$$0 $$$$0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.9.5.1
                               }
                               prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$0 $$0 apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$0 apply +ℕ orderedPair $$$0 $$$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$$0 $$0, apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$0 $$$0 $$$$0, apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$0 apply +ℕ orderedPair $$$0 $$$$0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.9.4 2.0.0.0.0.0.0.0.3.0.0.0.0.0.9.5
-                              premiseDerivation {
+                              inferenceWithPremiseDerivations {
                                 prove ∈ apply +ℕ orderedPair $$$0 $$$$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$0, $$$$0) 2.0.0.0.0.0.0.0.3.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                                 prove = apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$0 apply +ℕ orderedPair $$$0 $$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$0 apply +ℕ orderedPair $$$0 $$$$0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () ($$$$$0, $$0, apply +ℕ orderedPair $$$0 $$$$0) 2.0.0.0.0.0.0.0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.0.0.3.0.0.0.0.0.9.7.0
                               }
@@ -266,11 +266,11 @@ subproof (Transitive) {
                               prove ∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply +ℕ orderedPair $$$$$$0 $0 apply +ℕ orderedPair $$$$$0 $$0 <ℕ, ∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ) () 2.0.0.0.0.0.0.0.3.0.0.0.0.0.12.9 2.0.0.0.0.0.0.0.3.0.0.0.0.0.11
                             }
                             elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                              premiseDerivation {
+                              inferenceWithPremiseDerivations {
                                 prove = equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ $$$$$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$$$$0, equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ) 2.0.0.0.0.0.0.0.3.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                                 prove ∈ orderedPair $$$$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ) (equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ, $$$$$$$$$0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.13.0.0 2.0.0.0.0.0.0.0.3.0.0.0.0.0.12
                               }
-                              premiseDerivation {
+                              inferenceWithPremiseDerivations {
                                 prove = equivalenceClass orderedPair $$0 $0 ~_ℤ $$$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℤ) 2.0.0.0.0.0.0.0.3.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                                 prove ∈ orderedPair $$$$$$$$$0 $$$$$$$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$$$0 $$$$$$$$$$0 <ℤ) (equivalenceClass orderedPair $$0 $0 ~_ℤ, $$$$$$$0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.13.1.0 2.0.0.0.0.0.0.0.3.0.0.0.0.0.13.0
                               }
@@ -288,7 +288,7 @@ subproof (Transitive) {
       }
     }
   }
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∧ relation <ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∀ c → ∈ $0 ℤ → ∧ ∈ orderedPair $$$0 $$0 <ℤ ∈ orderedPair $$0 $0 <ℤ ∈ orderedPair $$$0 $0 <ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation <ℤ ℤ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∀ c → ∈ $0 ℤ → ∧ ∈ orderedPair $$$0 $$0 <ℤ ∈ orderedPair $$0 $0 <ℤ ∈ orderedPair $$$0 $0 <ℤ) () 0 2.0
     prove transitiveRelation <ℤ ℤ 115591d2ccba7063ade6115245528c0b261bd8f4455e320187d22c48d5955a92 () (<ℤ, ℤ) 2.1.0
   }
@@ -344,11 +344,11 @@ subproof (Semi-complete) {
                       prove ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply +ℕ orderedPair $$0 $$$0 apply +ℕ orderedPair $0 $$$$0 <ℕ, ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ) () 3.0.0.0.0.2.0.0.0.1.1.9 3.0.0.0.0.2.0.0.0.1.0
                     }
                     elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove = equivalenceClass orderedPair $$0 $0 ~_ℤ $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℤ) 3.0.0.0.0.2.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         prove ∈ orderedPair $$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ) (equivalenceClass orderedPair $$0 $0 ~_ℤ, $$$$$0) 3.0.0.0.0.2.0.0.0.1.2.0.0 3.0.0.0.0.2.0.0.0.1.1
                       }
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ $$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 3.0.0.0.0.2.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         prove ∈ orderedPair $$$$$0 $$$$$$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$0 $$$$$$$0 <ℤ) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, $$$$$$0) 3.0.0.0.0.2.0.0.0.1.2.1.0 3.0.0.0.0.2.0.0.0.1.2.0
                       }
@@ -361,11 +361,11 @@ subproof (Semi-complete) {
                       prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0, = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ) () 3.0.0.0.0.2.0.0.0.2.0.1 3.0.0.0.0.2.0.0.0.2a
                     }
                     elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ $$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 3.0.0.0.0.2.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         prove = $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, $$$$$$0) 3.0.0.0.0.2.0.0.0.2.1.0.0 3.0.0.0.0.2.0.0.0.2.0
                       }
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove = equivalenceClass orderedPair $$0 $0 ~_ℤ $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℤ) 3.0.0.0.0.2.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         prove = $$$$$$0 $$$$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$$$$0 $$$$$$$0) (equivalenceClass orderedPair $$0 $0 ~_ℤ, $$$$$0) 3.0.0.0.0.2.0.0.0.2.1.1.0 3.0.0.0.0.2.0.0.0.2.1.0
                       }
@@ -386,11 +386,11 @@ subproof (Semi-complete) {
                       prove ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 <ℕ, ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ) () 3.0.0.0.0.2.0.0.0.3.0.9 3.0.0.0.0.2.0.0.0.3a
                     }
                     elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ $$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 3.0.0.0.0.2.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         prove ∈ orderedPair $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, $$$$$$0) 3.0.0.0.0.2.0.0.0.3.1.0.0 3.0.0.0.0.2.0.0.0.3.0
                       }
-                      premiseDerivation {
+                      inferenceWithPremiseDerivations {
                         prove = equivalenceClass orderedPair $$0 $0 ~_ℤ $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℤ) 3.0.0.0.0.2.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         prove ∈ orderedPair $$$$$$0 $$$$$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$0 $$$$$$$0 <ℤ) (equivalenceClass orderedPair $$0 $0 ~_ℤ, $$$$$0) 3.0.0.0.0.2.0.0.0.3.1.1.0 3.0.0.0.0.2.0.0.0.3.1.0
                       }
@@ -410,12 +410,12 @@ subproof (Semi-complete) {
       }
     }
   }
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∧ relation <ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation <ℤ ℤ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ) () 0 3.0
     prove semicompleteRelation <ℤ ℤ daf480ab3127dfa3cc0ddd6a43857608d809c418164867ad4ede8a6f6842dfe8 () (<ℤ, ℤ) 3.1.0
   }
 }
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation <ℤ ℤ, asymmetricRelation <ℤ ℤ) () 0 1
   prove ∧ ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ transitiveRelation <ℤ ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ, transitiveRelation <ℤ ℤ) () 4.0 2
   prove ∧ ∧ ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ transitiveRelation <ℤ ℤ semicompleteRelation <ℤ ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ transitiveRelation <ℤ ℤ, semicompleteRelation <ℤ ℤ) () 4.1 3

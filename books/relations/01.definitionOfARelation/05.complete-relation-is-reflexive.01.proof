@@ -14,7 +14,7 @@ take a {
     }
   }
 }
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t0 t1, ∀ a → ∈ $0 t1 ∈ orderedPair $0 $0 t0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0
   prove reflexiveRelation t0 t1 c02d593cb92d673b7e9416e2da9b7cc3c19eda2afa0034be887cbab716a7e40c () (t0, t1) 1.0
 }

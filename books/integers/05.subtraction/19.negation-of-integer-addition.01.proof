@@ -101,11 +101,11 @@ elided 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d {
 }
 prove = apply +ℤ orderedPair apply +ℤ orderedPair t0 t1 apply +ℤ orderedPair negatedZ t0 negatedZ t1 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℤ orderedPair apply +ℤ orderedPair t0 t1 apply +ℤ orderedPair negatedZ t0 negatedZ t1, apply +ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ, apply ⍳_ℤ 0ℕ) 2 3
 elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∈ apply +ℤ orderedPair t0 t1 ℤ 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 () (t0, t1) p0 p1
     prove ∃! b ∧ ∈ $0 ℤ ∧ = apply +ℤ orderedPair apply +ℤ orderedPair t0 t1 $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $0 apply +ℤ orderedPair t0 t1 apply ⍳_ℤ 0ℕ c186607b0c66bf2f22efac5abf07ea607364c75eb6041e672fa04101b8437b27 () (apply +ℤ orderedPair t0 t1) 5.0.0
   }
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∈ apply +ℤ orderedPair t0 t1 ℤ 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 () (t0, t1) p0 p1
     prove ∧ ∈ negatedZ apply +ℤ orderedPair t0 t1 ℤ ∧ = apply +ℤ orderedPair apply +ℤ orderedPair t0 t1 negatedZ apply +ℤ orderedPair t0 t1 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ apply +ℤ orderedPair t0 t1 apply +ℤ orderedPair t0 t1 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (apply +ℤ orderedPair t0 t1) 5.1.0
   }

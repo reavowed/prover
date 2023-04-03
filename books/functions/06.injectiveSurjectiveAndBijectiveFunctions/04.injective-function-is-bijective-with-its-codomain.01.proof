@@ -1,5 +1,5 @@
 prove ∧ ∧ function t0 functionFrom t0 domain t0 codomain t0 surjectiveFunction t0 domain t0 codomain t0 f4176cc6612888fac04468c309334c6869778982d08270c7d500373a0d6684d5 () (t0) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∧ injectiveFunction t0 surjectiveFunction t0 domain t0 codomain t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (injectiveFunction t0, surjectiveFunction t0 domain t0 codomain t0) () p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   prove ∧ ∧ function t0 functionFrom t0 domain t0 codomain t0 ∧ injectiveFunction t0 surjectiveFunction t0 domain t0 codomain t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function t0 functionFrom t0 domain t0 codomain t0, ∧ injectiveFunction t0 surjectiveFunction t0 domain t0 codomain t0) () 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0
   prove bijectiveFunction t0 domain t0 codomain t0 62eb0045d476ceb01a9c467700835914614028597def65d4515de67385645269 () (t0, domain t0, codomain t0) 1.1

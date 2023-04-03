@@ -75,7 +75,7 @@ assume = absZ t0 negatedZ t0 {
     prove = apply ×ℤ orderedPair negatedZ t0 negatedZ t1 apply ×ℤ orderedPair t0 t1 9ba6600a0fca89941904b8210aa17319410cb72e25e6587fd5644c7244da0a22 () (t0, t1) p0 p1
     prove = apply ×ℤ orderedPair absZ t0 absZ t1 apply ×ℤ orderedPair t0 t1 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair absZ t0 absZ t1, apply ×ℤ orderedPair negatedZ t0 negatedZ t1, apply ×ℤ orderedPair t0 t1) 4.1.0 4.1.1
   }
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∨ = absZ t1 negatedZ t1 = absZ t1 t1 b134472f96d09743ef31ae01b078b0eb39e40cae7af88a3daa98c677ba777f89 (= absZ t1 t1, = absZ t1 negatedZ t1) () 2
     prove ∨ = apply ×ℤ orderedPair absZ t0 absZ t1 apply ×ℤ orderedPair t0 t1 = apply ×ℤ orderedPair absZ t0 absZ t1 negatedZ apply ×ℤ orderedPair t0 t1 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (= absZ t1 negatedZ t1, = absZ t1 t1, = apply ×ℤ orderedPair absZ t0 absZ t1 apply ×ℤ orderedPair t0 t1, = apply ×ℤ orderedPair absZ t0 absZ t1 negatedZ apply ×ℤ orderedPair t0 t1) () 4.2.0 4.1 4.0
   }

@@ -1,5 +1,5 @@
 elided 1db20ca3deb41aeb2f93f122193bd3737a92628fa8660675a82a52ac1b7e5ce9 {
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
     prove ∈ orderedPair 1ℕ successor 1ℕ <ℕ 1db20ca3deb41aeb2f93f122193bd3737a92628fa8660675a82a52ac1b7e5ce9 () (1ℕ) 0.0.0
   }
@@ -82,7 +82,7 @@ take b {
     }
   }
 }
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∈ 2ℕ ℕ af38b821f15a2d3562308d0b9319b068ee1de28b48b9ceebfeb61aa0af85a73e () ()
   prove ∧ ∈ orderedPair 1ℕ 2ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair 1ℕ 2ℕ <ℕ, ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ) () 0 1
   prove ∧ ∈ 2ℕ ℕ ∧ ∈ orderedPair 1ℕ 2ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 2ℕ ℕ, ∧ ∈ orderedPair 1ℕ 2ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ) () 2.0 2.1

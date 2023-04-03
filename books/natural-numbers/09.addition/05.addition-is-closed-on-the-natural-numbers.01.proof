@@ -7,7 +7,7 @@ elided 14a8a3161186dcc5b90a057a0a0be23e851b403852986852595316f6baf1177e {
   prove → ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ function +ℕ functionFrom +ℕ product ℕ ℕ ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ, ∧ function +ℕ functionFrom +ℕ product ℕ ℕ ℕ) () 1.0
   prove ∧ function +ℕ functionFrom +ℕ product ℕ ℕ ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ, ∧ function +ℕ functionFrom +ℕ product ℕ ℕ ℕ) () 1.1 0
 }
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∈ orderedPair t0 t1 product ℕ ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℕ, t1, ℕ) p0 p1
   prove ∈ apply +ℕ orderedPair t0 t1 ℕ 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (+ℕ, product ℕ ℕ, ℕ, orderedPair t0 t1) 1 2.0
 }

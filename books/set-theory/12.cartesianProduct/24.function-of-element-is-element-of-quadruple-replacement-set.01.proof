@@ -27,12 +27,12 @@ elided (Rewritten) {
   }
   prove = with (t6 t7 t8 t9) t5 with (first orderedPair t6 t7 second orderedPair t6 t7 first orderedPair t8 t9 second orderedPair t8 t9) t5 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (with (t6 t7 t8 t9) t5, with (first orderedPair t6 t7 second orderedPair t6 t7 first orderedPair t8 t9 t9) t5, with (first orderedPair t6 t7 second orderedPair t6 t7 first orderedPair t8 t9 second orderedPair t8 t9) t5) 1.4 1.5
 }
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∈ orderedPair t8 t9 product t3 t4 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t8, t3, t9, t4) p3 p4
   prove ∧ ∈ orderedPair t8 t9 product t3 t4 = with (t6 t7 t8 t9) t5 with (first orderedPair t6 t7 second orderedPair t6 t7 first orderedPair t8 t9 second orderedPair t8 t9) t5 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair t8 t9 product t3 t4, = with (t6 t7 t8 t9) t5 with (first orderedPair t6 t7 second orderedPair t6 t7 first orderedPair t8 t9 second orderedPair t8 t9) t5) () 2.0 1
   prove ∃ x ∧ ∈ $0 product t3 t4 = with (t6 t7 t8 t9) t5 with (first orderedPair t6 t7 second orderedPair t6 t7 first $0 second $0) t5 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 product t3 t4 = with (t6 t7 t8 t9) t5 with (first orderedPair t6 t7 second orderedPair t6 t7 first $0 second $0) t5) (orderedPair t8 t9) 2.1
 }
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∈ orderedPair t6 t7 product t1 t2 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t6, t1, t7, t2) p1 p2
   prove ∧ ∈ orderedPair t6 t7 product t1 t2 ∃ y ∧ ∈ $0 product t3 t4 = with (t6 t7 t8 t9) t5 with (first orderedPair t6 t7 second orderedPair t6 t7 first $0 second $0) t5 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair t6 t7 product t1 t2, ∃ y ∧ ∈ $0 product t3 t4 = with (t6 t7 t8 t9) t5 with (first orderedPair t6 t7 second orderedPair t6 t7 first $0 second $0) t5) () 3.0 2
   prove ∃ x ∧ ∈ $0 product t1 t2 ∃ y ∧ ∈ $0 product t3 t4 = with (t6 t7 t8 t9) t5 with (first $$0 second $$0 first $0 second $0) t5 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 product t1 t2 ∃ y ∧ ∈ $0 product t3 t4 = with (t6 t7 t8 t9) t5 with (first $$0 second $$0 first $0 second $0) t5) (orderedPair t6 t7) 3.1

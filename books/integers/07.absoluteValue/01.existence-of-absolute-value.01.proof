@@ -32,7 +32,7 @@ subproof (Existence) {
   }
   assume ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ {
     prove = t0 t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (t0)
-    premiseDerivation {
+    inferenceWithPremiseDerivations {
       prove ∨ = t0 t0 = t0 negatedZ t0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (= t0 t0, = t0 negatedZ t0) () 0.2.0
       prove ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ ∨ = t0 t0 = t0 negatedZ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ, ∨ = t0 t0 = t0 negatedZ t0) () 0.2a 0.2.1.0
       prove ∧ ∈ t0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ ∨ = t0 t0 = t0 negatedZ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ ∨ = t0 t0 = t0 negatedZ t0) () p0 0.2.1.1
@@ -73,14 +73,14 @@ subproof (Uniqueness) {
             prove = negatedZ apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ⍳_ℤ 0ℕ, negatedZ apply ⍳_ℤ 0ℕ) 1.0.0.0.0.4.0
           }
           prove = $$0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$0, negatedZ apply ⍳_ℤ 0ℕ, apply ⍳_ℤ 0ℕ) 1.0.0.0.0.3 1.0.0.0.0.4
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove = apply ⍳_ℤ 0ℕ $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, apply ⍳_ℤ 0ℕ) 1.0.0.0.0.2
             prove = $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 $$$0) (apply ⍳_ℤ 0ℕ, $0) 1.0.0.0.0.6.0 1.0.0.0.0.5
           }
         }
         assume = $$0 t0 {
           assume = $0 t0 {
-            premiseDerivation {
+            inferenceWithPremiseDerivations {
               prove = t0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, t0) 1.0.0.0.1.0a
               prove = $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 $$$0) (t0, $0) 1.0.0.0.1.0.0.0 1.0.0.0.1a
             }
@@ -90,7 +90,7 @@ subproof (Uniqueness) {
               prove = t0 negatedZ negatedZ t0 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b () (t0) p0
               prove = $$0 negatedZ negatedZ t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 $$$0) (t0, negatedZ negatedZ t0) 1.0.0.0.1.1.0.0 1.0.0.0.1a
             }
-            premiseDerivation {
+            inferenceWithPremiseDerivations {
               prove = negatedZ t0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, negatedZ t0) 1.0.0.0.1.1a
               prove = negatedZ negatedZ t0 negatedZ $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (negatedZ t0, $0, negatedZ $$$0) 1.0.0.0.1.1.1.0
             }
@@ -101,14 +101,14 @@ subproof (Uniqueness) {
         }
         assume = $$0 negatedZ t0 {
           assume = $0 t0 {
-            premiseDerivation {
+            inferenceWithPremiseDerivations {
               prove = t0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, t0) 1.0.0.0.2.0a
               prove = $$0 negatedZ $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 negatedZ $$$0) (t0, $0) 1.0.0.0.2.0.0.0 1.0.0.0.2a
             }
             prove = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= $$0 negatedZ $0, = $$0 $0) () 1.0.0.0.0 1.0.0.0.2.0.0
           }
           assume = $0 negatedZ t0 {
-            premiseDerivation {
+            inferenceWithPremiseDerivations {
               prove = negatedZ t0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, negatedZ t0) 1.0.0.0.2.1a
               prove = $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 $$$0) (negatedZ t0, $0) 1.0.0.0.2.1.0.0 1.0.0.0.2a
             }
@@ -120,7 +120,7 @@ subproof (Uniqueness) {
     }
   }
 }
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∧ ∃ x ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0 ∀ x ∀ y → ∧ ∧ ∈ $$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ ∨ = $$0 t0 = $$0 negatedZ t0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0, ∀ x ∀ y → ∧ ∧ ∈ $$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ ∨ = $$0 t0 = $$0 negatedZ t0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0 = $$0 $0) () 0 1
   prove ∃! x ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0) () 2.0
 }

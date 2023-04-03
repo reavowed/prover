@@ -27,7 +27,7 @@ take S {
                 elided ff305384b8c875741d2bff24068c2bb44095aabd204d18933dc5d95ff45923e4 {
                   prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ $$0 $0 = $$0 $0 ff305384b8c875741d2bff24068c2bb44095aabd204d18933dc5d95ff45923e4 () ()
                   prove → ∈ 0ℕ ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair 0ℕ $0 ≤ℕ ∨ ∈ 0ℕ $0 = 0ℕ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$$$0 $0 ≤ℕ ∨ ∈ $$$$$$0 $0 = $$$$$$0 $0) (0ℕ) 3.0.0.1.1.0.0.0.2.0
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
                     prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair 0ℕ $0 ≤ℕ ∨ ∈ 0ℕ $0 = 0ℕ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ 0ℕ ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair 0ℕ $0 ≤ℕ ∨ ∈ 0ℕ $0 = 0ℕ $0) () 3.0.0.1.1.0.0.0.2.1 3.0.0.1.1.0.0.0.2.2.0
                   }
@@ -56,13 +56,13 @@ take S {
               prove → ∈ $$0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$0 $0 <ℕ ∈ orderedPair $0 $$$0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$$$0 $0 <ℕ ∈ orderedPair $0 $$$$$0 ≤ℕ) ($$0) 3.0.0.1.1.1.1.0
               prove ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$0 $0 <ℕ ∈ orderedPair $0 $$$0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$0 $0 <ℕ ∈ orderedPair $0 $$$0 ≤ℕ) () 3.0.0.1.1.1.1.1 3.0.0.1.0
               prove → ∈ successor $$0 ℕ ⊕ ∈ orderedPair $$0 successor $$0 <ℕ ∈ orderedPair successor $$0 $$0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ ⊕ ∈ orderedPair $$0 $$$$0 <ℕ ∈ orderedPair $$$$0 $$0 ≤ℕ) (successor $$0) 3.0.0.1.1.1.1.2
-              premiseDerivation {
+              inferenceWithPremiseDerivations {
                 prove ∈ successor $$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$0) 3.0.0.1.0
                 prove ⊕ ∈ orderedPair $$0 successor $$0 <ℕ ∈ orderedPair successor $$0 $$0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ successor $$0 ℕ, ⊕ ∈ orderedPair $$0 successor $$0 <ℕ ∈ orderedPair successor $$0 $$0 ≤ℕ) () 3.0.0.1.1.1.1.3 3.0.0.1.1.1.1.4.0
               }
               prove ¬ ∈ orderedPair successor $$0 $$0 ≤ℕ 6c8066d1d6929a9884ff35ff44cde85658c881867f3da7c8459e41fb54febb61 (∈ orderedPair $$0 successor $$0 <ℕ, ∈ orderedPair successor $$0 $$0 ≤ℕ) () 3.0.0.1.1.1.1.4 3.0.0.1.1.1.0
             }
-            premiseDerivation {
+            inferenceWithPremiseDerivations {
               prove ∧ ∈ $$0 $$$0 ¬ ∈ orderedPair successor $$0 $$0 ≤ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 $$$0, ¬ ∈ orderedPair successor $$0 $$0 ≤ℕ) () 3.0.0.1a 3.0.0.1.1.1.1
               prove ∃ x ∧ ∈ $0 $$$$0 ¬ ∈ orderedPair successor $$$0 $0 ≤ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$0 $$$0 ¬ ∈ orderedPair successor $$0 $$$$0 ≤ℕ) ($$0) 3.0.0.1.1.1.2.0
             }
@@ -119,7 +119,7 @@ take S {
                 prove = $0 ℕ 6e234db6072e3ef9999777714d3f71de01d1277c7156cf4cc5200863e47a6323 () ($0) 3.0.0.1.1.2.0.0.0 3.0.0.1.1.0 3.0.0.1.1.2.0a
               }
               prove ¬ ∈ successor $$0 ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ successor $$0 $$$$0) ($0, ℕ) 3.0.0.1.1.2.0.0 3.0.0.1.1.1
-              premiseDerivation {
+              inferenceWithPremiseDerivations {
                 prove ∈ successor $$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$0) 3.0.0.1.0
                 prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∈ successor $$0 ℕ) () 3.0.0.1.1.2.0.2.0 3.0.0.1.1.2.0.1
               }
@@ -184,7 +184,7 @@ take S {
                   prove ↔ ∈ successor $0 $$0 ∧ ∈ successor $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$0 $$0 ∧ ∈ $$$$$0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$$$$$0 $0 ≤ℕ) (successor $0) 3.0.0.1.1.3.1.1.0
                   prove → ∧ ∈ successor $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ℕ ∈ successor $0 $$0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ successor $0 $$0, ∧ ∈ successor $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ℕ) () 3.0.0.1.1.3.1.1.1.0
                   prove ¬ ∧ ∈ successor $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∧ ∈ successor $0 ℕ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ℕ, ∈ successor $0 $$0) () 3.0.0.1.1.3.1.1.1.1 3.0.0.1.1.3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 3.0.0.1.1.3.1.0
                     prove ¬ ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ℕ 33deb5f816a1d197a67d4e2acf51cdda7b8476ded9fb6760cfe07c64b724b79c (∈ successor $0 ℕ, ∀ b → ∈ $0 $$$$$0 ∈ orderedPair successor $$0 $0 ≤ℕ) () 3.0.0.1.1.3.1.1.1.2 3.0.0.1.1.3.1.1.1.3.0
                   }
@@ -233,7 +233,7 @@ take S {
                   prove → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 <ℕ ∈ orderedPair $0 $$0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$0 ℕ ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$$$$$$0 $0 <ℕ ∈ orderedPair $0 $$$$$$$0 ≤ℕ) ($0) 3.0.0.1.1.3.1.3.1.0
                   prove ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 <ℕ ∈ orderedPair $0 $$0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ∀ m → ∈ $0 ℕ ⊕ ∈ orderedPair $$0 $0 <ℕ ∈ orderedPair $0 $$0 ≤ℕ) () 3.0.0.1.1.3.1.3.1.1 3.0.0.1.1.3.1.3.0
                   prove → ∈ successor $$0 ℕ ⊕ ∈ orderedPair $0 successor $$0 <ℕ ∈ orderedPair successor $$0 $0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$0 ℕ ⊕ ∈ orderedPair $0 $$$$$$0 <ℕ ∈ orderedPair $$$$$$0 $0 ≤ℕ) (successor $$0) 3.0.0.1.1.3.1.3.1.2
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove ∈ successor $$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$0) 3.0.0.1.1.3.1.0
                     prove ⊕ ∈ orderedPair $0 successor $$0 <ℕ ∈ orderedPair successor $$0 $0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ successor $$0 ℕ, ⊕ ∈ orderedPair $0 successor $$0 <ℕ ∈ orderedPair successor $$0 $0 ≤ℕ) () 3.0.0.1.1.3.1.3.1.3 3.0.0.1.1.3.1.3.1.4.0
                   }
@@ -264,7 +264,7 @@ take S {
                 prove ∈ $$0 $$$$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$$$$0 $$$$$0) ($0, $$0) 3.0.0.1.1.3.1.3.4 3.0.0.1.1.3.1.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
               } 3.0.0.1.1.3.1.2
             }
-            premiseDerivation {
+            inferenceWithPremiseDerivations {
               prove ∧ ∈ $0 $$$$0 ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 $$$$0, ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$0 $0 ≤ℕ) () 3.0.0.1.1.3.1 3.0.0.1.1.3.0
               prove ∃ x ∧ ∈ $0 $$$$$0 ∀ b → ∈ $0 $$$$$$0 ∈ orderedPair $$0 $0 ≤ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$0 $$$$0 ∀ b → ∈ $0 $$$$$0 ∈ orderedPair $$$$$$0 $0 ≤ℕ) ($0) 3.0.0.1.1.3.2.0
             }

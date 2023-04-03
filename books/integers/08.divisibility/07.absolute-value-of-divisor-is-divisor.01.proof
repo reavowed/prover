@@ -4,14 +4,14 @@ elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
   prove ∨ = absZ t0 t0 = absZ t0 negatedZ t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ, ∨ = absZ t0 t0 = absZ t0 negatedZ t0) () 0.1
 }
 assume = absZ t0 t0 {
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove = t0 absZ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (absZ t0, t0) 1a
     prove ↔ ∈ orderedPair t0 t1 |ℤ ∈ orderedPair absZ t0 t1 |ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $0 t1 |ℤ) (t0, absZ t0) 1.0.0
   }
 }
 assume = absZ t0 negatedZ t0 {
   prove ↔ ∈ orderedPair t0 t1 |ℤ ∈ orderedPair negatedZ t0 t1 |ℤ 57ab63ec1f41caa6cda17b77653a868d39c3269f1f69d88177089c2ca354737a () (t0, t1) p0 p1
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove = negatedZ t0 absZ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (absZ t0, negatedZ t0) 2a
     prove ↔ ∈ orderedPair negatedZ t0 t1 |ℤ ∈ orderedPair absZ t0 t1 |ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $0 t1 |ℤ) (negatedZ t0, absZ t0) 2.1.0
   }

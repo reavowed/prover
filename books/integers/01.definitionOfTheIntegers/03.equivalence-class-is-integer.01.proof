@@ -1,4 +1,4 @@
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove equivalenceRelation ~_ℤ product ℕ ℕ 459d141ac7e7021353f809dbe31e38d1a6638a074975a411a362a7e5f9d91017 () ()
   prove ∈ orderedPair t0 t1 product ℕ ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℕ, t1, ℕ) p0 p1
   prove ∈ equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceQuotient product ℕ ℕ ~_ℤ e7d68f420abd8f15886367a46ab0a267ff50b41eea7e3fc6b6d64e440f291aee () (~_ℤ, product ℕ ℕ, orderedPair t0 t1) 0.0 0.1

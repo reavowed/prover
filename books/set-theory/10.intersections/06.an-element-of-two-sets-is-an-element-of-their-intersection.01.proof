@@ -1,5 +1,5 @@
 prove ∀ x ↔ ∈ $0 ∩ t1 t2 ∧ ∈ $0 t1 ∈ $0 t2 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (t1, t2)
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∧ ∈ t0 t1 ∈ t0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 t1, ∈ t0 t2) () p0 p1
   elided 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c {
     prove ∀ x ↔ ∈ $0 ∩ t1 t2 ∧ ∈ $0 t1 ∈ $0 t2 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (t1, t2)

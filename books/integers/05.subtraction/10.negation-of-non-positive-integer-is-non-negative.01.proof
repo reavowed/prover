@@ -1,4 +1,4 @@
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
   prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0
   prove ↔ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair negatedZ apply ⍳_ℤ 0ℕ negatedZ t0 ≤ℤ e9cba88319c97cee2cf101df1c74e1c466acc093f2a71f0d1149afac3211be7e () (t0, apply ⍳_ℤ 0ℕ) p0 0.1

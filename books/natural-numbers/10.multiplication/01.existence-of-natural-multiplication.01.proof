@@ -11,7 +11,7 @@ take n {
         }
         prove ∧ function $0 functionFrom $0 ℕ ℕ 49727ac5186e6b8f7eb3d0851aac61a302ea69932f3ee7bfdf036e6054f6a9fc () ($0, ℕ, apply +ℕ orderedPair $$$0 $$0, ℕ) 0.0.0a 0.0.0.0.0
       }
-      premiseDerivation {
+      inferenceWithPremiseDerivations {
         prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
         prove ∃! g ∧ ∧ function $0 functionFrom $0 ℕ ℕ ∧ = apply $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply $$$0 apply $$0 $0 43c3aec452308507d7ed6d1847506e4970449488fa69112bdfb446de122bef87 () ($0, ℕ, 0ℕ) 0.0.0.0 0.0.0.1.0
       }

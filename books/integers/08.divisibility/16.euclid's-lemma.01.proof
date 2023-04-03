@@ -50,7 +50,7 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
           prove ¬ = apply ⍳_ℤ t1 apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= apply ⍳_ℤ t1 apply ⍳_ℤ 0ℕ, = t1 0ℕ) () 0.0.2.0.1.1 0.0.0
         }
       }
-      premiseDerivation {
+      inferenceWithPremiseDerivations {
         prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
         prove ∈ apply ⍳_ℤ t1 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t1) p1
         prove ∨ ¬ = apply ⍳_ℤ t0 apply ⍳_ℤ 0ℕ ¬ = apply ⍳_ℤ t1 apply ⍳_ℤ 0ℕ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (¬ = apply ⍳_ℤ t1 apply ⍳_ℤ 0ℕ, ¬ = apply ⍳_ℤ t0 apply ⍳_ℤ 0ℕ) () 0.0.2.0
@@ -73,7 +73,7 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
             prove = apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2 $0 apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ×ℤ orderedPair apply ⍳_ℤ t2 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2 $0, apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ×ℤ orderedPair apply ⍳_ℤ t2 $0, apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 $$$0) 0.0.3.0.0.0.0
           }
           elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
-            premiseDerivation {
+            inferenceWithPremiseDerivations {
               prove ∈ apply ⍳_ℤ t2 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t2) p2
               prove = apply ×ℤ orderedPair apply ⍳_ℤ t2 $0 apply ×ℤ orderedPair $0 apply ⍳_ℤ t2 db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe () (apply ⍳_ℤ t2, $0) 0.0.3.0.0.1.0.0 0.0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             }
@@ -81,7 +81,7 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
           }
           prove = apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2 $0 apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ×ℤ orderedPair $0 apply ⍳_ℤ t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2 $0, apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ×ℤ orderedPair apply ⍳_ℤ t2 $0, apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ×ℤ orderedPair $0 apply ⍳_ℤ t2) 0.0.3.0.0.0 0.0.3.0.0.1
           elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
-            premiseDerivation {
+            inferenceWithPremiseDerivations {
               prove ∈ apply ⍳_ℤ t1 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t1) p1
               prove ∈ apply ⍳_ℤ t2 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t2) p2
               prove = apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ×ℤ orderedPair $0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t1 $0 apply ⍳_ℤ t2 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f () (apply ⍳_ℤ t1, $0, apply ⍳_ℤ t2) 0.0.3.0.0.3.0.0 0.0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.3.0.0.3.0.1
@@ -113,16 +113,16 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
         }
         prove = apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2 $0 apply ⍳_ℤ t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2 $0, apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t2, apply ⍳_ℤ t2) 0.0.3.0.2 0.0.3.0.3
         elided 87527cd0c3ff7ee2e3728d98acbf579645100a9b9d4fc93e65dfca3bf65956c1 {
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
             prove ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t0 |ℤ 6f4db145aa1c1a088560971787b9de868161e77f6171fe4290338b11f0e2a352 () (apply ⍳_ℤ t0) 0.0.3.0.5.0.0
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
             prove ∨ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t0 |ℤ ∈ orderedPair apply ⍳_ℤ t0 $$0 |ℤ 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t0 |ℤ, ∈ orderedPair apply ⍳_ℤ t0 $$0 |ℤ) () 0.0.3.0.5.0
             prove ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 |ℤ 87527cd0c3ff7ee2e3728d98acbf579645100a9b9d4fc93e65dfca3bf65956c1 () (apply ⍳_ℤ t0, apply ⍳_ℤ t0, $$0) 0.0.3.0.5.1.0 0.0.3.0.5.1.0 0.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.3.0.5.1.1
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
             prove ∈ apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (apply ⍳_ℤ t0, $$0) 0.0.3.0.5.2.0 0.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             prove ∈ apply ⍳_ℤ t2 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t2) p2
@@ -143,7 +143,7 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
             prove = apply ⍳_ℤ apply ×ℕ orderedPair t1 t2 apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2 77729419466bc6d588ba4ee4d1f4f2258e0c409b687f0768ca6c81f8823df0f8 () (t1, t2) p1 p2
             prove ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2 |ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair apply ⍳_ℤ t0 $$$0 |ℤ) (apply ⍳_ℤ apply ×ℕ orderedPair t1 t2, apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2) 0.0.3.0.6.1.0 0.0.3.0.6.0
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
             prove ∈ apply ⍳_ℤ t1 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t1) p1
             prove ∈ apply ⍳_ℤ t2 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t2) p2
@@ -153,7 +153,7 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
           }
         }
         elided 078f9cf1abf618230f5367448ad4959916c28cb67d537849dbee7b3645848897 {
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
             prove ∈ apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (apply ⍳_ℤ t0, $$0) 0.0.3.0.7.0.0 0.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             prove ∈ apply ⍳_ℤ t2 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t2) p2

@@ -37,14 +37,14 @@ assume = apply +ℤ orderedPair t0 t2 apply +ℤ orderedPair t1 t2 {
               }
               elided (Rearranged) {
                 elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove ∈ apply +ℕ orderedPair $$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$0, $0) 0.1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove = apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () ($$$$$$0, $$$0, apply +ℕ orderedPair $$0 $0) 0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1.0.3.0.0.0
                   }
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$0 $0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0) 0.1.0.1.0.1.0.3.0.0
                 }
                 elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove ∈ apply +ℕ orderedPair $$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$0, $0) 0.1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove = apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$0 $0 $$$0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () ($$$0, apply +ℕ orderedPair $$0 $0) 0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1.0.3.1.0.0
                   }
@@ -57,7 +57,7 @@ assume = apply +ℤ orderedPair t0 t2 apply +ℤ orderedPair t1 t2 {
                   prove = apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$0 $0 $$$0 apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$0 apply +ℕ orderedPair $0 $$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$0 apply +ℕ orderedPair $0 $$$0, apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$0 $0 $$$0) 0.1.0.1.0.1.0.3.3.1
                 }
                 prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$0 apply +ℕ orderedPair $0 $$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0, apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$0 $0 $$$0, apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$0 apply +ℕ orderedPair $0 $$$0) 0.1.0.1.0.1.0.3.2 0.1.0.1.0.1.0.3.3
-                premiseDerivation {
+                inferenceWithPremiseDerivations {
                   prove ∈ apply +ℕ orderedPair $0 $$$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($0, $$$0) 0.1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                   prove = apply +ℕ orderedPair $$$$$$0 apply +ℕ orderedPair $$0 apply +ℕ orderedPair $0 $$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$0 apply +ℕ orderedPair $0 $$$0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () ($$$$$$0, $$0, apply +ℕ orderedPair $0 $$$0) 0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1.0.3.5.0
                 }
@@ -69,7 +69,7 @@ assume = apply +ℤ orderedPair t0 t2 apply +ℤ orderedPair t1 t2 {
                 prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$0 apply +ℕ orderedPair $$$0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$0 apply +ℕ orderedPair $0 $$$0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$0 apply +ℕ orderedPair $$$0 $0) 0.1.0.1.0.1.0.3.6 0.1.0.1.0.1.0.3.7
                 prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair $$$$0 $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$0 apply +ℕ orderedPair $$$0 $0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair $$$$0 $$0) 0.1.0.1.0.1.0.3.8 0.1.0.1.0.1.0.2
                 elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove ∈ apply +ℕ orderedPair $$$$0 $$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$$0, $$0) 0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove = apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $0 apply +ℕ orderedPair $$$$0 $$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair $$$$0 $$0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () ($$$$$0, $0, apply +ℕ orderedPair $$$$0 $$0) 0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1.0.3.10.0.0
                   }
@@ -77,7 +77,7 @@ assume = apply +ℤ orderedPair t0 t2 apply +ℤ orderedPair t1 t2 {
                 }
                 prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $0 apply +ℕ orderedPair $$$$0 $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair $$$$0 $$0, apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $0 apply +ℕ orderedPair $$$$0 $$0) 0.1.0.1.0.1.0.3.9 0.1.0.1.0.1.0.3.10
                 elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-                  premiseDerivation {
+                  inferenceWithPremiseDerivations {
                     prove ∈ apply +ℕ orderedPair $$$$0 $$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$$0, $$0) 0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove = apply +ℕ orderedPair $0 apply +ℕ orderedPair $$$$0 $$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $$0 $0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () ($0, apply +ℕ orderedPair $$$$0 $$0) 0.1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1.0.3.12.0.0
                   }
@@ -90,7 +90,7 @@ assume = apply +ℤ orderedPair t0 t2 apply +ℤ orderedPair t1 t2 {
                   prove = apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $$0 $0 apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$0 $0, apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $$0 $0) 0.1.0.1.0.1.0.3.14.1
                 }
                 prove = apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$0 $0, apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $$0 $0, apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$0 $0) 0.1.0.1.0.1.0.3.13 0.1.0.1.0.1.0.3.14
-                premiseDerivation {
+                inferenceWithPremiseDerivations {
                   prove ∈ apply +ℕ orderedPair $$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$0, $0) 0.1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                   prove = apply +ℕ orderedPair $$$$$0 apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$$0 $$$$0 apply +ℕ orderedPair $$0 $0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () ($$$$$0, $$$$0, apply +ℕ orderedPair $$0 $0) 0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.1.0.1.0.3.16.0
                 }
@@ -112,11 +112,11 @@ assume = apply +ℤ orderedPair t0 t2 apply +ℤ orderedPair t1 t2 {
                 prove = equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= apply +ℕ orderedPair $$$$$$0 $$$0 apply +ℕ orderedPair $$$$$0 $$$$0, = equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) () 0.1.0.1.0.1.0.5.1 0.1.0.1.0.1.0.4
               }
               elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                premiseDerivation {
+                inferenceWithPremiseDerivations {
                   prove = equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ) 0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   prove = t0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) (equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ, t0) 0.1.0.1.0.1.0.6.0.0 0.1.0.1.0.1.0.5
                 }
-                premiseDerivation {
+                inferenceWithPremiseDerivations {
                   prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   prove = t0 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $$$$$$$0) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, t1) 0.1.0.1.0.1.0.6.1.0 0.1.0.1.0.1.0.6.0
                 }

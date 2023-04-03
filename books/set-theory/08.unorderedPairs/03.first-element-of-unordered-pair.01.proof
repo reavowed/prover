@@ -1,6 +1,6 @@
 prove ∀ x ↔ ∈ $0 pair t0 t1 ∨ = $0 t0 = $0 t1 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 () (t0, t1)
 prove = t0 t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (t0)
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∨ = t0 t0 = t0 t1 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (= t0 t0, = t0 t1) () 1
   elided 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 {
     prove ∀ x ↔ ∈ $0 pair t0 t1 ∨ = $0 t0 = $0 t1 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 () (t0, t1)

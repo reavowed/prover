@@ -244,12 +244,12 @@ take d {
   }
 }
 elided c86cf1719e717b6e6cd7d06d763a7f3b38e175a7e18060e26c990618228324d6 {
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
     prove ∈ apply ⍳_ℤ t1 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t1) p1
     prove ∃! c ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 apply ⍳_ℤ t0 |ℤ ∧ ∈ orderedPair $0 apply ⍳_ℤ t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 apply ⍳_ℤ t0 |ℤ ∈ orderedPair $0 apply ⍳_ℤ t1 |ℤ ∈ orderedPair $0 $$0 ≤ℤ 783c5d4494e5ddbcfee428b7a8f0171d987ed76932ad9060d84a45e4e53691b2 () (apply ⍳_ℤ t0, apply ⍳_ℤ t1) 6.0.0 6.0.1 0
   }
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
     prove ∈ apply ⍳_ℤ t1 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t1) p1
     prove ∧ ∈ gcdℤ apply ⍳_ℤ t0 apply ⍳_ℤ t1 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ gcdℤ apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ ∧ ∈ orderedPair gcdℤ apply ⍳_ℤ t0 apply ⍳_ℤ t1 apply ⍳_ℤ t0 |ℤ ∧ ∈ orderedPair gcdℤ apply ⍳_ℤ t0 apply ⍳_ℤ t1 apply ⍳_ℤ t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 apply ⍳_ℤ t0 |ℤ ∈ orderedPair $0 apply ⍳_ℤ t1 |ℤ ∈ orderedPair $0 gcdℤ apply ⍳_ℤ t0 apply ⍳_ℤ t1 ≤ℤ c86cf1719e717b6e6cd7d06d763a7f3b38e175a7e18060e26c990618228324d6 () (apply ⍳_ℤ t0, apply ⍳_ℤ t1) 6.1.0 6.1.1 0

@@ -26,7 +26,7 @@ take x {
     }
   }
 }
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∧ ∃ x with ($0) s1 ∀ x ∀ y → ∧ with ($$0) s1 with ($0) s1 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x with ($0) s1, ∀ x ∀ y → ∧ with ($$0) s1 with ($0) s1 = $$0 $0) () 1 2
   prove ∃! x with ($0) s1 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (with ($0) s1) () 3.0
 }

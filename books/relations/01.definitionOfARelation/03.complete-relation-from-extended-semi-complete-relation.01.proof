@@ -57,7 +57,7 @@ subproof (Complete) {
               }
             }
           }
-          premiseDerivation {
+          inferenceWithPremiseDerivations {
             prove → ∨ = $$0 $0 ∈ orderedPair $0 $$0 t0 ∈ orderedPair $0 $$0 t2 d5ae154dc36200c1ad1fefe3cb0c30a20b73733c5a8fc1c3f892825368309ad9 (= $$0 $0, ∈ orderedPair $0 $$0 t2, ∈ orderedPair $0 $$0 t0) () 1.0.0.0.0.2 1.0.0.0.0.3
             prove ∨ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (∈ orderedPair $$0 $0 t0, ∨ = $$0 $0 ∈ orderedPair $0 $$0 t0, ∈ orderedPair $$0 $0 t2, ∈ orderedPair $0 $$0 t2) () 1.0.0.0.0.0 1.0.0.0.0.1 1.0.0.0.0.4.0
           }
@@ -65,7 +65,7 @@ subproof (Complete) {
       }
     }
   }
-  premiseDerivation {
+  inferenceWithPremiseDerivations {
     prove ∧ relation t2 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∨ ∈ orderedPair $$0 $0 t2 ∈ orderedPair $0 $$0 t2) () 0 1.0
     prove completeRelation t2 t1 6334cac2fe4a1ec106de1e8aa16aa0ad40f094d94780559ae3836b0109c2f981 () (t2, t1) 1.1.0
   }

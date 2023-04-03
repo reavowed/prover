@@ -1,6 +1,6 @@
 prove = domain t0 domain t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (domain t0)
 prove ⊆ codomain t0 codomain t0 fff98b9c0fc51a3a1b88a451546bf03f8a2295c91df4fb09494bfedf71c31a8b () (codomain t0)
-premiseDerivation {
+inferenceWithPremiseDerivations {
   prove ∧ = domain t0 domain t0 ⊆ codomain t0 codomain t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= domain t0 domain t0, ⊆ codomain t0 codomain t0) () 0 1
   prove ∧ function t0 ∧ = domain t0 domain t0 ⊆ codomain t0 codomain t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function t0, ∧ = domain t0 domain t0 ⊆ codomain t0 codomain t0) () p0 2.0
   prove functionFrom t0 domain t0 codomain t0 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a () (t0, domain t0, codomain t0) 2.1

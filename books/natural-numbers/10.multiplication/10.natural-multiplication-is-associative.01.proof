@@ -25,7 +25,7 @@ take x {
         prove = apply ×ℕ orderedPair t1 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair t1 $0 t1 87f6eec65ee7b1f694fbef11260c2086b2f9d533d365c0b343118eb3017dbcf5 () (t1, $0) p1 5.0a
         prove = apply ×ℕ orderedPair t0 apply ×ℕ orderedPair t1 successor $0 apply ×ℕ orderedPair t0 apply +ℕ orderedPair apply ×ℕ orderedPair t1 $0 t1 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ×ℕ orderedPair t1 successor $0, apply +ℕ orderedPair apply ×ℕ orderedPair t1 $0 t1, apply ×ℕ orderedPair t0 $$0) 5.0.0.0.0
       }
-      premiseDerivation {
+      inferenceWithPremiseDerivations {
         prove ∈ apply ×ℕ orderedPair t1 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (t1, $0) p1 5.0a
         prove = apply ×ℕ orderedPair t0 apply +ℕ orderedPair apply ×ℕ orderedPair t1 $0 t1 apply +ℕ orderedPair apply ×ℕ orderedPair t0 apply ×ℕ orderedPair t1 $0 apply ×ℕ orderedPair t0 t1 874d0c7352d18be1fc42553eaf016003ea2edfe0e0107be2e6b5488f6796e791 () (t0, apply ×ℕ orderedPair t1 $0, t1) p0 5.0.0.1.0 p1
       }

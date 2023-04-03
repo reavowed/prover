@@ -16,14 +16,14 @@ take x {
   }
   assume ∈ $0 t0 {
     prove ∈ t0 pair t0 t1 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b72df9639e () (t0, t1)
-    premiseDerivation {
+    inferenceWithPremiseDerivations {
       prove ∧ ∈ $0 t0 ∈ t0 pair t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 t0, ∈ t0 pair t0 t1) () 3.1a 3.1.0
       prove ∃ x ∧ ∈ $$0 $0 ∈ $0 pair t0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 $$0 ∈ $$0 pair t0 t1) (t0) 3.1.1.0
     }
   }
   assume ∈ $0 t1 {
     prove ∈ t1 pair t0 t1 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (t1, t0)
-    premiseDerivation {
+    inferenceWithPremiseDerivations {
       prove ∧ ∈ $0 t1 ∈ t1 pair t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 t1, ∈ t1 pair t0 t1) () 3.2a 3.2.0
       prove ∃ x ∧ ∈ $$0 $0 ∈ $0 pair t0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 $$0 ∈ $$0 pair t0 t1) (t1) 3.2.1.0
     }
