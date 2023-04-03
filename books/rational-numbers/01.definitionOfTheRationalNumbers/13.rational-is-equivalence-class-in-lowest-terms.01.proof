@@ -105,7 +105,7 @@ let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$
             prove ∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 <ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$$0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 <ℤ) () 1.0.1.1.0.0.3
           }
           elided 41a6908f80ecb0cf7c0e2f6d71ea118d3c0a32e47aec0064b3436af7229b38cf {
-            elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+            premiseDerivation {
               prove = $$$0 apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $0, $$$0) 1.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$0 <ℤ) ($$$0, apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $0) 1.0.1.1.0.1.0.0 1.0.1.1.0.0
             }
@@ -277,9 +277,9 @@ let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$
             prove = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 $$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0, apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 apply ×ℤ orderedPair gcdℤ $$$0 $$0 $0, apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 $$$0) 1.0.1.1.1.2.0 1.0.1.1.1.2.1
             prove = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 $$$$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0, apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 $$$0, $$$$$0) 1.0.1.1.1.2.2 1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             elided 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 {
-              elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+              premiseDerivation {
                 prove ∧ ∈ $0 ℤ = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 $$$$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 ℤ, = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 $$$$$0) () 1.0.1.1.1.2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.1.1.2.3
-                prove ∃ e ∧ ∈ $0 ℤ = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$$0 $$$$$0 gcdℤ $$$$0 $$$0 $0 $$$$$$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$$0 ℤ = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $$$$$$0 $$$$$0) ($0) 1.0.1.1.1.2.4.0.0
+                prove ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$$0 $$$$$0 gcdℤ $$$$0 $$$0 $0 $$$$$$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$$0 ℤ = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $$$$$$0 $$$$$0) ($0) 1.0.1.1.1.2.4.0.0
               }
               elided 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 {
                 elided 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 {
@@ -456,9 +456,9 @@ let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$
             prove = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0, apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 apply ×ℤ orderedPair gcdℤ $$$0 $$0 $0, apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 $$0) 1.0.1.1.1.5.0 1.0.1.1.1.5.1
             prove = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 $$$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0, apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 $$0, $$$$0) 1.0.1.1.1.5.2 1.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             elided 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 {
-              elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+              premiseDerivation {
                 prove ∧ ∈ $0 ℤ = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 $$$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 ℤ, = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 $$$$0) () 1.0.1.1.1.5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.1.1.5.3
-                prove ∃ f ∧ ∈ $0 ℤ = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$$0 $$$$$0 gcdℤ $$$$0 $$$0 $0 $$$$$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$$0 ℤ = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $$$$$$0 $$$$0) ($0) 1.0.1.1.1.5.4.0.0
+                prove ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$$0 $$$$$0 gcdℤ $$$$0 $$$0 $0 $$$$$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$$0 ℤ = apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $$$$$$0 $$$$0) ($0) 1.0.1.1.1.5.4.0.0
               }
               elided 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 {
                 elided 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 {
@@ -836,7 +836,7 @@ let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$
           }
         }
         subproof (Representations are equivalent) {
-          elided b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 {
+          premiseDerivation {
             prove = $$$$0 apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $$0, $$$$0) 1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             prove = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $$0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$$0, apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $$0, apply ×ℤ orderedPair $$$$$0 $0) 1.0.1.1.2.0.0
           }
@@ -938,12 +938,12 @@ let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$
           }
           prove = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $$$$$0) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ, equivalenceClass orderedPair $$0 $0 ~_ℚ) 1.0.1.1.2.5 1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         }
-        elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+        premiseDerivation {
           prove ∧ = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= t0 equivalenceClass orderedPair $$0 $0 ~_ℚ, = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ) () 1.0.1.1.2 1.0.1.1.1
           prove ∧ ∈ $0 ℤ^+ ∧ = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 ℤ^+, ∧ = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ) () 1.0.1.1.0 1.0.1.1.3.0
-          prove ∃ y ∧ ∈ $0 ℤ^+ ∧ = t0 equivalenceClass orderedPair $$$0 $0 ~_ℚ = gcdℤ $$$0 $0 apply ⍳_ℤ 1ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$0 ℤ^+ ∧ = t0 equivalenceClass orderedPair $$0 $$$$$0 ~_ℚ = gcdℤ $$0 $$$$$0 apply ⍳_ℤ 1ℕ) ($0) 1.0.1.1.3.1
+          prove ∃ x ∧ ∈ $0 ℤ^+ ∧ = t0 equivalenceClass orderedPair $$$0 $0 ~_ℚ = gcdℤ $$$0 $0 apply ⍳_ℤ 1ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$0 ℤ^+ ∧ = t0 equivalenceClass orderedPair $$0 $$$$$0 ~_ℚ = gcdℤ $$0 $$$$$0 apply ⍳_ℤ 1ℕ) ($0) 1.0.1.1.3.1
         }
-        elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+        premiseDerivation {
           prove ∧ ∈ $$0 ℤ ∃ y ∧ ∈ $0 ℤ^+ ∧ = t0 equivalenceClass orderedPair $$$0 $0 ~_ℚ = gcdℤ $$$0 $0 apply ⍳_ℤ 1ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 ℤ, ∃ y ∧ ∈ $0 ℤ^+ ∧ = t0 equivalenceClass orderedPair $$$0 $0 ~_ℚ = gcdℤ $$$0 $0 apply ⍳_ℤ 1ℕ) () 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.1.3
           prove ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ ∧ = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$0 ℤ ∃ y ∧ ∈ $0 ℤ^+ ∧ = t0 equivalenceClass orderedPair $$$$$$0 $0 ~_ℚ = gcdℤ $$$$$$0 $0 apply ⍳_ℤ 1ℕ) ($$0) 1.0.1.1.4.0
         }

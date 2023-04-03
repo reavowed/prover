@@ -6,7 +6,7 @@ subproof (Reflexive) {
   take a {
     assume ∈ $0 product ℕ ℕ {
       prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, ℕ, ℕ) 1.0.0a
-      elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
+      premiseDerivation {
         prove ∈ first $0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℕ, ℕ) 1.0.0a
         prove ∈ second $0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℕ, ℕ) 1.0.0a
         prove = apply +ℕ orderedPair first $0 second $0 apply +ℕ orderedPair second $0 first $0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () (first $0, second $0) 1.0.0.1.0 1.0.0.1.1
@@ -31,7 +31,7 @@ subproof (Reflexive) {
       prove ∈ orderedPair $0 $0 ~_ℤ 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ orderedPair $$0 $$0 ~_ℤ) ($0, orderedPair first $0 second $0) 1.0.0.0 1.0.0.2
     }
   }
-  elided c02d593cb92d673b7e9416e2da9b7cc3c19eda2afa0034be887cbab716a7e40c {
+  premiseDerivation {
     prove ∧ relation ~_ℤ product ℕ ℕ ∀ a → ∈ $0 product ℕ ℕ ∈ orderedPair $0 $0 ~_ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ~_ℤ product ℕ ℕ, ∀ a → ∈ $0 product ℕ ℕ ∈ orderedPair $0 $0 ~_ℤ) () 0 1.0
     prove reflexiveRelation ~_ℤ product ℕ ℕ c02d593cb92d673b7e9416e2da9b7cc3c19eda2afa0034be887cbab716a7e40c () (~_ℤ, product ℕ ℕ) 1.1.0
   }
@@ -72,14 +72,14 @@ subproof (Symmetric) {
               }
             }
             elided (Rearranged) {
-              elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
+              premiseDerivation {
                 prove ∈ first $0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℕ, ℕ) 2.0.0.0.0a
                 prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 2.0.0a
                 prove = apply +ℕ orderedPair first $0 second $$0 apply +ℕ orderedPair second $$0 first $0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () (first $0, second $$0) 2.0.0.0.0.0.2.0.0 2.0.0.0.0.0.2.0.1
               }
               prove = apply +ℕ orderedPair second $$0 first $0 apply +ℕ orderedPair first $$0 second $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair first $$0 second $0, apply +ℕ orderedPair second $$0 first $0) 2.0.0.0.0.0.1
               prove = apply +ℕ orderedPair first $0 second $$0 apply +ℕ orderedPair first $$0 second $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair first $0 second $$0, apply +ℕ orderedPair second $$0 first $0, apply +ℕ orderedPair first $$0 second $0) 2.0.0.0.0.0.2.0 2.0.0.0.0.0.2.1
-              elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
+              premiseDerivation {
                 prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 2.0.0a
                 prove ∈ second $0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℕ, ℕ) 2.0.0.0.0a
                 prove = apply +ℕ orderedPair first $$0 second $0 apply +ℕ orderedPair second $0 first $$0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () (first $$0, second $0) 2.0.0.0.0.0.2.3.0 2.0.0.0.0.0.2.3.1
@@ -126,7 +126,7 @@ subproof (Symmetric) {
       }
     }
   }
-  elided e3618dccd3e1f6cf51f3a0aaaa580847161f7f182fc29f8ef6561512ce540af7 {
+  premiseDerivation {
     prove ∧ relation ~_ℤ product ℕ ℕ ∀ a → ∈ $0 product ℕ ℕ ∀ b → ∈ $0 product ℕ ℕ → ∈ orderedPair $$0 $0 ~_ℤ ∈ orderedPair $0 $$0 ~_ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ~_ℤ product ℕ ℕ, ∀ a → ∈ $0 product ℕ ℕ ∀ b → ∈ $0 product ℕ ℕ → ∈ orderedPair $$0 $0 ~_ℤ ∈ orderedPair $0 $$0 ~_ℤ) () 0 2.0
     prove symmetricRelation ~_ℤ product ℕ ℕ e3618dccd3e1f6cf51f3a0aaaa580847161f7f182fc29f8ef6561512ce540af7 () (~_ℤ, product ℕ ℕ) 2.1.0
   }
@@ -204,7 +204,7 @@ subproof (Transitive) {
                 }
                 elided (Rearranged) {
                   elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
-                    elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
+                    premiseDerivation {
                       prove ∈ first $$$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$$0, ℕ, ℕ) 3.0.0a
                       prove ∈ second $0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℕ, ℕ) 3.0.0.0.0.0.0a
                       prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 3.0.0.0.0a
@@ -215,7 +215,7 @@ subproof (Transitive) {
                     prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair second $0 apply +ℕ orderedPair first $$0 second $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0) 3.0.0.0.0.0.0.0.5.0.0
                   }
                   elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-                    elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
+                    premiseDerivation {
                       prove ∈ second $0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℕ, ℕ) 3.0.0.0.0.0.0a
                       prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 3.0.0.0.0a
@@ -226,7 +226,7 @@ subproof (Transitive) {
                   }
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair apply +ℕ orderedPair first $$0 second $$0 second $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair apply +ℕ orderedPair first $$0 second $$0 second $0) 3.0.0.0.0.0.0.0.5.0 3.0.0.0.0.0.0.0.5.1
                   elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-                    elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
+                    premiseDerivation {
                       prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove = apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair second $$0 first $$0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () (first $$0, second $$0) 3.0.0.0.0.0.0.0.5.3.0.0 3.0.0.0.0.0.0.0.5.3.0.1
@@ -235,7 +235,7 @@ subproof (Transitive) {
                   }
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair apply +ℕ orderedPair second $$0 first $$0 second $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair apply +ℕ orderedPair first $$0 second $$0 second $0, apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair apply +ℕ orderedPair second $$0 first $$0 second $0) 3.0.0.0.0.0.0.0.5.2 3.0.0.0.0.0.0.0.5.3
                   elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
-                    elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
+                    premiseDerivation {
                       prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove ∈ second $0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℕ, ℕ) 3.0.0.0.0.0.0a
@@ -245,7 +245,7 @@ subproof (Transitive) {
                     prove = apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair apply +ℕ orderedPair second $$0 first $$0 second $0 apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair second $$0 apply +ℕ orderedPair first $$0 second $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply +ℕ orderedPair apply +ℕ orderedPair second $$0 first $$0 second $0, apply +ℕ orderedPair second $$0 apply +ℕ orderedPair first $$0 second $0, apply +ℕ orderedPair first $$$0 $$$$0) 3.0.0.0.0.0.0.0.5.5.1
                   }
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair second $$0 apply +ℕ orderedPair first $$0 second $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair apply +ℕ orderedPair second $$0 first $$0 second $0, apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair second $$0 apply +ℕ orderedPair first $$0 second $0) 3.0.0.0.0.0.0.0.5.4 3.0.0.0.0.0.0.0.5.5
-                  elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
+                  premiseDerivation {
                     prove ∈ first $$$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$$0, ℕ, ℕ) 3.0.0a
                     prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                     prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 3.0.0.0.0a
@@ -256,7 +256,7 @@ subproof (Transitive) {
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $$0 apply +ℕ orderedPair first $$0 second $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair first $$$0 apply +ℕ orderedPair second $$0 apply +ℕ orderedPair first $$0 second $0, apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $$0 apply +ℕ orderedPair first $$0 second $0) 3.0.0.0.0.0.0.0.5.6 3.0.0.0.0.0.0.0.5.7
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair apply +ℕ orderedPair second $$$0 first $$0 apply +ℕ orderedPair second $$0 first $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $$0 apply +ℕ orderedPair first $$0 second $0, apply +ℕ orderedPair apply +ℕ orderedPair second $$$0 first $$0 apply +ℕ orderedPair second $$0 first $0) 3.0.0.0.0.0.0.0.5.8 3.0.0.0.0.0.0.0.4
                   elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
-                    elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
+                    premiseDerivation {
                       prove ∈ second $$$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$$0, ℕ, ℕ) 3.0.0a
                       prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 3.0.0.0.0a
@@ -268,7 +268,7 @@ subproof (Transitive) {
                   }
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair first $$0 apply +ℕ orderedPair second $$0 first $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair apply +ℕ orderedPair second $$$0 first $$0 apply +ℕ orderedPair second $$0 first $0, apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair first $$0 apply +ℕ orderedPair second $$0 first $0) 3.0.0.0.0.0.0.0.5.9 3.0.0.0.0.0.0.0.5.10
                   elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-                    elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
+                    premiseDerivation {
                       prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove ∈ first $0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℕ, ℕ) 3.0.0.0.0.0.0a
@@ -279,7 +279,7 @@ subproof (Transitive) {
                   }
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair apply +ℕ orderedPair second $$0 first $0 first $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair first $$0 apply +ℕ orderedPair second $$0 first $0, apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair apply +ℕ orderedPair second $$0 first $0 first $$0) 3.0.0.0.0.0.0.0.5.11 3.0.0.0.0.0.0.0.5.12
                   elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-                    elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
+                    premiseDerivation {
                       prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove ∈ first $0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℕ, ℕ) 3.0.0.0.0.0.0a
                       prove = apply +ℕ orderedPair second $$0 first $0 apply +ℕ orderedPair first $0 second $$0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () (second $$0, first $0) 3.0.0.0.0.0.0.0.5.14.0.0 3.0.0.0.0.0.0.0.5.14.0.1
@@ -288,7 +288,7 @@ subproof (Transitive) {
                   }
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair apply +ℕ orderedPair first $0 second $$0 first $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair apply +ℕ orderedPair second $$0 first $0 first $$0, apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair apply +ℕ orderedPair first $0 second $$0 first $$0) 3.0.0.0.0.0.0.0.5.13 3.0.0.0.0.0.0.0.5.14
                   elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
-                    elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
+                    premiseDerivation {
                       prove ∈ first $0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℕ, ℕ) 3.0.0.0.0.0.0a
                       prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 3.0.0.0.0a
@@ -298,7 +298,7 @@ subproof (Transitive) {
                     prove = apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair apply +ℕ orderedPair first $0 second $$0 first $$0 apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair first $0 apply +ℕ orderedPair second $$0 first $$0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply +ℕ orderedPair apply +ℕ orderedPair first $0 second $$0 first $$0, apply +ℕ orderedPair first $0 apply +ℕ orderedPair second $$0 first $$0, apply +ℕ orderedPair second $$$0 $$$$0) 3.0.0.0.0.0.0.0.5.16.1
                   }
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair first $0 apply +ℕ orderedPair second $$0 first $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair apply +ℕ orderedPair first $0 second $$0 first $$0, apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair first $0 apply +ℕ orderedPair second $$0 first $$0) 3.0.0.0.0.0.0.0.5.15 3.0.0.0.0.0.0.0.5.16
-                  elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
+                  premiseDerivation {
                     prove ∈ second $$$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$$0, ℕ, ℕ) 3.0.0a
                     prove ∈ first $0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℕ, ℕ) 3.0.0.0.0.0.0a
                     prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 3.0.0.0.0a
@@ -308,7 +308,7 @@ subproof (Transitive) {
                   }
                   prove = apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0 apply +ℕ orderedPair apply +ℕ orderedPair second $$$0 first $0 apply +ℕ orderedPair second $$0 first $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair first $$$0 second $0 apply +ℕ orderedPair first $$0 second $$0, apply +ℕ orderedPair second $$$0 apply +ℕ orderedPair first $0 apply +ℕ orderedPair second $$0 first $$0, apply +ℕ orderedPair apply +ℕ orderedPair second $$$0 first $0 apply +ℕ orderedPair second $$0 first $$0) 3.0.0.0.0.0.0.0.5.17 3.0.0.0.0.0.0.0.5.18
                   elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-                    elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
+                    premiseDerivation {
                       prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 3.0.0.0.0a
                       prove = apply +ℕ orderedPair second $$0 first $$0 apply +ℕ orderedPair first $$0 second $$0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () (second $$0, first $$0) 3.0.0.0.0.0.0.0.5.20.0.0 3.0.0.0.0.0.0.0.5.20.0.1
@@ -375,12 +375,12 @@ subproof (Transitive) {
       }
     }
   }
-  elided 115591d2ccba7063ade6115245528c0b261bd8f4455e320187d22c48d5955a92 {
+  premiseDerivation {
     prove ∧ relation ~_ℤ product ℕ ℕ ∀ a → ∈ $0 product ℕ ℕ ∀ b → ∈ $0 product ℕ ℕ ∀ c → ∈ $0 product ℕ ℕ → ∧ ∈ orderedPair $$$0 $$0 ~_ℤ ∈ orderedPair $$0 $0 ~_ℤ ∈ orderedPair $$$0 $0 ~_ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ~_ℤ product ℕ ℕ, ∀ a → ∈ $0 product ℕ ℕ ∀ b → ∈ $0 product ℕ ℕ ∀ c → ∈ $0 product ℕ ℕ → ∧ ∈ orderedPair $$$0 $$0 ~_ℤ ∈ orderedPair $$0 $0 ~_ℤ ∈ orderedPair $$$0 $0 ~_ℤ) () 0 3.0
     prove transitiveRelation ~_ℤ product ℕ ℕ 115591d2ccba7063ade6115245528c0b261bd8f4455e320187d22c48d5955a92 () (~_ℤ, product ℕ ℕ) 3.1.0
   }
 }
-elided 655c5269631cada93092ee7256053fc6b963dca6426928688ccb1a821d5eca7b {
+premiseDerivation {
   prove ∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ~_ℤ product ℕ ℕ, reflexiveRelation ~_ℤ product ℕ ℕ) () 0 1
   prove ∧ ∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ symmetricRelation ~_ℤ product ℕ ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ, symmetricRelation ~_ℤ product ℕ ℕ) () 4.0 2
   prove ∧ ∧ ∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ symmetricRelation ~_ℤ product ℕ ℕ transitiveRelation ~_ℤ product ℕ ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ ∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ symmetricRelation ~_ℤ product ℕ ℕ, transitiveRelation ~_ℤ product ℕ ℕ) () 4.1 3

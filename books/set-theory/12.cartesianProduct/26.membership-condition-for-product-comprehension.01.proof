@@ -45,7 +45,7 @@ take a {
           elided (Extracted) {
             prove ↔ ∈ orderedPair $$0 $0 t0 ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 t0 ∧ ∈ $$$0 product t1 t2 with (first $$$0 second $$$0) s0) (orderedPair $$0 $0) 1
             prove → ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 ∈ orderedPair $$0 $0 t0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $$0 $0 t0, ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 2.0.0.0.1.2.0
-            elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
+            premiseDerivation {
               prove ∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $$0 $0 product t1 t2, with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 2.0.0.0.1.0 2.0.0.0.1.1
               prove ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ orderedPair $$0 $0 product t1 t2 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0, ∈ orderedPair $$0 $0 t0) () 2.0.0.0.1.2.1 2.0.0.0.1.2.2.0
             }

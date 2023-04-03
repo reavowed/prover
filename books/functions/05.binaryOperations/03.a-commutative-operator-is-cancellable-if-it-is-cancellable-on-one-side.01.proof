@@ -55,7 +55,7 @@ assume leftCancellableBinaryOperation t0 {
       }
     }
   }
-  elided 608a8d134b5af87ed6faa03133d9045c9ee99916be4d9a5d76c48afdf5c9f5b8 {
+  premiseDerivation {
     prove ∧ binaryOperation t0 ∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 ∀ c → ∈ $0 baseSet t0 → = apply t0 orderedPair $$$0 $0 apply t0 orderedPair $$0 $0 = $$$0 $$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 ∀ c → ∈ $0 baseSet t0 → = apply t0 orderedPair $$$0 $0 apply t0 orderedPair $$0 $0 = $$$0 $$0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0
     prove rightCancellableBinaryOperation t0 608a8d134b5af87ed6faa03133d9045c9ee99916be4d9a5d76c48afdf5c9f5b8 () (t0) 0.1.0
   }
@@ -117,7 +117,7 @@ assume rightCancellableBinaryOperation t0 {
       }
     }
   }
-  elided bd72b234423c3292c22ca8f29a9d91512463428657eb8bd397fd338a6ba40d64 {
+  premiseDerivation {
     prove ∧ binaryOperation t0 ∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 ∀ c → ∈ $0 baseSet t0 → = apply t0 orderedPair $$$0 $$0 apply t0 orderedPair $$$0 $0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 ∀ c → ∈ $0 baseSet t0 → = apply t0 orderedPair $$$0 $$0 apply t0 orderedPair $$$0 $0 = $$0 $0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0
     prove leftCancellableBinaryOperation t0 bd72b234423c3292c22ca8f29a9d91512463428657eb8bd397fd338a6ba40d64 () (t0) 1.1.0
   }
@@ -126,7 +126,7 @@ elided 2cd9dcb50f7e743be5ea6e40a1fd15bf150c5ed2802fb9e47916e0c040e4bc0a {
   prove ↔ leftCancellableBinaryOperation t0 rightCancellableBinaryOperation t0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (leftCancellableBinaryOperation t0, rightCancellableBinaryOperation t0) () 0 1
   prove ∧ leftCancellableBinaryOperation t0 rightCancellableBinaryOperation t0 2cd9dcb50f7e743be5ea6e40a1fd15bf150c5ed2802fb9e47916e0c040e4bc0a (leftCancellableBinaryOperation t0, rightCancellableBinaryOperation t0) () p1 2.0
 }
-elided 5c526c4d03061adc6ecc97c3420de927a6142441e89a30d385ec447f3f183dda {
+premiseDerivation {
   prove ∧ binaryOperation t0 ∧ leftCancellableBinaryOperation t0 rightCancellableBinaryOperation t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∧ leftCancellableBinaryOperation t0 rightCancellableBinaryOperation t0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2
   prove cancellableBinaryOperation t0 5c526c4d03061adc6ecc97c3420de927a6142441e89a30d385ec447f3f183dda () (t0) 3.0
 }

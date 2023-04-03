@@ -1,4 +1,4 @@
-elided e7d68f420abd8f15886367a46ab0a267ff50b41eea7e3fc6b6d64e440f291aee {
+premiseDerivation {
   prove equivalenceRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ c0bc32c877360e5315af8a448d415d129cf44fa28fa06e859a1fdc3b5663fd66 () ()
   prove ∈ orderedPair t0 t1 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℤ, t1, diff ℤ singleton apply ⍳_ℤ 0ℕ) p0 p1
   prove ∈ equivalenceClass orderedPair t0 t1 ~_ℚ equivalenceQuotient product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ~_ℚ e7d68f420abd8f15886367a46ab0a267ff50b41eea7e3fc6b6d64e440f291aee () (~_ℚ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, orderedPair t0 t1) 0.0 0.1

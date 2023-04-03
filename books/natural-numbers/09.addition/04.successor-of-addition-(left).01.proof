@@ -16,7 +16,7 @@ prove = apply +ℕ orderedPair successor t0 0ℕ successor apply +ℕ orderedPai
 take x {
   assume ∈ $0 ℕ {
     assume = apply +ℕ orderedPair successor t0 $0 successor apply +ℕ orderedPair t0 $0 {
-      elided 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 {
+      premiseDerivation {
         prove ∈ successor t0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () (t0) p0
         prove = apply +ℕ orderedPair successor t0 successor $0 successor apply +ℕ orderedPair successor t0 $0 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 () (successor t0, $0) 3.0.0.0.0 3.0a
       }

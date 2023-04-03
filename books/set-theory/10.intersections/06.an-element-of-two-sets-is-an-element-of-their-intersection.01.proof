@@ -1,7 +1,12 @@
 prove ∀ x ↔ ∈ $0 ∩ t1 t2 ∧ ∈ $0 t1 ∈ $0 t2 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (t1, t2)
-elided 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 {
-  prove ↔ ∈ t0 ∩ t1 t2 ∧ ∈ t0 t1 ∈ t0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 ∩ t1 t2 ∧ ∈ $0 t1 ∈ $0 t2) (t0) 0
-  prove → ∧ ∈ t0 t1 ∈ t0 t2 ∈ t0 ∩ t1 t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 ∩ t1 t2, ∧ ∈ t0 t1 ∈ t0 t2) () 1.0
+premiseDerivation {
   prove ∧ ∈ t0 t1 ∈ t0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 t1, ∈ t0 t2) () p0 p1
-  prove ∈ t0 ∩ t1 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ t0 t1 ∈ t0 t2, ∈ t0 ∩ t1 t2) () 1.1 1.2
+  elided 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c {
+    prove ∀ x ↔ ∈ $0 ∩ t1 t2 ∧ ∈ $0 t1 ∈ $0 t2 790b0030baf2cd0f258f9826e85fde156b6a4d01b971f3d71e50ef6d225cb79c () (t1, t2)
+    prove ↔ ∈ t0 ∩ t1 t2 ∧ ∈ t0 t1 ∈ t0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 ∩ t1 t2 ∧ ∈ $0 t1 ∈ $0 t2) (t0) 1.1.0
+    prove → ∧ ∈ t0 t1 ∈ t0 t2 ∈ t0 ∩ t1 t2 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 ∩ t1 t2, ∧ ∈ t0 t1 ∈ t0 t2) () 1.1.1
+    prove ∈ t0 ∩ t1 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ t0 t1 ∈ t0 t2, ∈ t0 ∩ t1 t2) () 1.1.2 1.0
+  }
+  prove → ∧ ∈ t0 t1 ∈ t0 t2 ∈ t0 ∩ t1 t2 acbe547cc61228898842cf6a8732b10d52cf1f493dd2455a7cecc64235f53854 (∈ t0 ∩ t1 t2, ∧ ∈ t0 t1 ∈ t0 t2) () 1.1
+  prove ∈ t0 ∩ t1 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ t0 t1 ∈ t0 t2, ∈ t0 ∩ t1 t2) () 1.2 1.0
 }

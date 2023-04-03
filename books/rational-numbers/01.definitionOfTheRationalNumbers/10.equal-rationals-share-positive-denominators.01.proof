@@ -40,7 +40,7 @@ take z {
                   }
                   prove = apply ×ℤ orderedPair $$$0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $$$$0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair $$$0 apply ⍳_ℤ 0ℕ, apply ⍳_ℤ 0ℕ, apply ×ℤ orderedPair $$$$0 apply ⍳_ℤ 0ℕ) 0.0.0.0.0.0.0.0.0.2 0.0.0.0.0.0.0.0.0.3
                   elided 74780f0abf9cfbbf15e897b5bd41430d789996311931d98813855e642387c016 {
-                    elided 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 {
+                    premiseDerivation {
                       prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
                       prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0.0.0.0.0.0.0.0.5.0.0
                     }
@@ -57,13 +57,13 @@ take z {
                       prove ∈ orderedPair apply ×ℤ orderedPair $$$$0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $$$$0 $0 <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair $$$$0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $$$$0 $0 <ℤ) () 0.0.0.0.0.0.0.0.0.5.2.1 0.0.0.0.0.0.0.0.0.1
                     }
                   }
-                  elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+                  premiseDerivation {
                     prove = apply ×ℤ orderedPair $$$$0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $$$0 apply ⍳_ℤ 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair $$$0 apply ⍳_ℤ 0ℕ, apply ×ℤ orderedPair $$$$0 apply ⍳_ℤ 0ℕ) 0.0.0.0.0.0.0.0.0.4
                     prove ∈ orderedPair apply ×ℤ orderedPair $$$0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $$$$0 $0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$0 apply ×ℤ orderedPair $$$$0 $0 <ℤ) (apply ×ℤ orderedPair $$$$0 apply ⍳_ℤ 0ℕ, apply ×ℤ orderedPair $$$0 apply ⍳_ℤ 0ℕ) 0.0.0.0.0.0.0.0.0.6.0 0.0.0.0.0.0.0.0.0.5
                   }
                   prove ∈ orderedPair apply ×ℤ orderedPair $$$0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $$$0 $$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair apply ×ℤ orderedPair $$$0 apply ⍳_ℤ 0ℕ $$$$$0 <ℤ) (apply ×ℤ orderedPair $$$$0 $0, apply ×ℤ orderedPair $$$0 $$0) 0.0.0.0.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0.0.0.0.0.0.0.6
                   elided 74780f0abf9cfbbf15e897b5bd41430d789996311931d98813855e642387c016 {
-                    elided 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 {
+                    premiseDerivation {
                       prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
                       prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0.0.0.0.0.0.0.0.8.0.0
                     }

@@ -20,7 +20,7 @@ take r {
   assume ∈ $0 ℕ {
     assume ¬ = $0 0ℕ {
       assume ∈ orderedPair t0 apply ×ℕ orderedPair t0 $0 ≤ℕ {
-        elided 7314876030171ae0ba4fbb2f095f49f29fb107d6bc2642c5defc34c8840d3065 {
+        premiseDerivation {
           prove ∈ apply ×ℕ orderedPair t0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (t0, $0) p0 2.0a
           prove ∈ orderedPair apply ×ℕ orderedPair t0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 t0 ≤ℕ 7314876030171ae0ba4fbb2f095f49f29fb107d6bc2642c5defc34c8840d3065 () (apply ×ℕ orderedPair t0 $0, t0) 2.0.0.0.0.0 p0
         }

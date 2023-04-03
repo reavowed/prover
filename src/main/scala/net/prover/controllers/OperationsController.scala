@@ -2,13 +2,18 @@ package net.prover.controllers
 
 import net.prover.books.management.BookStateManager
 import net.prover.refactoring.{ReplaceElidedSteps, ReplaceInference}
-import net.prover.theorems.ClearInference
+import net.prover.theorems.{ClearInference, RecalculateReferences}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 
 @RestController
 @RequestMapping(Array("/"))
 class OperationsController @Autowired() (implicit bookStateManager: BookStateManager) {
+
+  @GetMapping(value = Array("recalculateReferences"))
+  def recalculateReferences(): Unit = {
+    RecalculateReferences()
+  }
 
   @GetMapping(value = Array("replaceElidedSteps"))
   def replaceElidedSteps(): Unit = {

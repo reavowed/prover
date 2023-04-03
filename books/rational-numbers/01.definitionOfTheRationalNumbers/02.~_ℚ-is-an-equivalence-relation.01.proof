@@ -52,7 +52,7 @@ subproof (Reflexive) {
       }
     }
   }
-  elided c02d593cb92d673b7e9416e2da9b7cc3c19eda2afa0034be887cbab716a7e40c {
+  premiseDerivation {
     prove ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∈ orderedPair $0 $0 ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∀ a → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∈ orderedPair $0 $0 ~_ℚ) () 0 1.0
     prove reflexiveRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ c02d593cb92d673b7e9416e2da9b7cc3c19eda2afa0034be887cbab716a7e40c () (~_ℚ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 1.1.0
   }
@@ -161,7 +161,7 @@ subproof (Symmetric) {
       }
     }
   }
-  elided e3618dccd3e1f6cf51f3a0aaaa580847161f7f182fc29f8ef6561512ce540af7 {
+  premiseDerivation {
     prove ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ b → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ → ∈ orderedPair $$0 $0 ~_ℚ ∈ orderedPair $0 $$0 ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∀ a → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ b → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ → ∈ orderedPair $$0 $0 ~_ℚ ∈ orderedPair $0 $$0 ~_ℚ) () 0 2.0
     prove symmetricRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ e3618dccd3e1f6cf51f3a0aaaa580847161f7f182fc29f8ef6561512ce540af7 () (~_ℚ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 2.1.0
   }
@@ -360,7 +360,7 @@ subproof (Transitive) {
                     }
                   }
                   prove = apply ×ℤ orderedPair first $$$0 second $0 apply ×ℤ orderedPair second $$$0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair first $$$0 second $0, apply ⍳_ℤ 0ℕ, apply ×ℤ orderedPair second $$$0 apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0.0.4.13 3.0.0.0.0.0.0.0.4.14
-                  elided b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 {
+                  premiseDerivation {
                     prove = apply ⍳_ℤ 0ℕ first $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (first $0, apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0.0.4.10
                     prove = apply ×ℤ orderedPair second $$$0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair second $$$0 first $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ⍳_ℤ 0ℕ, first $0, apply ×ℤ orderedPair second $$$0 $$$$0) 3.0.0.0.0.0.0.0.4.16.0
                   }
@@ -718,12 +718,12 @@ subproof (Transitive) {
       }
     }
   }
-  elided 115591d2ccba7063ade6115245528c0b261bd8f4455e320187d22c48d5955a92 {
+  premiseDerivation {
     prove ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ b → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ → ∧ ∈ orderedPair $$$0 $$0 ~_ℚ ∈ orderedPair $$0 $0 ~_ℚ ∈ orderedPair $$$0 $0 ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∀ a → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ b → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ → ∧ ∈ orderedPair $$$0 $$0 ~_ℚ ∈ orderedPair $$0 $0 ~_ℚ ∈ orderedPair $$$0 $0 ~_ℚ) () 0 3.0
     prove transitiveRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 115591d2ccba7063ade6115245528c0b261bd8f4455e320187d22c48d5955a92 () (~_ℚ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.1.0
   }
 }
-elided 655c5269631cada93092ee7256053fc6b963dca6426928688ccb1a821d5eca7b {
+premiseDerivation {
   prove ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ reflexiveRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, reflexiveRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) () 0 1
   prove ∧ ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ reflexiveRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ symmetricRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ reflexiveRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, symmetricRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) () 4.0 2
   prove ∧ ∧ ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ reflexiveRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ symmetricRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ transitiveRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ reflexiveRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ symmetricRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, transitiveRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) () 4.1 3

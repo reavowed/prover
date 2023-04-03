@@ -18,27 +18,27 @@ take x {
       prove ∧ ∈ $0 product product union union t0 union union t2 product union union t0 union union t2 ∧ ∈ orderedPair first first $0 first second $0 t0 ∈ orderedPair second first $0 second second $0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 productRelation t0 t2, ∧ ∈ $0 product product union union t0 union union t2 product union union t0 union union t2 ∧ ∈ orderedPair first first $0 first second $0 t0 ∈ orderedPair second first $0 second second $0 t2) () 5.0.0.2 5.0a
       prove ∈ $0 product product union union t0 union union t2 product union union t0 union union t2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $0 product product union union t0 union union t2 product union union t0 union union t2, ∧ ∈ orderedPair first first $0 first second $0 t0 ∈ orderedPair second first $0 second second $0 t2) () 5.0.0.3
     }
-    elided f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b {
+    premiseDerivation {
       prove ∈ first $0 product union union t0 union union t2 cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product union union t0 union union t2, product union union t0 union union t2) 5.0.0
       prove ∈ first first $0 union union t0 cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () (first $0, union union t0, union union t2) 5.0.1.0
       prove ∈ first first $0 t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (union union t0, t1, first first $0) 0 5.0.1.1
     }
-    elided f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b {
+    premiseDerivation {
       prove ∈ first $0 product union union t0 union union t2 cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product union union t0 union union t2, product union union t0 union union t2) 5.0.0
       prove ∈ second first $0 union union t2 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (first $0, union union t0, union union t2) 5.0.2.0
       prove ∈ second first $0 t3 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (union union t2, t3, second first $0) 1 5.0.2.1
     }
-    elided f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b {
+    premiseDerivation {
       prove ∈ second $0 product union union t0 union union t2 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product union union t0 union union t2, product union union t0 union union t2) 5.0.0
       prove ∈ first second $0 union union t0 cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () (second $0, union union t0, union union t2) 5.0.3.0
       prove ∈ first second $0 t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (union union t0, t1, first second $0) 0 5.0.3.1
     }
-    elided f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b {
+    premiseDerivation {
       prove ∈ second $0 product union union t0 union union t2 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product union union t0 union union t2, product union union t0 union union t2) 5.0.0
       prove ∈ second second $0 union union t2 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (second $0, union union t0, union union t2) 5.0.4.0
       prove ∈ second second $0 t3 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (union union t2, t3, second second $0) 1 5.0.4.1
     }
-    elided 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b {
+    premiseDerivation {
       prove ∈ orderedPair first first $0 second first $0 product t1 t3 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (first first $0, t1, second first $0, t3) 5.0.1 5.0.2
       prove ∈ orderedPair first second $0 second second $0 product t1 t3 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (first second $0, t1, second second $0, t3) 5.0.3 5.0.4
       prove ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 product product t1 t3 product t1 t3 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (orderedPair first first $0 second first $0, product t1 t3, orderedPair first second $0 second second $0, product t1 t3) 5.0.5.0 5.0.5.1
@@ -46,7 +46,7 @@ take x {
     elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
       elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
         elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-          elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
+          premiseDerivation {
             prove ∈ first $0 product union union t0 union union t2 cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product union union t0 union union t2, product union union t0 union union t2) 5.0.0
             prove = first $0 orderedPair first first $0 second first $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () (first $0, union union t0, union union t2) 5.0.6.0.0.0.0
           }
@@ -54,7 +54,7 @@ take x {
           prove ∈ orderedPair first $0 orderedPair first second $0 second second $0 product product t1 t3 product t1 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$0 orderedPair first second $0 second second $0 product product t1 t3 product t1 t3) (orderedPair first first $0 second first $0, first $0) 5.0.6.0.0.1 5.0.5
         }
         elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-          elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
+          premiseDerivation {
             prove ∈ second $0 product union union t0 union union t2 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product union union t0 union union t2, product union union t0 union union t2) 5.0.0
             prove = second $0 orderedPair first second $0 second second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () (second $0, union union t0, union union t2) 5.0.6.0.1.0.0
           }

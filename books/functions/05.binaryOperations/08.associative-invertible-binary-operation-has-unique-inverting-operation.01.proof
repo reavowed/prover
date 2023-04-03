@@ -19,9 +19,10 @@ take f {
                 prove → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$$0 $0 t2 = apply t0 orderedPair apply $$$0 $0 $0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t1 ∧ = apply t0 orderedPair $$$$0 apply $$$0 $$$$0 t2 = apply t0 orderedPair apply $$$0 $$$$0 $$$$0 t2) ($0) 2.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                 prove ∧ = apply t0 orderedPair $0 apply $$$0 $0 t2 = apply t0 orderedPair apply $$$0 $0 $0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∧ = apply t0 orderedPair $0 apply $$$0 $0 t2 = apply t0 orderedPair apply $$$0 $0 $0 t2) () 2.1.0.0.0.0.0.1.0 2.1.0.0.0.0.0a
               }
-              elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                prove ∧ = apply t0 orderedPair $0 apply $$$0 $0 $$0 = apply t0 orderedPair apply $$$0 $0 $0 t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ = apply t0 orderedPair $0 apply $$$0 $0 $$$$0 = apply t0 orderedPair apply $$$0 $0 $0 t2) (t2, $$0) 2.1.0.0.0.0.0.0 2.1.0.0.0.0.0.1
-                prove ∧ = apply t0 orderedPair $0 apply $$$0 $0 $$0 = apply t0 orderedPair apply $$$0 $0 $0 $$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ = apply t0 orderedPair $0 apply $$$0 $0 $$0 = apply t0 orderedPair apply $$$0 $0 $0 $$$$0) (t2, $$0) 2.1.0.0.0.0.0.0 2.1.0.0.0.0.0.2.0
+              premiseDerivation {
+                prove = apply t0 orderedPair $0 apply $$$0 $0 $$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply t0 orderedPair $0 apply $$$0 $0 $$$$0) (t2, $$0) 2.1.0.0.0.0.0.0 2.1.0.0.0.0.0.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                prove ∧ = apply t0 orderedPair $0 apply $$$0 $0 $$0 = apply t0 orderedPair apply $$$0 $0 $0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= apply t0 orderedPair $0 apply $$$0 $0 $$0, = apply t0 orderedPair apply $$$0 $0 $0 t2) () 2.1.0.0.0.0.0.2.0 2.1.0.0.0.0.0.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                prove ∧ = apply t0 orderedPair $0 apply $$$0 $0 $$0 = apply t0 orderedPair apply $$$0 $0 $0 $$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ = apply t0 orderedPair $0 apply $$$0 $0 $$0 = apply t0 orderedPair apply $$$0 $0 $0 $$$$0) (t2, $$0) 2.1.0.0.0.0.0.0 2.1.0.0.0.0.0.2.1
               }
             }
           }
@@ -45,7 +46,7 @@ take f {
         prove → identityBinaryOperation t2 t0 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ identityBinaryOperation $$0 t0 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 $$$0 = apply t0 orderedPair apply $$0 $0 $0 $$$0) (t2) 2.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (identityBinaryOperation t2 t0, ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2) () 2.1.1.1.0 p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       }
-      elided 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 {
+      premiseDerivation {
         prove ∧ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ unaryOperation $0 unaryOperationOn $0 t1, ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2) () 2.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.1.1.1
       }
     }

@@ -7,14 +7,14 @@ assume ∃ x ∧ ∈ $0 t0 with (first $0 second $0) s0 {
       prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t1, t2) 0.0.0
       prove ∈ orderedPair first $0 second $0 t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$0 t0) ($0, orderedPair first $0 second $0) 0.0.3.0 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
     }
-    elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+    premiseDerivation {
       prove ∧ ∈ orderedPair first $0 second $0 t0 with (first $0 second $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair first $0 second $0 t0, with (first $0 second $0) s0) () 0.0.3 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       prove ∧ ∈ second $0 t2 ∧ ∈ orderedPair first $0 second $0 t0 with (first $0 second $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ second $0 t2, ∧ ∈ orderedPair first $0 second $0 t0 with (first $0 second $0) s0) () 0.0.2 0.0.4.0
-      prove ∃ b ∧ ∈ $0 t2 ∧ ∈ orderedPair first $$0 $0 t0 with (first $$0 $0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 t2 ∧ ∈ orderedPair first $0 $$0 t0 with (first $0 $$0) s0) (second $0) 0.0.4.1
+      prove ∃ x ∧ ∈ $0 t2 ∧ ∈ orderedPair first $$0 $0 t0 with (first $$0 $0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 t2 ∧ ∈ orderedPair first $0 $$0 t0 with (first $0 $$0) s0) (second $0) 0.0.4.1
     }
-    elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+    premiseDerivation {
       prove ∧ ∈ first $0 t1 ∃ b ∧ ∈ $0 t2 ∧ ∈ orderedPair first $$0 $0 t0 with (first $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ first $0 t1, ∃ b ∧ ∈ $0 t2 ∧ ∈ orderedPair first $$0 $0 t0 with (first $$0 $0) s0) () 0.0.1 0.0.4
-      prove ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 ∧ ∈ orderedPair $$0 $0 t0 with ($$0 $0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 t1 ∃ b ∧ ∈ $0 t2 ∧ ∈ orderedPair $$$0 $0 t0 with ($$$0 $0) s0) (first $0) 0.0.5.0
+      prove ∃ x ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 ∧ ∈ orderedPair $$0 $0 t0 with ($$0 $0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 t1 ∃ b ∧ ∈ $0 t2 ∧ ∈ orderedPair $$$0 $0 t0 with ($$$0 $0) s0) (first $0) 0.0.5.0
     }
   } 0a
 }
@@ -33,7 +33,7 @@ assume ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 ∧ ∈ orderedPair $$0 $0 t0 wit
           prove with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with (first orderedPair $$0 $0 $$$0) s0) ($0, second orderedPair $$0 $0) 1.0.0.0.1.1 1.0.0.0.0
         }
       }
-      elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+      premiseDerivation {
         prove ∧ ∈ orderedPair $$0 $0 t0 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $$0 $0 t0, with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 1.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0.0
         prove ∃ x ∧ ∈ $0 t0 with (first $0 second $0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 t0 with (first $$$0 second $$$0) s0) (orderedPair $$0 $0) 1.0.0.1.0
       }

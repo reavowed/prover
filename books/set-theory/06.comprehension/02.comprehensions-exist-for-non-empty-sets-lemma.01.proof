@@ -2,7 +2,7 @@ take y {
   assume ∃ x ∧ ∈ $0 t1 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 t0 {
     let x ∧ ∈ $0 t1 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 t1 ∨ ∧ with ($$0) s0 = $0 $$0 ∧ ¬ with ($$0) s0 = $0 t0, ∧ ∈ $0 t1 with ($0) s0) () {
       assume with ($0) s0 {
-        elided bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 {
+        premiseDerivation {
           prove ¬ ¬ with ($0) s0 3df4534886dd61f6ef0a8462fb7cdbff93a3381c7b5ce4d4871f1d25450b688a (with ($0) s0) () 0.0.0.0a
           prove ↔ ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 t0 = $$0 $0 bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 (with ($0) s0, ¬ with ($0) s0, = $$0 $0, = $$0 t0) () 0.0.0.0a 0.0.0.0.0.0
         }
@@ -28,7 +28,7 @@ take y {
   }
   assume ∧ ∈ $0 t1 with ($0) s0 {
     prove = $0 $0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () ($0)
-    elided 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 {
+    premiseDerivation {
       prove ∧ with ($0) s0 = $0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) s0, = $0 $0) () 0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.1.0
       prove ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 t0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ with ($0) s0 = $0 $0, ∧ ¬ with ($0) s0 = $0 t0) () 0.1.1.0
       prove ∧ ∈ $0 t1 ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 t1, ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 t0) () 0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.1.1

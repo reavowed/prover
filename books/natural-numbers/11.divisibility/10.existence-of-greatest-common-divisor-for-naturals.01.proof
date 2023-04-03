@@ -40,7 +40,7 @@ let D = $0 comprehension n ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0
           }
         }
       }
-      elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+      premiseDerivation {
         prove ∧ ∈ t0 ℕ ∀ d → ∈ $0 $$0 ∈ orderedPair $0 t0 ≤ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 ℕ, ∀ d → ∈ $0 $$0 ∈ orderedPair $0 t0 ≤ℕ) () p0 0.2.0.0
         prove ∃ x ∧ ∈ $0 ℕ ∀ d → ∈ $0 $$$0 ∈ orderedPair $0 $$0 ≤ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 ℕ ∀ d → ∈ $0 $$0 ∈ orderedPair $0 $$$0 ≤ℕ) (t0) 0.2.0.1.0
       }
@@ -69,7 +69,7 @@ let D = $0 comprehension n ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0
           }
         }
       }
-      elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+      premiseDerivation {
         prove ∧ ∈ t1 ℕ ∀ d → ∈ $0 $$0 ∈ orderedPair $0 t1 ≤ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t1 ℕ, ∀ d → ∈ $0 $$0 ∈ orderedPair $0 t1 ≤ℕ) () p1 0.2.1.0
         prove ∃ x ∧ ∈ $0 ℕ ∀ d → ∈ $0 $$$0 ∈ orderedPair $0 $$0 ≤ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 ℕ ∀ d → ∈ $0 $$0 ∈ orderedPair $0 $$$0 ≤ℕ) (t1) 0.2.1.1.0
       }
@@ -121,7 +121,7 @@ let D = $0 comprehension n ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0
           }
         }
       }
-      elided 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 {
+      premiseDerivation {
         prove ∧ ∈ orderedPair $0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $0 t1 |ℕ, ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ) () 0.4.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.4.0.5
         prove ∧ ∈ orderedPair $0 t0 |ℕ ∧ ∈ orderedPair $0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $0 t0 |ℕ, ∧ ∈ orderedPair $0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ) () 0.4.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.4.0.6.0
         prove ∧ ∈ orderedPair 0ℕ $0 <ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∧ ∈ orderedPair $0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair 0ℕ $0 <ℕ, ∧ ∈ orderedPair $0 t0 |ℕ ∧ ∈ orderedPair $0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ) () 0.4.0.4 0.4.0.6.1

@@ -24,7 +24,7 @@ take y {
     assume = $0 t0 {
       prove ∈ singleton ∅ powerSet singleton ∅ 6d9969f24629cbc5b410cebb8d4d426f1c712107b59e52fe914afce08d1c859c () (singleton ∅)
       prove = singleton ∅ singleton ∅ 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (singleton ∅)
-      elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+      premiseDerivation {
         prove ∧ = singleton ∅ singleton ∅ = $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= singleton ∅ singleton ∅, = $0 t0) () 2.1.0.1 2.1.0a
         prove ∨ ∧ = singleton ∅ singleton ∅ = $0 t0 ∧ = singleton ∅ ∅ = $0 t1 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ = singleton ∅ singleton ∅ = $0 t0, ∧ = singleton ∅ ∅ = $0 t1) () 2.1.0.2.0
         prove ∧ ∈ singleton ∅ powerSet singleton ∅ ∨ ∧ = singleton ∅ singleton ∅ = $0 t0 ∧ = singleton ∅ ∅ = $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ singleton ∅ powerSet singleton ∅, ∨ ∧ = singleton ∅ singleton ∅ = $0 t0 ∧ = singleton ∅ ∅ = $0 t1) () 2.1.0.0 2.1.0.2.1
@@ -34,7 +34,7 @@ take y {
     assume = $0 t1 {
       prove ∈ ∅ powerSet singleton ∅ 1b4b7e14784be7940f719468c38125a9b1ab00f3064655f8f6ae03612d948f85 () (singleton ∅)
       prove = ∅ ∅ 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (∅)
-      elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+      premiseDerivation {
         prove ∧ = ∅ ∅ = $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= ∅ ∅, = $0 t1) () 2.1.1.1 2.1.1a
         prove ∨ ∧ = ∅ singleton ∅ = $0 t0 ∧ = ∅ ∅ = $0 t1 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∧ = ∅ ∅ = $0 t1, ∧ = ∅ singleton ∅ = $0 t0) () 2.1.1.2.0
         prove ∧ ∈ ∅ powerSet singleton ∅ ∨ ∧ = ∅ singleton ∅ = $0 t0 ∧ = ∅ ∅ = $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ ∅ powerSet singleton ∅, ∨ ∧ = ∅ singleton ∅ = $0 t0 ∧ = ∅ ∅ = $0 t1) () 2.1.1.0 2.1.1.2.1

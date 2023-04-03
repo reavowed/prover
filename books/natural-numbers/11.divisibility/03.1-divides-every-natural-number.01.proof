@@ -2,9 +2,9 @@ elided fe5814df577245ac542e413d8a23711d2c3c697765986199e12a2f74b0eda14e {
   prove ∧ = apply ×ℕ orderedPair t0 1ℕ t0 = apply ×ℕ orderedPair 1ℕ t0 t0 fe5814df577245ac542e413d8a23711d2c3c697765986199e12a2f74b0eda14e () (t0) p0
   prove = apply ×ℕ orderedPair 1ℕ t0 t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply ×ℕ orderedPair t0 1ℕ t0, = apply ×ℕ orderedPair 1ℕ t0 t0) () 0.0
 }
-elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+premiseDerivation {
   prove ∧ ∈ t0 ℕ = apply ×ℕ orderedPair 1ℕ t0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 ℕ, = apply ×ℕ orderedPair 1ℕ t0 t0) () p0 0
-  prove ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair 1ℕ $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 ℕ = apply ×ℕ orderedPair 1ℕ $0 t0) (t0) 1.0
+  prove ∃ x ∧ ∈ $0 ℕ = apply ×ℕ orderedPair 1ℕ $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 ℕ = apply ×ℕ orderedPair 1ℕ $0 t0) (t0) 1.0
 }
 elided 85610f95d8025a79147939840f4ee93a9455b91e71ac4febd7ffe20fcee30cc9 {
   prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()

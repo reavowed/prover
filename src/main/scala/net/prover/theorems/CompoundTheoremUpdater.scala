@@ -15,12 +15,13 @@ abstract class CompoundTheoremUpdater[F[_] : Monad] extends CompoundStepUpdater[
       newPremises <- theorem.premises.map(updateStatement(_, SubstitutionContext.outsideProof)).toList.sequence
       newConclusion <- updateStatement(theorem.conclusion, SubstitutionContext.outsideProof)
       newProofs <- proofsWithContext.map(apply).toList.sequence
-    } yield Theorem(
-      theorem.name,
-      theorem.variableDefinitions,
-      newPremises,
-      newConclusion,
-      newProofs)
+      newTheorem = Theorem(
+        theorem.name,
+        theorem.variableDefinitions,
+        newPremises,
+        newConclusion,
+        newProofs)
+    } yield RecalculateReferences(theoremWithContext.copy(entry = newTheorem))._1
   }
   protected def apply(proofWithContext: ProofWithContext): F[Proof] = {
     import proofWithContext._

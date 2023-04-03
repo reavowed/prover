@@ -9,13 +9,11 @@ take a {
             let b_1 ∧ ∈ $0 ℤ ∃ b_2 ∧ ∈ $0 ℤ^+ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℤ ∃ b_2 ∧ ∈ $0 ℤ^+ = $$$$0 equivalenceClass orderedPair $$$$$$0 $0 ~_ℚ, = apply +ℚ orderedPair $$$$0 $$$0 apply +ℚ orderedPair $$$0 $$$$0) () {
               let b_2 ∧ ∈ $0 ℤ^+ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℤ^+ = $$$$0 equivalenceClass orderedPair $0 $$$$$$0 ~_ℚ, = apply +ℚ orderedPair $$$$$0 $$$$0 apply +ℚ orderedPair $$$$0 $$$$$0) () {
                 elided b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 {
-                  elided b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 {
-                    prove = $$$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$$0 ℤ^+, = $$$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) () 0.0.0.0.1.0a
-                    prove = apply +ℚ orderedPair $$$$$$0 $$$$$0 apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ, apply +ℚ orderedPair $$$$$$$0 $$$$$0) 0.0.0.0.1.0.1.0.0.0.0
+                  premiseDerivation {
+                    prove = apply +ℚ orderedPair $$$$$$0 $$$$$0 apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ, apply +ℚ orderedPair $$$$$$$0 $$$$$0) 0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   }
-                  elided b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 {
-                    prove = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 ℤ^+, = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ) () 0.0.0.0.1.0.1.0a
-                    prove = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$0 apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ, apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$$0) 0.0.0.0.1.0.1.0.0.1.0
+                  premiseDerivation {
+                    prove = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$0 apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ, apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$$0) 0.0.0.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   }
                   prove = apply +ℚ orderedPair $$$$$$0 $$$$$0 apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℚ orderedPair $$$$$$0 $$$$$0, apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$0, apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ) 0.0.0.0.1.0.1.0.0.0 0.0.0.0.1.0.1.0.0.1
                 }
@@ -165,11 +163,11 @@ take a {
                 }
                 prove = apply +ℚ orderedPair $$$$$$0 $$$$$0 apply +ℚ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℚ orderedPair $$$$$$0 $$$$$0, equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 apply ×ℤ orderedPair $0 $$$0 ~_ℚ, apply +ℚ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 0.0.0.0.1.0.1.0.4 0.0.0.0.1.0.1.0.5
                 elided b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 {
-                  elided b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 {
+                  premiseDerivation {
                     prove = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ) 0.0.0.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                     prove = apply +ℚ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ apply +ℚ orderedPair $$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (equivalenceClass orderedPair $$0 $0 ~_ℚ, $$$$$0, apply +ℚ orderedPair $$$$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 0.0.0.0.1.0.1.0.7.0.0
                   }
-                  elided b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 {
+                  premiseDerivation {
                     prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                     prove = apply +ℚ orderedPair $$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ apply +ℚ orderedPair $$$$$0 $$$$$$0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ, $$$$$$0, apply +ℚ orderedPair $$$$$0 $$$$$$$0) 0.0.0.0.1.0.1.0.7.1.0
                   }

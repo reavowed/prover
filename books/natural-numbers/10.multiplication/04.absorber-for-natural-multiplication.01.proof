@@ -14,7 +14,7 @@ elided ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b {
 take n {
   assume ∈ $0 ℕ {
     assume = apply ×ℕ orderedPair 0ℕ $0 0ℕ {
-      elided 87f6eec65ee7b1f694fbef11260c2086b2f9d533d365c0b343118eb3017dbcf5 {
+      premiseDerivation {
         prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
         prove = apply ×ℕ orderedPair 0ℕ successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ $0 0ℕ 87f6eec65ee7b1f694fbef11260c2086b2f9d533d365c0b343118eb3017dbcf5 () (0ℕ, $0) 2.0.0.0.0 2.0a
       }

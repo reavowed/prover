@@ -13,9 +13,9 @@ take b {
         prove ∧ ∈ $0 domain t0 ∈ $$0 codomain t0 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a () ($0, $$0, t0) 1.0.1a
         prove ∈ $0 domain t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $0 domain t0, ∈ $$0 codomain t0) () 1.0.1.0.0
       }
-      elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+      premiseDerivation {
         prove ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 domain t0, ∈ orderedPair $0 $$0 t0) () 1.0.1.0 1.0.1a
-        prove ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$$0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 domain t0 ∈ orderedPair $$$0 $$0 t0) ($0) 1.0.1.1.0
+        prove ∃ x ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$$0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 domain t0 ∈ orderedPair $$$0 $$0 t0) ($0) 1.0.1.1.0
       }
     } 1.0.0
   }

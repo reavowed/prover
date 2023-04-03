@@ -53,7 +53,7 @@ subproof (Forward implication) {
               }
               prove = successor t0 successor $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (t0, $0, successor $$0) 0.1.0.0.0.0.3a
               prove = apply +ℕ orderedPair t0 1ℕ successor $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair t0 1ℕ, successor t0, successor $0) 0.1.0.0.0.0.3.2 0.1.0.0.0.0.3.3
-              elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+              premiseDerivation {
                 prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
                 prove ∧ ¬ = 1ℕ 0ℕ = apply +ℕ orderedPair t0 1ℕ successor $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (¬ = 1ℕ 0ℕ, = apply +ℕ orderedPair t0 1ℕ successor $0) () 0.1.0.0.0.0.3.1 0.1.0.0.0.0.3.4
                 prove ∧ ∈ 1ℕ ℕ ∧ ¬ = 1ℕ 0ℕ = apply +ℕ orderedPair t0 1ℕ successor $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 1ℕ ℕ, ∧ ¬ = 1ℕ 0ℕ = apply +ℕ orderedPair t0 1ℕ successor $0) () 0.1.0.0.0.0.3.5.0 0.1.0.0.0.0.3.5.1

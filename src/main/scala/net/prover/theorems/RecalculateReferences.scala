@@ -1,16 +1,22 @@
 package net.prover.theorems
 
+import net.prover.books.management.BookStateManager
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.entries.{ProofWithContext, StepWithContext, TheoremWithContext}
 import net.prover.model._
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof.{Premise, Step}
+import net.prover.refactoring.UpdateTheorems
 import net.prover.theorems.steps.CompoundStepUpdater
 import net.prover.util.FunctorTypes._
 import scalaz.Scalaz._
 
 object RecalculateReferences extends CompoundStepUpdater[WithValue[List[StepWithReferenceChange]]#Type] {
+  def apply()(implicit bookStateManager: BookStateManager): Unit = {
+    UpdateTheorems(_ => theorem => apply(theorem)._1)
+  }
+
   def apply(theoremWithContext: TheoremWithContext): (Theorem, List[List[StepWithReferenceChange]]) = {
     val (updatedProofs, referenceChanges) = theoremWithContext.proofsWithContext.map(apply).split
     (theoremWithContext.theorem.copy(proofs = updatedProofs), referenceChanges.toList)

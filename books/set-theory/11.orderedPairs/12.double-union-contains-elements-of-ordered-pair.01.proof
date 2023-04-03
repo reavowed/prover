@@ -2,9 +2,9 @@ prove ∈ t0 pair t0 t1 28317e1585227cc7d8fe4219b6a32a24de195fef3f6a9759cebec3b7
 prove ∈ t1 pair t0 t1 05287abf6a6e482b2b48e0a3b0f98c056f0af8dccab6fe5122615f084b72b8b1 () (t1, t0)
 prove ∈ pair t0 t1 orderedPair t0 t1 f2a60db8a25b3c04e10af80da554bbaedd995c76335ec7ad6118c272d80b0060 () (t0, t1)
 elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
-  elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+  premiseDerivation {
     prove ∧ ∈ pair t0 t1 orderedPair t0 t1 ∈ orderedPair t0 t1 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ pair t0 t1 orderedPair t0 t1, ∈ orderedPair t0 t1 t2) () 2 p0
-    prove ∃ y ∧ ∈ pair t0 t1 $0 ∈ $0 t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ pair t0 t1 $0 ∈ $0 t2) (orderedPair t0 t1) 3.0.0
+    prove ∃ x ∧ ∈ pair t0 t1 $0 ∈ $0 t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ pair t0 t1 $0 ∈ $0 t2) (orderedPair t0 t1) 3.0.0
   }
   elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
     prove ∀ x ↔ ∈ $0 union t2 ∃ y ∧ ∈ $$0 $0 ∈ $0 t2 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (t2)
@@ -14,9 +14,9 @@ elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
   }
 }
 elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
-  elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+  premiseDerivation {
     prove ∧ ∈ t0 pair t0 t1 ∈ pair t0 t1 union t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 pair t0 t1, ∈ pair t0 t1 union t2) () 0 3
-    prove ∃ y ∧ ∈ t0 $0 ∈ $0 union t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ t0 $0 ∈ $0 union t2) (pair t0 t1) 4.0.0
+    prove ∃ x ∧ ∈ t0 $0 ∈ $0 union t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ t0 $0 ∈ $0 union t2) (pair t0 t1) 4.0.0
   }
   elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
     prove ∀ x ↔ ∈ $0 union union t2 ∃ y ∧ ∈ $$0 $0 ∈ $0 union t2 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (union t2)
@@ -26,9 +26,9 @@ elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
   }
 }
 elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
-  elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+  premiseDerivation {
     prove ∧ ∈ t1 pair t0 t1 ∈ pair t0 t1 union t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t1 pair t0 t1, ∈ pair t0 t1 union t2) () 1 3
-    prove ∃ y ∧ ∈ t1 $0 ∈ $0 union t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ t1 $0 ∈ $0 union t2) (pair t0 t1) 5.0.0
+    prove ∃ x ∧ ∈ t1 $0 ∈ $0 union t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ t1 $0 ∈ $0 union t2) (pair t0 t1) 5.0.0
   }
   elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
     prove ∀ x ↔ ∈ $0 union union t2 ∃ y ∧ ∈ $$0 $0 ∈ $0 union t2 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (union t2)

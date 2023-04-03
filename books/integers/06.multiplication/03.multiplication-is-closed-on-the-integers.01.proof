@@ -1,5 +1,5 @@
 prove ∧ function ×ℤ functionFrom ×ℤ product ℤ ℤ ℤ b21f47a107557bdcdb37704baa03bf88ec62f12fb3b3fdcb08febb1acac6afe8 () ()
-elided 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 {
+premiseDerivation {
   prove ∈ orderedPair t0 t1 product ℤ ℤ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℤ, t1, ℤ) p0 p1
   prove ∈ apply ×ℤ orderedPair t0 t1 ℤ 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (×ℤ, product ℤ ℤ, ℤ, orderedPair t0 t1) 0 1.0
 }

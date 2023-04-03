@@ -19,7 +19,7 @@ take a {
         }
         prove = $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 $$$0) (apply identityFunction t1 $0, $0) 1.0.1.0.0 1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       }
-      elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
+      premiseDerivation {
         prove = $0 $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$0, $0) 1.0.1.0
         prove ∈ $$0 t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$0 t0) ($0, $$0) 1.0.1.1.0 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
       }
@@ -37,9 +37,9 @@ take a {
         prove = $0 apply identityFunction t1 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply identityFunction t1 $0, $0) 1.1.0.1.0
       }
     }
-    elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
+    premiseDerivation {
       prove ∧ ∈ $0 t0 = $0 apply identityFunction t1 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 t0, = $0 apply identityFunction t1 $0) () 1.1a 1.1.0
-      prove ∃ a' ∧ ∈ $0 t0 = $$0 apply identityFunction t1 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 t0 = $0 apply identityFunction t1 $$0) ($0) 1.1.1.0
+      prove ∃ x ∧ ∈ $0 t0 = $$0 apply identityFunction t1 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 t0 = $0 apply identityFunction t1 $$0) ($0) 1.1.1.0
     }
     elided 2d53839253ae79456a823bb9196b815acf9752fa7abdaffaaf36a01f6c0d1f40 {
       prove ∀ b ↔ ∈ $0 applySet identityFunction t1 t0 ∃ a ∧ ∈ $0 t0 = $$0 apply identityFunction t1 $0 2d53839253ae79456a823bb9196b815acf9752fa7abdaffaaf36a01f6c0d1f40 () (identityFunction t1, t0)

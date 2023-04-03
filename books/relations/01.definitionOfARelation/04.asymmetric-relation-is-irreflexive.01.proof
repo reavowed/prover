@@ -13,7 +13,7 @@ take a {
     prove ¬ ∈ orderedPair $0 $0 t0 9bd9d3d3908033785d819d3b9887c5fa62d1af459ce843247ede345f9b666894 (∈ orderedPair $0 $0 t0) () 0.0.0
   }
 }
-elided d728a8db1a4be817a3987286c0987af086dee55fa299757ca65276b0c5f5c76b {
+premiseDerivation {
   prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ¬ ∈ orderedPair $0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t0 t1, ∀ a → ∈ $0 t1 ¬ ∈ orderedPair $0 $0 t0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0
   prove irreflexiveRelation t0 t1 d728a8db1a4be817a3987286c0987af086dee55fa299757ca65276b0c5f5c76b () (t0, t1) 1.0
 }

@@ -22,13 +22,13 @@ prove = apply ×ℕ orderedPair successor t0 0ℕ apply +ℕ orderedPair apply �
 take x {
   assume ∈ $0 ℕ {
     assume = apply ×ℕ orderedPair successor t0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0 {
-      elided 87f6eec65ee7b1f694fbef11260c2086b2f9d533d365c0b343118eb3017dbcf5 {
+      premiseDerivation {
         prove ∈ successor t0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () (t0) p0
         prove = apply ×ℕ orderedPair successor t0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair successor t0 $0 successor t0 87f6eec65ee7b1f694fbef11260c2086b2f9d533d365c0b343118eb3017dbcf5 () (successor t0, $0) 5.0.0.0.0 5.0a
       }
       prove = apply +ℕ orderedPair apply ×ℕ orderedPair successor t0 $0 successor t0 apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0 successor t0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ×ℕ orderedPair successor t0 $0, apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0, apply +ℕ orderedPair $$0 successor t0) 5.0.0a
       prove = apply ×ℕ orderedPair successor t0 successor $0 apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0 successor t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℕ orderedPair successor t0 successor $0, apply +ℕ orderedPair apply ×ℕ orderedPair successor t0 $0 successor t0, apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0 successor t0) 5.0.0.0 5.0.0.1
-      elided 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 {
+      premiseDerivation {
         prove ∈ apply ×ℕ orderedPair t0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (t0, $0) p0 5.0a
         prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair t0 $0, $0) 5.0.0.3.0 5.0a
         prove = apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0 successor t0 successor apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0 t0 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 () (apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0, t0) 5.0.0.3.1 p0
@@ -37,7 +37,7 @@ take x {
       elided (Rearranged) {
         elided (Rearranged) {
           elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
-            elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
+            premiseDerivation {
               prove ∈ apply ×ℕ orderedPair t0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (t0, $0) p0 5.0a
               prove = apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 apply +ℕ orderedPair $0 t0 apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0 t0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () (apply ×ℕ orderedPair t0 $0, $0, t0) 5.0.0.5.0.0.0.0 5.0a p0
             }
@@ -48,7 +48,7 @@ take x {
             prove = apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 apply +ℕ orderedPair $0 t0 apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 apply +ℕ orderedPair t0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply +ℕ orderedPair $0 t0, apply +ℕ orderedPair t0 $0, apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $$0) 5.0.0.5.0.1.0
           }
           prove = apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0 t0 apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 apply +ℕ orderedPair t0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 $0 t0, apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 apply +ℕ orderedPair $0 t0, apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 apply +ℕ orderedPair t0 $0) 5.0.0.5.0.0 5.0.0.5.0.1
-          elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
+          premiseDerivation {
             prove ∈ apply ×ℕ orderedPair t0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (t0, $0) p0 5.0a
             prove = apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 apply +ℕ orderedPair t0 $0 apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 t0 $0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () (apply ×ℕ orderedPair t0 $0, t0, $0) 5.0.0.5.0.3.0 p0 5.0a
           }

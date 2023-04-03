@@ -1,4 +1,4 @@
-elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
+premiseDerivation {
   prove ∈ apply +ℤ orderedPair t1 t2 ℤ 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 () (t1, t2) p1 p2
   prove = apply ×ℤ orderedPair t0 apply +ℤ orderedPair t1 t2 apply ×ℤ orderedPair apply +ℤ orderedPair t1 t2 t0 db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe () (t0, apply +ℤ orderedPair t1 t2) p0 0.0
 }

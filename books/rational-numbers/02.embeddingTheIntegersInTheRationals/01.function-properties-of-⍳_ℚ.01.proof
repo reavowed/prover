@@ -137,7 +137,7 @@ subproof (Injective) {
         prove ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 $$$0 → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) (ℤ, domain ⍳_ℚ) 2.1.0.1.0 2.1.0.0
       }
     }
-    elided 75e8af58388ac13c5f8f13fdd1cd63625a3f3f8696326041ae5da8f76ca64d68 {
+    premiseDerivation {
       prove ∧ function ⍳_ℚ ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function ⍳_ℚ, ∀ x → ∈ $0 domain ⍳_ℚ ∀ y → ∈ $0 domain ⍳_ℚ → = apply ⍳_ℚ $$0 apply ⍳_ℚ $0 = $$0 $0) () 1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.1.0
       prove injectiveFunction ⍳_ℚ 75e8af58388ac13c5f8f13fdd1cd63625a3f3f8696326041ae5da8f76ca64d68 () (⍳_ℚ) 2.1.1.0
     }
@@ -154,7 +154,7 @@ subproof (Function value) {
     }
   }
 }
-elided 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 {
+premiseDerivation {
   prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ, injectiveFunction ⍳_ℚ) () 1 2
   prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 4.0 3
 }
