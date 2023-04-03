@@ -20,7 +20,7 @@ class EqualityRewriterSpec extends Specification with StepBuilderHelper {
 
       def checkSteps(steps: Seq[Step]): Result = {
         Result.foreach(steps) { step =>
-          step.provenStatement must beSome(beNone ^^ ((s: Statement) => Equals(a, a).calculateSubstitutions(s)(SubstitutionContext.outsideProof)))
+          step.statement must (beNone ^^ ((s: Statement) => Equals(a, a).calculateSubstitutions(s)(SubstitutionContext.outsideProof)))
           checkSteps(step.asOptionalInstanceOf[Step.WithSubsteps].toSeq.flatMap(_.substeps))
         }
       }

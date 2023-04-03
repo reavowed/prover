@@ -38,7 +38,7 @@ case class StepContext private(
     addStatement(statement, stepReference.withSuffix(suffix))
   }
   def addStep(step: Step, reference: PreviousLineReference): StepContext = {
-    step.provenStatement.map(addStatement(_, reference)).getOrElse(this)
+    addStatement(step.statement, reference)
   }
   def addSteps(steps: Seq[Step]): StepContext = {
     steps.zipWithIndex.foldLeft(this) { case (context, (step, index)) =>

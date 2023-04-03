@@ -12,7 +12,7 @@ import scala.util.Success
 
 class StepProvingSpec extends ControllerSpec {
   def getBoundVariable(step: Step, path: Seq[Int]): String = {
-    path.foldLeft(step.provenStatement.get.asInstanceOf[DefinedStatement]) { case (s, i) =>
+    path.foldLeft(step.statement.asInstanceOf[DefinedStatement]) { case (s, i) =>
       s.components(i).asInstanceOf[DefinedStatement]
     }.boundVariableNames.head
   }

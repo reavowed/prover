@@ -24,7 +24,7 @@ object RecalculateReferences extends CompoundStepUpdater[WithValue[List[StepWith
 
   def apply(proof: ProofWithContext): (Proof, List[StepWithReferenceChange]) = {
     val (newSteps, changedSteps) = apply(proof.stepsWithContext)
-    val newStepsWithTarget = if (newSteps.mapCollect(_.provenStatement).lastOption.contains(proof.theorem.conclusion)) newSteps else newSteps :+ Step.Target(proof.theorem.conclusion)
+    val newStepsWithTarget = if (newSteps.map(_.statement).lastOption.contains(proof.theorem.conclusion)) newSteps else newSteps :+ Step.Target(proof.theorem.conclusion)
     (Proof(newStepsWithTarget), changedSteps)
   }
 

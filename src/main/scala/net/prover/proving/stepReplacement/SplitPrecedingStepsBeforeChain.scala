@@ -31,8 +31,7 @@ object SplitPrecedingStepsBeforeChain {
       def fromCurrentStep: Option[(Seq[Step], Seq[Step])] = {
         for {
           firstStep <- after.headOption
-          statement <- firstStep.provenStatement
-          (_, lhs, _) <- ChainingMethods.getJoiner(statement)
+          (_, lhs, _) <- ChainingMethods.getJoiner(firstStep.statement)
         } yield removeWhileTransitive(before, firstStep, Nil, lhs)
       }
 
@@ -46,12 +45,9 @@ object SplitPrecedingStepsBeforeChain {
   private def matchTransitiveChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, stepThree: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit stepsWithContext: StepsWithContext): Option[(T, T, T)] = {
     if (GetReferencedLines(stepThree).flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath) == Set(outerPath :+ firstStepIndex, outerPath :+ (firstStepIndex + 1)))
       for {
-        statementOne <- stepOne.provenStatement
-        (_, lhsOne, rhsOne) <- ChainingMethods.getJoiner(statementOne)
-        statementTwo <- stepTwo.provenStatement
-        (_, lhsTwo, rhsTwo) <- ChainingMethods.getJoiner(statementTwo)
-        statementThree <- stepThree.provenStatement
-        (_, lhsThree, rhsThree) <- ChainingMethods.getJoiner(statementThree)
+        (_, lhsOne, rhsOne) <- ChainingMethods.getJoiner(stepOne.statement)
+        (_, lhsTwo, rhsTwo) <- ChainingMethods.getJoiner(stepTwo.statement)
+        (_, lhsThree, rhsThree) <- ChainingMethods.getJoiner(stepThree.statement)
         if lhsOne == lhsThree && rhsOne == lhsTwo && rhsTwo == rhsThree
       } yield (lhsOne, rhsOne, rhsTwo)
     else None
@@ -60,10 +56,8 @@ object SplitPrecedingStepsBeforeChain {
   private def matchReplacementChaining[T <: Expression : ChainingMethods](stepOne: Step, stepTwo: Step, outerPath: Seq[Int], firstStepIndex: Int)(implicit stepsWithContext: StepsWithContext): Option[(T, T, T)] = {
     if (GetReferencedLines(stepTwo).flatMap(_.asOptionalInstanceOf[StepReference]).map(_.stepPath).contains(outerPath :+ firstStepIndex))
       for {
-        statementOne <- stepOne.provenStatement
-        (_, lhsOne, rhsOne) <- ChainingMethods.getJoiner(statementOne)
-        statementTwo <- stepTwo.provenStatement
-        (_, lhsTwo, rhsTwo) <- ChainingMethods.getJoiner(statementTwo)
+        (_, lhsOne, rhsOne) <- ChainingMethods.getJoiner(stepOne.statement)
+        (_, lhsTwo, rhsTwo) <- ChainingMethods.getJoiner(stepTwo.statement)
         if lhsOne == lhsTwo
       } yield (lhsOne, rhsOne, rhsTwo)
     else None

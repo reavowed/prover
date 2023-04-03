@@ -248,6 +248,8 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   lazy val statementDefinitionEliminationInferences: Seq[(Inference, Statement)] = {
     filter(definitions.statementDefinitionEliminationInferences)
   }
+
+  override def toString: String = "ProvingContext"
 }
 
 object ProvingContext {

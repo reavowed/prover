@@ -25,7 +25,7 @@ case class ClearInference(inferenceToClear: Inference) extends CompoundTheoremUp
     stepWithContext: StepWithContext
   ): Step = {
     if (step.highlightedInference.contains(inferenceToClear)) {
-      Step.Target(step.provenStatement.get)
+      Step.Target(step.statement)
     } else {
       super.updateElided(step, stepWithContext)
     }

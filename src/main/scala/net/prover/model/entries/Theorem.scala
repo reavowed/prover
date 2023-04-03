@@ -60,7 +60,7 @@ object Theorem extends Inference.EntryParser {
     val initialStepContext = StepContext.withPremisesAndVariables(premises, variableDefinitions)(ProvingContext(availableEntries, Definitions(availableEntries)))
     for {
       steps <- Step.listParser(availableEntries, initialStepContext)
-      _ = if (!steps.mapCollect(_.provenStatement).lastOption.contains(conclusion)) throw new Exception(s"Proof of theorem '$theoremName' did not prove $conclusion")
+      _ = if (!steps.lastOption.exists(_.statement == conclusion)) throw new Exception(s"Proof of theorem '$theoremName' did not prove $conclusion")
     } yield Proof(steps)
   }
 

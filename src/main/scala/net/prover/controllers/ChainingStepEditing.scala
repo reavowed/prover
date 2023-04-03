@@ -108,8 +108,7 @@ trait ChainingStepEditing {
             ): Try[(Seq[Step], MultipleStepReplacementProps)] = {
               def getWithFollowingTransitivity: Option[Option[(Seq[Step], MultipleStepReplacementProps)]] = for {
                 (followingStep, remainingSteps) <- after.headAndTailOption
-                followingStatement <- followingStep.provenStatement
-                (followingRelation, followingLhs, followingRhs) <- ChainingMethods.getJoiner(followingStatement)
+                (followingRelation, followingLhs, followingRhs) <- ChainingMethods.getJoiner(followingStep.statement)
                 if followingRhs == secondChainingStep.rhs
                 stepPath = stepWithContext.stepContext.stepReference.stepPath
                 followingStepPath = outerStepsWithContext.outerStepContext.stepReference.forChild(last + 1).stepPath
