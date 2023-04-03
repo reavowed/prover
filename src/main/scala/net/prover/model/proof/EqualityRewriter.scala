@@ -31,7 +31,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepContext: StepContex
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
         extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
-      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation) :+ extractionStep).steps ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
+      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation) :+ extractionStep) ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
     }
 
     def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
@@ -76,9 +76,9 @@ case class EqualityRewriter(equality: Equality)(implicit stepContext: StepContex
       }
       def findDirectly = {
         for {
-          premiseSteps <- DerivationFinder.findDerivationForStatement(equality(premiseTerm, targetTerm))
+          premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatement(equality(premiseTerm, targetTerm))
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
-          inference = premiseSteps.inferences.singleMatch match {
+          inference = premiseSteps.map(_.inference).singleMatch match {
             case PossibleSingleMatch.NoMatches =>
               Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)
             case PossibleSingleMatch.SingleMatch(inference) =>
@@ -86,7 +86,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepContext: StepContex
             case PossibleSingleMatch.MultipleMatches =>
               None
           }
-        } yield Seq(RearrangementStepWithInference(RearrangementStep(wrapper(targetTerm), premiseSteps.steps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
+        } yield Seq(RearrangementStepWithInference(RearrangementStep(wrapper(targetTerm), premiseSteps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
       }
       findExactly orElse findDirectly
     }
@@ -275,12 +275,12 @@ object EqualityRewriter {
     }
   }
 
-  def getReverseReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit substitutionContext: SubstitutionContext): Option[(Statement, DerivationStep)] = {
+  def getReverseReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Step.InferenceApplicationWithoutPremises)] = {
     val paths = statement.getTerms().filter(_._1 == rhs).map(_._4)
     if (paths.nonEmpty && (equality.unapply(statement).isEmpty || paths.forall(_.length > 1))) {
       val wrapper = Wrapper.fromExpression(statement.getPredicateForTerm(rhs, substitutionContext.externalDepth))
       val step = equality.substitution.assertionStep(lhs, rhs, wrapper)
-      Some((wrapper(lhs), DerivationStep.fromAssertion(step)))
+      Some((wrapper(lhs), step))
     } else {
       None
     }

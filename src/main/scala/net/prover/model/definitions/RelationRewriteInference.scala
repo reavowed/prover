@@ -1,7 +1,7 @@
 package net.prover.model.definitions
 
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{DerivationStep, StepContext, SubstitutionContext}
+import net.prover.model.proof.{DerivationStep, Step, StepContext, SubstitutionContext}
 import net.prover.model.{ProvingContext, Substitutions}
 import net.prover.proving.extraction.ExtractionHelper
 import net.prover.proving.extraction.SubstatementExtractor.InferenceExtraction
@@ -29,7 +29,7 @@ case class RelationRewriteInference(
       derivationStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions)
     } yield currentStatement.extend(premiseDerivation :+ derivationStep)
   }
-  def rewriteTarget(targetStatement: Statement)(implicit stepContext: StepContext): Option[(BinaryRelationStatement, Seq[DerivationStep])] = {
+  def rewriteTarget(targetStatement: Statement)(implicit stepContext: StepContext): Option[(BinaryRelationStatement, Seq[Step.InferenceApplicationWithoutPremises])] = {
     for {
       substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement, initialSubstitutions)
       (premiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {

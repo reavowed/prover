@@ -1,6 +1,6 @@
 package net.prover
 
-import net.prover.model.{Inference, Substitutions}
+import net.prover.model.{Inference, ProvingContext, Substitutions}
 import net.prover.model.expressions.{Statement, Term, TermVariable}
 import net.prover.model.proof.{Step, SubstitutionContext}
 import net.prover.model.TestDefinitions._
@@ -18,7 +18,8 @@ trait StepHelpers {
   def elided(inference: Inference, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Elided = sc => Step.Elided(steps(sc), Some(inference.summary), None)
   def elided(description: String, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Elided = sc => Step.Elided(steps(sc), None, Some(description))
   def existingStatementExtraction(steps: SubstitutionContext => Seq[Step.Assertion]): SubstitutionContext => Step.ExistingStatementExtraction = sc => Step.ExistingStatementExtraction(steps(sc))
-  def premiseDerivation(steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.InferenceWithPremiseDerivations = sc => Step.InferenceWithPremiseDerivations(steps(sc))
+  def inferenceExtraction(steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.InferenceExtraction = sc => Step.InferenceExtraction(steps(sc))
+  def premiseDerivation(steps: SubstitutionContext => Seq[Step])(implicit provingContext: ProvingContext): SubstitutionContext => Step.InferenceWithPremiseDerivations = sc => Step.InferenceWithPremiseDerivations(steps(sc))(provingContext)
 
   def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = (0 until number).map(i => target(ForAll("x")(Equals($, TermVariable(i)))))
 

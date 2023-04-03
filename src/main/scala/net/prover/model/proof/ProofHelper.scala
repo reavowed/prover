@@ -6,7 +6,7 @@ import net.prover.model.expressions._
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 
 object ProofHelper {
-  def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(DerivationStep, Substitutions.Possible)] = {
+  def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(Step.InferenceApplicationWithoutPremises, Substitutions.Possible)] = {
     provingContext.facts.mapFind { fact =>
       for {
         substitutions <- target.calculateSubstitutions(fact.statement, substitutionsSoFar)
@@ -43,7 +43,7 @@ object ProofHelper {
     inference: Inference,
     substitutions: Substitutions)(
     implicit stepContext: StepContext
-  ): Option[(Step.Assertion, Seq[DerivationStep], Seq[Step.Target])] = {
+  ): Option[(Step.Assertion, Seq[Step.InferenceApplicationWithoutPremises], Seq[Step.Target])] = {
     for {
       premiseStatements <- inference.substitutePremises(substitutions)
       conclusion <- inference.substituteConclusion(substitutions)

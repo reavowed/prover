@@ -17,7 +17,6 @@ class DerivationOrTargetFinderSpec extends Specification with ContextHelper with
     def findPremiseOrTarget(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries): (Seq[Step], Seq[Statement]) = {
       implicit val stepContext = createBaseStepContext(premises, depth)
       DerivationOrTargetFinder.findDerivationsOrTargets(Seq(target))
-        .mapLeft(_.steps)
         .mapRight(_.map(_.statement))
     }
 
@@ -45,11 +44,10 @@ class DerivationOrTargetFinderSpec extends Specification with ContextHelper with
         defaultAvailableEntriesPlus(axiom)
       ) mustEqual (
         Seq(
-          elided(axiom, Seq(
-            elided(axiom, Seq(
-              assertion(axiom, Nil, Nil),
-              assertion(extractRightConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))),
-            elided(FunctionFrom.deconstructionInference, Seq(
+          inferenceExtraction(Seq(
+            assertion(axiom, Nil, Nil),
+            assertion(extractRightConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil),
+            inferenceExtraction(Seq(
               assertion(FunctionFrom.deconstructionInference, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
               assertion(reverseEquality, Nil, Seq(Domain(Addition), Product(Naturals, Naturals))))))),
           assertion(substitutionOfEquals, Seq(ForAllIn("x", $.^)(ForAllIn("y", $.^^)(φ($.^, $)))), Seq(Product(Naturals, Naturals), Domain(Addition))))(SubstitutionContext.outsideProof),

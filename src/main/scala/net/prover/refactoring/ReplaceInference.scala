@@ -28,7 +28,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
       for {
         (inferenceExtraction, substitutions) <- substitutionsOption.failIfUndefined(InferenceReplacementException("Could not find extraction option", stepWithContext))
         extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions).failIfUndefined(InferenceReplacementException("Could not apply extraction", stepWithContext))
-      } yield extractionStep.step
+      } yield extractionStep
     } else super.updateAssertion(step, stepWithContext)
   }
 

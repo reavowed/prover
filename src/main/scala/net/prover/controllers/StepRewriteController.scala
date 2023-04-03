@@ -191,7 +191,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
       extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
-      elidedStep = Step.Elided.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).deduplicate.steps, inference).get
+      elidedStep = Step.Elided.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).distinctBy(_.statement), inference).get
     } yield (removedSource, rewrittenTerm, Seq(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
   }
 
@@ -212,7 +212,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       _ <- (removedSource == premiseLhs).orBadRequest("Premise did not match term at path")
       statementToFind = (equality.apply _).tupled(direction.swapSourceAndResult(premiseLhs, premiseRhs))
       knownStatement <- stepWithContext.stepContext.knownStatementsFromPremisesBySerializedStatement.get(statementToFind.serialized).orBadRequest(s"Could not find premise ${statementToFind.toString}")
-    } yield (premiseLhs, premiseRhs, knownStatement.derivation.steps, None, knownStatement.derivation.inferences.distinct.single.map(_.summary), removedUnwrappers, removedWrapperExpression)
+    } yield (premiseLhs, premiseRhs, knownStatement.derivation, None, knownStatement.derivation.flatMap(_.inferences).toSet.single.map(_.summary), removedUnwrappers, removedWrapperExpression)
   }
 
   def rewrite[TExpression <: Expression with TypedExpression[TExpression] : RewriteMethods, TStep](

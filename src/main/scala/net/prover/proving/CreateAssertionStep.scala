@@ -40,10 +40,10 @@ object CreateAssertionStep {
       (derivationStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, newTargetStatementsForExtractionOption, conclusionOption)(wrappedStepContext)
       (wrappedResult, wrappedStep, wrappedTargets) = if (unwrappers.nonEmpty)
         unwrappers
-          .addNecessaryExtractions(derivationStep.statement, derivationStep.step, targets)
+          .addNecessaryExtractions(derivationStep.statement, derivationStep, targets)
           .map2(Step.Elided.forInference(inference)(_))
       else
-        (derivationStep.statement, derivationStep.step, targets)
+        (derivationStep.statement, derivationStep, targets)
     } yield (wrappedResult, wrappedStep, wrappedTargets)
   }
 }

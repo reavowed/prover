@@ -106,6 +106,17 @@ package object model {
       case s: S =>
         s
     }
+    def takeOfType[S: ClassTag]: (Seq[S], Seq[T]) = {
+      @tailrec def helper(init: Seq[S], remaining: Seq[T]): (Seq[S], Seq[T]) = {
+        remaining match {
+          case (s: S) +: tail =>
+            helper(init :+ s, tail)
+          case _ =>
+            (init, remaining)
+        }
+      }
+      helper(Nil, seq)
+    }
     def toType[S: ClassTag]: Option[Seq[S]] = seq.map {
       case s: S =>
         Some(s)

@@ -122,7 +122,7 @@ case class StepContext private(
     findPremise(statement) getOrElse Premise.Pending(statement)
   }
 
-  val cachedDerivations: mutable.Map[String, Option[Seq[DerivationStep]]] = mutable.Map.empty
+  val cachedDerivations: mutable.Map[String, Option[Seq[Step.PremiseDerivation]]] = mutable.Map.empty
 }
 
 object StepContext {

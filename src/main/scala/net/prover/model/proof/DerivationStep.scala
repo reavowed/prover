@@ -26,12 +26,6 @@ object DerivationStep {
 
 case class DerivationStepWithSingleInference(statement: Statement, inference: Inference, step: Step) extends DerivationStep {
   override def inferences: Seq[Inference] = Seq(inference)
-  def elideWithPremiseSteps(premiseSteps: Seq[DerivationStep]): DerivationStepWithSingleInference = {
-    if (premiseSteps.isEmpty)
-      this
-    else
-      DerivationStepWithSingleInference(statement, inference, Step.InferenceWithPremiseDerivations(premiseSteps.map(_.step), step))
-  }
   def elideWithFollowingSteps(followingSteps: Seq[DerivationStep]): DerivationStepWithSingleInference = {
     if (followingSteps.isEmpty)
       this

@@ -110,6 +110,10 @@ object Unwrapper {
       unwrappers.foldLeft(stepContext) { case (context, unwrapper) => unwrapper.enhanceContext(context) }
     }
 
+    def addToStatement(statement: Statement): Statement = {
+      unwrappers.foldRight(statement) { _.addToStatement(_) }
+    }
+
     def getExtractionSteps(premise: Statement, steps: Seq[Step], inference: Inference)(implicit stepContext: StepContext): Seq[Step] = {
       val enhancedContext = enhanceStepContext(stepContext)
 

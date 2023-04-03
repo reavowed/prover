@@ -1,22 +1,22 @@
 package net.prover.proving.premiseFinding
 
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{DerivationStep, EqualityRewriter, Step, StepContext}
+import net.prover.model.proof.{EqualityRewriter, Step, StepContext}
 import net.prover.model.utils.ExpressionUtils
 
 object DerivationOrTargetFinder {
   private def findDerivationsOrTargets(
     premiseStatement: Statement)(
     implicit stepContext: StepContext
-  ): (Seq[DerivationStep], Seq[Step.Target]) = {
+  ): (Seq[Step.InferenceApplicationWithoutPremises], Seq[Step.Target]) = {
     findDerivationsOrTargetsWithSuccessResult(premiseStatement).strip3
   }
 
   private def findDerivationsOrTargetsWithSuccessResult(
     premiseStatement: Statement)(
     implicit stepContext: StepContext
-  ): (Seq[DerivationStep], Seq[Step.Target], Boolean) = {
-    val directly = DerivationFinder.findDerivationForStatement(premiseStatement).map((_, Nil, true))
+  ): (Seq[Step.InferenceApplicationWithoutPremises], Seq[Step.Target], Boolean) = {
+    val directly = DerivationFinder.findDerivationForUnwrappedStatement(premiseStatement).map((_, Nil, true))
 
     def byDeconstructing = for {
       (step, deconstructedStatements) <- deconstruct(premiseStatement)
@@ -36,29 +36,29 @@ object DerivationOrTargetFinder {
   def findDerivationsOrTargets(
     premiseStatements: Seq[Statement])(
     implicit stepContext: StepContext
-  ): (Seq[DerivationStep], Seq[Step.Target]) = {
-    val (premiseSteps, targets) = premiseStatements.foldLeft((Seq.empty[DerivationStep], Seq.empty[Step.Target])) { case ((premiseStepsSoFar, targetStepsSoFar), premiseStatement) =>
+  ): (Seq[Step.InferenceApplicationWithoutPremises], Seq[Step.Target]) = {
+    val (premiseSteps, targets) = premiseStatements.foldLeft((Seq.empty[Step.InferenceApplicationWithoutPremises], Seq.empty[Step.Target])) { case ((premiseStepsSoFar, targetStepsSoFar), premiseStatement) =>
       val (stepsForThisPremise, targetsForThisPremise) = findDerivationsOrTargets(premiseStatement)
       (premiseStepsSoFar ++ stepsForThisPremise, targetStepsSoFar ++ targetsForThisPremise)
     }
-    (premiseSteps.deduplicate, targets)
+    (premiseSteps.distinctBy(_.statement), targets)
   }
 
   def findDerivationsOrTargetsWithSuccessResult(
     premiseStatements: Seq[Statement])(
     implicit stepContext: StepContext
-  ): (Seq[DerivationStep], Seq[Step.Target], Boolean) = {
-    val (premiseSteps, targets, wasSuccessful) = premiseStatements.foldLeft((Seq.empty[DerivationStep], Seq.empty[Step.Target], false)) { case ((premiseStepsSoFar, targetStepsSoFar, wasSuccessfulSoFar), premiseStatement) =>
+  ): (Seq[Step.InferenceApplicationWithoutPremises], Seq[Step.Target], Boolean) = {
+    val (premiseSteps, targets, wasSuccessful) = premiseStatements.foldLeft((Seq.empty[Step.InferenceApplicationWithoutPremises], Seq.empty[Step.Target], false)) { case ((premiseStepsSoFar, targetStepsSoFar, wasSuccessfulSoFar), premiseStatement) =>
       val (stepsForThisPremise, targetsForThisPremise, wasThisStatementSuccessful) = findDerivationsOrTargetsWithSuccessResult(premiseStatement)
       (premiseStepsSoFar ++ stepsForThisPremise, targetStepsSoFar ++ targetsForThisPremise, wasSuccessfulSoFar || wasThisStatementSuccessful)
     }
-    (premiseSteps.deduplicate, targets, wasSuccessful)
+    (premiseSteps.distinctBy(_.statement), targets, wasSuccessful)
   }
 
   private def splitTarget(
     targetStatement: Statement)(
     implicit stepContext: StepContext
-  ): (Seq[DerivationStep], Seq[Statement]) = {
+  ): (Seq[Step.InferenceApplicationWithoutPremises], Seq[Statement]) = {
     def default = (Nil, Seq(targetStatement))
 
     if (ExpressionUtils.isTypeLikeStatement(targetStatement)) {
@@ -74,15 +74,15 @@ object DerivationOrTargetFinder {
   private def splitTargets(
     targetStatements: Seq[Statement])(
     implicit stepContext: StepContext
-  ): (Seq[DerivationStep], Seq[Statement]) = {
+  ): (Seq[Step.InferenceApplicationWithoutPremises], Seq[Statement]) = {
     targetStatements.map(splitTarget).splitFlatten
   }
 
   private def rewriteTarget(
     premiseStatement: Statement)(
     implicit stepContext: StepContext
-  ): (Seq[DerivationStep], Statement) = {
-    stepContext.knownValuesToProperties.foldLeft((premiseStatement, Seq.empty[DerivationStep])) { case ((currentStatement, currentDerivation), propertyValue) =>
+  ): (Seq[Step.InferenceApplicationWithoutPremises], Statement) = {
+    stepContext.knownValuesToProperties.foldLeft((premiseStatement, Seq.empty[Step.InferenceApplicationWithoutPremises])) { case ((currentStatement, currentDerivation), propertyValue) =>
       EqualityRewriter.getReverseReplacements(currentStatement, propertyValue.lhs, propertyValue.rhs, propertyValue.equality) match {
         case Some((result, derivationStep)) =>
           (result, currentDerivation ++ propertyValue.derivation :+ derivationStep)
@@ -95,12 +95,12 @@ object DerivationOrTargetFinder {
   private def deconstruct(
     statement: Statement)(
     implicit stepContext: StepContext
-  ): Option[(DerivationStep, Seq[Statement])] = {
+  ): Option[(Step.Assertion, Seq[Statement])] = {
     stepContext.provingContext.statementDefinitionDeconstructions.mapFind { deconstructionInference =>
       for {
         substitutions <- deconstructionInference.conclusion.calculateSubstitutions(statement).flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
         step <- Step.Assertion.forInference(deconstructionInference, substitutions)
-      } yield (DerivationStep.fromAssertion(step), step.premises.map(_.statement))
+      } yield (step, step.premises.map(_.statement))
     }
   }
 }

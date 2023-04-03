@@ -138,16 +138,16 @@ class StepProvingSpec extends ControllerSpec {
       checkModifyStepsWithMatcher(
         service,
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(statementToProve),
-        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ elided(axiom, Seq(
+        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ inferenceExtraction(Seq(
           assertion(axiom, Seq(φ($), ψ($(0), $(1))), Nil),
           assertion(specification, Seq(Equivalence(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
           assertion(forwardImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
           assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil)))
         ) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(0), Seq(0, 1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(1), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(2), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(3), Nil)})
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(0), Seq(0, 1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(1), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(2), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(3), Nil)})
     }
 
     "retain conclusion bound variable names when adding target by inference" in {
@@ -252,16 +252,16 @@ class StepProvingSpec extends ControllerSpec {
       checkModifyStepsWithMatcher(
         service,
         fillerSteps(stepIndex - 1) :+ target(ψ(b, c)) :+ target(statementToProve),
-        matchSteps(fillerSteps(stepIndex - 1) :+ target(ψ(b, c)) :+ target(premise) :+ elided(axiom, Seq(
+        matchSteps(fillerSteps(stepIndex - 1) :+ target(ψ(b, c)) :+ target(premise) :+ inferenceExtraction(Seq(
           assertion(axiom, Seq(φ($), ψ($(0), $(1))), Nil),
           assertion(specification, Seq(Equivalence(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
           assertion(reverseImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
           assertion(modusPonens, Seq(Exists("z")(ψ(a, $)), φ(a)), Nil)))
         ) and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(0), Seq(0, 1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(1), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.Elided].substeps(2), Seq(0))})
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(0), Seq(0, 1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(1), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(2), Seq(0))})
     }
 
     "prove a target inside a scoped deduction" in {
@@ -325,12 +325,11 @@ class StepProvingSpec extends ControllerSpec {
         service,
         fillerSteps(stepIndex) :+ target(Equals(Domain(Addition), Product(Naturals, Naturals))),
         fillerSteps(stepIndex) :+
-          elided(axiom, Seq(
-            elided(axiom, Seq(
-              assertion(axiom, Nil, Nil),
-              assertion(extractLeftConjunct, Seq(Conjunction(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), additionProperty), Nil),
-              assertion(extractRightConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))),
-            elided(FunctionFrom.statementDefinition.deconstructionInference.get, Seq(
+          inferenceExtraction(Seq(
+            assertion(axiom, Nil, Nil),
+            assertion(extractLeftConjunct, Seq(Conjunction(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), additionProperty), Nil),
+            assertion(extractRightConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil),
+            inferenceExtraction(Seq(
               assertion(FunctionFrom.statementDefinition.deconstructionInference.get, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
               assertion(extractRightConjunct, Seq(Function(Addition), Conjunction(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals))), Nil),
               assertion(extractLeftConjunct, Seq(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals)), Nil))))))

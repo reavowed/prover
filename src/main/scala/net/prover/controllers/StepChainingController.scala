@@ -222,8 +222,8 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                 case None =>
                   Success((inference, None))
               }
-              (derivationStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, intendedExtractionPremisesOption, intendedConclusionOption)
-            } yield (derivationStep.statement, Some(derivationStep.step), targets)
+              (inferenceExtractionStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, intendedExtractionPremisesOption, intendedConclusionOption)
+            } yield (inferenceExtractionStep.statement, Some(inferenceExtractionStep), targets)
           }
         }
         def fromPremise(serializedPremiseStatement: String): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {

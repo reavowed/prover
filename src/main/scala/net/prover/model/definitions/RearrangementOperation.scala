@@ -23,7 +23,7 @@ sealed trait RearrangementOperation {
       ).toOption
       if targetSteps.isEmpty
       expansionSteps = expansion.assertionStepIfNecessary(source(terms), result(terms), wrapper).toSeq
-    } yield RearrangementStep(wrapper(result(terms)), assertionStep.step +: expansionSteps, inference.summary)
+    } yield RearrangementStep(wrapper(result(terms)), assertionStep +: expansionSteps, inference.summary)
   }
   def reversedRearrangementStep[T <: Expression](terms: Seq[Term], wrapper: Wrapper[Term, T], expansion: Expansion[T], reversal: Reversal[T])(implicit stepContext: StepContext): Option[RearrangementStep[T]] = {
     for {

@@ -29,7 +29,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
     }
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries): Option[Seq[Step]] = {
-      DerivationFinder.findDerivationForStatement(target)(createBaseStepContext(premises, depth)).map(_.steps)
+      DerivationFinder.findDerivationForStatement(target)(createBaseStepContext(premises, depth))
     }
 
     "find a simplified premise without a derivation" in {
@@ -239,7 +239,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
           additionProperty))
 
       findPremise(Function(Addition), Nil)(defaultAvailableEntriesPlus(axiom)) must beSome(Seq(
-        elided(axiom, Seq(
+        inferenceExtraction(Seq(
           assertion(axiom, Nil, Nil),
           assertion(extractLeftConjunct, Seq(Conjunction(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), additionProperty), Nil),
           assertion(extractLeftConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))))(SubstitutionContext.outsideProof))
@@ -307,32 +307,32 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
         ElementOf(Apply(∗, Pair(a , b)), A),
         Seq(Conjunction(BinaryOperation(∗), BinaryOperationOn(∗, A)), ElementOf(a, A), ElementOf(b, A)),
         Seq(
-          elided(BinaryOperation.deconstructionInference, Seq(
+          inferenceExtraction(Seq(
             assertion(BinaryOperation.deconstructionInference, Nil, Seq(∗)),
             assertion(extractLeftConjunct, Seq(Function(∗), FunctionFrom(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))), Nil))), // ∗ is a function
-          elided(BinaryOperationOn.deconstructionInference, Seq(
+          inferenceExtraction(Seq(
             assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(∗, A)),
             assertion(reverseEquality, Nil, Seq(BaseSet(∗), A)))),                                                                  // A = BaseSet(∗)
           assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(A, BaseSet(∗))),                                                // a ∈ baseSet(∗)
           assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(A, BaseSet(∗))),                                                // b ∈ baseSet(∗)
           assertion(orderedPairIsElementOfCartesianProduct, Nil, Seq(a, BaseSet(∗), b, BaseSet(∗))),                                // (a, b) ∈ baseSet(∗) × baseSet(∗)
-          elided(BinaryOperation.deconstructionInference, Seq(
+          inferenceExtraction(Seq(
             assertion(BinaryOperation.deconstructionInference, Nil, Seq(∗)),
             assertion(extractRightConjunct, Seq(Function(∗), FunctionFrom(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))), Nil))),  // ∗ is from baseSet(∗) × baseSet(∗) to baseSet(∗)
-          elided(FunctionFrom.deconstructionInference, Seq(
+          inferenceExtraction(Seq(
             assertion(FunctionFrom.deconstructionInference, Nil, Seq(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))),
             assertion(reverseEquality, Nil, Seq(Domain(∗), Product(BaseSet(∗), BaseSet(∗)))))),                                      // baseSet(∗) × baseSet(∗) = domain(∗)
           assertion(substitutionOfEquals, Seq(ElementOf(Pair(a, b), $)), Seq(Product(BaseSet(∗), BaseSet(∗)), Domain(∗))),           // (a, b) ∈ domain(∗)
           assertion(functionApplicationIsElementOfRange, Nil, Seq(∗, Pair(a, b))),                                                   // (a ∗ b) ∈ codomain(∗)
-          elided(FunctionFrom.deconstructionInference, Seq(
+          inferenceExtraction(Seq(
             assertion(FunctionFrom.deconstructionInference, Nil, Seq(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))),
             assertion(extractRightConjunct, Seq(Function(∗), Conjunction(Equals(Domain(∗), Product(BaseSet(∗), BaseSet(∗))), Subset(Range(∗), BaseSet(∗)))), Nil),
             assertion(extractRightConjunct, Seq(Equals(Domain(∗), Product(BaseSet(∗), BaseSet(∗))), Subset(Range(∗), BaseSet(∗))), Nil))), // codomain(∗) ⊆ baseSet(∗)
-          elided(Subset.deconstructionInference.get, Seq(
+          inferenceExtraction(Seq(
             assertion(Subset.deconstructionInference.get, Nil, Seq(Range(∗), BaseSet(∗))),
             assertion(specification, Seq(Implication(ElementOf($, Range(∗)), ElementOf($, BaseSet(∗)))), Seq(Apply(∗, Pair(a, b)))),
             assertion(modusPonens, Seq(ElementOf(Apply(∗, Pair(a, b)), Range(∗)), ElementOf(Apply(∗, Pair(a, b)), BaseSet(∗))), Nil))), // (a ∗ b) ∈ baseSet(∗)
-          elided(BinaryOperationOn.deconstructionInference, Seq(
+          inferenceExtraction(Seq(
             assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(∗, A)),
             assertion(extractRightConjunct, Seq(BinaryOperation(∗), Equals(BaseSet(∗), A)), Nil))),                                  // BaseSet(∗) = A
           assertion(substitutionOfEquals, Seq(ElementOf(Apply(∗, Pair(a, b)), $)), Seq(BaseSet(∗), A))))
@@ -348,7 +348,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
         ElementOf(a, BaseSet(∗)),
         Seq(Distributive(∗, ∘), ElementOf(a, BaseSet(∘))),
         Seq(
-          elided(Distributive.deconstructionInference, Seq(
+          inferenceExtraction(Seq(
             assertion(Distributive.deconstructionInference, Nil, Seq(∗, ∘)),
             assertion(reverseEquality, Nil, Seq(BaseSet(∗), BaseSet(∘))))),
           assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(BaseSet(∘), BaseSet(∗)))))

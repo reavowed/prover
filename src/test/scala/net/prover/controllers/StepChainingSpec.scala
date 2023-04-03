@@ -111,7 +111,7 @@ class StepChainingSpec extends ControllerSpec {
         fillerSteps(stepIndex) :+ target(lessThan(a, b)),
         fillerSteps(stepIndex) :+
           target(lessThan(a, add(b, Zero))) :+
-          elided(zeroIsRightIdentityForAddition, Seq(
+          inferenceExtraction(Seq(
             assertion(zeroIsRightIdentityForAddition, Nil, Seq(b)),
             assertion(reverseEquality, Nil, Seq(b, add(b, Zero))))) :+
           assertion(substitutionOfEquals, Seq(lessThan(a, $)), Seq(add(b, Zero), b)))
@@ -150,7 +150,7 @@ class StepChainingSpec extends ControllerSpec {
         fillerSteps(stepIndex) :+
           target(Equivalence(φ, ψ(add(a, Zero)))) :+
           elided(zeroIsRightIdentityForAddition, Seq(
-            elided(zeroIsRightIdentityForAddition, Seq(
+            inferenceExtraction(Seq(
               assertion(zeroIsRightIdentityForAddition, Nil, Seq(a)),
               assertion(reverseEquality, Nil, Seq(a, add(a, Zero))))),
             assertion(equivalenceOfSubstitutedEquals, Seq(ψ($)), Seq(add(a, Zero), a)))) :+
@@ -169,7 +169,7 @@ class StepChainingSpec extends ControllerSpec {
         fillerSteps(stepIndex) :+ target(ElementOf(a, b)),
         fillerSteps(stepIndex) :+
           target(ElementOf(a, add(b, Zero))) :+
-          elided(zeroIsRightIdentityForAddition, Seq(
+          inferenceExtraction(Seq(
             assertion(zeroIsRightIdentityForAddition, Nil, Seq(b)),
             assertion(reverseEquality, Nil, Seq(b, add(b, Zero))))) :+
           assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(add(b, Zero), b)))

@@ -13,7 +13,7 @@ object SubstatementExtractor {
     def additionalVariableNames: Seq[String]
   }
 
-  case class ExtractionFromSinglePremise(premises: Seq[Statement], conclusion: Statement, derivation: Seq[DerivationStepWithSingleInference], extractionInferences: Seq[Inference.Summary], additionalVariableNames: Seq[String])
+  case class ExtractionFromSinglePremise(premises: Seq[Statement], conclusion: Statement, derivation: Seq[Step.InferenceApplicationWithoutPremises], extractionInferences: Seq[Inference.Summary], additionalVariableNames: Seq[String])
 
   case class InferenceExtraction(inference: Inference.Summary, innerExtraction: ExtractionFromSinglePremise) extends Extraction {
     def premises: Seq[Statement] = inference.premises ++ innerExtraction.premises
@@ -71,7 +71,7 @@ object SubstatementExtractor {
       assertionStep = Step.Assertion(extractedConclusion, inference.summary, (newPremiseOption.toSeq :+ sourceStatement).map(Premise.Pending), extractionSubstitutions)
     } yield innerExtraction.copy(
       premises = newPremiseOption.toSeq ++ innerExtraction.premises,
-      derivation = DerivationStep.fromAssertion(assertionStep) +: innerExtraction.derivation,
+      derivation = assertionStep +: innerExtraction.derivation,
       extractionInferences = inference.summary +: innerExtraction.extractionInferences)
   }
 
@@ -105,7 +105,7 @@ object SubstatementExtractor {
       innerExtraction <- recurse(nextPremise, newVariableTracker)
       assertionStep = Step.Assertion(nextPremise, inference.summary, Seq(Premise.Pending(sourceStatement)), substitutions)
     } yield innerExtraction.copy(
-      derivation = DerivationStep.fromAssertion(assertionStep) +: innerExtraction.derivation,
+      derivation = assertionStep +: innerExtraction.derivation,
       extractionInferences = inference.summary +: innerExtraction.extractionInferences)
   }
 
@@ -127,7 +127,7 @@ object SubstatementExtractor {
       innerExtraction <- recurse(deconstructedStatement, variableTracker)
       assertionStep = Step.Assertion(deconstructedStatement, inference.summary, Seq(Premise.Pending(sourceStatement)), substitutions)
     } yield innerExtraction.copy(
-      derivation = DerivationStep.fromAssertion(assertionStep) +: innerExtraction.derivation,
+      derivation = assertionStep +: innerExtraction.derivation,
       extractionInferences = inference.summary +: innerExtraction.extractionInferences)
   }
 
@@ -184,31 +184,36 @@ object SubstatementExtractor {
 
   def createDerivationForInferenceExtraction(
     assertionStep: Step.Assertion,
-    derivationSteps: Seq[DerivationStep])(
+    extractionSteps: Seq[Step.InferenceApplicationWithoutPremises])(
     implicit provingContext: ProvingContext
-  ): DerivationStepWithSingleInference = {
-    val updatedSteps = groupStepsByDefinition(derivationSteps, Some(DerivationStep.fromAssertion(assertionStep)))
-    updatedSteps.elideWithInference(assertionStep.inference)
+  ): Step.InferenceApplicationWithoutPremises = {
+    groupStepsByDefinition(extractionSteps, Some(assertionStep)) match {
+      case Seq(step) =>
+        step
+      case steps @ (_: Step.Assertion) +: _ =>
+        Step.InferenceExtraction(steps)
+      case Step.InferenceExtraction(assertion, inner) +: others =>
+        Step.InferenceExtraction(assertion, inner ++ others)
+    }
   }
 
-  def groupStepsByDefinition(steps: Seq[DerivationStep], initialMainStep: Option[DerivationStepWithSingleInference])(implicit provingContext: ProvingContext): Seq[DerivationStep] = {
+  def groupStepsByDefinition(steps: Seq[Step.InferenceApplicationWithoutPremises], initialMainStep: Option[Step.Assertion])(implicit provingContext: ProvingContext): Seq[Step.InferenceApplicationWithoutPremises] = {
     val deconstructionInferenceIds = provingContext.availableEntries.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
     val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
 
-    var currentMainStep: Option[DerivationStepWithSingleInference] = initialMainStep
-    val currentUngroupedSteps = Seq.newBuilder[DerivationStep]
-    val stepsToReturn = Seq.newBuilder[DerivationStep]
+    var currentMainStep: Option[Step.Assertion] = initialMainStep
+    val currentUngroupedSteps = Seq.newBuilder[Step.InferenceApplicationWithoutPremises]
+    val stepsToReturn = Seq.newBuilder[Step.InferenceApplicationWithoutPremises]
 
-    def isStructuralSimplification(step: DerivationStep): Boolean = {
-      step.asOptionalInstanceOf[DerivationStepWithSingleInference].exists(s => structuralSimplificationIds.contains(s.inference.id))
+    def isStructuralSimplification(step: Step.InferenceApplicationWithoutPremises): Boolean = {
+      structuralSimplificationIds.contains(step.inference.id)
     }
-
-    def removeStructuralSimplifications(steps: Seq[DerivationStep]): Seq[DerivationStep] = {
+    def removeStructuralSimplifications(steps: Seq[Step.InferenceApplicationWithoutPremises]): Seq[Step.InferenceApplicationWithoutPremises] = {
       steps.filter(s => !isStructuralSimplification(s))
     }
-    def removeNonEndStructuralSimplifications(steps: Seq[DerivationStep]): Seq[DerivationStep] = {
+    def removeNonEndStructuralSimplifications(steps: Seq[Step.InferenceApplicationWithoutPremises]): Seq[Step.InferenceApplicationWithoutPremises] = {
       @scala.annotation.tailrec
-      def whileStructuralAtEnd(current: Seq[DerivationStep], end: Seq[DerivationStep]): Seq[DerivationStep] = {
+      def whileStructuralAtEnd(current: Seq[Step.InferenceApplicationWithoutPremises], end: Seq[Step.InferenceApplicationWithoutPremises]): Seq[Step.InferenceApplicationWithoutPremises] = {
         current match {
           case init :+ last if isStructuralSimplification(last) =>
             whileStructuralAtEnd(init, last +: end)
@@ -218,10 +223,10 @@ object SubstatementExtractor {
       }
       whileStructuralAtEnd(steps, Nil)
     }
-    def groupSteps(steps: Seq[DerivationStep], retainEndSimplifications: Boolean): Unit = {
+    def groupSteps(steps: Seq[Step.InferenceApplicationWithoutPremises], retainEndSimplifications: Boolean): Unit = {
       currentMainStep match {
         case Some(step) =>
-          stepsToReturn += step.elideWithFollowingSteps(removeNonEndStructuralSimplifications(steps))
+          stepsToReturn += step.addExtractionSteps(removeNonEndStructuralSimplifications(steps))
         case None =>
           stepsToReturn ++= (if (retainEndSimplifications) removeNonEndStructuralSimplifications(steps) else removeStructuralSimplifications(steps))
       }
@@ -229,7 +234,7 @@ object SubstatementExtractor {
 
     for (currentStep <- steps) {
       currentStep match {
-        case deconstructionStep @ DerivationStepWithSingleInference(_, inference, _) if deconstructionInferenceIds.contains(inference.id) =>
+        case deconstructionStep @ Step.Assertion(_, inference, _, _) if deconstructionInferenceIds.contains(inference.id) =>
           groupSteps(currentUngroupedSteps.result(), false)
           currentMainStep = Some(deconstructionStep)
           currentUngroupedSteps.clear()
