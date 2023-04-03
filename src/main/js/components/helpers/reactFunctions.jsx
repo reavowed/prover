@@ -1,15 +1,17 @@
 import React from "react";
 
-export function joinAsList(components) {
+const commaFragment = <React.Fragment>, </React.Fragment>
+const andFragment = <React.Fragment> and </React.Fragment>
+export function joinAsList(components, and = true) {
   components = [...components];
   let allElements = [];
   while (components.length > 2) {
     allElements.push(components.shift());
-    allElements.push(<React.Fragment>, </React.Fragment>)
+    allElements.push(commaFragment);
   }
   if (components.length > 1) {
     allElements.push(components.shift());
-    allElements.push(<React.Fragment> and </React.Fragment>)
+    allElements.push(and ? andFragment : commaFragment);
   }
   if (components.length > 0) {
     allElements.push(components.shift());

@@ -5,6 +5,7 @@ import {renderToString} from "react-dom/server";
 import DisplayContext from "../../../../../DisplayContext";
 import AvailableEntries from "../../../../../AvailableEntries";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
+import {joinAsList} from "../../../../../helpers/reactFunctions";
 import ProofContext from "../../../ProofContext";
 import BoundVariableLists from "../../BoundVariableLists";
 import ConclusionChooser from "./ConclusionChooser";
@@ -72,6 +73,10 @@ export class InferenceFinder extends React.Component {
       mainElement={getSuggestionValue(s)}
       hoverElement={<AvailableEntries.Consumer>{availableEntries =>
         <DisplayContext.Provider value={DisplayContext.forInferenceSummary(s.inference, availableEntries)}>
+          { s.inference.premises.length && <>
+            {joinAsList(s.inference.premises.map(p => <CopiableExpression expression={p}/>), false)}
+            {" ⊢ "}
+          </>}
           <CopiableExpression expression={s.inference.conclusion}/>
         </DisplayContext.Provider>
       }</AvailableEntries.Consumer>} />;
