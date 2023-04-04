@@ -16,7 +16,7 @@ class DefinitionRewriterSpec extends Specification with StepBuilderHelper {
 
     def testRewrite(source: Statement, target: Statement, depth: Int = 0)(implicit variableDefinitions: VariableDefinitions): MatchResult[Any] = {
       implicit val stepContext = (1 to depth).foldLeft(createBaseStepContext(Seq(source))) {(c, i) => c.addBoundVariable(s"x_$i") }
-      DefinitionRewriter.rewriteDefinitions(source, target) must beSome(beStepThatMakesValidTheorem(Seq(source), target, depth))
+      DefinitionRewriter.rewriteDefinitions(source, target) must beSome(beStepThatMakesValidAndCompleteTheorem(Seq(source), target, depth))
     }
 
     "rewrite basic quantifier equivalence" in {

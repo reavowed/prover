@@ -54,20 +54,29 @@ trait StepBuilderHelper extends SpecificationLike with MockitoStubs with Context
     proofFileReader.getSerializedProofs(recalculatedTheorem.title) returns serializedProofs
     val parsedTheorem = Theorem.parser(availableEntries, proofFileReader).parseFromString(serializedTheorem, "Theorem")
     parsedTheorem must beTypedEqualTo(theorem)
-    parsedTheorem.isComplete(createTheoremWithContext(parsedTheorem)) must beTrue
   }
 
-  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
+  def beValidAndCompleteTheorem(implicit availableEntries: AvailableEntries): Matcher[Theorem] = {
+    beValidTheorem and (beTrue ^^ ((t: Theorem) => t.isComplete(createTheoremWithContext(t))))
+  }
+
+  def beStepsThatMakeValidTheorem(boundVariables: Seq[String])(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
+    beValidTheorem(availableEntries) ^^
+      { (steps: Seq[Step]) => createTheorem(Nil, steps.last.statement, steps) } ^^
+      { (steps: Seq[Step]) => boundVariables.foldRight(steps)((v, steps) => Seq(Step.Generalization(v, steps, availableEntries.generalizationDefinitionOption.get))) }
+  }
+
+  def beStepsThatMakeValidAndCompleteTheorem(premises: Seq[Statement], conclusion: Statement)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
     beValidTheorem(availableEntries) ^^ { (steps: Seq[Step]) => createTheorem(premises, conclusion, steps) }
   }
 
-  def beStepThatMakesValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int = 0)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Step] = {
-    beStepsThatMakeValidTheorem(premises, conclusion, depth) ^^ { step: Step => Seq(step) }
+  def beStepThatMakesValidAndCompleteTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int = 0)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Step] = {
+    beStepsThatMakeValidAndCompleteTheorem(premises, conclusion, depth) ^^ { step: Step => Seq(step) }
   }
 
-  def beStepsThatMakeValidTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
+  def beStepsThatMakeValidAndCompleteTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
     if (depth == 0)
-      beStepsThatMakeValidTheorem(premises, conclusion)
+      beStepsThatMakeValidAndCompleteTheorem(premises, conclusion)
     else {
       def generalizeOnce(statement: Statement, i: Int): Statement = ForAll(s"x_$i")(statement)
 
@@ -81,7 +90,7 @@ trait StepBuilderHelper extends SpecificationLike with MockitoStubs with Context
           Substitutions(Seq(statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get), Seq($)))
       }
 
-      beStepsThatMakeValidTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>
+      beStepsThatMakeValidAndCompleteTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>
         (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.Generalization(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, GeneralizationDefinition)) }
       }
     }

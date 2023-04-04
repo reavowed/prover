@@ -8,7 +8,7 @@ import org.specs2.mutable.Specification
 
 class ProveNewTargetSpec extends Specification with ContextHelper with BookServiceHelper with StepHelpers {
   implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0))
+  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Seq(a -> 0))
 
   "prove new target" should {
     "insert assertion step" in {

@@ -364,15 +364,13 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "apply rewrite to chained statement using a generalized deduction premise" in {
-      val A = TermVariablePlaceholder("A", 0)
-      val B = TermVariablePlaceholder("B", 1)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, B -> 0))
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0), Seq(a -> 0, b -> 0))
 
       implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
-      val statement = Equivalence(ForAll("x")(Implication(ElementOf($, Product(A, B)), Equals($, Zero))), φ)
+      val statement = Equivalence(ForAll("x")(Implication(ElementOf($, Product(a, b)), Equals($, Zero))), φ)
 
       controller.rewriteLeft(
         bookKey,
@@ -388,34 +386,30 @@ class StepRewriteSpec extends ControllerSpec {
         fillerSteps(stepIndex) :+
           elided(elementOfCartesianProductFromCoordinates, Seq(
             generalization("x", Seq(
-              deduction(ElementOf($, Product(A, B)), Seq(
+              deduction(ElementOf($, Product(a, b)), Seq(
                 elided(elementOfCartesianProductFromCoordinates, Seq(
-                  assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
+                  assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, a, b)),
                   assertion(equivalenceOfSubstitutedEquals, Seq(Equals($.^, Zero)), Seq($, Pair(First($), Second($)))))))),
-              assertion(distributeImplicationOverEquivalence, Seq(ElementOf($, Product(A, B)), Equals($, Zero), Equals(Pair(First($), Second($)), Zero)), Nil))),
-            assertion(distributeUniversalQuantifierOverEquivalence, Seq(Implication(ElementOf($, Product(A, B)), Equals($, Zero)), Implication(ElementOf($, Product(A, B)), Equals(Pair(First($), Second($)), Zero))), Nil))) :+
-          target(Equivalence(ForAll("x")(Implication(ElementOf($, Product(A, B)), Equals(Pair(First($), Second($)), Zero))), φ)) :+
+              assertion(distributeImplicationOverEquivalence, Seq(ElementOf($, Product(a, b)), Equals($, Zero), Equals(Pair(First($), Second($)), Zero)), Nil))),
+            assertion(distributeUniversalQuantifierOverEquivalence, Seq(Implication(ElementOf($, Product(a, b)), Equals($, Zero)), Implication(ElementOf($, Product(a, b)), Equals(Pair(First($), Second($)), Zero))), Nil))) :+
+          target(Equivalence(ForAll("x")(Implication(ElementOf($, Product(a, b)), Equals(Pair(First($), Second($)), Zero))), φ)) :+
           assertion(
             equivalenceIsTransitive,
             Seq(
-              ForAll("x")(Implication(ElementOf($, Product(A, B)), Equals($, Zero))),
-              ForAll("x")(Implication(ElementOf($, Product(A, B)), Equals(Pair(First($), Second($)), Zero))),
+              ForAll("x")(Implication(ElementOf($, Product(a, b)), Equals($, Zero))),
+              ForAll("x")(Implication(ElementOf($, Product(a, b)), Equals(Pair(First($), Second($)), Zero))),
               φ),
             Nil))
     }
 
     "apply multiple rewrites to chained statement using a generalized deduction premise at depth" in {
-      val A = TermVariablePlaceholder("A", 0)
-      val B = TermVariablePlaceholder("B", 1)
-      val C = TermVariablePlaceholder("C", 2)
-      val D = TermVariablePlaceholder("D", 3)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, B -> 0, C -> 0, D -> 0))
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
       implicit val service = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
-      val statement = Equivalence(ForAll("x")(Implication(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^, $), $.^^))))), φ)
+      val statement = Equivalence(ForAll("x")(Implication(ElementOf($, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair($.^, $), $.^^))))), φ)
 
       controller.rewriteLeft(
         bookKey,
@@ -434,85 +428,83 @@ class StepRewriteSpec extends ControllerSpec {
           elided(elementOfCartesianProductFromCoordinates, Seq(
             elided(elementOfCartesianProductFromCoordinates, Seq(
               generalization("x", Seq(
-                deduction(ElementOf($, Product(A, B)), Seq(
+                deduction(ElementOf($, Product(a, b)), Seq(
                   elided(elementOfCartesianProductFromCoordinates, Seq(
-                    assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
-                    assertion(equivalenceOfSubstitutedEquals, Seq(ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^^^, $), $.^^)))), Seq($, Pair(First($), Second($)))))))),
+                    assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, a, b)),
+                    assertion(equivalenceOfSubstitutedEquals, Seq(ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair($.^^^, $), $.^^)))), Seq($, Pair(First($), Second($)))))))),
                 assertion(
                   distributeImplicationOverEquivalence,
                   Seq(
-                    ElementOf($, Product(A, B)),
-                    ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^, $), $.^^))),
-                    ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^), Second($.^)), $), $.^^)))),
+                    ElementOf($, Product(a, b)),
+                    ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair($.^, $), $.^^))),
+                    ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair(Pair(First($.^), Second($.^)), $), $.^^)))),
                   Nil))),
               assertion(
                 distributeUniversalQuantifierOverEquivalence,
                 Seq(
-                  Implication(ElementOf($.^, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^^, $), $.^)))),
-                  Implication(ElementOf($.^, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^^), Second($.^^)), $), $.^))))),
+                  Implication(ElementOf($.^, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair($.^^, $), $.^)))),
+                  Implication(ElementOf($.^, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair(Pair(First($.^^), Second($.^^)), $), $.^))))),
                 Nil))),
             elided(elementOfCartesianProductFromCoordinates, Seq(
               generalization("x", Seq(
-                deduction(ElementOf($, Product(A, B)), Seq(
+                deduction(ElementOf($, Product(a, b)), Seq(
                   generalization("y", Seq(
-                    deduction(ElementOf($, Product(C, D)), Seq(
+                    deduction(ElementOf($, Product(c, d)), Seq(
                       elided(elementOfCartesianProductFromCoordinates, Seq(
-                        assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, C, D)),
+                        assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, c, d)),
                         assertion(equivalenceOfSubstitutedEquals, Seq(Equals(Pair(Pair(First($.^), Second($.^)), $.^^^), $.^^)), Seq($, Pair(First($), Second($)))))))),
                     assertion(
                       distributeImplicationOverEquivalence,
                       Seq(
-                        ElementOf($, Product(C, D)),
+                        ElementOf($, Product(c, d)),
                         Equals(Pair(Pair(First($.^), Second($.^)), $), $.^^),
                         Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^)),
                       Nil))),
                   assertion(
                     distributeUniversalQuantifierOverEquivalence,
                     Seq(
-                      Implication(ElementOf($.^^, Product(C, D)), Equals(Pair(Pair(First($), Second($)), $.^^), $.^)),
-                      Implication(ElementOf($.^^, Product(C, D)), Equals(Pair(Pair(First($), Second($)), Pair(First($.^^), Second($.^^))), $.^))),
+                      Implication(ElementOf($.^^, Product(c, d)), Equals(Pair(Pair(First($), Second($)), $.^^), $.^)),
+                      Implication(ElementOf($.^^, Product(c, d)), Equals(Pair(Pair(First($), Second($)), Pair(First($.^^), Second($.^^))), $.^))),
                     Nil))),
                 assertion(
                   distributeImplicationOverEquivalence,
                   Seq(
-                    ElementOf($, Product(A, B)),
-                    ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^), Second($.^)), $), $.^^))),
-                    ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^)))),
+                    ElementOf($, Product(a, b)),
+                    ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair(Pair(First($.^), Second($.^)), $), $.^^))),
+                    ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^)))),
                   Nil))),
               assertion(
                 distributeUniversalQuantifierOverEquivalence,
                 Seq(
-                  Implication(ElementOf($.^, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^^), Second($.^^)), $), $.^)))),
-                  Implication(ElementOf($.^, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^^), Second($.^^)), Pair(First($), Second($))), $.^))))),
+                  Implication(ElementOf($.^, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair(Pair(First($.^^), Second($.^^)), $), $.^)))),
+                  Implication(ElementOf($.^, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair(Pair(First($.^^), Second($.^^)), Pair(First($), Second($))), $.^))))),
                 Nil))),
             assertion(
               equivalenceIsTransitive,
               Seq(
-                ForAll("x")(Implication(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^, $), $.^^))))),
-                ForAll("x")(Implication(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^), Second($.^)), $), $.^^))))),
-                ForAll("x")(Implication(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^)))))),
+                ForAll("x")(Implication(ElementOf($, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair($.^, $), $.^^))))),
+                ForAll("x")(Implication(ElementOf($, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair(Pair(First($.^), Second($.^)), $), $.^^))))),
+                ForAll("x")(Implication(ElementOf($, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^)))))),
               Nil))) :+
-          target(Equivalence(ForAll("x")(Implication(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^))))), φ)) :+
+          target(Equivalence(ForAll("x")(Implication(ElementOf($, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^))))), φ)) :+
           assertion(
             equivalenceIsTransitive,
             Seq(
-              ForAll("x")(Implication(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^, $), $.^^))))),
-              ForAll("x")(Implication(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^))))),
+              ForAll("x")(Implication(ElementOf($, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair($.^, $), $.^^))))),
+              ForAll("x")(Implication(ElementOf($, Product(a, b)), ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^))))),
               φ),
             Nil),
         Seq("f"))
     }
 
     "rewrite in a deduction antecedent" in {
-      val A = TermVariablePlaceholder("A", 0)
-      val B = TermVariablePlaceholder("B", 1)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, B -> 0))
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0), Seq(a -> 0, b -> 0))
 
       implicit val service = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
       val controller = new StepRewriteController
 
-      val statement = ForAll("x")(Implication(ElementOf($, Product(A, B)), Implication(Equals($, Zero), φ)))
+      val statement = ForAll("x")(Implication(ElementOf($, Product(a, b)), Implication(Equals($, Zero), φ)))
 
       controller.rewriteManually(
         bookKey,
@@ -527,16 +519,16 @@ class StepRewriteSpec extends ControllerSpec {
         service,
         fillerSteps(stepIndex) :+ target(statement),
         fillerSteps(stepIndex) :+
-          target(ForAll("x")(Implication(ElementOf($, Product(A, B)), Implication(Equals(Pair(First($), Second($)), Zero), φ)))) :+
+          target(ForAll("x")(Implication(ElementOf($, Product(a, b)), Implication(Equals(Pair(First($), Second($)), Zero), φ)))) :+
           elided(elementOfCartesianProductFromCoordinates, Seq(
             generalization("x", Seq(
-              deduction(ElementOf($, Product(A, B)), Seq(
+              deduction(ElementOf($, Product(a, b)), Seq(
                 elided("Extracted", Seq(
-                  assertion(specification, Seq(Implication(ElementOf($.^, Product(A, B)), Implication(Equals(Pair(First($.^), Second($.^)), Zero), φ))), Seq($)),
-                  assertion(modusPonens, Seq(ElementOf($, Product(A, B)), Implication(Equals(Pair(First($), Second($)), Zero), φ)), Nil))),
+                  assertion(specification, Seq(Implication(ElementOf($.^, Product(a, b)), Implication(Equals(Pair(First($.^), Second($.^)), Zero), φ))), Seq($)),
+                  assertion(modusPonens, Seq(ElementOf($, Product(a, b)), Implication(Equals(Pair(First($), Second($)), Zero), φ)), Nil))),
                 elided(elementOfCartesianProductFromCoordinates, Seq(
                   inferenceExtraction(Seq(
-                    assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
+                    assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, a, b)),
                     assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))))),
                   assertion(substitutionOfEquals, Seq(Implication(Equals($.^, Zero), φ)), Seq(Pair(First($), Second($)), $)))))))))))
     }

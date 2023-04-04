@@ -21,7 +21,7 @@ trait StepHelpers {
   def inferenceExtraction(steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.InferenceExtraction = sc => Step.InferenceExtraction(steps(sc))
   def premiseDerivation(steps: SubstitutionContext => Seq[Step])(implicit provingContext: ProvingContext): SubstitutionContext => Step.InferenceWithPremiseDerivations = sc => Step.InferenceWithPremiseDerivations(steps(sc))(provingContext)
 
-  def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = (0 until number).map(i => target(ForAll("x")(Equals($, TermVariable(i)))))
+  def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = (0 until number).map(i => target(ForAll("x")(Equals($, add($, $)))))
 
   implicit class StepsConstructor(createSteps: SubstitutionContext => Seq[Step]) {
     def :+(other: SubstitutionContext => Step): SubstitutionContext => Seq[Step] = { sc =>

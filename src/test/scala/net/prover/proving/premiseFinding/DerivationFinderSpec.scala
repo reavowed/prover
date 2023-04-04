@@ -20,12 +20,12 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
 
     def checkFindPremiseSteps(target: Statement, premises: Seq[Statement], steps: SubstitutionContext => Seq[Step], depth: Int = 0)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
       findPremise(target, premises, depth)(availableEntries) must beSome(
-        beStepsThatMakeValidTheorem(premises, target, depth) and beEqualTo(steps(SubstitutionContext.withDepth(depth)))
+        beStepsThatMakeValidAndCompleteTheorem(premises, target, depth) and beEqualTo(steps(SubstitutionContext.withDepth(depth)))
       )
     }
 
     def checkFindPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
-      findPremise(target, premises, depth)(availableEntries) must beSome(beStepsThatMakeValidTheorem(premises, target, depth))
+      findPremise(target, premises, depth)(availableEntries) must beSome(beStepsThatMakeValidAndCompleteTheorem(premises, target, depth))
     }
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries): Option[Seq[Step]] = {

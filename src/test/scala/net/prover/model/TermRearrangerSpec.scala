@@ -26,7 +26,7 @@ class TermRearrangerSpec extends Specification with StepBuilderHelper {
 
     def testRearranging(targetStatement: Statement, premises: Seq[Statement])(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
       val step = rearrange(targetStatement, premises)
-      step must beSome(beStepThatMakesValidTheorem(premises, targetStatement))
+      step must beSome(beStepThatMakesValidAndCompleteTheorem(premises, targetStatement))
     }
 
     "rearrange with associativity and commutativity" in {

@@ -87,7 +87,7 @@ class StepProvingSpec extends ControllerSpec {
       checkModifySteps(
         service,
         fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ) :+ target(χ),
-        fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ) :+ existingStatementExtraction(Seq[SubstitutionContext => Step.Assertion](
+        fillerSteps(stepIndex - 2) :+ target(premise) :+ target(φ) :+ existingStatementExtraction(Seq(
           assertion(modusPonens, Seq(φ, Conjunction(ψ, χ)), Nil),
           assertion(extractRightConjunct, Seq(ψ, χ), Nil))))
     }
@@ -175,7 +175,7 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain conclusion bound variable names when adding target by premise" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2, χ -> 1), Seq(a -> 0))
       val x = TermVariable(1, Nil)
 
       implicit val service = mock[BookService]
@@ -231,7 +231,7 @@ class StepProvingSpec extends ControllerSpec {
     "retain bound variable names in extraction premise when proving target by inference" in {
       val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
       implicit val availableEntries = defaultAvailableEntriesPlus(axiom)
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0, b -> 0, c -> 0))
       val x = TermVariable(0, Nil) // variable that will be generated when specifying the axiom
 
       implicit val service = mock[BookService]
@@ -341,7 +341,7 @@ class StepProvingSpec extends ControllerSpec {
       val controller = new StepProvingController
 
       val premise = ForAll("x")(φ($))
-      val localVariableDefinitions = getVariableDefinitions(Seq(φ -> 1), Nil)
+      val localVariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 0), Nil)
 
       controller.addNewTarget(
         bookKey,
@@ -349,7 +349,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithPremise(premise, Seq(specification), Substitutions(Seq(φ($)), Seq($)), Some(φ($)))(implicitly, localVariableDefinitions))
+        definitionWithPremise(premise, Seq(specification), Substitutions(Seq(φ($), ψ), Seq($)), Some(φ($)))(implicitly, localVariableDefinitions))
 
       checkModifySteps(
         service,

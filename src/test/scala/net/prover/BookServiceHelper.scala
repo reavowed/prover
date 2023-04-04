@@ -141,7 +141,7 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
     variableDefinitions: VariableDefinitions
   ): StepsWithContext => Try[(Seq[Step], Seq[Step])] = {
     implicit val outerStepContext = createOuterStepContext(boundVariables)
-    existingSteps  -> beSuccessfulTry[(Seq[Step], Seq[Step])].withValue(stepsMatcher ^^ { t: (Seq[Step], Seq[Step]) => recalculateReferences(t._1) })
+    existingSteps  -> beSuccessfulTry[(Seq[Step], Seq[Step])].withValue((stepsMatcher and beStepsThatMakeValidTheorem(boundVariables)) ^^ { t: (Seq[Step], Seq[Step]) => recalculateReferences(t._1) })
   }
 
   private def modifyStepsCallback(
@@ -152,7 +152,7 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
     variableDefinitions: VariableDefinitions
   ): StepsWithContext => Try[(Seq[Step], InsertionAndReplacementProps)] = {
     implicit val outerStepContext = createOuterStepContext(boundVariables)
-    existingSteps -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)].withValue(stepsMatcher ^^ { t: (Seq[Step], InsertionAndReplacementProps) => recalculateReferences(t._1) })
+    existingSteps -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)].withValue((stepsMatcher and beStepsThatMakeValidTheorem(boundVariables)) ^^ { t: (Seq[Step], InsertionAndReplacementProps) => recalculateReferences(t._1) })
   }
 
   def matchSteps(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {

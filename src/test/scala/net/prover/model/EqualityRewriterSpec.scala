@@ -16,7 +16,7 @@ class EqualityRewriterSpec extends Specification with StepBuilderHelper {
       implicit val stepContext = createBaseStepContext(premises)
 
       val stepOption = EqualityRewriter.rewrite(target)
-      stepOption must beSome(beStepThatMakesValidTheorem(premises, target))
+      stepOption must beSome(beStepThatMakesValidAndCompleteTheorem(premises, target))
 
       def checkSteps(steps: Seq[Step]): Result = {
         Result.foreach(steps) { step =>
