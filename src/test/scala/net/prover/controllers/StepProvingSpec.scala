@@ -279,15 +279,16 @@ class StepProvingSpec extends ControllerSpec {
 
       checkModifySteps(
         service,
-        fillerSteps(stepIndex) :+ target(ForAll("x")(Implication(ElementOf($, a), ForAll("y")(Implication(ElementOf($, b), ElementOf(Successor(add($.^, $)), Naturals)))))),
+        fillerSteps(stepIndex) :+
+          target(ForAll("x")(Implication(ElementOf($, a), ForAll("y")(Implication(ElementOf($, b), ElementOf(Successor(add($.^, $)), Naturals)))))),
         fillerSteps(stepIndex) :+
           target(ForAll("x")(Implication(ElementOf($, a), ForAll("y")(Implication(ElementOf($, b), ElementOf(add($.^, $), Naturals)))))) :+
-          elided(successorOfNaturalIsNatural, Seq(
+          wrappedInferenceApplication(Seq(
             generalization("x", Seq(
               deduction(ElementOf($, a), Seq(
                 generalization("y", Seq(
                   deduction(ElementOf($, b), Seq(
-                    elided("Extracted", Seq(
+                    existingStatementExtraction(Seq(
                       assertion(specification, Seq(Implication(ElementOf($.^^, a), ForAll("y")(Implication(ElementOf($, b), ElementOf(add($.^^^, $), Naturals))))), Seq($.^)),
                       assertion(modusPonens, Seq(ElementOf($.^, a), ForAll("y")(Implication(ElementOf($, b), ElementOf(add($.^^, $), Naturals)))), Nil),
                       assertion(specification, Seq(Implication(ElementOf($.^^, b), ElementOf(add($.^, $.^^), Naturals))), Seq($)),

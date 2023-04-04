@@ -18,6 +18,7 @@ sealed trait RearrangementOperation {
         inferenceExtraction.inference,
         inferenceExtraction.innerExtraction.extractionInferences,
         Substitutions(Nil, terms),
+        Nil,
         None,
         None
       ).toOption

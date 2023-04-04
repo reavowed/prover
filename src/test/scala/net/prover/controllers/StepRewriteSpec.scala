@@ -295,7 +295,7 @@ class StepRewriteSpec extends ControllerSpec {
           elided(elementOfCartesianProductFromCoordinates, Seq(
             generalization("x", Seq(
               deduction(ElementOf($, Product(A, B)), Seq(
-                elided("Extracted", Seq(
+                existingStatementExtraction(Seq(
                   assertion(specification, Seq(Implication(ElementOf($.^, Product(A, B)), Equals(Pair(First($.^), Second($.^)), Zero))), Seq($)),
                   assertion(modusPonens, Seq(ElementOf($, Product(A, B)), Equals(Pair(First($), Second($)), Zero)), Nil))),
                 elided(elementOfCartesianProductFromCoordinates, Seq(
@@ -337,7 +337,7 @@ class StepRewriteSpec extends ControllerSpec {
             elided(elementOfCartesianProductFromCoordinates, Seq(
               generalization("x", Seq(
                 deduction(ElementOf($, Product(A, B)), Seq(
-                  elided("Extracted", Seq(
+                  existingStatementExtraction(Seq(
                     assertion(specification, Seq(Implication(ElementOf($.^^, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^^^), Second($.^^^)), Pair(First($), Second($))), $.^^))))), Seq($)),
                     assertion(modusPonens, Seq(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^)))), Nil))),
                   elided(elementOfCartesianProductFromCoordinates, Seq(
@@ -350,7 +350,7 @@ class StepRewriteSpec extends ControllerSpec {
                 deduction(ElementOf($, Product(A, B)), Seq(
                   generalization("y", Seq(
                     deduction(ElementOf($, Product(C, D)), Seq(
-                      elided("Extracted", Seq(
+                      existingStatementExtraction(Seq(
                         assertion(specification, Seq(Implication(ElementOf($.^^^, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^^^^, Pair(First($), Second($))), $.^^^))))), Seq($.^)),
                         assertion(modusPonens, Seq(ElementOf($.^, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^^, Pair(First($), Second($))), $.^^^)))), Nil),
                         assertion(specification, Seq(Implication(ElementOf($.^^^, Product(C, D)), Equals(Pair($.^, Pair(First($.^^^), Second($.^^^))), $.^^))), Seq($)),
@@ -523,7 +523,7 @@ class StepRewriteSpec extends ControllerSpec {
           elided(elementOfCartesianProductFromCoordinates, Seq(
             generalization("x", Seq(
               deduction(ElementOf($, Product(a, b)), Seq(
-                elided("Extracted", Seq(
+                existingStatementExtraction(Seq(
                   assertion(specification, Seq(Implication(ElementOf($.^, Product(a, b)), Implication(Equals(Pair(First($.^), Second($.^)), Zero), φ))), Seq($)),
                   assertion(modusPonens, Seq(ElementOf($, Product(a, b)), Implication(Equals(Pair(First($), Second($)), Zero), φ)), Nil))),
                 elided(elementOfCartesianProductFromCoordinates, Seq(

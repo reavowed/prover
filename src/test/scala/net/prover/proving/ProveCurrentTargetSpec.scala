@@ -157,5 +157,52 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
           assertion(modusPonens, Seq(φ, Implication(ψ, χ)), Nil) :+
           assertion(implicationIsTransitive, Seq(φ, ψ, χ), Nil))
     }
+
+    "find a wrapped premise for a wrapped inference" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+
+      implicit val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+
+      ProveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        StepDefinition(
+          Some(modusPonens.id),
+          None,
+          SerializedSubstitutions(Seq(φ($).serialized, ψ($).serialized), Nil),
+          Nil,
+          Seq(ForAllDefinition.symbol),
+          None,
+          None,
+          None))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex - 2) :+
+          target(ForAll("x")(Implication(φ($), ψ($)))) :+
+          target(ForAll("x")(φ($))) :+
+          target(ForAll("x")(ψ($))),
+        fillerSteps(stepIndex - 2) :+
+          target(ForAll("x")(Implication(φ($), ψ($)))) :+
+          target(ForAll("x")(φ($))) :+
+          wrappedInferenceApplication(Seq(
+            generalization("x", Seq(
+              assertion(
+                specification,
+                Seq(Implication(φ($.^), ψ($.^))),
+                Seq($)),
+              assertion(
+                specification,
+                Seq(φ($.^)),
+                Seq($)),
+              assertion(
+                modusPonens,
+                Seq(φ($), ψ($)),
+                Nil))))))
+    }
   }
 }

@@ -38,21 +38,4 @@ object ProofHelper {
         None
     }
   }
-
-  def getAssertionWithPremises(
-    inference: Inference,
-    substitutions: Substitutions)(
-    implicit stepContext: StepContext
-  ): Option[(Step.Assertion, Seq[Step.InferenceApplicationWithoutPremises], Seq[Step.Target])] = {
-    for {
-      premiseStatements <- inference.substitutePremises(substitutions)
-      conclusion <- inference.substituteConclusion(substitutions)
-      (premiseSteps, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(premiseStatements)
-      assertionStep = Step.Assertion(
-        conclusion,
-        inference.summary,
-        premiseStatements.map(Premise.Pending),
-        substitutions.restrictTo(inference.variableDefinitions))
-    } yield (assertionStep, premiseSteps, targetSteps)
-  }
 }

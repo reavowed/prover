@@ -3,6 +3,7 @@ package net.prover.model.unwrapping
 import net.prover.controllers._
 import net.prover.model.definitions.{BinaryJoiner, DeductionDefinition, GeneralizationDefinition, Wrapper}
 import net.prover.model.expressions._
+import net.prover.model.proof.Step.ExistingStatementExtraction
 import net.prover.model.proof._
 import net.prover.model.{Inference, Substitutions}
 
@@ -114,27 +115,20 @@ object Unwrapper {
       unwrappers.foldRight(statement) { _.addToStatement(_) }
     }
 
-    def getExtractionSteps(premise: Statement, steps: Seq[Step], inference: Inference)(implicit stepContext: StepContext): Seq[Step] = {
-      val enhancedContext = enhanceStepContext(stepContext)
-
-      def helper(currentUnwrappers: Seq[Unwrapper]): (Seq[Step], Statement, Int) = {
+    def getTargetExtraction(target: Statement)(implicit stepContext: StepContext): (Statement, Option[Step.PremiseDerivation]) = {
+      val enhancedStepContext = enhanceStepContext(stepContext)
+      def helper(currentUnwrappers: Seq[Unwrapper]): (Statement, Seq[Step.Assertion], Int) = {
         currentUnwrappers match {
           case unwrapper +: tailUnwrappers =>
-            val (innerSteps, innerStatement, innerDepth) = helper(tailUnwrappers)
-            val newStep = unwrapper.extractionStep(innerStatement, innerDepth)(enhancedContext)
-            (newStep +: innerSteps, newStep.premises(0).statement, innerDepth + unwrapper.depth)
+            val (innerTarget, innerSteps, innerDepth) = helper(tailUnwrappers)
+            val newStep = unwrapper.extractionStep(innerTarget, innerDepth)(enhancedStepContext)
+            val newTarget = newStep.premises.head.statement
+            (newTarget, newStep +: innerSteps, innerDepth + unwrapper.depth)
           case Nil =>
-            (Nil, premise, 0)
+            (target, Nil, 0)
         }
       }
-
-      val (extractionSteps, _, _) = helper(unwrappers)
-      Step.Elided.ifNecessary(extractionSteps, "Extracted") match {
-        case Some(extractionStep) =>
-          Seq(extractionStep, EqualityRewriter.rewriteElider(Some(inference))(steps).get)
-        case None =>
-          steps
-      }
+      helper(unwrappers).strip3.mapRight(ExistingStatementExtraction.ifNecessary)
     }
 
     def rewrap(steps: Seq[Step]): Seq[Step] = {
@@ -195,40 +189,15 @@ object Unwrapper {
       helper(unwrappers, stepContext)
     }
 
-    def addNecessaryExtractions(statement: Statement, step: Step, targets: Seq[Step.Target])(implicit stepContext: StepContext): (Statement, Seq[Step], Seq[Step.Target]) = {
-      val innermostContext = enhanceStepContext(stepContext)
-      def getTargetExtraction(target: Statement): (Statement, Option[Step]) = {
-        def helper(currentUnwrappers: Seq[Unwrapper]): (Statement, Seq[Step], Int) = {
-          currentUnwrappers match {
-            case unwrapper +: tailUnwrappers =>
-              val (innerTarget, innerSteps, innerDepth) = helper(tailUnwrappers)
-              val newStep = unwrapper.extractionStep(innerTarget, innerDepth)(innermostContext)
-              val newTarget = newStep.premises.head.statement
-              (newTarget, newStep +: innerSteps, innerDepth + unwrapper.depth)
-            case Nil =>
-              (target, Nil, 0)
-          }
-        }
-        val (newTarget, extractionSteps, _) = helper(unwrappers)
-        val stepOption = Step.Elided.ifNecessary(extractionSteps, "Extracted")
-        (newTarget, stepOption)
-      }
-
-      val newTargetsAndExtractions = targets.map(t => getTargetExtraction(t.statement))
-      val newTargets = newTargetsAndExtractions.map(_._1).map(Step.Target(_))
+    def addNecessaryExtractions(step: Step.InferenceApplicationWithoutPremises, targets: Seq[Statement])(implicit stepContext: StepContext): (Step.InferenceApplicationWithoutPremises, Seq[Statement]) = {
+      val newTargetsAndExtractions = targets.map(getTargetExtraction)
+      val newTargets = newTargetsAndExtractions.map(_._1)
       val targetExtractionSteps = newTargetsAndExtractions.flatMap(_._2)
-
-      def helper(currentUnwrappers: Seq[Unwrapper]): (Statement, Seq[Step]) = {
-        currentUnwrappers match {
-          case unwrapper +: tailUnwrappers =>
-            val (innerStatement, innerSteps) = helper(tailUnwrappers)
-            (unwrapper.addToStatement(innerStatement), Seq(unwrapper.rewrap(innerSteps)))
-          case Nil =>
-            (statement, targetExtractionSteps :+ step)
-        }
+      if (unwrappers.nonEmpty || targetExtractionSteps.nonEmpty) {
+        (Step.WrappedInferenceApplication(unwrappers, targetExtractionSteps, step), newTargets)
+      } else {
+        (step, newTargets)
       }
-      val (wrappedStatement, wrappedSteps) = helper(unwrappers)
-      (wrappedStatement, wrappedSteps, newTargets)
     }
   }
 }

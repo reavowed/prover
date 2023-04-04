@@ -3,7 +3,8 @@ package net.prover.refactoring
 import net.prover.books.management.BookStateManager
 import net.prover.entries.StepWithContext
 import net.prover.model.proof.{ProofHelper, Step}
-import net.prover.proving.extraction.SubstatementExtractor
+import net.prover.proving.extraction.{ExtractionHelper, SubstatementExtractor}
+import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 import net.prover.theorems.CompoundTheoremUpdater
 import scalaz.Scalaz._
 
@@ -30,11 +31,11 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
 
   private def reprove(step: Step.Elided, stepWithContext: StepWithContext): Option[Step] = {
     for {
-      oldAssertion <- step.substeps.lastOption.flatMap(_.asOptionalInstanceOf[Step.Assertion])
-      if step.highlightedInference.contains(oldAssertion.inference)
+      assertionStep <- step.substeps.lastOption.flatMap(_.asOptionalInstanceOf[Step.Assertion])
+      if step.highlightedInference.contains(assertionStep.inference)
       if step.substeps.forall(_.isInstanceOf[Step.Assertion])
-      (newAssertion, mainPremises, mainTargets) <- ProofHelper.getAssertionWithPremises(oldAssertion.inference, oldAssertion.substitutions)(stepWithContext)
-      if mainTargets.isEmpty
-    } yield Step.InferenceWithPremiseDerivations(Nil, mainPremises, newAssertion)
+      (premiseSteps, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(assertionStep.premises.map(_.statement))(stepWithContext.stepContext)
+      if targetSteps.isEmpty
+    } yield Step.InferenceWithPremiseDerivations(premiseSteps, assertionStep)
   }
 }

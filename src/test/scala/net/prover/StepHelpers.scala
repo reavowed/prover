@@ -19,7 +19,8 @@ trait StepHelpers {
   def elided(description: String, steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.Elided = sc => Step.Elided(steps(sc), None, Some(description))
   def existingStatementExtraction(steps: SubstitutionContext => Seq[Step.Assertion]): SubstitutionContext => Step.ExistingStatementExtraction = sc => Step.ExistingStatementExtraction(steps(sc))
   def inferenceExtraction(steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.InferenceExtraction = sc => Step.InferenceExtraction(steps(sc))
-  def premiseDerivation(steps: SubstitutionContext => Seq[Step])(implicit provingContext: ProvingContext): SubstitutionContext => Step.InferenceWithPremiseDerivations = sc => Step.InferenceWithPremiseDerivations(steps(sc))(provingContext)
+  def wrappedInferenceApplication(steps: SubstitutionContext => Seq[Step])(implicit provingContext: ProvingContext): SubstitutionContext => Step.WrappedInferenceApplication = sc => Step.WrappedInferenceApplication(steps(sc))(provingContext)
+  def premiseDerivation(steps: SubstitutionContext => Seq[Step]): SubstitutionContext => Step.InferenceWithPremiseDerivations = sc => Step.InferenceWithPremiseDerivations(steps(sc))
 
   def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = (0 until number).map(i => target(ForAll("x")(Equals($, add($, $)))))
 

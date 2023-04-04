@@ -222,7 +222,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                 case None =>
                   Success((inference, None))
               }
-              (inferenceExtractionStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, intendedExtractionPremisesOption, intendedConclusionOption)
+              (inferenceExtractionStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, Nil, intendedExtractionPremisesOption, intendedConclusionOption)
             } yield (inferenceExtractionStep.statement, Some(inferenceExtractionStep), targets)
           }
         }
