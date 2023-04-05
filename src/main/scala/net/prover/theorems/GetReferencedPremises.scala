@@ -7,11 +7,11 @@ import net.prover.model.proof.Premise
 import net.prover.theorems.steps.RecursiveStepFinder
 import scalaz.Scalaz._
 
-object GetAllPremises extends RecursiveStepFinder[Set[Premise]] {
-  override def apply(statement: Statement): Set[Premise] = Set.empty
-  override def apply(inference: Inference.Summary): Set[Premise] = Set.empty
-  override def apply(premise: Premise): Set[Premise] = Set(premise)
-  override def apply(substitutions: Substitutions): Set[Premise] = Set.empty
-  override def apply(deductionDefinition: DeductionDefinition): Set[Premise] = Set.empty
-  override def apply(generalizationDefinition: GeneralizationDefinition): Set[Premise] = Set.empty
+object GetAllPremises extends RecursiveStepFinder[List[Premise]] {
+  override def apply(statement: Statement): List[Premise] = Nil
+  override def apply(inference: Inference.Summary): List[Premise] = Nil
+  override def apply(premise: Premise): List[Premise] = List(premise)
+  override def apply(substitutions: Substitutions): List[Premise] = Nil
+  override def apply(deductionDefinition: DeductionDefinition): List[Premise] = Nil
+  override def apply(generalizationDefinition: GeneralizationDefinition): List[Premise] = Nil
 }

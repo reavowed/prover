@@ -43,6 +43,8 @@ object DirectDerivationFinder {
   ): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
     import stepContext.provingContext._
     def findDerivationWithFactInferences(targetStatement: Statement): Option[(Seq[Step.InferenceApplicationWithoutPremises], Seq[Inference])] = {
+      def fromPremise = stepContext.allPremises.find(_.statement == targetStatement).map(_ => (Nil, Nil))
+
       def directly = factsBySerializedStatement.get(targetStatement.serialized).map(derivationStep => (Seq(derivationStep), Seq(derivationStep.inference)))
 
       def bySimplifying = conclusionSimplificationInferences.iterator.findFirst { inference =>
@@ -54,7 +56,7 @@ object DirectDerivationFinder {
         } yield (premiseDerivations :+ assertionStep, premiseFacts)
       }
 
-      directly orElse bySimplifying
+      fromPremise orElse directly orElse bySimplifying
     }
 
     findDerivationWithFactInferences(targetStatement) map { case (derivationSteps, factInferences) =>

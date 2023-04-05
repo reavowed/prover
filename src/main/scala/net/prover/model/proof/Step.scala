@@ -2,10 +2,13 @@ package net.prover.model.proof
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.entries.TypedStepWithContext
 import net.prover.model._
 import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
+import net.prover.proving.premiseFinding.DerivationOrTargetFinder
+import net.prover.theorems.{GetAllPremises, RecalculateReferences}
 
 import scala.annotation.tailrec
 import scala.util.Try
@@ -456,6 +459,14 @@ object Step {
         assertion
       }
     }
+    def reprove(steps: Seq[Step])(stepContext: StepContext): InferenceWithPremiseDerivations = {
+      val application = steps.last.asInstanceOf[Step.InferenceApplicationWithoutPremises]
+      val premiseSteps = steps.init.map(_.asOptionalInstanceOf[Step.InferenceApplicationWithoutPremises]).traverseOption.getOrElse {
+        val premises = GetAllPremises(application).map(_.statement).distinct
+        DerivationOrTargetFinder.findDerivationsOrTargets(premises)(stepContext)._1
+      }
+      RecalculateReferences(TypedStepWithContext(InferenceWithPremiseDerivations(premiseSteps, application), null)(implicitly, stepContext))._1.asInstanceOf[InferenceWithPremiseDerivations]
+    }
     def apply(steps: Seq[Step]): InferenceWithPremiseDerivations = {
       InferenceWithPremiseDerivations(
         steps.init.map(_.asInstanceOf[Step.InferenceApplicationWithoutPremises]),
@@ -464,7 +475,7 @@ object Step {
     def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[InferenceWithPremiseDerivations] = {
       for {
         substeps <- listParser.inBraces
-      } yield InferenceWithPremiseDerivations(substeps)
+      } yield InferenceWithPremiseDerivations.reprove(substeps)(stepContext)
     }
   }
 

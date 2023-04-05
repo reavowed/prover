@@ -11,13 +11,6 @@ import net.prover.model.unwrapping.UnwrappedStatement
   * statements that have already been proved in the current proof, or facts that have been proved elsewhere).
   */
 object DerivationFinder {
-  def findDerivationsForStatements(
-    premiseStatements: Seq[Statement])(
-    implicit stepContext: StepContext
-  ): Option[Seq[Step.PremiseDerivation]] = {
-    premiseStatements.map(findDerivationForStatement).traverseOption.map(_.flatten)
-  }
-
   def findDerivationForStatement(
     targetStatement: Statement)(
     implicit stepContext: StepContext
