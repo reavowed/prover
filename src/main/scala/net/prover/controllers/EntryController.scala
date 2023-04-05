@@ -280,14 +280,16 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
       bookToModify.chaptersWithContexts.mapFoldWithPrevious[Changes, Chapter](changes) { case (changes, previousChapters, chapterToModify) =>
         chapterToModify.entriesWithContexts.mapFoldWithPrevious[Changes, ChapterEntry](changes) { case (changes, previousEntries, entryWithContextToModify) =>
           val entryToModify = entryWithContextToModify.entry
+          val chapterWithEntry = chapterToModify.chapter.setEntries(previousEntries.toList)
+          val bookWithEntry = bookToModify.book.setChapters(previousChapters.toList :+ chapterWithEntry)
           val updatedEntryWithContext = entryWithContextToModify.copy(
             chapterWithContext = chapterToModify.copy(
-              chapter = chapterToModify.chapter.setEntries(previousEntries.toList),
+              chapter = chapterWithEntry,
               bookWithContext = bookToModify.copy(
-                book = bookToModify.book.setChapters(previousChapters.toList),
-                globalContext = globalContext.copy(booksWithKeys = ListWithKeys(previousBooks.toList)))))
+                book = bookWithEntry,
+                globalContext = globalContext.copy(booksWithKeys = ListWithKeys(previousBooks.toList :+ bookWithEntry)))))
           val modifiedEntry = if (entryToModify == oldEntry) newEntry else entryToModify.replaceDefinitions(changes.changedEntries, changes.changedDefinitions, updatedEntryWithContext)
-          val changesWithEntry = changes.addChangedEntry(entryToModify, newEntry)
+          val changesWithEntry = changes.addChangedEntry(entryToModify, modifiedEntry)
           val changesWithExpressionDefinitions = AvailableEntries.getStatementDefinitionFromEntry(entryToModify) match {
             case Some(old) =>
               changesWithEntry.addChangedDefinition(old, AvailableEntries.getStatementDefinitionFromEntry(modifiedEntry).get)
@@ -308,7 +310,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
   private def modifyEntryWithReplacement(bookKey: String, chapterKey: String, entryKey: String)(f: (ChapterEntry, AvailableEntries) => Try[ChapterEntry]): ResponseEntity[_] = {
     bookService.modifyBooks[TryWithValue[ChapterEntry]#Type](globalContext => {
       for {
-        oldEntryWithContext <- globalContext.findEntry(bookKey, chapterKey, entryKey)
+        oldEntryWithContext <- globalContext.findEntry[ChapterEntry](bookKey, chapterKey, entryKey)
         newEntry <- f(oldEntryWithContext.entry, oldEntryWithContext.availableEntries)
         newBooks = replaceEntryInBooks(globalContext, oldEntryWithContext.entry, newEntry)
       } yield (newBooks, newEntry)

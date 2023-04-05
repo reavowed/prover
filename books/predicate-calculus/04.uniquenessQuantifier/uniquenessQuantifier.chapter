@@ -55,13 +55,13 @@ termVariables(a 0)
 premise ∀ x ↔ with ($0) s0 = $0 t0
 conclusion with (t0) s0
 
-theorem Uniqueness by Two Cases
+theorem Uniqueness by Exclusive Cases
 statementVariables(φ 0, ψ 0)
 termVariables(a 0, b 0)
 premise ⊕ s0 s1
 conclusion ∃! x ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1
 
-theorem Uniqueness by Two Cases
+theorem Uniqueness by Excluded Middle
 statementVariables(φ 0)
 termVariables(a 0, b 0)
 conclusion ∃! x ∨ ∧ s0 = $0 t0 ∧ ¬ s0 = $0 t1
