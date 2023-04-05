@@ -23,7 +23,7 @@ object ReadChapter {
         val chapterWithContext = ChapterWithContext(chapter, chapterKey, bookWithContext)
         val availableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
         val proofFileReader = ProofFileReader(chapterDirectoryPath, chapter.entriesWithKeys.keyAccumulator)
-        ChapterEntry.parser(availableEntries, proofFileReader).mapMap {chapter.addEntry}
+        ChapterEntry.parser(availableEntries, chapterWithContext, proofFileReader).mapMap {chapter.addEntry}
       }
     } yield chapter
 

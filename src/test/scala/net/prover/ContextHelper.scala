@@ -1,12 +1,13 @@
 package net.prover
 
+import net.prover.books.model.Book
 import net.prover.entries._
 import net.prover.model.TestDefinitions.{mock, theStubbed}
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepContext}
-import net.prover.model.{AvailableEntries, ProvingContext, VariableDefinitions}
+import net.prover.model.{AvailableEntries, Chapter, ProvingContext, VariableDefinitions}
 import org.mockito.Mockito.when
 
 import scala.reflect.ClassTag
@@ -99,4 +100,17 @@ trait ContextHelper {
     when(theoremWithContext.proofsWithContext).thenCallRealMethod()
     theoremWithContext
   }
+
+  def createChapterWithContext(): ChapterWithContext = {
+    val chapterWithContext = mock[ChapterWithContext]
+    chapterWithContext.chapter returns mock[Chapter]
+    chapterWithContext.chapter.title returns "Test Chapter"
+    chapterWithContext.chapterKey returns chapterKey
+    chapterWithContext.bookWithContext returns mock[BookWithContext]
+    chapterWithContext.bookWithContext.book returns mock[Book]
+    chapterWithContext.bookWithContext.book.title returns "Test Book"
+    chapterWithContext.bookWithContext.bookKey returns bookKey
+    chapterWithContext
+  }
+  implicit def chapterWithContext = createChapterWithContext()
 }

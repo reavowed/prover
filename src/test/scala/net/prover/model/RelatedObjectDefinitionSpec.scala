@@ -11,7 +11,7 @@ class RelatedObjectDefinitionSpec extends Specification {
 
   private def testParsingAndSerialization(relatedObjectDefinition: RelatedObjectDefinition)(implicit availableEntries: AvailableEntries): MatchResult[Any] = {
     val serializedDefinition = relatedObjectDefinition.serializedLines.mkString("\n")
-    val reparsedDefinition = ChapterEntry.parser(availableEntries, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
+    val reparsedDefinition = ChapterEntry.parser(availableEntries, implicitly, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(relatedObjectDefinition)
   }
 

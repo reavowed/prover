@@ -50,9 +50,9 @@ trait StepBuilderHelper extends SpecificationLike with MockitoStubs with Context
     val recalculatedTheorem = RecalculateReferences(createTheoremWithContext(theorem))._1
     val serializedTheorem = recalculatedTheorem.serializedLines.mkString("\n").stripPrefix("theorem ")
     val serializedProofs = recalculatedTheorem.proofs.map(_.serialized)
-    val proofFileReader = mock[ProofFileReader]
+    implicit val proofFileReader = mock[ProofFileReader]
     proofFileReader.getSerializedProofs(recalculatedTheorem.title) returns serializedProofs
-    val parsedTheorem = Theorem.parser(availableEntries, proofFileReader).parseFromString(serializedTheorem, "Theorem")
+    val parsedTheorem = Theorem.parser.parseFromString(serializedTheorem, "Theorem")
     parsedTheorem must beTypedEqualTo(theorem)
   }
 
