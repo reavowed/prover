@@ -38,7 +38,7 @@ take x {
     } 2.0a
   }
 }
-elided df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 {
+wrappedInferenceApplication {
   take x {
     prove → ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t0 ∃ a ∧ ∈ $0 t1 = $$$0 orderedPair $0 apply t0 $0) ($0) 1
     prove → ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t0 $0 ∈ $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∃ a ∧ ∈ $0 t1 = $$$0 orderedPair $0 apply t0 $0 ∈ $$0 t0) ($0) 2

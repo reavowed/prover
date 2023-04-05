@@ -1,6 +1,6 @@
 prove ⊆ ∅ product ∅ t0 e80dbd150e124b5ae524c59ff43b8233ff5c3e64ab4b90b524f50be0c81732c9 () (product ∅ t0)
 prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
-elided fa02c308b535e06a6fd425d8073ebbf2e2e6127a20a17a8bf3fe76840855133f {
+wrappedInferenceApplication {
   take x {
     prove ¬ ∈ $0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$0 ∅) ($0) 1
     prove → ∈ $0 ∅ ∃! y ∈ orderedPair $$0 $0 ∅ fa02c308b535e06a6fd425d8073ebbf2e2e6127a20a17a8bf3fe76840855133f (∈ $0 ∅, ∃! y ∈ orderedPair $$0 $0 ∅) () 2.0.0

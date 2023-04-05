@@ -189,7 +189,7 @@ object Unwrapper {
       helper(unwrappers, stepContext)
     }
 
-    def addNecessaryExtractions(step: Step.InferenceApplicationWithoutPremises, targets: Seq[Statement])(implicit stepContext: StepContext): (Step.InferenceApplicationWithoutPremises, Seq[Statement]) = {
+    def addNecessaryExtractions(step: Step.AssertionOrExtraction, targets: Seq[Statement])(implicit stepContext: StepContext): (Step.InferenceApplicationWithoutPremises, Seq[Statement]) = {
       val newTargetsAndExtractions = targets.map(getTargetExtraction)
       val newTargets = newTargetsAndExtractions.map(_._1)
       val targetExtractionSteps = newTargetsAndExtractions.flatMap(_._2)

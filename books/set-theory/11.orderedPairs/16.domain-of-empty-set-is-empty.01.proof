@@ -10,7 +10,7 @@ take x {
     }
   }
   elided (By definition) {
-    elided 3df4534886dd61f6ef0a8462fb7cdbff93a3381c7b5ce4d4871f1d25450b688a {
+    wrappedInferenceApplication {
       take b {
         prove → ∈ $0 codomain ∅ ¬ ∈ orderedPair $$0 $0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 codomain ∅ ¬ ∈ orderedPair $$0 $$$0 ∅) ($0) 0.0
         prove ¬ ¬ → ∈ $0 codomain ∅ ¬ ∈ orderedPair $$0 $0 ∅ 3df4534886dd61f6ef0a8462fb7cdbff93a3381c7b5ce4d4871f1d25450b688a (→ ∈ $0 codomain ∅ ¬ ∈ orderedPair $$0 $0 ∅) () 0.1.0.0.0

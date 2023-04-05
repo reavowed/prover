@@ -1,5 +1,5 @@
 prove = identityFunction t0 functionMap a t0 $0 ddfdc5168c946acb05577a1505f192510ac2361e71dc3198a8bb365889c2fa3a () (t0)
-elided 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b {
+wrappedInferenceApplication {
   take a {
     prove → ∈ $0 t0 ∈ $0 t0 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (∈ $0 t0) ()
   }

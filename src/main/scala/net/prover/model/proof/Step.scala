@@ -473,7 +473,7 @@ object Step {
     def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[InferenceWithPremiseDerivations] = {
       for {
         substeps <- listParser.inBraces
-      } yield InferenceWithPremiseDerivations.reprove(substeps)(stepContext)
+      } yield InferenceWithPremiseDerivations(substeps)
     }
   }
 

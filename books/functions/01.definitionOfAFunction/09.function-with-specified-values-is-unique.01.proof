@@ -18,7 +18,7 @@ take f {
     }
   }
 }
-elided 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 {
+inferenceWithPremiseDerivations {
   prove ∧ ∃ x ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ x → ∈ $0 t0 = apply $$0 $0 with ($0) t2 ∀ x ∀ y → ∧ ∧ ∧ function $$0 functionFrom $$0 t0 t1 ∀ x → ∈ $0 t0 = apply $$$0 $0 with ($0) t2 ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ x → ∈ $0 t0 = apply $$0 $0 with ($0) t2 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ x → ∈ $0 t0 = apply $$0 $0 with ($0) t2, ∀ x ∀ y → ∧ ∧ ∧ function $$0 functionFrom $$0 t0 t1 ∀ x → ∈ $0 t0 = apply $$$0 $0 with ($0) t2 ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ x → ∈ $0 t0 = apply $$0 $0 with ($0) t2 = $$0 $0) () p0 0
   prove ∃! f ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ x → ∈ $0 t0 = apply $$0 $0 with ($0) t2 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∧ ∧ function $0 functionFrom $0 t0 t1 ∀ x → ∈ $0 t0 = apply $$0 $0 with ($0) t2) () 1.0
 }

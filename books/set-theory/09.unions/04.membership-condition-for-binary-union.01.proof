@@ -33,7 +33,7 @@ take x {
   }
   prove ↔ ∃ y ∧ ∈ $$0 $0 ∈ $0 pair t0 t1 ∨ ∈ $0 t0 ∈ $0 t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∃ y ∧ ∈ $$0 $0 ∈ $0 pair t0 t1, ∨ ∈ $0 t0 ∈ $0 t1) () 3.0 3.3
 }
-elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
+wrappedInferenceApplication {
   take x {
     prove ↔ ∈ $0 ∪ t0 t1 ∃ y ∧ ∈ $$0 $0 ∈ $0 pair t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 ∪ t0 t1 ∃ y ∧ ∈ $$$0 $0 ∈ $0 pair t0 t1) ($0) 2
     prove ↔ ∃ y ∧ ∈ $$0 $0 ∈ $0 pair t0 t1 ∨ ∈ $0 t0 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∃ y ∧ ∈ $$$0 $0 ∈ $0 pair t0 t1 ∨ ∈ $$0 t0 ∈ $$0 t1) ($0) 3

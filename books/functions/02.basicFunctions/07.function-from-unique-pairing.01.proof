@@ -116,7 +116,7 @@ let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594
               prove → ∈ $0 t0 with ($0 apply $$$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t0 with ($$$$0 apply $$$0 $$$$0) s0) ($0) 0.1
               prove with ($0 apply $$$0 $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, with ($0 apply $$$0 $0) s0) () 0.2.0.0.0.0.4.0 0.2.0.0.0.0a
             }
-            elided 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d {
+            inferenceWithPremiseDerivations {
               prove ∧ ∈ apply $$0 $0 t1 with ($0 apply $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply $$0 $0 t1, with ($0 apply $$0 $0) s0) () 0.2.0.0.0.0.1 0.2.0.0.0.0.2
               prove ∧ ∈ apply $$$0 $0 t1 with ($0 apply $$$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply $$$0 $0 t1, with ($0 apply $$$0 $0) s0) () 0.2.0.0.0.0.3 0.2.0.0.0.0.4
               prove = apply $$0 $0 apply $$$0 $0 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∧ ∈ $$$$0 t1 with ($0 $$$$0) s0) (apply $$0 $0, apply $$$0 $0) 0.2.0.0.0.0.0 0.2.0.0.0.0.5.0 0.2.0.0.0.0.5.1
@@ -127,7 +127,7 @@ let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594
       }
     }
   }
-  elided f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 {
+  inferenceWithPremiseDerivations {
     prove ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function $0 functionFrom $0 t0 t1, ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0) () 0.0 0.1
     prove ∃! f ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ ∧ function $$0 functionFrom $$0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$$0 $0) s0) ($0) 0.3.0 0.2
   }

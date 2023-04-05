@@ -1,4 +1,4 @@
-elided 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b {
+wrappedInferenceApplication {
   take x {
     prove → ∈ $0 t0 ∈ $0 t0 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (∈ $0 t0) ()
   }

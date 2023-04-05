@@ -10,7 +10,7 @@ let a with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b
   }
   let S = $0 comprehension z $$$0 ∀ x → with ($0) s0 ∈ $$0 $0 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∃ Y ∀ y ↔ ∈ $0 $$0 ∀ x → with ($0) s0 ∈ $$0 $0) (comprehension z $$0 ∀ x → with ($0) s0 ∈ $$0 $0) {
     prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) s0 ∈ $$0 $0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∀ x → with ($0) s0 ∈ $$$$0 $0) ($0, $$0) 0.1a
-    elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
+    wrappedInferenceApplication {
       take y {
         prove ↔ ∈ $0 $$0 ∧ ∈ $0 $$$0 ∀ x → with ($0) s0 ∈ $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 $$0 ∧ ∈ $$$$0 $$$0 ∀ x → with ($0) s0 ∈ $$$$$0 $0) ($0) 0.1.0
         prove ↔ ∧ ∈ $0 $$$0 ∀ x → with ($0) s0 ∈ $$0 $0 ∀ x → with ($0) s0 ∈ $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∧ ∈ $$$$0 $$$0 ∀ x → with ($0) s0 ∈ $$$$$0 $0 ∀ x → with ($0) s0 ∈ $$$$$0 $0) ($0) 0.0

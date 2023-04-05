@@ -3,7 +3,7 @@ take x {
     prove with ($0) s0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (with ($$0) s0) ($0, t0) 0.0a p1
   }
 }
-elided df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 {
+wrappedInferenceApplication {
   take x {
     prove → with ($0) s0 = $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ with ($$0) s0 = $$0 t0) ($0) p0
     prove → = $0 t0 with ($0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ = $$0 t0 with ($$0) s0) ($0) 0

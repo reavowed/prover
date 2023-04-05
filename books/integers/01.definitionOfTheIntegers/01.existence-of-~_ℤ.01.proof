@@ -261,7 +261,7 @@ let ~_ℤ = $0 comprehension x product product ℕ ℕ product ℕ ℕ = apply +
       }
     }
   }
-  elided f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 {
+  inferenceWithPremiseDerivations {
     prove ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation $0 product ℕ ℕ, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0) () 0.1 0.2
     prove ∃! ~ ∧ relation $0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ relation $$0 product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$$0 = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0) ($0) 0.4.0 0.3
   }

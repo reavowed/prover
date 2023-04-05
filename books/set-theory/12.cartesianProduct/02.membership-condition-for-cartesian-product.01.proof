@@ -11,7 +11,7 @@ take x {
   }
   prove ↔ ∧ ∈ $0 powerSet powerSet ∪ t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 cf157b2b1bd058c8f87e3c98b7214da8a96a8f4e81231e5ccf6187ba601b2b5e (∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0, ∈ $0 powerSet powerSet ∪ t0 t1) () 2.0
 }
-elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
+wrappedInferenceApplication {
   take x {
     prove ↔ ∈ $0 product t0 t1 ∧ ∈ $0 powerSet powerSet ∪ t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 product t0 t1 ∧ ∈ $$0 powerSet powerSet ∪ t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$$0 orderedPair $$0 $0) ($0) 1
     prove ↔ ∧ ∈ $0 powerSet powerSet ∪ t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∧ ∈ $$0 powerSet powerSet ∪ t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$$0 orderedPair $$0 $0 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$$0 orderedPair $$0 $0) ($0) 2

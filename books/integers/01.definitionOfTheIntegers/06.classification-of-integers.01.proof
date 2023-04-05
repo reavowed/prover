@@ -161,8 +161,8 @@ let y ∧ ∈ $0 product ℕ ℕ = t0 equivalenceClass $0 ~_ℤ 30412315b8eb88fa
       }
     } 2.3.1
   }
-  elided 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 {
-    prove → ∨ = first $0 second $0 ∈ second $0 first $0 ∃ b ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $0 0ℕ ~_ℤ d5ae154dc36200c1ad1fefe3cb0c30a20b73733c5a8fc1c3f892825368309ad9 (= first $0 second $0, ∃ n ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $0 0ℕ ~_ℤ, ∈ second $0 first $0) () 2.2 2.3
+  inferenceWithPremiseDerivations {
+    prove → ∨ = first $0 second $0 ∈ second $0 first $0 ∃ b ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $0 0ℕ ~_ℤ d5ae154dc36200c1ad1fefe3cb0c30a20b73733c5a8fc1c3f892825368309ad9 (= first $0 second $0, ∃ b ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $0 0ℕ ~_ℤ, ∈ second $0 first $0) () 2.2 2.3
     prove ∨ ∃ b ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 0ℕ $0 ~_ℤ ∃ b ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (∈ first $0 second $0, ∨ = first $0 second $0 ∈ second $0 first $0, ∃ n ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 0ℕ $0 ~_ℤ, ∃ n ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 2.0 2.1 2.4.0
   }
 } 1

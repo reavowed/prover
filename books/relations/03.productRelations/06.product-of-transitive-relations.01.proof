@@ -128,7 +128,7 @@ take x {
     }
   }
 }
-elided 115591d2ccba7063ade6115245528c0b261bd8f4455e320187d22c48d5955a92 {
+inferenceWithPremiseDerivations {
   prove relation productRelation t0 t2 product t1 t3 1f3cf2de5b53e305300dd2a827389874fc44754faaa63482da414087f7a719b3 () (t0, t1, t2, t3) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
   prove ∧ relation productRelation t0 t2 product t1 t3 ∀ a → ∈ $0 product t1 t3 ∀ b → ∈ $0 product t1 t3 ∀ c → ∈ $0 product t1 t3 → ∧ ∈ orderedPair $$$0 $$0 productRelation t0 t2 ∈ orderedPair $$0 $0 productRelation t0 t2 ∈ orderedPair $$$0 $0 productRelation t0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation productRelation t0 t2 product t1 t3, ∀ a → ∈ $0 product t1 t3 ∀ b → ∈ $0 product t1 t3 ∀ c → ∈ $0 product t1 t3 → ∧ ∈ orderedPair $$$0 $$0 productRelation t0 t2 ∈ orderedPair $$0 $0 productRelation t0 t2 ∈ orderedPair $$$0 $0 productRelation t0 t2) () 1.0 0
   prove transitiveRelation productRelation t0 t2 product t1 t3 115591d2ccba7063ade6115245528c0b261bd8f4455e320187d22c48d5955a92 () (productRelation t0 t2, product t1 t3) 1.1

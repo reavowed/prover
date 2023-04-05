@@ -192,7 +192,7 @@ let i = $0 replacementSet2 a b product t1 t3 orderedPair orderedPair equivalence
       }
     }
   }
-  elided f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 {
+  inferenceWithPremiseDerivations {
     prove ∧ ∧ function compose quotientFunction t4 product t1 t3 t5 productRelation t0 t2 $0 functionFrom compose quotientFunction t4 product t1 t3 t5 productRelation t0 t2 $0 product equivalenceQuotient t1 t0 equivalenceQuotient t3 t2 t5 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t3 = apply compose quotientFunction t4 product t1 t3 t5 productRelation t0 t2 $$$0 orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 apply t4 orderedPair $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function compose quotientFunction t4 product t1 t3 t5 productRelation t0 t2 $0 functionFrom compose quotientFunction t4 product t1 t3 t5 productRelation t0 t2 $0 product equivalenceQuotient t1 t0 equivalenceQuotient t3 t2 t5, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t3 = apply compose quotientFunction t4 product t1 t3 t5 productRelation t0 t2 $$$0 orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 apply t4 orderedPair $$0 $0) () 5.1 5.2
     prove ∃! g ∧ ∧ function $0 functionFrom $0 product equivalenceQuotient t1 t0 equivalenceQuotient t3 t2 t5 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t3 = apply $$$0 orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 apply t4 orderedPair $$0 $0 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ ∧ function $$0 functionFrom $$0 product equivalenceQuotient t1 t0 equivalenceQuotient t3 t2 t5 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t3 = apply $$$$0 orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 apply t4 orderedPair $$0 $0) (compose quotientFunction t4 product t1 t3 t5 productRelation t0 t2 $0) 5.4.0 5.3
   }

@@ -1,7 +1,7 @@
 prove ∀ x ↔ ∈ $0 ∪ t0 t2 ∨ ∈ $0 t0 ∈ $0 t2 6df17685ff2fcdfe09e7677621a4ee11bf84d2594d923cf2839b7c7388bf089d () (t0, t2)
 prove ∀ x → ∈ $0 t0 ∈ $0 t1 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, t1) p0
 prove ∀ x → ∈ $0 t2 ∈ $0 t1 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t2, t1) p1
-elided d5ae154dc36200c1ad1fefe3cb0c30a20b73733c5a8fc1c3f892825368309ad9 {
+wrappedInferenceApplication {
   take x {
     prove → ∈ $0 t0 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t0 ∈ $$0 t1) ($0) 1
     prove → ∈ $0 t2 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t2 ∈ $$0 t1) ($0) 2

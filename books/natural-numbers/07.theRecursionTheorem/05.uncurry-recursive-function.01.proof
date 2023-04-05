@@ -7,7 +7,7 @@ elided 39a4a0b58fd0350180fbaa5054a7ac890a57bb416bf5f07a71553e8d94706219 {
     }
   }
 }
-elided 6f9d482ed3e2f6556597c50fa69557c764daac7d53092439e673f5c6a9d92028 {
+wrappedInferenceApplication {
   take n {
     assume ∈ $0 ℕ {
       existingStatementExtraction {

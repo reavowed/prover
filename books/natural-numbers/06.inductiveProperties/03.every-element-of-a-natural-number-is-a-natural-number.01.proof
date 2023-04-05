@@ -3,7 +3,7 @@ elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
   prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
   prove ∀ x ¬ ∈ $0 0ℕ 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∀ x ¬ ∈ $0 $$0) (0ℕ, ∅) 0.0 0.1
 }
-elided fa02c308b535e06a6fd425d8073ebbf2e2e6127a20a17a8bf3fe76840855133f {
+wrappedInferenceApplication {
   take x {
     prove ¬ ∈ $0 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$0 0ℕ) ($0) 0
     prove → ∈ $0 0ℕ ∈ $0 ℕ fa02c308b535e06a6fd425d8073ebbf2e2e6127a20a17a8bf3fe76840855133f (∈ $0 0ℕ, ∈ $0 ℕ) () 1.0.0

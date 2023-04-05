@@ -274,7 +274,7 @@ take S {
     }
   }
 }
-elided 51f8c63863975d63e93e519f2edaf0d1df5926e746cf1eb6b479b61356ee0369 {
+inferenceWithPremiseDerivations {
   prove ∧ totalOrder ≤ℕ ℕ ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (totalOrder ≤ℕ ℕ, ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℕ) () 2 3
   prove wellOrder ≤ℕ ℕ 51f8c63863975d63e93e519f2edaf0d1df5926e746cf1eb6b479b61356ee0369 () (≤ℕ, ℕ) 4.0
 }

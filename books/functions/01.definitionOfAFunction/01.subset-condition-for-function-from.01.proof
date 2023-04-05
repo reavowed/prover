@@ -82,7 +82,7 @@ assume ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $
         }
       }
     }
-    elided 835b7df52957d1503c2ab2f8c5d50829cc0178ffe44c9d36c306db6665493226 {
+    inferenceWithPremiseDerivations {
       prove ∧ pairSet t0 ∀ x → ∈ $0 domain t0 ∃! b ∈ orderedPair $$0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (pairSet t0, ∀ x → ∈ $0 domain t0 ∃! b ∈ orderedPair $$0 $0 t0) () 1.0.0 1.0.1
       prove function t0 835b7df52957d1503c2ab2f8c5d50829cc0178ffe44c9d36c306db6665493226 () (t0) 1.0.2.0
     }

@@ -7,7 +7,7 @@ take x {
   prove → ∈ $0 ∅ ∈ $0 t0 fa02c308b535e06a6fd425d8073ebbf2e2e6127a20a17a8bf3fe76840855133f (∈ $0 ∅, ∈ $0 t0) () 1.0
   prove ↔ ∨ ∈ $0 ∅ ∈ $0 t0 ∈ $0 t0 d1009c14ec973cf39b7edb4c88af93dbe17c037ccfab0017741c9faa96ea47ff (∈ $0 ∅, ∈ $0 t0) () 1.1
 }
-elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
+wrappedInferenceApplication {
   take x {
     prove ↔ ∈ $0 ∪ ∅ t0 ∨ ∈ $0 ∅ ∈ $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 ∪ ∅ t0 ∨ ∈ $$0 ∅ ∈ $$0 t0) ($0) 0
     prove ↔ ∨ ∈ $0 ∅ ∈ $0 t0 ∈ $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∨ ∈ $$0 ∅ ∈ $$0 t0 ∈ $$0 t0) ($0) 1

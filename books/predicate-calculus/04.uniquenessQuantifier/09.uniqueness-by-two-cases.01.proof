@@ -1,6 +1,6 @@
 assume s0 {
   prove ¬ s1 6c8066d1d6929a9884ff35ff44cde85658c881867f3da7c8459e41fb54febb61 (s0, s1) () p0 0a
-  elided bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 {
+  wrappedInferenceApplication {
     take x {
       prove ↔ ∨ ∧ s0 = $0 t0 ∧ s1 = $0 t1 = $0 t0 bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 (s0, s1, = $0 t0, = $0 t1) () 0a 0.0
     }

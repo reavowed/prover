@@ -1,4 +1,4 @@
-elided 45a8b6d473989bfc000d64033c09e16878a9f8a96199533105d5309bc26f23ff {
+wrappedInferenceApplication {
   take x {
     prove ↔ with ($0) s0 with ($0) s2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$0) s0 with ($$0) s2) ($0) p1
     prove ↔ ∧ with ($0) s0 with ($0) s1 ∧ with ($0) s2 with ($0) s1 45a8b6d473989bfc000d64033c09e16878a9f8a96199533105d5309bc26f23ff (with ($0) s0, with ($0) s2, with ($0) s1) () 0.0.0

@@ -1,6 +1,6 @@
 take x {
   assume ∀ y ↔ ∈ $0 $$0 with ($0) s0 {
-    elided cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c {
+    wrappedInferenceApplication {
       take y {
         prove ↔ ∈ $0 $$0 with ($0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 with ($$$0) s0) ($0) 0.0a
         prove ↔ with ($0) s0 with ($0) s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$$0) s0 with ($$$0) s1) ($0) p1
