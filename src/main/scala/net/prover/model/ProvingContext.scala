@@ -232,10 +232,10 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   lazy val structuralSimplificationInferences: Seq[(Inference, Statement)] = {
     filter(definitions.structuralSimplificationInferences)
   }
-  lazy val facts: Seq[Step.InferenceApplicationWithoutPremises] = {
+  lazy val facts: Seq[Step.AssertionOrExtraction] = {
     filter(definitions.facts)
   }
-  lazy val factsBySerializedStatement: Map[String, Step.InferenceApplicationWithoutPremises] = {
+  lazy val factsBySerializedStatement: Map[String, Step.AssertionOrExtraction] = {
     facts.map { fact => fact.statement.serialized -> fact }.toMapPreservingEarliest
   }
 

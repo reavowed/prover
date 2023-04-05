@@ -647,7 +647,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     }
   }
 
-  lazy val facts: Seq[Step.InferenceApplicationWithoutPremises] = {
+  lazy val facts: Seq[Step.AssertionOrExtraction] = {
     for {
       inferenceExtraction <- allInferenceExtractions
       if inferenceExtraction.premises.isEmpty && inferenceExtraction.variableDefinitions.isEmpty

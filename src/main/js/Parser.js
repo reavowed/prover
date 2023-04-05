@@ -249,7 +249,16 @@ export class Parser {
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           null,
           "Extraction from previous step");
-      case "inferenceWithPremiseDerivations":
+      case "inferenceExtraction": {
+        const assertionStep = this.parseStep(stepJson.assertion, inferenceSummaries);
+        const extractionSteps = this.parseSteps(stepJson.extractionSteps, inferenceSummaries);
+        return new ElidedStep(
+          ++this.stepCounter,
+          [assertionStep, ...extractionSteps],
+          assertionStep.inference,
+          null);
+      }
+      case "inferenceWithPremiseDerivations": {
         const premiseDerivationSteps = this.parseSteps(stepJson.premiseDerivationSteps, inferenceSummaries);
         const assertionStep = this.parseStep(stepJson.assertion, inferenceSummaries);
         return new ElidedStep(
@@ -257,6 +266,7 @@ export class Parser {
           [...premiseDerivationSteps, assertionStep],
           assertionStep.inference || assertionStep.highlightedInference,
           null);
+      }
       default:
         throw "Unrecognised step " + JSON.stringify(stepJson);
     }

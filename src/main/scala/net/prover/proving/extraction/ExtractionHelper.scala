@@ -4,6 +4,7 @@ import net.prover.controllers.OptionWithResponseExceptionOps
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
+import net.prover.model.proof.Step.InferenceWithPremiseDerivations
 import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.proving.extraction.SubstatementExtractor.{InferenceExtraction, VariableTracker}
@@ -12,7 +13,7 @@ import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 import scala.util.{Failure, Success, Try}
 
 object ExtractionHelper {
-  private case class ExtractionApplication(result: Statement, mainPremise: Statement, extractionSteps: Seq[Step.InferenceApplicationWithoutPremises], requiredPremises: Seq[Statement])
+  private case class ExtractionApplication(result: Statement, mainPremise: Statement, extractionSteps: Seq[Step.AssertionOrExtraction], requiredPremises: Seq[Statement])
 
   private def applySpecification(
     currentStatement: Statement,
@@ -188,7 +189,7 @@ object ExtractionHelper {
         (extractionStep, premises)
       }
       (premiseSteps, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(wrappedPremises)
-    } yield (wrappedStep.addPremiseDerivations(premiseSteps), targetSteps)
+    } yield (InferenceWithPremiseDerivations.ifNecessary(premiseSteps, wrappedStep), targetSteps)
   }
 
   def getPremiseExtractionWithPremises(

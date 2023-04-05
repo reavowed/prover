@@ -11,8 +11,8 @@ case class TypedStepWithContext[+T <: Step : ClassTag](
     implicit val stepContext: StepContext)
 {
   def globalContext: GlobalContext = proofWithContext.globalContext
-  def availableEntries: AvailableEntries = proofWithContext.availableEntries
-  implicit def provingContext: ProvingContext = proofWithContext.provingContext
+  implicit def provingContext: ProvingContext = stepContext.provingContext
+  def availableEntries: AvailableEntries = provingContext.availableEntries
 
   def withStep[NewStep <: Step : ClassTag](newStep: NewStep): TypedStepWithContext[NewStep] = {
     copy(step = newStep)
