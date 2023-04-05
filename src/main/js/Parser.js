@@ -249,22 +249,20 @@ export class Parser {
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           null,
           "Extraction from previous step");
-      case "inferenceExtraction": {
-        const assertionStep = this.parseStep(stepJson.assertion, inferenceSummaries);
-        const extractionSteps = this.parseSteps(stepJson.extractionSteps, inferenceSummaries);
+      case "wrappedPremiseDerivation":
         return new ElidedStep(
           ++this.stepCounter,
-          [assertionStep, ...extractionSteps],
-          assertionStep.inference,
-          null);
-      }
+          this.parseSteps(stepJson.substeps, inferenceSummaries),
+          null,
+          "Premise derivation");
+      case "inferenceExtraction":
+      case "wrappedInferenceApplication":
       case "inferenceWithPremiseDerivations": {
-        const premiseDerivationSteps = this.parseSteps(stepJson.premiseDerivationSteps, inferenceSummaries);
-        const assertionStep = this.parseStep(stepJson.assertion, inferenceSummaries);
+        const substeps = this.parseSteps(stepJson.substeps, inferenceSummaries);
         return new ElidedStep(
           ++this.stepCounter,
-          [...premiseDerivationSteps, assertionStep],
-          assertionStep.inference || assertionStep.highlightedInference,
+          substeps,
+          this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
           null);
       }
       default:
