@@ -384,7 +384,7 @@ object Step {
   case class WrappedInferenceApplication(
       unwrappers: Seq[Unwrapper],
       premiseUnwrappingSteps: Seq[PremiseDerivation],
-      inferenceApplication: InferenceApplicationWithoutPremises)
+      inferenceApplication: AssertionOrExtraction)
     extends Step.Wrapped
       with Step.InferenceApplicationWithoutPremises
   {
@@ -401,7 +401,7 @@ object Step {
         WrappedInferenceApplication(
           unwrappers,
           steps.init.map(_.asInstanceOf[PremiseDerivation]),
-          steps.last.asInstanceOf[Step.InferenceApplicationWithoutPremises])
+          steps.last.asInstanceOf[Step.AssertionOrExtraction])
       }
     }
     def parser(implicit availableEntries: AvailableEntries, stepContext: StepContext): Parser[WrappedInferenceApplication] = {
@@ -461,10 +461,8 @@ object Step {
     }
     def reprove(steps: Seq[Step])(stepContext: StepContext): InferenceWithPremiseDerivations = {
       val application = steps.last.asInstanceOf[Step.InferenceApplicationWithoutPremises]
-      val premiseSteps = steps.init.map(_.asOptionalInstanceOf[Step.InferenceApplicationWithoutPremises]).traverseOption.getOrElse {
-        val premises = GetAllPremises(application).map(_.statement).distinct
-        DerivationOrTargetFinder.findDerivationsOrTargets(premises)(stepContext)._1
-      }
+      val premises = GetAllPremises(application).map(_.statement).distinct
+      val premiseSteps = DerivationOrTargetFinder.findDerivationsOrTargets(premises)(stepContext)._1
       RecalculateReferences(TypedStepWithContext(InferenceWithPremiseDerivations(premiseSteps, application), null)(implicitly, stepContext))._1.asInstanceOf[InferenceWithPremiseDerivations]
     }
     def apply(steps: Seq[Step]): InferenceWithPremiseDerivations = {

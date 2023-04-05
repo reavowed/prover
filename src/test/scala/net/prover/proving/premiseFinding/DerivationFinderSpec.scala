@@ -1,7 +1,7 @@
 package net.prover.proving.premiseFinding
 
 import net.prover.StepBuilderHelper
-import net.prover.model.TestDefinitions.{a, b, _}
+import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
 import net.prover.model.entries.{ParentTypeConditions, PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}

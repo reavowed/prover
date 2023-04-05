@@ -90,9 +90,11 @@ let y ∧ ∈ $0 product ℕ ℕ = t0 equivalenceClass $0 ~_ℤ 30412315b8eb88fa
     }
     prove = t0 equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $$0) (equivalenceClass $0 ~_ℤ, equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) 2.2.2 2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     inferenceWithPremiseDerivations {
-      prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-      prove ∧ ∈ 0ℕ ℕ = t0 equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, = t0 equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) () 2.2.4.0 2.2.3
-      prove ∃ x ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 ℕ = t0 equivalenceClass orderedPair $$0 0ℕ ~_ℤ) (0ℕ) 2.2.4.1
+      inferenceExtraction {
+        prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+        prove ∧ ∈ 0ℕ ℕ = t0 equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, = t0 equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) () 2.2.4.0.0 2.2.3
+      }
+      prove ∃ x ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 ℕ = t0 equivalenceClass orderedPair $$0 0ℕ ~_ℤ) (0ℕ) 2.2.4.0
     }
   }
   assume ∈ second $0 first $0 {

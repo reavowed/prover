@@ -6,9 +6,11 @@ assume ∈ orderedPair t0 t1 ≤ℕ {
     }
     prove = apply +ℕ orderedPair t0 0ℕ t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply +ℕ orderedPair t0 0ℕ $0) (t0, t1) 0.0a 0.0.0
     inferenceWithPremiseDerivations {
-      prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-      prove ∧ ∈ 0ℕ ℕ = apply +ℕ orderedPair t0 0ℕ t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, = apply +ℕ orderedPair t0 0ℕ t1) () 0.0.2.0 0.0.1
-      prove ∃ x ∧ ∈ $0 ℕ = apply +ℕ orderedPair t0 $0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 ℕ = apply +ℕ orderedPair t0 $0 t1) (0ℕ) 0.0.2.1
+      inferenceExtraction {
+        prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+        prove ∧ ∈ 0ℕ ℕ = apply +ℕ orderedPair t0 0ℕ t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, = apply +ℕ orderedPair t0 0ℕ t1) () 0.0.2.0.0 0.0.1
+      }
+      prove ∃ x ∧ ∈ $0 ℕ = apply +ℕ orderedPair t0 $0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 ℕ = apply +ℕ orderedPair t0 $0 t1) (0ℕ) 0.0.2.0
     }
   }
   elided 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 {
