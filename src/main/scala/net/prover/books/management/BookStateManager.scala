@@ -25,7 +25,7 @@ class BookStateManager {
         _globalContext
       })
       if (wasUpdated) {
-        WriteBooks(books)
+        WriteBooks(_globalContext.booksWithContexts)
       }
       result
     }

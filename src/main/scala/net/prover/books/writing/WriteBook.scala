@@ -1,33 +1,35 @@
 package net.prover.books.writing
 
-import net.prover.books.keys.GetWithKeys
 import net.prover.books.management.BookDirectoryConfig
 import net.prover.books.model.{Book, FileDefinition}
-import net.prover.controllers.BookService
-import net.prover.model.entries.Theorem
-import net.prover.model.Chapter
+import net.prover.entries.{BookWithContext, ChapterWithContext}
+import net.prover.model.{Chapter, SeqOps}
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 
 import scala.collection.JavaConverters._
 
 object WriteBook {
-  def apply(book: Book): Unit = {
-    val files = getBookFiles(book)
+  def apply(bookWithContext: BookWithContext): Unit = {
+    val files = getBookFiles(bookWithContext)
     files.foreach(WriteFile(_))
-    deleteUnusedFiles(book, files)
+    deleteUnusedFiles(bookWithContext.book, files)
   }
 
-  private def getBookFiles(book: Book) = {
-    FileDefinition(BookDirectoryConfig.getBookFilePath(book.title), book.serialized) +: getChapterFiles(book)
+  private def getBookFiles(bookWithContext: BookWithContext) = {
+    FileDefinition(
+      BookDirectoryConfig.getBookFilePath(bookWithContext.book.title),
+      bookWithContext.book.serialized
+    ) +: getChapterFiles(bookWithContext)
   }
 
-  private def getChapterFiles(book: Book): Seq[FileDefinition] = {
-    book.chapters.flatMapWithIndex(getChapterFiles(book, _, _))
+  private def getChapterFiles(bookWithContext: BookWithContext): Seq[FileDefinition] = {
+    bookWithContext.chaptersWithContexts.flatMapWithIndex(getChapterFiles(bookWithContext, _, _))
   }
 
-  private def getChapterFiles(book: Book, chapter: Chapter, chapterIndex: Int): Seq[FileDefinition] = {
-    getChapterFile(book, chapter, chapterIndex) +: getProofFiles(book, chapter, chapterIndex)
+  private def getChapterFiles(bookWithContext: BookWithContext, chapterWithContext: ChapterWithContext, chapterIndex: Int): Seq[FileDefinition] = {
+    getChapterFile(bookWithContext.book, chapterWithContext.chapter, chapterIndex) +:
+      getProofFiles(bookWithContext, chapterWithContext, chapterIndex)
   }
 
   private def getChapterFile(book: Book, chapter: Chapter, chapterIndex: Int): FileDefinition = {
@@ -36,13 +38,13 @@ object WriteBook {
       chapter.serialized)
   }
 
-  private def getProofFiles(book: Book, chapter: Chapter, chapterIndex: Int): Seq[FileDefinition] = {
-    GetWithKeys(chapter.entries).collect {
-      case (theorem: Theorem, key) => (theorem, key)
-    }.flatMapWithIndex { case ((theorem, key), index) =>
-      theorem.proofs.mapWithIndex((proof, proofIndex) =>
+  private def getProofFiles(bookWithContext: BookWithContext, chapterWithContext: ChapterWithContext, chapterIndex: Int): Seq[FileDefinition] = {
+    import bookWithContext.book
+    import chapterWithContext.chapter
+    chapterWithContext.theoremsWithContexts.flatMapWithIndex { (theoremWithContext, index) =>
+      theoremWithContext.theorem.proofs.mapWithIndex((proof, proofIndex) =>
         FileDefinition(
-          BookDirectoryConfig.getProofPath(book.title, chapter.title, chapterIndex, key, index, proofIndex),
+          BookDirectoryConfig.getProofPath(book.title, chapter.title, chapterIndex, theoremWithContext.entryKey, index, proofIndex),
           proof.serialized))
     }
   }
