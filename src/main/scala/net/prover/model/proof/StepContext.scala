@@ -100,7 +100,7 @@ case class StepContext private(
   lazy val knownEqualities: Seq[KnownEquality] = {
     for {
       equality <- provingContext.equalityOption.toSeq
-      KnownStatement(statement, derivation) <- knownStatementsFromPremises ++ provingContext.facts.map(KnownStatement.fromSingleStep)
+      KnownStatement(statement, derivation) <- knownStatementsFromPremises ++ provingContext.facts.map(_.toKnownStatement)
       (lhs, rhs) <- equality.unapply(statement)
     } yield KnownEquality(lhs, rhs, equality, derivation)
   }

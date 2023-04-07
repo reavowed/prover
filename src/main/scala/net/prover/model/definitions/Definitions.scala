@@ -647,12 +647,11 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     }
   }
 
-  lazy val facts: Seq[Step.AssertionOrExtraction] = {
+  lazy val facts: Seq[Fact] = {
     for {
       inferenceExtraction <- allInferenceExtractions
       if inferenceExtraction.premises.isEmpty && inferenceExtraction.variableDefinitions.isEmpty
-      assertionStep = Step.Assertion(inferenceExtraction.inference.conclusion, inferenceExtraction.inference.summary, Nil, Substitutions.empty)
-    } yield ExtractionApplier.createDerivationForInferenceExtraction(assertionStep, inferenceExtraction.innerExtraction.derivation)(provingContext)
+    } yield Fact(inferenceExtraction)
   }
 
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, Int, Int, Direction)] = {

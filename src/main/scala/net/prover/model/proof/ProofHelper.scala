@@ -1,12 +1,12 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
+import net.prover.model.definitions.{DeductionDefinition, Fact, GeneralizationDefinition}
 import net.prover.model.expressions._
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 
 object ProofHelper {
-  def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(Step.InferenceApplicationWithoutPremises, Substitutions.Possible)] = {
+  def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(Fact, Substitutions.Possible)] = {
     provingContext.facts.mapFind { fact =>
       for {
         substitutions <- target.calculateSubstitutions(fact.statement, substitutionsSoFar)

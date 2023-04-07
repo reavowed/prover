@@ -74,7 +74,7 @@ object DerivationFinder {
 
     def fromFact = for {
       (fact, substitutions) <- ProofHelper.findFactBySubstituting(unsubstitutedPremiseStatement, initialSubstitutions)
-    } yield (KnownStatement.fromSingleStep(fact), substitutions)
+    } yield (fact.toKnownStatement, substitutions)
 
     def byDeconstructing = for {
       deconstructionInference <- stepContext.provingContext.statementDefinitionDeconstructions

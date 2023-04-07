@@ -72,6 +72,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
 
     implicit val allowableExtractionFromSinglePremise: Allowable[ExtractionFromSinglePremise] = allowableGeneric(Generic[ExtractionFromSinglePremise])
     implicit val allowableInferenceExtraction: Allowable[InferenceExtraction] = allowableGeneric(Generic[InferenceExtraction])
+    implicit val allowableFact: Allowable[Fact] = allowableGeneric(Generic[Fact])
     implicit val allowableCommutativity: Allowable[Commutativity] = allowableGeneric(Generic[Commutativity])
     implicit val allowableAssociativity: Allowable[Associativity] = allowableGeneric(Generic[Associativity])
     implicit val allowableLeftIdentity: Allowable[LeftIdentity] = allowableGeneric(Generic[LeftIdentity])
@@ -232,10 +233,10 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   lazy val structuralSimplificationInferences: Seq[(Inference, Statement)] = {
     filter(definitions.structuralSimplificationInferences)
   }
-  lazy val facts: Seq[Step.AssertionOrExtraction] = {
+  lazy val facts: Seq[Fact] = {
     filter(definitions.facts)
   }
-  lazy val factsBySerializedStatement: Map[String, Step.AssertionOrExtraction] = {
+  lazy val factsBySerializedStatement: Map[String, Fact] = {
     facts.map { fact => fact.statement.serialized -> fact }.toMapPreservingEarliest
   }
 
