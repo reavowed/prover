@@ -5,7 +5,7 @@ import net.prover.model.definitions.{BinaryRelation, KnownStatement, PremiseSimp
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.{ProvingContext, VariableDefinitions}
-import net.prover.proving.extraction.SubstatementExtractor
+import net.prover.proving.extraction.ExtractionCalculator
 
 import scala.collection.mutable
 
@@ -60,7 +60,7 @@ case class StepContext private(
     val givenAndSimplified = given ++ simplified
     val extracted = for {
       premise <- allPremises
-      extraction <- SubstatementExtractor.getPremiseExtractions(premise.statement)
+      extraction <- ExtractionCalculator.getPremiseExtractions(premise.statement)
       if extraction.premises.isEmpty && !extraction.innerExtraction.derivation.exists(step => givenAndSimplified.exists(_.statement == step.statement))
     } yield KnownStatement(extraction.conclusion, extraction.innerExtraction.derivation)
     (givenAndSimplified ++ extracted).deduplicate
@@ -91,7 +91,7 @@ case class StepContext private(
   private lazy val allPremisesAfterRewrites = simplifyAll(Nil, allPremisesAfterSimplifications, provingContext.premiseRelationRewriteInferences)
 
   lazy val knownStatementsFromPremises: Seq[KnownStatement] = allPremisesAfterRewrites.map {
-    ks => ks.copy(derivation = SubstatementExtractor.groupStepsByDefinition(ks.derivation, None)(provingContext))
+    ks => ks.copy(derivation = ExtractionCalculator.groupStepsByDefinition(ks.derivation, None)(provingContext))
   }
   lazy val knownStatementsFromPremisesBySerializedStatement: Map[String, KnownStatement] = {
     knownStatementsFromPremises.map(s => s.statement.serialized -> s).toMapPreservingEarliest

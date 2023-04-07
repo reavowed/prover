@@ -8,7 +8,7 @@ import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.{ExpressionParsingContext, Inference, ProvingContext, SeqOps, Substitutions}
 import net.prover.proving.FindInference
-import net.prover.proving.extraction.{ExtractionHelper, SubstatementExtractor}
+import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
 import net.prover.util.Direction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -100,7 +100,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     direction: Direction
   ): ResponseEntity[_] = {
     def getPremises[T <: Expression](joiner: BinaryJoiner[T], lhs: T, rhs: T, premise: Statement, baseSubstitutions: Substitutions.Possible)(implicit stepWithContext: StepWithContext): Try[Seq[PossibleConclusionWithPremises]] = {
-      Success(SubstatementExtractor.getPremiseExtractions(premise)
+      Success(ExtractionCalculator.getPremiseExtractions(premise)
         .flatMap(PossibleConclusionWithPremises.fromExtractionWithSubstitutions(_, conclusion => for {
           (conclusionLhs, conclusionRhs) <- joiner.unapply(conclusion)
           substitutions <- getSubstitutionsWithTermOrSubterm(direction.getSource(conclusionLhs, conclusionRhs), direction.getSource(lhs, rhs), baseSubstitutions)
@@ -222,7 +222,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
                 case None =>
                   Success((inference, None))
               }
-              (inferenceExtractionStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, Nil, intendedExtractionPremisesOption, intendedConclusionOption)
+              (inferenceExtractionStep, targets) <- ExtractionApplier.getInferenceExtractionWithPremises(inferenceToApply, extractionInferences, substitutions, Nil, intendedExtractionPremisesOption, intendedConclusionOption)
             } yield (inferenceExtractionStep.statement, Some(inferenceExtractionStep), targets)
           }
         }
@@ -230,14 +230,14 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           getResult { (extractionInferences, getIntendedConclusion) =>
             for {
               premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
-              extraction <- SubstatementExtractor.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
+              extraction <- ExtractionCalculator.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
               premise <- stepWithContext.stepContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
               epc = ExpressionParsingContext.withDefinitions(extraction.variableDefinitions)
               substitutions <- definition.substitutions.parse(extraction.variableDefinitions)
               intendedConclusionOption <- getIntendedConclusion(epc, substitutions)
               intendedPremiseStatementsOption <- definition.parseIntendedPremiseStatements(epc)
               substitutedIntendedPremiseStatementsOption <- intendedPremiseStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to extraction premises")).swap
-              (result, step, targets)  <- ExtractionHelper.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedIntendedPremiseStatementsOption, intendedConclusionOption)
+              (result, step, targets)  <- ExtractionApplier.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedIntendedPremiseStatementsOption, intendedConclusionOption)
             } yield (result, step, targets)
           }
         }

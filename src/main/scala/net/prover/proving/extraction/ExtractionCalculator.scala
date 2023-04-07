@@ -4,7 +4,7 @@ import net.prover.model._
 import net.prover.model.expressions._
 import net.prover.model.proof._
 
-object SubstatementExtractor {
+object ExtractionCalculator {
   trait Extraction {
     def premises: Seq[Statement]
     def conclusion: Statement
@@ -13,7 +13,12 @@ object SubstatementExtractor {
     def additionalVariableNames: Seq[String]
   }
 
-  case class ExtractionFromSinglePremise(premises: Seq[Statement], conclusion: Statement, derivation: Seq[Step.AssertionOrExtraction], extractionInferences: Seq[Inference.Summary], additionalVariableNames: Seq[String])
+  case class ExtractionFromSinglePremise(
+    premises: Seq[Statement],
+    conclusion: Statement,
+    derivation: Seq[Step.AssertionOrExtraction],
+    extractionInferences: Seq[Inference.Summary],
+    additionalVariableNames: Seq[String])
 
   case class InferenceExtraction(inference: Inference.Summary, innerExtraction: ExtractionFromSinglePremise) extends Extraction {
     def premises: Seq[Statement] = inference.premises ++ innerExtraction.premises

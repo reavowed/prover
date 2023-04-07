@@ -3,7 +3,7 @@ package net.prover.controllers.models
 import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.StepContext
 import net.prover.model.{Inference, Substitutions, VariableDefinitions}
-import net.prover.proving.extraction.SubstatementExtractor.Extraction
+import net.prover.proving.extraction.ExtractionCalculator.Extraction
 
 sealed trait PossibleInference {
   def inference: Inference.Summary

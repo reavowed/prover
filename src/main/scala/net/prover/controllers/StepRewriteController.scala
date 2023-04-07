@@ -10,7 +10,7 @@ import net.prover.model.proof.EqualityRewriter.{RewriteMethods, RewritePossibili
 import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.proving.FindInference
-import net.prover.proving.extraction.ExtractionHelper
+import net.prover.proving.extraction.ExtractionApplier
 import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.proving.stepReplacement.InsertStepBeforeChain
 import net.prover.util.Direction
@@ -190,7 +190,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       finalSubstitutionsAfterPremises <- inference.premises.zip(removedPremises).foldLeft(Try(finalSubstitutionsAfterSource)) { case (s, (ip, p)) => s.flatMap(ip.calculateSubstitutions(p, _)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions"))}
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
-      extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
+      extractionStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
       elidedStep = Step.Elided.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).distinctBy(_.statement), inference).get
     } yield (removedSource, rewrittenTerm, Seq(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
   }

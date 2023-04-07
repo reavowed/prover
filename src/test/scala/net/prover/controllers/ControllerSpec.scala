@@ -6,7 +6,7 @@ import net.prover.model.definitions.StatementDefinition
 import net.prover.model.expressions.{Statement, StatementVariable, Term, TermVariable}
 import net.prover.model.proof._
 import net.prover.model.{AvailableEntries, Inference, Substitutions, VariableDefinitions}
-import net.prover.proving.extraction.SubstatementExtractor
+import net.prover.proving.extraction.ExtractionCalculator
 import net.prover.{BookServiceHelper, ContextHelper, StepHelpers}
 import org.specs2.matcher.ValueChecks
 import org.specs2.mutable.Specification
@@ -23,7 +23,7 @@ trait ControllerSpec extends Specification with ContextHelper with BookServiceHe
     conclusionOption: Option[Statement] = None)(
     implicit availableEntries: AvailableEntries
   ): StepDefinition = {
-    val extraction = SubstatementExtractor.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).get
+    val extraction = ExtractionCalculator.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).get
     val substitutions = Substitutions(statements, terms)
     val serializedSubstitutions = SerializedSubstitutions(substitutions.statements.map(_.serialized), substitutions.terms.map(_.serialized))
     StepDefinition(
@@ -58,7 +58,7 @@ trait ControllerSpec extends Specification with ContextHelper with BookServiceHe
     variableDefinitions: VariableDefinitions
   ): StepDefinition = {
     implicit val stepContext: StepContext = createOuterStepContext(Nil)
-    val extraction = SubstatementExtractor.getPremiseExtractions(premise).find(_.extractionInferences == extractionInferences).get
+    val extraction = ExtractionCalculator.getPremiseExtractions(premise).find(_.extractionInferences == extractionInferences).get
     val serializedSubstitutions = SerializedSubstitutions(substitutions.statements.map(_.serialized), substitutions.terms.map(_.serialized))
     StepDefinition(
       None,

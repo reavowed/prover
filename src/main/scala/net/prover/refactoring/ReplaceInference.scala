@@ -5,7 +5,7 @@ import net.prover.entries.StepWithContext
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model.Inference
 import net.prover.model.proof.Step
-import net.prover.proving.extraction.ExtractionHelper
+import net.prover.proving.extraction.ExtractionApplier
 import net.prover.theorems.CompoundTheoremUpdater
 import net.prover.util.FunctorTypes._
 
@@ -27,7 +27,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
       } yield (inferenceExtraction, substitutions)).headOption
       for {
         (inferenceExtraction, substitutions) <- substitutionsOption.failIfUndefined(InferenceReplacementException("Could not find extraction option", stepWithContext))
-        extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions).failIfUndefined(InferenceReplacementException("Could not apply extraction", stepWithContext))
+        extractionStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, substitutions).failIfUndefined(InferenceReplacementException("Could not apply extraction", stepWithContext))
       } yield extractionStep
     } else super.updateAssertion(step, stepWithContext)
   }

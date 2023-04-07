@@ -3,8 +3,8 @@ package net.prover.model.definitions
 import net.prover.model.expressions.{Expression, Term}
 import net.prover.model.proof.{StepContext, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
-import net.prover.proving.extraction.ExtractionHelper
-import net.prover.proving.extraction.SubstatementExtractor.InferenceExtraction
+import net.prover.proving.extraction.ExtractionApplier
+import net.prover.proving.extraction.ExtractionCalculator.InferenceExtraction
 import net.prover.util.Direction
 
 sealed trait RearrangementOperation {
@@ -14,7 +14,7 @@ sealed trait RearrangementOperation {
   def result(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term
   def rearrangementStep[T <: Expression](terms: Seq[Term], wrapper: Wrapper[Term, T], expansion: Expansion[T])(implicit stepContext: StepContext): Option[RearrangementStep[T]] = {
     for {
-      (assertionStep, targetSteps) <- ExtractionHelper.getInferenceExtractionWithPremises(
+      (assertionStep, targetSteps) <- ExtractionApplier.getInferenceExtractionWithPremises(
         inferenceExtraction.inference,
         inferenceExtraction.innerExtraction.extractionInferences,
         Substitutions(Nil, terms),

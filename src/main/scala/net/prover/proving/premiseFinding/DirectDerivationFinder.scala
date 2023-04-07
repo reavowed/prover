@@ -4,7 +4,7 @@ import net.prover.model.Inference
 import net.prover.model.definitions.TermDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
-import net.prover.proving.extraction.ExtractionHelper
+import net.prover.proving.extraction.ExtractionApplier
 
 object DirectDerivationFinder {
   def findDirectDerivationForStatement(
@@ -31,7 +31,7 @@ object DirectDerivationFinder {
       substitutions <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inferenceExtraction.variableDefinitions))
       premiseStatements <- inferenceExtraction.premises.map(_.applySubstitutions(substitutions)).traverseOption
       premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatements(premiseStatements)
-      derivationStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions)
+      derivationStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
     } yield premiseSteps :+ derivationStep).headOption
 
     fromPremises orElse fromFact orElse bySimplifyingTarget orElse byRemovingTermDefinition

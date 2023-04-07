@@ -4,7 +4,7 @@ import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions._
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
-import net.prover.proving.extraction.ExtractionHelper
+import net.prover.proving.extraction.ExtractionApplier
 import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.util.{Direction, PossibleSingleMatch}
 
@@ -29,7 +29,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepContext: StepContex
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality(rewriteInference.variableDefinitions)
         simplifiedTerm <- inferenceResult.applySubstitutions(finalSubstitutions)
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
-        extractionStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
+        extractionStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
       } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation) :+ extractionStep) ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
     }

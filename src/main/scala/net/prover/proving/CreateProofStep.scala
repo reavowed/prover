@@ -6,7 +6,7 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepContext}
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.{ExpressionParsingContext, Substitutions}
-import net.prover.proving.extraction.{ExtractionHelper, SubstatementExtractor}
+import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
 
 import scala.util.Try
 
@@ -24,13 +24,13 @@ object CreateProofStep {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
         premise <- stepContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         extractionInferences <- definition.extractionInferenceIds.map(FindInference(_)).traverseTry
-        extraction <- SubstatementExtractor.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
+        extraction <- ExtractionCalculator.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
         substitutions <- definition.substitutions.parse(extraction.variableDefinitions)
         epc = implicitly[ExpressionParsingContext].addSimpleTermVariables(extraction.additionalVariableNames)
         conclusionOption <- getConclusionOption(epc, substitutions)
         newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
         substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to intended new targets")).swap
-        (result, stepOption, extractionTargets) <- ExtractionHelper.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
+        (result, stepOption, extractionTargets) <- ExtractionApplier.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
         step <- stepOption.orBadRequest("At least one step must be present")
       } yield (result, step, extractionTargets)
     }

@@ -5,7 +5,7 @@ import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
-import net.prover.proving.extraction.SubstatementExtractor.{ExtractionFromSinglePremise, InferenceExtraction}
+import net.prover.proving.extraction.ExtractionCalculator.{ExtractionFromSinglePremise, InferenceExtraction}
 import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}

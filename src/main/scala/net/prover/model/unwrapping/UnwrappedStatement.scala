@@ -2,7 +2,7 @@ package net.prover.model.unwrapping
 
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.StepContext
-import net.prover.proving.extraction.SubstatementExtractor.VariableTracker
+import net.prover.proving.extraction.ExtractionCalculator.VariableTracker
 
 case class UnwrappedStatement(statement: Statement, unwrappers: Seq[Unwrapper]) {
   def definitionSymbols: Seq[String] = unwrappers.map(_.definitionSymbol)

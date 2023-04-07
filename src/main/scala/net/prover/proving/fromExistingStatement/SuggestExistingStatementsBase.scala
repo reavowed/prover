@@ -5,8 +5,8 @@ import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises}
 import net.prover.model.Substitutions
 import net.prover.model.expressions.{FunctionParameter, Statement, StatementVariable, TermVariable}
 import net.prover.model.proof.{Step, StepContext}
-import net.prover.proving.extraction.SubstatementExtractor
-import net.prover.proving.extraction.SubstatementExtractor.PremiseExtraction
+import net.prover.proving.extraction.ExtractionCalculator
+import net.prover.proving.extraction.ExtractionCalculator.PremiseExtraction
 
 import scala.util.Try
 
@@ -29,7 +29,7 @@ trait SuggestExistingStatementsBase {
           stepWithContext.stepContext.variableDefinitions.statements.mapWithIndex((variableDefinition, index) => index -> StatementVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap,
           stepWithContext.stepContext.variableDefinitions.terms.mapWithIndex((variableDefinition, index) => index -> TermVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap)
         // Then add any premise-specific variables that might be missing
-      } yield SubstatementExtractor.getPremiseExtractions(premise.statement).flatMap(getPossibleConclusionWithPremises(_, stepWithContext.step, baseSubstitutions))
+      } yield ExtractionCalculator.getPremiseExtractions(premise.statement).flatMap(getPossibleConclusionWithPremises(_, stepWithContext.step, baseSubstitutions))
     )
   }
 

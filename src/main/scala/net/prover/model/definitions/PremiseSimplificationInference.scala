@@ -2,7 +2,7 @@ package net.prover.model.definitions
 
 import net.prover.model.ProvingContext
 import net.prover.model.proof.SubstitutionContext
-import net.prover.proving.extraction.SubstatementExtractor.InferenceExtraction
+import net.prover.proving.extraction.ExtractionCalculator.InferenceExtraction
 
 trait PremiseSimplificationInference {
   def inferenceExtraction: InferenceExtraction

@@ -3,8 +3,8 @@ package net.prover.model.definitions
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{DerivationStep, Step, StepContext, SubstitutionContext}
 import net.prover.model.{ProvingContext, Substitutions}
-import net.prover.proving.extraction.ExtractionHelper
-import net.prover.proving.extraction.SubstatementExtractor.InferenceExtraction
+import net.prover.proving.extraction.ExtractionApplier
+import net.prover.proving.extraction.ExtractionCalculator.InferenceExtraction
 import net.prover.proving.premiseFinding.DerivationFinder
 
 case class RelationRewriteInference(
@@ -26,7 +26,7 @@ case class RelationRewriteInference(
           Some((Nil, substitutionsAfterMainPremise))
       }
       substitutions <- substitutionsAfterInitialPremise.confirmTotality(inferenceExtraction.variableDefinitions)
-      derivationStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions)
+      derivationStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
     } yield currentStatement.extend(premiseDerivation :+ derivationStep)
   }
   def rewriteTarget(targetStatement: Statement)(implicit stepContext: StepContext): Option[(BinaryRelationStatement, Seq[Step.InferenceApplicationWithoutPremises])] = {
@@ -39,7 +39,7 @@ case class RelationRewriteInference(
           Some((Nil, substitutionsAfterConclusion))
       }
       substitutions <- substitutionsAfterInitialPremise.confirmTotality(inferenceExtraction.variableDefinitions)
-      derivationStep <- ExtractionHelper.getInferenceExtractionDerivationWithoutPremises(inferenceExtraction, substitutions)
+      derivationStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
       substitutedPremise <- mainPremise.applySubstitutions(substitutions)
       premiseRelationStatement <- stepContext.provingContext.findRelation(substitutedPremise)
     } yield (premiseRelationStatement, premiseDerivation :+ derivationStep)

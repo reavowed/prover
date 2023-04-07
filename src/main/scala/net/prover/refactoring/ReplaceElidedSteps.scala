@@ -4,7 +4,7 @@ import net.prover.books.management.BookStateManager
 import net.prover.entries.StepWithContext
 import net.prover.model.proof.Step
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
-import net.prover.proving.extraction.SubstatementExtractor
+import net.prover.proving.extraction.ExtractionCalculator
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 import net.prover.theorems.{CompoundTheoremUpdater, GetAllPremises, RecalculateReferences}
 import scalaz.Scalaz._
@@ -51,7 +51,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
       assertionSteps <- step.substeps.map(_.asOptionalInstanceOf[Step.Assertion]).toList.sequence
       firstAssertion <- assertionSteps.headOption
       mainPremise <- firstAssertion.premises.headOption.map(_.statement)
-      _ <- SubstatementExtractor.getPremiseExtractions(mainPremise)(stepWithContext.stepContext)
+      _ <- ExtractionCalculator.getPremiseExtractions(mainPremise)(stepWithContext.stepContext)
         .find(_.extractionInferences.toList == assertionSteps.map(_.inference))
     } yield Step.ExistingStatementExtraction(assertionSteps)
   }

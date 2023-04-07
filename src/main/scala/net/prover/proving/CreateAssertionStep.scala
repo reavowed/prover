@@ -6,7 +6,7 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepContext}
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.model.{ExpressionParsingContext, Substitutions}
-import net.prover.proving.extraction.{ExtractionHelper, SubstatementExtractor}
+import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
 
 import scala.util.{Success, Try}
 
@@ -21,7 +21,7 @@ object CreateAssertionStep {
     for {
       inference <- FindInference(inferenceId)
       extractionInferences <- definition.extractionInferenceIds.map(FindInference(_)).traverseTry
-      extraction <- SubstatementExtractor.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
+      extraction <- ExtractionCalculator.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
       wrappedStepContext = unwrappers.enhanceStepContext(stepContext)
       substitutions <- definition.substitutions.parse(extraction.variableDefinitions)(ExpressionParsingContext.atStep(wrappedStepContext))
       epc = ExpressionParsingContext.forInference(inference).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
@@ -37,7 +37,7 @@ object CreateAssertionStep {
         case None =>
           Success((inference, None))
       }
-      (derivationStep, targets) <- ExtractionHelper.getInferenceExtractionWithPremises(
+      (derivationStep, targets) <- ExtractionApplier.getInferenceExtractionWithPremises(
         inferenceToApply,
         extractionInferences,
         substitutions,
