@@ -120,7 +120,7 @@ object ExtractionApplier {
   }
 
   private def groupStepsByDefinition(extractionApplication: ExtractionApplication, initialStep: Option[Step.Assertion])(implicit provingContext: ProvingContext): ExtractionApplication = {
-    extractionApplication.copy(extractionSteps = ExtractionCalculator.groupStepsByDefinition(extractionApplication.extractionSteps, initialStep))
+    extractionApplication.copy(extractionSteps = groupStepsByDefinition(extractionApplication.extractionSteps, initialStep))
   }
 
   private def applyExtractionsForInference(
@@ -155,7 +155,7 @@ object ExtractionApplier {
     for {
       assertionStep <- Step.Assertion.forInference(inferenceExtraction.inference, substitutions)
       extractionApplication <- ExtractionApplier.applyExtractionsForInference(assertionStep, inferenceExtraction.innerExtraction.extractionInferences, inferenceExtraction.inference, substitutions, None, None).toOption
-    } yield ExtractionCalculator.createDerivationForInferenceExtraction(assertionStep, extractionApplication.extractionSteps)
+    } yield createDerivationForInferenceExtraction(assertionStep, extractionApplication.extractionSteps)
   }
 
   def getInferenceExtractionWithPremises(
@@ -182,7 +182,7 @@ object ExtractionApplier {
           wrappedStepContext)
       mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise) // mainPremise is equivalent to the existing conclusion here, but with the correct bound variable names
       premises = mainAssertion.premises.map(_.statement) ++ extractionPremises
-      extractionStep = ExtractionCalculator.createDerivationForInferenceExtraction(mainAssertionWithCorrectConclusion, extractionSteps)
+      extractionStep = createDerivationForInferenceExtraction(mainAssertionWithCorrectConclusion, extractionSteps)
       (wrappedStep, wrappedPremises) = if (unwrappers.nonEmpty) {
         unwrappers.addNecessaryExtractions(extractionStep, premises)
       } else {
@@ -210,5 +210,73 @@ object ExtractionApplier {
       (premiseSteps, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(extractionPremises)
       assertionWithExtractionStep = Step.Elided.ifNecessary(premiseSteps ++ extractionStep.toSeq, "Extracted")
     } yield (extractionResult, assertionWithExtractionStep, targetSteps)
+  }
+
+  def createDerivationForInferenceExtraction(
+    assertionStep: Step.Assertion,
+    extractionSteps: Seq[Step.AssertionOrExtraction])(
+    implicit provingContext: ProvingContext
+  ): Step.AssertionOrExtraction = {
+    groupStepsByDefinition(extractionSteps, Some(assertionStep)) match {
+      case Seq(step) =>
+        step
+      case steps@(_: Step.Assertion) +: _ =>
+        Step.InferenceExtraction(steps)
+      case Step.InferenceExtraction(assertion, inner) +: others =>
+        Step.InferenceExtraction(assertion, inner ++ others)
+    }
+  }
+
+  def groupStepsByDefinition[TStep >: Step.AssertionOrExtraction <: Step.InferenceApplicationWithoutPremises](steps: Seq[TStep], initialMainStep: Option[Step.Assertion])(implicit provingContext: ProvingContext): Seq[TStep] = {
+    val deconstructionInferenceIds = provingContext.availableEntries.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
+    val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
+
+    var currentMainStep: Option[Step.Assertion] = initialMainStep
+    val currentUngroupedSteps = Seq.newBuilder[TStep]
+    val stepsToReturn = Seq.newBuilder[TStep]
+
+    def isStructuralSimplification(step: TStep): Boolean = {
+      structuralSimplificationIds.contains(step.inference.id)
+    }
+
+    def removeStructuralSimplifications(steps: Seq[TStep]): Seq[TStep] = {
+      steps.filter(s => !isStructuralSimplification(s))
+    }
+
+    def removeNonEndStructuralSimplifications(steps: Seq[TStep]): Seq[TStep] = {
+      @scala.annotation.tailrec
+      def whileStructuralAtEnd(current: Seq[TStep], end: Seq[TStep]): Seq[TStep] = {
+        current match {
+          case init :+ last if isStructuralSimplification(last) =>
+            whileStructuralAtEnd(init, last +: end)
+          case _ =>
+            removeStructuralSimplifications(current) ++ end
+        }
+      }
+
+      whileStructuralAtEnd(steps, Nil)
+    }
+
+    def groupSteps(steps: Seq[TStep], retainEndSimplifications: Boolean): Unit = {
+      currentMainStep match {
+        case Some(step) =>
+          stepsToReturn += step.addExtractionSteps(removeNonEndStructuralSimplifications(steps))
+        case None =>
+          stepsToReturn ++= (if (retainEndSimplifications) removeNonEndStructuralSimplifications(steps) else removeStructuralSimplifications(steps))
+      }
+    }
+
+    for (currentStep <- steps) {
+      currentStep match {
+        case deconstructionStep@Step.Assertion(_, inference, _, _) if deconstructionInferenceIds.contains(inference.id) =>
+          groupSteps(currentUngroupedSteps.result(), false)
+          currentMainStep = Some(deconstructionStep)
+          currentUngroupedSteps.clear()
+        case _ =>
+          currentUngroupedSteps += currentStep
+      }
+    }
+    groupSteps(currentUngroupedSteps.result(), true)
+    stepsToReturn.result()
   }
 }

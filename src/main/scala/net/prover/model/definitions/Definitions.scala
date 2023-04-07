@@ -8,7 +8,7 @@ import net.prover.model.expressions._
 import net.prover.model.proof.{DerivationStepWithSingleInference, Step, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
-import net.prover.proving.extraction.ExtractionCalculator
+import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
 import net.prover.proving.extraction.ExtractionCalculator.InferenceExtraction
 import net.prover.util.Direction
 
@@ -652,7 +652,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       inferenceExtraction <- allInferenceExtractions
       if inferenceExtraction.premises.isEmpty && inferenceExtraction.variableDefinitions.isEmpty
       assertionStep = Step.Assertion(inferenceExtraction.inference.conclusion, inferenceExtraction.inference.summary, Nil, Substitutions.empty)
-    } yield ExtractionCalculator.createDerivationForInferenceExtraction(assertionStep, inferenceExtraction.innerExtraction.derivation)(provingContext)
+    } yield ExtractionApplier.createDerivationForInferenceExtraction(assertionStep, inferenceExtraction.innerExtraction.derivation)(provingContext)
   }
 
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, Int, Int, Direction)] = {
