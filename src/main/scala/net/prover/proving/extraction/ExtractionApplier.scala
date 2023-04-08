@@ -13,7 +13,7 @@ import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 import scala.util.{Failure, Success, Try}
 
 object ExtractionApplier {
-  private case class ExtractionApplication(result: Statement, mainPremise: Statement, extractionSteps: Seq[Step.AssertionOrExtraction], requiredPremises: Seq[Statement])
+  private case class ExtractionApplication(result: Statement, mainPremise: Statement, extractionSteps: Seq[Step.Assertion], requiredPremises: Seq[Statement])
 
   private def applySpecification(
     currentStatement: Statement,
@@ -119,10 +119,6 @@ object ExtractionApplier {
     }
   }
 
-  private def groupStepsByDefinition(extractionApplication: ExtractionApplication)(implicit provingContext: ProvingContext): ExtractionApplication = {
-    extractionApplication.copy(extractionSteps = groupStepsByDefinition(extractionApplication.extractionSteps))
-  }
-
   private def applyExtractionsForInference(
     assertionStep: Step.Assertion,
     extractionInferences: Seq[Inference],
@@ -144,7 +140,6 @@ object ExtractionApplier {
     implicit stepContext: StepContext
   ): Try[ExtractionApplication] = {
     applyExtractions(premise.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext)
-      .map(groupStepsByDefinition)
   }
 
   def getInferenceExtractionWithoutPremises(
@@ -203,7 +198,7 @@ object ExtractionApplier {
   ): Try[(Statement, Option[Step], Seq[Step.Target])] = {
     for {
       ExtractionApplication(extractionResult, _, extractionSteps, extractionPremises) <- ExtractionApplier.applyExtractionsForPremise(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion)
-      extractionStep = extractionSteps match {
+      extractionStep = groupStepsByDefinition(extractionSteps) match {
         case Nil => None
         case singleStep +: Nil => Some(singleStep)
         case steps => Some(Step.ExistingStatementExtraction(steps))
