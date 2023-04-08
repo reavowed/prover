@@ -1,8 +1,10 @@
-elided 423f2d93b9f08baeecf5438f8b5e334a95d4b4c09050dde282071d0c58ec5f81 {
+inferenceExtraction {
   prove reflexiveRelation ≤ℕ ℕ 423f2d93b9f08baeecf5438f8b5e334a95d4b4c09050dde282071d0c58ec5f81 () ()
-  prove ∧ relation ≤ℕ ℕ ∀ a → ∈ $0 ℕ ∈ orderedPair $0 $0 ≤ℕ f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 () (≤ℕ, ℕ) 0.0
-  prove → ∈ t0 ℕ ∈ orderedPair t0 t0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∈ orderedPair $0 $0 ≤ℕ) (t0) 0.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-  prove ∈ orderedPair t0 t0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∈ orderedPair t0 t0 ≤ℕ) () 0.2 p0
+  inferenceExtraction {
+    prove ∧ relation ≤ℕ ℕ ∀ a → ∈ $0 ℕ ∈ orderedPair $0 $0 ≤ℕ f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 () (≤ℕ, ℕ) 0.0
+    prove → ∈ t0 ℕ ∈ orderedPair t0 t0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∈ orderedPair $0 $0 ≤ℕ) (t0) 0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove ∈ orderedPair t0 t0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∈ orderedPair t0 t0 ≤ℕ) () 0.1.1 p0
+  }
 }
 elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
   prove ∧ = apply +ℕ orderedPair t0 0ℕ t0 = apply +ℕ orderedPair 0ℕ t0 t0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (t0) p0

@@ -1,8 +1,17 @@
-elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
-  prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
-  prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 0.0
-}
 inferenceWithPremiseDerivations {
-  prove ∧ relation ≤ℤ ℤ completeRelation ≤ℤ ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ≤ℤ ℤ, completeRelation ≤ℤ ℤ) () 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-  prove reflexiveRelation ≤ℤ ℤ bc0df8f9e26446a43f366fac0236214990fc2a83ea73b3235c2b208760c292e3 () (≤ℤ, ℤ) 1.0
+  inferenceExtraction {
+    prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
+    inferenceExtraction {
+      prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 0.0.0
+      prove ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ, completeRelation ≤ℤ ℤ) () 0.0.1.0
+      prove ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ, transitiveRelation ≤ℤ ℤ) () 0.0.1.1
+      prove relation ≤ℤ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (relation ≤ℤ ℤ, antisymmetricRelation ≤ℤ ℤ) () 0.0.1.2
+    }
+    inferenceExtraction {
+      prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 0.0.0
+      prove completeRelation ≤ℤ ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ, completeRelation ≤ℤ ℤ) () 0.0.2.0
+    }
+    prove ∧ relation ≤ℤ ℤ completeRelation ≤ℤ ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation ≤ℤ ℤ, completeRelation ≤ℤ ℤ) () 0.0.1 0.0.2
+  }
+  prove reflexiveRelation ≤ℤ ℤ bc0df8f9e26446a43f366fac0236214990fc2a83ea73b3235c2b208760c292e3 () (≤ℤ, ℤ) 0.0
 }

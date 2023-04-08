@@ -16,15 +16,6 @@ object DirectDerivationFinder {
 
     def fromFact = findDerivationForStatementFromFact(targetStatement).map(Seq(_))
 
-    def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>
-      for {
-        substitutions <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inference.variableDefinitions))
-        premiseStatements <- inference.substitutePremises(substitutions)
-        premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatements(premiseStatements)
-        assertionStep = Step.Assertion(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
-      } yield premiseSteps :+ assertionStep
-    }
-
     def byRemovingTermDefinition = (for {
       termDefinition <- targetStatement.referencedDefinitions.ofType[TermDefinition].iterator
       inferenceExtraction <- provingContext.termDefinitionRemovals(termDefinition)
@@ -34,7 +25,16 @@ object DirectDerivationFinder {
       derivationStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
     } yield premiseSteps :+ derivationStep).headOption
 
-    fromPremises orElse fromFact orElse bySimplifyingTarget orElse byRemovingTermDefinition
+    def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>
+      for {
+        substitutions <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inference.variableDefinitions))
+        premiseStatements <- inference.substitutePremises(substitutions)
+        premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatements(premiseStatements)
+        assertionStep = Step.Assertion(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
+      } yield premiseSteps :+ assertionStep
+    }
+
+    fromPremises orElse fromFact orElse byRemovingTermDefinition orElse bySimplifyingTarget
   }
 
   private def findDerivationForStatementFromFact(

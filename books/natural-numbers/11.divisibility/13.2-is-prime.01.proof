@@ -83,10 +83,8 @@ take b {
   }
 }
 inferenceWithPremiseDerivations {
-  inferenceExtraction {
-    prove ∈ 2ℕ ℕ af38b821f15a2d3562308d0b9319b068ee1de28b48b9ceebfeb61aa0af85a73e () ()
-    prove ∧ ∈ orderedPair 1ℕ 2ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair 1ℕ 2ℕ <ℕ, ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ) () 0 1
-    prove ∧ ∈ 2ℕ ℕ ∧ ∈ orderedPair 1ℕ 2ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 2ℕ ℕ, ∧ ∈ orderedPair 1ℕ 2ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ) () 2.0.0 2.0.1
-  }
-  prove prime 2ℕ 9e17fd73252360ff36c96e97ec508ac0b297d0a6c827552d2c06a82f0cf384e8 () (2ℕ) 2.0
+  prove ∈ 2ℕ ℕ af38b821f15a2d3562308d0b9319b068ee1de28b48b9ceebfeb61aa0af85a73e () ()
+  prove ∧ ∈ orderedPair 1ℕ 2ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair 1ℕ 2ℕ <ℕ, ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ) () 0 1
+  prove ∧ ∈ 2ℕ ℕ ∧ ∈ orderedPair 1ℕ 2ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 2ℕ ℕ, ∧ ∈ orderedPair 1ℕ 2ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 2ℕ |ℕ ∨ = $0 1ℕ = $0 2ℕ) () 2.0 2.1
+  prove prime 2ℕ 9e17fd73252360ff36c96e97ec508ac0b297d0a6c827552d2c06a82f0cf384e8 () (2ℕ) 2.2
 }
