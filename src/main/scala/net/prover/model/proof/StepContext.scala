@@ -91,7 +91,7 @@ case class StepContext private(
   private lazy val allPremisesAfterRewrites = simplifyAll(Nil, allPremisesAfterSimplifications, provingContext.premiseRelationRewriteInferences)
 
   lazy val knownStatementsFromPremises: Seq[KnownStatement] = allPremisesAfterRewrites.map {
-    ks => ks.copy(derivation = ExtractionApplier.groupStepsByDefinition(ks.derivation, None)(provingContext))
+    ks => ks.copy(derivation = ExtractionApplier.groupStepsByDefinition(ks.derivation))
   }
   lazy val knownStatementsFromPremisesBySerializedStatement: Map[String, KnownStatement] = {
     knownStatementsFromPremises.map(s => s.statement.serialized -> s).toMapPreservingEarliest

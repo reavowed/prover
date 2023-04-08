@@ -119,8 +119,8 @@ object ExtractionApplier {
     }
   }
 
-  private def groupStepsByDefinition(extractionApplication: ExtractionApplication, initialStep: Option[Step.Assertion])(implicit provingContext: ProvingContext): ExtractionApplication = {
-    extractionApplication.copy(extractionSteps = groupStepsByDefinition(extractionApplication.extractionSteps, initialStep))
+  private def groupStepsByDefinition(extractionApplication: ExtractionApplication)(implicit provingContext: ProvingContext): ExtractionApplication = {
+    extractionApplication.copy(extractionSteps = groupStepsByDefinition(extractionApplication.extractionSteps))
   }
 
   private def applyExtractionsForInference(
@@ -143,7 +143,8 @@ object ExtractionApplier {
     intendedConclusion: Option[Statement])(
     implicit stepContext: StepContext
   ): Try[ExtractionApplication] = {
-    applyExtractions(premise.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext).map(groupStepsByDefinition(_, None))
+    applyExtractions(premise.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext)
+      .map(groupStepsByDefinition)
   }
 
   def getInferenceExtractionWithoutPremises(
@@ -217,21 +218,14 @@ object ExtractionApplier {
     extractionSteps: Seq[Step.AssertionOrExtraction])(
     implicit provingContext: ProvingContext
   ): Step.AssertionOrExtraction = {
-    groupStepsByDefinition(extractionSteps, Some(assertionStep)) match {
-      case Seq(step) =>
-        step
-      case steps@(_: Step.Assertion) +: _ =>
-        Step.InferenceExtraction(steps)
-      case Step.InferenceExtraction(assertion, inner) +: others =>
-        Step.InferenceExtraction(assertion, inner ++ others)
-    }
+    assertionStep.addExtractionSteps(groupStepsByDefinition(extractionSteps))
   }
 
-  def groupStepsByDefinition[TStep >: Step.AssertionOrExtraction <: Step.InferenceApplicationWithoutPremises](steps: Seq[TStep], initialMainStep: Option[Step.Assertion])(implicit provingContext: ProvingContext): Seq[TStep] = {
+  def groupStepsByDefinition[TStep >: Step.AssertionOrExtraction <: Step.InferenceApplicationWithoutPremises](steps: Seq[TStep])(implicit provingContext: ProvingContext): Seq[TStep] = {
     val deconstructionInferenceIds = provingContext.availableEntries.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
     val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
 
-    var currentMainStep: Option[Step.Assertion] = initialMainStep
+    var currentMainStep: Option[Step.Assertion] = None
     val currentUngroupedSteps = Seq.newBuilder[TStep]
     val stepsToReturn = Seq.newBuilder[TStep]
 

@@ -624,7 +624,6 @@ class StepRewriteSpec extends ControllerSpec {
                 elided(integerAdditionIsCommutative, Seq(
                   inferenceExtraction(Seq(
                     assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
-                    assertion(extractRightConjunct, Seq(BinaryOperation(IntegerAddition), BinaryOperationOn(IntegerAddition, Integers)), Nil),
                     inferenceExtraction(Seq(
                       assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
                       assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
@@ -644,7 +643,6 @@ class StepRewriteSpec extends ControllerSpec {
                 elided(integerAdditionIsCommutative, Seq(
                   inferenceExtraction(Seq(
                     assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
-                    assertion(extractRightConjunct, Seq(BinaryOperation(IntegerAddition), BinaryOperationOn(IntegerAddition, Integers)), Nil),
                     inferenceExtraction(Seq(
                       assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
                       assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),

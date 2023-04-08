@@ -46,7 +46,6 @@ class DerivationOrTargetFinderSpec extends Specification with ContextHelper with
         Seq(
           inferenceExtraction(Seq(
             assertion(axiom, Nil, Nil),
-            assertion(extractRightConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil),
             inferenceExtraction(Seq(
               assertion(FunctionFrom.deconstructionInference, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
               assertion(reverseEquality, Nil, Seq(Domain(Addition), Product(Naturals, Naturals))))))),
