@@ -460,7 +460,7 @@ object Step {
         assertion
       }
     }
-    def reprove(steps: Seq[Step])(stepContext: StepContext): InferenceWithPremiseDerivations = {
+    def reprove(steps: Seq[Step])(implicit stepContext: StepContext): InferenceWithPremiseDerivations = {
       val application = steps.last.asInstanceOf[Step.InferenceApplicationWithoutPremises]
       val premises = GetAllPremises(application).map(_.statement).distinct
       val premiseSteps = DerivationOrTargetFinder.findDerivationsOrTargets(premises)(stepContext)._1
