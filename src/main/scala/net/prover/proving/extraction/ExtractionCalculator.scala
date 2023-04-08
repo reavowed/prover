@@ -16,7 +16,7 @@ object ExtractionCalculator {
   case class ExtractionFromSinglePremise(
     premises: Seq[Statement],
     conclusion: Statement,
-    derivation: Seq[Step.AssertionOrExtraction],
+    derivation: Seq[Step.Assertion],
     extractionInferences: Seq[Inference.Summary],
     additionalVariableNames: Seq[String])
 

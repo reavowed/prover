@@ -397,5 +397,54 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
         ForAllIn("a", A)(ForAllIn("b", A)(ElementOf(Apply2(∘, $.^, Apply(f, $)), A))),
         Seq(Conjunction(BinaryOperation(∘), BinaryOperationOn(∘, A)), Conjunction(UnaryOperation(f), UnaryOperationOn(f, A))))
     }
+
+    "find a premise by combining an existing premise and a fact" in {
+      checkFindPremiseSteps(
+        Conjunction(ElementOf(Zero, Naturals), φ),
+        Seq(φ),
+        Seq(
+          assertion(zeroIsANaturalNumber, Nil, Nil),
+          assertion(combineConjunction, Seq(ElementOf(Zero, Naturals), φ), Nil)))
+    }
+
+    "return a fact rearrangement as a single step" in {
+      val R = TermVariablePlaceholder("R", 0)
+      val A = TermVariablePlaceholder("A", 1)
+      val Relation = TypeDefinition("relation", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, false))), None, BlankDefinition)
+      val Antisymmetric = PropertyDefinitionOnType("antisymmetric", ParentTypeConditions(Relation, None, None, None, ConjunctionDefinition), None, BlankDefinition)
+      val Transitive = PropertyDefinitionOnType("transitive", ParentTypeConditions(Relation, None, None, None, ConjunctionDefinition), None, BlankDefinition)
+      val Complete = PropertyDefinitionOnType("complete", ParentTypeConditions(Relation, None, None, None, ConjunctionDefinition), None, BlankDefinition)
+      val TotalOrder = TypeDefinition("totalOrder", "R", Some(Qualifier(Seq("A"), Format.Explicit("on A", Seq("A"), true, false))), None, Conjunction(Conjunction(Conjunction(Relation(R, A), Antisymmetric(R, A)), Transitive(R, A)), Complete(R, A)))
+      val StrictOrderDefinition = TermDefinitionEntry("<", Nil, Nil, None, None, Format.default(Nil, Nil), Nil, φ($), None, Nil, Nil)
+      val StrictOrder = StrictOrderDefinition()
+      val StrictOrderIsATotalOrder = createInference("< is a total order on N", Nil, TotalOrder(StrictOrder, Naturals))
+
+      implicit val availableEntries = defaultAvailableEntries
+        .addEntry(Relation)
+        .addEntry(Antisymmetric)
+        .addEntry(Transitive)
+        .addEntry(Complete)
+        .addEntry(Complete)
+        .addEntry(TotalOrder)
+        .addEntry(StrictOrderDefinition)
+        .addEntry(StrictOrderIsATotalOrder)
+
+      checkFindPremiseSteps(
+        Conjunction(Relation(StrictOrder, Naturals), Transitive(StrictOrder, Naturals)),
+        Nil,
+        Seq(
+          inferenceExtraction(Seq(
+            assertion(StrictOrderIsATotalOrder, Nil, Nil),
+            inferenceExtraction(Seq(
+              assertion(TotalOrder.deconstructionInference, Nil, Seq(StrictOrder, Naturals)),
+              assertion(extractLeftConjunct, Seq(Conjunction(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Complete(StrictOrder, Naturals)), Nil),
+              assertion(extractLeftConjunct, Seq(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Nil),
+              assertion(extractLeftConjunct, Seq(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Nil))),
+            inferenceExtraction(Seq(
+              assertion(TotalOrder.deconstructionInference, Nil, Seq(StrictOrder, Naturals)),
+              assertion(extractLeftConjunct, Seq(Conjunction(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Complete(StrictOrder, Naturals)), Nil),
+              assertion(extractRightConjunct, Seq(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Nil))),
+            assertion(combineConjunction, Seq(Relation(StrictOrder, Naturals), Transitive(StrictOrder, Naturals)), Nil)))))
+    }
   }
 }

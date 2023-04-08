@@ -10,15 +10,17 @@ case class Fact(inferenceExtraction: InferenceExtraction) {
   def statement: Statement = inferenceExtraction.conclusion
   def inference: Inference = inferenceExtraction.inference
 
+  def derivation(implicit provingContext: ProvingContext): Seq[Step.AssertionOrExtraction] = {
+    ExtractionApplier.groupStepsByDefinition(inferenceExtraction.innerExtraction.derivation)
+  }
+
   def toStep(implicit provingContext: ProvingContext): Step.AssertionOrExtraction = {
-    val assertionStep = Step.Assertion(
+    val baseAssertion = Step.Assertion(
       inferenceExtraction.inference.conclusion,
       inferenceExtraction.inference.summary,
       Nil,
       Substitutions.empty)
-    ExtractionApplier.createDerivationForInferenceExtraction(
-      assertionStep,
-      inferenceExtraction.innerExtraction.derivation)
+    baseAssertion.addExtractionSteps(derivation)
   }
   def toKnownStatement(implicit provingContext: ProvingContext): KnownStatement = {
     KnownStatement.fromSingleStep(toStep)
