@@ -407,7 +407,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
 
     bookService.modifyChapter[Id](bookKey, chapterKey, chapterWithContext =>
       for {
-        entryWithContext <- chapterWithContext.getEntry(entryKey)
+        entryWithContext <- chapterWithContext.getEntry[ChapterEntry](entryKey)
         updatedChapter <- deleteEntry(entryWithContext)
       } yield updatedChapter
     ).map(getChapterProps).toResponseEntity
