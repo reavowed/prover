@@ -36,7 +36,7 @@ class StatsController @Autowired() (val bookService: BookService) {
     for {
       bookWithContext <- bookService.globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts
-      inferenceWithContext <- chapterWithContext.inferencesWithContexts
+      inferenceWithContext <- chapterWithContext.theoremsWithContexts
       if !usedInferences.contains(inferenceWithContext.entry)
     } yield "http://" + request.getHeader("Host") + BookService.getEntryUrl(inferenceWithContext)
   }

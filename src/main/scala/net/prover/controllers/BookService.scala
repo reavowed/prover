@@ -139,7 +139,7 @@ object BookService {
     (for {
       bookWithContext <- globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts
-      entryWithContext <- chapterWithContext.inferencesWithContexts
+      entryWithContext <- chapterWithContext.entriesWithContexts
       inference <- entryWithContext.entry.inferences
       if inferences.contains(inference)
     } yield inference.id -> InferenceSummary(inference.name, getEntryUrl(entryWithContext), globalContext.definitions.isInferenceComplete(inference))).toMap

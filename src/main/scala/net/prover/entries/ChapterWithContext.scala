@@ -15,7 +15,6 @@ case class ChapterWithContext(
   def globalContext: GlobalContext = bookWithContext.globalContext
 
   def entriesWithContexts: Seq[EntryWithContext] = chapter.entriesWithKeys.listWithKeys.map(getEntry[ChapterEntry])
-  def inferencesWithContexts: Seq[TypedEntryWithContext[Inference.Entry]] = entriesWithContexts.ofType[TypedEntryWithContext[Inference.Entry]]
   def theoremsWithContexts: Seq[TheoremWithContext] = entriesWithContexts.filter(_.entry.isInstanceOf[Theorem]).map(_.asInstanceOf[TheoremWithContext])
 
   def getEntry[T <: ChapterEntry : ClassTag](entryKey: String): Try[TypedEntryWithContext[T]] = {
