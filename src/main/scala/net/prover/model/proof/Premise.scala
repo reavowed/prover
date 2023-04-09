@@ -9,7 +9,7 @@ import net.prover.model.proof.Premise.Pending
 sealed trait Premise {
   def statement: Statement
   def referencedInferences: Set[Inference]
-  def referencedLines: Set[PreviousLineReference]
+  def referencedLines: Option[PreviousLineReference]
   def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending]
   def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise
   def removeExternalParameters(numberOfParametersToRemove: Int, internalDepth: Int): Option[Premise] = {
@@ -58,13 +58,13 @@ object Premise {
   sealed trait SingleLinePremise extends Premise {
     @JsonSerialize
     def referencedLine: PreviousLineReference
-    override def referencedLines: Set[PreviousLineReference] = Set(referencedLine)
+    override def referencedLines: Option[PreviousLineReference] = Some(referencedLine)
   }
 
   case class Pending(statement: Statement) extends Premise {
     val `type` = "pending"
     override def referencedInferences: Set[Inference] = Set.empty
-    override def referencedLines: Set[PreviousLineReference] = Set.empty
+    override def referencedLines: Option[PreviousLineReference] = None
     override def getPendingPremises(path: Seq[Int]): Map[Seq[Int], Premise.Pending] = Map(path -> this)
     override def insertExternalParameters(numberOfParametersToInsert: Int, internalDepth: Int): Premise.Pending = {
       copy(statement = statement.insertExternalParameters(numberOfParametersToInsert, internalDepth))

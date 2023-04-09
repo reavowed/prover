@@ -3,7 +3,7 @@ package net.prover.refactoring
 import net.prover.books.management.BookStateManager
 import net.prover.entries.StepWithContext
 import net.prover.exceptions.InferenceReplacementException
-import net.prover.model.proof.Step
+import net.prover.model.proof.{Step, StepReference}
 import net.prover.model.proof.Step.InferenceWithPremiseDerivations
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 import net.prover.theorems.{CompoundTheoremUpdater, GetAllPremises, RecalculateReferences}
@@ -26,7 +26,10 @@ object RederivePremises extends CompoundTheoremUpdater[Try] {
   }
 
   private def reprove(step: Step.InferenceWithPremiseDerivations, stepWithContext: StepWithContext): Try[Step] = {
-    val premises = GetAllPremises(step).map(_.statement)
+    val assertionStepReference = stepWithContext.stepContext.stepReference.forChild(step.premiseSteps.length)
+    val premises = GetAllPremises(step.assertionStep)
+      .filter(p => !p.referencedLines.flatMap(_.asOptionalInstanceOf[StepReference]).exists(_.stepPath.startsWith(assertionStepReference.stepPath)))
+      .map(_.statement)
     val (premiseSteps, targets) = DerivationOrTargetFinder.findDerivationsOrTargets(premises) (stepWithContext)
     if (targets.nonEmpty) {
       Failure(InferenceReplacementException("Could not rederive all premises", stepWithContext))
