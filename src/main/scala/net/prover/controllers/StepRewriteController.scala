@@ -211,7 +211,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       (premiseLhs, premiseRhs) <- equality.unapply(removedPremiseStatement).orBadRequest("Premise was not equality")
       _ <- (removedSource == premiseLhs).orBadRequest("Premise did not match term at path")
       statementToFind = (equality.apply _).tupled(direction.swapSourceAndResult(premiseLhs, premiseRhs))
-      knownStatement <- stepWithContext.stepContext.knownStatementsFromPremisesBySerializedStatement.get(statementToFind.serialized).orBadRequest(s"Could not find premise ${statementToFind.toString}")
+      knownStatement <- stepWithContext.stepContext.knownStatementsFromPremisesBySerializedStatement.get(statementToFind.serializedForHash).orBadRequest(s"Could not find premise ${statementToFind.toString}")
     } yield (premiseLhs, premiseRhs, knownStatement.derivation, None, knownStatement.derivation.flatMap(_.inferences).toSet.single.map(_.summary), removedUnwrappers, removedWrapperExpression)
   }
 

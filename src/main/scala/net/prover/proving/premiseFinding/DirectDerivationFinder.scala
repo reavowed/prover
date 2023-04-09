@@ -12,7 +12,7 @@ object DirectDerivationFinder {
     implicit stepContext: StepContext
   ): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
     import stepContext._
-    def fromPremises = knownStatementsFromPremisesBySerializedStatement.get(targetStatement.serialized).map(_.derivation)
+    def fromPremises = knownStatementsFromPremisesBySerializedStatement.get(targetStatement.serializedForHash).map(_.derivation)
 
     def fromFact = findDerivationForStatementFromFact(targetStatement).map(Seq(_))
 

@@ -94,7 +94,7 @@ case class StepContext private(
     ks => ks.copy(derivation = ExtractionApplier.groupStepsByDefinition(ks.derivation))
   }
   lazy val knownStatementsFromPremisesBySerializedStatement: Map[String, KnownStatement] = {
-    knownStatementsFromPremises.map(s => s.statement.serialized -> s).toMapPreservingEarliest
+    knownStatementsFromPremises.map(s => s.statement.serializedForHash -> s).toMapPreservingEarliest
   }
 
   lazy val knownEqualities: Seq[KnownEquality] = {

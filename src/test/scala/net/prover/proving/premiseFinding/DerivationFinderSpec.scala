@@ -33,7 +33,17 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
     }
 
     "find a simplified premise without a derivation" in {
-      findPremise(φ, Seq(Conjunction(φ, ψ))) must beSome(beEqualTo(Nil))
+      checkFindPremiseSteps(
+        φ,
+        Seq(Conjunction(φ, ψ)),
+        Nil)
+    }
+
+    "find an existing premise with different bound variable names" in {
+      checkFindPremiseSteps(
+        Exists("x")(ForAll("y")(Equals($, $.^))),
+        Seq(Exists("a")(ForAll("b")(Equals($, $.^)))),
+        Nil)
     }
 
     "find premise using rewrite" in {
