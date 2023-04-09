@@ -1,15 +1,17 @@
 package net.prover.controllers
 
 import net.prover.books.management.BookStateManager
-import net.prover.refactoring.{ReplaceElidedSteps, ReplaceInference}
+import net.prover.refactoring.{RederivePremises, ReplaceElidedSteps, ReplaceInference}
 import net.prover.theorems.{ClearInference, RecalculateReferences}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
+import scalaz.Id.Id
+
+import scala.util.Try
 
 @RestController
 @RequestMapping(Array("/"))
-class OperationsController @Autowired() (implicit bookStateManager: BookStateManager) {
-
+class OperationsController @Autowired() (implicit bookService: BookService, bookStateManager: BookStateManager) {
   @GetMapping(value = Array("recalculateReferences"))
   def recalculateReferences(): Unit = {
     RecalculateReferences()
@@ -18,6 +20,25 @@ class OperationsController @Autowired() (implicit bookStateManager: BookStateMan
   @GetMapping(value = Array("replaceElidedSteps"))
   def replaceElidedSteps(): Unit = {
     ReplaceElidedSteps()
+  }
+
+  @GetMapping(value = Array("rederivePremises"))
+  def rederivePremises(
+    @RequestParam(value = "inference", required = false) inferenceId: String
+  ): Unit = {
+    (Option(inferenceId) match {
+      case Some(inferenceId) =>
+        for {
+          theorem <- bookStateManager.globalContext.allTheorems.find(_.theorem.id == inferenceId)
+            .orNotFound(s"Theorem with id ${inferenceId}")
+          _ <- bookService.modifyTheorem[Id](
+            theorem.chapterWithContext.bookWithContext.bookKey,
+            theorem.chapterWithContext.chapterKey,
+            theorem.entryKey)(RederivePremises(_))
+        } yield "Updated"
+      case None =>
+        Try { RederivePremises() }
+    }).toResponseEntity
   }
 
   @GetMapping(value = Array("replaceInference"))
