@@ -2,7 +2,7 @@ package net.prover.model.entries
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import net.prover.books.reading.ProofFileReader
-import net.prover.entries.{ChapterWithContext, EntryWithContext, TheoremWithContext}
+import net.prover.entries.{ChapterWithContext, EntryParsingContext, EntryWithContext, TheoremWithContext}
 import net.prover.model._
 import net.prover.model.definitions.{Definitions, ExpressionDefinition}
 import net.prover.model.entries.Theorem.Proof
@@ -64,8 +64,8 @@ object Theorem extends Inference.EntryParser {
     } yield Proof(steps)
   }
 
-  override def parser(implicit availableEntries: AvailableEntries, chapterWithContext: ChapterWithContext, proofFileReader: ProofFileReader): Parser[Theorem] = {
-    implicit val provingContext = ProvingContext(availableEntries, Definitions(availableEntries))
+  override def parser(implicit entryParsingContext: EntryParsingContext): Parser[Theorem] = {
+    import entryParsingContext._
     for {
       name <- Parser.toEndOfLine
       variableDefinitions <- VariableDefinitions.parser
@@ -73,7 +73,7 @@ object Theorem extends Inference.EntryParser {
       premises <- premisesParser(expressionParsingContext)
       conclusion <- conclusionParser(expressionParsingContext)
       serializedProofs = proofFileReader.getSerializedProofs(name)
-      proofs = serializedProofs.mapWithIndex((proof, i) => proofParser(name, variableDefinitions, premises, conclusion).parseFromString(proof, s"Book '${chapterWithContext.bookWithContext.book.title}' chapter '${chapterWithContext.chapter.title}' theorem ${name} proof ${i + 1}"))
+      proofs = serializedProofs.mapWithIndex((proof, i) => proofParser(name, variableDefinitions, premises, conclusion).parseFromString(proof, s"Book '${bookTitle}' chapter '${chapterTitle}' theorem ${name} proof ${i + 1}"))
     } yield Theorem(name, variableDefinitions, premises, conclusion, proofs)
   }
 }

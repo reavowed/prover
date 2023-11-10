@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.books.reading.ProofFileReader
-import net.prover.entries.{ChapterWithContext, EntryWithContext}
+import net.prover.entries.{ChapterWithContext, EntryParsingContext, EntryWithContext}
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
@@ -76,7 +76,7 @@ case class TypeDefinition(
 
 object TypeDefinition extends ChapterEntryParser {
   override def name: String = "type"
-  override def parser(implicit availableEntries: AvailableEntries, chapterWithContext: ChapterWithContext, proofFileReader: ProofFileReader): Parser[ChapterEntry] = {
+  override def parser(implicit entryParsingContext: EntryParsingContext): Parser[TypeDefinition] = {
     for {
       symbol <- Parser.singleWord
       mainVariableDefinition <- SimpleVariableDefinition.parser

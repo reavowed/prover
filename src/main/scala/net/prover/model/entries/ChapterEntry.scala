@@ -3,7 +3,7 @@ package net.prover.model.entries
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.books.keys.WithKeyProperty
 import net.prover.books.reading.ProofFileReader
-import net.prover.entries.{ChapterWithContext, EntryWithContext}
+import net.prover.entries.{ChapterWithContext, EntryParsingContext, EntryWithContext}
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.{AvailableEntries, ExpressionParsingContext, Inference, Parser, SimpleVariableDefinition}
@@ -79,7 +79,7 @@ object ChapterEntry {
     DisplayShorthand,
     WritingShorthand)
 
-  def parser(implicit availableEntries: AvailableEntries, chapterWithContext: ChapterWithContext, proofFileReader: ProofFileReader): Parser[Option[ChapterEntry]] = {
+  def parser(implicit entryParsingContext: EntryParsingContext): Parser[Option[ChapterEntry]] = {
     Parser.singleWordIfAny.flatMapFlatMapReverse { entryType =>
       parsers.find(_.name == entryType).map(_.parser)
     }

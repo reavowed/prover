@@ -1,7 +1,7 @@
 package net.prover.model
 
 import net.prover.books.model.Book
-import net.prover.entries.{BookWithContext, ChapterWithContext, EntryWithContext}
+import net.prover.entries.{BookWithContext, ChapterWithContext, EntryParsingContext, EntryWithContext}
 import net.prover.model.AvailableEntries.getStatementDefinitionFromEntry
 import net.prover.model.definitions._
 import net.prover.model.entries._
@@ -115,4 +115,5 @@ object AvailableEntries {
   }
 
   implicit def fromProvingContext(implicit provingContext: ProvingContext): AvailableEntries = provingContext.availableEntries
+  implicit def fromEntryParsingContext(implicit entryParsingContext: EntryParsingContext): AvailableEntries = entryParsingContext.availableEntries
 }

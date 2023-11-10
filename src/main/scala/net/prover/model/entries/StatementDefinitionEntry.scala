@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.books.reading.ProofFileReader
-import net.prover.entries.{ChapterWithContext, EntryWithContext}
+import net.prover.entries.{ChapterWithContext, EntryParsingContext, EntryWithContext}
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
@@ -64,7 +64,7 @@ object StatementDefinitionEntry extends ChapterEntryParser {
     "definition",
     Statement.parser.inParens)
 
-  def parser(implicit availableEntries: AvailableEntries, chapterWithContext: ChapterWithContext, proofFileReader: ProofFileReader): Parser[StatementDefinitionEntry] = {
+  override def parser(implicit entryParsingContext: EntryParsingContext): Parser[StatementDefinitionEntry] = {
     for {
       symbol <- Parser.singleWord
       boundVariablesAndComponentTypes <- ExpressionDefinitionEntry.boundVariablesAndComponentTypesParser

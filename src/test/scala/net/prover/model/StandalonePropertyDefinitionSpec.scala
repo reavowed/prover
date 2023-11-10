@@ -1,8 +1,7 @@
 package net.prover.model
 
-import net.prover.books.reading.ProofFileReader
 import net.prover.model.TestDefinitions._
-import net.prover.model.entries.{ChapterEntry, StandalonePropertyDefinition, TypeQualifierDefinition}
+import net.prover.model.entries.{ChapterEntry, StandalonePropertyDefinition}
 import org.specs2.matcher.MatchResult
 import org.specs2.mutable.Specification
 
@@ -12,7 +11,7 @@ class StandalonePropertyDefinitionSpec extends Specification {
 
   private def testParsingAndSerialization(standalonePropertyDefinition: StandalonePropertyDefinition)(implicit availableEntries: AvailableEntries): MatchResult[Any] = {
     val serializedDefinition = standalonePropertyDefinition.serializedLines.mkString("\n")
-    val reparsedDefinition = ChapterEntry.parser(availableEntries, implicitly, mock[ProofFileReader]).parseAndDiscard(serializedDefinition)
+    val reparsedDefinition = ChapterEntry.parser.parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(standalonePropertyDefinition)
   }
 

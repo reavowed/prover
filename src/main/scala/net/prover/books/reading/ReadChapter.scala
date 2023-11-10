@@ -2,9 +2,9 @@ package net.prover.books.reading
 
 import net.prover.books.keys.ListWithKeys
 import net.prover.books.management.BookDirectoryConfig
-import net.prover.entries.{BookWithContext, ChapterWithContext}
+import net.prover.entries.{BookWithContext, ChapterWithContext, EntryParsingContext}
 import net.prover.model.entries.ChapterEntry
-import net.prover.model.{Chapter, AvailableEntries, Parser}
+import net.prover.model.{AvailableEntries, Chapter, Parser}
 
 object ReadChapter {
   def apply(
@@ -23,7 +23,8 @@ object ReadChapter {
         val chapterWithContext = ChapterWithContext(chapter, chapterKey, bookWithContext)
         val availableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
         val proofFileReader = ProofFileReader(chapterDirectoryPath, chapter.entriesWithKeys.keyAccumulator)
-        ChapterEntry.parser(availableEntries, chapterWithContext, proofFileReader).mapMap {chapter.addEntry}
+        val entryParsingContext = EntryParsingContext(bookWithContext.book.title, chapterTitle, proofFileReader)(availableEntries)
+        ChapterEntry.parser(entryParsingContext).mapMap {chapter.addEntry}
       }
     } yield chapter
 

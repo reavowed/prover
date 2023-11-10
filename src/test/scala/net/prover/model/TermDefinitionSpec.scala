@@ -1,6 +1,5 @@
 package net.prover.model
 
-import net.prover.books.reading.ProofFileReader
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.{ChapterEntry, TermDefinitionEntry}
 import net.prover.model.expressions.FunctionParameter
@@ -11,7 +10,6 @@ class TermDefinitionSpec extends Specification {
 
   private def testParsingAndSerialization(termDefinition: TermDefinitionEntry): MatchResult[Any] = {
     implicit val availableEntries = defaultAvailableEntries
-    implicit val proofFileReader = mock[ProofFileReader]
     val serializedDefinition = termDefinition.serializedLines.mkString("\n")
     val reparsedDefinition = ChapterEntry.parser.parseAndDiscard(serializedDefinition)
     reparsedDefinition must beSome(termDefinition)

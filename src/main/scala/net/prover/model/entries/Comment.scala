@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.books.reading.ProofFileReader
-import net.prover.entries.{ChapterWithContext, EntryWithContext}
+import net.prover.entries.{ChapterWithContext, EntryParsingContext, EntryWithContext}
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.{AvailableEntries, Inference, Parser}
 
@@ -20,7 +20,7 @@ case class Comment(text: String) extends ChapterEntry {
 
 object Comment extends ChapterEntryParser {
   override val name: String = "comment"
-  override def parser(implicit availableEntries: AvailableEntries, chapterWithContext: ChapterWithContext, proofFileReader: ProofFileReader): Parser[Comment] = {
+  override def parser(implicit entryParsingContext: EntryParsingContext): Parser[Comment] = {
     for {
       text <- Parser.toEndOfLine
     } yield Comment(text)

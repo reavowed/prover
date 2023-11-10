@@ -10,7 +10,6 @@ class StatementDefinitionSpec extends Specification {
   "statement definition parser" should {
     def parseStatementDefinition(text: String): StatementDefinitionEntry = {
       implicit val availableEntries = defaultAvailableEntries
-      implicit val proofFileReader = mock[ProofFileReader]
       StatementDefinitionEntry.parser.parseAndDiscard(text)
     }
 

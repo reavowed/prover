@@ -1,6 +1,7 @@
 package net.prover
 
 import net.prover.books.model.Book
+import net.prover.books.reading.ProofFileReader
 import net.prover.entries._
 import net.prover.model.TestDefinitions.{mock, theStubbed}
 import net.prover.model.definitions.Definitions
@@ -118,5 +119,13 @@ trait ContextHelper {
     chapterWithContext.globalContext returns mock[GlobalContext]
     chapterWithContext.globalContext.definitions returns new Definitions(availableEntries)
     chapterWithContext
+  }
+
+  implicit def createEntryParsingContext(implicit availableEntries: AvailableEntries): EntryParsingContext = {
+    EntryParsingContext(
+      "Book",
+      "Chapter",
+      mock[ProofFileReader])(
+      availableEntries)
   }
 }

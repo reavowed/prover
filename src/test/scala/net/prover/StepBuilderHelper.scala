@@ -1,6 +1,7 @@
 package net.prover
 
 import net.prover.books.reading.ProofFileReader
+import net.prover.entries.EntryParsingContext
 import net.prover.model.TestDefinitions._
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.{FunctionParameter, Statement}
@@ -50,9 +51,9 @@ trait StepBuilderHelper extends SpecificationLike with MockitoStubs with Context
     val recalculatedTheorem = RecalculateReferences(createTheoremWithContext(theorem))._1
     val serializedTheorem = recalculatedTheorem.serializedLines.mkString("\n").stripPrefix("theorem ")
     val serializedProofs = recalculatedTheorem.proofs.map(_.serialized)
-    implicit val proofFileReader = mock[ProofFileReader]
-    proofFileReader.getSerializedProofs(recalculatedTheorem.title) returns serializedProofs
-    val parsedTheorem = Theorem.parser.parseFromString(serializedTheorem, "Theorem")
+    implicit val entryParsingContext = implicitly[EntryParsingContext]
+    entryParsingContext.proofFileReader.getSerializedProofs(recalculatedTheorem.title) returns serializedProofs
+    val parsedTheorem = Theorem.parser(entryParsingContext).parseFromString(serializedTheorem, "Theorem")
     parsedTheorem must beTypedEqualTo(theorem)
   }
 
