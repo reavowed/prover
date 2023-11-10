@@ -14,7 +14,7 @@ object ReadBook {
     val outline = ReadBookOutline(bookTitle.value)
     val initialBook = Book(bookTitle.value, outline.imports, ListWithKeys.empty)
     outline.chapterTitles.zipWithIndex.foldLeft(initialBook) { case (book, (chapterTitle, index)) =>
-      val chapter = ReadChapter(BookWithContext(book, previousBooks.keyAccumulator.getNextKey(book)._1, GlobalContext(previousBooks)), chapterTitle, index)
+      val chapter = ReadChapter(book, previousBooks, chapterTitle, index)
       book.addChapter(chapter)
     }
   }

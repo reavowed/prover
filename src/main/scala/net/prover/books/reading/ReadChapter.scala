@@ -2,25 +2,28 @@ package net.prover.books.reading
 
 import net.prover.books.keys.ListWithKeys
 import net.prover.books.management.BookDirectoryConfig
-import net.prover.entries.{BookWithContext, ChapterWithContext, EntryParsingContext}
+import net.prover.books.model.Book
+import net.prover.entries.{BookWithContext, ChapterWithContext, EntryParsingContext, GlobalContext}
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.{AvailableEntries, Chapter, Parser}
 
 object ReadChapter {
   def apply(
-    bookWithContext: BookWithContext,
+    bookSoFar: Book,
+    previousBooks: ListWithKeys[Book],
     chapterTitle: String,
     chapterIndex: Int
   ): Chapter = {
-    import bookWithContext.book
-    val filePath = BookDirectoryConfig.getChapterFilePath(book.title, chapterTitle, chapterIndex)
-    val chapterDirectoryPath = BookDirectoryConfig.getChapterDirectoryPath(book.title, chapterTitle, chapterIndex)
+    val filePath = BookDirectoryConfig.getChapterFilePath(bookSoFar.title, chapterTitle, chapterIndex)
+    val chapterDirectoryPath = BookDirectoryConfig.getChapterDirectoryPath(bookSoFar.title, chapterTitle, chapterIndex)
     val parser = for {
       summary <- Parser.toEndOfLine
       initialChapter = Chapter(chapterTitle, summary, ListWithKeys.empty)
-      chapterKey = bookWithContext.book.chaptersWithKeys.keyAccumulator.getNextKey(initialChapter)._1
       chapter <- Parser.foldWhileDefined[Chapter](initialChapter) { chapter: Chapter =>
-        val chapterWithContext = ChapterWithContext(chapter, chapterKey, bookWithContext)
+        val updatedBook = bookSoFar.addChapter(chapter)
+        val (updatedBooks, updatedBookKey) = previousBooks.addAndGetKey(updatedBook)
+        val bookWithContext = BookWithContext(updatedBook, updatedBookKey, GlobalContext(updatedBooks))
+        val chapterWithContext = bookWithContext.getChapter(chapter)
         val availableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
         val proofFileReader = ProofFileReader(chapterDirectoryPath, chapter.entriesWithKeys.keyAccumulator)
         val entryParsingContext = EntryParsingContext(bookWithContext.book.title, chapterTitle, proofFileReader)(availableEntries)
@@ -28,6 +31,6 @@ object ReadChapter {
       }
     } yield chapter
 
-    parser.parseFromFile(filePath, s"book '${bookWithContext.book.title}' chapter '$chapterTitle''")
+    parser.parseFromFile(filePath, s"book '${bookSoFar.title}' chapter '$chapterTitle''")
   }
 }
