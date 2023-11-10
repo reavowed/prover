@@ -36,6 +36,8 @@ case class Book(
   override def hashCode(): Int = {
     title.hashCode
   }
+
+  override def toString: String = s"Book '${title}'"
 }
 
 object Book {

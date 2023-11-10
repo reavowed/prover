@@ -21,6 +21,8 @@ sealed trait BinaryJoiner[TComponent <: Expression] extends ExpressionLenses[TCo
   }
 
   def reversal(inference: Inference.Summary): Reversal[TComponent] = Reversal[TComponent](this, inference)
+
+  override def toString: String = symbol
 }
 
 sealed trait BinaryJoinerFromDefinition[TComponent <: Expression] extends BinaryJoiner[TComponent] {

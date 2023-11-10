@@ -13,7 +13,7 @@ import scala.annotation.tailrec
 
 object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
   def apply()(implicit bookStateManager: BookStateManager): Unit = {
-    UpdateTheorems(_ => apply(_))
+    UpdateTheorems(_ => apply)
   }
 
   override def updateElided(step: Step.Elided, stepWithContext: StepWithContext): Step = {

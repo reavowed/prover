@@ -4,7 +4,12 @@ import net.prover.model.expressions.Expression
 import net.prover.model.proof._
 import net.prover.model.{Inference, ProvingContext}
 
-case class Transitivity[TComponent <: Expression](firstPremiseJoiner: BinaryJoiner[TComponent], secondPremiseJoiner: BinaryJoiner[TComponent], resultJoiner: BinaryJoiner[TComponent], inference: Inference.Summary) {
+case class Transitivity[TComponent <: Expression](
+  firstPremiseJoiner: BinaryJoiner[TComponent],
+  secondPremiseJoiner: BinaryJoiner[TComponent],
+  resultJoiner: BinaryJoiner[TComponent],
+  inference: Inference.Summary
+) {
   def assertionStep(left: TComponent, middle: TComponent, right: TComponent)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
     Step.Assertion(
       resultJoiner(left, right),

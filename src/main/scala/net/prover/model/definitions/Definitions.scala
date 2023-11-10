@@ -693,6 +693,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     }
   }
 
+  override def toString: String = s"Definitions (${allAvailableEntries.allEntries.length} entries)"
 }
 
 object Definitions {

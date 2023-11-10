@@ -30,6 +30,8 @@ case class Chapter(
   override def hashCode(): Int = {
     title.hashCode
   }
+
+  override def toString: String = s"Chapter '${title}'"
 }
 
 object Chapter {
