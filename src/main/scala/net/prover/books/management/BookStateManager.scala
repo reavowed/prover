@@ -19,13 +19,15 @@ class BookStateManager {
   def updateBooks[T](performUpdate: (ListWithKeys[Book] => GlobalContext) => T): T = {
     this.synchronized {
       var wasUpdated = false
+      val oldContext = _globalContext
       val result = performUpdate(newBooks => {
         _globalContext = GlobalContext(newBooks)
         wasUpdated = true
         _globalContext
       })
       if (wasUpdated) {
-        WriteBooks(_globalContext.booksWithContexts)
+        val newContext = _globalContext
+        WriteBooks(oldContext.booksWithContexts, newContext.booksWithContexts)
       }
       result
     }
