@@ -145,7 +145,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit def filterableSeqFromFilterable[T](implicit filterable: Filterable[T]): Filterable[Seq[T]] = Filterable[Seq[T]](_.map(filterable.replace))
     implicit def filterableOptionFromFilterable[T](implicit filterable: Filterable[T]): Filterable[Option[T]] = Filterable[Option[T]](_.map(filterable.replace))
     implicit def filterableMapFromFilterable[T, S](implicit allowableT: Allowable[T], filterableS: Filterable[S]): Filterable[Map[T, S]] = {
-      Filterable[Map[T, S]](m => m.filterKeys(allowableT.isAllowed).mapValues(filterableS.replace))
+      Filterable[Map[T, S]](m => m.view.filterKeys(allowableT.isAllowed).mapValues(filterableS.replace).toMap)
     }
   }
 

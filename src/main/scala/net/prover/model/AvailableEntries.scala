@@ -44,9 +44,9 @@ case class AvailableEntries(entriesWithContexts: Seq[EntryWithContext])
   }
 
   lazy val typeStatementDefinitionsByType: Map[String, Seq[StatementDefinition]] = {
-    typeDefinitions.mapValues { t =>
+    typeDefinitions.view.mapValues { t =>
       t.statementDefinition +: (qualifiersByType.getOrElse(t.symbol, Nil) ++ propertyDefinitionsByType.getOrElse(t.symbol, Nil) ++ relatedObjectsByType.getOrElse(t.symbol, Nil)).map(_.statementDefinition)
-    }
+    }.toMap
   }
   lazy val typeStatementDefinitions: Seq[StatementDefinition] = typeStatementDefinitionsByType.values.flatten.toSeq ++ typeRelationDefinitions.map(_.statementDefinition)
 

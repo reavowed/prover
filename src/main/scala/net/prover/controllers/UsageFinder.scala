@@ -29,12 +29,12 @@ trait UsageFinder {
     } yield (chapterWithContext.bookWithContext.book.title, chapterWithContext.chapter.title, inferenceLinks)
   }
 
-  def checkNoUsages(entriesPotentiallyUsing: Seq[EntryWithContext], entriesPotentiallyBeingUsed: Seq[EntryWithContext]): Try[Any] = {
+  def checkNoUsages(entriesPotentiallyUsing: Iterable[EntryWithContext], entriesPotentiallyBeingUsed: Iterable[EntryWithContext]): Try[Any] = {
     findUsage(entriesPotentiallyUsing, entriesPotentiallyBeingUsed)
       .badRequestIfDefined { case (usedEntry, entryUsing) => s"""Entry "${entryUsing.entry.name}" depends on "${usedEntry.entry.name}"""" }
   }
 
-  def findUsage(entriesPotentiallyUsing: Seq[EntryWithContext], entriesPotentiallyBeingUsed: Seq[EntryWithContext]): Option[(EntryWithContext, EntryWithContext)] = {
+  def findUsage(entriesPotentiallyUsing: Iterable[EntryWithContext], entriesPotentiallyBeingUsed: Iterable[EntryWithContext]): Option[(EntryWithContext, EntryWithContext)] = {
     entriesPotentiallyUsing
       .mapFind { entryUsing =>
         GetReferencedInferences(entryUsing).mapFind(referencedInference => entriesPotentiallyBeingUsed.find(_.entry.inferences.contains(referencedInference)).map(entryUsing -> _)) orElse

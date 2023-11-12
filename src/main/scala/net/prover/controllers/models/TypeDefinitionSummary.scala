@@ -37,7 +37,7 @@ object TypeDefinitionSummary {
     PropertyDefinitionSummary(pd.symbol, pd.qualifiedSymbol, pd.name, pd.parentTypeConditions.requiredParentQualifier.map(_.symbol), pd.parentTypeConditions.requiredParentObjects.objectDefinitions.map(_.symbol))
   }
   def getAllFromContext(availableEntries: AvailableEntries): Map[String, TypeDefinitionSummary] = {
-    availableEntries.typeDefinitions.mapValues(d => getSummary(d)(availableEntries))
+    availableEntries.typeDefinitions.view.mapValues(d => getSummary(d)(availableEntries)).toMap
   }
 }
 

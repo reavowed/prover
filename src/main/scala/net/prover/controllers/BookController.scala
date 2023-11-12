@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 import scalaz.Id.Id
 
+import scala.language.postfixOps
 import scala.util.{Success, Try}
 
 @RestController

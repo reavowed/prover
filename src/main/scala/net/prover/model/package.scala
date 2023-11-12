@@ -4,8 +4,7 @@ import net.prover.util.PossibleSingleMatch
 import net.prover.util.PossibleSingleMatch.{MultipleMatches, NoMatches, SingleMatch}
 
 import scala.annotation.tailrec
-import scala.collection.generic.CanBuildFrom
-import scala.collection.{AbstractIterator, Iterator, TraversableLike, immutable, mutable}
+import scala.collection.{View, mutable, immutable}
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
@@ -61,17 +60,17 @@ package object model {
   implicit class SeqOps[T](seq: Seq[T]) {
     def headAndTailOption: Option[(T, Seq[T])] = +:.unapply(seq)
     def initAndLastOption: Option[(Seq[T], T)] = :+.unapply(seq)
-    def singleMatch: PossibleSingleMatch[T]= {
+    def singleMatch: PossibleSingleMatch[T] = {
       seq match {
         case Nil => NoMatches
-        case Seq(singleElement) => SingleMatch(singleElement)
+        case singleElement +: Nil => SingleMatch(singleElement)
         case _ => MultipleMatches
       }
     }
     def flatMapFold[R, S](initial: R)(f: (R, T) => (R, Seq[S])): (R, Seq[S]) = {
-      seq.foldLeft((initial, Seq.empty[S])) { case ((acc, ss), t) =>
-        f(acc, t).mapRight(ss ++ _)
-      }
+      seq.foldLeft((initial, seq.iterableFactory.newBuilder[S])) { case ((acc, b), t) =>
+        f(acc, t).mapRight(b ++= _)
+      }.mapRight(_.result())
     }
     def mapReduceWithPrevious[S](f: (Seq[S], T) => S): Seq[S] = {
       seq.foldLeft(Seq.empty[S]) { case (acc, t) =>
@@ -107,6 +106,7 @@ package object model {
         s
     }
     def takeOfType[S: ClassTag]: (Seq[S], Seq[T]) = {
+
       @tailrec def helper(init: Seq[S], remaining: Seq[T]): (Seq[S], Seq[T]) = {
         remaining match {
           case (s: S) +: tail =>
@@ -128,8 +128,8 @@ package object model {
         case Some(t) => t
       }
     }
-    def zipStrict[S, That](other: Seq[S])(implicit bf: CanBuildFrom[Seq[T], (T, S), That]): Option[That] = {
-      val b = bf(seq)
+    def zipStrict[S, That](other: Seq[S]): Option[Seq[(T, S)]] = {
+      val b = Seq.newBuilder[(T, S)]
       val these = seq.iterator
       val those = other.iterator
       while (these.hasNext && those.hasNext)
@@ -198,12 +198,26 @@ package object model {
         Some(seq.take(index) ++ seq.drop(index + 1))
     }
 
-    def dropUntil(p: T => Boolean): Seq[T] = {
-      seq.dropWhile(t => !p(t)).drop(1)
-    }
-
     def toMapWithKey[S](getKey: T => S): Map[S, T] = {
       seq.map(t => (getKey(t), t)).toMap
+    }
+
+    def toMapPreservingEarliest[S, U](implicit ev: T <:< (S, U)): Map[S, U] = {
+      val b = Map.newBuilder[S, U]
+      for (x <- seq)
+        if (!b.result().contains(x._1)) b += x
+      b.result()
+    }
+
+    def toSeqMap[S, U](implicit ev: T <:< (S, U)): Map[S, Seq[U]] = {
+      val mapBuilder = Map.newBuilder[S, mutable.Builder[U, Seq[U]]]
+      for (x <- seq) {
+        if (!mapBuilder.result().contains(x._1)) {
+          mapBuilder += (x._1 -> Seq.newBuilder[U])
+        }
+        mapBuilder.result()(x._1) += x._2
+      }
+      mapBuilder.result().view.mapValues(_.result()).toMap
     }
   }
 
@@ -214,7 +228,13 @@ package object model {
     }
   }
 
-  implicit class IterableOps[T](iterable: Iterable[T]) {
+  implicit class IterableOps[T, CC[_], C](iterable: scala.collection.IterableOps[T, CC, C]) {
+    def mapFold[R, S](initial: R)(f: (R, T) => (R, S)): (R, CC[S]) = {
+      iterable.foldLeft((initial, iterable.iterableFactory.newBuilder[S])) { case ((accumulator, builder), t) =>
+        f(accumulator, t).mapRight(builder += _)
+      }.mapRight(_.result())
+    }
+
     def mapFind[S](f: T => Option[S]): Option[S] = {
       iterable.iterator.map(f).find(_.isDefined).flatten
     }
@@ -226,6 +246,27 @@ package object model {
         .map(_ => iterator.next())
         .filter(_ => !iterator.hasNext)
     }
+
+    def dropUntil(p: T => Boolean): View[T] = {
+      iterable.view.dropWhile(!p(_)).drop(1)
+    }
+  }
+
+  implicit class IterableOptionOps[T, CC[_], C](iterable: scala.collection.IterableOps[Option[T], CC, C]) {
+    def collectDefined: CC[T] = {
+      iterable.collect {
+        case Some(t) => t
+      }
+    }
+
+    def traverseOption: Option[CC[T]] = {
+      iterable.foldLeft(Option(iterable.iterableFactory.newBuilder[T])) { case (builderOption, valueOption) =>
+        for {
+          builder <- builderOption
+          value <- valueOption
+        } yield builder += value
+      }
+    }.map(_.result())
   }
 
   implicit class Seq2TupleOps[S, T](seq: Seq[(S, T)]) {
@@ -255,33 +296,9 @@ package object model {
     }
   }
 
-  implicit class TraversableOps[T, Repr](traversable: TraversableLike[T, Repr]) {
-    def mapFold[R, S, That](initial: R)(f: (R, T) => (R, S))(implicit bf: CanBuildFrom[Repr, S, That]): (R, That) = {
-      traversable.foldLeft((initial, bf())) { case ((accumulator, builder), t) =>
-        f(accumulator, t).mapRight(builder += _)
-      }.mapRight(_.result())
-    }
-  }
-
-  implicit class TraversableOptionOps[T, Repr](traversable: TraversableLike[Option[T], Repr]) {
-    def collectDefined[That](implicit bf: CanBuildFrom[Repr, T, That]): That = {
-      traversable.collect {
-        case Some(t) => t
-      }
-    }
-    def traverseOption[That](implicit bf: CanBuildFrom[Repr, T, That]): Option[That] = {
-      traversable.foldLeft(Option(bf())) { case (builderOption, valueOption) =>
-        for {
-          builder <- builderOption
-          value <- valueOption
-        } yield builder += value
-      }
-    }.map(_.result())
-  }
-
-  implicit class TraversableTryOps[T, Repr](traversable: TraversableLike[Try[T], Repr]) {
-    def traverseTry[That](implicit bf: CanBuildFrom[Repr, T, That]): Try[That] = {
-      traversable.foldLeft(Try(bf())) { case (builderTry, valueTry) =>
+  implicit class IterableTryOps[T, CC[_], C](traversable: scala.collection.IterableOps[Try[T], CC, C]) {
+    def traverseTry: Try[CC[T]] = {
+      traversable.foldLeft(Try(traversable.iterableFactory.newBuilder[T])) { case (builderTry, valueTry) =>
         for {
           builder <- builderTry
           value <- valueTry
@@ -329,29 +346,6 @@ package object model {
           MultipleMatches
         }
       }
-    }
-
-    def dropUntil(p: T => Boolean): Iterator[T] = new AbstractIterator[T] {
-      // Magic value: -1 = hasn't dropped, 1 = defer to parent iterator
-      private[this] var status = -1
-      def hasNext: Boolean =
-        if (status == 1) iterator.hasNext
-        else {
-          while (iterator.hasNext) {
-            val a = iterator.next()
-            if (p(a)) {
-              status = 1
-              return iterator.hasNext
-            }
-          }
-          status = 1
-          false
-        }
-      def next(): T =
-        if (hasNext) {
-          iterator.next()
-        }
-        else Iterator.empty.next()
     }
   }
 
@@ -418,25 +412,6 @@ package object model {
       map.map { case (s, tOption) => tOption.map(s -> _) }
         .traverseOption
         .map(_.toMap)
-    }
-  }
-
-  implicit class TraversableOnceOps[A](coll: TraversableOnce[A]) {
-    def toMapPreservingEarliest[T, U](implicit ev: A <:< (T, U)): immutable.Map[T, U] = {
-      val b = immutable.Map.newBuilder[T, U]
-      for (x <- coll)
-        if (!b.result().contains(x._1)) b += x
-      b.result()
-    }
-    def toSeqMap[T, U](implicit ev: A <:< (T, U)): immutable.Map[T, Seq[U]] = {
-      val b = immutable.Map.newBuilder[T, mutable.Builder[U, Seq[U]]]
-      for (x <- coll) {
-        if (!b.result().contains(x._1)) {
-          b += (x._1 -> Seq.newBuilder[U])
-        }
-        b.result()(x._1) += x._2
-      }
-      b.result().mapValues(_.result())
     }
   }
 

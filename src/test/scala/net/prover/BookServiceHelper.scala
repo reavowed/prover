@@ -10,12 +10,12 @@ import net.prover.util.FunctorTypes.WithValue
 import org.mockito.Mockito
 import org.specs2.SpecificationLike
 import org.specs2.matcher.{MatchResult, Matcher}
-import org.specs2.mock.mockito.{CalledMatchers, MockitoMatchers, MockitoStubs}
+import org.specs2.mock.mockito.{CalledMatchers, MockitoMatchers}
 
 import scala.util.{Success, Try}
 
-trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with ContextHelper with MockitoStubs with MockitoMatchers with CalledMatchers {
-  private def eq[T](t: T) = org.mockito.Matchers.eq(t)
+trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with ContextHelper with CustomMockitoStubs with MockitoMatchers with CalledMatchers {
+  private def eq[T](t: T) = org.mockito.ArgumentMatchers.eq(t)
 
   def createService = {
     val service = mock[BookService]

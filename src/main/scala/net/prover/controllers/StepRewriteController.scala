@@ -47,7 +47,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       if (res0 != 0)
         res0
       else
-        Ordering.Implicits.seqDerivedOrdering[Seq, Int].compare(x, y)
+        Ordering.Implicits.seqOrdering[Seq, Int].compare(x, y)
     }
 
   @GetMapping(value = Array("/rewriteSuggestions"), produces = Array("application/json;charset=UTF-8"))

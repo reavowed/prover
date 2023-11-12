@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 
 import java.nio.file.{Files, Path}
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object WriteBook {
 

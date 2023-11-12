@@ -3,7 +3,6 @@ package net.prover
 import net.prover.books.model.Book
 import net.prover.books.reading.ProofFileReader
 import net.prover.entries._
-import net.prover.model.TestDefinitions.{mock, theStubbed}
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.expressions.Statement
@@ -13,7 +12,7 @@ import org.mockito.Mockito.when
 
 import scala.reflect.ClassTag
 
-trait ContextHelper {
+trait ContextHelper extends CustomMockitoStubs {
 
   val bookKey = "test-book-key"
   val chapterKey = "test-chapter-key"

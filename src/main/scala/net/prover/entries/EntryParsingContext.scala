@@ -10,5 +10,5 @@ case class EntryParsingContext(
   proofFileReader: ProofFileReader)(
   implicit val availableEntries: AvailableEntries)
 {
-  implicit lazy val provingContext = ProvingContext(availableEntries, Definitions(availableEntries))
+  implicit lazy val provingContext: ProvingContext = ProvingContext(availableEntries, Definitions(availableEntries))
 }

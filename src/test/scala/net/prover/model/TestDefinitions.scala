@@ -1,16 +1,12 @@
 package net.prover.model
 
-import net.prover.{ContextHelper, StepBuilderHelper}
-import net.prover.entries.{GlobalContext, TheoremWithContext, TypedEntryWithContext}
+import net.prover.ContextHelper
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.definitions.ExpressionDefinition.{ComponentArgument, ComponentType}
 import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.model.entries._
 import net.prover.model.expressions._
-import net.prover.model.proof._
-import org.mockito.Mockito.when
-import org.specs2.mock.mockito.MockitoStubs
 
 import scala.language.implicitConversions
 
@@ -384,7 +380,7 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
   val negationOfIntegerMultiplication = createInference("Negation of Integer Multipliciation", Seq(ElementOf(a, Integers), ElementOf(b, Integers)), Conjunction(Equals(mulZ(a, IntegerNegation(b)), IntegerNegation(mulZ(a, b))), Equals(mulZ(IntegerNegation(a), b), IntegerNegation(mulZ(a, b)))))
 }
 
-object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with ContextHelper with MockitoStubs {
+object TestDefinitions extends TestVariableDefinitions with TestExpressionDefinitions with TestInferenceDefinitions with ContextHelper {
   val defaultAvailableEntries: AvailableEntries = createAvailableEntries(
     Seq(
       Implication, Negation, Conjunction, Disjunction, Equivalence,

@@ -7,10 +7,12 @@ import net.prover.model.entries.ChapterEntry
 import java.nio.file.{Files, Path}
 import java.util.regex.Pattern
 import java.util.stream.Collectors
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 case class ProofFileReader(chapterDirectoryPath: Path, keyAccumulator: KeyAccumulator) {
-  private lazy val files = Files.find(chapterDirectoryPath, 1, (_, attributes) => attributes.isRegularFile).collect(Collectors.toList[Path]).asScala
+  private lazy val files = Files.find(chapterDirectoryPath, 1, (_, attributes) => attributes.isRegularFile)
+    .collect(Collectors.toList[Path]).asScala
+    .toList
 
   def getSerializedProofs(theoremTitle: String): Seq[String] = {
     val (key, _) = keyAccumulator.getNextKey(theoremTitle.formatAsKey)

@@ -49,7 +49,7 @@ case class TokenStream(tokens: Vector[Token], endToken: Token, lines: Vector[Vec
     lineSubstring(lineIndex, start, lines(lineIndex).length)
   }
   private def lineSubstring(lineIndex: Int, start: Int, end: Int): String = {
-    lines(lineIndex).subSequence(start, end).toString
+    lines(lineIndex).slice(start, end).mkString
   }
 
   def throwParseException(message: String, cause: Option[Throwable] = None): Nothing = {
@@ -100,7 +100,7 @@ object Tokenizer {
           while (endColumnIndex < lineLength && !line(endColumnIndex).isWhitespace && !singleCharacterTokens.contains(line(endColumnIndex))) {
             endColumnIndex += 1
           }
-          builder += Token(line.subSequence(columnIndex, endColumnIndex).toString, context, lineIndex + 1, columnIndex + 1)
+          builder += Token(line.slice(columnIndex, endColumnIndex).mkString, context, lineIndex + 1, columnIndex + 1)
           columnIndex = endColumnIndex
         }
       }

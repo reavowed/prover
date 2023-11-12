@@ -3,7 +3,7 @@ package net.prover.controllers
 import net.prover.controllers.models.{PossibleConclusion, PossibleInference, PossibleInferenceWithTargets}
 import net.prover.model._
 
-import scala.collection.{SortedSet, TraversableLike}
+import scala.collection.SortedSet
 
 trait InferenceSearch {
 
@@ -18,14 +18,12 @@ trait InferenceSearch {
   }
 
   object +: {
-    def unapply[T,Coll <: TraversableLike[T, Coll]](
-      t: Coll with TraversableLike[T, Coll]): Option[(T, Coll)] =
+    def unapply[T, C[_], Coll](t: Coll with scala.collection.IterableOps[T, C, Coll]): Option[(T, Coll)] =
       if(t.isEmpty) None
       else Some(t.head -> t.tail)
   }
   object Empty {
-    def unapply[T,Coll <: TraversableLike[T, Coll]](
-      t: Coll with TraversableLike[T, Coll]): Option[Unit] =
+    def unapply[T, C[_], Coll](t: Coll with scala.collection.IterableOps[T, C, Coll]): Option[Unit] =
       if (t.isEmpty) Some(())
       else None
   }

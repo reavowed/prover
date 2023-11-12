@@ -660,7 +660,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       deductionDefinition <- allAvailableEntries.deductionDefinitionOption.toSeq
       result <- for {
         inference <- allInferences
-        Seq(firstPremise @ deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq.unapplySeq(inference.premises).toSeq
+        Seq(firstPremise @ deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq(inference.premises)
         swapper <- Seq(Direction.Forward, Direction.Reverse)
         (premiseIndex, conclusionIndex) = swapper.swapSourceAndResult(a, b)
         if inference.variableDefinitions.terms.isEmpty && inference.variableDefinitions.hasNoApplications
