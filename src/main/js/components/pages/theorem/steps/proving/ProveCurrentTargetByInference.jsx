@@ -6,7 +6,7 @@ import {InferenceFinder} from "./components/InferenceFinder";
 export default function ProveCurrentTargetByInference({path, onError}) {
   const context = useContext(ProofContext);
   const getInferenceSuggestions = (searchText) => {
-    return context.fetchJsonForStep(path, `possibleInferencesForCurrentTarget?searchText=${encodeURIComponent(searchText)}`);
+    return context.fetchJsonForStep(path, `suggestInferencesForExistingTarget?searchText=${encodeURIComponent(searchText)}`);
   };;
   const fetchPossiblePremises = (inference, wrappingDefinitions, extractionInferenceIds) => {
     return context.fetchJsonForStep(path, `possiblePremisesForCurrentTarget?inferenceId=${encodeURIComponent(inference.id)}&targetUnwrappers=${encodeURIComponent(wrappingDefinitions.join(","))}&conclusionExtractionInferenceIds=${encodeURIComponent(extractionInferenceIds.join(","))}`)

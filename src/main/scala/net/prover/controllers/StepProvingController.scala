@@ -5,6 +5,7 @@ import net.prover.model._
 import net.prover.model.proof._
 import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement}
 import net.prover.proving.fromExistingStatement.{SuggestExistingStatementsForCurrentTarget, SuggestExistingStatementsForNewTarget}
+import net.prover.proving.suggestions.{InferenceFilter, SuggestInferencesForExistingTarget}
 import net.prover.proving.{FindInference, ProveCurrentTarget, ProveNewTarget}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -12,9 +13,9 @@ import org.springframework.web.bind.annotation._
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepProvingController @Autowired() (implicit val bookService: BookService) extends InferenceSearch {
-  @GetMapping(value = Array("/possibleInferencesForCurrentTarget"), produces = Array("application/json;charset=UTF-8"))
-  def getPossibleInferencesForCurrentTarget(
+class StepProvingController @Autowired() (implicit val bookService: BookService) {
+  @GetMapping(value = Array("/suggestInferencesForExistingTarget"), produces = Array("application/json;charset=UTF-8"))
+  def suggestInferencesForExistingTarget(
     @PathVariable("bookKey") bookKey: String,
     @PathVariable("chapterKey") chapterKey: String,
     @PathVariable("theoremKey") theoremKey: String,
@@ -22,36 +23,8 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map(implicit stepWithContext => {
-      val possibleUnwrappedTargetStatements = UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement)
-
-      def findPossibleInference(inference: Inference): Option[PossibleInferenceWithTargets] = {
-        val possibleTargets = for {
-          possibleUnwrappedTargetStatement <- possibleUnwrappedTargetStatements
-          possibleConclusions = stepWithContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
-            .filter(_.conclusion.calculateSubstitutions(possibleUnwrappedTargetStatement.statement).nonEmpty)
-            .map(e => PossibleConclusionWithoutPremises(e.conclusion, e.extractionInferences.map(_.id), e.additionalVariableNames))
-          if possibleConclusions.nonEmpty
-        } yield PossibleTarget(
-          possibleUnwrappedTargetStatement.statement,
-          possibleUnwrappedTargetStatement.definitionSymbols,
-          possibleUnwrappedTargetStatement.unwrappers.ofType[GeneralizationUnwrapper].map(_.variableName).map(Seq(_)),
-          possibleConclusions)
-
-        if (possibleTargets.nonEmpty)
-          Some(PossibleInferenceWithTargets(inference.summary, possibleTargets))
-        else
-          None
-      }
-
-      def getConclusionComplexity(possibleConclusion: PossibleConclusion): Int = possibleConclusion.conclusion.structuralComplexity
-
-      getPossibleInferences(
-        stepWithContext.availableEntries.allInferences,
-        searchText,
-        findPossibleInference,
-        getConclusionComplexity)
-    }).toResponseEntity
+    SuggestInferencesForExistingTarget(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)
+      .toResponseEntity
   }
 
   @GetMapping(value = Array("/possiblePremisesForCurrentTarget"), produces = Array("application/json;charset=UTF-8"))
@@ -84,7 +57,7 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
     bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map(implicit stepWithContext =>
-      filterInferences(stepWithContext.provingContext.availableEntries.allInferences, searchText)
+      stepWithContext.provingContext.availableEntries.allInferences.filter(InferenceFilter(searchText).apply)
         .reverse
         .take(10)
         .map { inference =>

@@ -2,6 +2,7 @@ package net.prover.controllers
 
 import net.prover.controllers.models.{NamingDefinition, PathData}
 import net.prover.model._
+import net.prover.model.definitions.NamingInference
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
 import net.prover.proving.FindInference
@@ -30,7 +31,8 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
       for {
         variableName <- Option(definition.variableName.trim).filter(_.nonEmpty).orBadRequest("Variable name must be provided")
         inference <- FindInference(definition.inferenceId)
-        (namingPremises, assumption, generalizationDefinition, deductionDefinition) <- ProofHelper.getNamingPremisesAndAssumption(inference).orBadRequest(s"Inference ${definition.inferenceId} is not a naming inference")
+        NamingInference(_, namingPremises, assumption, generalizationDefinition, deductionDefinition) <- ProofHelper.asNamingInference(inference)
+          .orBadRequest(s"Inference ${definition.inferenceId} is not a naming inference")
         substitutions <- definition.substitutions.parse(inference.variableDefinitions)
         _ <- inference.substituteConclusion(substitutions).filter(_ == step.statement).orBadRequest("Conclusion was incorrect")
         premiseStatements <- namingPremises.map(inference.substituteStatement(_, substitutions)).traverseOption.orBadRequest("Could not substitute premises")
@@ -67,26 +69,26 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
         premiseStatement <- Statement.parser.parseFromString(serializedPremise, "premise").recoverWithBadRequest
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
         variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).orBadRequest("Premise did not have single bound variable")
-        (namingInference, namingInferenceAssumption, substitutionsAfterPremise, generalizationDefinition, deductionDefinition) <- ProofHelper.findNamingInferences.mapFind {
-          case (i, Seq(singlePremise), a, generalizationDefinition, deductionDefinition) =>
-            singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s, generalizationDefinition, deductionDefinition) }
+        (namingInference, substitutionsAfterPremise) <- ProofHelper.findNamingInferences.mapFind {
+          case namingInference @ NamingInference(_, Seq(singlePremise), _, _, _) =>
+            singlePremise.calculateSubstitutions(premiseStatement).map { namingInference -> _ }
           case _ =>
             None
         }.orBadRequest("Could not find naming inference matching premise")
-        substitutionsAfterConclusion <- namingInference.conclusion.calculateSubstitutions(step.statement, substitutionsAfterPremise).orBadRequest("Could not calculate substitutions for conclusion")
-        substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.variableDefinitions).orBadRequest("Substitutions for naming inference were not total")
-        substitutedAssumption <- namingInferenceAssumption.applySubstitutions(substitutions, 1, stepContext.externalDepth).orBadRequest("Could not substitute assumption")
+        substitutionsAfterConclusion <- namingInference.baseInference.conclusion.calculateSubstitutions(step.statement, substitutionsAfterPremise).orBadRequest("Could not calculate substitutions for conclusion")
+        substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.baseInference.variableDefinitions).orBadRequest("Substitutions for naming inference were not total")
+        substitutedAssumption <- namingInference.assumption.applySubstitutions(substitutions, 1, stepContext.externalDepth).orBadRequest("Could not substitute assumption")
       } yield {
         Seq(Step.Naming(
           variableName,
           substitutedAssumption,
           step.statement,
           Seq(Step.Target(step.statement.insertExternalParameters(1))),
-          namingInference.summary,
+          namingInference.baseInference.summary,
           Seq(premise),
           substitutions,
-          generalizationDefinition,
-          deductionDefinition))
+          namingInference.generalizationDefinition,
+          namingInference.deductionDefinition))
       }
     }.toResponseEntity
   }

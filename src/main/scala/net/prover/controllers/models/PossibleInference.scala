@@ -5,22 +5,8 @@ import net.prover.model.proof.StepProvingContext
 import net.prover.model.{Inference, Substitutions, VariableDefinitions}
 import net.prover.proving.extraction.ExtractionCalculator.Extraction
 
-sealed trait PossibleInference {
-  def inference: Inference.Summary
-  def canEqual(other: Any): Boolean = other.isInstanceOf[PossibleInference]
-  override def equals(other: Any): Boolean = other match {
-    case that: PossibleInference =>
-      (that canEqual this) &&
-        inference == that.inference
-    case _ => false
-  }
-  override def hashCode(): Int = {
-    inference.hashCode
-  }
-}
-
-case class PossibleInferenceWithTargets(inference: Inference.Summary, possibleTargets: Seq[PossibleTarget]) extends PossibleInference
-case class PossibleInferenceWithConclusions(inference: Inference.Summary, possibleConclusions: Seq[PossibleConclusionWithPremises]) extends PossibleInference
+case class PossibleInferenceWithTargets(inference: Inference.Summary, possibleTargets: Seq[PossibleTarget])
+case class PossibleInferenceWithConclusions(inference: Inference.Summary, possibleConclusions: Seq[PossibleConclusionWithPremises])
 
 case class PossibleTarget(
   target: Expression,

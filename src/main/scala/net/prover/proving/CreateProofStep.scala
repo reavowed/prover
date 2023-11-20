@@ -34,8 +34,6 @@ object CreateProofStep {
         step <- stepOption.orBadRequest("At least one step must be present")
       } yield (result, step, extractionTargets)
     }
-
     definition.getFromInferenceOrPremise(withInference, withPremise)
   }
-
 }

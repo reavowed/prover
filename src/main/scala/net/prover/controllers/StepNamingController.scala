@@ -2,16 +2,19 @@ package net.prover.controllers
 
 import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, PossibleInferenceWithConclusions, StepDefinition}
 import net.prover.model._
+import net.prover.model.definitions.NamingInference
 import net.prover.model.expressions.{DefinedStatement, Statement}
 import net.prover.model.proof._
 import net.prover.proving.CreateAssertionStep
+import net.prover.proving.suggestions.InferenceFilter
+import net.prover.proving.suggestions.SuggestInferences.NumberOfSuggestionsToReturn
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepNamingController @Autowired() (val bookService: BookService) extends InferenceSearch {
+class StepNamingController @Autowired() (val bookService: BookService) {
 
   @GetMapping(value = Array("/suggestInferencesForNamingByInference"), produces = Array("application/json;charset=UTF-8"))
   def suggestInferencesForNamingByInference(
@@ -23,12 +26,12 @@ class StepNamingController @Autowired() (val bookService: BookService) extends I
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
     bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map { implicit stepWithContext =>
-      filterInferences(stepWithContext.provingContext.availableEntries.allInferences, searchText)
+      stepWithContext.provingContext.availableEntries.allInferences.filter(InferenceFilter(searchText).apply(_))
         .iterator
         .mapCollect { inference =>
           val conclusions = for {
             inferenceExtraction <- stepWithContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
-            if ProofHelper.findNamingInferences.exists { case (_, initialPremises, _, _, _) =>
+            if ProofHelper.findNamingInferences.exists { case NamingInference(_, initialPremises, _, _, _) =>
               initialPremises.single.exists(_.calculateSubstitutions(inferenceExtraction.conclusion)(SubstitutionContext.outsideProof).nonEmpty)
             }
           } yield PossibleConclusionWithPremises.fromExtraction(inferenceExtraction, None)
@@ -57,16 +60,16 @@ class StepNamingController @Autowired() (val bookService: BookService) extends I
       def getNamingWrapper(premiseStatement: Statement, resultStatement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Statement, SubstitutionContext, Step => Step.Naming)] = {
         for {
           variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single)
-          (namingInference, namingInferenceAssumption, substitutionsAfterPremise, generalizationDefinition, deductionDefinition) <- ProofHelper.findNamingInferences.mapFind {
-            case (i, Seq(singlePremise), a, generalizationDefinition, deductionDefinition) =>
-              singlePremise.calculateSubstitutions(premiseStatement).map { s => (i, a, s, generalizationDefinition, deductionDefinition) }
+          (namingInference, substitutionsAfterPremise) <- ProofHelper.findNamingInferences.mapFind {
+            case namingInference @ NamingInference(i, Seq(singlePremise), a, generalizationDefinition, deductionDefinition) =>
+              singlePremise.calculateSubstitutions(premiseStatement).map { namingInference -> _ }
             case _ =>
               None
           }
-          substitutionsAfterConclusion <- namingInference.conclusion.calculateSubstitutions(resultStatement, substitutionsAfterPremise)
-          substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.variableDefinitions)
-          substitutedAssumption <- namingInferenceAssumption.applySubstitutions(substitutions, 1, substitutionContext.externalDepth)
-          substitutedConclusion <- namingInference.conclusion.applySubstitutions(substitutions, 1, substitutionContext.externalDepth)
+          substitutionsAfterConclusion <- namingInference.baseInference.conclusion.calculateSubstitutions(resultStatement, substitutionsAfterPremise)
+          substitutions <- substitutionsAfterConclusion.confirmTotality(namingInference.baseInference.variableDefinitions)
+          substitutedAssumption <- namingInference.assumption.applySubstitutions(substitutions, 1, substitutionContext.externalDepth)
+          substitutedConclusion <- namingInference.baseInference.conclusion.applySubstitutions(substitutions, 1, substitutionContext.externalDepth)
         } yield (
           substitutedAssumption,
           substitutedConclusion,
@@ -76,11 +79,11 @@ class StepNamingController @Autowired() (val bookService: BookService) extends I
             substitutedAssumption,
             step.statement,
             Seq(substep),
-            namingInference.summary,
+            namingInference.baseInference.summary,
             Seq(Premise.Pending(premiseStatement)),
             substitutions,
-            generalizationDefinition,
-            deductionDefinition))
+            namingInference.generalizationDefinition,
+            namingInference.deductionDefinition))
       }
 
       def recurseNamingWrappers(currentAssumption: Statement, currentConclusion: Statement)(implicit currentContext: SubstitutionContext): Step = {

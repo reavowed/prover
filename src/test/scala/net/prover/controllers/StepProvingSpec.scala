@@ -34,7 +34,7 @@ class StepProvingSpec extends ControllerSpec {
           createOuterStepContext(Nil),
           implicitly))
 
-      controller.getPossibleInferencesForCurrentTarget(
+      controller.suggestInferencesForExistingTarget(
         bookKey,
         chapterKey,
         theoremKey,

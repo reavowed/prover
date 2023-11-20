@@ -13,6 +13,8 @@ import net.prover.proving.FindInference
 import net.prover.proving.extraction.ExtractionApplier
 import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.proving.stepReplacement.InsertStepBeforeChain
+import net.prover.proving.suggestions.InferenceFilter
+import net.prover.proving.suggestions.SuggestInferences.NumberOfSuggestionsToReturn
 import net.prover.util.Direction
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +25,7 @@ import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepRewriteController @Autowired() (implicit val bookService: BookService) extends InferenceSearch with ChainingStepEditing {
+class StepRewriteController @Autowired() (implicit val bookService: BookService) extends ChainingStepEditing {
 
   private def getRewritePossibilities[T <: Expression : RewriteMethods](expression: T)(implicit stepWithContext: StepWithContext): Seq[RewritePossibility[T]] = {
     RewriteMethods[T].getRewritePossibilitiesFromOuterExpression(expression, Nil, Nil)
@@ -103,9 +105,8 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
             .sortBy(_.source.complexity)(Ordering[(Int, Int)].reverse)
         }
 
-        val filter = inferenceFilter(searchText)
         stepWithContext.provingContext.prospectiveTermRewriteInferences
-          .filter { termRewriteInference => filter(termRewriteInference.baseInference) }
+          .filter(InferenceFilter(searchText).apply)
           .groupBy(_.lhs.structuralComplexity).toSeq
           .sortBy(_._1)(Ordering[Int].reverse)
           .iterator

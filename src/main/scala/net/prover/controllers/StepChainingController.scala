@@ -9,6 +9,7 @@ import net.prover.model.proof._
 import net.prover.model.{ExpressionParsingContext, Inference, ProvingContext, SeqOps, Substitutions}
 import net.prover.proving.FindInference
 import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
+import net.prover.proving.suggestions.SuggestInferences
 import net.prover.util.Direction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -19,7 +20,7 @@ import scala.util.{Success, Try}
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepChainingController @Autowired() (val bookService: BookService) extends ChainingStepEditing with InferenceSearch {
+class StepChainingController @Autowired() (val bookService: BookService) extends ChainingStepEditing {
   private def getSubstitutionsWithTermOrSubterm(source: Expression, result: Expression, baseSubstitutions: Substitutions.Possible)(implicit stepWithContext: StepWithContext): Option[Substitutions.Possible] = {
     source.calculateSubstitutions(result, baseSubstitutions) orElse
       (result.getTerms().map(_._1).toSet diff result.asOptionalInstanceOf[Term].toSet).toSeq.mapCollect(source.calculateSubstitutions(_, baseSubstitutions)).single
@@ -35,7 +36,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     direction: Direction
   ): ResponseEntity[_] = {
 
-    def withJoiner[T <: Expression, TJoiner <: BinaryJoiner[T] : ClassTag](targetConnective: BinaryJoiner[T], targetLhs: T, targetRhs: T)(implicit stepWithContext: StepWithContext): Try[Seq[PossibleInference]] = {
+    def withJoiner[T <: Expression, TJoiner <: BinaryJoiner[T] : ClassTag](targetConnective: BinaryJoiner[T], targetLhs: T, targetRhs: T)(implicit stepWithContext: StepWithContext): Try[Seq[PossibleInferenceWithTargets]] = {
       val targetSource = direction.getSource(targetLhs, targetRhs)
       def getSubstitutions(extractionResult: Statement): Option[Substitutions.Possible] = {
         for {
@@ -58,7 +59,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           .mapFind(j => j.unapply(possibleConclusion.conclusion).map { case (l, r) => direction.getSource(l, r).structuralComplexity })
           .getOrElse(0)
       }
-      Success(getPossibleInferences(stepWithContext.provingContext.availableEntries.allInferences, searchText, getPossibleInference, getConclusionComplexity))
+      Success(SuggestInferences(searchText, getPossibleInference, getConclusionComplexity))
     }
     bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       .flatMap(implicit stepWithContext => {

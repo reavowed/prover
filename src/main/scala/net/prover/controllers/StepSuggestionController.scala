@@ -2,15 +2,17 @@ package net.prover.controllers
 
 import net.prover.controllers.models._
 import net.prover.model._
+import net.prover.model.definitions.NamingInference
 import net.prover.model.expressions._
 import net.prover.model.proof._
+import net.prover.proving.suggestions.InferenceFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{theoremKey}/proofs/{proofIndex}/{stepPath}"))
-class StepSuggestionController @Autowired() (val bookService: BookService) extends InferenceSearch {
+class StepSuggestionController @Autowired() (val bookService: BookService) {
 
   @GetMapping(value = Array("/suggestImmediateNamingPremises"), produces = Array("application/json;charset=UTF-8"))
   def suggestImmediateNamingPremises(
@@ -22,7 +24,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
   ): ResponseEntity[_] = {
     bookService.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map(implicit stepWithContext =>
       for {
-        (_, Seq(singleNamingPremise: DefinedStatement), _, _, _) <- ProofHelper.findNamingInferences
+        NamingInference(_, Seq(singleNamingPremise: DefinedStatement), _, _, _) <- ProofHelper.findNamingInferences
         if singleNamingPremise.boundVariableNames.single.nonEmpty
         premise <- stepWithContext.stepProvingContext.allPremises
         if singleNamingPremise.calculateSubstitutions(premise.statement).nonEmpty
@@ -40,11 +42,10 @@ class StepSuggestionController @Autowired() (val bookService: BookService) exten
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
     bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map(implicit stepWithContext => {
-      val filter = inferenceFilter(searchText.toLowerCase)
       ProofHelper.findNamingInferences
-        .filter(x => filter(x._1))
+        .filter(InferenceFilter(searchText).apply)
         .reverse
-        .mapCollect { case (inference, namingPremises, _, _, _) =>
+        .mapCollect { case NamingInference(inference, namingPremises, _, _, _) =>
           inference.conclusion.calculateSubstitutions(stepWithContext.step.statement)
             .map(s => PossibleInferenceWithConclusions(
               inference.summary,
