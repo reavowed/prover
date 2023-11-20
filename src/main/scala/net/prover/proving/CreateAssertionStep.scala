@@ -14,19 +14,18 @@ object CreateAssertionStep {
   def apply(
     inferenceId: String,
     getConclusionOption: (ExpressionParsingContext, Substitutions) => Try[Option[Statement]],
-    definition: StepDefinition,
+    stepDefinition: StepDefinition,
     unwrappers: Seq[Unwrapper])(
     implicit stepProvingContext: StepProvingContext
   ): Try[(Statement, Step, Seq[Step.Target])] = {
     for {
-      inference <- FindInference(inferenceId)
-      extractionInferences <- definition.extractionInferenceIds.map(FindInference(_)).traverseTry
-      extraction <- ExtractionCalculator.getInferenceExtractions(inference).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
+      extraction <- stepProvingContext.provingContext.findInferenceExtraction(inferenceId, stepDefinition.extractionDefinition).orBadRequest("Could not find extraction with given inferences")
+      inference = extraction.inference
       wrappedStepProvingContext = unwrappers.enhanceStepProvingContext
-      substitutions <- definition.substitutions.parse(extraction.variableDefinitions)(ExpressionParsingContext.atStep(wrappedStepProvingContext))
-      epc = ExpressionParsingContext.forInference(inference).addSimpleTermVariables(definition.additionalVariableNames.toSeq.flatten)
+      substitutions <- stepDefinition.substitutions.parse(extraction.variableDefinitions)(ExpressionParsingContext.atStep(wrappedStepProvingContext))
+      epc = ExpressionParsingContext.forInference(inference).addSimpleTermVariables(stepDefinition.additionalVariableNames.toSeq.flatten)
       conclusionOption <- getConclusionOption(epc, substitutions)
-      newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
+      newTargetStatementsOption <- stepDefinition.parseIntendedPremiseStatements(epc)
       (inferenceToApply, newTargetStatementsForExtractionOption) <- newTargetStatementsOption match {
         case Some(newTargetStatements) =>
           for {
@@ -37,9 +36,9 @@ object CreateAssertionStep {
         case None =>
           Success((inference, None))
       }
-      (derivationStep, targets) <- ExtractionApplier.getInferenceExtractionWithPremises(
-        inferenceToApply,
-        extractionInferences,
+      extractionToApply = extraction.copy(inference = inferenceToApply)
+      (derivationStep, targets) <- ExtractionApplier.getInferenceExtractionStepWithPremises(
+        extractionToApply,
         substitutions,
         unwrappers,
         newTargetStatementsForExtractionOption,

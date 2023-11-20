@@ -52,7 +52,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
       firstAssertion <- assertionSteps.headOption
       mainPremise <- firstAssertion.premises.headOption.map(_.statement)
       _ <- ExtractionCalculator.getPremiseExtractions(mainPremise)(stepWithContext.stepContext, stepWithContext.provingContext)
-        .find(_.extractionInferences.toList == assertionSteps.map(_.inference))
+        .find(_.innerExtraction.derivation.map(_.inference) == assertionSteps.map(_.inference))
     } yield Step.ExistingStatementExtraction(assertionSteps)
   }
 

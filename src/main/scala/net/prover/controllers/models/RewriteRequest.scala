@@ -1,3 +1,5 @@
 package net.prover.controllers.models
 
-case class RewriteRequest(path: Seq[Int], inferenceId: Option[String], serializedPremiseStatement: Option[String], extractionInferenceIds: Seq[String])
+import net.prover.proving.extraction.ExtractionDefinition
+
+case class RewriteRequest(path: Seq[Int], inferenceId: Option[String], serializedPremiseStatement: Option[String], extractionDefinition: ExtractionDefinition.Serialized)

@@ -5,6 +5,7 @@ import net.prover.model.Substitutions
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{DefinedStatement, TermVariable}
 import net.prover.model.proof.{Step, SubstitutionContext}
+import net.prover.proving.extraction.ExtractionDefinition
 import org.specs2.matcher.Matcher
 import org.springframework.http.ResponseEntity
 
@@ -57,7 +58,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithPremise(premise, Nil, Seq(extractRightConjunct, modusPonens), None))
+        definitionWithPremise(premise, Nil, simpleExtraction(extractRightConjunct, modusPonens), None))
 
       checkModifySteps(
         service,
@@ -78,7 +79,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithPremise(premise, Nil, Seq(modusPonens, extractRightConjunct), None))
+        definitionWithPremise(premise, Nil, simpleExtraction(modusPonens, extractRightConjunct), None))
 
       val x: SubstitutionContext => Seq[Step.Assertion] = Seq(
         assertion(modusPonens, Seq(φ, Conjunction(ψ, χ)), Nil),
@@ -107,7 +108,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(specification, Seq(Exists("y")(Equals($, $.^))), Seq(a), Nil))
+        definitionWithInference(specification, Seq(Exists("y")(Equals($, $.^))), Seq(a), ExtractionDefinition.Empty))
 
       checkModifyStepsWithMatcher(
         service,
@@ -134,7 +135,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(axiom, Seq(φ($), ψ($(0), $(1))), Seq(a), Seq(specification, forwardImplicationFromEquivalence, modusPonens)))
+        definitionWithInference(axiom, Seq(φ($), ψ($(0), $(1))), Seq(a), simpleExtraction(specification, forwardImplicationFromEquivalence, modusPonens)))
 
       checkModifyStepsWithMatcher(
         service,
@@ -166,7 +167,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(existence, Seq(φ($)), Seq(b), Nil, conclusionOption = Some(Exists("z")(φ($)))))
+        definitionWithInference(existence, Seq(φ($)), Seq(b), ExtractionDefinition.Empty, conclusionOption = Some(Exists("z")(φ($)))))
 
       checkModifyStepsWithMatcher(
         service,
@@ -191,7 +192,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithPremise(premise, Seq(a()), Seq(specification, modusPonens), Some(Exists("z")(ψ(x, $)))))
+        definitionWithPremise(premise, Seq(a()), simpleExtraction(specification, modusPonens), Some(Exists("z")(ψ(x, $)))))
 
       checkModifyStepsWithMatcher(
         service,
@@ -220,7 +221,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(specification, Seq(Exists("y")(Equals($, $.^))), Seq(a), Nil, premisesOption = Some(Seq(ForAll("z")(φ($))))))
+        definitionWithInference(specification, Seq(Exists("y")(Equals($, $.^))), Seq(a), ExtractionDefinition.Empty, premisesOption = Some(Seq(ForAll("z")(φ($))))))
 
       checkModifyStepsWithMatcher(
         service,
@@ -248,7 +249,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(axiom, Seq(φ($), ψ($(0), $(1))), Seq(a), Seq(specification, reverseImplicationFromEquivalence, modusPonens), premisesOption = Some(Seq(Exists("z")(ψ(x, $))))))
+        definitionWithInference(axiom, Seq(φ($), ψ($(0), $(1))), Seq(a), simpleExtraction(specification, reverseImplicationFromEquivalence, modusPonens), premisesOption = Some(Seq(Exists("z")(ψ(x, $))))))
 
       checkModifyStepsWithMatcher(
         service,
@@ -276,7 +277,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(successorOfNaturalIsNatural, Nil, Seq(add($.^, $)), Nil, unwrappers = Seq(ForAllDefinition, Implication, ForAllDefinition, Implication)))
+        definitionWithInference(successorOfNaturalIsNatural, Nil, Seq(add($.^, $)), ExtractionDefinition.Empty, unwrappers = Seq(ForAllDefinition, Implication, ForAllDefinition, Implication)))
 
       checkModifySteps(
         service,
@@ -321,7 +322,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(axiom, Nil, Nil, Seq(extractLeftConjunct, extractRightConjunct, FunctionFrom.statementDefinition.deconstructionInference.get, extractRightConjunct, extractLeftConjunct)))
+        definitionWithInference(axiom, Nil, Nil, simpleExtraction(extractLeftConjunct, extractRightConjunct, FunctionFrom.statementDefinition.deconstructionInference.get, extractRightConjunct, extractLeftConjunct)))
 
       checkModifySteps(
         service,
@@ -349,7 +350,7 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithPremise(premise, Seq(specification), Substitutions(Seq(φ($), ψ), Seq($)), Some(φ($)))(implicitly, localVariableDefinitions))
+        definitionWithPremise(premise, simpleExtraction(specification), Substitutions(Seq(φ($), ψ), Seq($)), Some(φ($)))(implicitly, localVariableDefinitions))
 
       checkModifySteps(
         service,

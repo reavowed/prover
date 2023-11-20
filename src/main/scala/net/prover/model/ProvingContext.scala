@@ -6,6 +6,7 @@ import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.proving.extraction.ExtractionCalculator.{ExtractionFromSinglePremise, InferenceExtraction}
+import net.prover.proving.extraction.ExtractionDefinition
 import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
@@ -70,6 +71,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val alwaysAllowableOperator: Allowable[Operator] = alwaysAllowable
     implicit val allowableEquality: Allowable[Equality] = allowableGeneric(Generic[Equality])
 
+    implicit val allowableExtractionDefinition: Allowable[ExtractionDefinition] = allowableGeneric(Generic[ExtractionDefinition])
     implicit val allowableExtractionFromSinglePremise: Allowable[ExtractionFromSinglePremise] = allowableGeneric(Generic[ExtractionFromSinglePremise])
     implicit val allowableInferenceExtraction: Allowable[InferenceExtraction] = allowableGeneric(Generic[InferenceExtraction])
     implicit val allowableFact: Allowable[Fact] = allowableGeneric(Generic[Fact])
@@ -155,6 +157,13 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   def filter[T](t: T)(implicit replacable: Filterable[T]): T = replacable.replace(t)
 
   lazy val inferenceExtractionsByInferenceId: Map[String, Seq[InferenceExtraction]] = filter(definitions.inferenceExtractionsByInferenceId)
+
+  def findInferenceExtraction(baseInferenceId: String, extractionDefinition: ExtractionDefinition.Serialized): Option[InferenceExtraction] = {
+    for {
+      extractions <- inferenceExtractionsByInferenceId.get(baseInferenceId)
+      matchingExtraction <- extractions.find(_.innerExtraction.extractionDefinition.matches(extractionDefinition))
+    } yield matchingExtraction
+  }
 
   lazy val deductionDefinitionOption: Option[DeductionDefinition] = availableEntries.deductionDefinitionOption
   lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {

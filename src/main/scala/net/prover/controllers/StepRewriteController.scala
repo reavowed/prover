@@ -10,7 +10,7 @@ import net.prover.model.proof.EqualityRewriter.{RewriteMethods, RewritePossibili
 import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.proving.FindInference
-import net.prover.proving.extraction.ExtractionApplier
+import net.prover.proving.extraction.{ExtractionApplier, ExtractionDefinition}
 import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.proving.stepReplacement.InsertStepBeforeChain
 import net.prover.proving.suggestions.InferenceFilter
@@ -90,7 +90,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
               .map { case ((source, result), paths) =>
                 InferenceRewriteSuggestion(
                   termRewriteInference.baseInference.summary,
-                  termRewriteInference.extractionInferences.map(_.id),
+                  termRewriteInference.extractionDefinition.serialized,
                   source,
                   result,
                   paths)
@@ -170,16 +170,10 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     equality: Equality)(
     implicit stepProvingContext: StepProvingContext
   ): Try[(Term, Term, Seq[Step], Option[Inference.Summary], Option[Inference.Summary], Seq[Unwrapper], TExpression)] = {
+    val extractionDefinition = rewrite.extractionDefinition.reverseIfNecessary(direction, equality)
     for {
-      inference <- FindInference(inferenceId)
-      extractionInferenceIds = if (!direction.isReversed) {
-        rewrite.extractionInferenceIds
-      } else if (rewrite.extractionInferenceIds.lastOption.contains(equality.reversal.inference.id)) {
-        rewrite.extractionInferenceIds.init
-      } else {
-        rewrite.extractionInferenceIds :+ equality.reversal.inference.id
-      }
-      inferenceExtraction <- stepProvingContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == extractionInferenceIds).orBadRequest(s"Could not find extraction for inference ${inference.id}")
+      inferenceExtraction <- stepProvingContext.provingContext.findInferenceExtraction(inferenceId, extractionDefinition).orBadRequest(s"Could not find extraction")
+      inference = inferenceExtraction.inference
       (lhs, rhs) <- equality.unapply(inferenceExtraction.conclusion).orBadRequest("Rewrite conclusion was not equality")
       (sourceTemplate, targetTemplate) = direction.swapSourceAndResult(lhs, rhs)
       substitutions <- sourceTemplate.calculateSubstitutions(baseTerm).orBadRequest("Could not find substitutions")
@@ -191,7 +185,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       finalSubstitutionsAfterPremises <- inference.premises.zip(removedPremises).foldLeft(Try(finalSubstitutionsAfterSource)) { case (s, (ip, p)) => s.flatMap(ip.calculateSubstitutions(p, _)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions"))}
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
-      extractionStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
+      extractionStep <- ExtractionApplier.getInferenceExtractionStepWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
       elidedStep = Step.Elided.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).distinctBy(_.statement), inference).get
     } yield (removedSource, rewrittenTerm, Seq(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
   }
@@ -479,7 +473,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
 object StepRewriteController {
   val logger: Logger = LoggerFactory.getLogger(StepRewriteController.getClass)
 
-  case class InferenceRewriteSuggestion(inference: Inference.Summary, extractionInferenceIds: Seq[String], source: Term, result: Term, paths: Seq[Seq[Int]])
+  case class InferenceRewriteSuggestion(inference: Inference.Summary, extractionDefinition: ExtractionDefinition.Serialized, source: Term, result: Term, paths: Seq[Seq[Int]])
   case class PremiseSuggestion(statement: Statement, reference: Option[PreviousLineReference], rewriteSuggestions: Seq[PremiseRewritePath])
   case class PremiseRewritePath(path: Seq[Int], result: Term)
 }

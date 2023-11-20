@@ -5,12 +5,13 @@ import net.prover.controllers._
 import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstitutionContext
+import net.prover.proving.extraction.ExtractionDefinition
 
 case class StepDefinition(
     inferenceId: Option[String],
     serializedPremiseStatement: Option[String],
     substitutions: SerializedSubstitutions,
-    extractionInferenceIds: Seq[String],
+    extractionDefinition: ExtractionDefinition.Serialized,
     wrappingSymbols: Seq[String],
     serializedIntendedPremiseStatements: Option[Seq[String]],
     serializedIntendedConclusionStatement: Option[String],

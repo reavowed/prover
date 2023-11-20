@@ -3,6 +3,7 @@ package net.prover.model.definitions
 import net.prover.model.expressions.Statement
 import net.prover.model.{Inference, VariableDefinitions}
 import net.prover.proving.extraction.ExtractionCalculator.InferenceExtraction
+import net.prover.proving.extraction.ExtractionDefinition
 
 trait DerivedInference {
   def inferenceExtraction: InferenceExtraction
@@ -10,7 +11,7 @@ trait DerivedInference {
   def premises: Seq[Statement] = inferenceExtraction.premises
   def conclusion: Statement = inferenceExtraction.conclusion
   def variableDefinitions: VariableDefinitions = inferenceExtraction.variableDefinitions
-  def extractionInferences: Seq[Inference] = inferenceExtraction.extractionInferences
+  def extractionDefinition: ExtractionDefinition = inferenceExtraction.extractionDefinition
 
   def baseInference: Inference.Summary = inferenceExtraction.inference
   def derivedSummary: Inference.Summary = inferenceExtraction.derivedSummary

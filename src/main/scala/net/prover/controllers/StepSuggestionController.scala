@@ -5,6 +5,7 @@ import net.prover.model._
 import net.prover.model.definitions.NamingInference
 import net.prover.model.expressions._
 import net.prover.model.proof._
+import net.prover.proving.extraction.ExtractionDefinition
 import net.prover.proving.suggestions.InferenceFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -54,7 +55,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) {
                 PossiblePremise.fromAvailablePremises(namingPremises, Some(s), inference.variableDefinitions),
                 Some(SuggestedSubstitutions(inference.variableDefinitions, s)),
                 inference.variableDefinitions,
-                Nil,
+                ExtractionDefinition.Empty.serialized,
                 Nil))))
         }
         .take(10)

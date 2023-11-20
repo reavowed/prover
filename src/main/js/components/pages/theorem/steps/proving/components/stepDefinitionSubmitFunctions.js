@@ -5,7 +5,7 @@ export function createSubmitFunctionForStepDefinitionEndpointFromInference(conte
       body: {
         inferenceId: possibleInference.inference.id,
         substitutions,
-        extractionInferenceIds: possibleConclusion.extractionInferenceIds,
+        extractionDefinition: possibleConclusion.extractionDefinition,
         wrappingSymbols: possibleTarget ? possibleTarget.wrappingDefinitions : [],
         serializedIntendedPremiseStatements: premiseStatements.map(p => p.serialize()),
         serializedIntendedConclusionStatement: conclusionStatement.serialize(),
@@ -26,7 +26,7 @@ export function createSubmitFunctionForStepDefinitionEndpointFromPremise(context
       body: {
         serializedPremiseStatement: premiseStatement.serialize(),
         substitutions,
-        extractionInferenceIds: selectedConclusion.extractionInferenceIds,
+        extractionDefinition: selectedConclusion.extractionDefinition,
         wrappingSymbols: [],
         serializedIntendedPremiseStatements: premiseStatements.map(p => p.serialize()),
         serializedIntendedConclusionStatement: conclusionStatement.serialize(),

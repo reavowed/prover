@@ -9,7 +9,7 @@ object ExtractionCalculator {
     def premises: Seq[Statement]
     def conclusion: Statement
     def variableDefinitions: VariableDefinitions
-    def extractionInferences: Seq[Inference.Summary]
+    def extractionDefinition: ExtractionDefinition
     def additionalVariableNames: Seq[String]
   }
 
@@ -17,14 +17,14 @@ object ExtractionCalculator {
     premises: Seq[Statement],
     conclusion: Statement,
     derivation: Seq[Step.Assertion],
-    extractionInferences: Seq[Inference.Summary],
-    additionalVariableNames: Seq[String])
+    additionalVariableNames: Seq[String],
+    extractionDefinition: ExtractionDefinition)
 
   case class InferenceExtraction(inference: Inference.Summary, innerExtraction: ExtractionFromSinglePremise) extends Extraction {
     def premises: Seq[Statement] = inference.premises ++ innerExtraction.premises
     def conclusion: Statement = innerExtraction.conclusion
     def variableDefinitions: VariableDefinitions = inference.variableDefinitions.addSimpleTermVariableNames(innerExtraction.additionalVariableNames)
-    def extractionInferences: Seq[Inference.Summary] = innerExtraction.extractionInferences
+    def extractionDefinition: ExtractionDefinition = innerExtraction.extractionDefinition
     def additionalVariableNames: Seq[String] = innerExtraction.additionalVariableNames
     def derivedSummary: Inference.Summary = Inference.Summary(inference.name, Inference.calculateHash(premises, conclusion), variableDefinitions, premises, conclusion)
   }
@@ -32,7 +32,7 @@ object ExtractionCalculator {
     def premises: Seq[Statement] = innerExtraction.premises
     def conclusion: Statement = innerExtraction.conclusion
     def variableDefinitions: VariableDefinitions = stepContext.variableDefinitions.addSimpleTermVariableNames(innerExtraction.additionalVariableNames)
-    def extractionInferences: Seq[Inference.Summary] = innerExtraction.extractionInferences
+    def extractionDefinition: ExtractionDefinition = innerExtraction.extractionDefinition
     def additionalVariableNames: Seq[String] = innerExtraction.additionalVariableNames
   }
 
@@ -54,7 +54,7 @@ object ExtractionCalculator {
   }
 
   private def getBaseExtractions(sourceStatement: Statement, variableTracker: VariableTracker): Seq[ExtractionFromSinglePremise] = {
-    Seq(ExtractionFromSinglePremise(Nil, sourceStatement, Nil, Nil, variableTracker.additionalVariableNames))
+    Seq(ExtractionFromSinglePremise(Nil, sourceStatement, Nil, variableTracker.additionalVariableNames, ExtractionDefinition.Empty))
   }
 
   private def getSimpleExtractions(
@@ -77,7 +77,7 @@ object ExtractionCalculator {
     } yield innerExtraction.copy(
       premises = newPremiseOption.toSeq ++ innerExtraction.premises,
       derivation = assertionStep +: innerExtraction.derivation,
-      extractionInferences = inference.summary +: innerExtraction.extractionInferences)
+      extractionDefinition = innerExtraction.extractionDefinition.addInitialExtractionInference(inference.summary))
   }
 
   private def getSimpleExtractions(
@@ -111,7 +111,7 @@ object ExtractionCalculator {
       assertionStep = Step.Assertion(nextPremise, inference.summary, Seq(Premise.Pending(sourceStatement)), substitutions)
     } yield innerExtraction.copy(
       derivation = assertionStep +: innerExtraction.derivation,
-      extractionInferences = inference.summary +: innerExtraction.extractionInferences)
+      extractionDefinition = innerExtraction.extractionDefinition.addInitialExtractionInference(inference.summary))
   }
 
   private def getDefinitionDeconstructionExtractions(
@@ -133,7 +133,7 @@ object ExtractionCalculator {
       assertionStep = Step.Assertion(deconstructedStatement, inference.summary, Seq(Premise.Pending(sourceStatement)), substitutions)
     } yield innerExtraction.copy(
       derivation = assertionStep +: innerExtraction.derivation,
-      extractionInferences = inference.summary +: innerExtraction.extractionInferences)
+      extractionDefinition = innerExtraction.extractionDefinition.addInitialExtractionInference(inference.summary))
   }
 
   private def getFinalExtractions(

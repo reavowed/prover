@@ -27,7 +27,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
       } yield (inferenceExtraction, substitutions)).headOption
       for {
         (inferenceExtraction, substitutions) <- substitutionsOption.failIfUndefined(InferenceReplacementException("Could not find extraction option", stepWithContext))
-        extractionStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, substitutions).failIfUndefined(InferenceReplacementException("Could not apply extraction", stepWithContext))
+        extractionStep <- ExtractionApplier.getInferenceExtractionStepWithoutPremises(inferenceExtraction, substitutions).failIfUndefined(InferenceReplacementException("Could not apply extraction", stepWithContext))
       } yield extractionStep
     } else super.updateAssertion(step, stepWithContext)
   }

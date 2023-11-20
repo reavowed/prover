@@ -23,14 +23,13 @@ object CreateProofStep {
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
         premise <- stepProvingContext.findPremise(premiseStatement).orBadRequest(s"Could not find premise $premiseStatement")
-        extractionInferences <- definition.extractionInferenceIds.map(FindInference(_)).traverseTry
-        extraction <- ExtractionCalculator.getPremiseExtractions(premiseStatement).find(_.extractionInferences == extractionInferences).orBadRequest("Could not find extraction with given inferences")
+        extraction <- ExtractionCalculator.getPremiseExtractions(premiseStatement).find(_.extractionDefinition.matches(definition.extractionDefinition)).orBadRequest("Could not find extraction with given inferences")
         substitutions <- definition.substitutions.parse(extraction.variableDefinitions)
         epc = implicitly[ExpressionParsingContext].addSimpleTermVariables(extraction.additionalVariableNames)
         conclusionOption <- getConclusionOption(epc, substitutions)
         newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
         substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to intended new targets")).swap
-        (result, stepOption, extractionTargets) <- ExtractionApplier.getPremiseExtractionWithPremises(premise, extractionInferences, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
+        (result, stepOption, extractionTargets) <- ExtractionApplier.getPremiseExtractionStepWithPremises(premise, extraction, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
         step <- stepOption.orBadRequest("At least one step must be present")
       } yield (result, step, extractionTargets)
     }

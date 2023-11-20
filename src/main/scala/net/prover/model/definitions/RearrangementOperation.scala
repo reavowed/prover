@@ -14,9 +14,8 @@ sealed trait RearrangementOperation {
   def result(terms: Seq[Term])(implicit substitutionContext: SubstitutionContext): Term
   def rearrangementStep[T <: Expression](terms: Seq[Term], wrapper: Wrapper[Term, T], expansion: Expansion[T])(implicit stepProvingContext: StepProvingContext): Option[RearrangementStep[T]] = {
     for {
-      (assertionStep, targetSteps) <- ExtractionApplier.getInferenceExtractionWithPremises(
-        inferenceExtraction.inference,
-        inferenceExtraction.innerExtraction.extractionInferences,
+      (assertionStep, targetSteps) <- ExtractionApplier.getInferenceExtractionStepWithPremises(
+        inferenceExtraction,
         Substitutions(Nil, terms),
         Nil,
         None,

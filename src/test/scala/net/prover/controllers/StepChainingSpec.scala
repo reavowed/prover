@@ -4,6 +4,7 @@ import net.prover.controllers.StepChainingController.ChainedTargetDefinition
 import net.prover.controllers.models.PathData
 import net.prover.model.TestDefinitions
 import net.prover.model.TestDefinitions._
+import net.prover.proving.extraction.ExtractionDefinition
 
 class StepChainingSpec extends ControllerSpec {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
@@ -58,7 +59,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
-      controller.addChainingFromLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), definitionWithPremise(premise, Nil, Nil, None))
+      controller.addChainingFromLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), definitionWithPremise(premise, Nil, ExtractionDefinition.Empty, None))
 
       checkModifySteps(
         service,
@@ -71,7 +72,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
-      controller.addChainingFromRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), definitionWithPremise(premise, Nil, Nil, None))
+      controller.addChainingFromRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), definitionWithPremise(premise, Nil, ExtractionDefinition.Empty, None))
 
       checkModifySteps(
         service,
@@ -87,7 +88,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
-      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, Nil))))
+      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, ExtractionDefinition.Empty))))
 
       checkModifySteps(
         service,
@@ -104,7 +105,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
-      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, Nil))))
+      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, ExtractionDefinition.Empty))))
 
       checkModifySteps(
         service,
@@ -123,7 +124,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
-      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Seq(0), Nil))))
+      controller.rewriteLeft(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Seq(0), ExtractionDefinition.Empty))))
 
       checkModifySteps(
         service,
@@ -142,7 +143,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
-      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Seq(0), Nil))))
+      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Seq(0), ExtractionDefinition.Empty))))
 
       checkModifySteps(
         service,
@@ -162,7 +163,7 @@ class StepChainingSpec extends ControllerSpec {
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
-      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, Nil))))
+      controller.rewriteRight(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), Seq(Seq(rewrite(zeroIsRightIdentityForAddition, Nil, ExtractionDefinition.Empty))))
 
       checkModifySteps(
         service,
@@ -188,7 +189,7 @@ class StepChainingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(zeroIsRightIdentityForAddition, Nil, Seq(b), Nil))
+        definitionWithInference(zeroIsRightIdentityForAddition, Nil, Seq(b), ExtractionDefinition.Empty))
 
       checkModifySteps(
         service,

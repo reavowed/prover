@@ -22,7 +22,7 @@ object DirectDerivationFinder {
       substitutions <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inferenceExtraction.variableDefinitions))
       premiseStatements <- inferenceExtraction.premises.map(_.applySubstitutions(substitutions)).traverseOption
       premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatements(premiseStatements)
-      derivationStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
+      derivationStep <- ExtractionApplier.getInferenceExtractionStepWithoutPremises(inferenceExtraction, substitutions)
     } yield premiseSteps :+ derivationStep).headOption
 
     def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>

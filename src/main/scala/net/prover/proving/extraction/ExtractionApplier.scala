@@ -7,7 +7,7 @@ import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.Step.InferenceWithPremiseDerivations
 import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
-import net.prover.proving.extraction.ExtractionCalculator.{InferenceExtraction, VariableTracker}
+import net.prover.proving.extraction.ExtractionCalculator.{InferenceExtraction, PremiseExtraction, VariableTracker}
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 
 import scala.util.{Failure, Success, Try}
@@ -121,28 +121,27 @@ object ExtractionApplier {
 
   private def applyExtractionsForInference(
     assertionStep: Step.Assertion,
-    extractionInferences: Seq[Inference],
-    baseInference: Inference,
+    inferenceExtraction: InferenceExtraction,
     substitutions: Substitutions,
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement])(
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
   ): Try[ExtractionApplication] = {
-    applyExtractions(assertionStep.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromInference(baseInference))
+    applyExtractions(assertionStep.statement, inferenceExtraction.extractionDefinition.extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromInference(inferenceExtraction.inference))
   }
   private def applyExtractionsForPremise(
     premise: Premise,
-    extractionInferences: Seq[Inference],
+    premiseExtraction: PremiseExtraction,
     substitutions: Substitutions,
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement])(
     implicit stepProvingContext: StepProvingContext
   ): Try[ExtractionApplication] = {
-    applyExtractions(premise.statement, extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext)
+    applyExtractions(premise.statement, premiseExtraction.extractionDefinition.extractionInferences, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext)
   }
 
-  def getInferenceExtractionWithoutPremises(
+  def getInferenceExtractionStepWithoutPremises(
     inferenceExtraction: InferenceExtraction,
     substitutions: Substitutions)(
     implicit provingContext: ProvingContext,
@@ -150,13 +149,12 @@ object ExtractionApplier {
   ): Option[Step.InferenceApplicationWithoutPremises] = {
     for {
       assertionStep <- Step.Assertion.forInference(inferenceExtraction.inference, substitutions)
-      extractionApplication <- ExtractionApplier.applyExtractionsForInference(assertionStep, inferenceExtraction.innerExtraction.extractionInferences, inferenceExtraction.inference, substitutions, None, None).toOption
+      extractionApplication <- ExtractionApplier.applyExtractionsForInference(assertionStep, inferenceExtraction, substitutions, None, None).toOption
     } yield createDerivationForInferenceExtraction(assertionStep, extractionApplication.extractionSteps)
   }
 
-  def getInferenceExtractionWithPremises(
-    inference: Inference,
-    extractionInferences: Seq[Inference],
+  def getInferenceExtractionStepWithPremises(
+    inferenceExtraction: InferenceExtraction,
     substitutions: Substitutions,
     unwrappers: Seq[Unwrapper],
     intendedPremises: Option[Seq[Statement]],
@@ -165,12 +163,11 @@ object ExtractionApplier {
   ): Try[(Step.InferenceApplication, Seq[Step.Target])] = {
     val wrappedStepContext = unwrappers.enhanceStepProvingContext
     for {
-      mainAssertion <- Step.Assertion.forInference(inference, substitutions)(wrappedStepContext).orBadRequest("Could not apply substitutions to inference")
+      mainAssertion <- Step.Assertion.forInference(inferenceExtraction.inference, substitutions)(wrappedStepContext).orBadRequest("Could not apply substitutions to inference")
       ExtractionApplication(_, mainPremise, extractionSteps, extractionPremises) <-
         ExtractionApplier.applyExtractionsForInference(
           mainAssertion,
-          extractionInferences,
-          inference,
+          inferenceExtraction,
           substitutions,
           intendedPremises,
           intendedConclusion)(
@@ -188,16 +185,16 @@ object ExtractionApplier {
     } yield (InferenceWithPremiseDerivations.ifNecessary(premiseSteps, wrappedStep), targetSteps)
   }
 
-  def getPremiseExtractionWithPremises(
+  def getPremiseExtractionStepWithPremises(
     premise: Premise,
-    extractionInferences: Seq[Inference],
+    premiseExtraction: PremiseExtraction,
     substitutions: Substitutions,
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement])(
     implicit stepProvingContext: StepProvingContext
   ): Try[(Statement, Option[Step], Seq[Step.Target])] = {
     for {
-      ExtractionApplication(extractionResult, _, extractionSteps, extractionPremises) <- ExtractionApplier.applyExtractionsForPremise(premise, extractionInferences, substitutions, intendedPremises, intendedConclusion)
+      ExtractionApplication(extractionResult, _, extractionSteps, extractionPremises) <- ExtractionApplier.applyExtractionsForPremise(premise, premiseExtraction, substitutions, intendedPremises, intendedConclusion)
       extractionStep = groupStepsByDefinition(extractionSteps) match {
         case Nil => None
         case singleStep +: Nil => Some(singleStep)

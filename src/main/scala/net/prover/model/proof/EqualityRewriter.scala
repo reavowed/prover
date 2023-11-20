@@ -29,7 +29,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality(rewriteInference.variableDefinitions)
         simplifiedTerm <- inferenceResult.applySubstitutions(finalSubstitutions)
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
-        extractionStep <- ExtractionApplier.getInferenceExtractionWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
+        extractionStep <- ExtractionApplier.getInferenceExtractionStepWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
       } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation) :+ extractionStep) ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
     }

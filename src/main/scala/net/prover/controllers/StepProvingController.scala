@@ -4,6 +4,7 @@ import net.prover.controllers.models._
 import net.prover.model._
 import net.prover.model.proof._
 import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement}
+import net.prover.proving.extraction.ExtractionDefinition
 import net.prover.proving.fromExistingStatement.{SuggestExistingStatementsForCurrentTarget, SuggestExistingStatementsForNewTarget}
 import net.prover.proving.suggestions.{InferenceFilter, SuggestInferencesForExistingTarget}
 import net.prover.proving.{FindInference, ProveCurrentTarget, ProveNewTarget}
@@ -36,13 +37,12 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("inferenceId") inferenceId: String,
     @RequestParam("targetUnwrappers") targetUnwrappers: Array[String],
-    @RequestParam("conclusionExtractionInferenceIds") conclusionExtractionInferenceIds: Array[String]
+    @RequestParam("conclusionExtractionDefinition") conclusionExtractionDefinition: ExtractionDefinition.Serialized
   ): ResponseEntity[_] = {
     bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
       for {
-        inference <- FindInference(inferenceId)
         possibleTarget <- UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
-        inferenceExtraction <- stepWithContext.provingContext.inferenceExtractionsByInferenceId(inference.id).find(_.extractionInferences.map(_.id) == conclusionExtractionInferenceIds.toSeq).orBadRequest(s"Could not find extraction option with inference ids ${conclusionExtractionInferenceIds.mkString(", ")}")
+        inferenceExtraction <- stepWithContext.provingContext.findInferenceExtraction(inferenceId, conclusionExtractionDefinition).orBadRequest(s"Could not find extraction")
       } yield PossibleConclusionWithPremises.fromExtractionWithTarget(inferenceExtraction, possibleTarget.statement)(possibleTarget.unwrappers.enhanceStepProvingContext)
     ).toResponseEntity
   }

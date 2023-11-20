@@ -11,7 +11,7 @@ addCompilerPlugin("io.tryp" % "splain" % "1.0.3" cross CrossVersion.patch)
 libraryDependencies ++= Seq(
   "com.chuusai" %% "shapeless" % "2.3.10",
   "org.springframework.boot" % "spring-boot-starter-web" % "1.4.2.RELEASE",
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.14.2",
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.16.0",
   "commons-io" % "commons-io" % "2.5",
   "com.googlecode.concurrent-locks" % "concurrent-locks" % "1.0.0",
   "org.scala-lang.modules" %% "scala-xml" % "2.1.0",

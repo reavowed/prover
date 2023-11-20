@@ -8,8 +8,8 @@ export default function ProveCurrentTargetByInference({path, onError}) {
   const getInferenceSuggestions = (searchText) => {
     return context.fetchJsonForStep(path, `suggestInferencesForExistingTarget?searchText=${encodeURIComponent(searchText)}`);
   };;
-  const fetchPossiblePremises = (inference, wrappingDefinitions, extractionInferenceIds) => {
-    return context.fetchJsonForStep(path, `possiblePremisesForCurrentTarget?inferenceId=${encodeURIComponent(inference.id)}&targetUnwrappers=${encodeURIComponent(wrappingDefinitions.join(","))}&conclusionExtractionInferenceIds=${encodeURIComponent(extractionInferenceIds.join(","))}`)
+  const fetchPossiblePremises = (inference, wrappingDefinitions, extractionDefinition) => {
+    return context.fetchJsonForStep(path, `possiblePremisesForCurrentTarget?inferenceId=${encodeURIComponent(inference.id)}&targetUnwrappers=${encodeURIComponent(wrappingDefinitions.join(","))}&conclusionExtractionDefinition=${encodeURIComponent(JSON.stringify(extractionDefinition))}`)
       .then(context.parser.parsePossibleConclusion);
   };
   const proveWithInference = createSubmitFunctionForStepDefinitionEndpointFromInference(context.fetchJsonForStepAndInsertAndReplace, path, "", "PUT", onError);

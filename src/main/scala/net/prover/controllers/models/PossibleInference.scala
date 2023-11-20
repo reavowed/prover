@@ -4,6 +4,7 @@ import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.StepProvingContext
 import net.prover.model.{Inference, Substitutions, VariableDefinitions}
 import net.prover.proving.extraction.ExtractionCalculator.Extraction
+import net.prover.proving.extraction.ExtractionDefinition
 
 case class PossibleInferenceWithTargets(inference: Inference.Summary, possibleTargets: Seq[PossibleTarget])
 case class PossibleInferenceWithConclusions(inference: Inference.Summary, possibleConclusions: Seq[PossibleConclusionWithPremises])
@@ -16,13 +17,13 @@ case class PossibleTarget(
 
 sealed trait PossibleConclusion {
   def conclusion: Statement
-  def extractionInferenceIds: Seq[String]
+  def extractionDefinition: ExtractionDefinition.Serialized
   def additionalVariableNames: Seq[String]
 }
 
 case class PossibleConclusionWithoutPremises(
   conclusion: Statement,
-  extractionInferenceIds: Seq[String],
+  extractionDefinition: ExtractionDefinition.Serialized,
   additionalVariableNames: Seq[String]
 ) extends PossibleConclusion
 
@@ -31,7 +32,7 @@ case class PossibleConclusionWithPremises(
   possiblePremises: Seq[PossiblePremise],
   substitutions: Option[SuggestedSubstitutions],
   variableDefinitions: VariableDefinitions,
-  extractionInferenceIds: Seq[String],
+  extractionDefinition: ExtractionDefinition.Serialized,
   additionalVariableNames: Seq[String]
 ) extends PossibleConclusion
 
@@ -48,7 +49,7 @@ object PossibleConclusionWithPremises {
       PossiblePremise.fromAvailablePremises(extraction.premises, substitutions, extraction.variableDefinitions),
       substitutions.map(SuggestedSubstitutions(extraction.variableDefinitions, _)),
       extraction.variableDefinitions,
-      extraction.extractionInferences.map(_.id),
+      extraction.extractionDefinition.serialized,
       extraction.additionalVariableNames)
   }
 }

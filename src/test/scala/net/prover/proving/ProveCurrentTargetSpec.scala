@@ -4,6 +4,7 @@ import net.prover.{BookServiceHelper, StepHelpers}
 import net.prover.controllers.BookService
 import net.prover.controllers.models.{PathData, SerializedSubstitutions, StepDefinition}
 import net.prover.model.TestDefinitions._
+import net.prover.proving.extraction.ExtractionDefinition
 import org.specs2.mutable.Specification
 
 class ProveCurrentTargetSpec extends Specification with BookServiceHelper with StepHelpers {
@@ -25,7 +26,7 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
           Some(modusPonens.id),
           None,
           SerializedSubstitutions(Seq(φ.serialized, ψ.serialized), Nil),
-          Nil,
+          ExtractionDefinition.Empty.serialized,
           Nil,
           None,
           None,
@@ -60,7 +61,7 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
           Some(modusPonens.id),
           None,
           SerializedSubstitutions(Seq(Conjunction(φ, ψ).serialized, χ.serialized), Nil),
-          Nil,
+          ExtractionDefinition.Empty.serialized,
           Nil,
           None,
           None,
@@ -102,7 +103,7 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
           Some(modusPonens.id),
           None,
           SerializedSubstitutions(Seq(φ.serialized, ψ.serialized), Nil),
-          Nil,
+          ExtractionDefinition.Empty.serialized,
           Nil,
           None,
           None,
@@ -137,7 +138,7 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
           Some(modusPonens.id),
           None,
           SerializedSubstitutions(Seq(φ.serialized, Implication(ψ, χ).serialized), Nil),
-          Nil,
+          ExtractionDefinition.Empty.serialized,
           Nil,
           None,
           None,
@@ -174,7 +175,7 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
           Some(modusPonens.id),
           None,
           SerializedSubstitutions(Seq(φ($).serialized, ψ($).serialized), Nil),
-          Nil,
+          ExtractionDefinition.Empty.serialized,
           Seq(ForAllDefinition.symbol),
           None,
           None,

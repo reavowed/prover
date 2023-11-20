@@ -26,7 +26,7 @@ object SuggestInferencesForExistingTarget {
           possibleUnwrappedTargetStatement <- possibleUnwrappedTargetStatements
           possibleConclusions = stepWithContext.provingContext.inferenceExtractionsByInferenceId(inference.id)
             .filter(_.conclusion.calculateSubstitutions(possibleUnwrappedTargetStatement.statement).nonEmpty)
-            .map(e => PossibleConclusionWithoutPremises(e.conclusion, e.extractionInferences.map(_.id), e.additionalVariableNames))
+            .map(e => PossibleConclusionWithoutPremises(e.conclusion, e.extractionDefinition.serialized, e.additionalVariableNames))
           if possibleConclusions.nonEmpty
         } yield PossibleTarget(
           possibleUnwrappedTargetStatement.statement,

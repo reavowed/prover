@@ -3,6 +3,7 @@ package net.prover.proving
 import net.prover.controllers.BookService
 import net.prover.controllers.models.{PathData, SerializedSubstitutions, StepDefinition}
 import net.prover.model.TestDefinitions._
+import net.prover.proving.extraction.ExtractionDefinition
 import net.prover.{BookServiceHelper, ContextHelper, StepHelpers}
 import org.specs2.mutable.Specification
 
@@ -25,7 +26,7 @@ class ProveNewTargetSpec extends Specification with ContextHelper with BookServi
           Some(modusPonens.id),
           None,
           SerializedSubstitutions(Seq(φ.serialized, ψ.serialized), Nil),
-          Nil,
+          ExtractionDefinition.Empty.serialized,
           Nil,
           None,
           None,
@@ -61,7 +62,7 @@ class ProveNewTargetSpec extends Specification with ContextHelper with BookServi
           Some(equalityIsReflexive.id),
           None,
           SerializedSubstitutions(Nil, Seq(a.serialized)),
-          Nil,
+          ExtractionDefinition.Empty.serialized,
           Nil,
           None,
           None,

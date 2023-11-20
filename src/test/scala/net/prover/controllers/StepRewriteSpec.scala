@@ -5,6 +5,7 @@ import net.prover.controllers.models.{PathData, PremiseRewrite}
 import net.prover.model.TestDefinitions._
 import net.prover.model.proof.{Step, StepReference}
 import net.prover.model.{TermVariablePlaceholder, TestDefinitions}
+import net.prover.proving.extraction.ExtractionDefinition
 import org.springframework.http.ResponseEntity
 
 import scala.util.Success
@@ -285,7 +286,7 @@ class StepRewriteSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        Seq(Seq(rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0), Nil))))
+        Seq(Seq(rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0), ExtractionDefinition.Empty))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -325,8 +326,8 @@ class StepRewriteSpec extends ControllerSpec {
         proofIndex,
         PathData(stepPath),
         Seq(Seq(
-          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 0), Nil),
-          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 1), Nil))))
+          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 0), ExtractionDefinition.Empty),
+          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 1), ExtractionDefinition.Empty))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -378,7 +379,7 @@ class StepRewriteSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        Seq(Seq(rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0), Nil))))
+        Seq(Seq(rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0), ExtractionDefinition.Empty))))
 
       checkModifySteps(
         service,
@@ -418,8 +419,8 @@ class StepRewriteSpec extends ControllerSpec {
         proofIndex,
         PathData(stepPath),
         Seq(Seq(
-          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 0), Nil),
-          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 1), Nil))))
+          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 0), ExtractionDefinition.Empty),
+          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 1, 0, 1), ExtractionDefinition.Empty))))
 
       checkModifySteps(
         service,
@@ -513,7 +514,7 @@ class StepRewriteSpec extends ControllerSpec {
         proofIndex,
         PathData(stepPath),
         Seq(Seq(
-          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 0), Nil))))
+          rewrite(elementOfCartesianProductFromCoordinates, Seq(0, 1, 0, 0), ExtractionDefinition.Empty))))
 
       checkModifyStepsWithoutProps(
         service,
@@ -612,8 +613,8 @@ class StepRewriteSpec extends ControllerSpec {
         proofIndex,
         PathData(stepPath),
         Seq(Seq(
-          rewrite(integerAdditionIsCommutative, Seq(0), Seq(Commutative.deconstructionInference, extractRightConjunct, specification, modusPonens, specification, modusPonens)),
-          rewrite(integerAdditionIsCommutative, Seq(1), Seq(Commutative.deconstructionInference, extractRightConjunct, specification, modusPonens, specification, modusPonens)))))
+          rewrite(integerAdditionIsCommutative, Seq(0), simpleExtraction(Commutative.deconstructionInference, extractRightConjunct, specification, modusPonens, specification, modusPonens)),
+          rewrite(integerAdditionIsCommutative, Seq(1), simpleExtraction(Commutative.deconstructionInference, extractRightConjunct, specification, modusPonens, specification, modusPonens)))))
 
         checkModifyStepsWithoutProps(
           service,

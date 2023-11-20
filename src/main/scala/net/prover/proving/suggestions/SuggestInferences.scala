@@ -59,7 +59,7 @@ object SuggestInferences {
                 possibleInference,
                 possibleInference.possibleTargets.map(_.target.structuralComplexity).max,
                 possibleInference.possibleTargets.flatMap(_.possibleConclusions.map(getConclusionComplexity)).max,
-                possibleInference.possibleTargets.flatMap(_.possibleConclusions.map(_.extractionInferenceIds.length)).min,
+                possibleInference.possibleTargets.flatMap(_.possibleConclusions.map(_.extractionDefinition.depth)).min,
                 matchHead.index)
               recursivelyFindInferences(matchTail, matchedInferences, queuedInferences + possibleInferenceWithComplexity)
             case None =>
