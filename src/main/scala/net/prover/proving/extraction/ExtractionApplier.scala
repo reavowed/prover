@@ -129,7 +129,7 @@ object ExtractionApplier {
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
   ): Try[ExtractionApplication] = {
-    applySimpleExtractions(statement, extractionDefinition.extractionInferences ++ extractionDefinition.rewriteInference.toSeq, substitutions, intendedPremises, intendedConclusion, variableTracker)
+    applySimpleExtractions(statement, extractionDefinition.extractionInferences ++ extractionDefinition.reversalInference.toSeq, substitutions, intendedPremises, intendedConclusion, variableTracker)
   }
 
 

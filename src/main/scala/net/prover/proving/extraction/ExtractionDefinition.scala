@@ -10,35 +10,35 @@ import org.springframework.stereotype.Component
 
 case class ExtractionDefinition(
   extractionInferences: Seq[Inference.Summary],
-  rewriteInference: Option[Inference.Summary])
+  reversalInference: Option[Inference.Summary])
 {
   def serialized: ExtractionDefinition.Serialized = {
-    ExtractionDefinition.Serialized(extractionInferences.map(_.id), rewriteInference.map(_.id))
+    ExtractionDefinition.Serialized(extractionInferences.map(_.id), reversalInference.map(_.id))
   }
   def matches(serializedDefinition: ExtractionDefinition.Serialized): Boolean = {
     extractionInferences.map(_.id) == serializedDefinition.extractionInferenceIds &&
-      rewriteInference.map(_.id) == serializedDefinition.rewriteInferenceId
+      reversalInference.map(_.id) == serializedDefinition.reversalInferenceId
   }
   def addNextExtractionInference(inference: Inference.Summary): ExtractionDefinition = {
     copy(extractionInferences = extractionInferences :+ inference)
   }
-  def setRewriteInference(inference: Inference.Summary): ExtractionDefinition = {
-    copy(rewriteInference = Some(inference))
+  def setReversalInference(inference: Inference.Summary): ExtractionDefinition = {
+    copy(reversalInference = Some(inference))
   }
 }
 
 object ExtractionDefinition {
   val Empty: ExtractionDefinition = ExtractionDefinition(Nil, None)
 
-  case class Serialized @JsonCreator() (@JsonProperty("extractionInferenceIds") extractionInferenceIds: Seq[String], rewriteInferenceId: Option[String]) {
+  case class Serialized @JsonCreator() (@JsonProperty("extractionInferenceIds") extractionInferenceIds: Seq[String], reversalInferenceId: Option[String]) {
     def depth: Int = extractionInferenceIds.length
     def reverseIfNecessary(direction: Direction, equality: Equality): Serialized = {
       if (!direction.isReversed) {
         this
-      } else if (rewriteInferenceId.contains(equality.reversal.inference.id)) {
-        copy(rewriteInferenceId = None)
+      } else if (reversalInferenceId.nonEmpty) {
+        copy(reversalInferenceId = None)
       } else {
-        copy(rewriteInferenceId = Some(equality.reversal.inference.id))
+        copy(reversalInferenceId = Some(equality.reversal.inference.id))
       }
     }
   }

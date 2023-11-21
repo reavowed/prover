@@ -555,17 +555,6 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     }.toMap
   }
 
-  lazy val rewriteInferences: Seq[(Inference, Statement)] = {
-    inferenceEntries.collect {
-      case inference @ Inference(_, Seq(singlePremise), conclusion)
-        if conclusion.complexity == singlePremise.complexity &&
-          conclusion.usedVariables.isEquivalentTo(singlePremise.usedVariables) &&
-          inference.variableDefinitions.hasNoApplications &&
-          conclusion != singlePremise
-      => (inference, singlePremise)
-    }
-  }
-
   def isValidSinglePremiseExtraction(premise: Statement, conclusion: Statement): Boolean = {
     def isSingleStatementSimplification = ExpressionUtils.getWrappedSimpleStatementVariable(premise).exists(ExpressionUtils.getWrappedSimpleStatementVariable(conclusion).contains)
     def isDoubleStatementSimplification = ExpressionUtils.getWrappedBinaryStatementVariables(premise).map(_.toSet).exists(ExpressionUtils.getWrappedBinaryStatementVariables(conclusion).map(_.toSet).contains)

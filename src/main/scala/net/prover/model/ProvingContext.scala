@@ -220,10 +220,6 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   lazy val conclusionSimplificationInferences: Seq[Inference] = filter(definitions.conclusionSimplificationInferences)
   lazy val termDefinitionRemovals: Map[TermDefinition, Seq[InferenceExtraction]] = filter(definitions.termDefinitionRemovals)
 
-  lazy val rewriteInferences: Seq[(Inference, Statement)] = {
-    filter(definitions.rewriteInferences)
-  }
-
   lazy val statementExtractionInferences: Seq[(Inference, Statement, Option[Statement])] = {
     filter(definitions.statementExtractionInferences)
   }

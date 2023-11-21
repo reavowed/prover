@@ -137,19 +137,16 @@ object ExtractionCalculator {
       extractionSoFar.extractionDefinition.addNextExtractionInference(inference.summary))
   }
 
-  private def getRewrites(
+  private def getReversal(
     extractionSoFar: ExtractionFromSinglePremise)(
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
-  ): Seq[ExtractionFromSinglePremise] = {
-      provingContext.rewriteInferences.mapCollect { case (inference, firstPremise) =>
-        getSimpleExtraction(
-          extractionSoFar,
-          inference,
-          firstPremise,
-          None,
-          _.setRewriteInference(_))
-      }
+  ): Option[ExtractionFromSinglePremise] = {
+    for {
+      reversal <- provingContext.reversals.find(_.joiner.unapply(extractionSoFar.conclusion).nonEmpty)
+      premise <- reversal.inference.premises.single
+      result <- getSimpleExtraction(extractionSoFar, reversal.inference, premise, None, _.setReversalInference(_))
+    } yield result
   }
 
   private def getNextSimplificationExtractions(
@@ -191,7 +188,7 @@ object ExtractionCalculator {
     provingContext: ProvingContext
   ): Seq[ExtractionFromSinglePremise] = {
     val simplificationExtractions = getSimplificationExtractions(sourceStatement, variableTracker)
-    val rewriteExtractions = simplificationExtractions.flatMap(getRewrites(_))
+    val rewriteExtractions = simplificationExtractions.flatMap(getReversal(_))
     simplificationExtractions ++ rewriteExtractions
   }
 
