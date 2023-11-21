@@ -5,7 +5,7 @@ import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
-import net.prover.proving.extraction.ExtractionCalculator.{ExtractionFromSinglePremise, InferenceExtraction}
+import net.prover.proving.extraction.ExtractionCalculator.{ExtractionFromSinglePremise, InferenceExtraction, VariableTracker}
 import net.prover.proving.extraction.ExtractionDefinition
 import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
@@ -41,6 +41,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val alwaysAllowableInt: AlwaysAllowable[Int] = alwaysAllowable
     implicit val alwaysAllowableDirection: AlwaysAllowable[Direction] = alwaysAllowable
     implicit val alwaysAllowablePossibleSubstitutions: AlwaysAllowable[Substitutions.Possible] = alwaysAllowable
+    implicit val alwaysAllowableVariableTracker: AlwaysAllowable[VariableTracker] = alwaysAllowable
     implicit def allowableSeq[T](implicit inner: Allowable[T]): Allowable[Seq[T]] = allowable { x => x.forall(isAllowed) }
 
     implicit val allowableInference: Allowable[Inference] = allowable(i => availableEntries.allInferenceIds.contains(i.id))

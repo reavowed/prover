@@ -88,6 +88,6 @@ trait ControllerSpec extends Specification with ContextHelper with BookServiceHe
   }
 
   def simpleExtraction(extractionInferences: Inference*): ExtractionDefinition = {
-    ExtractionDefinition(extractionInferences.map(_.summary))
+    ExtractionDefinition(extractionInferences.map(_.summary), None)
   }
 }

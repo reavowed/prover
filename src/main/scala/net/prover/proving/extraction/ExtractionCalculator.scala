@@ -4,6 +4,8 @@ import net.prover.model._
 import net.prover.model.expressions._
 import net.prover.model.proof._
 
+import scala.annotation.tailrec
+
 object ExtractionCalculator {
   trait Extraction {
     def premises: Seq[Statement]
@@ -17,23 +19,23 @@ object ExtractionCalculator {
     premises: Seq[Statement],
     conclusion: Statement,
     derivation: Seq[Step.Assertion],
-    additionalVariableNames: Seq[String],
+    variableTracker: VariableTracker,
     extractionDefinition: ExtractionDefinition)
 
   case class InferenceExtraction(inference: Inference.Summary, innerExtraction: ExtractionFromSinglePremise) extends Extraction {
     def premises: Seq[Statement] = inference.premises ++ innerExtraction.premises
     def conclusion: Statement = innerExtraction.conclusion
-    def variableDefinitions: VariableDefinitions = inference.variableDefinitions.addSimpleTermVariableNames(innerExtraction.additionalVariableNames)
+    def variableDefinitions: VariableDefinitions = inference.variableDefinitions.addSimpleTermVariableNames(innerExtraction.variableTracker.additionalVariableNames)
     def extractionDefinition: ExtractionDefinition = innerExtraction.extractionDefinition
-    def additionalVariableNames: Seq[String] = innerExtraction.additionalVariableNames
+    def additionalVariableNames: Seq[String] = innerExtraction.variableTracker.additionalVariableNames
     def derivedSummary: Inference.Summary = Inference.Summary(inference.name, Inference.calculateHash(premises, conclusion), variableDefinitions, premises, conclusion)
   }
   case class PremiseExtraction(innerExtraction: ExtractionFromSinglePremise, stepContext: StepContext) extends Extraction {
     def premises: Seq[Statement] = innerExtraction.premises
     def conclusion: Statement = innerExtraction.conclusion
-    def variableDefinitions: VariableDefinitions = stepContext.variableDefinitions.addSimpleTermVariableNames(innerExtraction.additionalVariableNames)
+    def variableDefinitions: VariableDefinitions = stepContext.variableDefinitions.addSimpleTermVariableNames(innerExtraction.variableTracker.additionalVariableNames)
     def extractionDefinition: ExtractionDefinition = innerExtraction.extractionDefinition
-    def additionalVariableNames: Seq[String] = innerExtraction.additionalVariableNames
+    def additionalVariableNames: Seq[String] = innerExtraction.variableTracker.additionalVariableNames
   }
 
   case class VariableTracker(baseVariableNames: Seq[String], additionalVariableNames: Seq[String]) {
@@ -54,116 +56,132 @@ object ExtractionCalculator {
   }
 
   private def getBaseExtractions(sourceStatement: Statement, variableTracker: VariableTracker): Seq[ExtractionFromSinglePremise] = {
-    Seq(ExtractionFromSinglePremise(Nil, sourceStatement, Nil, variableTracker.additionalVariableNames, ExtractionDefinition.Empty))
+    Seq(ExtractionFromSinglePremise(Nil, sourceStatement, Nil, variableTracker, ExtractionDefinition.Empty))
   }
 
-  private def getSimpleExtractions(
-    sourceStatement: Statement,
+  private def getSimpleExtraction(
+    extractionSoFar: ExtractionFromSinglePremise,
     inference: Inference,
     extractionPremise: Statement,
     otherPremiseOption: Option[Statement],
-    recurse: (Statement, VariableTracker) => Seq[ExtractionFromSinglePremise],
-    variableTracker: VariableTracker)(
+    updateExtractionDefinition: (ExtractionDefinition, Inference.Summary) => ExtractionDefinition)(
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
-  ): Seq[ExtractionFromSinglePremise] = {
+  ): Option[ExtractionFromSinglePremise] = {
     for {
-      extractionSubstitutions <- extractionPremise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
-      extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions).toSeq
-      innerExtraction <- recurse(extractedConclusion, variableTracker)
-      newPremiseOption <- otherPremiseOption.map(_.applySubstitutions(extractionSubstitutions)).swap.toSeq
-      if !newPremiseOption.contains(innerExtraction.conclusion) // Filter out spurious extractions
-      assertionStep = Step.Assertion(extractedConclusion, inference.summary, (newPremiseOption.toSeq :+ sourceStatement).map(Premise.Pending), extractionSubstitutions)
-    } yield innerExtraction.copy(
-      premises = newPremiseOption.toSeq ++ innerExtraction.premises,
-      derivation = assertionStep +: innerExtraction.derivation,
-      extractionDefinition = innerExtraction.extractionDefinition.addInitialExtractionInference(inference.summary))
+      extractionSubstitutions <- extractionPremise.calculateSubstitutions(extractionSoFar.conclusion).flatMap(_.confirmTotality(inference.variableDefinitions))
+      extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions)
+      newPremiseOption <- otherPremiseOption.map(_.applySubstitutions(extractionSubstitutions)).swap
+      assertionStep = Step.Assertion(extractedConclusion, inference.summary, (extractionSoFar.conclusion +: newPremiseOption.toSeq).map(Premise.Pending), extractionSubstitutions)
+      newExtraction = ExtractionFromSinglePremise(
+        extractionSoFar.premises ++ newPremiseOption.toSeq,
+        extractedConclusion,
+        extractionSoFar.derivation :+ assertionStep,
+        extractionSoFar.variableTracker,
+        updateExtractionDefinition(extractionSoFar.extractionDefinition, inference.summary))
+      if !newExtraction.premises.contains(newExtraction.conclusion) // Filter out spurious extractions
+    } yield newExtraction
   }
 
-  private def getSimpleExtractions(
-    sourceStatement: Statement,
-    recurse: (Statement, VariableTracker) => Seq[ExtractionFromSinglePremise],
-    variableTracker: VariableTracker)(
+  private def getStatementExtractions(
+    extractionSoFar: ExtractionFromSinglePremise)(
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[ExtractionFromSinglePremise] = {
     for {
       (inference, extractionPremise, otherPremiseOption) <- provingContext.statementExtractionInferences
-      extraction <- getSimpleExtractions(sourceStatement, inference, extractionPremise, otherPremiseOption, recurse, variableTracker)
+      extraction <- getSimpleExtraction(extractionSoFar, inference, extractionPremise, otherPremiseOption, _.addNextExtractionInference(_))
     } yield extraction
   }
 
-  private def getPredicateExtractions(
-    sourceStatement: Statement,
-    recurse: (Statement, VariableTracker) => Seq[ExtractionFromSinglePremise],
-    variableTracker: VariableTracker)(
+  private def getPredicateExtraction(
+    extractionSoFar: ExtractionFromSinglePremise)(
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
-  ): Seq[ExtractionFromSinglePremise] = {
+  ): Option[ExtractionFromSinglePremise] = {
     for {
-      (inference, extractionPremise) <- provingContext.specificationInferenceOption.toSeq
-      predicate <- extractionPremise.calculateSubstitutions(sourceStatement).flatMap(_.statements.get(0)).toSeq // missing external depth increase?
-      boundVariableName <- sourceStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).toSeq
-      (_, newIndex, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(boundVariableName)
+      (inference, extractionPremise) <- provingContext.specificationInferenceOption
+      predicate <- extractionPremise.calculateSubstitutions(extractionSoFar.conclusion).flatMap(_.statements.get(0)) // missing external depth increase?
+      boundVariableName <- extractionSoFar.conclusion.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single)
+      (_, newIndex, newVariableTracker) = extractionSoFar.variableTracker.getAndAddUniqueVariableName(boundVariableName)
       substitutions = Substitutions(Seq(predicate), Seq(TermVariable(newIndex)))
-      nextPremise <- inference.conclusion.applySubstitutions(substitutions).toSeq
-      innerExtraction <- recurse(nextPremise, newVariableTracker)
-      assertionStep = Step.Assertion(nextPremise, inference.summary, Seq(Premise.Pending(sourceStatement)), substitutions)
-    } yield innerExtraction.copy(
-      derivation = assertionStep +: innerExtraction.derivation,
-      extractionDefinition = innerExtraction.extractionDefinition.addInitialExtractionInference(inference.summary))
+      newConclusion <- inference.conclusion.applySubstitutions(substitutions)
+      assertionStep = Step.Assertion(newConclusion, inference.summary, Seq(Premise.Pending(extractionSoFar.conclusion)), substitutions)
+    } yield ExtractionFromSinglePremise(
+      extractionSoFar.premises,
+      newConclusion,
+      extractionSoFar.derivation :+ assertionStep,
+      newVariableTracker,
+      extractionSoFar.extractionDefinition.addNextExtractionInference(inference.summary))
   }
 
   private def getDefinitionDeconstructionExtractions(
-    sourceStatement: Statement,
-    recurse: (Statement, VariableTracker) => Seq[ExtractionFromSinglePremise],
-    variableTracker: VariableTracker)(
+    extractionSoFar: ExtractionFromSinglePremise)(
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[ExtractionFromSinglePremise] = {
     for {
-      definedStatement <- sourceStatement.asOptionalInstanceOf[DefinedStatement].toSeq
+      definedStatement <- extractionSoFar.conclusion.asOptionalInstanceOf[DefinedStatement].toSeq
       definition = definedStatement.definition
       if implicitly[AvailableEntries].typeStatementDefinitions.contains(definition)
       inference <- definedStatement.definition.deconstructionInference.toSeq
       premise <- inference.premises.single.toSeq
-      substitutions <- premise.calculateSubstitutions(sourceStatement).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
+      substitutions <- premise.calculateSubstitutions(extractionSoFar.conclusion).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
       deconstructedStatement <- inference.conclusion.applySubstitutions(substitutions).toSeq
-      innerExtraction <- recurse(deconstructedStatement, variableTracker)
-      assertionStep = Step.Assertion(deconstructedStatement, inference.summary, Seq(Premise.Pending(sourceStatement)), substitutions)
-    } yield innerExtraction.copy(
-      derivation = assertionStep +: innerExtraction.derivation,
-      extractionDefinition = innerExtraction.extractionDefinition.addInitialExtractionInference(inference.summary))
+      assertionStep = Step.Assertion(deconstructedStatement, inference.summary, Seq(Premise.Pending(extractionSoFar.conclusion)), substitutions)
+    } yield ExtractionFromSinglePremise(
+      extractionSoFar.premises,
+      deconstructedStatement,
+      extractionSoFar.derivation :+ assertionStep,
+      extractionSoFar.variableTracker,
+      extractionSoFar.extractionDefinition.addNextExtractionInference(inference.summary))
   }
 
-  private def getFinalExtractions(
-    sourceStatement: Statement,
-    variableTracker: VariableTracker)(
+  private def getRewrites(
+    extractionSoFar: ExtractionFromSinglePremise)(
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[ExtractionFromSinglePremise] = {
-    getBaseExtractions(sourceStatement, variableTracker) ++
-      provingContext.rewriteInferences.flatMap { case (inference, firstPremise) =>
-        getSimpleExtractions(
-          sourceStatement,
+      provingContext.rewriteInferences.mapCollect { case (inference, firstPremise) =>
+        getSimpleExtraction(
+          extractionSoFar,
           inference,
           firstPremise,
           None,
-          getBaseExtractions,
-          variableTracker)
+          _.setRewriteInference(_))
       }
   }
 
-  private def getExtractionsRecursive(
+  private def getNextSimplificationExtractions(
+    extractionSoFar: ExtractionFromSinglePremise)(
+    implicit substitutionContext: SubstitutionContext,
+    provingContext: ProvingContext
+  ): Seq[ExtractionFromSinglePremise] = {
+    getStatementExtractions(extractionSoFar) ++
+      getPredicateExtraction(extractionSoFar).toSeq ++
+      getDefinitionDeconstructionExtractions(extractionSoFar)
+  }
+
+  private def getSimplificationExtractions(
     sourceStatement: Statement,
     variableTracker: VariableTracker)(
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[ExtractionFromSinglePremise] = {
-    getFinalExtractions(sourceStatement, variableTracker) ++
-      getSimpleExtractions(sourceStatement, getExtractionsRecursive, variableTracker) ++
-      getPredicateExtractions(sourceStatement, getExtractionsRecursive, variableTracker) ++
-      getDefinitionDeconstructionExtractions(sourceStatement, getExtractionsRecursive, variableTracker)
+    @tailrec
+    def getSimplificationExtractions(newExtractions: Seq[ExtractionFromSinglePremise], oldExtractions: Seq[ExtractionFromSinglePremise]): Seq[ExtractionFromSinglePremise] = {
+      if (newExtractions.isEmpty)
+        oldExtractions
+      else
+        getSimplificationExtractions(newExtractions.flatMap(getNextSimplificationExtractions), oldExtractions ++ newExtractions)
+    }
+    val baseExtraction = ExtractionFromSinglePremise(
+      Nil,
+      sourceStatement,
+      Nil,
+      variableTracker,
+      ExtractionDefinition.Empty)
+    getSimplificationExtractions(Seq(baseExtraction), Nil)
   }
 
   private def getExtractions(
@@ -172,7 +190,9 @@ object ExtractionCalculator {
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[ExtractionFromSinglePremise] = {
-    getExtractionsRecursive(sourceStatement, variableTracker)
+    val simplificationExtractions = getSimplificationExtractions(sourceStatement, variableTracker)
+    val rewriteExtractions = simplificationExtractions.flatMap(getRewrites(_))
+    simplificationExtractions ++ rewriteExtractions
   }
 
   def getInferenceExtractions(inference: Inference)(implicit provingContext: ProvingContext): Seq[InferenceExtraction] = {
