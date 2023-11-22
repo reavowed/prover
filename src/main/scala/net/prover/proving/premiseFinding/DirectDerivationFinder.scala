@@ -10,7 +10,7 @@ object DirectDerivationFinder {
   def findDirectDerivationForStatement(
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
+  ): Option[Seq[Step.AssertionOrExtraction]] = {
     import stepProvingContext._
     def fromPremises = knownStatementsFromPremisesBySerializedStatement.get(targetStatement.serializedForHash).map(_.derivation)
 

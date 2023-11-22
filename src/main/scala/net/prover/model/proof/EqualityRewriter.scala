@@ -275,7 +275,7 @@ object EqualityRewriter {
     }
   }
 
-  def getReverseReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Step.InferenceApplicationWithoutPremises)] = {
+  def getReverseReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Step.Assertion)] = {
     val paths = statement.getTerms().filter(_._1 == rhs).map(_._4)
     if (paths.nonEmpty && (equality.unapply(statement).isEmpty || paths.forall(_.length > 1))) {
       val wrapper = Wrapper.fromExpression(statement.getPredicateForTerm(rhs, substitutionContext.externalDepth))

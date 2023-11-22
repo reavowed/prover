@@ -29,7 +29,7 @@ case class RelationRewriteInference(
       derivationStep <- ExtractionApplier.getInferenceExtractionStepWithoutPremises(inferenceExtraction, substitutions)
     } yield currentStatement.extend(premiseDerivation :+ derivationStep)
   }
-  def rewriteTarget(targetStatement: Statement)(implicit stepProvingContext: StepProvingContext): Option[(BinaryRelationStatement, Seq[Step.InferenceApplicationWithoutPremises])] = {
+  def rewriteTarget(targetStatement: Statement)(implicit stepProvingContext: StepProvingContext): Option[(BinaryRelationStatement, Seq[Step.AssertionOrExtraction])] = {
     for {
       substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement, initialSubstitutions)
       (premiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {

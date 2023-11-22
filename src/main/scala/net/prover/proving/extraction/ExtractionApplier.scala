@@ -160,7 +160,7 @@ object ExtractionApplier {
     substitutions: Substitutions)(
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
-  ): Option[Step.InferenceApplicationWithoutPremises] = {
+  ): Option[Step.AssertionOrExtraction] = {
     for {
       assertionStep <- Step.Assertion.forInference(inferenceExtraction.inference, substitutions)
       extractionApplication <- ExtractionApplier.applyExtractionsForInference(assertionStep, inferenceExtraction.extractionDefinition, substitutions, None, None).toOption
@@ -227,25 +227,25 @@ object ExtractionApplier {
     assertionStep.addExtractionSteps(groupStepsByDefinition(extractionSteps))
   }
 
-  def groupStepsByDefinition[TStep >: Step.AssertionOrExtraction <: Step.InferenceApplicationWithoutPremises](steps: Seq[TStep])(implicit provingContext: ProvingContext): Seq[TStep] = {
+  def groupStepsByDefinition(steps: Seq[Step.AssertionOrExtraction])(implicit provingContext: ProvingContext): Seq[Step.AssertionOrExtraction] = {
     val deconstructionInferenceIds = provingContext.availableEntries.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
     val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
 
     var currentMainStep: Option[Step.Assertion] = None
-    val currentUngroupedSteps = Seq.newBuilder[TStep]
-    val stepsToReturn = Seq.newBuilder[TStep]
+    val currentUngroupedSteps = Seq.newBuilder[Step.AssertionOrExtraction]
+    val stepsToReturn = Seq.newBuilder[Step.AssertionOrExtraction]
 
-    def isStructuralSimplification(step: TStep): Boolean = {
+    def isStructuralSimplification(step: Step.AssertionOrExtraction): Boolean = {
       structuralSimplificationIds.contains(step.inference.id)
     }
 
-    def removeStructuralSimplifications(steps: Seq[TStep]): Seq[TStep] = {
+    def removeStructuralSimplifications(steps: Seq[Step.AssertionOrExtraction]): Seq[Step.AssertionOrExtraction] = {
       steps.filter(s => !isStructuralSimplification(s))
     }
 
-    def removeNonEndStructuralSimplifications(steps: Seq[TStep]): Seq[TStep] = {
+    def removeNonEndStructuralSimplifications(steps: Seq[Step.AssertionOrExtraction]): Seq[Step.AssertionOrExtraction] = {
       @scala.annotation.tailrec
-      def whileStructuralAtEnd(current: Seq[TStep], end: Seq[TStep]): Seq[TStep] = {
+      def whileStructuralAtEnd(current: Seq[Step.AssertionOrExtraction], end: Seq[Step.AssertionOrExtraction]): Seq[Step.AssertionOrExtraction] = {
         current match {
           case init :+ last if isStructuralSimplification(last) =>
             whileStructuralAtEnd(init, last +: end)
@@ -257,7 +257,7 @@ object ExtractionApplier {
       whileStructuralAtEnd(steps, Nil)
     }
 
-    def groupSteps(steps: Seq[TStep], retainEndSimplifications: Boolean): Unit = {
+    def groupSteps(steps: Seq[Step.AssertionOrExtraction], retainEndSimplifications: Boolean): Unit = {
       currentMainStep match {
         case Some(step) =>
           stepsToReturn += step.addExtractionSteps(removeNonEndStructuralSimplifications(steps))

@@ -39,14 +39,14 @@ object DerivationFinder {
   def findDerivationForUnwrappedStatements(
     targetStatement: Seq[Statement])(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
+  ): Option[Seq[Step.AssertionOrExtraction]] = {
     targetStatement.map(findDerivationForUnwrappedStatement).traverseOption.map(_.flatten)
   }
 
   def findDerivationForUnwrappedStatement(
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
+  ): Option[Seq[Step.AssertionOrExtraction]] = {
     stepProvingContext.provingContext.findRelation(targetStatement).map(BinaryRelationDerivationFinder.findDirectDerivationForBinaryRelationStatement)
       .getOrElse(DirectDerivationFinder.findDirectDerivationForStatement(targetStatement))
       .map(_.distinctBy(_.statement))

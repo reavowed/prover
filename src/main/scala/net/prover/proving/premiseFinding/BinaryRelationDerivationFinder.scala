@@ -9,8 +9,8 @@ object BinaryRelationDerivationFinder {
   def findDirectDerivationForBinaryRelationStatement(
     binaryRelationStatement: BinaryRelationStatement)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
-    def withoutRewriting(binaryRelationStatement: BinaryRelationStatement): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
+  ): Option[Seq[Step.AssertionOrExtraction]] = {
+    def withoutRewriting(binaryRelationStatement: BinaryRelationStatement): Option[Seq[Step.AssertionOrExtraction]] = {
       def bySimplifyingTargetRelation = stepProvingContext.provingContext.conclusionRelationSimplificationInferences.getOrElse(binaryRelationStatement.relation, Nil).iterator.findFirst { conclusionRelationSimplificationInference =>
         for {
           (directTargets, binaryRelationTargets, derivationForInference) <- conclusionRelationSimplificationInference.getConclusionSimplification(binaryRelationStatement.baseStatement)
@@ -23,7 +23,7 @@ object BinaryRelationDerivationFinder {
       DirectDerivationFinder.findDirectDerivationForStatement(binaryRelationStatement.baseStatement) orElse bySimplifyingTargetRelation
     }
 
-    def withoutRenaming(binaryRelationStatement: BinaryRelationStatement): Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
+    def withoutRenaming(binaryRelationStatement: BinaryRelationStatement): Option[Seq[Step.AssertionOrExtraction]] = {
       withoutRewriting(binaryRelationStatement) orElse {
         (for {
           inference <- stepProvingContext.provingContext.conclusionRelationRewriteInferences.getOrElse(binaryRelationStatement.relation, Nil)
@@ -33,7 +33,7 @@ object BinaryRelationDerivationFinder {
       }
     }
 
-    def byRenaming: Option[Seq[Step.InferenceApplicationWithoutPremises]] = {
+    def byRenaming: Option[Seq[Step.AssertionOrExtraction]] = {
       def directly = (for {
         KnownEquality(source, result, equality, equalityDerivation) <- stepProvingContext.knownEqualities
         if result == binaryRelationStatement.right

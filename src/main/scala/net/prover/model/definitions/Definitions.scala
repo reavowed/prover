@@ -531,6 +531,8 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     } yield conclusion.relation -> ConclusionRelationSimplificationInference(inferenceExtraction, optionalTypeStatement, premiseDesimplifications)).toSeqMap
   }
 
+  // An inference such as `φ,ψ ⊢ φ∧ψ` or `φ ⊢ φ∨ψ` that can be run in reverse to allow a target conclusion to be
+  // decomposed into smaller parts
   lazy val conclusionSimplificationInferences: Seq[Inference] = allInferences.filter {
     case inference
       if inference.premises.nonEmpty &&
