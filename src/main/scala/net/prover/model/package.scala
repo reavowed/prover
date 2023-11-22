@@ -36,6 +36,7 @@ package object model {
     def formatAsKey: String = splitByWhitespace().map(_.toLowerCase).mkString("-")
     def capitalizeWords: String = raw"\b((?<!\b')\w+)".r.replaceAllIn(s, _.group(1).capitalize)
     def inParens: String = "(" + s + ")"
+    def decapitalize: String = s(0).toLower +: s.drop(1)
   }
 
   implicit class Tuple2Ops[S,T](tuple: (S, T)) {

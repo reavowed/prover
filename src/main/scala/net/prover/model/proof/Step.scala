@@ -12,7 +12,8 @@ import scala.util.Try
 
 @JsonIgnoreProperties(Array("substitutions", "isComplete", "unwrappers", "assertionStep", "premiseSteps", "innerSteps"))
 sealed trait Step {
-  def `type`: String
+  @JsonSerialize
+  def `type`: String = getClass.getSimpleName.decapitalize
   def statement: Statement
   def length: Int
   def serializedLines: Seq[String]
@@ -60,13 +61,6 @@ object Step {
   }
   sealed trait InferenceApplicationWithoutPremises extends InferenceApplication with PremiseDerivation {
     override def inferences: Set[Inference] = Set(inference)
-    def addPremiseDerivations(premiseDerivations: Seq[InferenceApplicationWithoutPremises]): InferenceApplication = {
-      if (premiseDerivations.isEmpty) {
-        this
-      } else {
-        InferenceWithPremiseDerivations(premiseDerivations, this)
-      }
-    }
   }
   sealed trait AssertionOrExtraction extends InferenceApplicationWithoutPremises
 
@@ -100,7 +94,6 @@ object Step {
 
 
   case class Target(statement: Statement) extends Step.WithoutSubsteps with Step.WithTopLevelStatement {
-    val `type` = "target"
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def length = 1
     def serializedLines: Seq[String] = Seq(s"target ${statement.serialized}")
@@ -113,8 +106,15 @@ object Step {
     }
   }
 
-  case class Assertion(statement: Statement, inference: Inference.Summary, premises: Seq[Premise], substitutions: Substitutions) extends Step.AssertionOrExtraction with Step.WithoutSubsteps with Step.WithTopLevelStatement {
-    val `type`: String = "assertion"
+  case class Assertion(
+    statement: Statement,
+    inference: Inference.Summary,
+    premises: Seq[Premise],
+    substitutions: Substitutions)
+    extends Step.AssertionOrExtraction
+      with Step.WithoutSubsteps
+      with Step.WithTopLevelStatement
+  {
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     @JsonSerialize
     def referencedLinesForAssertion: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
@@ -125,7 +125,7 @@ object Step {
     def pendingPremises: Map[Seq[Int], Premise.Pending] = {
       premises.flatMapWithIndex((p, i) => p.getPendingPremises(Seq(i)).toSeq).toMap
     }
-    def addExtractionSteps(extractionSteps: Seq[InferenceApplicationWithoutPremises]): AssertionOrExtraction = {
+    def addExtractionSteps(extractionSteps: Seq[AssertionOrExtraction]): AssertionOrExtraction = {
       if (extractionSteps.nonEmpty) {
         InferenceExtraction(this, extractionSteps)
       } else {
@@ -160,7 +160,6 @@ object Step {
       deductionDefinition: DeductionDefinition)
     extends Step.WithSubsteps with WithTopLevelStatement with WithAssumption
   {
-    val `type` = "deduction"
     override def statement: Statement = {
       deductionDefinition(assumption, substeps.last.statement)
     }
@@ -190,7 +189,6 @@ object Step {
       generalizationDefinition: GeneralizationDefinition)
     extends Step.WithSubsteps with WithVariable
   {
-    val `type` = "generalization"
     override def statement: Statement = {
       generalizationDefinition(variableName, substeps.last.statement)
     }
@@ -224,7 +222,6 @@ object Step {
       @JsonIgnore deductionDefinition: DeductionDefinition)
     extends Step.WithSubsteps with WithTopLevelStatement with WithVariable with WithAssumption
   {
-    val `type` = "naming"
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = {
       val newInternalConclusion = newSubsteps.last.statement
@@ -277,7 +274,6 @@ object Step {
   }
 
   case class Elided(substeps: Seq[Step], highlightedInference: Option[Inference.Summary], description: Option[String]) extends Step.WithSubsteps {
-    val `type` = "elided"
     override def statement: Statement = substeps.last.statement
     override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = copy(substeps = newSubsteps)
     override def length: Int = substeps.map(_.length).sum
@@ -318,8 +314,7 @@ object Step {
     }
   }
 
-  case class SubProof(name: String, substeps: Seq[Step]) extends Step.WithSubsteps {
-    val `type`: String = "subproof"
+  case class Subproof(name: String, substeps: Seq[Step]) extends Step.WithSubsteps {
     override def statement: Statement = substeps.last.statement
     override def length: Int = substeps.map(_.length).sum
     override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = copy(substeps = newSubsteps)
@@ -327,17 +322,16 @@ object Step {
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
-  object SubProof {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[SubProof] = {
+  object Subproof {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Subproof] = {
       for {
         name <- Parser.allInParens
         substeps <- listParser.inBraces
-      } yield SubProof(name, substeps)
+      } yield Subproof(name, substeps)
     }
   }
 
   case class ExistingStatementExtraction(substeps: Seq[Step.InferenceApplicationWithoutPremises]) extends Step.Autogenerated with Step.PremiseDerivation {
-    val `type` = "existingStatementExtraction"
     override def statement: Statement = substeps.last.statement
     override def inferences: Set[Inference] = substeps.map(_.inference).toSet
     override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = {
@@ -360,7 +354,6 @@ object Step {
   }
 
   case class InferenceExtraction(assertionStep: Step.Assertion, extractionSteps: Seq[Step.InferenceApplication]) extends Step.AssertionOrExtraction with Step.Autogenerated {
-    val `type` = "inferenceExtraction"
     override def inference: Inference.Summary = assertionStep.inference
     override def statement: Statement = extractionSteps.last.statement
     override def substeps: Seq[Step] = assertionStep +: extractionSteps
@@ -386,7 +379,6 @@ object Step {
     extends Step.Wrapped
       with Step.InferenceApplicationWithoutPremises
   {
-    val `type` = "wrappedInferenceApplication"
     override def inference: Inference.Summary = assertionStep.inference
     override def innerSteps: Seq[Step] = premiseSteps :+ assertionStep
     override protected def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = {
@@ -415,7 +407,6 @@ object Step {
     extends Step.Wrapped
       with Step.PremiseDerivation
   {
-    override def `type`: String = "wrappedPremiseDerivation"
     override protected def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = {
       WrappedPremiseDerivation(newSubsteps)
     }
@@ -440,7 +431,6 @@ object Step {
     extends Step.InferenceApplication
       with Step.Autogenerated
   {
-    val `type` = "inferenceWithPremiseDerivations"
     override def inference: Inference.Summary = assertionStep.inference
     override def statement: Statement = assertionStep.statement
     override def substeps: Seq[Step] = premiseSteps :+ assertionStep
@@ -477,7 +467,7 @@ object Step {
       case "take" => Generalization.parser
       case "let" => Naming.parser
       case "elided" => Elided.parser
-      case "subproof" => SubProof.parser
+      case "subproof" => Subproof.parser
       case "existingStatementExtraction" => ExistingStatementExtraction.parser
       case "inferenceExtraction" => InferenceExtraction.parser
       case "wrappedInferenceApplication" => WrappedInferenceApplication.parser
