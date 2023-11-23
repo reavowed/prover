@@ -3,7 +3,7 @@ package net.prover.controllers
 import net.prover.books.keys.ListWithKeys
 import net.prover.books.model.Book
 import net.prover.controllers.models.LinkSummary
-import net.prover.entries.{GlobalContext, TheoremWithContext}
+import net.prover.entries.GlobalContext
 import net.prover.exceptions.BadRequestException
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition
@@ -20,7 +20,6 @@ import scala.util.{Failure, Success, Try}
 @RestController
 @RequestMapping(Array("/books/{bookKey}/{chapterKey}/{entryKey}"))
 class EntryController @Autowired() (val bookService: BookService) extends UsageFinder with ParameterValidation with ReactViews {
-
   @GetMapping(value = Array(""), produces = Array("text/html;charset=UTF-8"))
   def getEntry(
     @PathVariable("bookKey") bookKey: String,
@@ -55,7 +54,6 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
       }
     } yield {
       import entryWithContext._
-      val entriesWithKeys = chapterWithContext.chapter.entriesWithKeys.listWithKeys.mapCollect(_.optionMapLeft(_.asOptionalInstanceOf[ChapterEntry.Standalone]))
       val index = chapterWithContext.entriesWithContexts.findIndexWhere(_.entry == entry).getOrElse(throw new Exception("Entry somehow didn't exist"))
       val previous = chapterWithContext.entriesWithContexts.lift(index - 1).map(LinkSummary(_))
       val next = chapterWithContext.entriesWithContexts.lift(index + 1).map(LinkSummary(_))
@@ -67,7 +65,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
         "next" -> next,
         "usages" -> getInferenceUsages(entry),
         "binaryRelations" -> getBinaryRelations(provingContext)) ++
-        getGeneralDisplayProps(availableEntries))
+        getGeneralDisplayProps(availableEntries.addEntry(entryWithContext)))
     }).toResponseEntity
   }
 
