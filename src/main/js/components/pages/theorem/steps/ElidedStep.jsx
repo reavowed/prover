@@ -89,7 +89,8 @@ class ElidedStepProofLineWithContexts extends React.Component {
           <Step.Antecedent>{proofLine}</Step.Antecedent>
           <div className="card" style={{margin: ".5rem -0.75rem .5rem 2rem", padding: ".5rem .75rem"}}>
             <Steps.Children steps={step.substeps}
-                            path={path} />
+                            path={path}
+                            propsForLastStep={{showConclusion: true}}/>
           </div>
         </Step.WithSubsteps> :
         <Step.WithoutSubsteps>{proofLine}</Step.WithoutSubsteps>}

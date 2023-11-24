@@ -16,7 +16,7 @@ export default class GeneralizedDeductionStep extends React.Component {
     return true;
   }
   render() {
-    let {step, path, additionalReferences, variableDescription, suppressConclusion} = this.props;
+    let {step, path, additionalReferences, variableDescription, showConclusion} = this.props;
     additionalReferences = additionalReferences || [];
     const substep = step.substeps[0];
     const substepPath = [...path, 0];
@@ -32,17 +32,18 @@ export default class GeneralizedDeductionStep extends React.Component {
     };
 
     const patchedExpression = new DefinedExpression(variableDescription.definition, [step.variableName], variableDescription.otherComponents);
+    const referencesForLastStep = showConclusion ? [] : [...additionalReferences, reference];
 
     return <Step.WithSubsteps path={path}>
       <Step.Antecedent>
           <ProofLine path={path}>
-            Take any <HighlightableExpression expression={patchedExpression} references={[assumptionReference]} additionalPremiseReferences={suppressConclusion ? [...additionalReferences, reference] : []} wrapBoundVariable={wrapBoundVariable} expressionToCopy={substep.assumption}/>.
+            Take any <HighlightableExpression expression={patchedExpression} references={[assumptionReference]} additionalPremiseReferences={referencesForLastStep} wrapBoundVariable={wrapBoundVariable} expressionToCopy={substep.assumption}/>.
           </ProofLine>
       </Step.Antecedent>
       <BoundVariableLists.Add variables={[step.variableName]}>
-        <Steps.Children steps={substep.substeps} path={substepPath} propsForLastStep={{suppressConclusion: true, additionalReferences: suppressConclusion ? [...additionalReferences, reference] : []}} />
+        <Steps.Children steps={substep.substeps} path={substepPath} propsForLastStep={{additionalReferences: referencesForLastStep}} />
       </BoundVariableLists.Add>
-      {step.provenStatement && !suppressConclusion &&
+      {step.provenStatement && showConclusion &&
         <ProofLine.SingleStatementWithPrefix prefix="So"
                                              statement={step.provenStatement}
                                              path={path}

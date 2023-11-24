@@ -46,7 +46,7 @@ export class SubproofStepWithContexts extends React.Component {
         <SubproofOutline>
           <Steps.Children steps={step.substeps}
                           path={path}
-                          propsForLastStep={{additionalReferences: [...additionalReferences, reference]}} />
+                          propsForLastStep={{additionalReferences: [...additionalReferences, reference], showConclusion: true}} />
         </SubproofOutline>
       </Step.WithSubsteps> :
       <Step.WithoutSubsteps>

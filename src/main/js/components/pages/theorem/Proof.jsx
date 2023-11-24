@@ -167,7 +167,9 @@ export default class Proof extends React.Component {
           <BoundVariableLists.Provider value={[]}>
             <Steps.Container path={[]}>
               <Steps steps={steps}
-                     path={[]} />
+                     path={[]}
+                     propsForLastStep={{showConclusion: true}}
+              />
             </Steps.Container>
           </BoundVariableLists.Provider>
         </DndProvider>
