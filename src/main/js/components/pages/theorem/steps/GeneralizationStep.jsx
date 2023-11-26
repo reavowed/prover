@@ -15,7 +15,7 @@ export class GeneralizationStep extends React.Component {
   render() {
     let {step, path, additionalReferences, showConclusion} = this.props;
     const reference = new StepReference(path);
-    const referencesForLastStep = showConclusion ? [] : [...additionalReferences, reference];
+    const referencesForLastStep = showConclusion ? [] : [...(additionalReferences || []), reference];
     return <Step.WithSubsteps path={path}>
       <Step.Antecedent>
         <ProofLine path={path}>
