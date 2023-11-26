@@ -4,15 +4,15 @@ import Button from "react-bootstrap/Button";
 import {DndProvider} from 'react-dnd'
 import Backend from 'react-dnd-html5-backend'
 import {Parser} from "../../Parser";
-import {Breadcrumbs} from "./components/Breadcrumbs";
+import AvailableEntries from "../AvailableEntries";
+import {SimpleDraggableList} from "../draggableList/SimpleDraggableList";
+import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import ChapterContext from "./chapter/ChapterContext";
 import ChapterEntry from "./chapter/ChapterEntry";
 import ChapterEntryAdder from "./chapter/ChapterEntryAdder";
-import DraggableList from "../DraggableList";
-import {InlineTextEditor} from "../helpers/InlineTextEditor";
+import {Breadcrumbs} from "./components/Breadcrumbs";
 import {NavLinks} from "./components/NavLinks";
 import {Page} from "./Page";
-import AvailableEntries from "../AvailableEntries";
 
 export class Chapter extends React.Component {
   constructor(props) {
@@ -90,7 +90,7 @@ export class Chapter extends React.Component {
           <h3><InlineTextEditor text={title} callback={this.updateTitle}/></h3>
           <p>{summary}</p>
           <DndProvider backend={Backend}>
-            <DraggableList.Simple
+            <SimpleDraggableList
               type="ChapterEntry"
               enabled={editing}
               onDrop={this.onDropEntry}

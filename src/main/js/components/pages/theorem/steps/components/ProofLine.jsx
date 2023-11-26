@@ -5,7 +5,7 @@ import Popover from "react-bootstrap/Popover";
 import Tooltip from "react-bootstrap/Tooltip";
 import styled, {css} from "styled-components";
 import {StepReference} from "../../../../../models/Step";
-import DraggableList from "../../../../DraggableList";
+import DraggableList from "../../../../draggableList/DraggableList";
 import {HighlightableExpression} from "../../../../ExpressionComponent";
 import {FlexRow} from "../../../../FlexRow";
 import {InlineTextEditor} from "../../../../helpers/InlineTextEditor";

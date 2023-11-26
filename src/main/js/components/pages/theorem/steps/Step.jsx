@@ -1,4 +1,4 @@
-import DraggableList from "../../../DraggableList";
+import DraggableList from "../../../draggableList/DraggableList";
 import {Steps} from "./Steps";
 
 export default {

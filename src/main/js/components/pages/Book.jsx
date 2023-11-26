@@ -3,8 +3,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import {DndProvider} from "react-dnd";
 import Backend from "react-dnd-html5-backend";
-import styled from "styled-components";
-import DraggableList from "../DraggableList";
+import {SimpleDraggableList} from "../draggableList/SimpleDraggableList";
 import {FlexRow} from "../FlexRow";
 import BookContext from "./book/BookContext";
 import {ChapterAdder} from "./book/ChapterAdder";
@@ -83,7 +82,7 @@ export class Book extends React.Component {
         <NavLinks previous={previous} next={next} />
         <h3>{title}</h3>
         <DndProvider backend={Backend}>
-          <DraggableList.Simple
+          <SimpleDraggableList
             type="ChapterEntry"
             enabled={editing}
             onDrop={this.onDropChapter}

@@ -1,7 +1,7 @@
 import React, {CSSProperties, useCallback, useContext, useRef, useState} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import update from 'immutability-helper';
-import BoundVariableListContext from "./expressions/boundVariables/BoundVariableListContext";
+import BoundVariableListContext from "../expressions/boundVariables/BoundVariableListContext";
 import {DropTargetMonitor} from "react-dnd/lib/interfaces/monitors";
 import {ConnectDragSource} from "react-dnd/lib/interfaces";
 import _ from "lodash";
@@ -49,13 +49,13 @@ type PlaceholderProps = {
   index: number
 }
 
-type Entry<Data> = {
+export type Entry<Data> = {
   key: string
   element: React.ReactNode
   data: Data
 }
 
-type DraggableListProps<Data> = {
+export type DraggableListProps<Data> = {
   type: string
   enabled: boolean
   onDrop: (itemDropped: Data, itemDroppedOn: Data | null, movingAfter?: boolean) => Promise<any>
@@ -224,21 +224,6 @@ function Entry<Data>({context, children}: {context: EntryContextType<Data>, chil
   </div>;
 }
 
-
-type SimpleDraggableListProps<Data> = DraggableListProps<Data> & { entries: Entry<Data>[] }
-DraggableList.Simple = function<Data>({entries, ...listProps}: SimpleDraggableListProps<Data>) {
-  const wrappedEntries = entries.map(e => Object.assign({}, e, {
-    element: <DraggableList.DragHandle>
-      <DraggableList.SingleDropZone>
-        {e.element}
-      </DraggableList.SingleDropZone>
-    </DraggableList.DragHandle>
-  }));
-  return <DraggableList {...listProps}>
-    <DraggableList.Entries entries={wrappedEntries} />
-  </DraggableList>
-};
-
 function createHoverZone<T extends DragContextType, Data>(
     contextType: React.Context<T | null>,
     children: React.ReactNode,
@@ -289,11 +274,9 @@ DraggableList.SingleDropZone = function SingleDropZone({children}: {children: Re
       EntryContext,
       children,
       (context, itemBeingDragged) => {
-        console.log("Move before " + context.path.join("."))
         move(itemBeingDragged, context.listContext, context.index, context, false)
       },
       (context, itemBeingDragged) => {
-        console.log("Move after " + context.path.join("."))
         move(itemBeingDragged, context.listContext, context.index + 1, context, true)
       });
 };
@@ -303,11 +286,9 @@ DraggableList.Before = function Before({children}: {children: React.ReactNode}) 
       ListContext,
       children,
       (context, itemBeingDragged) => {
-        console.log("Move before " + context.entryContext!.path.join("."))
         move(itemBeingDragged, context.parentContext!, context.entryContext!.index, context.entryContext, false)
       },
       (context, itemBeingDragged) => {
-        console.log("Move to start of " + context.path.join("."))
         move(itemBeingDragged, context, 0, null, false)
       });
 }

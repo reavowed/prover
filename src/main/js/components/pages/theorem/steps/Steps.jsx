@@ -12,7 +12,7 @@ import {
   StepReference
 } from "../../../../models/Step";
 import DisplayContext from "../../../DisplayContext";
-import DraggableList from "../../../DraggableList";
+import DraggableList from "../../../draggableList/DraggableList";
 import {HighlightableExpression} from "../../../ExpressionComponent";
 import ProofContext from "../ProofContext";
 import TheoremContext from "../TheoremContext";
