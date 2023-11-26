@@ -7,7 +7,7 @@ import AvailableEntries from "../../../../../AvailableEntries";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
 import {joinAsList} from "../../../../../helpers/reactFunctions";
 import ProofContext from "../../../ProofContext";
-import BoundVariableLists from "../../BoundVariableLists";
+import BoundVariableListContext from "../../../../../expressions/boundVariables/BoundVariableListContext";
 import ConclusionChooser from "./ConclusionChooser";
 import InferenceAutosuggest from "./InferenceAutosuggest";
 import SuggestionDropdownElement from "./SuggestionDropdownElement";
@@ -96,14 +96,14 @@ export class InferenceFinder extends React.Component {
           readOnly={disabled} />
       </Form.Group>
       {possibleTargets && possibleTargets.length === 1 &&
-      <BoundVariableLists.Consumer>{boundVariableLists =>
+      <BoundVariableListContext.Consumer>{boundVariableLists =>
         <Form.Group>
           <Form.Label><strong>Target</strong></Form.Label>
           <div><CopiableExpression expression={possibleTargets[0].target} boundVariableLists={[...boundVariableLists, ...possibleTargets[0].additionalBoundVariables]}/></div>
         </Form.Group>
-      }</BoundVariableLists.Consumer>
+      }</BoundVariableListContext.Consumer>
       }
-      {possibleTargets && possibleTargets.length > 1 && <BoundVariableLists.Consumer>{boundVariableLists =>
+      {possibleTargets && possibleTargets.length > 1 && <BoundVariableListContext.Consumer>{boundVariableLists =>
         <AvailableEntries.Consumer>{availableEntries =>
           <DisplayContext.Consumer>{displayContext =>
           <Form.Group>
@@ -120,7 +120,7 @@ export class InferenceFinder extends React.Component {
           </Form.Group>
           }</DisplayContext.Consumer>
         }</AvailableEntries.Consumer>
-      }</BoundVariableLists.Consumer>}
+      }</BoundVariableListContext.Consumer>}
       {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
                                                  conclusionVariableDefinitions={selectedInference.inference.variableDefinitions}
                                                  defaultConclusionStatement={selectedInference.inference.conclusion}

@@ -1,6 +1,6 @@
 import React from "react";
 import ProofContext from "../../../ProofContext";
-import BoundVariableLists from "../../BoundVariableLists";
+import BoundVariableListContext from "../../../../../expressions/boundVariables/BoundVariableListContext";
 import ConclusionChooser from "./ConclusionChooser";
 import PremiseChooser from "./PremiseChooser";
 
@@ -31,7 +31,7 @@ export default class ProveByPremise extends React.Component {
   render () {
     const {availablePremises, availableEntries} = this.props;
     const {selectedPremise, possibleConclusions, saving} = this.state;
-    return <BoundVariableLists.Consumer>{boundVariableLists => <>
+    return <BoundVariableListContext.Consumer>{boundVariableLists => <>
       <PremiseChooser premise={selectedPremise} setPremise={this.setPremise} availablePremises={availablePremises} availableEntries={availableEntries} autoFocus />
       {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
                                                  conclusionVariableDefinitions={this.context.variableDefinitions}
@@ -40,6 +40,6 @@ export default class ProveByPremise extends React.Component {
                                                  disabled={saving}
                                                  boundVariableListsForPremises={boundVariableLists}
                                                  boundVariableListsForSubstitutions={[]}/>}
-    </>}</BoundVariableLists.Consumer>;
+    </>}</BoundVariableListContext.Consumer>;
   }
 }

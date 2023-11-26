@@ -3,9 +3,9 @@ import React from "react";
 import {DefinedExpression} from "../../../../models/Expression";
 import {StepReference} from "../../../../models/Step";
 import {HighlightableExpression} from "../../../ExpressionComponent";
+import AddBoundVariableList from "../../../expressions/boundVariables/AddBoundVariableList";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import ProofContext from "../ProofContext";
-import BoundVariableLists from "./BoundVariableLists";
 import ProofLine from "./components/ProofLine";
 import Step from "./Step";
 import {Steps} from "./Steps";
@@ -40,9 +40,9 @@ export default class GeneralizedDeductionStep extends React.Component {
             Take any <HighlightableExpression expression={patchedExpression} references={[assumptionReference]} additionalPremiseReferences={referencesForLastStep} wrapBoundVariable={wrapBoundVariable} expressionToCopy={substep.assumption}/>.
           </ProofLine>
       </Step.Antecedent>
-      <BoundVariableLists.Add variables={[step.variableName]}>
+      <AddBoundVariableList variables={[step.variableName]}>
         <Steps.Children steps={substep.substeps} path={substepPath} propsForLastStep={{additionalReferences: referencesForLastStep}} />
-      </BoundVariableLists.Add>
+      </AddBoundVariableList>
       {step.provenStatement && showConclusion &&
         <ProofLine.SingleStatementWithPrefix prefix="So"
                                              statement={step.provenStatement}

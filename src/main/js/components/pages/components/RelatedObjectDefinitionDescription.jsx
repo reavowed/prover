@@ -1,9 +1,9 @@
 import React, {useContext} from "react";
-import DisplayContext from "../../DisplayContext";
 import AvailableEntries from "../../AvailableEntries";
+import DisplayContext from "../../DisplayContext";
 import {CopiableExpression} from "../../ExpressionComponent";
+import AddBoundVariableLists from "../../expressions/boundVariables/AddBoundVariableLists";
 import {formatQualifier} from "../../helpers/Formatter";
-import BoundVariableLists from "../theorem/steps/BoundVariableLists";
 
 export default function RelatedObjectDefinitionDescription({relatedObjectDefinition}) {
   const availableEntries = useContext(AvailableEntries);
@@ -15,9 +15,9 @@ export default function RelatedObjectDefinitionDescription({relatedObjectDefinit
   const requiredObjectVariableNames = _.map(requiredObjects, o => o.mainVariableDefinition.name);
   const variableDefinitions = [relatedObjectDefinition.mainVariableDefinition, typeDefinition.mainVariableDefinition, ...(qualifier ? qualifier.variableDefinitions : [])];
 
-  const definingStatementElement = <BoundVariableLists.AddMultiple variables={_.map(requiredObjectVariableNames, n => [n])}>
+  const definingStatementElement = <AddBoundVariableLists variableLists={_.map(requiredObjectVariableNames, n => [n])}>
     <CopiableExpression expression={relatedObjectDefinition.definingStatement} splitConjunction/>
-  </BoundVariableLists.AddMultiple>;
+  </AddBoundVariableLists>;
 
   return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(relatedObjectDefinition.definingStatement, variableDefinitions, availableEntries)}>
     {relatedObjectDefinition.article.capitalize()} <u>{relatedObjectDefinition.name}</u> for {typeDefinition.article} {typeDefinition.name} {typeDefinition.mainVariableDefinition.name} {formatQualifier(qualifier)} is an object {relatedObjectDefinition.mainVariableDefinition.name} such that {definingStatementElement}.

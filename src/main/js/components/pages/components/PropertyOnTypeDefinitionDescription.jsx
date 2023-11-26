@@ -1,10 +1,10 @@
 import React, {useContext} from "react";
-import DisplayContext from "../../DisplayContext";
 import AvailableEntries from "../../AvailableEntries";
+import DisplayContext from "../../DisplayContext";
 import {CopiableExpression} from "../../ExpressionComponent";
+import AddBoundVariableLists from "../../expressions/boundVariables/AddBoundVariableLists";
 import {formatQualifier} from "../../helpers/Formatter";
 import {joinAsList} from "../../helpers/reactFunctions";
-import BoundVariableLists from "../theorem/steps/BoundVariableLists";
 
 export default function PropertyOnTypeDefinitionDescription({propertyDefinition}) {
   const availableEntries = useContext(AvailableEntries);
@@ -20,9 +20,9 @@ export default function PropertyOnTypeDefinitionDescription({propertyDefinition}
   const requiredObjectVariableNames = _.map(requiredObjects, o => o.mainVariableDefinition.name);
   const variableDefinitions = [typeDefinition.mainVariableDefinition, ...(qualifier ? qualifier.variableDefinitions : [])];
 
-  const definingStatementElement = <BoundVariableLists.AddMultiple variables={_.map(requiredObjectVariableNames, n => [n])}>
+  const definingStatementElement = <AddBoundVariableLists variableLists={_.map(requiredObjectVariableNames, n => [n])}>
     <CopiableExpression expression={propertyDefinition.definingStatement} splitConjunction/>
-  </BoundVariableLists.AddMultiple>;
+  </AddBoundVariableLists>;
 
   return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(propertyDefinition.definingStatement, variableDefinitions, availableEntries)}>
     {typeDefinition.article.capitalize()} {typeDefinition.name} {typeDefinition.mainVariableDefinition.name} {formatQualifier(qualifier)} {requiredObjectsText} is <u>{propertyDefinition.name}</u> if {definingStatementElement}.

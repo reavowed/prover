@@ -8,10 +8,11 @@ import {replaceAtIndex} from "../../../../../../models/Helpers";
 import DisplayContext from "../../../../../DisplayContext";
 import AvailableEntries from "../../../../../AvailableEntries";
 import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
+import AddParameterList from "../../../../../expressions/boundVariables/AddParameterList";
 import {InlineTextEditor} from "../../../../../helpers/InlineTextEditor";
 import InputWithShorthandReplacement from "../../../../../helpers/InputWithShorthandReplacement";
 import {ResultWithPremises} from "../../../../../ResultWithPremises";
-import BoundVariableLists from "../../BoundVariableLists";
+import BoundVariableListContext from "../../../../../expressions/boundVariables/BoundVariableListContext";
 
 function substitutionGetter(type, applicationType, name) {
   return substitutions => {
@@ -189,7 +190,7 @@ export default class ConclusionChooser extends React.Component {
       <DisplayContext.Consumer>{displayContext => {
         const conclusionDisplayContext = displayContext.withVariableDefinitions(conclusionVariableDefinitions);
         const PremiseSuggestions = () => {
-          const boundVariableLists = useContext(BoundVariableLists) || [];
+          const boundVariableLists = useContext(BoundVariableListContext) || [];
           return <Form.Group>
             <Form.Label><strong>Premises</strong></Form.Label>
             {selectedConclusion.possiblePremises.map(({premise, possibleMatches}, i) =>
@@ -217,7 +218,7 @@ export default class ConclusionChooser extends React.Component {
                                            readOnly={disabled}
                                            onChange={(value, callback) => this.setSelectedSubstitutionValue(setter, value, callback)}
                                            onKeyDown={this.onInputKeyDown} /> :
-            <BoundVariableLists.Consumer>{ boundVariableLists =>
+            <BoundVariableListContext.Consumer>{ boundVariableLists =>
               validValues.length === 1 ?
                 <Form.Label column><CopiableExpression expression={validValues[0]} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} /></Form.Label> :
                 <Form.Control as="select" value={getter(this.state.selectedSubstitutionValues)} onChange={e => this.setSelectedSubstitutionValue(setter, e.target.value)} readOnly={disabled}>
@@ -228,7 +229,7 @@ export default class ConclusionChooser extends React.Component {
                       )}}/>
                   )}
                 </Form.Control>
-            }</BoundVariableLists.Consumer>;
+            }</BoundVariableListContext.Consumer>;
 
           return <Form.Group as={Form.Row}>
             <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}}/></Form.Label>
@@ -246,9 +247,9 @@ export default class ConclusionChooser extends React.Component {
               arity === 1 ? ["$"] :
                 _.map(_.range(arity), x => "$_" + (x+1));
             return newVariableList ?
-              <BoundVariableLists.AddParameters variables={newVariableList} key={`${key} ${index}`}>
+              <AddParameterList parameters={newVariableList} key={`${key} ${index}`}>
                 {showSubstitutionOptions(`${name}(${newVariableList.join(", ")})`, validValues, getter, setter)}
-              </BoundVariableLists.AddParameters> :
+              </AddParameterList> :
               <React.Fragment key={`${key} ${index}`}>
                 {showSubstitutionOptions(name, validValues, getter, setter)}
               </React.Fragment>;

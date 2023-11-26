@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {ExpressionComponent} from "../../../../ExpressionComponent";
 import ProofContext from "../../ProofContext";
-import BoundVariableLists from "../BoundVariableLists";
+import BoundVariableListContext from "../../../../expressions/boundVariables/BoundVariableListContext";
 import Rewriter from "./components/Rewriter";
 
 export default class RewriteCurrentTargetByDefinition extends React.Component {
@@ -29,7 +29,7 @@ export default class RewriteCurrentTargetByDefinition extends React.Component {
     const {availablePremises, availableEntries} = this.props;
     const {saving, selectedPremise} = this.state;
 
-    return <BoundVariableLists.Consumer>{boundVariableLists =>
+    return <BoundVariableListContext.Consumer>{boundVariableLists =>
       <>
         <Form.Group>
           <Form.Label><strong>Choose premise</strong></Form.Label>
@@ -50,6 +50,6 @@ export default class RewriteCurrentTargetByDefinition extends React.Component {
           {saving ? <span className="fas fa-spin fa-spinner"/> : "Rewrite"}
         </Button>
       </>
-    }</BoundVariableLists.Consumer>;
+    }</BoundVariableListContext.Consumer>;
   }
 }

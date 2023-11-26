@@ -5,12 +5,12 @@ import {DefinedExpression} from "../../../../models/Expression";
 import {AssertionStep, ElidedStep, NamingStep as NamingStepModel, StepReference} from "../../../../models/Step";
 import DisplayContext from "../../../DisplayContext";
 import {HighlightableExpression} from "../../../ExpressionComponent";
-import HashParamsContext from "../../../HashParamsContext";
+import AddBoundVariableLists from "../../../expressions/boundVariables/AddBoundVariableLists";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import {joinAsList} from "../../../helpers/reactFunctions";
 import ProofContext from "../ProofContext";
 import {AssertionStepProofLine} from "./AssertionStep";
-import BoundVariableLists from "./BoundVariableLists";
+import BoundVariableListContext from "../../../expressions/boundVariables/BoundVariableListContext";
 import {InferenceLink} from "./components/InferenceLink";
 import ProofLine from "./components/ProofLine";
 import {ElidedStepProofLine} from "./ElidedStep";
@@ -84,7 +84,7 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
           stepElement = <InlineTextEditor text={step.variableName} callback={updateBoundVariable(path)}/>;
         }
         const newBoundVariableLists = [...boundVariableLists, [step.variableName]];
-        return [[...stepsSoFar, <BoundVariableLists.Provider value={boundVariableLists}>{stepElement}</BoundVariableLists.Provider>], newBoundVariableLists];
+        return [[...stepsSoFar, <BoundVariableListContext.Provider value={boundVariableLists}>{stepElement}</BoundVariableListContext.Provider>], newBoundVariableLists];
       },
       [[], boundVariableLists]
     )[0];
@@ -103,18 +103,18 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
   const proofLineContent = <>
     Let
     {' '}
-    <BoundVariableLists.Consumer>{boundVariableLists =>
+    <BoundVariableListContext.Consumer>{boundVariableLists =>
       joinAsList(getNamingStepVariableDescriptions(namingSteps, boundVariableLists))
-    }</BoundVariableLists.Consumer>
+    }</BoundVariableListContext.Consumer>
     {' '}
     be such that
     {' '}
-    <BoundVariableLists.AddMultiple variables={namingSteps.map(({step}) => [step.variableName])}>
+    <AddBoundVariableLists variableLists={namingSteps.map(({step}) => [step.variableName])}>
       <HighlightableExpression expression={innermostNamingStep.assumption}
                                references={[innermostAssumptionReference]}
                                path={innermostNamingStep.variableDescription && [1]}
                                wrapBoundVariable={wrapEditableBoundVariableInAssumption}/>
-    </BoundVariableLists.AddMultiple>
+    </AddBoundVariableLists>
     {'.'}
   </>;
 
@@ -136,10 +136,10 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
 
   return <Step.WithSubsteps path={innermostNamingPath}>
       {proofLine}
-      <BoundVariableLists.AddMultiple variables={namingSteps.map(({step}) => [step.variableName])}>
+      <AddBoundVariableLists variableLists={namingSteps.map(({step}) => [step.variableName])}>
         <Steps steps={innermostNamingStep.step.substeps}
                path={innermostNamingPath}
                propsForLastStep={{additionalReferences: [...additionalReferences, outerNamingStepReference]}} />
-      </BoundVariableLists.AddMultiple>
+      </AddBoundVariableLists>
     </Step.WithSubsteps>;
 }

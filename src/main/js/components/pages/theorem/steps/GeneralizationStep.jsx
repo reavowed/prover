@@ -1,8 +1,8 @@
 import React from "react";
 import {StepReference} from "../../../../models/Step";
+import AddBoundVariableList from "../../../expressions/boundVariables/AddBoundVariableList";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import ProofContext from "../ProofContext";
-import BoundVariableLists from "./BoundVariableLists";
 import ProofLine from "./components/ProofLine";
 import Step from "./Step";
 import {Steps} from "./Steps";
@@ -22,11 +22,11 @@ export class GeneralizationStep extends React.Component {
           Take any <InlineTextEditor text={step.variableName} callback={this.updateBoundVariable}/>.
         </ProofLine>
       </Step.Antecedent>
-      <BoundVariableLists.Add variables={[step.variableName]}>
+      <AddBoundVariableList variables={[step.variableName]}>
         <Steps.Children steps={step.substeps}
                         path={path}
                         propsForLastStep={{additionalReferences: referencesForLastStep}} />
-      </BoundVariableLists.Add>
+      </AddBoundVariableList>
       {step.provenStatement && showConclusion &&
         <ProofLine.SingleStatementWithPrefix prefix="So"
                                              statement={step.provenStatement}

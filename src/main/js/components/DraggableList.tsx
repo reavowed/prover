@@ -1,7 +1,7 @@
 import React, {CSSProperties, useCallback, useContext, useRef, useState} from "react";
 import {useDrag, useDrop} from "react-dnd";
 import update from 'immutability-helper';
-import BoundVariableLists from "./pages/theorem/steps/BoundVariableLists";
+import BoundVariableListContext from "./expressions/boundVariables/BoundVariableListContext";
 import {DropTargetMonitor} from "react-dnd/lib/interfaces/monitors";
 import {ConnectDragSource} from "react-dnd/lib/interfaces";
 import _ from "lodash";
@@ -136,7 +136,7 @@ type InternalEntryProps = {
 DraggableList.Entries = function Entries<T>({entries}: {entries: Entry<T>[]}) {
   const listContext = useContext(ListContext)!;
   const {type, path: outerPath, hiddenIndex, placeholderProps, enabled} = listContext!;
-  const boundVariableLists = useContext(BoundVariableLists);
+  const boundVariableLists = useContext(BoundVariableListContext);
 
   function wrapAndAddPlaceholder(entryProps: InternalEntryProps[]) {
     if (_.isNumber(hiddenIndex)) {
@@ -154,9 +154,9 @@ DraggableList.Entries = function Entries<T>({entries}: {entries: Entry<T>[]}) {
           0,
           {
             element: <Entry context={placeholderEntryContext}>
-              <BoundVariableLists.Provider value={placeholderProps.boundVariableLists}>
+              <BoundVariableListContext.Provider value={placeholderProps.boundVariableLists}>
                 {placeholderProps.element}
-              </BoundVariableLists.Provider>
+              </BoundVariableListContext.Provider>
             </Entry>,
             key: "placeholder",
             placeholder: true

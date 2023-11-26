@@ -13,7 +13,7 @@ import DisplayContext from "./DisplayContext";
 import AvailableEntries from "./AvailableEntries";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
 import {joinAsList} from "./helpers/reactFunctions";
-import BoundVariableLists from "./pages/theorem/steps/BoundVariableLists";
+import BoundVariableListContext from "./expressions/boundVariables/BoundVariableListContext";
 import ProofContext from "./pages/theorem/ProofContext";
 import TheoremContext from "./pages/theorem/TheoremContext";
 
@@ -340,7 +340,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
 
 export const CopiableExpression = (props) => {
   const expressionToCopy = props.expressionToCopy || props.expression;
-  const boundVariableLists = props.boundVariableLists || useContext(BoundVariableLists) || [];
+  const boundVariableLists = props.boundVariableLists || useContext(BoundVariableListContext) || [];
   const variableDefinitions = (props.displayContext || useContext(DisplayContext))?.variableDefinitions;
   const {expression, ...otherProps} = props;
 

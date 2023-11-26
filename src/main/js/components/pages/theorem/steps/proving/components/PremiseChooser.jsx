@@ -4,10 +4,10 @@ import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import DisplayContext from "../../../../../DisplayContext";
 import {ExpressionComponent} from "../../../../../ExpressionComponent";
-import BoundVariableLists from "../../BoundVariableLists";
+import BoundVariableListContext from "../../../../../expressions/boundVariables/BoundVariableListContext";
 
 export default function PremiseChooser({premise, setPremise, availablePremises, availableEntries, title, autoFocus}) {
-  return <BoundVariableLists.Consumer>{boundVariableLists =>
+  return <BoundVariableListContext.Consumer>{boundVariableLists =>
     <DisplayContext.Consumer>{displayContext =>
       <Form.Group>
         <Form.Label><strong>{title || "Choose premise"}</strong></Form.Label>
@@ -21,5 +21,5 @@ export default function PremiseChooser({premise, setPremise, availablePremises, 
         </Form.Control>
       </Form.Group>
     }</DisplayContext.Consumer>
-  }</BoundVariableLists.Consumer>
+  }</BoundVariableListContext.Consumer>
 }

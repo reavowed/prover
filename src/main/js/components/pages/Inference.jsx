@@ -7,18 +7,17 @@ import InputWithShorthandReplacement from "../helpers/InputWithShorthandReplacem
 import {Breadcrumbs} from "./components/Breadcrumbs";
 import {InferenceSummary} from "../InferenceSummary";
 import {Monospace} from "../Monospace";
-import EditableExplicitName from "./components/EditableExplicitName";
 import EditableProperty from "./components/EditableProperty";
 import {NavLinks} from "./components/NavLinks";
 import {Page} from "./Page";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import {Usages} from "./components/Usages";
-import BoundVariableLists from "./theorem/steps/BoundVariableLists";
+import BoundVariableListContext from "../expressions/boundVariables/BoundVariableListContext";
 import {serializeVariable} from "./utils/entryFunctions";
 
 export function Inference({inference, title, url, bookLink, chapterLink, previous, next, usages, children, buttons, createPremiseElement, editable}) {
   const displayContext = useContext(DisplayContext);
-  const boundVariableLists = useContext(BoundVariableLists) || [];
+  const boundVariableLists = useContext(BoundVariableListContext) || [];
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(null);
   const updateName = async (newName) => {
