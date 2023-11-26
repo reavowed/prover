@@ -3,7 +3,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import {matchTemplate} from "../../../../models/Expression";
 import AvailableEntries from "../../../AvailableEntries";
-import {CopiableExpression} from "../../../ExpressionComponent";
+import {CopiableExpression} from "../../../expressions/ExpressionComponent";
 import ProofContext from "../ProofContext";
 import ProofLine from "./components/ProofLine";
 import ProvingCard from "./proving/ProvingCard";

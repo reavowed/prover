@@ -6,7 +6,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import styled, {css} from "styled-components";
 import {StepReference} from "../../../../../models/Step";
 import DraggableList from "../../../../draggableList/DraggableList";
-import {HighlightableExpression} from "../../../../ExpressionComponent";
+import {HighlightableExpression} from "../../../../expressions/ExpressionComponent";
 import {FlexRow} from "../../../../FlexRow";
 import {InlineTextEditor} from "../../../../helpers/InlineTextEditor";
 import {BoundVariableModal} from "../../../../Modals";

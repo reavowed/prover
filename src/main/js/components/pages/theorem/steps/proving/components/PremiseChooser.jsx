@@ -3,7 +3,7 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import DisplayContext from "../../../../../DisplayContext";
-import {ExpressionComponent} from "../../../../../ExpressionComponent";
+import {ExpressionComponent} from "../../../../../expressions/ExpressionComponent";
 import BoundVariableListContext from "../../../../../expressions/boundVariables/BoundVariableListContext";
 
 export default function PremiseChooser({premise, setPremise, availablePremises, availableEntries, title, autoFocus}) {

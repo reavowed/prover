@@ -1,5 +1,5 @@
 import React from "react";
-import {CopiableExpression} from "./ExpressionComponent";
+import {CopiableExpression} from "./expressions/ExpressionComponent";
 import {joinAsList} from "./helpers/reactFunctions";
 
 export class ResultWithPremises extends React.Component {

@@ -1,7 +1,7 @@
 import React from "react";
 import renderer from "react-test-renderer";
 import AvailableEntries from "../../../main/js/components/AvailableEntries";
-import {ExpressionComponent} from "../../../main/js/components/ExpressionComponent";
+import {ExpressionComponent} from "../../../main/js/components/expressions/ExpressionComponent";
 import {DefinedExpression} from "../../../main/js/models/Expression";
 import {getWords, treeToString} from "./ExpressionComponent.helpers";
 import {conjunctionDefinition, equalityDefinition, A, B, C, D} from "./testDefinitions";

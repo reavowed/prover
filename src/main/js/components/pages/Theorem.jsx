@@ -6,7 +6,7 @@ import {PremiseReference} from "../../models/Step";
 import {Parser} from "../../Parser";
 import DisplayContext from "../DisplayContext";
 import AvailableEntries from "../AvailableEntries";
-import {HighlightableExpression} from "../ExpressionComponent";
+import {HighlightableExpression} from "../expressions/ExpressionComponent";
 import HashParamsContext from "../HashParamsContext";
 import {Inference} from "./Inference";
 import Proofs from "./theorem/Proofs";

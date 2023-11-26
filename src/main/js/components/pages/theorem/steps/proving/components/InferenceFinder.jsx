@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import DisplayContext from "../../../../../DisplayContext";
 import AvailableEntries from "../../../../../AvailableEntries";
-import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
+import {CopiableExpression, ExpressionComponent} from "../../../../../expressions/ExpressionComponent";
 import {joinAsList} from "../../../../../helpers/reactFunctions";
 import ProofContext from "../../../ProofContext";
 import BoundVariableListContext from "../../../../../expressions/boundVariables/BoundVariableListContext";

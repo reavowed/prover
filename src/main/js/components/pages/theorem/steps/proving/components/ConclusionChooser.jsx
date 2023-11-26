@@ -7,7 +7,7 @@ import {renderToString} from "react-dom/server";
 import {replaceAtIndex} from "../../../../../../models/Helpers";
 import DisplayContext from "../../../../../DisplayContext";
 import AvailableEntries from "../../../../../AvailableEntries";
-import {CopiableExpression, ExpressionComponent} from "../../../../../ExpressionComponent";
+import {CopiableExpression, ExpressionComponent} from "../../../../../expressions/ExpressionComponent";
 import AddParameterList from "../../../../../expressions/boundVariables/AddParameterList";
 import {InlineTextEditor} from "../../../../../helpers/InlineTextEditor";
 import InputWithShorthandReplacement from "../../../../../helpers/InputWithShorthandReplacement";

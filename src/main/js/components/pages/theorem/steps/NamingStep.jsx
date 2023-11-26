@@ -4,7 +4,7 @@ import React, {useContext, useRef, useState} from "react";
 import {DefinedExpression} from "../../../../models/Expression";
 import {AssertionStep, ElidedStep, NamingStep as NamingStepModel, StepReference} from "../../../../models/Step";
 import DisplayContext from "../../../DisplayContext";
-import {HighlightableExpression} from "../../../ExpressionComponent";
+import {HighlightableExpression} from "../../../expressions/ExpressionComponent";
 import AddBoundVariableLists from "../../../expressions/boundVariables/AddBoundVariableLists";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import {joinAsList} from "../../../helpers/reactFunctions";

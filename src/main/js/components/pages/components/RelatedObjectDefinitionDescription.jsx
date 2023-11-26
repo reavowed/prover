@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import AvailableEntries from "../../AvailableEntries";
 import DisplayContext from "../../DisplayContext";
-import {CopiableExpression} from "../../ExpressionComponent";
+import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import AddBoundVariableLists from "../../expressions/boundVariables/AddBoundVariableLists";
 import {formatQualifier} from "../../helpers/Formatter";
 

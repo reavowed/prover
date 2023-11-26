@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import DisplayContext from "../../DisplayContext";
 import AvailableEntries from "../../AvailableEntries";
-import {CopiableExpression} from "../../ExpressionComponent";
+import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import {formatQualifier} from "../../helpers/Formatter";
 import ChapterEntryWrapper from "../chapter/ChapterEntryWrapper";
 

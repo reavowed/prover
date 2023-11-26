@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 import {matchTemplate} from "../../../../../models/Expression";
 import AvailableEntries from "../../../../AvailableEntries";
-import {CopiableExpression} from "../../../../ExpressionComponent";
+import {CopiableExpression} from "../../../../expressions/ExpressionComponent";
 import AddTargetByInference from "./AddTargetByInference";
 import AddTargetByPremise from "./AddTargetByPremise";
 import AddTargetManually from "./AddTargetManually";

@@ -3,7 +3,7 @@ import React, {useContext, useState} from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
-import {ExpressionComponent} from "../../../../ExpressionComponent";
+import {ExpressionComponent} from "../../../../expressions/ExpressionComponent";
 import ProofContext from "../../ProofContext";
 import BoundVariableListContext from "../../../../expressions/boundVariables/BoundVariableListContext";
 import Rewriter from "./components/Rewriter";

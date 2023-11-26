@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import {DefinedExpression} from "../../../models/Expression";
 import AvailableEntries from "../../AvailableEntries";
-import {CopiableExpression} from "../../ExpressionComponent";
+import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import {formatHtml} from "../../helpers/Formatter";
 import {ResultWithPremises} from "../../ResultWithPremises";
 import PropertyOnTypeDefinitionDescription from "../components/PropertyOnTypeDefinitionDescription";

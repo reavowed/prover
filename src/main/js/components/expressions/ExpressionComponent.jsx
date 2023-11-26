@@ -8,14 +8,14 @@ import {
   StandalonePropertyExpression,
   TypeExpression,
   TypeQualifierExpression, TypeRelationExpression, Variable
-} from "../models/Expression";
-import DisplayContext from "./DisplayContext";
-import AvailableEntries from "./AvailableEntries";
-import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "./helpers/Formatter";
-import {joinAsList} from "./helpers/reactFunctions";
-import BoundVariableListContext from "./expressions/boundVariables/BoundVariableListContext";
-import ProofContext from "./pages/theorem/ProofContext";
-import TheoremContext from "./pages/theorem/TheoremContext";
+} from "../../models/Expression";
+import DisplayContext from "../DisplayContext";
+import AvailableEntries from "../AvailableEntries";
+import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "../helpers/Formatter";
+import {joinAsList} from "../helpers/reactFunctions";
+import BoundVariableListContext from "./boundVariables/BoundVariableListContext";
+import ProofContext from "../pages/theorem/ProofContext";
+import TheoremContext from "../pages/theorem/TheoremContext";
 
 const HighlightingStyle = styled.span`
   color: ${props => props.isPremise ? "red" : props.isConclusion ? "blue" : null};

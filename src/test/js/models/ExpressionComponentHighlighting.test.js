@@ -3,7 +3,7 @@ import * as _ from "lodash";
 import React from 'react'
 import renderer from 'react-test-renderer'
 import AvailableEntries from "../../../main/js/components/AvailableEntries";
-import {ExpressionComponent} from "../../../main/js/components/ExpressionComponent";
+import {ExpressionComponent} from "../../../main/js/components/expressions/ExpressionComponent";
 import {TypeExpression} from "../../../main/js/models/Expression";
 import {getWords, treeToString} from "./ExpressionComponent.helpers";
 import {
