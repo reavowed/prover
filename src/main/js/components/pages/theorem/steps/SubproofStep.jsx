@@ -11,7 +11,7 @@ import {Steps} from "./Steps";
 const SubproofOutline = styled.div`
   border: 1px solid black;
   border-radius: .25rem;
-  padding: 0.5rem 1rem 0.5rem 0;
+  padding: 0.25rem 0.5rem 0.25rem 0.5rem;
 `;
 
 export class SubproofStepWithContexts extends React.Component {
@@ -41,25 +41,27 @@ export class SubproofStepWithContexts extends React.Component {
     let reference = new StepReference(path);
     const titleElement = <div onClick={this.toggleSubproof} className={"font-weight-bold mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</div>;
     return showingSubproof ?
-      <Step.WithSubsteps path={path}>
-        <Step.Antecedent>{titleElement}</Step.Antecedent>
-        <SubproofOutline>
-          <Steps.Children steps={step.substeps}
-                          path={path}
-                          propsForLastStep={{additionalReferences: [...additionalReferences, reference], showConclusion: true}} />
-        </SubproofOutline>
-      </Step.WithSubsteps> :
-      <Step.WithoutSubsteps>
-        {titleElement}
-        <ProofLine path={path}
-                   premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
-                   incomplete={!step.isComplete}
-                   onKeyDown={this.onProofLineKeyDown}>
-          <ProofLine.SingleStatementWithPrefixContent prefix="Then"
-                                                      statement={step.provenStatement}
-                                                      path={path} />
-        </ProofLine>
-      </Step.WithoutSubsteps>;
+      <SubproofOutline>
+        <Step.WithSubsteps path={path}>
+          <Step.Antecedent>{titleElement}</Step.Antecedent>
+          <Steps steps={step.substeps}
+                 path={path}
+                 propsForLastStep={{additionalReferences: [...additionalReferences, reference], showConclusion: true}} />
+        </Step.WithSubsteps>
+      </SubproofOutline> :
+      <SubproofOutline>
+        <Step.WithoutSubsteps>
+          {titleElement}
+          <ProofLine path={path}
+                     premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
+                     incomplete={!step.isComplete}
+                     onKeyDown={this.onProofLineKeyDown}>
+            <ProofLine.SingleStatementWithPrefixContent prefix="Then"
+                                                        statement={step.provenStatement}
+                                                        path={path} />
+          </ProofLine>
+        </Step.WithoutSubsteps>
+      </SubproofOutline>;
   }
 }
 
