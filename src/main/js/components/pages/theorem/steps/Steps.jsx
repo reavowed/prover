@@ -8,9 +8,9 @@ import {
   DeductionStep as DeductionStepModel,
   ElidedStep as ElidedStepModel,
   GeneralizationStep as GeneralizationStepModel,
-  NamingStep as NamingStepModel,
-  StepReference
+  NamingStep as NamingStepModel
 } from "../../../../models/Step";
+import {StepReference} from "../../../definitions/Reference";
 import DisplayContext from "../../../DisplayContext";
 import DraggableList from "../../../draggableList/DraggableList";
 import {HighlightableExpression} from "../../../expressions/ExpressionComponent";

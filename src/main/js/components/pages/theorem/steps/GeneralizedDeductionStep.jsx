@@ -1,7 +1,8 @@
 import update from 'immutability-helper';
 import React from "react";
 import {DefinedExpression} from "../../../../models/Expression";
-import {StepReference} from "../../../../models/Step";
+
+import {StepReference} from "../../../definitions/Reference";
 import {HighlightableExpression} from "../../../expressions/ExpressionComponent";
 import AddBoundVariableList from "../../../expressions/boundVariables/AddBoundVariableList";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";

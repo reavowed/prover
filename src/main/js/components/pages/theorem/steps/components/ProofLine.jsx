@@ -4,7 +4,8 @@ import Overlay from "react-bootstrap/Overlay";
 import Popover from "react-bootstrap/Popover";
 import Tooltip from "react-bootstrap/Tooltip";
 import styled, {css} from "styled-components";
-import {StepReference} from "../../../../../models/Step";
+
+import {StepReference} from "../../../../definitions/Reference";
 import DraggableList from "../../../../draggableList/DraggableList";
 import {HighlightableExpression} from "../../../../expressions/ExpressionComponent";
 import {FlexRow} from "../../../../FlexRow";

@@ -1,5 +1,6 @@
 import React from "react";
-import {StepReference} from "../../../../models/Step";
+
+import {StepReference} from "../../../definitions/Reference";
 import ProofLine from "./components/ProofLine";
 import Step from "./Step";
 import {Steps} from "./Steps";

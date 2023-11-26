@@ -1,4 +1,5 @@
-import {DisambiguatedSymbol, Variable} from "../../../main/js/models/Expression";
+import {DisambiguatedSymbol} from "../../../main/js/components/definitions/DefinitionParts";
+import {Variable} from "../../../main/js/models/Expression";
 
 export const injectiveDefinition = {
   symbol: "injective",

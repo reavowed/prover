@@ -1,93 +1,22 @@
-import * as _ from "lodash";
+import _ from "lodash";
 import {mapAtIndex, mapAtIndexWithMetadata, replaceAtIndex} from "./Helpers";
+import {VariableDefinition, VariableDefinitions} from "../components/definitions/DefinitionParts";
+
+import {
+  ExpressionDefinition,
+  PropertyDefinition,
+  RelatedObjectDefinition,
+  StandalonePropertyDefinition,
+  TypeDefinition,
+  TypeQualifierDefinition,
+  TypeRelationDefinition
+} from "../components/definitions/EntryDefinitions";
 
 declare global {
     interface Window {
       definitions: { [key: string]: ExpressionDefinition }
       typeDefinitions: { [key: string]: TypeDefinition }
     }
-}
-
-export interface DisambiguatedSymbol {
-  baseSymbol: string;
-  disambiguator: string | null;
-  serialized: string;
-}
-
-export interface SimpleVariableDefinition {
-  name: string;
-}
-
-export interface VariableDefinition {
-  name: string;
-  arity: number;
-}
-
-export interface VariableDefinitions {
-  statements: VariableDefinition[];
-  terms: VariableDefinition[];
-}
-
-export interface ExpressionDefinition {
-  symbol: DisambiguatedSymbol;
-  baseFormatString: string;
-  requiresBrackets: boolean;
-  requiresComponentBrackets: boolean;
-  numberOfBoundVariables: number;
-  numberOfComponents: number;
-  attributes: string[];
-  definitionPredicate?: Expression
-}
-
-export interface QualifierDefinition {
-  variableDefinitions: SimpleVariableDefinition[];
-  format: string;
-}
-
-export interface TypeDefinition {
-  symbol: string;
-  name: string;
-  allVariableDefinitions: SimpleVariableDefinition[];
-  mainVariableDefinition: SimpleVariableDefinition;
-  defaultQualifier: QualifierDefinition | null;
-  properties: PropertyDefinition[];
-  qualifiers: TypeQualifierDefinition[];
-  relatedObjects: RelatedObjectDefinition[];
-}
-
-export interface TypeQualifierDefinition {
-  symbol: string;
-  qualifiedSymbol: string;
-  name: string;
-  qualifier: QualifierDefinition;
-}
-
-export interface TypeRelationDefinition {
-  symbol: string;
-  linkingPhrase: string;
-}
-
-export interface PropertyDefinition {
-  symbol: string;
-  qualifiedSymbol: string;
-  name: string;
-  requiredParentQualifier: string | undefined;
-}
-
-export interface RelatedObjectDefinition {
-  symbol: string;
-  qualifiedSymbol: string;
-  name: string;
-  article: string;
-  mainVariableDefinition: SimpleVariableDefinition;
-  requiredParentQualifier: string | undefined;
-}
-
-export interface StandalonePropertyDefinition {
-  symbol: string;
-  qualifiedSymbol: string;
-  name: string;
-  mainVariableDefinition: SimpleVariableDefinition;
 }
 
 export class ExpressionMatchResult {
@@ -501,16 +430,15 @@ export class TypeRelationExpression extends Expression {
   }
 }
 
-export class StandalonePropertyExpression extends TypeLikeExpression {
-  constructor(public definition: StandalonePropertyDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
+export class StandalonePropertyExpression extends Expression {
+  constructor(public definition: StandalonePropertyDefinition, public term: Expression) { super(); }
   serialize(): string {
-    return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
+    return [this.definition.qualifiedSymbol, this.term.serialize()].join(" ")
   }
-  serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
+  serializeNicely(): string {
     return [
       this.definition.qualifiedSymbol,
-      this.term.serialize(),
-      ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists, variableDefinitions))
+      this.term.serialize()
     ].join(" ")
   }
   setBoundVariableName(): Expression {

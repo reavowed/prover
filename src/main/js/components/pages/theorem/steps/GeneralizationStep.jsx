@@ -1,5 +1,6 @@
 import React from "react";
-import {StepReference} from "../../../../models/Step";
+
+import {StepReference} from "../../../definitions/Reference";
 import AddBoundVariableList from "../../../expressions/boundVariables/AddBoundVariableList";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import ProofContext from "../ProofContext";

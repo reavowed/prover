@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as _ from "lodash";
-import {SimpleVariableDefinition} from "../../models/Expression";
+
+import {SimpleVariableDefinition} from "../definitions/DefinitionParts";
 
 type Match = {index: number, [key: number]: string}
 

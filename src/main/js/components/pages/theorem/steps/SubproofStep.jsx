@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import {StepReference} from "../../../../models/Step";
+
+import {StepReference} from "../../../definitions/Reference";
 import HashParamsContext from "../../../HashParamsContext";
 import {formatHtml} from "../../../helpers/Formatter";
 import ProofContext from "../ProofContext";

@@ -1,26 +1,41 @@
 import _ from "lodash";
 import {
   DefinedExpression,
-  Variable,
+  Expression,
   FunctionParameter,
   PropertyExpression,
+  RelatedObjectExpression,
+  StandalonePropertyExpression,
   TypeExpression,
-  StandalonePropertyExpression, TypeQualifierExpression, RelatedObjectExpression, TypeRelationExpression,
+  TypeQualifierExpression,
+  TypeRelationExpression,
+  Variable,
 } from "./models/Expression";
 import {
   AssertionStep,
   DeductionStep,
   ElidedStep,
-  NamingStep,
-  PremiseReference,
   GeneralizationStep,
-  StepReference,
+  NamingStep,
+  Step,
   SubproofStep,
   TargetStep
 } from "./models/Step";
 import {Theorem} from "./models/Theorem";
 
-function serializeReference(reference) {
+import {
+  ExpressionDefinition,
+  PropertyDefinition,
+  RelatedObjectDefinition,
+  StandalonePropertyDefinition,
+  TypeDefinition,
+  TypeQualifierDefinition,
+  TypeRelationDefinition
+} from "./components/definitions/EntryDefinitions";
+import {InferenceSummary} from "./components/definitions/InferenceSummary";
+import {PremiseReference, StepReference} from "./components/definitions/Reference";
+
+function serializeReference(reference: any) {
   if (!reference) return "???";
   const main = _.isNumber(reference.premiseIndex) ? "p" + reference.premiseIndex : reference.stepPath.join(".");
   const internalPath = reference.internalPath ? "-" + reference.internalPath.join(".") : "";
@@ -28,8 +43,8 @@ function serializeReference(reference) {
   return main + internalPath + suffix;
 }
 
-function tokenize(str)  {
-  function splitToken(word) {
+function tokenize(str: string): string[]  {
+  function splitToken(word: string): string[] {
     const firstSingleCharacterIndex = _.findIndex(word, x => _.includes("(){}", x));
     if (firstSingleCharacterIndex === 0) {
       return [word[0], ...splitToken(word.substring(1))];
@@ -45,17 +60,33 @@ function tokenize(str)  {
 }
 
 export class Parser {
-  constructor(definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions) {
-    this.definitions = definitions;
-    this.typeDefinitions = typeDefinitions;
-    this.typeRelationDefinitions = typeRelationDefinitions;
-    this.standalonePropertyDefinitions = standalonePropertyDefinitions;
-    this.stepCounter = 0;
+  private stepCounter: number = 0;
+  private qualifiersWithParentTypes: {[key: string]: {qualifier: TypeQualifierDefinition, parentType: TypeDefinition}};
+  private propertiesWithParentTypes: {[key: string]: {property: PropertyDefinition, parentType: TypeDefinition}};
+  private objectsWithParentTypes: {[key: string]: {object: RelatedObjectDefinition, parentType: TypeDefinition}};
+  constructor(
+    private definitions: {[key: string]: ExpressionDefinition},
+    private typeDefinitions: {[key: string]: TypeDefinition},
+    private typeRelationDefinitions: {[key: string]: TypeRelationDefinition},
+    private standalonePropertyDefinitions: {[key: string]: StandalonePropertyDefinition}
+  ) {
+    this.qualifiersWithParentTypes = _.fromPairs(
+      _.flatMap(this.typeDefinitions, parentType =>
+        _.map(parentType.qualifiers, qualifier =>
+            [qualifier.qualifiedSymbol, {qualifier, parentType}])));
+    this.propertiesWithParentTypes = _.fromPairs(
+      _.flatMap(this.typeDefinitions, parentType =>
+        _.map(parentType.properties, property =>
+            [property.qualifiedSymbol, {property, parentType}])));
+    this.objectsWithParentTypes = _.fromPairs(
+      _.flatMap(this.typeDefinitions, parentType =>
+        _.map(parentType.relatedObjects, object =>
+            [object.qualifiedSymbol, {object, parentType}])));
   }
-  parseExpression = (json) => {
+  parseExpression = (json: string) => {
     const self = this;
-    function parseExpressionsFromTokens(tokens, numberOfExpressions) {
-      return _.reduce(
+    function parseExpressionsFromTokens(tokens: string[], numberOfExpressions: number): [Expression[], string[]] {
+      return _.reduce<number, [Expression[], string[]]>(
         _.range(numberOfExpressions),
         ([componentsSoFar, tokens]) => {
           const [newComponent, newTokens] = parseExpressionFromTokens(tokens);
@@ -64,7 +95,7 @@ export class Parser {
         [[], tokens]
       );
     }
-    function parseArgumentsFromTokens(tokens) {
+    function parseArgumentsFromTokens(tokens: string[]): [Expression[], string[]] {
       if (tokens.length > 0) {
         if (tokens[0] === ")") {
           return [[], tokens.slice(1)];
@@ -77,14 +108,23 @@ export class Parser {
         throw "Expression ended unexpectedly during parsing"
       }
     }
-    function parseExpressionFromTokens(tokens) {
+    function matchQualifiers(firstComponent: TypeExpression, secondComponent: PropertyExpression | RelatedObjectExpression): boolean {
+      if (!firstComponent.definition.defaultQualifier && !secondComponent.definition.requiredParentQualifier) {
+        return true
+      } else if (firstComponent.definition.defaultQualifier || (secondComponent.definition.requiredParentQualifier && firstComponent.explicitQualifier && firstComponent.explicitQualifier.symbol === secondComponent.definition.requiredParentQualifier)) {
+        return secondComponent.qualifierComponents.map(c => c.serialize()).join(" ") === firstComponent.qualifierComponents.map(c => c.serialize()).join(" ")
+      } else {
+        return false;
+      }
+    }
+    function parseExpressionFromTokens(tokens: string[]): [Expression, string[]] {
       if (tokens.length > 0) {
         const [firstToken, ...tokensAfterFirst] = tokens;
         const expressionDefinition = self.definitions[firstToken];
         const typeDefinition = self.typeDefinitions[firstToken];
-        const qualifierAndParentType = _.chain(self.typeDefinitions).map(d => { return {qualifierDefinition: _.find(d.qualifiers, q => q.qualifiedSymbol === firstToken), parentType: d}}).filter("qualifierDefinition").find().value();
-        const propertyAndParentType = _.chain(self.typeDefinitions).map(d => { return {property: _.find(d.properties, p => p.qualifiedSymbol === firstToken), parentType: d}}).filter("property").find().value();
-        const objectAndParentType = _.chain(self.typeDefinitions).map(d => { return {object: _.find(d.relatedObjects, o => o.qualifiedSymbol === firstToken), parentType: d}}).filter("object").find().value();
+        const qualifierAndParentType = self.qualifiersWithParentTypes[firstToken];
+        const propertyAndParentType = self.propertiesWithParentTypes[firstToken];
+        const objectAndParentType = self.objectsWithParentTypes[firstToken];
         const typeRelationDefinition = self.typeRelationDefinitions[firstToken];
         const standalonePropertyDefinition = self.standalonePropertyDefinitions[firstToken];
         if (expressionDefinition) {
@@ -99,31 +139,13 @@ export class Parser {
               }
             }
             if (firstComponent instanceof TypeExpression && secondComponent instanceof PropertyExpression && _.includes(firstComponent.definition.properties, secondComponent.definition)) {
-              function matchQualifiers() {
-                if (!firstComponent.definition.defaultQualifier && !secondComponent.definition.requiredParentQualifier) {
-                  return true
-                } else if (firstComponent.definition.defaultQualifier || (secondComponent.definition.requiredParentQualifier && firstComponent.explicitQualifier && firstComponent.explicitQualifier.symbol === secondComponent.definition.requiredParentQualifier)) {
-                  return secondComponent.qualifierComponents.map(c => c.serialize()).join(" ") === firstComponent.qualifierComponents.map(c => c.serialize()).join(" ")
-                } else {
-                  return false;
-                }
-              }
-              if (secondComponent.term.serialize() === firstComponent.term.serialize() && matchQualifiers()) {
+              if (secondComponent.term.serialize() === firstComponent.term.serialize() && matchQualifiers(firstComponent, secondComponent)) {
                 firstComponent.addProperty(secondComponent.definition, expressionDefinition);
                 return [firstComponent, tokensAfterComponents];
               }
             }
             if (firstComponent instanceof TypeExpression && secondComponent instanceof RelatedObjectExpression && _.includes(firstComponent.definition.relatedObjects, secondComponent.definition)) {
-              function matchQualifiers() {
-                if (!firstComponent.definition.defaultQualifier && !secondComponent.definition.requiredParentQualifier) {
-                  return true
-                } else if (firstComponent.definition.defaultQualifier || (secondComponent.definition.requiredParentQualifier && firstComponent.explicitQualifier && firstComponent.explicitQualifier.symbol === secondComponent.definition.requiredParentQualifier)) {
-                  return secondComponent.qualifierComponents.map(c => c.serialize()).join(" ") === firstComponent.qualifierComponents.map(c => c.serialize()).join(" ")
-                } else {
-                  return false;
-                }
-              }
-              if (secondComponent.parentTerm.serialize() === firstComponent.term.serialize() && matchQualifiers()) {
+              if (secondComponent.parentTerm.serialize() === firstComponent.term.serialize() && matchQualifiers(firstComponent, secondComponent)) {
                 firstComponent.addObject(secondComponent.definition, secondComponent.term, expressionDefinition);
                 return [firstComponent, tokensAfterComponents];
               }
@@ -133,11 +155,11 @@ export class Parser {
         } else if (typeDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
           const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, typeDefinition.defaultQualifier?.variableDefinitions.length ?? 0);
-          return [new TypeExpression(typeDefinition, term, null, components, [], [], null), tokensAfterComponents];
+          return [new TypeExpression(typeDefinition, term, undefined, components, [], [], undefined), tokensAfterComponents];
         } else if (qualifierAndParentType) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifierAndParentType.qualifierDefinition.qualifier.variableDefinitions.length);
-          return [new TypeQualifierExpression(qualifierAndParentType.qualifierDefinition, qualifierAndParentType.parentType, term, components), tokensAfterComponents];
+          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, qualifierAndParentType.qualifier.qualifier.variableDefinitions.length);
+          return [new TypeQualifierExpression(qualifierAndParentType.qualifier, qualifierAndParentType.parentType, term, components), tokensAfterComponents];
         } else if (propertyAndParentType) {
           const {property, parentType} = propertyAndParentType;
           const requiredParentQualifier = property.requiredParentQualifier ? _.find(parentType.qualifiers, q => q.symbol === property.requiredParentQualifier) : null;
@@ -159,8 +181,7 @@ export class Parser {
           return [new TypeRelationExpression(typeRelationDefinition, firstTerm, secondTerm), tokensAfterSecondTerm];
         }else if (standalonePropertyDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
-          const [components, tokensAfterComponents] = parseExpressionsFromTokens(tokensAfterTerm, standalonePropertyDefinition.numberOfComponents);
-          return [new StandalonePropertyExpression(standalonePropertyDefinition, term, components), tokensAfterComponents];
+          return [new StandalonePropertyExpression(standalonePropertyDefinition, term), tokensAfterTerm];
         } else if (firstToken === "with") {
           const [variableArguments, [name, ...remainingTokens]] = parseArgumentsFromTokens(tokensAfterFirst.slice(1));
           return [new Variable(name, variableArguments), remainingTokens];
@@ -184,7 +205,7 @@ export class Parser {
     return expression;
   };
 
-  parseReference = (json) => {
+  parseReference = (json: any) => {
     if (_.isNumber(json.premiseIndex)) {
       return new PremiseReference(json.premiseIndex, json.internalPath || null);
     } else {
@@ -192,13 +213,13 @@ export class Parser {
     }
   };
 
-  parseInferenceWithSummary = (json, inferenceSummaries) => {
+  parseInferenceWithSummary = (json: any, inferenceSummaries: InferenceSummary[]) => {
     const inference = this.parseInference(json);
     const summary = inferenceSummaries[inference.id];
     return {...inference, ...summary};
   };
 
-  parseStep = (stepJson, inferenceSummaries) => {
+  parseStep = (stepJson: any, inferenceSummaries: InferenceSummary[]): Step => {
     switch (stepJson.type) {
       case "assertion":
         return new AssertionStep(
@@ -270,15 +291,15 @@ export class Parser {
     }
   };
   
-  parseSteps = (json, inferenceSummaries) => {
+  parseSteps = (json: any[], inferenceSummaries: InferenceSummary[]): Step[] => {
     return json.map(stepJson => this.parseStep(stepJson, inferenceSummaries));
   };
-  parseStepsWithReferenceChanges = (json, inferenceSummaries) => {
-    return json.map(({step: stepJson, path}) => {return {step: this.parseStep(stepJson, inferenceSummaries), path}});
+  parseStepsWithReferenceChanges = (json: any, inferenceSummaries: InferenceSummary[]) => {
+    return json.map(({step: stepJson, path}: {step: any, path: number[]}) => {return {step: this.parseStep(stepJson, inferenceSummaries), path}});
   };
 
 
-  parseTheorem = (theoremJson, inferences) => {
+  parseTheorem = (theoremJson: any, inferences: InferenceSummary[]): Theorem => {
     return new Theorem(
       theoremJson.name,
       theoremJson.id,
@@ -286,15 +307,15 @@ export class Parser {
       theoremJson.variableDefinitions,
       theoremJson.premises.map(this.parseExpression),
       this.parseExpression(theoremJson.conclusion),
-      theoremJson.proofs.map(proof => this.parseSteps(proof.steps, inferences)));
+      theoremJson.proofs.map((proof: any) => this.parseSteps(proof.steps, inferences)));
   };
 
-  parseInferenceSummary = (inference) => {
+  parseInferenceSummary = (inference: any) => {
     inference.premises = inference.premises.map(this.parseExpression);
     inference.conclusion = this.parseExpression(inference.conclusion);
   };
 
-  parsePremise = (premiseJson) => {
+  parsePremise = (premiseJson: any) => {
     const premise = _.cloneDeep(premiseJson);
     premiseJson.statement && (premise.statement = this.parseExpression(premiseJson.statement));
     premiseJson.premises && (premise.premises =  premise.premises.map(this.parsePremise));
@@ -302,19 +323,19 @@ export class Parser {
     premise.serializedReference = serializeReference(premiseJson.referencedLine);
     return premise;
   };
-  parseInference = (rawInference) => {
+  parseInference = (rawInference: any) => {
     const inference = _.cloneDeep(rawInference);
     inference.premises && (inference.premises = inference.premises.map(this.parseExpression));
     inference.conclusion && (inference.conclusion = this.parseExpression(inference.conclusion));
     return inference;
   };
-  parseStatementDefinition = (definitionJson) => {
+  parseStatementDefinition = (definitionJson: any) => {
     const definition = _.cloneDeep(definitionJson);
     definition.definingStatement && (definition.definingStatement = this.parseExpression(definition.definingStatement));
     definition.defaultValue = this.parseExpression(definition.defaultValue);
     return definition;
   };
-  parseTermDefinition = (definitionJson) => {
+  parseTermDefinition = (definitionJson: any) => {
     const definition = _.cloneDeep(definitionJson);
     definition.definingStatement && (definition.definingStatement = this.parseExpression(definition.definingStatement));
     definition.definitionPredicate && (definition.definitionPredicate = this.parseExpression(definition.definitionPredicate));
@@ -323,19 +344,19 @@ export class Parser {
     _.forEach(definition.disambiguatorAdders, da => da.template = this.parseExpression(da.template));
     return definition;
   };
-  parseDefinitionWithDefiningStatement = (definitionJson) => {
+  parseDefinitionWithDefiningStatement = (definitionJson: any) => {
     const definition = _.cloneDeep(definitionJson);
     definition.definingStatement = this.parseExpression(definition.definingStatement);
     return definition;
   };
-  parseSubstitutions = (substitutions) => {
+  parseSubstitutions = (substitutions: any) => {
     const statements = _.map(substitutions.statements, s => s && this.parseExpression(s));
     const terms = _.map(substitutions.terms, t => t && this.parseExpression(t));
     const statementApplications = _.mapValues(substitutions.statementApplications, ss => _.map(ss, this.parseExpression));
     const termApplications = _.mapValues(substitutions.termApplications, ts => _.map(ts, this.parseExpression));
     return {statements, terms, statementApplications, termApplications};
   };
-  parsePossibleInferences = (possibleInferences) => {
+  parsePossibleInferences = (possibleInferences: any) => {
     _.forEach(possibleInferences, possibleInference => {
       this.parseInferenceSummary(possibleInference.inference);
       possibleInference.possibleTargets && this.parsePossibleTargets(possibleInference.possibleTargets);
@@ -345,17 +366,17 @@ export class Parser {
     return possibleInferences;
   };
 
-  parsePossibleTargets = (possibleTargets) => {
+  parsePossibleTargets = (possibleTargets: any) => {
     _.forEach(possibleTargets, t => {
       t.target = this.parseExpression(t.target);
       this.parsePossibleConclusions(t.possibleConclusions);
     });
   };
-  parsePossibleConclusions = (possibleConclusions) => {
+  parsePossibleConclusions = (possibleConclusions: any) => {
     _.forEach(possibleConclusions, this.parsePossibleConclusion);
     return possibleConclusions;
   };
-  parsePossibleConclusion = (possibleConclusion) => {
+  parsePossibleConclusion = (possibleConclusion: any) => {
     possibleConclusion.conclusion = this.parseExpression(possibleConclusion.conclusion);
     possibleConclusion.substitutions = possibleConclusion.substitutions && this.parseSubstitutions(possibleConclusion.substitutions);
     _.forEach(possibleConclusion.possiblePremises, p => {
@@ -367,7 +388,7 @@ export class Parser {
     });
     return possibleConclusion;
   };
-  parsePremiseRewriteSuggestions = (suggestions) => {
+  parsePremiseRewriteSuggestions = (suggestions: any[]) => {
     return suggestions.map(suggestionJson => {
       const suggestion = _.cloneDeep(suggestionJson);
       _.forEach(suggestion.rewriteSuggestions, s => s.result = this.parseExpression(s.result));
@@ -376,7 +397,7 @@ export class Parser {
       return suggestion;
     })
   };
-  parseInferenceRewriteSuggestions = (suggestions) => {
+  parseInferenceRewriteSuggestions = (suggestions: any[]) => {
     return suggestions.map(suggestionJson => {
       const suggestion = _.cloneDeep(suggestionJson);
       this.parseInferenceSummary(suggestion.inference);
@@ -385,7 +406,7 @@ export class Parser {
       return suggestion;
     })
   };
-  parseEntries = (entryWrappers) => {
+  parseEntries = (entryWrappers: any[]) => {
     return entryWrappers.map(entryWrapper => {
       entryWrapper = _.cloneDeep(entryWrapper);
       let entry = entryWrapper.entry;
@@ -396,17 +417,17 @@ export class Parser {
       return entryWrapper;
     });
   };
-  parseDisplayShorthand = (json) => {
+  parseDisplayShorthand = (json: any) => {
     const shorthand = _.cloneDeep(json);
     shorthand.template = this.parseExpression(shorthand.template);
     return shorthand;
   };
-  parseBinaryRelation = (json) => {
+  parseBinaryRelation = (json: any) => {
     const relation = _.cloneDeep(json);
     relation.template = this.parseExpression(relation.template);
     return relation;
   };
-  parseDisambiguatorAdder = (json) => {
+  parseDisambiguatorAdder = (json: any) => {
     const disambiguatorAdder = _.cloneDeep(json);
     disambiguatorAdder.template = this.parseExpression(disambiguatorAdder.template);
     return disambiguatorAdder;

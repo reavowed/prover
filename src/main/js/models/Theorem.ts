@@ -1,7 +1,8 @@
-import {Expression, VariableDefinitions} from "./Expression";
+import {Expression} from "./Expression";
 import {Step} from "./Step";
 import {flatMapAtIndex, mapAtIndex} from "./Helpers";
 import * as _ from "lodash";
+import {VariableDefinitions} from "../components/definitions/DefinitionParts";
 
 
 export class Theorem {

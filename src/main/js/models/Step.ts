@@ -1,28 +1,9 @@
-import {DefinedExpression, Expression, ExpressionDefinition} from "./Expression";
+import {DefinedExpression, Expression} from "./Expression";
 import * as _ from "lodash";
 import {flatMapAtIndex, mapAtIndex} from "./Helpers";
 
-export class PremiseReference {
-    type = "premise";
-    constructor(public index: number, public innerPath: number[] | null = null) {}
-    matches(other: Reference): boolean {
-        return other instanceof PremiseReference && other.index == this.index;
-    }
-    toString(): string {
-        return "p" + this.index + (this.innerPath ? "-" + this.innerPath.join(".") : "");
-    }
-}
-export class StepReference {
-    type = "step";
-    constructor(public stepPath: number[], public suffix: string | null = null, public innerPath: number[] | null = null) {}
-    matches(other: Reference): boolean {
-        return other instanceof StepReference && _.isEqual(other.stepPath, this.stepPath) && other.suffix == this.suffix;
-    }
-    toString(): string {
-        return this.stepPath.join(".") + (this.suffix || "") + (this.innerPath ? "-" + this.innerPath.join(".") : "");
-    }
-}
-export type Reference = PremiseReference | StepReference;
+import {ExpressionDefinition} from "../components/definitions/EntryDefinitions";
+import {Reference} from "../components/definitions/Reference";
 
 export abstract class Step {
     abstract id: number;
