@@ -2,7 +2,7 @@ import _ from "lodash";
 import React from "react";
 import Button from "react-bootstrap/Button";
 import {matchTemplate} from "../../../../models/Expression";
-import AvailableEntries from "../../../AvailableEntries";
+import AvailableEntriesContext from "../../../AvailableEntriesContext";
 import {CopiableExpression} from "../../../expressions/ExpressionComponent";
 import ProofContext from "../ProofContext";
 import ProofLine from "./components/ProofLine";
@@ -68,9 +68,9 @@ class TargetStepProofLineInner extends React.Component {
 }
 
 export function TargetStepProofLine(props) {
-  return <AvailableEntries.Consumer>{availableEntries =>
+  return <AvailableEntriesContext.Consumer>{availableEntries =>
     <TargetStepProofLineInner availableEntries={availableEntries} {...props} />
-  }</AvailableEntries.Consumer>
+  }</AvailableEntriesContext.Consumer>
 }
 export class TargetStep extends React.Component {
   render() {

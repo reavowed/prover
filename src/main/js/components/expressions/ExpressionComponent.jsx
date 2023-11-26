@@ -10,7 +10,7 @@ import {
   TypeQualifierExpression, TypeRelationExpression, Variable
 } from "../../models/Expression";
 import DisplayContext from "../DisplayContext";
-import AvailableEntries from "../AvailableEntries";
+import AvailableEntriesContext from "../AvailableEntriesContext";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "../helpers/Formatter";
 import {joinAsList} from "../helpers/reactFunctions";
 import BoundVariableListContext from "./boundVariables/BoundVariableListContext";
@@ -50,7 +50,7 @@ function filterPathsMultiple(actions, initialPaths) {
 }
 
 export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, availableEntries, displayContext, splitConjunction}) {
-  availableEntries = availableEntries || useContext(AvailableEntries);
+  availableEntries = availableEntries || useContext(AvailableEntriesContext);
   displayContext = displayContext || useContext(DisplayContext);
   wrapBoundVariable = wrapBoundVariable || ((name) => formatHtml(name));
 

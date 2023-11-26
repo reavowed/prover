@@ -1,6 +1,6 @@
 import React, {useMemo} from "react";
 import {Parser} from "../../Parser";
-import AvailableEntries from "../AvailableEntries";
+import AvailableEntriesContext, {createAvailableEntries} from "../AvailableEntriesContext";
 import {Breadcrumbs} from "./components/Breadcrumbs";
 import EditableProperties from "./components/EditableProperties";
 import {NavLinks} from "./components/NavLinks";
@@ -11,8 +11,8 @@ import {useMappedState} from "./utils/entryFunctions";
 
 export function TypeDefinition(props) {
   const {definition: definitionJson, bookLink, chapterLink, url, previous, next, usages} = props;
-  const [parser, availableEntries] = AvailableEntries.fromEntryProps(props);
-  const [definition, setDefinition] = useMappedState(definitionJson, parser.parseDefinitionWithDefiningStatement);
+  const availableEntries = createAvailableEntries(props);
+  const [definition, setDefinition] = useMappedState(definitionJson, availableEntries.parser.parseDefinitionWithDefiningStatement);
 
   const serializedFormat = definition.qualifier?.format.originalValue ?
     "(" + definition.qualifier.format.originalValue + ")" + (definition.qualifier.format.requiresBrackets ? " requires-brackets" : "") + (definition.qualifier.format.requiresComponentBrackets ? "" : " no-component-brackets") :
@@ -48,7 +48,7 @@ export function TypeDefinition(props) {
   ];
 
 
-  return <AvailableEntries.Provider value={availableEntries}>
+  return <AvailableEntriesContext.Provider value={availableEntries}>
     <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <h3>{definition.title.capitalize()}</h3>
@@ -56,5 +56,5 @@ export function TypeDefinition(props) {
       <EditableProperties url={url} updateEntry={setDefinition} definitions={editableProperties} />
       <StatementDefinitionUsages usages={usages} statementDefinition={definition.statementDefinition} />
     </Page>
-  </AvailableEntries.Provider>;
+  </AvailableEntriesContext.Provider>;
 }

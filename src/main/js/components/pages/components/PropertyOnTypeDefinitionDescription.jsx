@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import AvailableEntries from "../../AvailableEntries";
+import AvailableEntriesContext from "../../AvailableEntriesContext";
 import DisplayContext from "../../DisplayContext";
 import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import AddBoundVariableLists from "../../expressions/boundVariables/AddBoundVariableLists";
@@ -7,7 +7,7 @@ import {formatQualifier} from "../../helpers/Formatter";
 import {joinAsList} from "../../helpers/reactFunctions";
 
 export default function PropertyOnTypeDefinitionDescription({propertyDefinition}) {
-  const availableEntries = useContext(AvailableEntries);
+  const availableEntries = useContext(AvailableEntriesContext);
 
   const typeDefinition = propertyDefinition.parentTypeConditions.parentType;
   const qualifier = propertyDefinition.parentTypeConditions.requiredParentQualifier ?

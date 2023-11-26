@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import {DefinedExpression} from "../../../models/Expression";
-import AvailableEntries from "../../AvailableEntries";
+import AvailableEntriesContext from "../../AvailableEntriesContext";
 import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import {formatHtml} from "../../helpers/Formatter";
 import {ResultWithPremises} from "../../ResultWithPremises";
@@ -17,7 +17,7 @@ import DeleteEntryButton from "./DeleteEntryButton";
 import InferenceEntry from "./InferenceEntry";
 
 export default function ChapterEntry({entry, url, type, title}) {
-  const availableEntries = useContext(AvailableEntries);
+  const availableEntries = useContext(AvailableEntriesContext);
   switch (type) {
     case "axiom":
       return <InferenceEntry type="Axiom" inference={entry} url={url} />;

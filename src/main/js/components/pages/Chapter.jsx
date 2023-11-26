@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import {DndProvider} from 'react-dnd'
 import Backend from 'react-dnd-html5-backend'
 import {Parser} from "../../Parser";
-import AvailableEntries from "../AvailableEntries";
+import AvailableEntriesContext, {createAvailableEntries} from "../AvailableEntriesContext";
 import {SimpleDraggableList} from "../draggableList/SimpleDraggableList";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import ChapterContext from "./chapter/ChapterContext";
@@ -80,12 +80,11 @@ export class Chapter extends React.Component {
     const {title, url, entries, editing, definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions} = this.state;
 
     const context = {updateChapter: this.updateChapter, url, editing};
-    const parser = new Parser(definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions);
-    const availableEntries = AvailableEntries.create(parser, definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands);
+    const availableEntries = createAvailableEntries({definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands});
     return <Page breadcrumbs={<Breadcrumbs links={[bookLink, {title, url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <ChapterContext.Provider value={context}>
-        <AvailableEntries.Provider value={availableEntries}>
+        <AvailableEntriesContext.Provider value={availableEntries}>
           <Button className="ml-3 float-right" size="sm" onClick={() => this.setState({editing: !editing})}><i className={"fas fa-" + (editing ? "times" : "edit")}/></Button>
           <h3><InlineTextEditor text={title} callback={this.updateTitle}/></h3>
           <p>{summary}</p>
@@ -99,7 +98,7 @@ export class Chapter extends React.Component {
           </DndProvider>
           <hr/>
           <ChapterEntryAdder />
-        </AvailableEntries.Provider>
+        </AvailableEntriesContext.Provider>
       </ChapterContext.Provider>
     </Page>;
   }

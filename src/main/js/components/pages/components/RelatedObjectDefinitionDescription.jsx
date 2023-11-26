@@ -1,12 +1,12 @@
 import React, {useContext} from "react";
-import AvailableEntries from "../../AvailableEntries";
+import AvailableEntriesContext from "../../AvailableEntriesContext";
 import DisplayContext from "../../DisplayContext";
 import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import AddBoundVariableLists from "../../expressions/boundVariables/AddBoundVariableLists";
 import {formatQualifier} from "../../helpers/Formatter";
 
 export default function RelatedObjectDefinitionDescription({relatedObjectDefinition}) {
-  const availableEntries = useContext(AvailableEntries);
+  const availableEntries = useContext(AvailableEntriesContext);
   const typeDefinition = relatedObjectDefinition.parentTypeConditions.parentType;
   const qualifier = relatedObjectDefinition.parentTypeConditions.requiredParentQualifier ?
     relatedObjectDefinition.parentTypeConditions.requiredParentQualifier.qualifier :

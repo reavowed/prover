@@ -2,7 +2,7 @@ import _ from "lodash";
 import * as React from "react";
 import {useContext} from "react";
 import {DefinedExpression, matchTemplate, TypeLikeExpression, TypeRelationExpression} from "../models/Expression";
-import AvailableEntries from "./AvailableEntries";
+import AvailableEntriesContext from "./AvailableEntriesContext";
 
 const DisplayContext = React.createContext();
 
@@ -123,7 +123,7 @@ DisplayContext.forInferenceSummary = function(inference, availableEntries) {
 };
 
 DisplayContext.AddSteps = function({steps, children}) {
-  const availableEntries = useContext(AvailableEntries);
+  const availableEntries = useContext(AvailableEntriesContext);
   const existingDisplayContext = useContext(DisplayContext);
   const statements = _.chain(steps).map(s => s.provenStatement).filter().value();
   const newDisambiguators = getDisambiguatorsForExpressions(statements, availableEntries);

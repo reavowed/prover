@@ -1,12 +1,12 @@
 import React, {useContext} from "react";
 import DisplayContext from "../../DisplayContext";
-import AvailableEntries from "../../AvailableEntries";
+import AvailableEntriesContext from "../../AvailableEntriesContext";
 import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import {formatQualifier} from "../../helpers/Formatter";
 import ChapterEntryWrapper from "../chapter/ChapterEntryWrapper";
 
 export default function TypeQualifierDefinitionDescription({typeQualifierDefinition}) {
-  const availableEntries = useContext(AvailableEntries);
+  const availableEntries = useContext(AvailableEntriesContext);
   const typeDefinition = typeQualifierDefinition.parentType;
   const variableDefinitions = [typeQualifierDefinition.parentType.mainVariableDefinition, ...typeQualifierDefinition.qualifier.variableDefinitions];
 

@@ -1,6 +1,6 @@
 import React from "react";
 import {Parser} from "../../Parser";
-import AvailableEntries from "../AvailableEntries";
+import AvailableEntriesContext, {createAvailableEntries} from "../AvailableEntriesContext";
 import {Breadcrumbs} from "./components/Breadcrumbs";
 import EditableProperties from "./components/EditableProperties";
 import {NavLinks} from "./components/NavLinks";
@@ -12,8 +12,8 @@ import {serializeVariable, useMappedState} from "./utils/entryFunctions";
 
 export function TypeRelationDefinition(props) {
   const {definition: definitionJson, bookLink, chapterLink, url, previous, next, usages} = props;
-  const [parser, availableEntries] = AvailableEntries.fromEntryProps(props);
-  const [definition, setDefinition] = useMappedState(definitionJson, parser.parseDefinitionWithDefiningStatement);
+  const availableEntries = createAvailableEntries(props);
+  const [definition, setDefinition] = useMappedState(definitionJson, availableEntries.parser.parseDefinitionWithDefiningStatement);
 
   const editableProperties = [
     {label: "Symbol", initialValue: definition.symbol, endpointName: "symbol"},
@@ -23,7 +23,7 @@ export function TypeRelationDefinition(props) {
   ];
 
 
-  return <AvailableEntries.Provider value={availableEntries}>
+  return <AvailableEntriesContext.Provider value={availableEntries}>
     <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
       <NavLinks previous={previous} next={next} />
       <h3>{definition.title.capitalize()}</h3>
@@ -31,5 +31,5 @@ export function TypeRelationDefinition(props) {
       <EditableProperties url={url} updateEntry={setDefinition} definitions={editableProperties} />
       <StatementDefinitionUsages usages={usages} statementDefinition={definition.statementDefinition} />
     </Page>
-  </AvailableEntries.Provider>;
+  </AvailableEntriesContext.Provider>;
 }

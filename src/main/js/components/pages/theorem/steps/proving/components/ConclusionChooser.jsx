@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {replaceAtIndex} from "../../../../../../models/Helpers";
 import DisplayContext from "../../../../../DisplayContext";
-import AvailableEntries from "../../../../../AvailableEntries";
+import AvailableEntriesContext from "../../../../../AvailableEntriesContext";
 import {CopiableExpression, ExpressionComponent} from "../../../../../expressions/ExpressionComponent";
 import AddParameterList from "../../../../../expressions/boundVariables/AddParameterList";
 import {InlineTextEditor} from "../../../../../helpers/InlineTextEditor";
@@ -186,7 +186,7 @@ export default class ConclusionChooser extends React.Component {
       return <InlineTextEditor text={name} callback={callback} />;
     };
 
-    return <AvailableEntries.Consumer>{availableEntries =>
+    return <AvailableEntriesContext.Consumer>{availableEntries =>
       <DisplayContext.Consumer>{displayContext => {
         const conclusionDisplayContext = displayContext.withVariableDefinitions(conclusionVariableDefinitions);
         const PremiseSuggestions = () => {
@@ -296,6 +296,6 @@ export default class ConclusionChooser extends React.Component {
           </div>
         </div>
       }}</DisplayContext.Consumer>
-    }</AvailableEntries.Consumer>
+    }</AvailableEntriesContext.Consumer>
   }
 }

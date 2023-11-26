@@ -1,4 +1,10 @@
-import {ComponentSummary, DisambiguatedSymbol, QualifierDefinition, SimpleVariableDefinition} from "./DefinitionParts";
+import {
+    ComponentSummary,
+    DisambiguatedSymbol,
+    QualifierDefinition,
+    SerializedDisambiguatorAdder,
+    SimpleVariableDefinition
+} from "./DefinitionParts";
 import {Expression} from "../../models/Expression";
 
 export interface ExpressionDefinition {
@@ -9,7 +15,7 @@ export interface ExpressionDefinition {
     numberOfBoundVariables: number;
     components: ComponentSummary[];
     attributes: string[];
-    definitionPredicate?: Expression
+    disambiguatorAdders: SerializedDisambiguatorAdder[]
 }
 
 export interface TypeDefinition {
@@ -56,4 +62,10 @@ export interface StandalonePropertyDefinition {
     qualifiedSymbol: string;
     name: string;
     mainVariableDefinition: SimpleVariableDefinition;
+}
+
+export interface DisplayShorthand {
+    template: Expression
+    baseFormatString: string
+    requiresBrackets: boolean
 }

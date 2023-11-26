@@ -1,11 +1,11 @@
 import React, {useContext} from "react";
 import DisplayContext from "../../DisplayContext";
-import AvailableEntries from "../../AvailableEntries";
+import AvailableEntriesContext from "../../AvailableEntriesContext";
 import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import {joinWordElements} from "../../helpers/reactFunctions";
 
 export default function TypeRelationDefinitionDescription({typeRelationDefinition}) {
-  const availableEntries = useContext(AvailableEntries);
+  const availableEntries = useContext(AvailableEntriesContext);
   const variableDefinitions = [typeRelationDefinition.firstVariable, typeRelationDefinition.secondVariable];
   const words = [
     typeRelationDefinition.firstType.article.capitalize(),

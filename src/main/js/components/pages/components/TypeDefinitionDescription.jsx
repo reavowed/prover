@@ -1,11 +1,11 @@
 import React, {Fragment, useContext} from "react";
 import DisplayContext from "../../DisplayContext";
-import AvailableEntries from "../../AvailableEntries";
+import AvailableEntriesContext from "../../AvailableEntriesContext";
 import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import {formatQualifier} from "../../helpers/Formatter";
 
 export default function TypeDefinitionDescription({typeDefinition}) {
-  const availableEntries = useContext(AvailableEntries);
+  const availableEntries = useContext(AvailableEntriesContext);
   let description = typeDefinition.name;
   let qualifierDescription = formatQualifier(typeDefinition.defaultQualifier);
   if (qualifierDescription) {

@@ -1,6 +1,6 @@
 import React from "react";
 import DisplayContext from "./DisplayContext";
-import AvailableEntries from "./AvailableEntries";
+import AvailableEntriesContext from "./AvailableEntriesContext";
 import {CopiableExpression} from "./expressions/ExpressionComponent";
 import InputWithShorthandReplacement from "./helpers/InputWithShorthandReplacement";
 import {Breadcrumbs} from "./pages/components/Breadcrumbs";
@@ -38,7 +38,7 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
     }
   ];
 
-  return <AvailableEntries.Provider value={availableEntries}>
+  return <AvailableEntriesContext.Provider value={availableEntries}>
     <DisplayContext.Provider value={displayContext}>
       <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
         <NavLinks previous={previous} next={next} />
@@ -50,5 +50,5 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
         {definition.deconstructionInference && <Usages.ForInference usages={usages} inferenceId={definition.deconstructionInference.id} title="Deconstruction" />}
       </Page>
     </DisplayContext.Provider>
-  </AvailableEntries.Provider>;
+  </AvailableEntriesContext.Provider>;
 }

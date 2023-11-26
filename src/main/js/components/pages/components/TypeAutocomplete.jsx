@@ -1,10 +1,10 @@
 import _ from "lodash";
 import React, {useCallback, useContext, useState} from "react";
-import AvailableEntries from "../../AvailableEntries";
+import AvailableEntriesContext from "../../AvailableEntriesContext";
 import PrettifiedAutosuggest from "../../helpers/PrettifiedAutosuggest";
 
 export default function TypeAutocomplete({value, onChange}) {
-  const availableEntries = useContext(AvailableEntries);
+  const availableEntries = useContext(AvailableEntriesContext);
   const [suggestions, setSuggestions] = useState([]);
 
   const fetchSuggestions = useCallback(

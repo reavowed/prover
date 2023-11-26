@@ -5,7 +5,7 @@ import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import styled from "styled-components";
 import {matchTemplate} from "../../../../../models/Expression";
-import AvailableEntries from "../../../../AvailableEntries";
+import AvailableEntriesContext from "../../../../AvailableEntriesContext";
 import {CopiableExpression} from "../../../../expressions/ExpressionComponent";
 import AddTargetByInference from "./AddTargetByInference";
 import AddTargetByPremise from "./AddTargetByPremise";
@@ -31,7 +31,7 @@ import RewriteTransitiveFromLeft from "./RewriteTransitiveFromLeft";
 import RewriteTransitiveFromRight from "./RewriteTransitiveFromRight";
 
 export default class ProvingCard extends React.Component {
-  static contextType = AvailableEntries;
+  static contextType = AvailableEntriesContext;
   constructor(props) {
     super(props);
     this.ref = createRef();
@@ -200,7 +200,7 @@ export default class ProvingCard extends React.Component {
     const currentRow = _.find(rows, r => r && r.label === currentRowLabel);
     const currentProver = currentRow && _.find(currentRow.provers, p => p && p.label === currentProverLabel);
 
-    return <AvailableEntries.Consumer>{availableEntries => {
+    return <AvailableEntriesContext.Consumer>{availableEntries => {
       const proverProps = {
         step,
         path,
@@ -248,6 +248,6 @@ export default class ProvingCard extends React.Component {
           </div>
         }
       </div>;
-    }}</AvailableEntries.Consumer>;
+    }}</AvailableEntriesContext.Consumer>;
   }
 }

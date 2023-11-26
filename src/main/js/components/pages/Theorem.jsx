@@ -5,7 +5,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import {Parser} from "../../Parser";
 import {PremiseReference} from "../definitions/Reference";
 import DisplayContext from "../DisplayContext";
-import AvailableEntries from "../AvailableEntries";
+import AvailableEntriesContext, {createAvailableEntries} from "../AvailableEntriesContext";
 import {HighlightableExpression} from "../expressions/ExpressionComponent";
 import HashParamsContext from "../HashParamsContext";
 import {Inference} from "./Inference";
@@ -20,8 +20,8 @@ function Premise({statement, index}) {
 export class Theorem extends React.Component {
   constructor(props) {
     super(props);
-    const [parser, availableEntries] = AvailableEntries.fromEntryProps(props);
-    this.parser = parser;
+    const availableEntries = createAvailableEntries(props);
+    this.parser = availableEntries.parser;
     this.availableEntries = availableEntries;
     const theorem = this.parser.parseTheorem(props.theorem, props.inferences);
     this.state = {
@@ -208,7 +208,7 @@ export class Theorem extends React.Component {
       </Dropdown>;
 
     return <HashParamsContext.Provider value={hashParams}>
-      <AvailableEntries.Provider value={this.availableEntries}>
+      <AvailableEntriesContext.Provider value={this.availableEntries}>
         <TheoremContext.Provider value={theoremContext}>
           <DisplayContext.Provider value={displayContext}>
             <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" buttons={settingsDropdown} editable {...this.props}>
@@ -216,7 +216,7 @@ export class Theorem extends React.Component {
             </Inference>
           </DisplayContext.Provider>
         </TheoremContext.Provider>
-      </AvailableEntries.Provider>
+      </AvailableEntriesContext.Provider>
     </HashParamsContext.Provider>;
   }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import renderer from "react-test-renderer";
-import AvailableEntries from "../../../main/js/components/AvailableEntries";
+import AvailableEntriesContext from "../../../main/js/components/AvailableEntriesContext";
 import {ExpressionComponent} from "../../../main/js/components/expressions/ExpressionComponent";
 import {DefinedExpression} from "../../../main/js/models/Expression";
 import {getWords, treeToString} from "./ExpressionComponent.helpers";
@@ -21,9 +21,9 @@ const doubleEqualityShorthand = {
 };
 
 function renderExpression(expression, otherProps = {}) {
-  const wrappedComponent = <AvailableEntries.Provider value={{displayShorthands: [doubleEqualityShorthand], disambiguatorAdders: []}}>
+  const wrappedComponent = <AvailableEntriesContext.Provider value={{displayShorthands: [doubleEqualityShorthand], disambiguatorAdders: []}}>
     <ExpressionComponent expression={expression} {...otherProps} />
-  </AvailableEntries.Provider>;
+  </AvailableEntriesContext.Provider>;
   const tree = renderer.create(wrappedComponent).toJSON();
   return treeToString(tree);
 }

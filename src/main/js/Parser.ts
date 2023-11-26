@@ -24,6 +24,7 @@ import {
 import {Theorem} from "./models/Theorem";
 
 import {
+  DisplayShorthand,
   ExpressionDefinition,
   PropertyDefinition,
   RelatedObjectDefinition,
@@ -34,6 +35,8 @@ import {
 } from "./components/definitions/EntryDefinitions";
 import {InferenceSummary} from "./components/definitions/InferenceSummary";
 import {PremiseReference, StepReference} from "./components/definitions/Reference";
+import {BinaryRelation} from "./components/definitions/BinaryRelation";
+import {SerializedDisambiguatorAdder} from "./components/definitions/DefinitionParts";
 
 function serializeReference(reference: any) {
   if (!reference) return "???";
@@ -417,19 +420,22 @@ export class Parser {
       return entryWrapper;
     });
   };
-  parseDisplayShorthand = (json: any) => {
-    const shorthand = _.cloneDeep(json);
-    shorthand.template = this.parseExpression(shorthand.template);
-    return shorthand;
+  parseDisplayShorthand = (json: any): DisplayShorthand => {
+    return {
+      baseFormatString: json.baseFormatString,
+      requiresBrackets: json.requiresBrackets,
+      template: this.parseExpression(json.template)
+    }
   };
-  parseBinaryRelation = (json: any) => {
+  parseBinaryRelation = (json: any): BinaryRelation => {
     const relation = _.cloneDeep(json);
     relation.template = this.parseExpression(relation.template);
     return relation;
   };
-  parseDisambiguatorAdder = (json: any) => {
-    const disambiguatorAdder = _.cloneDeep(json);
-    disambiguatorAdder.template = this.parseExpression(disambiguatorAdder.template);
-    return disambiguatorAdder;
+  parseDisambiguatorAdder = (json: SerializedDisambiguatorAdder) => {
+    return {
+      disambiguator: json.disambiguator,
+      template: this.parseExpression(json.template)
+    }
   };
 }

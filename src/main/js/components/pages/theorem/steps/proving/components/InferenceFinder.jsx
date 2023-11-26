@@ -3,7 +3,7 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import DisplayContext from "../../../../../DisplayContext";
-import AvailableEntries from "../../../../../AvailableEntries";
+import AvailableEntriesContext from "../../../../../AvailableEntriesContext";
 import {CopiableExpression, ExpressionComponent} from "../../../../../expressions/ExpressionComponent";
 import {joinAsList} from "../../../../../helpers/reactFunctions";
 import ProofContext from "../../../ProofContext";
@@ -71,7 +71,7 @@ export class InferenceFinder extends React.Component {
     let getSuggestionValue = s => s.inference.name;
     let renderSuggestion = s => <SuggestionDropdownElement
       mainElement={getSuggestionValue(s)}
-      hoverElement={<AvailableEntries.Consumer>{availableEntries =>
+      hoverElement={<AvailableEntriesContext.Consumer>{availableEntries =>
         <DisplayContext.Provider value={DisplayContext.forInferenceSummary(s.inference, availableEntries)}>
           { s.inference.premises.length && <>
             {joinAsList(s.inference.premises.map(p => <CopiableExpression expression={p}/>), false)}
@@ -79,7 +79,7 @@ export class InferenceFinder extends React.Component {
           </>}
           <CopiableExpression expression={s.inference.conclusion}/>
         </DisplayContext.Provider>
-      }</AvailableEntries.Consumer>} />;
+      }</AvailableEntriesContext.Consumer>} />;
 
     const possibleTargets = selectedInference && selectedInference.possibleTargets;
     const possibleConclusions = (selectedInference && selectedInference.possibleConclusions) || (selectedTarget && selectedTarget.possibleConclusions);
@@ -104,7 +104,7 @@ export class InferenceFinder extends React.Component {
       }</BoundVariableListContext.Consumer>
       }
       {possibleTargets && possibleTargets.length > 1 && <BoundVariableListContext.Consumer>{boundVariableLists =>
-        <AvailableEntries.Consumer>{availableEntries =>
+        <AvailableEntriesContext.Consumer>{availableEntries =>
           <DisplayContext.Consumer>{displayContext =>
           <Form.Group>
             <Form.Label><strong>Choose target</strong></Form.Label>
@@ -119,7 +119,7 @@ export class InferenceFinder extends React.Component {
             </Form.Control>
           </Form.Group>
           }</DisplayContext.Consumer>
-        }</AvailableEntries.Consumer>
+        }</AvailableEntriesContext.Consumer>
       }</BoundVariableListContext.Consumer>}
       {possibleConclusions && <ConclusionChooser possibleConclusions={possibleConclusions}
                                                  conclusionVariableDefinitions={selectedInference.inference.variableDefinitions}

@@ -2,7 +2,7 @@ import "jest-styled-components";
 import * as _ from "lodash";
 import React from 'react'
 import renderer from 'react-test-renderer'
-import AvailableEntries from "../../../main/js/components/AvailableEntries";
+import AvailableEntriesContext from "../../../main/js/components/AvailableEntriesContext";
 import {ExpressionComponent} from "../../../main/js/components/expressions/ExpressionComponent";
 import {TypeExpression} from "../../../main/js/models/Expression";
 import {getWords, treeToString} from "./ExpressionComponent.helpers";
@@ -20,9 +20,9 @@ const expression = new TypeExpression(functionDefinition, f, functionFromDefinit
 
 function createComponent(pathsToHighlight) {
   const actionHighlights = _.map(pathsToHighlight, path => {return {path}});
-  return <AvailableEntries.Provider value={{displayShorthands: [], disambiguatorAdders: []}}>
+  return <AvailableEntriesContext.Provider value={{displayShorthands: [], disambiguatorAdders: []}}>
     <ExpressionComponent expression={expression} actionHighlights={actionHighlights} />
-  </AvailableEntries.Provider>;
+  </AvailableEntriesContext.Provider>;
 }
 
 function renderExpression(pathsToHighlight) {
