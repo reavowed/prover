@@ -13,6 +13,7 @@ const SubproofOutline = styled.div`
   border: 1px solid black;
   border-radius: .25rem;
   padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+  margin-bottom: 0.25rem;
 `;
 
 export class SubproofStepWithContexts extends React.Component {

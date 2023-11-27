@@ -1,23 +1,23 @@
 import * as React from "react";
 import {Parser} from "../Parser";
 import {
-  DisplayShorthand,
-  ExpressionDefinition,
-  StandalonePropertyDefinition,
-  TypeDefinition,
-  TypeRelationDefinition
-} from "./definitions/EntryDefinitions";
+    DisplayShorthand,
+    ExpressionDefinitionSummary,
+    InferenceSummary,
+    StandalonePropertyDefinitionSummary,
+    TypeDefinitionSummary,
+    TypeRelationDefinitionSummary
+} from "./definitions/EntryDefinitionSummaries";
 import {DisambiguatedSymbol, DisambiguatorAdder} from "./definitions/DefinitionParts";
-import {InferenceSummary} from "./definitions/InferenceSummary";
 import _ from "lodash";
 import {BinaryRelation} from "./definitions/BinaryRelation";
 
-type AvailableEntries = {
+export type AvailableEntries = {
   parser: Parser
-  definitions: {[key: string]: ExpressionDefinition},
-  typeDefinitions: {[key: string]: TypeDefinition},
-  typeRelationDefinitions: {[key: string]: TypeRelationDefinition},
-  standalonePropertyDefinitions: {[key: string]: StandalonePropertyDefinition}
+  definitions: {[key: string]: ExpressionDefinitionSummary},
+  typeDefinitions: {[key: string]: TypeDefinitionSummary},
+  typeRelationDefinitions: {[key: string]: TypeRelationDefinitionSummary},
+  standalonePropertyDefinitions: {[key: string]: StandalonePropertyDefinitionSummary}
   definitionShorthands: {[key: string]: DisambiguatedSymbol}
   displayShorthands: DisplayShorthand[]
   inferences: InferenceSummary[]
@@ -28,10 +28,10 @@ type AvailableEntries = {
 const AvailableEntriesContext = React.createContext<AvailableEntries>({} as AvailableEntries);
 
 type AvailableEntriesProps = {
-    definitions: {[key: string]: ExpressionDefinition}
-    typeDefinitions: {[key: string]: TypeDefinition}
-    typeRelationDefinitions: {[key: string]: TypeRelationDefinition}
-    standalonePropertyDefinitions: {[key: string]: StandalonePropertyDefinition}
+    definitions: {[key: string]: ExpressionDefinitionSummary}
+    typeDefinitions: {[key: string]: TypeDefinitionSummary}
+    typeRelationDefinitions: {[key: string]: TypeRelationDefinitionSummary}
+    standalonePropertyDefinitions: {[key: string]: StandalonePropertyDefinitionSummary}
     definitionShorthands: {[key: string]: DisambiguatedSymbol}
     displayShorthands: any[]
     inferences?: InferenceSummary[]

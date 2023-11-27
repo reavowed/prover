@@ -1,17 +1,17 @@
 import update from "immutability-helper";
 import _ from "lodash";
-import React, {useContext, useRef, useState} from "react";
+import React, {useContext, useRef} from "react";
 import {DefinedExpression} from "../../../../models/Expression";
 import {AssertionStep, ElidedStep, NamingStep as NamingStepModel} from "../../../../models/Step";
 import {StepReference} from "../../../definitions/Reference";
-import DisplayContext from "../../../DisplayContext";
-import {HighlightableExpression} from "../../../expressions/ExpressionComponent";
+import {DisplaySettingsContext} from "../../../DisplaySettings";
 import AddBoundVariableLists from "../../../expressions/boundVariables/AddBoundVariableLists";
+import BoundVariableListContext from "../../../expressions/boundVariables/BoundVariableListContext";
+import {HighlightableExpression} from "../../../expressions/ExpressionComponent";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import {joinAsList} from "../../../helpers/reactFunctions";
 import ProofContext from "../ProofContext";
 import {AssertionStepProofLine} from "./AssertionStep";
-import BoundVariableListContext from "../../../expressions/boundVariables/BoundVariableListContext";
 import {InferenceLink} from "./components/InferenceLink";
 import ProofLine from "./components/ProofLine";
 import {ElidedStepProofLine} from "./ElidedStep";
@@ -22,7 +22,7 @@ import {Steps} from "./Steps";
 export default function NamingStep({step: namingStep, assertionStep, path, additionalReferences}) {
   additionalReferences = additionalReferences || [];
   const context = useContext(ProofContext);
-  const displayContext = useContext(DisplayContext);
+  const displaySettings = useContext(DisplaySettingsContext);
   const proofLineRef = useRef(null);
   const updateBoundVariable = (namingStepPath) => (newName) => {
     return context.fetchJsonForStepAndReplace(namingStepPath, "boundVariable", {method: "PUT", body: newName});
@@ -51,7 +51,7 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
     }
   }
   addNamingStep(namingStep, currentNamingStepPath);
-  while (!displayContext.disableAssumptionCollapse &&
+  while (!displaySettings.disableAssumptionCollapse &&
     namingStep.substeps.length === 1 &&
     namingStep.substeps[0] instanceof NamingStepModel &&
     _.some(namingStep.substeps[0].referencedLinesForExtraction, r => _.isEqual(r.stepPath, currentNamingStepPath) && r.suffix === "a"))

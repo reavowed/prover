@@ -25,15 +25,15 @@ import {Theorem} from "./models/Theorem";
 
 import {
   DisplayShorthand,
-  ExpressionDefinition,
-  PropertyDefinition,
-  RelatedObjectDefinition,
-  StandalonePropertyDefinition,
-  TypeDefinition,
-  TypeQualifierDefinition,
-  TypeRelationDefinition
-} from "./components/definitions/EntryDefinitions";
-import {InferenceSummary} from "./components/definitions/InferenceSummary";
+  ExpressionDefinitionSummary,
+  InferenceSummary,
+  PropertyDefinitionSummary,
+  RelatedObjectDefinitionSummary,
+  StandalonePropertyDefinitionSummary,
+  TypeDefinitionSummary,
+  TypeQualifierDefinitionSummary,
+  TypeRelationDefinitionSummary
+} from "./components/definitions/EntryDefinitionSummaries";
 import {PremiseReference, StepReference} from "./components/definitions/Reference";
 import {BinaryRelation} from "./components/definitions/BinaryRelation";
 import {SerializedDisambiguatorAdder} from "./components/definitions/DefinitionParts";
@@ -64,14 +64,14 @@ function tokenize(str: string): string[]  {
 
 export class Parser {
   private stepCounter: number = 0;
-  private qualifiersWithParentTypes: {[key: string]: {qualifier: TypeQualifierDefinition, parentType: TypeDefinition}};
-  private propertiesWithParentTypes: {[key: string]: {property: PropertyDefinition, parentType: TypeDefinition}};
-  private objectsWithParentTypes: {[key: string]: {object: RelatedObjectDefinition, parentType: TypeDefinition}};
+  private qualifiersWithParentTypes: {[key: string]: {qualifier: TypeQualifierDefinitionSummary, parentType: TypeDefinitionSummary}};
+  private propertiesWithParentTypes: {[key: string]: {property: PropertyDefinitionSummary, parentType: TypeDefinitionSummary}};
+  private objectsWithParentTypes: {[key: string]: {object: RelatedObjectDefinitionSummary, parentType: TypeDefinitionSummary}};
   constructor(
-    private definitions: {[key: string]: ExpressionDefinition},
-    private typeDefinitions: {[key: string]: TypeDefinition},
-    private typeRelationDefinitions: {[key: string]: TypeRelationDefinition},
-    private standalonePropertyDefinitions: {[key: string]: StandalonePropertyDefinition}
+    private definitions: {[key: string]: ExpressionDefinitionSummary},
+    private typeDefinitions: {[key: string]: TypeDefinitionSummary},
+    private typeRelationDefinitions: {[key: string]: TypeRelationDefinitionSummary},
+    private standalonePropertyDefinitions: {[key: string]: StandalonePropertyDefinitionSummary}
   ) {
     this.qualifiersWithParentTypes = _.fromPairs(
       _.flatMap(this.typeDefinitions, parentType =>

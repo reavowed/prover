@@ -1,22 +1,22 @@
 import * as path from "path";
 import React, {useContext, useState} from "react";
 import Button from "react-bootstrap/Button";
-import DisplayContext from "../DisplayContext";
+import {DisplaySettingsContext} from "../DisplaySettings";
+import BoundVariableListContext from "../expressions/boundVariables/BoundVariableListContext";
 import ErrorAlert from "../helpers/ErrorAlert";
+import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import InputWithShorthandReplacement from "../helpers/InputWithShorthandReplacement";
-import {Breadcrumbs} from "./components/Breadcrumbs";
 import {InferenceSummary} from "../InferenceSummary";
 import {Monospace} from "../Monospace";
+import {Breadcrumbs} from "./components/Breadcrumbs";
 import EditableProperty from "./components/EditableProperty";
 import {NavLinks} from "./components/NavLinks";
-import {Page} from "./Page";
-import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import {Usages} from "./components/Usages";
-import BoundVariableListContext from "../expressions/boundVariables/BoundVariableListContext";
+import {Page} from "./Page";
 import {serializeVariable} from "./utils/entryFunctions";
 
 export function Inference({inference, title, url, bookLink, chapterLink, previous, next, usages, children, buttons, createPremiseElement, editable}) {
-  const displayContext = useContext(DisplayContext);
+  const displaySettings = useContext(DisplaySettingsContext);
   const boundVariableLists = useContext(BoundVariableListContext) || [];
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(null);
@@ -56,8 +56,8 @@ export function Inference({inference, title, url, bookLink, chapterLink, previou
           <Button variant="primary" size="sm" className="float-right ml-1 mb-1" onClick={() => setEditing(false)}>Cancel</Button>
           <ErrorAlert error={error} setError={setError} />
           <EditableProperty label="Variables" initialValue={initialVariablesText} onSave={updateVariables} onError={setError} inputType={InputWithShorthandReplacement} inputProps={{as: "textarea"}} />
-          <EditableProperty label="Premises" initialValue={_.map(inference.premises, p => p.serializeNicely(boundVariableLists, displayContext.variableDefinitions)).join("\n")} onSave={updatePremises} onError={setError} inputType={InputWithShorthandReplacement} inputProps={{as: "textarea"}} />
-          <EditableProperty label="Conclusion" initialValue={inference.conclusion.serializeNicely(boundVariableLists, displayContext.variableDefinitions)} onSave={updateConclusion} onError={setError} inputType={InputWithShorthandReplacement} />
+          <EditableProperty label="Premises" initialValue={_.map(inference.premises, p => p.serializeNicely(boundVariableLists, displaySettings.variableDefinitions)).join("\n")} onSave={updatePremises} onError={setError} inputType={InputWithShorthandReplacement} inputProps={{as: "textarea"}} />
+          <EditableProperty label="Conclusion" initialValue={inference.conclusion.serializeNicely(boundVariableLists, displaySettings.variableDefinitions)} onSave={updateConclusion} onError={setError} inputType={InputWithShorthandReplacement} />
         </> :
         <>
           {editable && <Button variant="primary" size="sm" className="float-right ml-1" onClick={() => setEditing(true)}>Edit</Button>}

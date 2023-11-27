@@ -1,6 +1,7 @@
 import {Expression} from "../../models/Expression";
 import {Reference} from "./Reference";
-import {InferenceSummary} from "./InferenceSummary";
+
+import {InferenceSummary} from "./EntryDefinitionSummaries";
 
 type PendingPremise = {
     type: "pending"

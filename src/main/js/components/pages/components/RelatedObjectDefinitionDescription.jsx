@@ -1,8 +1,8 @@
 import React, {useContext} from "react";
 import AvailableEntriesContext from "../../AvailableEntriesContext";
-import DisplayContext from "../../DisplayContext";
-import {CopiableExpression} from "../../expressions/ExpressionComponent";
+import DisplaySettings, {DisplaySettingsContext} from "../../DisplaySettings";
 import AddBoundVariableLists from "../../expressions/boundVariables/AddBoundVariableLists";
+import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import {formatQualifier} from "../../helpers/Formatter";
 
 export default function RelatedObjectDefinitionDescription({relatedObjectDefinition}) {
@@ -19,7 +19,7 @@ export default function RelatedObjectDefinitionDescription({relatedObjectDefinit
     <CopiableExpression expression={relatedObjectDefinition.definingStatement} splitConjunction/>
   </AddBoundVariableLists>;
 
-  return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(relatedObjectDefinition.definingStatement, variableDefinitions, availableEntries)}>
+  return <DisplaySettingsContext.Provider value={DisplaySettings.forTypeLikeDefinition(relatedObjectDefinition.definingStatement, variableDefinitions, availableEntries)}>
     {relatedObjectDefinition.article.capitalize()} <u>{relatedObjectDefinition.name}</u> for {typeDefinition.article} {typeDefinition.name} {typeDefinition.mainVariableDefinition.name} {formatQualifier(qualifier)} is an object {relatedObjectDefinition.mainVariableDefinition.name} such that {definingStatementElement}.
-  </DisplayContext.Provider>;
+  </DisplaySettingsContext.Provider>;
 }

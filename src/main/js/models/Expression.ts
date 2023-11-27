@@ -3,19 +3,19 @@ import {mapAtIndex, mapAtIndexWithMetadata, replaceAtIndex} from "./Helpers";
 import {VariableDefinition, VariableDefinitions} from "../components/definitions/DefinitionParts";
 
 import {
-  ExpressionDefinition,
-  PropertyDefinition,
-  RelatedObjectDefinition,
-  StandalonePropertyDefinition,
-  TypeDefinition,
-  TypeQualifierDefinition,
-  TypeRelationDefinition
-} from "../components/definitions/EntryDefinitions";
+  ExpressionDefinitionSummary,
+  PropertyDefinitionSummary,
+  RelatedObjectDefinitionSummary,
+  StandalonePropertyDefinitionSummary,
+  TypeDefinitionSummary,
+  TypeQualifierDefinitionSummary,
+  TypeRelationDefinitionSummary
+} from "../components/definitions/EntryDefinitionSummaries";
 
 declare global {
     interface Window {
-      definitions: { [key: string]: ExpressionDefinition }
-      typeDefinitions: { [key: string]: TypeDefinition }
+      definitions: { [key: string]: ExpressionDefinitionSummary }
+      typeDefinitions: { [key: string]: TypeDefinitionSummary }
     }
 }
 
@@ -132,7 +132,7 @@ export class Variable extends Expression {
 }
 
 export class DefinedExpression extends Expression {
-  constructor(public definition: ExpressionDefinition, public boundVariableNames: string[], public components: Expression[]) { super(); }
+  constructor(public definition: ExpressionDefinitionSummary, public boundVariableNames: string[], public components: Expression[]) { super(); }
   symbol: string = this.definition.symbol.baseSymbol;
   disambiguator: string | null = this.definition.symbol.disambiguator;
   serialize() {
@@ -168,13 +168,13 @@ export class DefinedExpression extends Expression {
 
 export class TypeExpression extends TypeLikeExpression {
   constructor(
-      public definition: TypeDefinition,
+      public definition: TypeDefinitionSummary,
       public term: Expression,
-      public explicitQualifier: TypeQualifierDefinition | undefined,
+      public explicitQualifier: TypeQualifierDefinitionSummary | undefined,
       public qualifierComponents: Expression[],
-      public properties: PropertyDefinition[],
-      public objects: [RelatedObjectDefinition, Expression][],
-      public conjunctionDefinition: ExpressionDefinition | undefined)
+      public properties: PropertyDefinitionSummary[],
+      public objects: [RelatedObjectDefinitionSummary, Expression][],
+      public conjunctionDefinition: ExpressionDefinitionSummary | undefined)
   { super(); }
   serialize(): string {
     const serializedTerm = this.term.serialize();
@@ -193,7 +193,7 @@ export class TypeExpression extends TypeLikeExpression {
     const wordsAfterProperties = _.reduce(
         this.properties,
         // @ts-ignore
-        (wordsSoFar: string[], propertyDefinition: PropertyDefinition) => {
+        (wordsSoFar: string[], propertyDefinition: PropertyDefinitionSummary) => {
           if (!this.conjunctionDefinition) throw "Cannot serialize type with property without conjunction";
           const wordsWithoutQualifier = [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, propertyDefinition.qualifiedSymbol, serializedTerm];
           if (propertyDefinition.requiredParentQualifier || this.definition.defaultQualifier) {
@@ -207,7 +207,7 @@ export class TypeExpression extends TypeLikeExpression {
     const wordsAfterObjects = _.reduce(
         this.objects,
         // @ts-ignore
-        (wordsSoFar: string[], [objectDefinition, objectTerm]: [RelatedObjectDefinition, Expression]) => {
+        (wordsSoFar: string[], [objectDefinition, objectTerm]: [RelatedObjectDefinitionSummary, Expression]) => {
           if (!this.conjunctionDefinition) throw "Cannot serialize type with object without conjunction";
           const wordsWithoutQualifier = [this.conjunctionDefinition.symbol.serialized, ...wordsSoFar, objectDefinition.qualifiedSymbol, objectTerm.serialize(), serializedTerm];
           if (objectDefinition.requiredParentQualifier || this.definition.defaultQualifier) {
@@ -233,16 +233,16 @@ export class TypeExpression extends TypeLikeExpression {
         worldsWithQualifier;
     return allWords.join(" ")
   }
-  addQualifier(newQualifier: TypeQualifierDefinition, qualifierComponents: Expression[], conjunctionDefinition: ExpressionDefinition) {
+  addQualifier(newQualifier: TypeQualifierDefinitionSummary, qualifierComponents: Expression[], conjunctionDefinition: ExpressionDefinitionSummary) {
     this.explicitQualifier = newQualifier;
     this.qualifierComponents = qualifierComponents;
     this.conjunctionDefinition = conjunctionDefinition;
   }
-  addProperty(newProperty: PropertyDefinition, conjunctionDefinition: ExpressionDefinition) {
+  addProperty(newProperty: PropertyDefinitionSummary, conjunctionDefinition: ExpressionDefinitionSummary) {
     this.properties = [...this.properties, newProperty];
     this.conjunctionDefinition = conjunctionDefinition;
   }
-  addObject(newObjectDefinition: RelatedObjectDefinition, objectTerm: Expression, conjunctionDefinition: ExpressionDefinition) {
+  addObject(newObjectDefinition: RelatedObjectDefinitionSummary, objectTerm: Expression, conjunctionDefinition: ExpressionDefinitionSummary) {
     this.objects = [...this.objects, [newObjectDefinition, objectTerm]];
     this.conjunctionDefinition = conjunctionDefinition;
   }
@@ -334,7 +334,7 @@ export class TypeExpression extends TypeLikeExpression {
 }
 
 export class TypeQualifierExpression extends TypeLikeExpression {
-  constructor(public definition: TypeQualifierDefinition, public typeDefinition: TypeDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
+  constructor(public definition: TypeQualifierDefinitionSummary, public typeDefinition: TypeDefinitionSummary, public term: Expression, public qualifierComponents: Expression[]) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
@@ -370,7 +370,7 @@ export class TypeQualifierExpression extends TypeLikeExpression {
 }
 
 export class PropertyExpression extends TypeLikeExpression {
-  constructor(public definition: PropertyDefinition, public typeDefinition: TypeDefinition, public term: Expression, public qualifierComponents: Expression[]) { super(); }
+  constructor(public definition: PropertyDefinitionSummary, public typeDefinition: TypeDefinitionSummary, public term: Expression, public qualifierComponents: Expression[]) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
@@ -390,7 +390,7 @@ export class PropertyExpression extends TypeLikeExpression {
 }
 
 export class RelatedObjectExpression extends TypeLikeExpression {
-  constructor(public definition: RelatedObjectDefinition, public typeDefinition: TypeDefinition, public term: Expression, public parentTerm: Expression, public qualifierComponents: Expression[]) { super(); }
+  constructor(public definition: RelatedObjectDefinitionSummary, public typeDefinition: TypeDefinitionSummary, public term: Expression, public parentTerm: Expression, public qualifierComponents: Expression[]) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize(), this.parentTerm.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
@@ -411,7 +411,7 @@ export class RelatedObjectExpression extends TypeLikeExpression {
 }
 
 export class TypeRelationExpression extends Expression {
-  constructor(public definition: TypeRelationDefinition, public firstTerm: Expression, public secondTerm: Expression) { super(); }
+  constructor(public definition: TypeRelationDefinitionSummary, public firstTerm: Expression, public secondTerm: Expression) { super(); }
   serialize(): string {
     return [this.definition.symbol, this.firstTerm.serialize(), this.secondTerm.serialize()].join(" ")
   }
@@ -431,7 +431,7 @@ export class TypeRelationExpression extends Expression {
 }
 
 export class StandalonePropertyExpression extends Expression {
-  constructor(public definition: StandalonePropertyDefinition, public term: Expression) { super(); }
+  constructor(public definition: StandalonePropertyDefinitionSummary, public term: Expression) { super(); }
   serialize(): string {
     return [this.definition.qualifiedSymbol, this.term.serialize()].join(" ")
   }

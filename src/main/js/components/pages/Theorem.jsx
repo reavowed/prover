@@ -1,17 +1,16 @@
 import path from "path";
+import queryString from "query-string";
 import React from "react";
 import Toggle from "react-bootstrap-toggle";
 import Dropdown from "react-bootstrap/Dropdown";
-import {Parser} from "../../Parser";
-import {PremiseReference} from "../definitions/Reference";
-import DisplayContext from "../DisplayContext";
 import AvailableEntriesContext, {createAvailableEntries} from "../AvailableEntriesContext";
+import {PremiseReference} from "../definitions/Reference";
+import DisplaySettings, {DisplaySettingsContext} from "../DisplaySettings";
 import {HighlightableExpression} from "../expressions/ExpressionComponent";
 import HashParamsContext from "../HashParamsContext";
 import {Inference} from "./Inference";
 import Proofs from "./theorem/Proofs";
 import TheoremContext from "./theorem/TheoremContext";
-import queryString from "query-string";
 
 function Premise({statement, index}) {
   return <HighlightableExpression expression={statement} references={[new PremiseReference(index)]}/>
@@ -35,7 +34,7 @@ export class Theorem extends React.Component {
       disableChaining: false,
       disableAssumptionCollapse: false,
       disableShorthands: false,
-      disambiguators: DisplayContext.disambiguatorsForInferenceSummary(theorem, this.availableEntries)
+      disambiguators: DisplaySettings.disambiguatorsForInferenceSummary(theorem, availableEntries)
     }
   }
 
@@ -43,12 +42,12 @@ export class Theorem extends React.Component {
     const self = this;
     const {url} = this.props;
     const {theorem, inferences, highlighting, disableChaining, disableShorthands, disableAssumptionCollapse, disambiguators} = this.state;
-    const displayContext = DisplayContext.construct(theorem.variableDefinitions, disambiguators, disableChaining, disableShorthands, disableAssumptionCollapse);
+    const displaySettings = new DisplaySettings(theorem.variableDefinitions, disambiguators, disableChaining, disableShorthands, disableAssumptionCollapse);
     const theoremContext = {
       availableEntries: this.availableEntries,
       parser: this.parser,
       variableDefinitions: theorem.variableDefinitions,
-      displayContext,
+      displaySettings: displaySettings,
       fetchJson(subpath,  options) {
         return window.fetchJson(path.join(url, subpath), options);
       },
@@ -59,7 +58,7 @@ export class Theorem extends React.Component {
           self.setState({
             theorem: newTheorem,
             inferences: newInferences,
-            disambiguators: DisplayContext.disambiguatorsForInferenceSummary(newTheorem, self.availableEntries)
+            disambiguators: DisplaySettings.disambiguatorsForInferenceSummary(newTheorem, self.availableEntries)
           }, () => resolve());
         })
       },
@@ -210,11 +209,11 @@ export class Theorem extends React.Component {
     return <HashParamsContext.Provider value={hashParams}>
       <AvailableEntriesContext.Provider value={this.availableEntries}>
         <TheoremContext.Provider value={theoremContext}>
-          <DisplayContext.Provider value={displayContext}>
+          <DisplaySettingsContext.Provider value={displaySettings}>
             <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" buttons={settingsDropdown} editable {...this.props}>
               <Proofs proofs={theorem.proofs} />
             </Inference>
-          </DisplayContext.Provider>
+          </DisplaySettingsContext.Provider>
         </TheoremContext.Provider>
       </AvailableEntriesContext.Provider>
     </HashParamsContext.Provider>;

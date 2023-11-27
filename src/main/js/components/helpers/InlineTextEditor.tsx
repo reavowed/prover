@@ -81,7 +81,7 @@ export class InlineTextEditor extends React.Component<InlineTextEditorProps, Inl
     }
   }
   setStatePromise<K extends keyof InlineTextEditorState>(newState: Pick<InlineTextEditorState, K>) {
-    return new Promise(resolve => this.setState(newState, resolve));
+    return new Promise<void>(resolve => this.setState(newState, resolve));
   };
   onInputKeyUp = (event: any) => {
     if (event.key === "Enter") {

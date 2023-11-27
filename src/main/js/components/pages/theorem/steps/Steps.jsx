@@ -11,7 +11,7 @@ import {
   NamingStep as NamingStepModel
 } from "../../../../models/Step";
 import {StepReference} from "../../../definitions/Reference";
-import DisplayContext from "../../../DisplayContext";
+import DisplaySettings from "../../../DisplaySettings";
 import DraggableList from "../../../draggableList/DraggableList";
 import {HighlightableExpression} from "../../../expressions/ExpressionComponent";
 import ProofContext from "../ProofContext";
@@ -302,7 +302,7 @@ export class Steps extends React.Component {
     const renderNextStep = (stepsWithIndexes, path, propsForLastStep, theoremContext) => {
       const {step, index} = stepsWithIndexes.shift();
       const stepPath = [...path, index];
-      if (!theoremContext.displayContext.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.provenStatement && step.provenStatement.definition) {
+      if (!theoremContext.displaySettings.disableChaining && _.includes(allowableChainedStepTypes, step.type) && step.provenStatement && step.provenStatement.definition) {
         const binaryRelation = findBinaryRelation(step.provenStatement, theoremContext.availableEntries);
         if (binaryRelation && isChainable(binaryRelation)) {
           const chainingDetails = this.getChainingDetails(stepsWithIndexes, step, binaryRelation, path, index, theoremContext.availableEntries);
@@ -322,7 +322,7 @@ export class Steps extends React.Component {
       };
       let elidableVariableDescription;
 
-      if (!theoremContext.displayContext.disableAssumptionCollapse &&
+      if (!theoremContext.displaySettings.disableAssumptionCollapse &&
         step instanceof GeneralizationStepModel &&
         step.substeps.length === 1 &&
         step.substeps[0] instanceof DeductionStepModel &&
@@ -333,7 +333,7 @@ export class Steps extends React.Component {
         };
       }
 
-      if (!theoremContext.displayContext.disableAssumptionCollapse && (step instanceof AssertionStepModel || step instanceof ElidedStepModel) &&
+      if (!theoremContext.displaySettings.disableAssumptionCollapse && (step instanceof AssertionStepModel || step instanceof ElidedStepModel) &&
         step.provenStatement &&
         stepsWithIndexes.length &&
         stepsWithIndexes[0].step instanceof NamingStepModel &&
@@ -369,11 +369,11 @@ export class Steps extends React.Component {
   render() {
     const {steps, className, path, propsForLastStep} = this.props;
     return <TheoremContext.Consumer>{theoremContext =>
-      <DisplayContext.AddSteps steps={steps}>
+      <DisplaySettings.AddSteps steps={steps}>
         <div className={className}>
           <DraggableList.Entries entries={Steps.renderSteps(steps, path, propsForLastStep, theoremContext)}/>
         </div>
-      </DisplayContext.AddSteps>
+      </DisplaySettings.AddSteps>
     }</TheoremContext.Consumer>;
   }
 }

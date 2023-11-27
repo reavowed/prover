@@ -5,14 +5,14 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {replaceAtIndex} from "../../../../../../models/Helpers";
-import DisplayContext from "../../../../../DisplayContext";
 import AvailableEntriesContext from "../../../../../AvailableEntriesContext";
-import {CopiableExpression, ExpressionComponent} from "../../../../../expressions/ExpressionComponent";
+import {DisplaySettingsContext} from "../../../../../DisplaySettings";
 import AddParameterList from "../../../../../expressions/boundVariables/AddParameterList";
+import BoundVariableListContext from "../../../../../expressions/boundVariables/BoundVariableListContext";
+import {CopiableExpression, ExpressionComponent} from "../../../../../expressions/ExpressionComponent";
 import {InlineTextEditor} from "../../../../../helpers/InlineTextEditor";
 import InputWithShorthandReplacement from "../../../../../helpers/InputWithShorthandReplacement";
 import {ResultWithPremises} from "../../../../../ResultWithPremises";
-import BoundVariableListContext from "../../../../../expressions/boundVariables/BoundVariableListContext";
 
 function substitutionGetter(type, applicationType, name) {
   return substitutions => {
@@ -187,8 +187,8 @@ export default class ConclusionChooser extends React.Component {
     };
 
     return <AvailableEntriesContext.Consumer>{availableEntries =>
-      <DisplayContext.Consumer>{displayContext => {
-        const conclusionDisplayContext = displayContext.withVariableDefinitions(conclusionVariableDefinitions);
+      <DisplaySettingsContext.Consumer>{displaySettings => {
+        const conclusionDisplaySettings = displaySettings.withVariableDefinitions(conclusionVariableDefinitions);
         const PremiseSuggestions = () => {
           const boundVariableLists = useContext(BoundVariableListContext) || [];
           return <Form.Group>
@@ -196,14 +196,14 @@ export default class ConclusionChooser extends React.Component {
             {selectedConclusion.possiblePremises.map(({premise, possibleMatches}, i) =>
               <Form.Group as={Form.Row} key={i}>
                 <Col xs={4}>
-                  <CopiableExpression expression={premise} boundVariableLists={boundVariableListsForPremises} displayContext={conclusionDisplayContext.addTermVariables(selectedConclusion.additionalVariableNames)}/>
+                  <CopiableExpression expression={premise} boundVariableLists={boundVariableListsForPremises} displaySettings={conclusionDisplaySettings.addTermVariables(selectedConclusion.additionalVariableNames)}/>
                 </Col>
                 <Col>
                   <Form.Control as="select" value={this.state.selectedPremises[i][0]} onChange={(e) => this.setSelectedPremise(i, e.target.value)} readOnly={disabled}>
                     <option value="" />
                     {possibleMatches.map(({matchingPremise}, i) =>
                       <option key={i} value={i} dangerouslySetInnerHTML={{__html: renderToString(
-                          <ExpressionComponent expression={matchingPremise} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} availableEntries={availableEntries} displayContext={displayContext} />
+                          <ExpressionComponent expression={matchingPremise} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} availableEntries={availableEntries} displaySettings={displaySettings} />
                         )}}/>
                     )}
                   </Form.Control>
@@ -225,7 +225,7 @@ export default class ConclusionChooser extends React.Component {
                   <option value="" />
                   {validValues.map(v =>
                     <option key={v.serialize()} value={v.serialize()} dangerouslySetInnerHTML={{__html: renderToString(
-                        <ExpressionComponent expression={v} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} availableEntries={availableEntries} displayContext={displayContext}/>
+                        <ExpressionComponent expression={v} boundVariableLists={[...boundVariableLists, ...boundVariableListsForSubstitutions]} availableEntries={availableEntries} displaySettings={displaySettings}/>
                       )}}/>
                   )}
                 </Form.Control>
@@ -265,19 +265,19 @@ export default class ConclusionChooser extends React.Component {
               <option value="" />
               {possibleConclusions.map(({conclusion, additionalVariableNames}, index) => {
                 return <option key={index} value={index} dangerouslySetInnerHTML={{__html: renderToString(
-                    <ExpressionComponent expression={conclusion} boundVariableLists={boundVariableListsForPremises} availableEntries={availableEntries} displayContext={conclusionDisplayContext.addTermVariables(additionalVariableNames)}/>
+                    <ExpressionComponent expression={conclusion} boundVariableLists={boundVariableListsForPremises} availableEntries={availableEntries} displaySettings={conclusionDisplaySettings.addTermVariables(additionalVariableNames)}/>
                   )}}/>
               })}
             </Form.Control>
           </Form.Group>}
           {selectedConclusion && <>
-            {!hideSummary && <DisplayContext.Provider value={conclusionDisplayContext.addTermVariables(selectedConclusion.additionalVariableNames)}>
+            {!hideSummary && <DisplaySettingsContext.Provider value={conclusionDisplaySettings.addTermVariables(selectedConclusion.additionalVariableNames)}>
               <Form.Group>
                 <ResultWithPremises premises={premiseStatements}
                                     createPremiseElement={(p, i) => <CopiableExpression key={p.serialize()} expression={p} wrapBoundVariable={wrapPremiseBoundVariable(i)}  />}
                                     result={<CopiableExpression expression={conclusionStatement} wrapBoundVariable={wrapConclusionBoundVariable}/>}/>
               </Form.Group>
-            </DisplayContext.Provider>}
+            </DisplaySettingsContext.Provider>}
             {getAllRequiredPaths(selectedConclusion.variableDefinitions).length > 0 && <>
               {selectedConclusion.possiblePremises.length !== 0 && <PremiseSuggestions/>}
               <Form.Group>
@@ -295,7 +295,7 @@ export default class ConclusionChooser extends React.Component {
             </Button>
           </div>
         </div>
-      }}</DisplayContext.Consumer>
+      }}</DisplaySettingsContext.Consumer>
     }</AvailableEntriesContext.Consumer>
   }
 }

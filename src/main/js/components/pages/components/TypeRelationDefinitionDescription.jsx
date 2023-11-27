@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
-import DisplayContext from "../../DisplayContext";
 import AvailableEntriesContext from "../../AvailableEntriesContext";
+import DisplaySettings, {DisplaySettingsContext} from "../../DisplaySettings";
 import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import {joinWordElements} from "../../helpers/reactFunctions";
 
@@ -19,7 +19,7 @@ export default function TypeRelationDefinitionDescription({typeRelationDefinitio
     <CopiableExpression expression={typeRelationDefinition.definingStatement} splitConjunction/>
   ];
 
-  return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(typeRelationDefinition.definingStatement, variableDefinitions, availableEntries)}>
+  return <DisplaySettingsContext.Provider value={DisplaySettings.forTypeLikeDefinition(typeRelationDefinition.definingStatement, variableDefinitions, availableEntries)}>
     {joinWordElements(words)}.
-  </DisplayContext.Provider>;
+  </DisplaySettingsContext.Provider>;
 }

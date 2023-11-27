@@ -1,8 +1,8 @@
 import React, {useContext} from "react";
 import AvailableEntriesContext from "../../AvailableEntriesContext";
-import DisplayContext from "../../DisplayContext";
-import {CopiableExpression} from "../../expressions/ExpressionComponent";
+import DisplaySettings, {DisplaySettingsContext} from "../../DisplaySettings";
 import AddBoundVariableLists from "../../expressions/boundVariables/AddBoundVariableLists";
+import {CopiableExpression} from "../../expressions/ExpressionComponent";
 import {formatQualifier} from "../../helpers/Formatter";
 import {joinAsList} from "../../helpers/reactFunctions";
 
@@ -24,7 +24,7 @@ export default function PropertyOnTypeDefinitionDescription({propertyDefinition}
     <CopiableExpression expression={propertyDefinition.definingStatement} splitConjunction/>
   </AddBoundVariableLists>;
 
-  return <DisplayContext.Provider value={DisplayContext.forTypeLikeDefinition(propertyDefinition.definingStatement, variableDefinitions, availableEntries)}>
+  return <DisplaySettingsContext.Provider value={DisplaySettings.forTypeLikeDefinition(propertyDefinition.definingStatement, variableDefinitions, availableEntries)}>
     {typeDefinition.article.capitalize()} {typeDefinition.name} {typeDefinition.mainVariableDefinition.name} {formatQualifier(qualifier)} {requiredObjectsText} is <u>{propertyDefinition.name}</u> if {definingStatementElement}.
-  </DisplayContext.Provider>;
+  </DisplaySettingsContext.Provider>;
 }

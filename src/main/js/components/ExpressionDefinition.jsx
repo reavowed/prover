@@ -1,6 +1,6 @@
 import React from "react";
-import DisplayContext from "./DisplayContext";
 import AvailableEntriesContext from "./AvailableEntriesContext";
+import DisplaySettings, {DisplaySettingsContext} from "./DisplaySettings";
 import {CopiableExpression} from "./expressions/ExpressionComponent";
 import InputWithShorthandReplacement from "./helpers/InputWithShorthandReplacement";
 import {Breadcrumbs} from "./pages/components/Breadcrumbs";
@@ -10,7 +10,7 @@ import {Usages} from "./pages/components/Usages";
 import {Page} from "./pages/Page";
 
 export function ExpressionDefinition({url, title, definition, setDefinition, bookLink, chapterLink, previous, next, usages, hasDisambiguator, children, availableEntries}) {
-  const displayContext = DisplayContext.forExpressionDefinition(definition, availableEntries);
+  const displaySettings = DisplaySettings.forExpressionDefinition(definition, availableEntries);
   const serializedFormat = definition.format.originalValue ?
     "(" + definition.format.originalValue + ")" + (definition.format.requiresBrackets ? " requires-brackets" : "") + (definition.format.requiresComponentBrackets ? "" : " no-component-brackets") :
     "";
@@ -25,7 +25,7 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
     {label: "Attributes", initialValue: definition.attributes.join(" "), endpointName: "attributes", process: newAttributesText => newAttributesText.split(" ")},
     hasDisambiguator && {
       label: "Disambiguator Adders",
-      initialValue: definition.disambiguatorAdders.map(d => d.template.serializeNicely([["_"]], displayContext.variableDefinitions) + " " + d.disambiguator).join("\n"),
+      initialValue: definition.disambiguatorAdders.map(d => d.template.serializeNicely([["_"]], displaySettings.variableDefinitions) + " " + d.disambiguator).join("\n"),
       endpointName: "disambiguator",
       process: newDisambiguatorAddersText => _.filter(newDisambiguatorAddersText.split(/\r?\n/).map(_.trim), s => s.length),
       inputType: InputWithShorthandReplacement,
@@ -33,13 +33,13 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
     },
     definition.definitionPredicate && {
       label: "Definition Predicate",
-      initialValue: definition.definitionPredicate.serializeNicely([["_"]], displayContext.variableDefinitions),
+      initialValue: definition.definitionPredicate.serializeNicely([["_"]], displaySettings.variableDefinitions),
       endpointName: "definingStatement"
     }
   ];
 
   return <AvailableEntriesContext.Provider value={availableEntries}>
-    <DisplayContext.Provider value={displayContext}>
+    <DisplaySettingsContext.Provider value={displaySettings}>
       <Page breadcrumbs={<Breadcrumbs links={[bookLink, chapterLink, {title: definition.title.capitalize(), url}]}/>}>
         <NavLinks previous={previous} next={next} />
         <h3>{title}:  <CopiableExpression expression={definition.defaultValue} /></h3>
@@ -49,6 +49,6 @@ export function ExpressionDefinition({url, title, definition, setDefinition, boo
         {definition.constructionInference && <Usages.ForInference usages={usages} inferenceId={definition.constructionInference.id} title="Construction" />}
         {definition.deconstructionInference && <Usages.ForInference usages={usages} inferenceId={definition.deconstructionInference.id} title="Deconstruction" />}
       </Page>
-    </DisplayContext.Provider>
+    </DisplaySettingsContext.Provider>
   </AvailableEntriesContext.Provider>;
 }

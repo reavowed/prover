@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import DisplayContext from "../../DisplayContext";
+import DisplaySettings from "../../DisplaySettings";
 import AvailableEntriesContext from "../../AvailableEntriesContext";
 import {formatHtml} from "../../helpers/Formatter";
 import {InferenceSummary} from "../../InferenceSummary";

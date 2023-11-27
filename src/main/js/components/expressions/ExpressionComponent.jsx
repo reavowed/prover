@@ -4,18 +4,21 @@ import styled from "styled-components";
 import {
   DefinedExpression,
   matchTemplate,
-  PropertyExpression, RelatedObjectExpression,
+  PropertyExpression,
+  RelatedObjectExpression,
   StandalonePropertyExpression,
   TypeExpression,
-  TypeQualifierExpression, TypeRelationExpression, Variable
+  TypeQualifierExpression,
+  TypeRelationExpression,
+  Variable
 } from "../../models/Expression";
-import DisplayContext from "../DisplayContext";
 import AvailableEntriesContext from "../AvailableEntriesContext";
+import {DisplaySettingsContext} from "../DisplaySettings";
 import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "../helpers/Formatter";
 import {joinAsList} from "../helpers/reactFunctions";
-import BoundVariableListContext from "./boundVariables/BoundVariableListContext";
 import ProofContext from "../pages/theorem/ProofContext";
 import TheoremContext from "../pages/theorem/TheoremContext";
+import BoundVariableListContext from "./boundVariables/BoundVariableListContext";
 
 const HighlightingStyle = styled.span`
   color: ${props => props.isPremise ? "red" : props.isConclusion ? "blue" : null};
@@ -49,9 +52,9 @@ function filterPathsMultiple(actions, initialPaths) {
   return result;
 }
 
-export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, availableEntries, displayContext, splitConjunction}) {
+export function ExpressionComponent({expression, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, wrapBoundVariable, path, availableEntries, displaySettings, splitConjunction}) {
   availableEntries = availableEntries || useContext(AvailableEntriesContext);
-  displayContext = displayContext || useContext(DisplayContext);
+  displaySettings = displaySettings || useContext(DisplaySettingsContext);
   wrapBoundVariable = wrapBoundVariable || ((name) => formatHtml(name));
 
   function renderExpression(expression, path, actionHighlights, staticHighlights, boundVariableLists, parentRequiresBrackets, splitConjunction = false) {
@@ -65,7 +68,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
             if (match && match.expression instanceof DefinedExpression) {
               return _.includes(match.expression.definition.attributes, condition[1]);
             } else if (match && match.expression instanceof Variable) {
-              return _.includes(match.expression.getDefinition(displayContext.variableDefinitions).attributes, condition[1]);
+              return _.includes(match.expression.getDefinition(displaySettings.variableDefinitions).attributes, condition[1]);
             } else {
               return false;
             }
@@ -97,7 +100,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
     }
 
     function renderChildrenOfTag() {
-      if (!(displayContext && displayContext.disableShorthands)) {
+      if (!(displaySettings && displaySettings.disableShorthands)) {
         const {displayShorthand, matches} = matchDisplayShorthand(expression) || {};
         if (matches) {
           let renderedMatches = matches.map(m => renderMatch(m, path));
@@ -132,7 +135,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         }
       }
 
-      if (splitConjunction && !(displayContext && displayContext.disableShorthands)) {
+      if (splitConjunction && !(displaySettings && displaySettings.disableShorthands)) {
         return [joinAsList(splitConjunctions(expression, []).map(([e, p]) => renderChildExpression(e, p)))];
       }
 
@@ -149,7 +152,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         const renderedComponents = expression.components.map((c, i) =>
           renderChildExpression(c, [i], {additionalBoundVariables: innerBoundVariables, parentRequiresBrackets: expression.definition ? expression.definition.requiresComponentBrackets : true})
         );
-        const renderedSymbol = (disambiguator && !(displayContext?.disambiguators?.[expression.symbol]?.length <= 1)) ?
+        const renderedSymbol = (disambiguator && !(displaySettings?.disambiguators?.[expression.symbol]?.length <= 1)) ?
           <>{formatHtml(expression.symbol)}<sub>{disambiguator}</sub></> :
           formatHtml(expression.symbol);
         return formatHtmlWithoutWrapping(format, s => replacePlaceholders(s, [renderedSymbol, ...renderedBoundVariables, ...renderedComponents]));
@@ -263,8 +266,8 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
         const formattedTerm = renderChildExpression(expression.term, [...path, 0]);
         return addBrackets([formattedTerm, " is ", expression.definition.name]);
       } else if (expression instanceof Variable) {
-        if (displayContext && displayContext.variableDefinitions) {
-          const name = expression.getDefinition(displayContext.variableDefinitions).name;
+        if (displaySettings && displaySettings.variableDefinitions) {
+          const name = expression.getDefinition(displaySettings.variableDefinitions).name;
           const result = formatHtmlWithoutWrapping(name);
           if (expression.components.length > 0) {
             result.push("(");
@@ -341,7 +344,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
 export const CopiableExpression = (props) => {
   const expressionToCopy = props.expressionToCopy || props.expression;
   const boundVariableLists = props.boundVariableLists || useContext(BoundVariableListContext) || [];
-  const variableDefinitions = (props.displayContext || useContext(DisplayContext))?.variableDefinitions;
+  const variableDefinitions = (props.displaySettings || useContext(DisplaySettingsContext))?.variableDefinitions;
   const {expression, ...otherProps} = props;
 
   return <span onContextMenu={() => navigator.clipboard.writeText(expressionToCopy.serializeNicely(boundVariableLists, variableDefinitions))}>

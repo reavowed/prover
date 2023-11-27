@@ -2,7 +2,7 @@ import {DefinedExpression, Expression} from "./Expression";
 import * as _ from "lodash";
 import {flatMapAtIndex, mapAtIndex} from "./Helpers";
 
-import {ExpressionDefinition} from "../components/definitions/EntryDefinitions";
+import {ExpressionDefinitionSummary} from "../components/definitions/EntryDefinitionSummaries";
 import {Reference} from "../components/definitions/Reference";
 
 export abstract class Step {
@@ -92,7 +92,7 @@ export class AssertionStep extends StepWithoutSubsteps {
 
 export class DeductionStep extends StepWithSubsteps {
     type = "deduction";
-    constructor(public id: number, public assumption: Expression, substeps: Step[], public deductionDefinition: ExpressionDefinition) { super(substeps); }
+    constructor(public id: number, public assumption: Expression, substeps: Step[], public deductionDefinition: ExpressionDefinitionSummary) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, "isComplete");
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     provenStatement: Expression | null = (this.substeps.length && this.substeps[this.substeps.length - 1].provenStatement) ? new DefinedExpression(this.deductionDefinition, [], [this.assumption, this.substeps[this.substeps.length - 1].provenStatement!]) : null;
@@ -103,7 +103,7 @@ export class DeductionStep extends StepWithSubsteps {
 
 export class GeneralizationStep extends StepWithSubsteps {
     type = "generalization";
-    constructor(public id: number, public variableName: string, substeps: Step[], public generalizationDefinition: ExpressionDefinition) { super(substeps); }
+    constructor(public id: number, public variableName: string, substeps: Step[], public generalizationDefinition: ExpressionDefinitionSummary) { super(substeps); }
     isComplete: boolean = _.every(this.substeps, s => s.isComplete);
     inferencesUsed: any[] = _.flatMap(this.substeps, s => s.inferencesUsed);
     provenStatement: Expression | null = (this.substeps.length && this.substeps[this.substeps.length - 1].provenStatement) ? new DefinedExpression(this.generalizationDefinition, [this.variableName], [this.substeps[this.substeps.length - 1].provenStatement!]) : null;

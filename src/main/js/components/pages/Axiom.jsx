@@ -1,7 +1,6 @@
 import React from "react";
-import {Parser} from "../../Parser";
-import DisplayContext from "../DisplayContext";
 import AvailableEntriesContext, {createAvailableEntries} from "../AvailableEntriesContext";
+import DisplaySettings, {DisplaySettingsContext} from "../DisplaySettings";
 import {Inference} from "./Inference";
 
 export class Axiom extends React.Component {
@@ -10,9 +9,9 @@ export class Axiom extends React.Component {
     const availableEntries = createAvailableEntries(this.props);
     const axiom = availableEntries.parser.parseInference(axiomJson);
     return <AvailableEntriesContext.Provider value={availableEntries}>
-      <DisplayContext.Provider value={DisplayContext.forInferenceSummary(axiom, availableEntries)}>
+      <DisplaySettingsContext.Provider value={DisplaySettings.forInferenceSummary(axiom, availableEntries)}>
         <Inference inference={axiom} title="Axiom" {...otherProps}/>
-      </DisplayContext.Provider>
+      </DisplaySettingsContext.Provider>
     </AvailableEntriesContext.Provider>;
   }
 }
