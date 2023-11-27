@@ -37,10 +37,10 @@ type ProofUpdateProps<T> = {
 // TODO: Move to highlightable expression file
 export type ActionHighlight = {
     reference: Reference
-    action: () => void
+    action?: () => void
 }
 
-type TheoremContextType = {
+export type TheoremContextType = {
     availableEntries: AvailableEntries
     parser: Parser
     variableDefinitions: VariableDefinitions

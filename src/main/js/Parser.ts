@@ -424,7 +424,8 @@ export class Parser {
     return {
       baseFormatString: json.baseFormatString,
       requiresBrackets: json.requiresBrackets,
-      template: this.parseExpression(json.template)
+      template: this.parseExpression(json.template),
+      conditions: json.conditions
     }
   };
   parseBinaryRelation = (json: any): BinaryRelation => {

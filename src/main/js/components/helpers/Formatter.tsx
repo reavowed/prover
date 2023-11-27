@@ -2,32 +2,41 @@ import * as React from "react";
 import * as _ from "lodash";
 
 import {SimpleVariableDefinition} from "../definitions/DefinitionParts";
+import {CompoundReactNode, SimpleReactNode} from "../../utils";
+import {wrapWithFragment} from "./reactFunctions";
 
 type Match = {index: number, [key: number]: string}
 
-function formatWithReplacement(text: String, getMatches: ((s: String) => Match[]), handlePlain: ((s: String) => React.ReactNode), handleMatch: ((m: Match) => React.ReactNode)) {
+function formatWithReplacement(text: string, getMatches: ((s: string) => Match[]), handlePlain: ((s: string) => CompoundReactNode), handleMatch: ((m: Match) => CompoundReactNode)): SimpleReactNode[] {
   const matches = getMatches(text);
   let indexOfLastMatchEnd = 0;
-  let elements = [];
+  let elements: SimpleReactNode[] = [];
+  function add(node: CompoundReactNode) {
+    if (_.isArray(node)) {
+      elements.push(...node);
+    } else {
+      elements.push(node);
+    }
+  }
   for (const match of matches) {
-    elements.push(handlePlain(text.substr(indexOfLastMatchEnd, match.index - indexOfLastMatchEnd)));
-    elements.push(handleMatch(match));
+    add(handlePlain(text.substring(indexOfLastMatchEnd, match.index)));
+    add(handleMatch(match));
     indexOfLastMatchEnd = match.index + match[0].length;
   }
-  elements.push(handlePlain(text.substr(indexOfLastMatchEnd)));
-  return _.filter(_.flatten(elements), s => s !== "");
+  add(handlePlain(text.substring(indexOfLastMatchEnd)));
+  return _.filter(elements, s => s !== "");
 }
 
-export function formatHtml(text: String, replacementFunction?: ((s: String) => React.ReactNode)) {
-  return formatHtmlWithoutWrapping(text, replacementFunction).map((c, i) => <React.Fragment key={i}>{c}</React.Fragment>);
+export function formatHtml(text: string, replacementFunction?: ((s: string) => CompoundReactNode)): SimpleReactNode {
+  return wrapWithFragment(formatHtmlWithoutWrapping(text, replacementFunction));
 }
 
-export function formatHtmlWithoutWrapping(text: String, replacementFunction?: ((s: String) => React.ReactNode)) {
+export function formatHtmlWithoutWrapping(text: string, replacementFunction?: ((s: string) => CompoundReactNode)): SimpleReactNode[] {
   if (!replacementFunction) {
-    replacementFunction = (x: String) => <React.Fragment>{x}</React.Fragment>;
+    replacementFunction = (x: string) => x;
   }
   const regex = /([^\s])([_^])([^\s(){}]+)/g;
-  const getMatches = (s: String) => {
+  const getMatches = (s: string) => {
     const matches = [...(s as any).matchAll(regex)];
     _.forEach(matches, m => {
       m.index = m.index + m[1].length;
@@ -44,8 +53,8 @@ export function formatHtmlWithoutWrapping(text: String, replacementFunction?: ((
   });
 }
 
-export function replacePlaceholders(text: String, components: React.ReactNode[]) {
-  return formatWithReplacement(text, (s: String) => (s as any).matchAll(/%(\d+)/g), x => x,  match => {
+export function replacePlaceholders(text: string, components: CompoundReactNode[]): SimpleReactNode[] {
+  return formatWithReplacement(text, (s: string) => (s as any).matchAll(/%(\d+)/g), x => x,  match => {
     const index = parseInt(match[1]);
     return components[index];
   });
@@ -59,7 +68,7 @@ interface Qualifier {
   variableDefinitions: SimpleVariableDefinition[]
 }
 
-export function formatQualifier(qualifier: Qualifier | undefined): JSX.Element[] | null {
+export function formatQualifier(qualifier: Qualifier | undefined): SimpleReactNode | null {
   if (qualifier) {
     return formatHtml(qualifier.format.baseFormatString, s => replacePlaceholders(s, qualifier.variableDefinitions.map(d => d.name)))
   } else {

@@ -5,7 +5,7 @@ import {Step} from "../../../models/Step";
 import {Reference} from "../../definitions/Reference";
 import {ActionHighlight} from "./TheoremContext";
 
-type ProofContext = {
+export type ProofContextType = {
     parser: Parser
     variableDefinitions: VariableDefinitions
     registerStep(step: Step, path: number[]): void
@@ -26,4 +26,4 @@ type ProofContext = {
     clearHighlightingAction(): void
 }
 
-export default React.createContext<ProofContext | null>(null);
+export default React.createContext<ProofContextType | null>(null);

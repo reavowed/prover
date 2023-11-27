@@ -74,4 +74,5 @@ export interface DisplayShorthand {
     template: Expression
     baseFormatString: string
     requiresBrackets: boolean
+    conditions: [string, string][]
 }

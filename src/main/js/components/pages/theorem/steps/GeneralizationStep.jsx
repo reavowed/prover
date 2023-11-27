@@ -1,7 +1,9 @@
 import React from "react";
+import {FunctionParameter} from "../../../../models/Expression";
 
 import {StepReference} from "../../../definitions/Reference";
 import AddBoundVariableList from "../../../expressions/boundVariables/AddBoundVariableList";
+import {HighlightableExpression} from "../../../expressions/ExpressionComponent";
 import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import ProofContext from "../ProofContext";
 import ProofLine from "./components/ProofLine";
@@ -16,17 +18,20 @@ export class GeneralizationStep extends React.Component {
   render() {
     let {step, path, additionalReferences, showConclusion} = this.props;
     const reference = new StepReference(path);
-    const referencesForLastStep = showConclusion ? [] : [...(additionalReferences || []), reference];
+    const referencesForVariableAndConclusion = showConclusion ? [] : [...(additionalReferences || []), reference];
     return <Step.WithSubsteps path={path}>
-      <Step.Antecedent>
-        <ProofLine path={path}>
-          Take any <InlineTextEditor text={step.variableName} callback={this.updateBoundVariable}/>.
-        </ProofLine>
-      </Step.Antecedent>
       <AddBoundVariableList variables={[step.variableName]}>
+        <Step.Antecedent>
+          <ProofLine path={path}>
+            Take any <HighlightableExpression expression={new FunctionParameter(0, 0)}
+                                              references={referencesForVariableAndConclusion}
+                                              wrapBoundVariable={name => <InlineTextEditor text={name} callback={this.updateBoundVariable}/>}
+            />.
+          </ProofLine>
+        </Step.Antecedent>
         <Steps.Children steps={step.substeps}
                         path={path}
-                        propsForLastStep={{additionalReferences: referencesForLastStep}} />
+                        propsForLastStep={{additionalReferences: referencesForVariableAndConclusion}} />
       </AddBoundVariableList>
       {step.provenStatement && showConclusion &&
         <ProofLine.SingleStatementWithPrefix prefix="So"

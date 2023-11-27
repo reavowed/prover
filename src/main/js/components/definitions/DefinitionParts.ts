@@ -20,6 +20,7 @@ export interface SimpleVariableDefinition {
 export interface VariableDefinition {
     name: string
     arity: number
+    attributes?: string[]
 }
 
 export interface VariableDefinitions {

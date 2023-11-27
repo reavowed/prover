@@ -1,11 +1,11 @@
 import React from "react";
 import {CopiableExpression} from "./expressions/ExpressionComponent";
-import {joinAsList} from "./helpers/reactFunctions";
+import {joinAsList, wrapWithFragment} from "./helpers/reactFunctions";
 
 export class ResultWithPremises extends React.Component {
   static renderPremises(premises, createPremiseElement) {
     let premiseElements = premises.map(createPremiseElement);
-    return <div>Suppose {joinAsList(premiseElements)}.</div>;
+    return <div>Suppose {wrapWithFragment(joinAsList(premiseElements))}.</div>;
   }
   render() {
     let {premises, result, createPremiseElement} = this.props;

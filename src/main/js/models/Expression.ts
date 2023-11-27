@@ -31,7 +31,7 @@ export interface BoundVariableMatchResult {
   pathWithinMatch: number[];
 }
 
-type MatchResult = ExpressionMatchResult | BoundVariableMatchResult;
+export type MatchResult = ExpressionMatchResult | BoundVariableMatchResult;
 
 function checkComponentsMatch(matchResults: MatchResult[]): MatchResult[] | undefined {
   const expressionMatchResults = <ExpressionMatchResult[]>matchResults.filter(a => a instanceof ExpressionMatchResult);

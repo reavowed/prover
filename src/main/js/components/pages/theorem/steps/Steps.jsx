@@ -2,7 +2,7 @@ import update from 'immutability-helper';
 import _ from "lodash";
 import React, {useContext} from "react";
 import styled from "styled-components";
-import {matchTemplate} from "../../../../models/Expression";
+import {DefinedExpression, FunctionParameter, matchTemplate} from "../../../../models/Expression";
 import {
   AssertionStep as AssertionStepModel,
   DeductionStep as DeductionStepModel,
@@ -66,7 +66,7 @@ class RightHandSide extends React.Component {
                                      additionalPremiseReferences={additionalReferences} />
             {' '}
           </PositionToLeft>}
-      <HighlightableExpression expression={{textForHtml: () => (hovered && rightHandSide.internalSymbol) || rightHandSide.symbol}}
+      <HighlightableExpression expression={(hovered && rightHandSide.internalSymbol) || rightHandSide.symbol}
                                expressionToCopy={rightHandSide.step.provenStatement}
                                references={rightHandSide.referencesForRhs}
                                additionalReferences={additionalReferences}/>
