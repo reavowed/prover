@@ -48,7 +48,7 @@ export class Theorem extends React.Component {
       parser: this.parser,
       variableDefinitions: theorem.variableDefinitions,
       displaySettings: displaySettings,
-      fetchJson(subpath,  options) {
+      fetchJson(subpath, options) {
         return window.fetchJson(path.join(url, subpath), options);
       },
       updateTheorem(newTheoremJson) {
