@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import {DndProvider} from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import {SimpleDraggableList} from "../draggableList/SimpleDraggableList";
-import {FlexRow} from "../FlexRow";
+import FlexRow from "../FlexRow";
 import BookContext from "./book/BookContext";
 import {ChapterAdder} from "./book/ChapterAdder";
 import {Breadcrumbs} from "./components/Breadcrumbs";

@@ -1,5 +1,5 @@
 import React from "react";
-import {FlexRow} from "../../FlexRow";
+import FlexRow from "../../FlexRow";
 import {formatHtml} from "../../helpers/Formatter";
 import {Monospace} from "../../Monospace";
 

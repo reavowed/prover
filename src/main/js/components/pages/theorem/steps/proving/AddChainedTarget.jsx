@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import {renderToString} from "react-dom/server";
 import {ExpressionComponent} from "../../../../expressions/ExpressionComponent";
-import {FlexRow} from "../../../../FlexRow";
+import FlexRow from "../../../../FlexRow";
 import InputWithShorthandReplacement from "../../../../helpers/InputWithShorthandReplacement";
 import ProofContext from "../../ProofContext";
 

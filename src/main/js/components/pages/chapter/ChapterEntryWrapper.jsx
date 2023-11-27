@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import Button from "react-bootstrap/Button";
 import styled, {css} from "styled-components";
-import {FlexRow} from "../../FlexRow";
+import FlexRow from "../../FlexRow";
 import ChapterContext from "./ChapterContext";
 import DeleteEntryButton from "./DeleteEntryButton";
 

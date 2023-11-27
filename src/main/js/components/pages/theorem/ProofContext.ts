@@ -10,7 +10,7 @@ export type ProofContextType = {
     variableDefinitions: VariableDefinitions
     registerStep(step: Step, path: number[]): void
     unregisterStep(step: Step, path: number[]): void
-    callOnStep(step: Step, action: keyof Step): void
+    callOnStep(path: number[], action: string): void
     fetchJson(subpath: string, options: RequestInit): Promise<any>
     fetchJsonForStep(stepPath: number[], subpath: string, options: RequestInit): Promise<any>
     fetchJsonForStepAndInsert(stepPath: number[], subpath: string, options: RequestInit): Promise<[number[], Step[]]>
@@ -20,7 +20,7 @@ export type ProofContextType = {
     fetchJsonAndInsertAndDelete(subpath: string, options: RequestInit): Promise<void>
     fetchJsonForStepAndReplaceWithWrapping(stepPath: number[], subpath: string, options: RequestInit): Promise<void>
     updateTheorem(newTheoremJson: any): Promise<void>
-    setHighlighting(newHighlightedPremises: Reference[], newHighlightedConclusion: Reference): void
+    setHighlighting(newHighlightedPremises: Reference[], newHighlightedConclusion?: Reference): void
     getHighlighting(): [ActionHighlight[], Reference[]]
     setHighlightingAction(actionHighlights: ActionHighlight[], staticHighlights: Reference[]): void
     clearHighlightingAction(): void
