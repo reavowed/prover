@@ -7,7 +7,6 @@ import AvailableEntriesContext, {createAvailableEntries} from "../AvailableEntri
 import {PremiseReference} from "../definitions/Reference";
 import DisplaySettings, {DisplaySettingsContext} from "../DisplaySettings";
 import {HighlightableExpression} from "../expressions/ExpressionComponent";
-import HashParamsContext from "../HashParamsContext";
 import {Inference} from "./Inference";
 import Proofs from "./theorem/Proofs";
 import TheoremContext from "./theorem/TheoremContext";
@@ -43,11 +42,14 @@ export class Theorem extends React.Component {
     const {url} = this.props;
     const {theorem, inferences, highlighting, disableChaining, disableShorthands, disableAssumptionCollapse, disambiguators} = this.state;
     const displaySettings = new DisplaySettings(theorem.variableDefinitions, disambiguators, disableChaining, disableShorthands, disableAssumptionCollapse);
+
+    const hashParams = queryString.parse(window.location.hash);
     const theoremContext = {
       availableEntries: this.availableEntries,
       parser: this.parser,
       variableDefinitions: theorem.variableDefinitions,
       displaySettings: displaySettings,
+      inferencesToHighlight: hashParams.inferencesToHighlight ? hashParams.inferencesToHighlight.split(",") : [],
       fetchJson(subpath, options) {
         return window.fetchJson(path.join(url, subpath), options);
       },
@@ -170,12 +172,6 @@ export class Theorem extends React.Component {
       return <Premise statement={premise} index={index}/>
     };
 
-    const rawHashParams = queryString.parse(window.location.hash);
-    const hashParams = {};
-    if (rawHashParams.inferencesToHighlight) {
-      hashParams.inferencesToHighlight = rawHashParams.inferencesToHighlight.split(",")
-    }
-
     const settingsDropdown = <Dropdown className="position-static">
         <Dropdown.Toggle size="sm" className="mr-2" variant="success" id="dropdown-basic-button">Settings</Dropdown.Toggle>
         <Dropdown.Menu>
@@ -206,16 +202,14 @@ export class Theorem extends React.Component {
         </Dropdown.Menu>
       </Dropdown>;
 
-    return <HashParamsContext.Provider value={hashParams}>
-      <AvailableEntriesContext.Provider value={this.availableEntries}>
-        <TheoremContext.Provider value={theoremContext}>
-          <DisplaySettingsContext.Provider value={displaySettings}>
-            <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" buttons={settingsDropdown} editable {...this.props}>
-              <Proofs proofs={theorem.proofs} />
-            </Inference>
-          </DisplaySettingsContext.Provider>
-        </TheoremContext.Provider>
-      </AvailableEntriesContext.Provider>
-    </HashParamsContext.Provider>;
+    return <AvailableEntriesContext.Provider value={this.availableEntries}>
+      <TheoremContext.Provider value={theoremContext}>
+        <DisplaySettingsContext.Provider value={displaySettings}>
+          <Inference inference={theorem} createPremiseElement={createPremiseElement} title="Theorem" buttons={settingsDropdown} editable {...this.props}>
+            <Proofs proofs={theorem.proofs} />
+          </Inference>
+        </DisplaySettingsContext.Provider>
+      </TheoremContext.Provider>
+    </AvailableEntriesContext.Provider>;
   }
 }

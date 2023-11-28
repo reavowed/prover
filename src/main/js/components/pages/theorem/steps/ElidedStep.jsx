@@ -4,8 +4,8 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
 import {ElidedStep as ElidedStepModel} from "../../../../models/Step";
-import HashParamsContext from "../../../HashParamsContext";
 import ProofContext from "../ProofContext";
+import TheoremContext from "../TheoremContext";
 import {InferenceLink} from "./components/InferenceLink";
 import ProofLine from "./components/ProofLine";
 import Step from "./Step";
@@ -14,8 +14,8 @@ import {Steps} from "./Steps";
 class ElidedStepProofLineWithContexts extends React.Component {
   constructor(props) {
     super(props);
-    const containsHighlightedInference = _.intersection(_.map(props.step.inferencesUsed, "id"), props.hashParamsContext.inferencesToHighlight).length;
-    const isHighlightedInference = props.step.highlightedInference && _.isEqual(props.hashParamsContext.inferencesToHighlight, [props.step.highlightedInference.id]);
+    const containsHighlightedInference = _.intersection(_.map(props.step.inferencesUsed, "id"), props.theoremContext.inferencesToHighlight).length;
+    const isHighlightedInference = props.step.highlightedInference && _.isEqual(props.theoremContext.inferencesToHighlight, [props.step.highlightedInference.id]);
     this.proofLineRef = React.createRef();
     this.state = {
       showProofCard: !props.step.isComplete || (containsHighlightedInference && !isHighlightedInference),
@@ -100,9 +100,9 @@ class ElidedStepProofLineWithContexts extends React.Component {
 
 export function ElidedStepProofLine(props) {
   return <ProofContext.Consumer>{proofContext =>
-    <HashParamsContext.Consumer>{hashParamsContext =>
-      <ElidedStepProofLineWithContexts {...props} proofContext={proofContext} hashParamsContext={hashParamsContext}/>
-    }</HashParamsContext.Consumer>
+    <TheoremContext.Consumer>{theoremContext =>
+      <ElidedStepProofLineWithContexts {...props} proofContext={proofContext} theoremContext={theoremContext}/>
+    }</TheoremContext.Consumer>
   }</ProofContext.Consumer>
 }
 

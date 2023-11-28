@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 import {StepReference} from "../../../definitions/Reference";
-import HashParamsContext from "../../../HashParamsContext";
 import {formatHtml} from "../../../helpers/Formatter";
 import ProofContext from "../ProofContext";
+import TheoremContext from "../TheoremContext";
 import ProofLine from "./components/ProofLine";
 import Step from "./Step";
 import {Steps} from "./Steps";
@@ -21,7 +21,7 @@ export class SubproofStepWithContexts extends React.Component {
     super(...args);
     const {step} = this.props;
     this.state = {
-      showingSubproof: !step.isComplete && (step.substeps.length > 1 || step.substeps[0].type !== "target") || _.intersection(_.map(this.props.step.inferencesUsed, "id"), this.props.hashParamsContext.inferencesToHighlight).length
+      showingSubproof: !step.isComplete && (step.substeps.length > 1 || step.substeps[0].type !== "target") || _.intersection(_.map(this.props.step.inferencesUsed, "id"), this.props.theoremContext.inferencesToHighlight).length
     };
   }
   toggleSubproof = () => {
@@ -69,8 +69,8 @@ export class SubproofStepWithContexts extends React.Component {
 
 export function SubproofStep(props) {
   return <ProofContext.Consumer>{proofContext =>
-    <HashParamsContext.Consumer>{hashParamsContext =>
-      <SubproofStepWithContexts {...props} proofContext={proofContext} hashParamsContext={hashParamsContext}/>
-    }</HashParamsContext.Consumer>
+    <TheoremContext.Consumer>{theoremContext =>
+      <SubproofStepWithContexts {...props} proofContext={proofContext} theoremContext={theoremContext}/>
+    }</TheoremContext.Consumer>
   }</ProofContext.Consumer>
 }

@@ -45,6 +45,7 @@ export type TheoremContextType = {
     parser: Parser
     variableDefinitions: VariableDefinitions
     displaySettings: DisplaySettings
+    inferencesToHighlight?: string[]
     fetchJson(subpath: string, options: RequestInit): Promise<any>
     updateTheorem(newTheoremJson: any): Promise<void>
     insertSteps(proofIndex: number, props: ProofUpdateProps<StepChangeProps>): Promise<[number[], Step[]]>
