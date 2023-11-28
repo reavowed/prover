@@ -121,20 +121,24 @@ object Unwrapper {
       unwrappers.foldRight(statement) { _.addToStatement(_) }
     }
 
-    def getTargetExtraction(target: Statement)(implicit stepContext: StepContext): (Statement, Option[Step.PremiseDerivation]) = {
-      val enhancedStepContext = enhanceStepContext(stepContext)
+    def getTargetExtraction(target: Statement)(implicit stepProvingContext: StepProvingContext): (Option[Statement], Option[Step.PremiseDerivation]) = {
+      val enhancedStepProvingContext = enhanceStepProvingContext
       def helper(currentUnwrappers: Seq[Unwrapper]): (Statement, Seq[Step.Assertion], Int) = {
         currentUnwrappers match {
           case unwrapper +: tailUnwrappers =>
             val (innerTarget, innerSteps, innerDepth) = helper(tailUnwrappers)
-            val newStep = unwrapper.extractionStep(innerTarget, innerDepth)(enhancedStepContext)
+            val newStep = unwrapper.extractionStep(innerTarget, innerDepth)(enhancedStepProvingContext.stepContext)
             val newTarget = newStep.premises.head.statement
             (newTarget, newStep +: innerSteps, innerDepth + unwrapper.depth)
           case Nil =>
             (target, Nil, 0)
         }
       }
-      helper(unwrappers).strip3.mapRight(ExistingStatementExtraction.ifNecessary)
+      if (enhancedStepProvingContext.allPremises.exists(_.statement == target)) {
+        (None, None)
+      } else {
+        helper(unwrappers).strip3.mapLeft(Some(_)).mapRight(ExistingStatementExtraction.ifNecessary)
+      }
     }
 
     def rewrap(steps: Seq[Step]): Seq[Step] = {
@@ -195,9 +199,9 @@ object Unwrapper {
       helper(unwrappers, stepContext)
     }
 
-    def addNecessaryExtractions(step: Step.AssertionOrExtraction, targets: Seq[Statement])(implicit stepContext: StepContext): (Step.InferenceApplicationWithoutPremises, Seq[Statement]) = {
+    def addNecessaryExtractions(step: Step.AssertionOrExtraction, targets: Seq[Statement])(implicit stepProvingContext: StepProvingContext): (Step.InferenceApplicationWithoutPremises, Seq[Statement]) = {
       val newTargetsAndExtractions = targets.map(getTargetExtraction)
-      val newTargets = newTargetsAndExtractions.map(_._1)
+      val newTargets = newTargetsAndExtractions.flatMap(_._1)
       val targetExtractionSteps = newTargetsAndExtractions.flatMap(_._2)
       if (unwrappers.nonEmpty || targetExtractionSteps.nonEmpty) {
         (Step.WrappedInferenceApplication(unwrappers, targetExtractionSteps, step), newTargets)

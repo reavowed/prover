@@ -232,7 +232,7 @@ export default class ConclusionChooser extends React.Component {
             }</BoundVariableListContext.Consumer>;
 
           return <Form.Group as={Form.Row}>
-            <Form.Label column xs={2}><CopiableExpression expression={{textForHtml: () => name}}/></Form.Label>
+            <Form.Label column xs={2}><CopiableExpression expression={name}/></Form.Label>
             <Form.Label column xs={1}>&rarr;</Form.Label>
             <Col>{selectionElement}</Col>
           </Form.Group>

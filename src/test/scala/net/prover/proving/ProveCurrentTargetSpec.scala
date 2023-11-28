@@ -205,5 +205,46 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
                 Seq(φ($), ψ($)),
                 Nil))))))
     }
+
+    "prove using an inference whose premises have been added as generalized implications" in {
+      val axiom = createInference(
+        "Two Empty Sets Are Equal",
+        Seq(ForAll("x")(Negation(ElementOf($, a))), ForAll("x")(Negation(ElementOf($, b)))),
+        Equals(a, b))
+      implicit val availableEntries = defaultAvailableEntries.addEntry(axiom)
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      implicit val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+
+      ProveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        StepDefinition(
+          Some(axiom.id),
+          None,
+          SerializedSubstitutions(Nil, Seq($.^.serialized, $.serialized)),
+          ExtractionDefinition.Empty.serialized,
+          Seq(ForAllDefinition.symbol, ForAllDefinition.symbol, Implication.symbol),
+          None,
+          None,
+          None))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex) :+
+          target(ForAll("x")(ForAll("y")(Implication(Conjunction(ForAll("z")(Negation(ElementOf($, $.^^))), ForAll("x")(Negation(ElementOf($, $.^)))), Equals($.^, $))))),
+        fillerSteps(stepIndex) :+
+          wrappedInferenceApplication(Seq(
+            generalization("x", Seq(
+              generalization("y", Seq(
+                deduction(Conjunction(ForAll("z")(Negation(ElementOf($, $.^^))), ForAll("x")(Negation(ElementOf($, $.^)))), Seq(
+                  assertion(
+                    axiom,
+                    Nil,
+                    Seq($.^, $)))))))))))
+    }
   }
 }
