@@ -41,7 +41,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           case statementDefinition: StatementDefinitionEntry =>
             Some(EntryProps("statementDefinition", url, statementDefinition.title, statementDefinition))
           case termDefinition: TermDefinitionEntry =>
-            Some(EntryProps("statementDefinition", url, termDefinition.title, termDefinition))
+            Some(EntryProps("termDefinition", url, termDefinition.title, termDefinition))
           case typeDefinition: TypeDefinition =>
             Some(EntryProps("typeDefinition", url, typeDefinition.title, typeDefinition))
           case typeQualifierDefinition: TypeQualifierDefinition =>
