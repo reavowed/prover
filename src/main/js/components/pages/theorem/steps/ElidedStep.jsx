@@ -31,7 +31,7 @@ class ElidedStepProofLineWithContexts extends React.Component {
 
   setDescription = (description) => {
     this.setStatePromise({savingDescription: true})
-      .then(() => this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "description", {
+      .then(() => this.props.proofContext.fetchJsonForStepAndReplace(this.props.step.path, "description", {
         method: "POST",
         body: description
       }))
@@ -40,14 +40,14 @@ class ElidedStepProofLineWithContexts extends React.Component {
   };
 
   highlightInference = (inferenceId) => {
-    this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "highlightedInference", {
+    this.props.proofContext.fetchJsonForStepAndReplace(this.props.step.path, "highlightedInference", {
       method: "POST",
       body: inferenceId
     });
   };
 
   unpackStep = () => {
-    this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "unpack", {method: "POST"});
+    this.props.proofContext.fetchJsonForStepAndReplace(this.props.step.path, "unpack", {method: "POST"});
   };
 
   onProofLineKeyDown = (event) => {
@@ -59,7 +59,7 @@ class ElidedStepProofLineWithContexts extends React.Component {
   };
 
   render() {
-    let {step, path, children} = this.props;
+    let {step, children} = this.props;
     let {draftDescription, savingDescription} = this.state;
     let buttons = <>
       {step.highlightedInference && <span className="mr-2"><InferenceLink inference={step.highlightedInference}/></span>}
@@ -74,8 +74,8 @@ class ElidedStepProofLineWithContexts extends React.Component {
       </InputGroup>}
       <span className="fas fa-ellipsis-v text-muted mr-2" onClick={this.toggleProofCard} style={{cursor: "pointer"}}/>
     </>;
-    const proofLine = <ProofLine premiseReferences={step.filterReferences(path)}
-                                 path={path}
+    const proofLine = <ProofLine premiseReferences={step.filterReferences(step.path)}
+                                 path={step.path}
                                  buttons={buttons}
                                  incomplete={!step.isComplete}
                                  onKeyDown={this.onProofLineKeyDown}
@@ -85,11 +85,11 @@ class ElidedStepProofLineWithContexts extends React.Component {
     </ProofLine>;
     return <>
       {this.state.showProofCard ?
-        <Step.WithSubsteps path={path}>
+        <Step.WithSubsteps path={step.path}>
           <Step.Antecedent>{proofLine}</Step.Antecedent>
           <div className="card" style={{margin: ".5rem -0.75rem .5rem 2rem", padding: ".5rem .75rem"}}>
             <Steps.Children steps={step.substeps}
-                            path={path}
+                            path={step.path}
                             propsForLastStep={{showConclusion: true}}/>
           </div>
         </Step.WithSubsteps> :
@@ -107,11 +107,11 @@ export function ElidedStepProofLine(props) {
 }
 
 export function ElidedStep(props) {
-  const {step, path, additionalReferences} = props;
+  const {step, additionalReferences} = props;
   return <ElidedStepProofLine {...props} prefix="Then">
     <ProofLine.SingleStatementWithPrefixContent prefix="Then"
                                                 statement={step.provenStatement}
-                                                path={path}
+                                                path={step.path}
                                                 additionalReferences={additionalReferences}  />
   </ElidedStepProofLine>;
 }

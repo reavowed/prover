@@ -1,13 +1,13 @@
 import {Expression} from "./Expression";
 import {Step} from "./Step";
-import {flatMapAtIndex, mapAtIndex} from "./Helpers";
+import {mapAtIndex} from "./Helpers";
 import * as _ from "lodash";
 import {VariableDefinitions} from "../components/definitions/DefinitionParts";
-
+import {insertSteps, replaceStep, updateStep} from "../components/pages/theorem/steps/stepReplacementFunctions";
 
 export class Theorem {
     constructor(public name: string, public id: string, public key: string, public variableDefinitions: VariableDefinitions, public premises: any[], public conclusion: Expression, public proofs: Step[][]) {}
-    updateProof(proofIndex: number, newProof: Step[]): Theorem {
+    updateStep(proofIndex: number, newStep: Step): Theorem {
         return new Theorem(
             this.name,
             this.id,
@@ -15,17 +15,7 @@ export class Theorem {
             this.variableDefinitions,
             this.premises,
             this.conclusion,
-            mapAtIndex(this.proofs, proofIndex, _ => newProof),)
-    }
-    updateStep(proofIndex: number, stepPath: number[], newStep: Step): Theorem {
-        return new Theorem(
-            this.name,
-            this.id,
-            this.key,
-            this.variableDefinitions,
-            this.premises,
-            this.conclusion,
-            mapAtIndex(this.proofs, proofIndex, proof => mapAtIndex(proof, stepPath[0], step => step.updateStep(stepPath.slice(1), newStep))))
+            mapAtIndex(this.proofs, proofIndex, proof => updateStep(newStep.path, proof, newStep)))
     }
     replaceStep(proofIndex: number, stepPath: number[], newSteps: Step[]): Theorem {
         return new Theorem(
@@ -35,7 +25,7 @@ export class Theorem {
             this.variableDefinitions,
             this.premises,
             this.conclusion,
-            mapAtIndex(this.proofs, proofIndex, proof => flatMapAtIndex(proof, stepPath[0], step => step.replaceStep(stepPath.slice(1), newSteps))))
+            mapAtIndex(this.proofs, proofIndex, proof => replaceStep(stepPath, proof, newSteps)))
     }
     replaceSteps(proofIndex: number, outerPath: number[], startIndex: number, endIndex: number, newSteps: Step[]): Theorem {
         const theoremAfterRemoval = endIndex > startIndex ?
@@ -52,11 +42,9 @@ export class Theorem {
             this.premises,
             this.conclusion,
             mapAtIndex(this.proofs, proofIndex, proof =>
-                stepPath.length == 1 ?
-                    [...proof.slice(0, stepPath[0]), ...newSteps, ...proof.slice(stepPath[0])] :
-                    mapAtIndex(proof, stepPath[0], step => step.insertSteps(stepPath.slice(1), newSteps))))
+              insertSteps(stepPath, proof, newSteps)));
     }
-    updateStepsWithReferenceChanges(proofIndex: number, stepsWithReferenceChanges: {step: Step, path: number[]}[]): Theorem {
-        return _.reduce(stepsWithReferenceChanges, (t, {step, path}) => t.updateStep(proofIndex, path, step), <Theorem>this);
+    updateStepsWithReferenceChanges(proofIndex: number, stepsWithReferenceChanges: Step[]): Theorem {
+        return _.reduce(stepsWithReferenceChanges, (t, step) => t.updateStep(proofIndex, step), <Theorem>this);
     }
 }

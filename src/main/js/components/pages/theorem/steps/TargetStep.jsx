@@ -1,9 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import Button from "react-bootstrap/Button";
-import {matchTemplate} from "../../../../models/Expression";
 import AvailableEntriesContext from "../../../AvailableEntriesContext";
-import {CopiableExpression} from "../../../expressions/ExpressionComponent";
 import ProofContext from "../ProofContext";
 import ProofLine from "./components/ProofLine";
 import ProvingCard from "./proving/ProvingCard";
@@ -20,19 +18,19 @@ class TargetStepProofLineInner extends React.Component {
   }
 
   componentDidMount() {
-    this.context.registerStep(this, this.props.path);
+    this.context.registerStep(this, this.props.step.path);
   }
   componentWillUnmount() {
-    this.context.unregisterStep(this, this.props.path);
+    this.context.unregisterStep(this, this.props.step.path);
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (!_.isEqual(prevProps.path, this.props.path)) {
-      this.context.unregisterStep(this, prevProps.path);
-      this.context.registerStep(this, this.props.path);
+    if (!_.isEqual(prevProps.step.path, this.props.step.path)) {
+      this.context.unregisterStep(this, prevProps.step.path);
+      this.context.registerStep(this, this.props.step.path);
     }
   }
   onUpdate() {
-    this.context.fetchJsonForStep(this.props.path, "premises")
+    this.context.fetchJsonForStep(this.props.step.path, "premises")
       .then(premiseJson => this.setState({availablePremises: _.map(premiseJson, this.props.availableEntries.parser.parsePremise)}))
       .catch(console.log);
   }
@@ -51,14 +49,14 @@ class TargetStepProofLineInner extends React.Component {
   };
 
   render() {
-    const {step, path, additionalReferences, children} = this.props;
+    const {step, additionalReferences, children} = this.props;
     const {proving} = this.state;
 
     return proving ?
-      <ProvingCard step={step} path={path} availablePremises={this.state.availablePremises} stopProving={this.stopProving} /> :
+      <ProvingCard step={step} path={step.path} availablePremises={this.state.availablePremises} stopProving={this.stopProving} /> :
       <ProofLine incomplete
                  editableBoundVariable
-                 path={path}
+                 path={step.path}
                  additionalReferences={additionalReferences}
                  onKeyDown={this.onProofLineKeyDown}
                  buttons={<Button variant="danger" size="sm" className="pt-0 pb-0" onClick={this.startProving}>Prove</Button>}>
@@ -74,13 +72,13 @@ export function TargetStepProofLine(props) {
 }
 export class TargetStep extends React.Component {
   render() {
-    const {step, path, additionalReferences} = this.props;
+    const {step, additionalReferences} = this.props;
     return <Step.WithoutSubsteps>
       <TargetStepProofLine {...this.props}>
         <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
                                                     prefix="Then"
                                                     statement={step.statement}
-                                                    path={path}
+                                                    path={step.path}
                                                     additionalReferences={additionalReferences} />
       </TargetStepProofLine>
     </Step.WithoutSubsteps>

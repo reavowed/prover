@@ -5,13 +5,13 @@ import {InferenceLink} from "./components/InferenceLink";
 import ProofLine from "./components/ProofLine";
 import Step from "./Step";
 
-export function AssertionStepProofLine({step, path, children}) {
+export function AssertionStepProofLine({step, children}) {
   const context = useContext(ProofContext);
   const createTargets = () => {
-    context.fetchJsonForStepAndInsert(path, "createTargets", {method: "POST"});
+    context.fetchJsonForStepAndInsert(step.path, "createTargets", {method: "POST"});
   };
   return <ProofLine premiseReferences={step.referencedLines}
-                    path={path}
+                    path={step.path}
                     statement={step.statement}
                     buttons={<>
                       <InferenceLink inference={step.inference}/>
@@ -24,13 +24,13 @@ export function AssertionStepProofLine({step, path, children}) {
 
 export class AssertionStep extends React.Component {
   render() {
-    const {step, path, additionalReferences} = this.props;
+    const {step, additionalReferences} = this.props;
     return <Step.WithoutSubsteps>
       <AssertionStepProofLine {...this.props}>
         <ProofLine.SingleStatementWithPrefixContent editableBoundVariable
                                                     prefix="Then"
                                                     statement={step.statement}
-                                                    path={path}
+                                                    path={step.path}
                                                     additionalReferences={additionalReferences} />
       </AssertionStepProofLine>
     </Step.WithoutSubsteps>

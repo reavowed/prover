@@ -1,6 +1,6 @@
 package net.prover.model.entries
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties, JsonProperty}
 import net.prover.books.reading.ProofFileReader
 import net.prover.entries.{ChapterWithContext, EntryParsingContext, EntryWithContext, TheoremWithContext}
 import net.prover.model._
@@ -8,13 +8,12 @@ import net.prover.model.definitions.{Definitions, ExpressionDefinition}
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
-import net.prover.theorems.{GetReferencedDefinitions, IsComplete, ReplaceDefinitions}
+import net.prover.theorems.{DisplayStep, GetDisplaySteps, GetReferencedDefinitions, IsComplete, ReplaceDefinitions}
 
-@JsonIgnoreProperties(Array("rearrangementType"))
 case class Theorem(
     name: String,
     variableDefinitions: VariableDefinitions,
-    premises: Seq[Statement],
+    @JsonIgnore premises: Seq[Statement],
     conclusion: Statement,
     proofs: Seq[Proof])
   extends Inference.Entry
@@ -40,6 +39,11 @@ case class Theorem(
     entryWithContext: EntryWithContext
   ): Theorem = {
     ReplaceDefinitions(expressionDefinitionReplacements, entryWithContext.availableEntries)(entryWithContext.copy(entry = this))
+  }
+
+  @JsonProperty("proofs")
+  def proofsForSerialization: Seq[Seq[DisplayStep]] = {
+    this.proofs.map(GetDisplaySteps(_))
   }
 }
 

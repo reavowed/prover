@@ -29,7 +29,7 @@ export class SubproofStepWithContexts extends React.Component {
   };
 
   unpackStep = () => {
-    this.props.proofContext.fetchJsonForStepAndReplace(this.props.path, "unpack", {method: "POST"});
+    this.props.proofContext.fetchJsonForStepAndReplace(this.props.step.path, "unpack", {method: "POST"});
   };
   onProofLineKeyDown = (event) => {
     if (event.key === "u") {
@@ -37,30 +37,30 @@ export class SubproofStepWithContexts extends React.Component {
     }
   };
   render() {
-    let {step, path, additionalReferences} = this.props;
+    let {step, additionalReferences} = this.props;
     additionalReferences = additionalReferences || [];
     let {showingSubproof} = this.state;
-    let reference = new StepReference(path);
+    let reference = new StepReference(step.path);
     const titleElement = <div onClick={this.toggleSubproof} className={"font-weight-bold mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</div>;
     return showingSubproof ?
       <SubproofOutline>
-        <Step.WithSubsteps path={path}>
+        <Step.WithSubsteps path={step.path}>
           <Step.Antecedent>{titleElement}</Step.Antecedent>
           <Steps steps={step.substeps}
-                 path={path}
+                 path={step.path}
                  propsForLastStep={{additionalReferences: [...additionalReferences, reference], showConclusion: true}} />
         </Step.WithSubsteps>
       </SubproofOutline> :
       <SubproofOutline>
         <Step.WithoutSubsteps>
           {titleElement}
-          <ProofLine path={path}
-                     premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, path))}
+          <ProofLine path={step.path}
+                     premiseReferences={_.filter(step.referencedLines, ({stepPath}) => !stepPath || !_.startsWith(stepPath, step.path))}
                      incomplete={!step.isComplete}
                      onKeyDown={this.onProofLineKeyDown}>
             <ProofLine.SingleStatementWithPrefixContent prefix="Then"
                                                         statement={step.provenStatement}
-                                                        path={path} />
+                                                        path={step.path} />
           </ProofLine>
         </Step.WithoutSubsteps>
       </SubproofOutline>;

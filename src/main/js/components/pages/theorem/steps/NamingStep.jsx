@@ -19,7 +19,7 @@ import Step from "./Step";
 import {matchElidableVariableDescription} from "./stepDisplayFunctions";
 import {Steps} from "./Steps";
 
-export default function NamingStep({step: namingStep, assertionStep, path, additionalReferences}) {
+export default function NamingStep({step: outerNamingStep, assertionStep, additionalReferences}) {
   additionalReferences = additionalReferences || [];
   const context = useContext(ProofContext);
   const displaySettings = useContext(DisplaySettingsContext);
@@ -28,61 +28,57 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
     return context.fetchJsonForStepAndReplace(namingStepPath, "boundVariable", {method: "PUT", body: newName});
   };
 
-  const outerNamingStepPath = assertionStep ? [...path.slice(0, path.length - 1), path[path.length - 1] + 1] : path;
-  let currentNamingStepPath = outerNamingStepPath;
   const namingSteps = [];
   let elidableVariableDescription;
-  function addNamingStep(namingStep, namingStepPath) {
+  function addNamingStep(namingStep) {
     if (namingStep.assumption instanceof DefinedExpression &&
       _.includes(namingStep.assumption.definition.attributes, "conjunction") &&
       (elidableVariableDescription = matchElidableVariableDescription(namingStep.assumption.components[0]))) {
       namingSteps.push({
         step: namingStep,
-        path: namingStepPath,
         variableDescription: elidableVariableDescription,
         assumption: namingStep.assumption.components[1]
       });
     } else {
       namingSteps.push({
         step: namingStep,
-        path: namingStepPath,
         assumption: namingStep.assumption
       });
     }
   }
-  addNamingStep(namingStep, currentNamingStepPath);
+  addNamingStep(outerNamingStep);
+  let currentNamingStep = outerNamingStep;
   while (!displaySettings.disableAssumptionCollapse &&
-    namingStep.substeps.length === 1 &&
-    namingStep.substeps[0] instanceof NamingStepModel &&
-    _.some(namingStep.substeps[0].referencedLinesForExtraction, r => _.isEqual(r.stepPath, currentNamingStepPath) && r.suffix === "a"))
+    currentNamingStep.substeps.length === 1 &&
+    currentNamingStep.substeps[0] instanceof NamingStepModel &&
+    _.some(currentNamingStep.substeps[0].premiseReferences, r => _.isEqual(r.stepPath, currentNamingStep.path) && r.suffix === "a"))
   {
-    namingStep = namingStep.substeps[0];
-    currentNamingStepPath = [...currentNamingStepPath, 0];
-    addNamingStep(namingStep, currentNamingStepPath);
+    currentNamingStep = currentNamingStep.substeps[0];
+    addNamingStep(currentNamingStep);
   }
 
-  const outerNamingStepReference = new StepReference(outerNamingStepPath);
+  const outerNamingStepReference = new StepReference(outerNamingStep.path);
   const innermostNamingStep = namingSteps[namingSteps.length - 1];
-  const innermostNamingPath = innermostNamingStep.path;
+  const innermostNamingPath = innermostNamingStep.step.path;
   const innermostAssumptionReference = new StepReference(innermostNamingPath, "a");
 
   function getNamingStepVariableDescriptions(namingSteps, boundVariableLists) {
     return _.reduce(
       namingSteps,
-      ([stepsSoFar, boundVariableLists], {step, path, variableDescription}) => {
+      ([stepsSoFar, boundVariableLists], {step, variableDescription}) => {
         let stepElement;
         if (variableDescription) {
-          const assumptionReference = new StepReference(path, "a");
+          const assumptionReference = new StepReference(step.path, "a");
           const patchedExpression = new DefinedExpression(variableDescription.definition, [step.variableName], variableDescription.otherComponents);
           const wrapBoundVariable = (name, index, boundVariablePath) => {
             const callback = (_.isEqual(boundVariablePath, [0]) && index === 0) ?
-              updateBoundVariable(path) :
-              (newName) => context.fetchJsonForStepAndReplace(path, `boundVariables/${update(boundVariablePath, {$splice: [[0, 1, boundVariablePath[0] + 1]]}).join(".")}/${index}/`, {method: "PUT", body: newName});
+              updateBoundVariable(step.path) :
+              (newName) => context.fetchJsonForStepAndReplace(step.path, `boundVariables/${update(boundVariablePath, {$splice: [[0, 1, boundVariablePath[0] + 1]]}).join(".")}/${index}/`, {method: "PUT", body: newName});
             return <InlineTextEditor text={name} callback={callback} />;
           };
           stepElement = <HighlightableExpression expression={patchedExpression} references={[assumptionReference]} additionalConclusionReferences={[innermostAssumptionReference]} wrapBoundVariable={wrapBoundVariable} path={[0]} />
         } else {
-          stepElement = <InlineTextEditor text={step.variableName} callback={updateBoundVariable(path)}/>;
+          stepElement = <InlineTextEditor text={step.variableName} callback={updateBoundVariable(step.path)}/>;
         }
         const newBoundVariableLists = [...boundVariableLists, [step.variableName]];
         return [[...stepsSoFar, <BoundVariableListContext.Provider value={boundVariableLists}>{stepElement}</BoundVariableListContext.Provider>], newBoundVariableLists];
@@ -120,16 +116,16 @@ export default function NamingStep({step: namingStep, assertionStep, path, addit
   </>;
 
   const proofLine = (assertionStep instanceof ElidedStep) ?
-    <ElidedStepProofLine step={assertionStep} path={path}>
+    <ElidedStepProofLine step={assertionStep} path={outerNamingStep.path}>
       {proofLineContent}
     </ElidedStepProofLine> :
     assertionStep instanceof AssertionStep ?
-    <AssertionStepProofLine step={assertionStep} path={path}>
+    <AssertionStepProofLine step={assertionStep} path={outerNamingStep.path}>
       {proofLineContent}
     </AssertionStepProofLine> :
-    <ProofLine path={path}
+    <ProofLine path={outerNamingStep.path}
                suffix="a"
-               premiseReferences={[...innermostNamingStep.step.referencedLinesForExtraction, ...(assertionStep ? _.filter(assertionStep.referencedLines, r => !_.startsWith(r.stepPath, path)) : [])]}
+               premiseReferences={[...innermostNamingStep.step.premiseReferences, ...(assertionStep ? _.filter(assertionStep.referencedLines, r => !_.startsWith(r.stepPath, outerNamingStep.path)) : [])]}
                buttons={<span className="mr-2"><InferenceLink inference={innermostNamingStep.step.inference}/></span>}
                ref={proofLineRef}>
       {proofLineContent}

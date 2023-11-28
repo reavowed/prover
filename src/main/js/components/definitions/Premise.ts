@@ -1,12 +1,9 @@
 import {Expression} from "../../models/Expression";
 import {Reference} from "./Reference";
 
-import {InferenceSummary} from "./EntryDefinitionSummaries";
-
 type PendingPremise = {
     type: "pending"
     statement: Expression
-    complete: boolean
 }
 type GivenPremise = {
     type: "given"
@@ -17,7 +14,6 @@ type SimplificationPremise = {
     type: "simplification"
     statement: Expression
     premise: Premise
-    inference: InferenceSummary
     referencedLine: Reference
     path: number[]
 }

@@ -67,7 +67,7 @@ export class Theorem extends React.Component {
       insertSteps(proofIndex, {stepUpdates: {path, newSteps: newStepsJson}, newInferences: newInferencesFromUpdate, stepsWithReferenceChanges: stepsWithReferenceChangesJson}) {
         const newInferences = {...inferences, ...newInferencesFromUpdate};
         const newSteps = self.parser.parseSteps(newStepsJson, newInferences);
-        const stepsWithReferenceChanges = self.parser.parseStepsWithReferenceChanges(stepsWithReferenceChangesJson, newInferences);
+        const stepsWithReferenceChanges = self.parser.parseSteps(stepsWithReferenceChangesJson, newInferences);
         const newTheorem = self.state.theorem.insertSteps(proofIndex, path, newSteps)
           .updateStepsWithReferenceChanges(proofIndex, stepsWithReferenceChanges);
         return self.setStatePromise({
@@ -78,7 +78,7 @@ export class Theorem extends React.Component {
       replaceStep(proofIndex, {stepUpdates: {path, newSteps: newStepsJson}, newInferences: newInferencesFromUpdate, stepsWithReferenceChanges: stepsWithReferenceChangesJson}) {
         const newInferences = {...inferences, ...newInferencesFromUpdate};
         const newSteps = self.parser.parseSteps(newStepsJson, newInferences);
-        const stepsWithReferenceChanges = self.parser.parseStepsWithReferenceChanges(stepsWithReferenceChangesJson, newInferences);
+        const stepsWithReferenceChanges = self.parser.parseSteps(stepsWithReferenceChangesJson, newInferences);
         const newTheorem = self.state.theorem.replaceStep(proofIndex, path, newSteps)
           .updateStepsWithReferenceChanges(proofIndex, stepsWithReferenceChanges);
         return self.setStatePromise({
@@ -90,7 +90,7 @@ export class Theorem extends React.Component {
         const newInferences = {...inferences, ...newInferencesFromUpdate};
         const insertionSteps = self.parser.parseSteps(insertion.newSteps, newInferences);
         const replacementSteps = self.parser.parseSteps(replacement.newSteps, newInferences);
-        const stepsWithReferenceChanges = self.parser.parseStepsWithReferenceChanges(stepsWithReferenceChangesJson, newInferences);
+        const stepsWithReferenceChanges = self.parser.parseSteps(stepsWithReferenceChangesJson, newInferences);
         const newTheorem = self.state.theorem
           .replaceStep(proofIndex, replacement.path, replacementSteps)
           .insertSteps(proofIndex, insertion.path, insertionSteps)
@@ -104,7 +104,7 @@ export class Theorem extends React.Component {
         const newInferences = {...inferences, ...newInferencesFromUpdate};
         const insertionSteps = self.parser.parseSteps(insertion.newSteps, newInferences);
         const replacementSteps = self.parser.parseSteps(replacement.newSteps, newInferences);
-        const stepsWithReferenceChanges = self.parser.parseStepsWithReferenceChanges(stepsWithReferenceChangesJson, newInferences);
+        const stepsWithReferenceChanges = self.parser.parseSteps(stepsWithReferenceChangesJson, newInferences);
         const newTheorem = self.state.theorem
           .replaceSteps(proofIndex, replacement.parentPath, replacement.startIndex, replacement.endIndex, replacementSteps)
           .insertSteps(proofIndex, insertion.path, insertionSteps)
@@ -117,7 +117,7 @@ export class Theorem extends React.Component {
       insertAndDeleteSteps(proofIndex, {stepUpdates: {insertion, deletion}, newInferences: newInferencesFromUpdate, stepsWithReferenceChanges: stepsWithReferenceChangesJson}) {
         const newInferences = {...inferences, ...newInferencesFromUpdate};
         const insertionSteps = self.parser.parseSteps(insertion.newSteps, newInferences);
-        const stepsWithReferenceChanges = self.parser.parseStepsWithReferenceChanges(stepsWithReferenceChangesJson, newInferences);
+        const stepsWithReferenceChanges = self.parser.parseSteps(stepsWithReferenceChangesJson, newInferences);
         const newTheorem = _.reduce(
             _.range(deletion.endIndex - deletion.startIndex),
             theorem => theorem.replaceStep(proofIndex, [...deletion.parentPath, deletion.startIndex], []),

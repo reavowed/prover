@@ -37,14 +37,8 @@ import {
 import {PremiseReference, StepReference} from "./components/definitions/Reference";
 import {BinaryRelation} from "./components/definitions/BinaryRelation";
 import {SerializedDisambiguatorAdder} from "./components/definitions/DefinitionParts";
-
-function serializeReference(reference: any) {
-  if (!reference) return "???";
-  const main = _.isNumber(reference.premiseIndex) ? "p" + reference.premiseIndex : reference.stepPath.join(".");
-  const internalPath = reference.internalPath ? "-" + reference.internalPath.join(".") : "";
-  const suffix = reference.suffix || "";
-  return main + internalPath + suffix;
-}
+import {Premise} from "./components/definitions/Premise";
+import {Inference, InferenceWithSummary} from "./components/definitions/EntryDefinitions";
 
 function tokenize(str: string): string[]  {
   function splitToken(word: string): string[] {
@@ -85,6 +79,12 @@ export class Parser {
       _.flatMap(this.typeDefinitions, parentType =>
         _.map(parentType.relatedObjects, object =>
             [object.qualifiedSymbol, {object, parentType}])));
+  }
+  get deductionDefinition() {
+    return _.find(this.definitions, d => _.includes(d.attributes, "deduction"))!
+  }
+  get generalizationDefinition() {
+    return _.find(this.definitions, d => _.includes(d.attributes, "generalization"))!
   }
   parseExpression = (json: string) => {
     const self = this;
@@ -216,34 +216,30 @@ export class Parser {
     }
   };
 
-  parseInferenceWithSummary = (json: any, inferenceSummaries: InferenceSummary[]) => {
-    const inference = this.parseInference(json);
-    const summary = inferenceSummaries[inference.id];
-    return {...inference, ...summary};
-  };
-
   parseStep = (stepJson: any, inferenceSummaries: InferenceSummary[]): Step => {
     switch (stepJson.type) {
-      case "assertion":
+      case "Assertion":
         return new AssertionStep(
           ++this.stepCounter,
           this.parseExpression(stepJson.statement),
           stepJson.premises.map(this.parsePremise),
           this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
-          stepJson.referencedLinesForAssertion.map(this.parseReference));
-      case "deduction":
+          stepJson.path);
+      case "Deduction":
         return new DeductionStep(
           ++this.stepCounter,
           this.parseExpression(stepJson.assumption),
           this.parseSteps(stepJson.substeps, inferenceSummaries),
-          this.definitions[stepJson.deductionDefinition]);
-      case "generalization":
+          this.deductionDefinition,
+          stepJson.path);
+      case "Generalization":
         return new GeneralizationStep(
           ++this.stepCounter,
           stepJson.variableName,
           this.parseSteps(stepJson.substeps, inferenceSummaries),
-          this.definitions[stepJson.generalizationDefinition]);
-      case "naming":
+          this.generalizationDefinition,
+          stepJson.path);
+      case "Naming":
         return new NamingStep(
           ++this.stepCounter,
           stepJson.variableName,
@@ -251,44 +247,33 @@ export class Parser {
           this.parseExpression(stepJson.statement),
           this.parseSteps(stepJson.substeps, inferenceSummaries),
           this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
-          stepJson.referencedLinesForExtraction.map(this.parseReference));
-      case "target":
+          stepJson.premises.map(this.parsePremise),
+          stepJson.path);
+      case "Target":
         return new TargetStep(
           ++this.stepCounter,
-          this.parseExpression(stepJson.statement));
-      case "elided":
+          this.parseExpression(stepJson.statement),
+          stepJson.path);
+      case "ElidedInference":
         return new ElidedStep(
           ++this.stepCounter,
           this.parseSteps(stepJson.substeps, inferenceSummaries),
-          stepJson.highlightedInference && this.parseInferenceWithSummary(stepJson.highlightedInference, inferenceSummaries),
-          stepJson.description);
-      case "subproof":
+          this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
+          null,
+          stepJson.path);
+      case "ElidedWithDescription":
+        return new ElidedStep(
+          ++this.stepCounter,
+          this.parseSteps(stepJson.substeps, inferenceSummaries),
+          null,
+          stepJson.description,
+          stepJson.path);
+      case "Subproof":
         return new SubproofStep(
           ++this.stepCounter,
           stepJson.name,
-          this.parseSteps(stepJson.substeps, inferenceSummaries));
-      case "existingStatementExtraction":
-        return new ElidedStep(
-          ++this.stepCounter,
           this.parseSteps(stepJson.substeps, inferenceSummaries),
-          null,
-          "Extraction from previous step");
-      case "wrappedPremiseDerivation":
-        return new ElidedStep(
-          ++this.stepCounter,
-          this.parseSteps(stepJson.substeps, inferenceSummaries),
-          null,
-          "Premise derivation");
-      case "inferenceExtraction":
-      case "wrappedInferenceApplication":
-      case "inferenceWithPremiseDerivations": {
-        const substeps = this.parseSteps(stepJson.substeps, inferenceSummaries);
-        return new ElidedStep(
-          ++this.stepCounter,
-          substeps,
-          this.parseInferenceWithSummary(stepJson.inference, inferenceSummaries),
-          null);
-      }
+          stepJson.path);
       default:
         throw "Unrecognised step " + JSON.stringify(stepJson);
     }
@@ -297,10 +282,6 @@ export class Parser {
   parseSteps = (json: any[], inferenceSummaries: InferenceSummary[]): Step[] => {
     return json.map(stepJson => this.parseStep(stepJson, inferenceSummaries));
   };
-  parseStepsWithReferenceChanges = (json: any, inferenceSummaries: InferenceSummary[]) => {
-    return json.map(({step: stepJson, path}: {step: any, path: number[]}) => {return {step: this.parseStep(stepJson, inferenceSummaries), path}});
-  };
-
 
   parseTheorem = (theoremJson: any, inferences: InferenceSummary[]): Theorem => {
     return new Theorem(
@@ -310,27 +291,48 @@ export class Parser {
       theoremJson.variableDefinitions,
       theoremJson.premises.map(this.parseExpression),
       this.parseExpression(theoremJson.conclusion),
-      theoremJson.proofs.map((proof: any) => this.parseSteps(proof.steps, inferences)));
+      theoremJson.proofs.map((proof: any) => this.parseSteps(proof, inferences)));
   };
 
-  parseInferenceSummary = (inference: any) => {
-    inference.premises = inference.premises.map(this.parseExpression);
-    inference.conclusion = this.parseExpression(inference.conclusion);
+  parsePremise = (premiseJson: any): Premise => {
+    switch(premiseJson.type) {
+      case "pending":
+        return {
+          type: premiseJson.type,
+          statement: this.parseExpression(premiseJson.statement)
+        }
+      case "given":
+        return {
+          type: premiseJson.type,
+          statement: this.parseExpression(premiseJson.statement),
+          referencedLine: this.parseReference(premiseJson.referencedLine)
+        }
+      case "simplification":
+        return {
+          type: premiseJson.type,
+          statement: this.parseExpression(premiseJson.statement),
+          premise: this.parsePremise(premiseJson.premise),
+          referencedLine: this.parseReference(premiseJson.referencedLine),
+          path: premiseJson.path
+        }
+      default:
+        throw "Unknown premise type " + premiseJson.premiseType
+    }
   };
-
-  parsePremise = (premiseJson: any) => {
-    const premise = _.cloneDeep(premiseJson);
-    premiseJson.statement && (premise.statement = this.parseExpression(premiseJson.statement));
-    premiseJson.premises && (premise.premises =  premise.premises.map(this.parsePremise));
-    premiseJson.referencedLine && (premise.referencedLine = this.parseReference(premise.referencedLine));
-    premise.serializedReference = serializeReference(premiseJson.referencedLine);
-    return premise;
+  parseInference = (inferenceJson: any): Inference => {
+    return {
+      id: inferenceJson.id,
+      name: inferenceJson.name,
+      premises: inferenceJson.premises.map(this.parseExpression),
+      conclusion: this.parseExpression(inferenceJson.conclusion),
+      variableDefinitions: inferenceJson.variableDefinitions
+    };
   };
-  parseInference = (rawInference: any) => {
-    const inference = _.cloneDeep(rawInference);
-    inference.premises && (inference.premises = inference.premises.map(this.parseExpression));
-    inference.conclusion && (inference.conclusion = this.parseExpression(inference.conclusion));
-    return inference;
+  parseInferenceWithSummary = (inferenceJson: any, inferenceSummaries: InferenceSummary[]): InferenceWithSummary => {
+    return {
+      ...this.parseInference(inferenceJson),
+      ...inferenceSummaries[inferenceJson.id]
+    };
   };
   parseStatementDefinition = (definitionJson: any) => {
     const definition = _.cloneDeep(definitionJson);
@@ -361,7 +363,7 @@ export class Parser {
   };
   parsePossibleInferences = (possibleInferences: any) => {
     _.forEach(possibleInferences, possibleInference => {
-      this.parseInferenceSummary(possibleInference.inference);
+      possibleInference.inference = this.parseInference(possibleInference.inference);
       possibleInference.possibleTargets && this.parsePossibleTargets(possibleInference.possibleTargets);
       possibleInference.possibleConclusions && this.parsePossibleConclusions(possibleInference.possibleConclusions);
       return possibleInference;
@@ -403,7 +405,7 @@ export class Parser {
   parseInferenceRewriteSuggestions = (suggestions: any[]) => {
     return suggestions.map(suggestionJson => {
       const suggestion = _.cloneDeep(suggestionJson);
-      this.parseInferenceSummary(suggestion.inference);
+      suggestion.inference = this.parseInference(suggestion.inference);
       suggestion.source = this.parseExpression(suggestion.source);
       suggestion.result = this.parseExpression(suggestion.result);
       return suggestion;

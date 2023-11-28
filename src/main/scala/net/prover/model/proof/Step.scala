@@ -116,8 +116,6 @@ object Step {
       with Step.WithTopLevelStatement
   {
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
-    @JsonSerialize
-    def referencedLinesForAssertion: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = 1
     override def serializedLines: Seq[String] = {
       Seq(Seq("prove", statement.serialized, inference.id, substitutions.serialize, Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
@@ -243,8 +241,6 @@ object Step {
         deductionDefinition)
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
-    @JsonSerialize
-    def referencedLinesForExtraction: Set[PreviousLineReference] = premises.flatMap(_.referencedLines).toSet
     override def length: Int = substeps.map(_.length).sum + 1
     override def serializedLines: Seq[String] = Seq(s"let $variableName ${assumption.serialized} ${inference.id} ${substitutions.serialize} {") ++
       substeps.flatMap(_.serializedLines).indent ++
