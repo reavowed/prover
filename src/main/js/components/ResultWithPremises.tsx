@@ -5,7 +5,7 @@ import {Expression} from "../models/Expression";
 
 type ResultWithPremisesProps = {
   premises: Expression[]
-  result: Expression
+  result: React.ReactNode
   className?: string
   createPremiseElement?: (premise: Expression) => React.ReactElement
 }
