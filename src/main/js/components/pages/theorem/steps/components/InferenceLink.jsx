@@ -9,8 +9,14 @@ export const InferenceLink = ({inference}) => {
   const theoremContext = useContext(TheoremContext);
   const shouldHighlight = _.includes(theoremContext.inferencesToHighlight, inference.id);
   const shouldStrikethrough = !inference.isComplete;
+  const popover = <Popover id="inferenceSummary">
+     <Popover.Title>{inference.name}</Popover.Title>
+     <Popover.Content>
+      <InferenceSummary inference={inference}/>
+     </Popover.Content>
+  </Popover>
   return <OverlayTrigger placement="bottom"
-                         overlay={<Popover title={inference.name}><InferenceSummary inference={inference}/></Popover>}>
+                         overlay={popover}>
     <a href={inference.url} className="text-uppercase" style={{"fontFamily": "monospace", "color": shouldHighlight ? "red" : "#6c757d", "textDecoration": shouldStrikethrough && "line-through"}} tabIndex={-1}>{formatHtml(inference.title)}</a>
   </OverlayTrigger>;
 };

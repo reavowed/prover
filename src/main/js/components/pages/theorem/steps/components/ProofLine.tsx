@@ -24,7 +24,7 @@ type ProofLineProps = {
   onClick?: React.MouseEventHandler<HTMLSpanElement>
   incomplete: boolean
 }
-const ProofLine = styled(React.forwardRef(function NewProofLine(props: ProofLineProps, containerRef: React.Ref<HTMLDivElement>) {
+const ProofLine = styled(React.forwardRef(function ProofLine(props: ProofLineProps, containerRef: React.Ref<HTMLDivElement>) {
   const {className, children, path, suffix, buttons, premiseReferences} = props;
   const context = useContext(ProofContext)!;
 
@@ -118,11 +118,13 @@ const ProofLine = styled(React.forwardRef(function NewProofLine(props: ProofLine
         </DraggableList.DragHandle>}
         {path && (isHovered || isFocused) && <>
           <Overlay target={buttonRef} show={isFocused} placement="bottom">
-            {({show, ...props}) => <Popover id={path.join(".") + suffix} className="p-1" {...props}>
-              <Button onClick={() => setShouldShowSubproofNameModal(true)} variant="success" size="sm" className="ml-1">To subproof</Button>
-              <Button onClick={elide} variant="success" size="sm" className="ml-1">Elide</Button>
-              <Button onClick={clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
-              <Button onClick={deleteStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-trash"/></Button>
+            {({show, ...props}) => <Popover id="stepActions" {...props}>
+              <Popover.Content>
+                <Button onClick={() => setShouldShowSubproofNameModal(true)} variant="success" size="sm" className="ml-1">To subproof</Button>
+                <Button onClick={elide} variant="success" size="sm" className="ml-1">Elide</Button>
+                <Button onClick={clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
+                <Button onClick={deleteStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-trash"/></Button>
+              </Popover.Content>
             </Popover>}
           </Overlay>
         </>}
