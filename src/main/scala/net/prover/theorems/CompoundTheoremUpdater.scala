@@ -21,7 +21,7 @@ abstract class CompoundTheoremUpdater[F[_] : Monad] extends CompoundStepUpdater[
         newPremises,
         newConclusion,
         newProofs)
-    } yield RecalculateReferences(theoremWithContext.copy(entry = newTheorem))._1
+    } yield newTheorem
   }
   protected def apply(proofWithContext: ProofWithContext): F[Proof] = {
     import proofWithContext._

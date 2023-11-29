@@ -44,11 +44,11 @@ trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with C
   }
 
   def recalculateReferences(steps: Seq[Step])(implicit outerStepContext: StepContext, availableEntries: AvailableEntries): Seq[Step] = {
-    RecalculateReferences(createStepsWithContext(steps))._1
+    RecalculateReferences(createStepsWithContext(steps)).get._1
   }
 
   def beValidTheorem(implicit availableEntries: AvailableEntries): Matcher[Theorem] = (theorem: Theorem) => {
-    val recalculatedTheorem = RecalculateReferences(createTheoremWithContext(theorem))._1
+    val recalculatedTheorem = RecalculateReferences(createTheoremWithContext(theorem)).get._1
     val serializedTheorem = recalculatedTheorem.serializedLines.mkString("\n").stripPrefix("theorem ")
     val serializedProofs = recalculatedTheorem.proofs.map(_.serialized)
     implicit val entryParsingContext = implicitly[EntryParsingContext]
@@ -95,6 +95,10 @@ trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with C
         (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.Generalization(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, GeneralizationDefinition)) }
       }
     }
+  }
+
+  def beEmptyOrStepsThatMakeValidAndCompleteTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
+    beEmpty[Seq[Step]] or beStepsThatMakeValidAndCompleteTheorem(premises, conclusion, depth)
   }
 
 }

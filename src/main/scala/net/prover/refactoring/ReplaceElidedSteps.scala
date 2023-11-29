@@ -36,7 +36,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
             assertionStep <- steps.last.asOptionalInstanceOf[Step.Assertion]
             premises = assertionStep.premises.map(_.statement).filter(s => !stepProvingContext.allPremises.exists(p => p.statement == s))
             (wrappedStep, _) = unwrappers.addNecessaryExtractions(assertionStep, premises)
-            updatedStep = RecalculateReferences(stepWithContext.copy(step = wrappedStep))._1
+            updatedStep = RecalculateReferences(stepWithContext.copy(step = wrappedStep)).get._1
             if updatedStep.asOptionalInstanceOf[Step.WithSubsteps].map(_.substeps).contains(baseStep.substeps)
           } yield updatedStep
         case _ =>

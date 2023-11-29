@@ -38,8 +38,14 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
         premiseStatements <- namingPremises.map(inference.substituteStatement(_, substitutions)).traverseOption.orBadRequest("Could not substitute premises")
         substitutedAssumption <- assumption.applySubstitutions(substitutions, 1, stepContext.externalDepth).orBadRequest("Could not substitute assumption")
       } yield {
-        val premises = premiseStatements.map(stepProvingContext.createPremise)
-        val targetSteps = premises.ofType[Premise.Pending].map(p => provingContext.factsBySerializedStatement.get(p.statement.serialized).map(_.toStep).getOrElse(Step.Target(p.statement)))
+        val (premises, targetSteps) = premiseStatements.map { premise =>
+          stepProvingContext.findPremise(premise) match {
+            case Some(p) =>
+              Left(p)
+            case None =>
+              Right(provingContext.factsBySerializedStatement.get(premise.serialized).map(_.toStep).getOrElse(Step.Target(premise)))
+          }
+        }.split
         targetSteps :+ Step.Naming(
           variableName,
           substitutedAssumption,

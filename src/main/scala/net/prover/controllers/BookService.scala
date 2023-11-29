@@ -11,8 +11,8 @@ import net.prover.theorems.{FindStep, GetReferencedInferences, RecalculateRefere
 import net.prover.util.FunctorTypes._
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import scalaz.Functor
-import scalaz.syntax.functor._
+import scalaz.{Functor, Traverse}
+import scalaz.Scalaz._
 
 import scala.reflect.{ClassTag, classTag}
 import scala.util.Try
@@ -69,21 +69,22 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
     ).map(_.map { case (newChapterWithContext, newEntry) => newChapterWithContext.getEntry(newEntry) })
   }
 
-  def modifyTheorem[F[_] : Functor](bookKey: String, chapterKey: String, theoremKey: String)(getUpdatedTheorem: TheoremWithContext => Try[F[Theorem]]): Try[F[TheoremUpdateProps]] = {
+  def modifyTheorem[F[_] : Traverse](bookKey: String, chapterKey: String, theoremKey: String)(getUpdatedTheorem: TheoremWithContext => Try[F[Theorem]]): Try[F[TheoremUpdateProps]] = {
     modifyEntry[Theorem, FWithValue[F, TheoremUpdateProps]#Type](bookKey, chapterKey, theoremKey, theoremWithContext => {
-      getUpdatedTheorem(theoremWithContext).map { fTheorem =>
+      getUpdatedTheorem(theoremWithContext).flatMap { fTheorem =>
         fTheorem.map { newTheoremWithoutReferenceChanges =>
-          val (newTheoremWithReferenceChanges, stepsWithReferenceChanges) = RecalculateReferences(theoremWithContext.copy(entry = newTheoremWithoutReferenceChanges))
-          val newTheoremWithContext = theoremWithContext.copy(entry = newTheoremWithReferenceChanges)
-          val newInferences = GetReferencedInferences(newTheoremWithContext).diff(GetReferencedInferences(theoremWithContext))
-          val inferenceLinks = BookService.getInferenceLinks(newInferences, theoremWithContext.globalContext)
-          (newTheoremWithReferenceChanges, TheoremUpdateProps(newTheoremWithReferenceChanges, newTheoremWithContext, inferenceLinks, stepsWithReferenceChanges))
-        }
+          RecalculateReferences(theoremWithContext.copy(entry = newTheoremWithoutReferenceChanges)).map { case (newTheoremWithReferenceChanges, stepsWithReferenceChanges) =>
+            val newTheoremWithContext = theoremWithContext.copy(entry = newTheoremWithReferenceChanges)
+            val newInferences = GetReferencedInferences(newTheoremWithContext).diff(GetReferencedInferences(theoremWithContext))
+            val inferenceLinks = BookService.getInferenceLinks(newInferences, theoremWithContext.globalContext)
+            (newTheoremWithReferenceChanges, TheoremUpdateProps(newTheoremWithReferenceChanges, newTheoremWithContext, inferenceLinks, stepsWithReferenceChanges))
+          }
+        }.sequence
       }
     }).map(_.map(_._2))
   }
 
-  def replaceSteps[F[_]: Functor](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: StepsWithContext => Try[F[Seq[Step]]]): Try[F[ProofUpdateProps[MultipleStepReplacementProps]]] = {
+  def replaceSteps[F[_]: Traverse](bookKey: String, chapterKey: String, theoremKey: String, proofIndex: Int, stepPath: Seq[Int])(f: StepsWithContext => Try[F[Seq[Step]]]): Try[F[ProofUpdateProps[MultipleStepReplacementProps]]] = {
     modifyTheorem[FWithValue[F, MultipleStepReplacementProps]#Type](bookKey, chapterKey, theoremKey) { theoremWithContext =>
       ReplaceSteps[TryFWithValue[F, MultipleStepReplacementProps]#Type](theoremWithContext, proofIndex, stepPath) { stepsWithContext =>
         Some(f(stepsWithContext).map(_.map { newSteps =>

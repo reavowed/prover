@@ -34,7 +34,7 @@ object RederivePremises extends CompoundTheoremUpdater[Try] {
     if (targets.nonEmpty) {
       Failure(InferenceReplacementException("Could not rederive all premises", stepWithContext))
     } else {
-      Success(RecalculateReferences(stepWithContext.withStep(InferenceWithPremiseDerivations(premiseSteps, step.assertionStep)))._1)
+      RecalculateReferences(stepWithContext.withStep(InferenceWithPremiseDerivations(premiseSteps, step.assertionStep))).map(_._1)
     }
   }
 }

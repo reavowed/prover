@@ -306,7 +306,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
   }
 
   private def modifyEntryWithReplacement(bookKey: String, chapterKey: String, entryKey: String)(f: (ChapterEntry, AvailableEntries) => Try[ChapterEntry]): ResponseEntity[_] = {
-    bookService.modifyBooks[TryWithValue[ChapterEntry]#Type](globalContext => {
+    bookService.modifyBooks[FWithValue[Try, ChapterEntry]#Type](globalContext => {
       for {
         oldEntryWithContext <- globalContext.findEntry[ChapterEntry](bookKey, chapterKey, entryKey)
         newEntry <- f(oldEntryWithContext.entry, oldEntryWithContext.availableEntries)

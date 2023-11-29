@@ -92,10 +92,6 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
     allPremises.find(_.statement == statement)
   }
 
-  def createPremise(statement: Statement): Premise = {
-    findPremise(statement) getOrElse Premise.Pending(statement)
-  }
-
   val cachedDerivations: mutable.Map[String, Option[Seq[Step.PremiseDerivation]]] = mutable.Map.empty
 }
 

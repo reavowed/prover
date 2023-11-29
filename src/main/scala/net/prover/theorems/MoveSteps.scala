@@ -40,7 +40,7 @@ object MoveSteps {
                 (before ++ after, currentStepsWithContext.copy(steps = steps))
               }
             }.orBadRequest("Invalid source path")
-          result <- ReplaceSteps[TryWithValue[InsertionAndDeletionProps]#Type](sharedParentStepsWithContext.copy(steps = substepsWithoutCurrent), destinationPathInner) { newSurroundingStepsWithContext =>
+          result <- ReplaceSteps[FWithValue[Try, InsertionAndDeletionProps]#Type](sharedParentStepsWithContext.copy(steps = substepsWithoutCurrent), destinationPathInner) { newSurroundingStepsWithContext =>
             val sharedBoundVariableDepth = Seq(currentStepsWithContext.outerStepContext.externalDepth, newSurroundingStepsWithContext.outerStepContext.externalDepth).min
             val boundVariablesToRemove = currentStepsWithContext.outerStepContext.externalDepth - newSurroundingStepsWithContext.outerStepContext.externalDepth
             newSurroundingStepsWithContext.steps.takeAndRemainingIfValid(destinationIndex).map { case (before, after) =>
