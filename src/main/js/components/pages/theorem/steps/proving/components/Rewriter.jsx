@@ -112,7 +112,7 @@ export default class Rewriter extends React.Component {
     let getSuggestionValue = s => s.inference.name;
     let renderSuggestion = s => <SuggestionDropdownElement
       mainElement={getSuggestionValue(s)}
-      hoverElement={<><CopiableExpression expression={s.source} /> -> <CopiableExpression expression={s.result} /></>} />;
+      hoverElement={<><CopiableExpression expression={s.source} /> -&gt; <CopiableExpression expression={s.result} /></>} />;
 
     const saveDisabled = saving || chosenRewrites.length === 0 || chosenRewrites[chosenRewrites.length - 1].length === 0;
 

@@ -17,12 +17,12 @@ type ProofLineProps = {
   path: number[]
   suffix?: string
   premiseReferences?: Reference[]
-  children: React.ReactNode | ((isHovered: boolean) => React.ReactNode)
+  children?: React.ReactNode | ((isHovered: boolean) => React.ReactNode)
   className?: string
   buttons?: React.ReactNode
   onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>
   onClick?: React.MouseEventHandler<HTMLSpanElement>
-  incomplete: boolean
+  incomplete?: boolean
 }
 const ProofLine = styled(React.forwardRef(function ProofLine(props: ProofLineProps, containerRef: React.Ref<HTMLDivElement>) {
   const {className, children, path, suffix, buttons, premiseReferences} = props;
@@ -147,7 +147,7 @@ const ProofLine = styled(React.forwardRef(function ProofLine(props: ProofLinePro
 
 type SingleStatementWithPrefixContentProps = {
   prefix: string
-  statement: Expression
+  statement: Expression | null
   path: number[]
   suffix?: string
   editableBoundVariable?: boolean
@@ -169,9 +169,9 @@ const SingleStatementWithPrefixContent = function({editableBoundVariable, prefix
     {' '}
     {statement ?
       <HighlightableExpression expression={statement}
-                              references={[new StepReference(path, suffix)]}
-                              additionalReferences={additionalReferences || []}
-                              wrapBoundVariable={editableBoundVariable ? wrapEditableBoundVariable : undefined}/> :
+                               references={[new StepReference(path, suffix)]}
+                               additionalReferences={additionalReferences || []}
+                               wrapBoundVariable={editableBoundVariable ? wrapEditableBoundVariable : undefined}/> :
       "???"}
     {'.'}
   </>

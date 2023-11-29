@@ -50,7 +50,7 @@ type PlaceholderProps = {
 }
 
 export type Entry<Data> = {
-  key: string
+  key: number | string
   element: React.ReactNode
   data: Data
 }
@@ -127,7 +127,7 @@ export default function DraggableList<Data>({type, enabled, onDrop, children}: D
 };
 
 type InternalEntryProps = {
-  key: string,
+  key: string | number,
   element: React.ReactNode
   placeholder?: boolean
   hidden?: boolean

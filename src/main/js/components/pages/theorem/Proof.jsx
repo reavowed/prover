@@ -5,7 +5,7 @@ import {DndProvider} from "react-dnd";
 import Backend from "react-dnd-html5-backend";
 import {DeductionStep, GeneralizationStep, NamingStep, TargetStep} from "../../../models/Step";
 import BoundVariableListContext from "../../expressions/boundVariables/BoundVariableListContext";
-import {Steps} from "./steps/Steps";
+import Steps from "./steps/Steps";
 import ProofContext from "./ProofContext";
 import TheoremContext from "./TheoremContext";
 

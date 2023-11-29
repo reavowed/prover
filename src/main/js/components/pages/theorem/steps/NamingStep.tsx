@@ -1,7 +1,7 @@
 import update from "immutability-helper";
 import _ from "lodash";
 import React, {useContext, useRef} from "react";
-import {DefinedExpression} from "../../../../models/Expression";
+import {DefinedExpression, Expression} from "../../../../models/Expression";
 import {AssertionStep, ElidedStep, NamingStep as NamingStepModel} from "../../../../models/Step";
 import {StepReference} from "../../../definitions/Reference";
 import {DisplaySettingsContext} from "../../../DisplaySettings";
@@ -12,25 +12,35 @@ import {InlineTextEditor} from "../../../helpers/InlineTextEditor";
 import {joinAsList} from "../../../helpers/reactFunctions";
 import ProofContext from "../ProofContext";
 import {AssertionStepProofLine} from "./AssertionStep";
-import {InferenceLink} from "./components/InferenceLink";
-import ProofLine from "./components/ProofLine";
 import {ElidedStepProofLine} from "./ElidedStep";
 import Step from "./Step";
-import {matchElidableVariableDescription} from "./stepDisplayFunctions";
-import {Steps} from "./Steps";
+import {ElidableVariableDescription, matchElidableVariableDescription} from "./stepDisplayFunctions";
+import Steps, {StepProps} from "./Steps";
+import {SimpleReactNode} from "../../../../utils";
+import ProofLine from "./components/ProofLine";
+import {InferenceLink} from "./components/InferenceLink";
 
-export default function NamingStep({step: outerNamingStep, assertionStep, additionalReferences}) {
+type NamingStepProps = StepProps<NamingStepModel> & {
+  assertionStep?: AssertionStep | ElidedStep
+}
+type CollapsedNamingStepDetails = {
+  step: NamingStepModel
+  assumption: Expression
+  variableDescription?: ElidableVariableDescription
+}
+
+export default function NamingStep({step: outerNamingStep, assertionStep, additionalReferences}: NamingStepProps) {
   additionalReferences = additionalReferences || [];
-  const context = useContext(ProofContext);
+  const context = useContext(ProofContext)!;
   const displaySettings = useContext(DisplaySettingsContext);
   const proofLineRef = useRef(null);
-  const updateBoundVariable = (namingStepPath) => (newName) => {
+  const updateBoundVariable = (namingStepPath: number[]) => (newName: string) => {
     return context.fetchJsonForStepAndReplace(namingStepPath, "boundVariable", {method: "PUT", body: newName});
   };
 
-  const namingSteps = [];
+  const namingSteps: CollapsedNamingStepDetails[] = [];
   let elidableVariableDescription;
-  function addNamingStep(namingStep) {
+  function addNamingStep(namingStep: NamingStepModel) {
     if (namingStep.assumption instanceof DefinedExpression &&
       _.includes(namingStep.assumption.definition.attributes, "conjunction") &&
       (elidableVariableDescription = matchElidableVariableDescription(namingStep.assumption.components[0]))) {
@@ -51,7 +61,7 @@ export default function NamingStep({step: outerNamingStep, assertionStep, additi
   while (!displaySettings.disableAssumptionCollapse &&
     currentNamingStep.substeps.length === 1 &&
     currentNamingStep.substeps[0] instanceof NamingStepModel &&
-    _.some(currentNamingStep.substeps[0].premiseReferences, r => _.isEqual(r.stepPath, currentNamingStep.path) && r.suffix === "a"))
+    _.some(currentNamingStep.substeps[0].premiseReferences, r => (r instanceof StepReference) && _.isEqual(r.stepPath, currentNamingStep.path) && r.suffix === "a"))
   {
     currentNamingStep = currentNamingStep.substeps[0];
     addNamingStep(currentNamingStep);
@@ -59,21 +69,20 @@ export default function NamingStep({step: outerNamingStep, assertionStep, additi
 
   const outerNamingStepReference = new StepReference(outerNamingStep.path);
   const innermostNamingStep = namingSteps[namingSteps.length - 1];
-  const innermostNamingPath = innermostNamingStep.step.path;
-  const innermostAssumptionReference = new StepReference(innermostNamingPath, "a");
+  const innermostAssumptionReference = new StepReference(innermostNamingStep.step.path, "a");
 
-  function getNamingStepVariableDescriptions(namingSteps, boundVariableLists) {
-    return _.reduce(
+  function getNamingStepVariableDescriptions(namingSteps: CollapsedNamingStepDetails[], boundVariableLists: string[][]): SimpleReactNode[] {
+    return _.reduce<CollapsedNamingStepDetails, [SimpleReactNode[], string[][]]>(
       namingSteps,
       ([stepsSoFar, boundVariableLists], {step, variableDescription}) => {
         let stepElement;
         if (variableDescription) {
           const assumptionReference = new StepReference(step.path, "a");
           const patchedExpression = new DefinedExpression(variableDescription.definition, [step.variableName], variableDescription.otherComponents);
-          const wrapBoundVariable = (name, index, boundVariablePath) => {
+          const wrapBoundVariable = (name: string, index: number, boundVariablePath: number[]) => {
             const callback = (_.isEqual(boundVariablePath, [0]) && index === 0) ?
               updateBoundVariable(step.path) :
-              (newName) => context.fetchJsonForStepAndReplace(step.path, `boundVariables/${update(boundVariablePath, {$splice: [[0, 1, boundVariablePath[0] + 1]]}).join(".")}/${index}/`, {method: "PUT", body: newName});
+              (newName: string) => context.fetchJsonForStepAndReplace(step.path, `boundVariables/${update(boundVariablePath, {$splice: [[0, 1, boundVariablePath[0] + 1]]}).join(".")}/${index}/`, {method: "PUT", body: newName});
             return <InlineTextEditor text={name} callback={callback} />;
           };
           stepElement = <HighlightableExpression expression={patchedExpression} references={[assumptionReference]} additionalConclusionReferences={[innermostAssumptionReference]} wrapBoundVariable={wrapBoundVariable} path={[0]} />
@@ -87,9 +96,9 @@ export default function NamingStep({step: outerNamingStep, assertionStep, additi
     )[0];
   }
 
-  function wrapEditableBoundVariableInAssumption(name, index, boundVariablePath) {
-    const callback = (newName) => {
-      return context.fetchJsonForStepAndReplace(innermostNamingPath, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
+  function wrapEditableBoundVariableInAssumption(name: string, index: number, boundVariablePath: number[]) {
+    const callback = (newName: string) => {
+      return context.fetchJsonForStepAndReplace(innermostNamingStep.step.path, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
         method: "PUT",
         body: newName
       });
@@ -116,26 +125,26 @@ export default function NamingStep({step: outerNamingStep, assertionStep, additi
   </>;
 
   const proofLine = (assertionStep instanceof ElidedStep) ?
-    <ElidedStepProofLine step={assertionStep} path={outerNamingStep.path}>
+    <ElidedStepProofLine step={assertionStep} additionalReferences={[new StepReference(outerNamingStep.path)]}>
       {proofLineContent}
     </ElidedStepProofLine> :
-    assertionStep instanceof AssertionStep ?
-    <AssertionStepProofLine step={assertionStep} path={outerNamingStep.path}>
+    (assertionStep instanceof AssertionStep) ?
+    <AssertionStepProofLine step={assertionStep} additionalReferences={[new StepReference(outerNamingStep.path)]}>
       {proofLineContent}
     </AssertionStepProofLine> :
     <ProofLine path={outerNamingStep.path}
                suffix="a"
-               premiseReferences={[...innermostNamingStep.step.premiseReferences, ...(assertionStep ? _.filter(assertionStep.referencedLines, r => !_.startsWith(r.stepPath, outerNamingStep.path)) : [])]}
+               premiseReferences={innermostNamingStep.step.premiseReferences}
                buttons={<span className="mr-2"><InferenceLink inference={innermostNamingStep.step.inference}/></span>}
                ref={proofLineRef}>
       {proofLineContent}
     </ProofLine>;
 
-  return <Step.WithSubsteps path={innermostNamingPath}>
+  return <Step.WithSubsteps path={innermostNamingStep.step.path}>
       {proofLine}
       <AddBoundVariableLists variableLists={namingSteps.map(({step}) => [step.variableName])}>
         <Steps steps={innermostNamingStep.step.substeps}
-               path={innermostNamingPath}
+               path={innermostNamingStep.step.path}
                propsForLastStep={{additionalReferences: [...additionalReferences, outerNamingStepReference]}} />
       </AddBoundVariableLists>
     </Step.WithSubsteps>;

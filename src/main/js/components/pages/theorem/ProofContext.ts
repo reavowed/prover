@@ -8,11 +8,11 @@ import {ActionHighlight} from "./TheoremContext";
 export type ProofContextType = {
     parser: Parser
     variableDefinitions: VariableDefinitions
-    registerStep(step: Step, path: number[]): void
-    unregisterStep(step: Step, path: number[]): void
+    registerStep(actions: {[key: string]: () => void}, path: number[]): void
+    unregisterStep(actions: {[key: string]: () => void}, path: number[]): void
     callOnStep(path: number[], action: string): void
     fetchJson(subpath: string, options: RequestInit): Promise<any>
-    fetchJsonForStep(stepPath: number[], subpath: string, options: RequestInit): Promise<any>
+    fetchJsonForStep(stepPath: number[], subpath: string, options?: RequestInit): Promise<any>
     fetchJsonForStepAndInsert(stepPath: number[], subpath: string, options: RequestInit): Promise<[number[], Step[]]>
     fetchJsonForStepAndReplace(stepPath: number[], subpath: string, options: RequestInit): Promise<void>
     fetchJsonForStepAndInsertAndReplace(stepPath: number[], subpath: string, options: RequestInit): Promise<void>

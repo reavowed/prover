@@ -1,18 +1,19 @@
 import DraggableList from "../../../draggableList/DraggableList";
-import {Steps} from "./Steps";
+import Steps from "./Steps";
+import {PropsWithChildren} from "react";
 
 export default {
-  WithoutSubsteps({children}) {
+  WithoutSubsteps({children}: PropsWithChildren<{}>) {
     return <DraggableList.SingleDropZone>
       {children}
     </DraggableList.SingleDropZone>
   },
-  WithSubsteps({children, path}) {
+  WithSubsteps({children, path}: PropsWithChildren<{path: number[]}>) {
     return <Steps.Container path={path}>
       {children}
     </Steps.Container>
   },
-  Antecedent({children}) {
+  Antecedent({children}: PropsWithChildren<{}>) {
     return <DraggableList.Before>
       {children}
     </DraggableList.Before>;

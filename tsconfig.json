@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "allowJs": false,
+        "allowJs": true,
         "target": "es6",
         "jsx": "preserve",
         "moduleResolution": "node",

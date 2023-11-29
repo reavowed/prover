@@ -14,6 +14,7 @@ import AvailableEntriesContext, {AvailableEntries} from "./AvailableEntriesConte
 import {VariableDefinition, VariableDefinitions} from "./definitions/DefinitionParts";
 import {ExpressionDefinition, Inference} from "./definitions/EntryDefinitions";
 import {isDefined} from "../utils";
+import {Step} from "../models/Step";
 
 export const DisplaySettingsContext = React.createContext<DisplaySettings>({} as DisplaySettings);
 
@@ -87,7 +88,7 @@ class DisplaySettings {
     return new DisplaySettings(inference.variableDefinitions, disambiguators);
   };
 
-  static AddSteps({steps, children}: {steps: {provenStatement: Expression}[], children: React.ReactNode}) {
+  static AddSteps({steps, children}: {steps: Step[], children: React.ReactNode}) {
     const availableEntries = useContext(AvailableEntriesContext);
     const existingDisplaySettings = useContext(DisplaySettingsContext);
     const statements = steps.map(s => s.provenStatement).filter(isDefined);

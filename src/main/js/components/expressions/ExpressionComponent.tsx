@@ -40,7 +40,7 @@ export function ExpressionComponent({expression, actionHighlights, staticHighlig
 }
 
 type CopiableExpressionProps = ExpressionComponentProps & {
-  expressionToCopy?: Expression
+  expressionToCopy?: Expression | null
 }
 
 export const CopiableExpression = (props: CopiableExpressionProps) => {
@@ -63,7 +63,7 @@ type HighlightableExpressionProps = {
   additionalConclusionReferences?: Reference[]
   wrapBoundVariable?: (name: string, index: number, path: number[]) => SimpleReactNode
   className?: string
-  expressionToCopy?: Expression
+  expressionToCopy?: Expression | null
 }
 export const HighlightableExpression = React.memo(function HighlightableExpression({
     expression,

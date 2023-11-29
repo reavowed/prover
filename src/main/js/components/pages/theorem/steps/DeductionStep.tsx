@@ -1,11 +1,12 @@
-import React from "react";
+import React, {PropsWithChildren} from "react";
 
 import {StepReference} from "../../../definitions/Reference";
 import ProofLine from "./components/ProofLine";
 import Step from "./Step";
-import {Steps} from "./Steps";
+import Steps, {StepProps} from "./Steps";
+import {DeductionStep as DeductionStepModel} from "../../../../models/Step";
 
-export function DeductionStep({step, additionalReferences, showConclusion}) {
+export function DeductionStep({step, additionalReferences, showConclusion}: PropsWithChildren<StepProps<DeductionStepModel>>) {
   additionalReferences = additionalReferences || [];
   const reference = new StepReference(step.path);
   const referencesForAssumptionAndConclusion = showConclusion ? [] : [...additionalReferences, reference];
