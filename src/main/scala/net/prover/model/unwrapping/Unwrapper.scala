@@ -19,7 +19,7 @@ sealed trait Unwrapper {
   }
   def enhanceWrapper(wrapper: Wrapper[Term, Statement]): Wrapper[Term, Statement]
   def addToStatement(statement: Statement): Statement
-  def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion
+  def extractionStep(result: Statement, innerUnwrappers: Seq[Unwrapper])(implicit substitutionContext: SubstitutionContext): Step.Assertion
   def rewrap(steps: Seq[Step]): Step
   def rewrapWithDistribution(steps: Seq[Step], joiner: BinaryJoiner[Statement], source: Statement, result: Statement)(implicit stepContext: StepContext, provingContext: ProvingContext): Try[Seq[Step]]
   def remove(source: Term, premises: Seq[Statement], wrapperStatement: Statement): Option[(Term, Seq[Statement], Statement)]
@@ -38,8 +38,8 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
   def addToStatement(statement: Statement): Statement = {
     generalizationDefinition(variableName, statement)
   }
-  def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
-    val parameter = FunctionParameter(0, depth)
+  def extractionStep(result: Statement, innerUnwrappers: Seq[Unwrapper])(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
+    val parameter = FunctionParameter(0, innerUnwrappers.depth)
     val predicate = result.calculateApplicatives(Seq(TermVariable(0, Nil)), Substitutions.Possible(Map.empty, Map(0 -> parameter))).next()._1
     val substitutions = Substitutions(Seq(predicate), Seq(parameter))
     val baseAssertionStep = Step.Assertion.forInference(inference, substitutions).get
@@ -78,9 +78,8 @@ case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: Deduct
   def addToStatement(statement: Statement): Statement = {
     deductionDefinition(antecedent, statement)
   }
-  def extractionStep(result: Statement, depth: Int)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
-    val insertedAntecedent = antecedent.insertExternalParameters(depth)
-    val substitutions = Substitutions(Seq(insertedAntecedent, result), Nil)
+  def extractionStep(result: Statement, innerUnwrappers: Seq[Unwrapper])(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
+    val substitutions = Substitutions(Seq(antecedent.insertExternalParameters(innerUnwrappers.depth), result), Nil)
     Step.Assertion.forInference(deductionEliminationInference, substitutions).get
   }
   def rewrap(steps: Seq[Step]): Step = {
@@ -123,21 +122,21 @@ object Unwrapper {
 
     def getTargetExtraction(target: Statement)(implicit stepProvingContext: StepProvingContext): (Option[Statement], Option[Step.PremiseDerivation]) = {
       val enhancedStepProvingContext = enhanceStepProvingContext
-      def helper(currentUnwrappers: Seq[Unwrapper]): (Statement, Seq[Step.Assertion], Int) = {
+      def helper(currentUnwrappers: Seq[Unwrapper]): (Statement, Seq[Step.Assertion]) = {
         currentUnwrappers match {
           case unwrapper +: tailUnwrappers =>
-            val (innerTarget, innerSteps, innerDepth) = helper(tailUnwrappers)
-            val newStep = unwrapper.extractionStep(innerTarget, innerDepth)(enhancedStepProvingContext.stepContext)
+            val (innerTarget, innerSteps) = helper(tailUnwrappers)
+            val newStep = unwrapper.extractionStep(innerTarget, tailUnwrappers)(enhancedStepProvingContext)
             val newTarget = newStep.premises.head.statement
-            (newTarget, newStep +: innerSteps, innerDepth + unwrapper.depth)
+            (newTarget, newStep +: innerSteps)
           case Nil =>
-            (target, Nil, 0)
+            (target, Nil)
         }
       }
       if (enhancedStepProvingContext.allPremises.exists(_.statement == target)) {
         (None, None)
       } else {
-        helper(unwrappers).strip3.mapLeft(Some(_)).mapRight(ExistingStatementExtraction.ifNecessary)
+        helper(unwrappers).mapLeft(s => Some(s.removeExternalParameters(unwrappers.depth).get)).mapRight(ExistingStatementExtraction.ifNecessary)
       }
     }
 

@@ -206,6 +206,54 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
                 Nil))))))
     }
 
+    "find a wrapped premise for a wrapped inference that references a bound variable" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+
+      implicit val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+
+      ProveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        StepDefinition(
+          Some(modusPonens.id),
+          None,
+          SerializedSubstitutions(Seq(φ($).serialized, ψ($.^).serialized), Nil),
+          ExtractionDefinition.Empty.serialized,
+          Seq(ForAllDefinition.symbol),
+          None,
+          None,
+          None))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex - 2) :+
+          target(ForAll("x")(Implication(φ($), ψ($.^)))) :+
+          target(ForAll("x")(φ($))) :+
+          target(ForAll("x")(ψ($.^))),
+        fillerSteps(stepIndex - 2) :+
+          target(ForAll("x")(Implication(φ($), ψ($.^)))) :+
+          target(ForAll("x")(φ($))) :+
+          wrappedInferenceApplication(Seq(
+            generalization("x", Seq(
+              assertion(
+                specification,
+                Seq(Implication(φ($.^^), ψ($.^))),
+                Seq($)),
+              assertion(
+                specification,
+                Seq(φ($.^^)),
+                Seq($)),
+              assertion(
+                modusPonens,
+                Seq(φ($), ψ($.^)),
+                Nil))))),
+        Seq("x"))
+    }
+
     "prove using an inference whose premises have been added as generalized implications" in {
       val axiom = createInference(
         "Two Empty Sets Are Equal",
