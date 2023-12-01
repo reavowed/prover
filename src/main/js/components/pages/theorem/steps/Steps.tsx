@@ -1,6 +1,6 @@
 import update from 'immutability-helper';
 import _ from "lodash";
-import React, {useContext, useEffect, useRef} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import {Expression, ExpressionMatchResult, matchTemplate} from "../../../../models/Expression";
 import {
@@ -114,30 +114,7 @@ type ProofLineProps = {
   premiseReferences?: Reference[]
 }
 function ChainedSteps({leftHandSide, rightHandSides, propsForLastStep}: ChainedStepsProps) {
-  const leftHandSideRef = useRef<HTMLElement>(null);
-  const spacerRefs = useRef<{[key: string]: HTMLElement}>({});
-  const setSpacerRef = (ref: HTMLSpanElement | null, path: number[]) => {
-    const id = path.join(".")
-    if (ref) {
-      spacerRefs.current = {
-        ...spacerRefs.current,
-        [id]: ref
-      }
-    } else {
-      const {[id]: toOmit, ...rest} = spacerRefs.current;
-      spacerRefs.current = rest;
-    }
-  }
-  useEffect(() => {
-    if (leftHandSideRef.current) {
-      const spacingWidth = leftHandSideRef.current.getBoundingClientRect().width;
-      for (const spacerRef of _.values(spacerRefs.current)) {
-        spacerRef.style.display = "inline-block";
-        spacerRef.style.width = spacingWidth + "px";
-      }
-    }
-  }, [leftHandSideRef.current, spacerRefs]);
-
+  const [spacingWidth, setSpacingWidth] = useState<number | null>(null);
   const renderProofLine = (props: ProofLineProps, children: React.ReactNode | ((isHovered: boolean) => React.ReactNode)) => {
     const {step, ...otherProps} = props;
     if (props.step instanceof AssertionStepModel)
@@ -155,7 +132,7 @@ function ChainedSteps({leftHandSide, rightHandSides, propsForLastStep}: ChainedS
     {renderProofLine(
       {step: firstRightHandSide.step, key: firstRightHandSide.step.id},
       <>
-        <span ref={leftHandSideRef}>Then <HighlightableExpression expression={leftHandSide}
+        <span ref={r => setSpacingWidth(r && r.getBoundingClientRect().width)}>Then <HighlightableExpression expression={leftHandSide}
                                                                   expressionToCopy={rightHandSides[0].step.provenStatement}
                                                                   references={firstRightHandSide.referencesForLhs}
                                                                   {...propsForLastStep}
@@ -170,7 +147,7 @@ function ChainedSteps({leftHandSide, rightHandSides, propsForLastStep}: ChainedS
       return renderProofLine(
         {step: rightHandSide.step, premiseReferences: rightHandSide.step.referencedLines, key},
         (isHovered: boolean) => <>
-          <span ref={r => setSpacerRef(r, rightHandSide.step.path)}/>
+          <span style={{"display": "inline-block", "width": spacingWidth + "px"}}/>
           <RightHandSide rightHandSide={rightHandSide}
                          hovered={isHovered}
                          {...((index === rightHandSides.length - 2) ? propsForLastStep : {})}
