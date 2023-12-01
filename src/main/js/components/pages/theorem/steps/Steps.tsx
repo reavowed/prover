@@ -326,7 +326,7 @@ type StepEntryData = {
   endIndex: number
 }
 
-function renderSteps(steps: Step[], path: number[], propsForLastStep: AdditionalStepProps | undefined, theoremContext: TheoremContextType) {
+function renderSteps(steps: Step[], path: number[], propsForLastStep: AdditionalStepProps | undefined, theoremContext: TheoremContextType): Entry<StepEntryData>[] {
   const stepsWithIndexes = steps.map((step, index) => ({step,index}));
   const finalIndex = steps.length;
   const results: Entry<Omit<StepEntryData, "endIndex">>[] = [];
@@ -394,7 +394,16 @@ function renderSteps(steps: Step[], path: number[], propsForLastStep: Additional
     currentIndex += 1;
   }
   indexLookup.push(finalIndex);
-  return results.map((r, i) => {return {...r, endIndex: indexLookup[i+1]}});
+  return results.map(({key, element, data}, i) => {
+    return {
+      key,
+      element,
+      data: {
+        ...data,
+        endIndex: indexLookup[i+1]
+      }
+    }
+  });
 }
 
 type StepsProps = {
@@ -443,7 +452,7 @@ const Container = function Container({path: stepsPath, children}: {path: number[
         }
       });
   }
-  return <DraggableList type="Steps" enabled={true} onDrop={onDrop}>
+  return <DraggableList<StepEntryData> type="Steps" enabled={true} onDrop={onDrop}>
     {children}
   </DraggableList>
 };
