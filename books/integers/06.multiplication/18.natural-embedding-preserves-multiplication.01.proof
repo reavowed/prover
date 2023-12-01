@@ -62,7 +62,7 @@ prove = apply ⍳_ℤ apply ×ℕ orderedPair t0 t1 equivalenceClass orderedPair
 elided 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 {
   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-  elided 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 {
+  inferenceExtraction {
     prove = apply ×ℤ orderedPair equivalenceClass orderedPair t0 0ℕ ~_ℤ equivalenceClass orderedPair t1 0ℕ ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 t1 apply ×ℕ orderedPair 0ℕ 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair t0 0ℕ apply ×ℕ orderedPair 0ℕ t1 ~_ℤ 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 () (t0, 0ℕ, t1, 0ℕ) p0 5.1 p1 5.1
     prove = equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 t1 apply ×ℕ orderedPair 0ℕ 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair t0 0ℕ apply ×ℕ orderedPair 0ℕ t1 ~_ℤ apply ×ℤ orderedPair equivalenceClass orderedPair t0 0ℕ ~_ℤ equivalenceClass orderedPair t1 0ℕ ~_ℤ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair equivalenceClass orderedPair t0 0ℕ ~_ℤ equivalenceClass orderedPair t1 0ℕ ~_ℤ, equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 t1 apply ×ℕ orderedPair 0ℕ 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair t0 0ℕ apply ×ℕ orderedPair 0ℕ t1 ~_ℤ) 5.2.0
   }

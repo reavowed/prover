@@ -61,7 +61,7 @@ let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594
     }
     elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
       prove ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ $0 product t0 t1, ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.0 0.0.1
-      elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+      inferenceExtraction {
         prove ↔ ∧ function $0 functionFrom $0 t0 t1 ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () ($0, t0, t1)
         prove → ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 ∧ function $0 functionFrom $0 t0 t1 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∧ function $0 functionFrom $0 t0 t1, ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.2.1.0
         prove ∧ function $0 functionFrom $0 t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0, ∧ function $0 functionFrom $0 t0 t1) () 0.0.2.1.1 0.0.2.0

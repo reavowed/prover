@@ -1,5 +1,5 @@
 prove ⊆ t0 ℕ 34a7f76ed080afa14ba8e71d62dede990465b606d025c97cf6715b36125808cf () (t0) p0
-elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+inferenceExtraction {
   prove ↔ ∧ function t1 functionFrom t1 t0 t2 ∧ ⊆ t1 product t0 t2 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (t1, t0, t2)
   prove → ∧ function t1 functionFrom t1 t0 t2 ∧ ⊆ t1 product t0 t2 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ function t1 functionFrom t1 t0 t2, ∧ ⊆ t1 product t0 t2 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1) () 1.0
   prove ∧ ⊆ t1 product t0 t2 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ function t1 functionFrom t1 t0 t2, ∧ ⊆ t1 product t0 t2 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 t1) () 1.1 p1

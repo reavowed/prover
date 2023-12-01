@@ -4,8 +4,8 @@ elided 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 {
     assume ∈ $0 ℤ {
       take b {
         assume ∈ $0 ℤ {
-          elided 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 {
-            elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+          inferenceWithPremiseDerivations {
+            inferenceExtraction {
               prove ∧ ∈ negatedZ $0 ℤ ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () ($0) 1.0.0.0.0a
               prove ∈ negatedZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $0 ℤ, ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.0.0.0
             }

@@ -29,7 +29,7 @@ let y ∧ ∈ $0 product ℕ ℕ = t0 equivalenceClass $0 ~_ℤ 30412315b8eb88fa
     elided 45e40da11c67bcaeb7e0a9579eabe7e0003cf18d4d43996dcaf35ecd90b85707 {
       prove ∈ first $0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
       prove ∈ second $0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-      elided 45e40da11c67bcaeb7e0a9579eabe7e0003cf18d4d43996dcaf35ecd90b85707 {
+      inferenceExtraction {
         prove ↔ ∈ orderedPair first $0 second $0 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair first $$0 $0 second $$0 45e40da11c67bcaeb7e0a9579eabe7e0003cf18d4d43996dcaf35ecd90b85707 () (first $0, second $0) 2.1.1.0 2.1.1.1
         prove → ∈ orderedPair first $0 second $0 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair first $$0 $0 second $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair first $0 second $0 <ℕ, ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair first $$0 $0 second $$0) () 2.1.1.2.0
         prove ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair first $$0 $0 second $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair first $0 second $0 <ℕ, ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair first $$0 $0 second $$0) () 2.1.1.2.1 2.1.0
@@ -37,9 +37,9 @@ let y ∧ ∈ $0 product ℕ ℕ = t0 equivalenceClass $0 ~_ℤ 30412315b8eb88fa
     }
     let b ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair first $$0 $0 second $$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℕ ∧ ¬ = $$0 0ℕ = apply +ℕ orderedPair first $0 $$0 second $0, ∃ n ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 0ℕ $0 ~_ℤ) () {
       elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
-        elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+        inferenceWithPremiseDerivations {
           prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-          elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+          inferenceExtraction {
             prove ∧ = apply +ℕ orderedPair second $$0 0ℕ second $$0 = apply +ℕ orderedPair 0ℕ second $$0 second $$0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (second $$0) 2.1.2.0.0.0
             prove = second $$0 apply +ℕ orderedPair second $$0 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair second $$0 0ℕ, second $$0) 2.1.2.0.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           }
@@ -50,7 +50,7 @@ let y ∧ ∈ $0 product ℕ ℕ = t0 equivalenceClass $0 ~_ℤ 30412315b8eb88fa
         prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-        elided 60fbf61f630f3ef7bff09c889a5e86eb0db4b9eaf6f36b137c93fde53414eb42 {
+        inferenceExtraction {
           prove ↔ = equivalenceClass orderedPair first $$0 second $$0 ~_ℤ equivalenceClass orderedPair 0ℕ $0 ~_ℤ = apply +ℕ orderedPair first $$0 $0 apply +ℕ orderedPair second $$0 0ℕ 60fbf61f630f3ef7bff09c889a5e86eb0db4b9eaf6f36b137c93fde53414eb42 () (first $$0, second $$0, 0ℕ, $0) 2.1.2.1.0 2.1.2.1.1 2.1.2.1.2 2.1.2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           prove → = apply +ℕ orderedPair first $$0 $0 apply +ℕ orderedPair second $$0 0ℕ = equivalenceClass orderedPair first $$0 second $$0 ~_ℤ equivalenceClass orderedPair 0ℕ $0 ~_ℤ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (= equivalenceClass orderedPair first $$0 second $$0 ~_ℤ equivalenceClass orderedPair 0ℕ $0 ~_ℤ, = apply +ℕ orderedPair first $$0 $0 apply +ℕ orderedPair second $$0 0ℕ) () 2.1.2.1.3.0
           prove = equivalenceClass orderedPair first $$0 second $$0 ~_ℤ equivalenceClass orderedPair 0ℕ $0 ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= apply +ℕ orderedPair first $$0 $0 apply +ℕ orderedPair second $$0 0ℕ, = equivalenceClass orderedPair first $$0 second $$0 ~_ℤ equivalenceClass orderedPair 0ℕ $0 ~_ℤ) () 2.1.2.1.3.1 2.1.2.0
@@ -78,7 +78,7 @@ let y ∧ ∈ $0 product ℕ ℕ = t0 equivalenceClass $0 ~_ℤ 30412315b8eb88fa
       prove ∈ second $0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
       prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
       prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-      elided 60fbf61f630f3ef7bff09c889a5e86eb0db4b9eaf6f36b137c93fde53414eb42 {
+      inferenceExtraction {
         prove ↔ = equivalenceClass orderedPair first $0 second $0 ~_ℤ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ = apply +ℕ orderedPair first $0 0ℕ apply +ℕ orderedPair second $0 0ℕ 60fbf61f630f3ef7bff09c889a5e86eb0db4b9eaf6f36b137c93fde53414eb42 () (first $0, second $0, 0ℕ, 0ℕ) 2.2.1.0 2.2.1.1 2.2.1.3 2.2.1.3
         prove → = apply +ℕ orderedPair first $0 0ℕ apply +ℕ orderedPair second $0 0ℕ = equivalenceClass orderedPair first $0 second $0 ~_ℤ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (= equivalenceClass orderedPair first $0 second $0 ~_ℤ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ, = apply +ℕ orderedPair first $0 0ℕ apply +ℕ orderedPair second $0 0ℕ) () 2.2.1.4.0
         prove = equivalenceClass orderedPair first $0 second $0 ~_ℤ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= apply +ℕ orderedPair first $0 0ℕ apply +ℕ orderedPair second $0 0ℕ, = equivalenceClass orderedPair first $0 second $0 ~_ℤ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) () 2.2.1.4.1 2.2.0
@@ -116,7 +116,7 @@ let y ∧ ∈ $0 product ℕ ℕ = t0 equivalenceClass $0 ~_ℤ 30412315b8eb88fa
     elided 45e40da11c67bcaeb7e0a9579eabe7e0003cf18d4d43996dcaf35ecd90b85707 {
       prove ∈ second $0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
       prove ∈ first $0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-      elided 45e40da11c67bcaeb7e0a9579eabe7e0003cf18d4d43996dcaf35ecd90b85707 {
+      inferenceExtraction {
         prove ↔ ∈ orderedPair second $0 first $0 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair second $$0 $0 first $$0 45e40da11c67bcaeb7e0a9579eabe7e0003cf18d4d43996dcaf35ecd90b85707 () (second $0, first $0) 2.3.1.0 2.3.1.1
         prove → ∈ orderedPair second $0 first $0 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair second $$0 $0 first $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair second $0 first $0 <ℕ, ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair second $$0 $0 first $$0) () 2.3.1.2.0
         prove ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair second $$0 $0 first $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair second $0 first $0 <ℕ, ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair second $$0 $0 first $$0) () 2.3.1.2.1 2.3.0
@@ -124,9 +124,9 @@ let y ∧ ∈ $0 product ℕ ℕ = t0 equivalenceClass $0 ~_ℤ 30412315b8eb88fa
     }
     let b ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair second $$0 $0 first $$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℕ ∧ ¬ = $$0 0ℕ = apply +ℕ orderedPair second $0 $$0 first $0, ∃ n ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () {
       elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
-        elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+        inferenceWithPremiseDerivations {
           prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-          elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+          inferenceExtraction {
             prove ∧ = apply +ℕ orderedPair first $$0 0ℕ first $$0 = apply +ℕ orderedPair 0ℕ first $$0 first $$0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (first $$0) 2.3.2.0.0.0
             prove = first $$0 apply +ℕ orderedPair first $$0 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair first $$0 0ℕ, first $$0) 2.3.2.0.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           }
@@ -138,7 +138,7 @@ let y ∧ ∈ $0 product ℕ ℕ = t0 equivalenceClass $0 ~_ℤ 30412315b8eb88fa
         prove ∈ first $$0 ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         prove ∈ second $$0 ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℕ, ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-        elided 60fbf61f630f3ef7bff09c889a5e86eb0db4b9eaf6f36b137c93fde53414eb42 {
+        inferenceExtraction {
           prove ↔ = equivalenceClass orderedPair first $$0 second $$0 ~_ℤ equivalenceClass orderedPair $0 0ℕ ~_ℤ = apply +ℕ orderedPair first $$0 0ℕ apply +ℕ orderedPair second $$0 $0 60fbf61f630f3ef7bff09c889a5e86eb0db4b9eaf6f36b137c93fde53414eb42 () (first $$0, second $$0, $0, 0ℕ) 2.3.2.2.0 2.3.2.2.1 2.3.2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.3.2.2.2
           prove → = apply +ℕ orderedPair first $$0 0ℕ apply +ℕ orderedPair second $$0 $0 = equivalenceClass orderedPair first $$0 second $$0 ~_ℤ equivalenceClass orderedPair $0 0ℕ ~_ℤ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (= equivalenceClass orderedPair first $$0 second $$0 ~_ℤ equivalenceClass orderedPair $0 0ℕ ~_ℤ, = apply +ℕ orderedPair first $$0 0ℕ apply +ℕ orderedPair second $$0 $0) () 2.3.2.2.3.0
           prove = equivalenceClass orderedPair first $$0 second $$0 ~_ℤ equivalenceClass orderedPair $0 0ℕ ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= apply +ℕ orderedPair first $$0 0ℕ apply +ℕ orderedPair second $$0 $0, = equivalenceClass orderedPair first $$0 second $$0 ~_ℤ equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 2.3.2.2.3.1 2.3.2.1

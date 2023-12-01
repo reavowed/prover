@@ -7,7 +7,7 @@ elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
 }
 elided 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 {
   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-  elided 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 {
+  inferenceExtraction {
     prove = apply +ℕ orderedPair t0 successor 0ℕ successor apply +ℕ orderedPair t0 0ℕ 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 () (t0, 0ℕ) p0 1.0
     prove = successor apply +ℕ orderedPair t0 0ℕ apply +ℕ orderedPair t0 successor 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair t0 successor 0ℕ, successor apply +ℕ orderedPair t0 0ℕ) 1.1.0
   }

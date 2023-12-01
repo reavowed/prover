@@ -1,7 +1,7 @@
 assume ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 {
   let c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1) () {
     elided (Rearranged) {
-      elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
+      inferenceExtraction {
         prove ∧ = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0 = apply ×ℤ orderedPair negatedZ t0 $0 negatedZ apply ×ℤ orderedPair t0 $0 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 () (t0, $0) p0 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         prove = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0, = apply ×ℤ orderedPair negatedZ t0 $0 negatedZ apply ×ℤ orderedPair t0 $0) () 0.0.0.0.0
       }
@@ -21,7 +21,7 @@ assume ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 {
 assume ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1 {
   let c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 negatedZ t1, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1) () {
     elided (Rearranged) {
-      elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
+      inferenceExtraction {
         prove ∧ = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0 = apply ×ℤ orderedPair negatedZ t0 $0 negatedZ apply ×ℤ orderedPair t0 $0 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 () (t0, $0) p0 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         prove = apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℤ orderedPair t0 negatedZ $0 negatedZ apply ×ℤ orderedPair t0 $0, = apply ×ℤ orderedPair negatedZ t0 $0 negatedZ apply ×ℤ orderedPair t0 $0) () 1.0.0.0.0
       }

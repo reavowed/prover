@@ -40,7 +40,7 @@ elided 07d426b42b42809acbff0ae40cf7a8280c197462baa6259d18f62b04343d7174 {
     prove ∈ t1 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ t1 ℤ, ¬ ∈ t1 singleton apply ⍳_ℤ 0ℕ) () 4.1.3
   }
   prove ¬ ∨ = t0 apply ⍳_ℤ 0ℕ = t1 apply ⍳_ℤ 0ℕ 403c99556d1d944b1441d404e264b68e20dc4c3e62bd7024cccd76ca6bd875bc (= t0 apply ⍳_ℤ 0ℕ, = t1 apply ⍳_ℤ 0ℕ) () 1 3
-  elided 07d426b42b42809acbff0ae40cf7a8280c197462baa6259d18f62b04343d7174 {
+  inferenceExtraction {
     prove ↔ = apply ×ℤ orderedPair t0 t1 apply ⍳_ℤ 0ℕ ∨ = t0 apply ⍳_ℤ 0ℕ = t1 apply ⍳_ℤ 0ℕ 07d426b42b42809acbff0ae40cf7a8280c197462baa6259d18f62b04343d7174 () (t0, t1) 4.0 4.1
     prove → = apply ×ℤ orderedPair t0 t1 apply ⍳_ℤ 0ℕ ∨ = t0 apply ⍳_ℤ 0ℕ = t1 apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (= apply ×ℤ orderedPair t0 t1 apply ⍳_ℤ 0ℕ, ∨ = t0 apply ⍳_ℤ 0ℕ = t1 apply ⍳_ℤ 0ℕ) () 4.3.0
     prove ¬ = apply ×ℤ orderedPair t0 t1 apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= apply ×ℤ orderedPair t0 t1 apply ⍳_ℤ 0ℕ, ∨ = t0 apply ⍳_ℤ 0ℕ = t1 apply ⍳_ℤ 0ℕ) () 4.3.1 4.2

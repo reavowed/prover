@@ -48,14 +48,14 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
         prove ↔ ∈ orderedPair t0 t1 <ℤ ∈ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ equivalenceClass orderedPair $$$0 $$$$0 ~_ℤ <ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair t0 t1 <ℤ, ∈ orderedPair apply +ℕ orderedPair $0 $$$$0 apply +ℕ orderedPair $$0 $$$0 <ℕ, ∈ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ equivalenceClass orderedPair $$$0 $$$$0 ~_ℤ <ℤ) () 1.0.1.0.4 1.0.1.0.5
         elided b34175d29d4eab981b8fa9105b52c815b5b0fd99d5ed22d76b278aef3204ba43 {
           elided b34175d29d4eab981b8fa9105b52c815b5b0fd99d5ed22d76b278aef3204ba43 {
-            elided b34175d29d4eab981b8fa9105b52c815b5b0fd99d5ed22d76b278aef3204ba43 {
+            inferenceExtraction {
               prove = negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $0 $$0 ~_ℤ b34175d29d4eab981b8fa9105b52c815b5b0fd99d5ed22d76b278aef3204ba43 () ($$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
               prove = equivalenceClass orderedPair $0 $$0 ~_ℤ negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ, equivalenceClass orderedPair $0 $$0 ~_ℤ) 1.0.1.0.7.0.0.0
             }
             prove ↔ ∈ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ equivalenceClass orderedPair $$$0 $$$$0 ~_ℤ <ℤ ∈ orderedPair negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $$$0 $$$$0 ~_ℤ <ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $$$$$0 equivalenceClass orderedPair $$$0 $$$$0 ~_ℤ <ℤ) (equivalenceClass orderedPair $0 $$0 ~_ℤ, negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.1.0.7.0.0
           }
           elided b34175d29d4eab981b8fa9105b52c815b5b0fd99d5ed22d76b278aef3204ba43 {
-            elided b34175d29d4eab981b8fa9105b52c815b5b0fd99d5ed22d76b278aef3204ba43 {
+            inferenceExtraction {
               prove = negatedZ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$$0 $$$$0 ~_ℤ b34175d29d4eab981b8fa9105b52c815b5b0fd99d5ed22d76b278aef3204ba43 () ($$$$0, $$$0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
               prove = equivalenceClass orderedPair $$$0 $$$$0 ~_ℤ negatedZ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (negatedZ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, equivalenceClass orderedPair $$$0 $$$$0 ~_ℤ) 1.0.1.0.7.1.0.0
             }

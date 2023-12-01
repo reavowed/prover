@@ -6,7 +6,7 @@ subproof (Base case) {
         prove ¬ ∈ $0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$0 ∅) ($0) 0.0.0.0.0
       }
       elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
-        elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
+        inferenceExtraction {
           prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
           prove = ∅ 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (0ℕ, ∅) 0.0.0.1.0.0
         }
@@ -20,7 +20,7 @@ subproof (Base case) {
         prove ¬ ∈ successor $0 singleton 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ successor $0 singleton 0ℕ, = successor $0 0ℕ) () 0.0.0.3.2 0.0.0.2
       }
       elided 57beb22f2b138311d56700b177c9e188c51e86c7ea55ddf4bae8a64c2d18c6e7 {
-        elided 57beb22f2b138311d56700b177c9e188c51e86c7ea55ddf4bae8a64c2d18c6e7 {
+        inferenceExtraction {
           prove = 1ℕ singleton 0ℕ 57beb22f2b138311d56700b177c9e188c51e86c7ea55ddf4bae8a64c2d18c6e7 () ()
           prove = singleton 0ℕ 1ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (1ℕ, singleton 0ℕ) 0.0.0.4.0.0
         }

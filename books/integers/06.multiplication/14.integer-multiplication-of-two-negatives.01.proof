@@ -1,15 +1,15 @@
-elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
-  elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+inferenceWithPremiseDerivations {
+  inferenceExtraction {
     prove ∧ ∈ negatedZ t1 ℤ ∧ = apply +ℤ orderedPair t1 negatedZ t1 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t1 t1 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t1) p1
     prove ∈ negatedZ t1 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t1 ℤ, ∧ = apply +ℤ orderedPair t1 negatedZ t1 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t1 t1 apply ⍳_ℤ 0ℕ) () 0.0.0
   }
-  elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
+  inferenceExtraction {
     prove ∧ = apply ×ℤ orderedPair t0 negatedZ negatedZ t1 negatedZ apply ×ℤ orderedPair t0 negatedZ t1 = apply ×ℤ orderedPair negatedZ t0 negatedZ t1 negatedZ apply ×ℤ orderedPair t0 negatedZ t1 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 () (t0, negatedZ t1) p0 0.0
     prove = apply ×ℤ orderedPair negatedZ t0 negatedZ t1 negatedZ apply ×ℤ orderedPair t0 negatedZ t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply ×ℤ orderedPair t0 negatedZ negatedZ t1 negatedZ apply ×ℤ orderedPair t0 negatedZ t1, = apply ×ℤ orderedPair negatedZ t0 negatedZ t1 negatedZ apply ×ℤ orderedPair t0 negatedZ t1) () 0.1.0
   }
 }
 elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
-  elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
+  inferenceExtraction {
     prove ∧ = apply ×ℤ orderedPair t0 negatedZ t1 negatedZ apply ×ℤ orderedPair t0 t1 = apply ×ℤ orderedPair negatedZ t0 t1 negatedZ apply ×ℤ orderedPair t0 t1 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 () (t0, t1) p0 p1
     prove = apply ×ℤ orderedPair t0 negatedZ t1 negatedZ apply ×ℤ orderedPair t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℤ orderedPair t0 negatedZ t1 negatedZ apply ×ℤ orderedPair t0 t1, = apply ×ℤ orderedPair negatedZ t0 t1 negatedZ apply ×ℤ orderedPair t0 t1) () 1.0.0
   }

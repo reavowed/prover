@@ -4,10 +4,7 @@ assume ∧ unaryOperation t0 unaryOperationOn t0 t1 {
     prove = domain t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (unaryOperation t0, = domain t0 t1) () 0.0.0
   }
   prove ∧ function t0 functionFrom t0 domain t0 domain t0 65302ad667918f8e4353bdf303ef416424efde343876d93d3419ea9dcfcafeb4 () (t0) 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-  elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-    prove ∧ function t0 functionFrom t0 t1 domain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function t0 functionFrom t0 $0 domain t0) (domain t0, t1) 0.0 0.1
-    prove ∧ function t0 functionFrom t0 t1 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function t0 functionFrom t0 t1 $0) (domain t0, t1) 0.0 0.2.0
-  }
+  prove ∧ function t0 functionFrom t0 t1 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function t0 functionFrom t0 $0 $0) (domain t0, t1) 0.0 0.1
 }
 assume ∧ function t0 functionFrom t0 t1 t1 {
   existingStatementExtraction {

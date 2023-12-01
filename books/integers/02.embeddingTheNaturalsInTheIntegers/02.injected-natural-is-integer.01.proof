@@ -1,4 +1,4 @@
-elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+inferenceExtraction {
   prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
   prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0
   prove ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ, injectiveFunction ⍳_ℤ) () 0.1

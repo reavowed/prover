@@ -29,7 +29,7 @@ take a {
           prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 0.0.1.0.3.2
           prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
           prove ¬ = 1ℕ 0ℕ bdaf6427cfd0b36642272a980ebfbca98f289fa9b1a02f7cacacf5cd2789af03 () ()
-          elided d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b {
+          inferenceExtraction {
             prove ↔ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b () (1ℕ, 0ℕ) 0.0.1.0.3.2 0.0.1.0.3.4
             prove → = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ = 1ℕ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 0.0.1.0.3.6.0
             prove ¬ = apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ, = 1ℕ 0ℕ) () 0.0.1.0.3.6.1 0.0.1.0.3.5
@@ -94,7 +94,7 @@ take a {
     } 0.0.0
     elided 84d34d30618e869c03d27050117173447358c00c190f4a70360f6e9b7ca61bc3 {
       elided 84d34d30618e869c03d27050117173447358c00c190f4a70360f6e9b7ca61bc3 {
-        elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
+        inferenceExtraction {
           prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
           prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 0.0.2.0.0.0
           prove ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ, injectiveFunction ⍳_ℚ) () 0.0.2.0.0.1
@@ -102,27 +102,19 @@ take a {
         }
         prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
         prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 0.0.2.0.1
-        elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
-          elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
-            prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
-            prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 0.0.2.0.3.0.0
-          }
-          existingStatementExtraction {
-            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 0.0.2.0.3.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-            prove ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ) () 0.0.2.0.3.1.0
-            prove = domain ⍳_ℚ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain ⍳_ℚ ℤ, ⊆ codomain ⍳_ℚ ℚ) () 0.0.2.0.3.1.1
-            prove = ℤ domain ⍳_ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain ⍳_ℚ, ℤ) 0.0.2.0.3.1.2
+        inferenceExtraction {
+          prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
+          inferenceExtraction {
+            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 0.0.2.0.3.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            prove = ℤ domain ⍳_ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain ⍳_ℚ, ℤ) 0.0.2.0.3.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           }
         }
         prove ∈ apply ⍳_ℤ 1ℕ domain ⍳_ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ apply ⍳_ℤ 1ℕ $$0) (ℤ, domain ⍳_ℚ) 0.0.2.0.3 0.0.2.0.2
         prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ efc99ff765a81eb7b927af90cd2691becadb0bf21892d67709f64f02d0c5ff95 () (⍳_ℚ, apply ⍳_ℤ 1ℕ) 0.0.2.0.0 0.0.2.0.4
-        elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
-          elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
-            prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
-            prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 0.0.2.0.6.0.0
-          }
-          existingStatementExtraction {
-            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 0.0.2.0.6.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        inferenceExtraction {
+          prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
+          inferenceExtraction {
+            prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 0.0.2.0.6.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             prove ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ) () 0.0.2.0.6.1.0
             prove ⊆ codomain ⍳_ℚ ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= domain ⍳_ℚ ℤ, ⊆ codomain ⍳_ℚ ℚ) () 0.0.2.0.6.1.1
           }
@@ -132,15 +124,11 @@ take a {
           prove → ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 codomain ⍳_ℚ ∈ $$0 ℚ) (apply ⍳_ℚ apply ⍳_ℤ 1ℕ) 0.0.2.0.7.0
           prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ, ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ) () 0.0.2.0.7.1 0.0.2.0.5
         }
-        elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {
-          elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {
-            prove ∧ ∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed () ()
-            prove ∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) () 0.0.2.0.8.0.0
-          }
-          existingStatementExtraction {
-            prove ∧ binaryOperation ×ℚ = baseSet ×ℚ ℚ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (×ℚ, ℚ) 0.0.2.0.8.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-            prove = baseSet ×ℚ ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation ×ℚ, = baseSet ×ℚ ℚ) () 0.0.2.0.8.1.0
-            prove = ℚ baseSet ×ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet ×ℚ, ℚ) 0.0.2.0.8.1.1
+        inferenceExtraction {
+          prove ∧ ∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed () ()
+          inferenceExtraction {
+            prove ∧ binaryOperation ×ℚ = baseSet ×ℚ ℚ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (×ℚ, ℚ) 0.0.2.0.8.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            prove = ℚ baseSet ×ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet ×ℚ, ℚ) 0.0.2.0.8.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
           }
         }
         prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ baseSet ×ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ $$0) (ℚ, baseSet ×ℚ) 0.0.2.0.8 0.0.2.0.7
@@ -164,12 +152,12 @@ take a {
   }
 }
 elided 23b9075e363ada7bcda1e0c41cc95fc195a8958f52ce49caa9e7056e5b28bf9b {
-  elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {
+  inferenceExtraction {
     prove ∧ ∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed () ()
     prove ∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) () 1.0.0
     prove binaryOperation ×ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (binaryOperation ×ℚ, binaryOperationOn ×ℚ ℚ) () 1.0.1
   }
-  elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
+  inferenceExtraction {
     prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
     prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 1.1.0
     prove ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ, injectiveFunction ⍳_ℚ) () 1.1.1
@@ -177,27 +165,19 @@ elided 23b9075e363ada7bcda1e0c41cc95fc195a8958f52ce49caa9e7056e5b28bf9b {
   }
   prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
   prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 1.2
-  elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
-    elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
-      prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
-      prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 1.4.0.0
-    }
-    existingStatementExtraction {
-      prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 1.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ) () 1.4.1.0
-      prove = domain ⍳_ℚ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain ⍳_ℚ ℤ, ⊆ codomain ⍳_ℚ ℚ) () 1.4.1.1
-      prove = ℤ domain ⍳_ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain ⍳_ℚ, ℤ) 1.4.1.2
+  inferenceExtraction {
+    prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
+    inferenceExtraction {
+      prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 1.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove = ℤ domain ⍳_ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain ⍳_ℚ, ℤ) 1.4.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
     }
   }
   prove ∈ apply ⍳_ℤ 1ℕ domain ⍳_ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ apply ⍳_ℤ 1ℕ $0) (ℤ, domain ⍳_ℚ) 1.4 1.3
   prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ efc99ff765a81eb7b927af90cd2691becadb0bf21892d67709f64f02d0c5ff95 () (⍳_ℚ, apply ⍳_ℤ 1ℕ) 1.1 1.5
-  elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
-    elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
-      prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
-      prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 1.7.0.0
-    }
-    existingStatementExtraction {
-      prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 1.7.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+  inferenceExtraction {
+    prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
+    inferenceExtraction {
+      prove ∧ function ⍳_ℚ ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℚ, ℤ, ℚ) 1.7.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       prove ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function ⍳_ℚ, ∧ = domain ⍳_ℚ ℤ ⊆ codomain ⍳_ℚ ℚ) () 1.7.1.0
       prove ⊆ codomain ⍳_ℚ ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= domain ⍳_ℚ ℤ, ⊆ codomain ⍳_ℚ ℚ) () 1.7.1.1
     }
@@ -207,15 +187,11 @@ elided 23b9075e363ada7bcda1e0c41cc95fc195a8958f52ce49caa9e7056e5b28bf9b {
     prove → ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 codomain ⍳_ℚ ∈ $0 ℚ) (apply ⍳_ℚ apply ⍳_ℤ 1ℕ) 1.8.0
     prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ codomain ⍳_ℚ, ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ ℚ) () 1.8.1 1.6
   }
-  elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {
-    elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {
-      prove ∧ ∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed () ()
-      prove ∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) () 1.9.0.0
-    }
-    existingStatementExtraction {
-      prove ∧ binaryOperation ×ℚ = baseSet ×ℚ ℚ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (×ℚ, ℚ) 1.9.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove = baseSet ×ℚ ℚ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation ×ℚ, = baseSet ×ℚ ℚ) () 1.9.1.0
-      prove = ℚ baseSet ×ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet ×ℚ, ℚ) 1.9.1.1
+  inferenceExtraction {
+    prove ∧ ∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed () ()
+    inferenceExtraction {
+      prove ∧ binaryOperation ×ℚ = baseSet ×ℚ ℚ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (×ℚ, ℚ) 1.9.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove = ℚ baseSet ×ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet ×ℚ, ℚ) 1.9.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     }
   }
   prove ∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ baseSet ×ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ apply ⍳_ℚ apply ⍳_ℤ 1ℕ $0) (ℚ, baseSet ×ℚ) 1.9 1.8

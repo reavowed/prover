@@ -8,7 +8,7 @@ subproof (Forward implication) {
       assume ∈ $0 ℕ {
         assume → ∈ orderedPair t0 $0 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 $$0 {
           assume ∈ orderedPair t0 successor $0 <ℕ {
-            elided cab6916eae683ff596e690ffacb01974242e074af96cb57c85d188f75fcfcfd8 {
+            inferenceExtraction {
               prove ↔ ∈ orderedPair t0 successor $0 <ℕ ∈ orderedPair t0 $0 ≤ℕ cab6916eae683ff596e690ffacb01974242e074af96cb57c85d188f75fcfcfd8 () (t0, $0) p0 0.1.0.0a
               prove → ∈ orderedPair t0 successor $0 <ℕ ∈ orderedPair t0 $0 ≤ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t0 successor $0 <ℕ, ∈ orderedPair t0 $0 ≤ℕ) () 0.1.0.0.0.0.0.0
               prove ∈ orderedPair t0 $0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 successor $0 <ℕ, ∈ orderedPair t0 $0 ≤ℕ) () 0.1.0.0.0.0.0.1 0.1.0.0.0.0a
@@ -38,7 +38,7 @@ subproof (Forward implication) {
               } 0.1.0.0.0.0.2.0
             }
             assume = t0 $0 {
-              elided 835ad48524335c7129668ce59ad2b153e3064e4585ad486e28b7c4dae912e4c7 {
+              inferenceExtraction {
                 prove ¬ = 0ℕ successor 0ℕ 835ad48524335c7129668ce59ad2b153e3064e4585ad486e28b7c4dae912e4c7 () (0ℕ)
                 prove ¬ = successor 0ℕ 0ℕ 63df87633696587242ebf84efb37d81a35fdc0713905a3d019bd45c73e2f66be () (0ℕ, successor 0ℕ) 0.1.0.0.0.0.3.0.0
               }

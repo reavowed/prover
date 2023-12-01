@@ -1,5 +1,5 @@
 prove ↔ ∈ orderedPair t0 t1 <ℕ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t1 <ℤ 1760e1b115ad354c2948efe51448d9a3ba82aee7f9c2b8c25909a515461f5ab2 () (t0, t1) p0 p1
-elided d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b {
+inferenceExtraction {
   prove ↔ = apply ⍳_ℤ t0 apply ⍳_ℤ t1 = t0 t1 d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b () (t0, t1) p0 p1
   prove ↔ = t0 t1 = apply ⍳_ℤ t0 apply ⍳_ℤ t1 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (= apply ⍳_ℤ t0 apply ⍳_ℤ t1, = t0 t1) () 1.0
 }

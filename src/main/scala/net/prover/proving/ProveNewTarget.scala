@@ -19,7 +19,7 @@ object ProveNewTarget {
     InsertStepBeforeChain(bookKey, chapterKey, theoremKey, proofIndex, stepReference) { stepProvingContext =>
       implicit val spc = stepProvingContext
       for {
-        (_, newStep, targets) <- CreateProofStep(
+        (newStep, targets) <- CreateProofStep(
           definition,
           definition.parseIntendedConclusion,
           Nil)

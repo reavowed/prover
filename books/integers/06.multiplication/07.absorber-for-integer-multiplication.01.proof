@@ -93,10 +93,7 @@ elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
   elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
     prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
     prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 2.0.0
-    elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
-      prove = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ t0 apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe () (apply ⍳_ℤ 0ℕ, t0) 2.0.1 p0
-      prove = apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ t0, apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ) 2.0.2.0
-    }
+    prove = apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ t0 db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe () (t0, apply ⍳_ℤ 0ℕ) p0 2.0.1
   }
   prove = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ t0 apply ⍳_ℤ 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $0 apply ⍳_ℤ 0ℕ) (apply ×ℤ orderedPair t0 apply ⍳_ℤ 0ℕ, apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ t0) 2.0 1
 }

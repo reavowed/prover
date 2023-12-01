@@ -1,8 +1,8 @@
-elided 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 {
+inferenceExtraction {
   prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
   prove ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ, ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0) () 0.0
 }
-elided 14a8a3161186dcc5b90a057a0a0be23e851b403852986852595316f6baf1177e {
+inferenceExtraction {
   prove ↔ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ function +ℕ functionFrom +ℕ product ℕ ℕ ℕ 14a8a3161186dcc5b90a057a0a0be23e851b403852986852595316f6baf1177e () (+ℕ, ℕ)
   prove → ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ function +ℕ functionFrom +ℕ product ℕ ℕ ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ, ∧ function +ℕ functionFrom +ℕ product ℕ ℕ ℕ) () 1.0
   prove ∧ function +ℕ functionFrom +ℕ product ℕ ℕ ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ, ∧ function +ℕ functionFrom +ℕ product ℕ ℕ ℕ) () 1.1 0

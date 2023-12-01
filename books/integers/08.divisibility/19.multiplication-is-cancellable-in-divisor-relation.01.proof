@@ -19,7 +19,7 @@ take d {
     }
     elided 12723c6fc7982984ea496be141e256bf4157a4df22cc9173a979d8d60cb8c2a1 {
       prove ∈ apply ×ℤ orderedPair t0 $0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t0, $0) p0 0.0a
-      elided 12723c6fc7982984ea496be141e256bf4157a4df22cc9173a979d8d60cb8c2a1 {
+      inferenceExtraction {
         prove ∧ ↔ = apply ×ℤ orderedPair apply ×ℤ orderedPair t0 $0 t2 apply ×ℤ orderedPair t1 t2 ∨ = apply ×ℤ orderedPair t0 $0 t1 = t2 apply ⍳_ℤ 0ℕ ↔ = apply ×ℤ orderedPair t2 apply ×ℤ orderedPair t0 $0 apply ×ℤ orderedPair t2 t1 ∨ = apply ×ℤ orderedPair t0 $0 t1 = t2 apply ⍳_ℤ 0ℕ 12723c6fc7982984ea496be141e256bf4157a4df22cc9173a979d8d60cb8c2a1 () (apply ×ℤ orderedPair t0 $0, t1, t2) 0.0.1.0 p1 p2
         prove ↔ = apply ×ℤ orderedPair apply ×ℤ orderedPair t0 $0 t2 apply ×ℤ orderedPair t1 t2 ∨ = apply ×ℤ orderedPair t0 $0 t1 = t2 apply ⍳_ℤ 0ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (↔ = apply ×ℤ orderedPair apply ×ℤ orderedPair t0 $0 t2 apply ×ℤ orderedPair t1 t2 ∨ = apply ×ℤ orderedPair t0 $0 t1 = t2 apply ⍳_ℤ 0ℕ, ↔ = apply ×ℤ orderedPair t2 apply ×ℤ orderedPair t0 $0 apply ×ℤ orderedPair t2 t1 ∨ = apply ×ℤ orderedPair t0 $0 t1 = t2 apply ⍳_ℤ 0ℕ) () 0.0.1.1.0
       }

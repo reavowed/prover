@@ -1,8 +1,16 @@
-elided 8d2b899ed603dcfd1ad54dbd945fd05dea4f3a61e470882b0b15f64f78e65d33 {
+inferenceExtraction {
   prove wellOrder ≤ℕ ℕ 8d2b899ed603dcfd1ad54dbd945fd05dea4f3a61e470882b0b15f64f78e65d33 () ()
-  prove ∧ totalOrder ≤ℕ ℕ ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℕ 9f51581e6b04082a59aca422f1b4ffb8e8933acedcd0a5d5cca63d97dcd83259 () (≤ℕ, ℕ) 0.0
-  prove ∧ ∧ ∧ relation ≤ℕ ℕ antisymmetricRelation ≤ℕ ℕ transitiveRelation ≤ℕ ℕ completeRelation ≤ℕ ℕ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℕ, ℕ) 0.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-  prove ⊆ ≤ℕ product ℕ ℕ e3a7e3f727ccfe95728f3df8bab36dc71f8f578c1df1cabdf75f51ddfe4baaa2 () (≤ℕ, ℕ) 0.2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+  inferenceExtraction {
+    prove ∧ totalOrder ≤ℕ ℕ ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℕ 9f51581e6b04082a59aca422f1b4ffb8e8933acedcd0a5d5cca63d97dcd83259 () (≤ℕ, ℕ) 0.0
+    prove totalOrder ≤ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (totalOrder ≤ℕ ℕ, ∀ S → ⊆ $0 ℕ → ¬ = $0 ∅ ∃ a ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℕ) () 0.1.0
+  }
+  inferenceExtraction {
+    prove ∧ ∧ ∧ relation ≤ℕ ℕ antisymmetricRelation ≤ℕ ℕ transitiveRelation ≤ℕ ℕ completeRelation ≤ℕ ℕ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℕ, ℕ) 0.1
+    prove ∧ ∧ relation ≤ℕ ℕ antisymmetricRelation ≤ℕ ℕ transitiveRelation ≤ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation ≤ℕ ℕ antisymmetricRelation ≤ℕ ℕ transitiveRelation ≤ℕ ℕ, completeRelation ≤ℕ ℕ) () 0.2.0
+    prove ∧ relation ≤ℕ ℕ antisymmetricRelation ≤ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ relation ≤ℕ ℕ antisymmetricRelation ≤ℕ ℕ, transitiveRelation ≤ℕ ℕ) () 0.2.1
+    prove relation ≤ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (relation ≤ℕ ℕ, antisymmetricRelation ≤ℕ ℕ) () 0.2.2
+  }
+  prove ⊆ ≤ℕ product ℕ ℕ e3a7e3f727ccfe95728f3df8bab36dc71f8f578c1df1cabdf75f51ddfe4baaa2 () (≤ℕ, ℕ) 0.2
 }
 prove ∈ orderedPair t0 t1 product ℕ ℕ f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (≤ℕ, product ℕ ℕ, orderedPair t0 t1) 0 p0
 prove ∈ t0 ℕ d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () (t0, t1, ℕ, ℕ) 1

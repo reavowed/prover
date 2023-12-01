@@ -21,7 +21,7 @@ assume ∈ orderedPair t0 t1 ≤ℕ {
     prove ∨ ∈ orderedPair t0 t1 <ℕ = t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 t1 ≤ℕ, ∨ ∈ orderedPair t0 t1 <ℕ = t0 t1) () 0.1.5 0a
   }
   assume ∈ orderedPair t0 t1 <ℕ {
-    elided 45e40da11c67bcaeb7e0a9579eabe7e0003cf18d4d43996dcaf35ecd90b85707 {
+    inferenceExtraction {
       prove ↔ ∈ orderedPair t0 t1 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 t1 45e40da11c67bcaeb7e0a9579eabe7e0003cf18d4d43996dcaf35ecd90b85707 () (t0, t1) p0 p1
       prove → ∈ orderedPair t0 t1 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t0 t1 <ℕ, ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 t1) () 0.2.0.0
       prove ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 t1 <ℕ, ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 t1) () 0.2.0.1 0.2a

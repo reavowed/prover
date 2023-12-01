@@ -2,7 +2,7 @@ take n {
   assume ∈ $0 ℕ {
     let f_n = $0 functionMap m ℕ apply +ℕ orderedPair $0 $$$0 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∃! x ∧ ∧ function $0 functionFrom $0 ℕ ℕ ∧ = apply $0 0ℕ 0ℕ ∀ m → ∈ $0 ℕ = apply $$0 successor $0 apply +ℕ orderedPair apply $$0 $0 $$$0) (functionMap m ℕ apply +ℕ orderedPair $0 $$0) {
       elided 49727ac5186e6b8f7eb3d0851aac61a302ea69932f3ee7bfdf036e6054f6a9fc {
-        elided 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a {
+        wrappedInferenceApplication {
           take a {
             assume ∈ $0 ℕ {
               prove ∈ apply +ℕ orderedPair $0 $$$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($0, $$$0) 0.0.0.0.0.0.0a 0.0a

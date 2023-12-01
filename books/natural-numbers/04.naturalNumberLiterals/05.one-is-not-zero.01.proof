@@ -1,6 +1,6 @@
 prove ¬ = successor 0ℕ 0ℕ 680871c216b3ec6767ce74e9d781392911f72cdcb40b15d7b4f9071ed1491366 () (0ℕ)
 elided 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b {
-  elided 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b {
+  inferenceExtraction {
     prove = 1ℕ successor 0ℕ 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b () ()
     prove = successor 0ℕ 1ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (1ℕ, successor 0ℕ) 1.0.0
   }

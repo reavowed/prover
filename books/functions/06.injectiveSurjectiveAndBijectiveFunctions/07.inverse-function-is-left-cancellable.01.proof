@@ -3,7 +3,7 @@ elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
   prove ∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 domain t0 bijectiveFunction inverseFunction t0 codomain t0 domain t0 ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 () (t0) p0
   prove ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 domain t0 bijectiveFunction inverseFunction t0 codomain t0 domain t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 domain t0 bijectiveFunction inverseFunction t0 codomain t0 domain t0, ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0) () 1.0
 }
-elided dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc {
+inferenceExtraction {
   prove = apply compose inverseFunction t0 t0 t1 apply inverseFunction t0 apply t0 t1 dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc () (t0, domain t0, codomain t0, inverseFunction t0, domain t0, t1) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p1
   prove = apply inverseFunction t0 apply t0 t1 apply compose inverseFunction t0 t0 t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply compose inverseFunction t0 t0 t1, apply inverseFunction t0 apply t0 t1) 2.0
 }

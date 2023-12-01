@@ -1,14 +1,13 @@
-elided edf24ed36cee5777cbb7559537494645302e3f79a066c66b5fcf20a2e2d1fcc3 {
-  prove bijectiveFunction t0 t1 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function t0 functionFrom t0 t1 t2, bijectiveFunction t0 t1 t2) () p0
-  existingStatementExtraction {
-    prove ∧ ∧ function t0 functionFrom t0 t1 t2 ∧ injectiveFunction t0 surjectiveFunction t0 t1 t2 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (t0, t1, t2) 0.0
-    prove ∧ injectiveFunction t0 surjectiveFunction t0 t1 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function t0 functionFrom t0 t1 t2, ∧ injectiveFunction t0 surjectiveFunction t0 t1 t2) () 0.1.0
-    prove surjectiveFunction t0 t1 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (injectiveFunction t0, surjectiveFunction t0 t1 t2) () 0.1.1
+inferenceWithPremiseDerivations {
+  inferenceExtraction {
+    prove ∧ ∧ function t0 functionFrom t0 t1 t2 ∧ injectiveFunction t0 surjectiveFunction t0 t1 t2 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (t0, t1, t2) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+    prove ∧ injectiveFunction t0 surjectiveFunction t0 t1 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function t0 functionFrom t0 t1 t2, ∧ injectiveFunction t0 surjectiveFunction t0 t1 t2) () 0.0.0
+    prove surjectiveFunction t0 t1 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (injectiveFunction t0, surjectiveFunction t0 t1 t2) () 0.0.1
   }
-  elided edf24ed36cee5777cbb7559537494645302e3f79a066c66b5fcf20a2e2d1fcc3 {
+  inferenceExtraction {
     prove ↔ surjectiveFunction t0 t1 t2 = t2 codomain t0 edf24ed36cee5777cbb7559537494645302e3f79a066c66b5fcf20a2e2d1fcc3 () (t0, t1, t2) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-    prove → surjectiveFunction t0 t1 t2 = t2 codomain t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (surjectiveFunction t0 t1 t2, = t2 codomain t0) () 0.2.0
-    prove = t2 codomain t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (surjectiveFunction t0 t1 t2, = t2 codomain t0) () 0.2.1 0.1
+    prove → surjectiveFunction t0 t1 t2 = t2 codomain t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (surjectiveFunction t0 t1 t2, = t2 codomain t0) () 0.1.0
+    prove = t2 codomain t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (surjectiveFunction t0 t1 t2, = t2 codomain t0) () 0.1.1 0.0
   }
 }
 elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
@@ -22,32 +21,29 @@ elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
   prove ∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 domain t0 bijectiveFunction inverseFunction t0 codomain t0 domain t0 ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 () (t0) 1.2
 }
 elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-  elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-    prove ∧ function t0 functionFrom t0 t1 t2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function t0 functionFrom t0 t1 t2, bijectiveFunction t0 t1 t2) () p0
-    existingStatementExtraction {
-      prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) 2.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 2.0.1.0
-      prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 2.0.1.1
+  inferenceWithPremiseDerivations {
+    inferenceExtraction {
+      prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 2.0.0.0
+      prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 2.0.0.1
     }
-    prove ∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 t1 bijectiveFunction inverseFunction t0 codomain t0 domain t0 ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 $0 bijectiveFunction inverseFunction t0 codomain t0 domain t0 ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0) (domain t0, t1) 2.0.1 1
+    prove ∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 t1 bijectiveFunction inverseFunction t0 codomain t0 domain t0 ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 $0 bijectiveFunction inverseFunction t0 codomain t0 domain t0 ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0) (domain t0, t1) 2.0.0 1
   }
-  elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-    prove ∧ function t0 functionFrom t0 t1 t2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function t0 functionFrom t0 t1 t2, bijectiveFunction t0 t1 t2) () p0
-    existingStatementExtraction {
-      prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) 2.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 2.1.1.0
-      prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 2.1.1.1
+  inferenceWithPremiseDerivations {
+    inferenceExtraction {
+      prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 2.1.0.0
+      prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 2.1.0.1
     }
-    prove ∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 t1 bijectiveFunction inverseFunction t0 codomain t0 t1 ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 t1 bijectiveFunction inverseFunction t0 codomain t0 $0 ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0) (domain t0, t1) 2.1.1 2.0
+    prove ∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 t1 bijectiveFunction inverseFunction t0 codomain t0 t1 ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 t1 bijectiveFunction inverseFunction t0 codomain t0 $0 ∧ = compose inverseFunction t0 t0 identityFunction domain t0 = compose t0 inverseFunction t0 identityFunction codomain t0) (domain t0, t1) 2.1.0 2.0
   }
-  elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-    prove ∧ function t0 functionFrom t0 t1 t2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function t0 functionFrom t0 t1 t2, bijectiveFunction t0 t1 t2) () p0
-    existingStatementExtraction {
-      prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) 2.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 2.2.1.0
-      prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 2.2.1.1
+  inferenceWithPremiseDerivations {
+    inferenceExtraction {
+      prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 2.2.0.0
+      prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 2.2.0.1
     }
-    prove ∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 t1 bijectiveFunction inverseFunction t0 codomain t0 t1 ∧ = compose inverseFunction t0 t0 identityFunction t1 = compose t0 inverseFunction t0 identityFunction codomain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 t1 bijectiveFunction inverseFunction t0 codomain t0 t1 ∧ = compose inverseFunction t0 t0 identityFunction $0 = compose t0 inverseFunction t0 identityFunction codomain t0) (domain t0, t1) 2.2.1 2.1
+    prove ∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 t1 bijectiveFunction inverseFunction t0 codomain t0 t1 ∧ = compose inverseFunction t0 t0 identityFunction t1 = compose t0 inverseFunction t0 identityFunction codomain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 codomain t0 t1 bijectiveFunction inverseFunction t0 codomain t0 t1 ∧ = compose inverseFunction t0 t0 identityFunction $0 = compose t0 inverseFunction t0 identityFunction codomain t0) (domain t0, t1) 2.2.0 2.1
   }
 }
 elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {

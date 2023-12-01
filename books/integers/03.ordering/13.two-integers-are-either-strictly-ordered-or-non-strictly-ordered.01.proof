@@ -35,7 +35,7 @@ take z {
         prove ∨ ∈ orderedPair $$0 $0 <ℤ ∈ orderedPair $0 $$0 ≤ℤ 248476159b47ac04f4372eb3da2ea80598a55590337f781b1e6082ad4f70c003 (∈ orderedPair $$0 $0 <ℤ, ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ, ∈ orderedPair $0 $$0 ≤ℤ) () 0.0.0.0.0 0.0.0.0.1
         assume ∧ ∈ orderedPair $$0 $0 <ℤ ∈ orderedPair $0 $$0 ≤ℤ {
           elided 9999c34789a1be099e50624592678246437dd2ee3d96e1a72c632bfe1977b0b1 {
-            elided 099e2609908d9688a62987a8fa7f613209d3ca6cfe5a832d431504424c0a5f0e {
+            inferenceExtraction {
               prove ∧ relation <ℤ ℤ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ ∈ orderedPair apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 <ℕ 099e2609908d9688a62987a8fa7f613209d3ca6cfe5a832d431504424c0a5f0e () ()
               prove relation <ℤ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (relation <ℤ ℤ, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ ∈ orderedPair apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 <ℕ) () 0.0.0.0.3.0.0.0
             }

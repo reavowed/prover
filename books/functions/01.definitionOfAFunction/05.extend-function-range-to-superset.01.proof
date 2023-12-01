@@ -1,4 +1,4 @@
-elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+inferenceExtraction {
   prove ↔ ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (t0, t1, t2)
   prove → ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ function t0 functionFrom t0 t1 t2, ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.0
   prove ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ function t0 functionFrom t0 t1 t2, ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.1 p0
@@ -9,7 +9,7 @@ elided 1a3b5651d48b259c2cb11e78f184653da72a27c10712e8ae6c3eb0d3a98edfa9 {
 }
 elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
   prove ∧ ⊆ t0 product t1 t3 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ t0 product t1 t3, ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 1 0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-  elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+  inferenceExtraction {
     prove ↔ ∧ function t0 functionFrom t0 t1 t3 ∧ ⊆ t0 product t1 t3 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (t0, t1, t3)
     prove → ∧ ⊆ t0 product t1 t3 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 ∧ function t0 functionFrom t0 t1 t3 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∧ function t0 functionFrom t0 t1 t3, ∧ ⊆ t0 product t1 t3 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 2.1.0
     prove ∧ function t0 functionFrom t0 t1 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ⊆ t0 product t1 t3 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0, ∧ function t0 functionFrom t0 t1 t3) () 2.1.1 2.0

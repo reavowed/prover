@@ -1,13 +1,22 @@
 package net.prover.theorems
 
+import net.prover.entries.StepWithContext
 import net.prover.model.{Inference, Substitutions}
 import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.Premise
+import net.prover.model.proof.{Premise, StepReference}
+import net.prover.model.proof.Premise.SingleLinePremise
 import net.prover.theorems.steps.RecursiveStepFinder
 import scalaz.Scalaz._
 
-object GetAllPremises extends RecursiveStepFinder[List[Premise]] {
+object GetReferencedPremises extends RecursiveStepFinder[List[Premise]] {
+  def apply(stepWithContext: StepWithContext): List[Premise] = {
+    apply(stepWithContext.step).filter {
+      p => !p.asOptionalInstanceOf[SingleLinePremise]
+        .flatMap(_.referencedLine.asOptionalInstanceOf[StepReference])
+        .exists(_.stepPath.startsWith(stepWithContext.stepContext.stepReference.stepPath))
+    }
+  }
   override def apply(statement: Statement): List[Premise] = Nil
   override def apply(inference: Inference.Summary): List[Premise] = Nil
   override def apply(premise: Premise): List[Premise] = List(premise)

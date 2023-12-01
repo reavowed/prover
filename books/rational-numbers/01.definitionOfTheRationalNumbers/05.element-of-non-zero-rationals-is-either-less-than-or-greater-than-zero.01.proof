@@ -19,22 +19,26 @@ elided f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 {
   }
 }
 assume ∨ = apply ⍳_ℤ 0ℕ t0 ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ {
-  elided f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d {
-    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+  inferenceWithPremiseDerivations {
+    inferenceExtraction {
       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
       prove ↔ ∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ t0 ℤ ¬ ∈ t0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) (t0) 1.0.0.0
       prove → ∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ t0 ℤ ¬ ∈ t0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ t0 ℤ ¬ ∈ t0 singleton apply ⍳_ℤ 0ℕ) () 1.0.0.1
       prove ∧ ∈ t0 ℤ ¬ ∈ t0 singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ t0 ℤ ¬ ∈ t0 singleton apply ⍳_ℤ 0ℕ) () 1.0.0.2 p0
       prove ¬ ∈ t0 singleton apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ t0 ℤ, ¬ ∈ t0 singleton apply ⍳_ℤ 0ℕ) () 1.0.0.3
     }
-    elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+    inferenceExtraction {
       prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (apply ⍳_ℤ 0ℕ)
       prove ↔ ∈ t0 singleton apply ⍳_ℤ 0ℕ = t0 apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ) (t0) 1.0.1.0
       prove → = t0 apply ⍳_ℤ 0ℕ ∈ t0 singleton apply ⍳_ℤ 0ℕ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 singleton apply ⍳_ℤ 0ℕ, = t0 apply ⍳_ℤ 0ℕ) () 1.0.1.1
       prove ¬ = t0 apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= t0 apply ⍳_ℤ 0ℕ, ∈ t0 singleton apply ⍳_ℤ 0ℕ) () 1.0.1.2 1.0.0
-      prove ¬ = apply ⍳_ℤ 0ℕ t0 63df87633696587242ebf84efb37d81a35fdc0713905a3d019bd45c73e2f66be () (t0, apply ⍳_ℤ 0ℕ) 1.0.1.3
     }
-    prove ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= apply ⍳_ℤ 0ℕ t0, ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ) () 1a 1.0.1
+    inferenceExtraction {
+      prove ↔ = apply ⍳_ℤ 0ℕ t0 = t0 apply ⍳_ℤ 0ℕ ed7b232f0ea68691151eb08591b48140cc57bbc02f27a1d8397d29f46f48c2b5 () (apply ⍳_ℤ 0ℕ, t0)
+      prove → = apply ⍳_ℤ 0ℕ t0 = t0 apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (= apply ⍳_ℤ 0ℕ t0, = t0 apply ⍳_ℤ 0ℕ) () 1.0.2.0
+      prove ¬ = apply ⍳_ℤ 0ℕ t0 f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (= apply ⍳_ℤ 0ℕ t0, = t0 apply ⍳_ℤ 0ℕ) () 1.0.2.1 1.0.1
+    }
+    prove ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= apply ⍳_ℤ 0ℕ t0, ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ) () 1a 1.0.2
   }
 }
 prove ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ 248476159b47ac04f4372eb3da2ea80598a55590337f781b1e6082ad4f70c003 (∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ, ∨ = apply ⍳_ℤ 0ℕ t0 ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ, ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ) () 0 1

@@ -16,7 +16,7 @@ object CreateProofStep {
     getConclusionOption: (ExpressionParsingContext, Substitutions) => Try[Option[Statement]],
     unwrappers: Seq[Unwrapper])(
     implicit stepProvingContext: StepProvingContext
-  ): Try[(Statement, Step, Seq[Step.Target])] = {
+  ): Try[(Step, Seq[Step.Target])] = {
     def withInference(inferenceId: String) = CreateAssertionStep(inferenceId, getConclusionOption, definition, unwrappers)
 
     def withPremise(serializedPremiseStatement: String) = {
@@ -31,7 +31,7 @@ object CreateProofStep {
         substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to intended new targets")).swap
         (result, stepOption, extractionTargets) <- ExtractionApplier.getPremiseExtractionStepWithPremises(premise, extraction, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
         step <- stepOption.orBadRequest("At least one step must be present")
-      } yield (result, step, extractionTargets)
+      } yield (step, extractionTargets)
     }
     definition.getFromInferenceOrPremise(withInference, withPremise)
   }

@@ -85,7 +85,7 @@ subproof (Conditions are equivalent) {
 elided 4cb43000bb83d45aed68b3fcf827f03cdf4bf5f595e8b72cf4c3579ba2807c53 {
   take f {
     assume ∧ function $0 functionFrom $0 product t0 t1 t2 {
-      elided c77bb73bca1f02d6d38280eab9fda22237ae20b85ed00393014b5566bfb5948b {
+      inferenceExtraction {
         prove ↔ ∀ x → ∈ $0 product t0 t1 = apply $$0 orderedPair first $0 second $0 with (first $0 second $0) t3 ∀ a → ∈ $0 t0 ∀ b → ∈ $0 t1 = apply $$$0 orderedPair $$0 $0 with ($$0 $0) t3 c77bb73bca1f02d6d38280eab9fda22237ae20b85ed00393014b5566bfb5948b (= apply $0 orderedPair $$0 $$1 with ($$0 $$1) t3) (t0, t1)
         prove ↔ ∀ a → ∈ $0 t0 ∀ b → ∈ $0 t1 = apply $$$0 orderedPair $$0 $0 with ($$0 $0) t3 ∀ x → ∈ $0 product t0 t1 = apply $$0 orderedPair first $0 second $0 with (first $0 second $0) t3 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∀ x → ∈ $0 product t0 t1 = apply $$0 orderedPair first $0 second $0 with (first $0 second $0) t3, ∀ a → ∈ $0 t0 ∀ b → ∈ $0 t1 = apply $$$0 orderedPair $$0 $0 with ($$0 $0) t3) () 1.0.0.0.0
       }

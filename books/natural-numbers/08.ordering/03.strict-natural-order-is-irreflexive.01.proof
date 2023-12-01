@@ -1,4 +1,4 @@
-elided 3a892325f069a905737f5f700d91ff187d047c348fcb1605168bbd0a24a248d0 {
+inferenceExtraction {
   prove strictTotalOrder <ℕ ℕ 3a892325f069a905737f5f700d91ff187d047c348fcb1605168bbd0a24a248d0 () ()
   prove ∧ ∧ ∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ transitiveRelation <ℕ ℕ semicompleteRelation <ℕ ℕ 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (<ℕ, ℕ) 0.0
 }

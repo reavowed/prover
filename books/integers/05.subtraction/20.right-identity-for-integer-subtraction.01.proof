@@ -10,7 +10,7 @@ elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
   }
 }
 elided 780bb169aa5fbcf54489be01508749717565853bd1740e0e7c3cdedd0ea51f2a {
-  elided 780bb169aa5fbcf54489be01508749717565853bd1740e0e7c3cdedd0ea51f2a {
+  inferenceExtraction {
     prove = apply ⍳_ℤ 0ℕ negatedZ apply ⍳_ℤ 0ℕ 780bb169aa5fbcf54489be01508749717565853bd1740e0e7c3cdedd0ea51f2a () ()
     prove = negatedZ apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ⍳_ℤ 0ℕ, negatedZ apply ⍳_ℤ 0ℕ) 1.0.0
   }

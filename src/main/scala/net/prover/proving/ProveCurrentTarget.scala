@@ -21,8 +21,8 @@ object ProveCurrentTarget {
     ReplaceStepAddingTargetsBeforeChain[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { implicit stepWithContext =>
       for {
         (targetStatement, unwrappers) <- UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement).find(_.definitionSymbols == definition.wrappingSymbols).map(x => (x.statement, x.unwrappers)).orBadRequest("Invalid wrapping symbols")
-        (result, newStep, targets) <- CreateProofStep(definition, (_, _) => Success(Some(targetStatement)), unwrappers)
-        _ <- (result == stepWithContext.step.statement).orBadRequest("Conclusion was incorrect")
+        (newStep, targets) <- CreateProofStep(definition, (_, _) => Success(Some(targetStatement)), unwrappers)
+        _ <- (newStep.statement == stepWithContext.step.statement).orBadRequest("Conclusion was incorrect")
       } yield (newStep, targets)
     }
   }

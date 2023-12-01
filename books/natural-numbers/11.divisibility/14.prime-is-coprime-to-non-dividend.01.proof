@@ -6,7 +6,7 @@ elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
     prove ∈ orderedPair 0ℕ t1 <ℕ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 1.0.1 0
   }
   prove ∨ ∈ orderedPair 0ℕ t0 <ℕ ∈ orderedPair 0ℕ t1 <ℕ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∈ orderedPair 0ℕ t1 <ℕ, ∈ orderedPair 0ℕ t0 <ℕ) () 1.0
-  elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
+  inferenceExtraction {
     prove ∧ ∈ gcdℕ t0 t1 ℕ ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 () (t0, t1) p0 p1 1.1
     prove ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ gcdℕ t0 t1 ℕ, ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 1.2.0
     prove ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ, ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 1.2.1
@@ -20,7 +20,7 @@ elided 364bbd79cbb397680f370a451f83ed23bcc45deb7d5d0295f038decaaa51657d {
     prove ∈ orderedPair 0ℕ t1 <ℕ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 2.0.1 0
   }
   prove ∨ ∈ orderedPair 0ℕ t0 <ℕ ∈ orderedPair 0ℕ t1 <ℕ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∈ orderedPair 0ℕ t1 <ℕ, ∈ orderedPair 0ℕ t0 <ℕ) () 2.0
-  elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
+  inferenceExtraction {
     prove ∧ ∈ gcdℕ t0 t1 ℕ ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 () (t0, t1) p0 p1 2.1
     prove ∈ gcdℕ t0 t1 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ gcdℕ t0 t1 ℕ, ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 2.2.0
   }
@@ -40,7 +40,7 @@ subproof (gcd(p, a) is not p) {
         prove ∈ orderedPair 0ℕ t1 <ℕ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 3.0.0.0.1 0
       }
       prove ∨ ∈ orderedPair 0ℕ t0 <ℕ ∈ orderedPair 0ℕ t1 <ℕ e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (∈ orderedPair 0ℕ t1 <ℕ, ∈ orderedPair 0ℕ t0 <ℕ) () 3.0.0.0
-      elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
+      inferenceExtraction {
         prove ∧ ∈ gcdℕ t0 t1 ℕ ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 () (t0, t1) p0 p1 3.0.0.1
         prove ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ gcdℕ t0 t1 ℕ, ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 3.0.0.2.0
         prove ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ, ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ) () 3.0.0.2.1

@@ -8,7 +8,7 @@ wrappedInferenceApplication {
 }
 elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
   prove ∧ ⊆ ∅ product ∅ t0 ∀ x → ∈ $0 ∅ ∃! b ∈ orderedPair $$0 $0 ∅ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ ∅ product ∅ t0, ∀ x → ∈ $0 ∅ ∃! b ∈ orderedPair $$0 $0 ∅) () 0 2
-  elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+  inferenceExtraction {
     prove ↔ ∧ function ∅ functionFrom ∅ ∅ t0 ∧ ⊆ ∅ product ∅ t0 ∀ x → ∈ $0 ∅ ∃! b ∈ orderedPair $$0 $0 ∅ a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (∅, ∅, t0)
     prove → ∧ ⊆ ∅ product ∅ t0 ∀ x → ∈ $0 ∅ ∃! b ∈ orderedPair $$0 $0 ∅ ∧ function ∅ functionFrom ∅ ∅ t0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∧ function ∅ functionFrom ∅ ∅ t0, ∧ ⊆ ∅ product ∅ t0 ∀ x → ∈ $0 ∅ ∃! b ∈ orderedPair $$0 $0 ∅) () 3.1.0
     prove ∧ function ∅ functionFrom ∅ ∅ t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ⊆ ∅ product ∅ t0 ∀ x → ∈ $0 ∅ ∃! b ∈ orderedPair $$0 $0 ∅, ∧ function ∅ functionFrom ∅ ∅ t0) () 3.1.1 3.0

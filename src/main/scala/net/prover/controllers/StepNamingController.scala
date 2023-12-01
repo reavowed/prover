@@ -97,8 +97,8 @@ class StepNamingController @Autowired() (val bookService: BookService) {
 
       for {
         inferenceId <- definition.inferenceId.orBadRequest("Inference id must be provided")
-        (conclusion, assertionStep, targetSteps) <- CreateAssertionStep(inferenceId, definition.parseIntendedConclusion, definition, Nil)
-        (mainNamingAssumption, mainNamingConclusion, mainNamingContext, mainNamingWrapper) <- getNamingWrapper(conclusion, step.statement).orBadRequest("Could not find naming step to apply")
+        (assertionStep, targetSteps) <- CreateAssertionStep(inferenceId, definition.parseIntendedConclusion, definition, Nil)
+        (mainNamingAssumption, mainNamingConclusion, mainNamingContext, mainNamingWrapper) <- getNamingWrapper(assertionStep.statement, step.statement).orBadRequest("Could not find naming step to apply")
         innerStep = recurseNamingWrappers(mainNamingAssumption, mainNamingConclusion)(mainNamingContext)
         namingStep = mainNamingWrapper(innerStep)
       } yield targetSteps :+ assertionStep :+ namingStep

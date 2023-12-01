@@ -11,7 +11,7 @@ subproof (Reverse implication (generalised)) {
           assume ∈ $0 ℕ {
             assume → ∧ ∈ orderedPair $$0 $0 <ℕ ¬ = t2 0ℕ ∈ orderedPair apply ×ℕ orderedPair $$0 t2 apply ×ℕ orderedPair $0 t2 <ℕ {
               assume ∧ ∈ orderedPair $$0 successor $0 <ℕ ¬ = t2 0ℕ {
-                elided cab6916eae683ff596e690ffacb01974242e074af96cb57c85d188f75fcfcfd8 {
+                inferenceExtraction {
                   prove ↔ ∈ orderedPair $$0 successor $0 <ℕ ∈ orderedPair $$0 $0 ≤ℕ cab6916eae683ff596e690ffacb01974242e074af96cb57c85d188f75fcfcfd8 () ($$0, $0) 0.0.0a 0.0.0.1.0.0a
                   prove → ∈ orderedPair $$0 successor $0 <ℕ ∈ orderedPair $$0 $0 ≤ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 successor $0 <ℕ, ∈ orderedPair $$0 $0 ≤ℕ) () 0.0.0.1.0.0.0.0.0.0
                   prove ∈ orderedPair $$0 $0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 successor $0 <ℕ, ∈ orderedPair $$0 $0 ≤ℕ) () 0.0.0.1.0.0.0.0.0.1 0.0.0.1.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -35,7 +35,7 @@ subproof (Reverse implication (generalised)) {
                     prove ∈ orderedPair apply ×ℕ orderedPair $0 t2 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 <ℕ 3743dc4334ea19e955601fd268e43943ea46dab11b5db7c8955a34a20dccfa30 () (apply ×ℕ orderedPair $0 t2, t2) 0.0.0.1.0.0.0.0.2.1.0 p2 0.0.0.1.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   }
                   prove ∈ orderedPair apply ×ℕ orderedPair $$0 t2 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 <ℕ 1f7bb894b49d0cb9296bcce3d3321d832f8c11b832e53955c1976ca28a712ac7 () (apply ×ℕ orderedPair $$0 t2, apply ×ℕ orderedPair $0 t2, apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2) 0.0.0.1.0.0.0.0.2.0 0.0.0.1.0.0.0.0.2.1
-                  elided 55835599beea40a47f4afb84d6a53402ee3f6dcf495d27037bd17fa53936591e {
+                  inferenceExtraction {
                     prove = apply ×ℕ orderedPair successor $0 t2 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 55835599beea40a47f4afb84d6a53402ee3f6dcf495d27037bd17fa53936591e () ($0, t2) 0.0.0.1.0.0a p2
                     prove = apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 apply ×ℕ orderedPair successor $0 t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair successor $0 t2, apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2) 0.0.0.1.0.0.0.0.2.3.0
                   }
@@ -51,7 +51,7 @@ subproof (Reverse implication (generalised)) {
                     prove = apply ×ℕ orderedPair $0 t2 apply ×ℕ orderedPair $$0 t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair $$0 t2, apply ×ℕ orderedPair $0 t2) 0.0.0.1.0.0.0.0.3.0
                     prove ∈ orderedPair apply ×ℕ orderedPair $$0 t2 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 <ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 <ℕ) (apply ×ℕ orderedPair $0 t2, apply ×ℕ orderedPair $$0 t2) 0.0.0.1.0.0.0.0.3.2.0 0.0.0.1.0.0.0.0.3.1
                   }
-                  elided 55835599beea40a47f4afb84d6a53402ee3f6dcf495d27037bd17fa53936591e {
+                  inferenceExtraction {
                     prove = apply ×ℕ orderedPair successor $0 t2 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 55835599beea40a47f4afb84d6a53402ee3f6dcf495d27037bd17fa53936591e () ($0, t2) 0.0.0.1.0.0a p2
                     prove = apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 apply ×ℕ orderedPair successor $0 t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair successor $0 t2, apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2) 0.0.0.1.0.0.0.0.3.3.0
                   }

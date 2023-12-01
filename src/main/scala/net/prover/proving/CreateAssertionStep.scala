@@ -17,7 +17,7 @@ object CreateAssertionStep {
     stepDefinition: StepDefinition,
     unwrappers: Seq[Unwrapper])(
     implicit stepProvingContext: StepProvingContext
-  ): Try[(Statement, Step, Seq[Step.Target])] = {
+  ): Try[(Step, Seq[Step.Target])] = {
     for {
       extraction <- stepProvingContext.provingContext.findInferenceExtraction(inferenceId, stepDefinition.extractionDefinition).orBadRequest("Could not find extraction with given inferences")
       inference = extraction.inference
@@ -43,6 +43,6 @@ object CreateAssertionStep {
         unwrappers,
         newTargetStatementsForExtractionOption,
         conclusionOption)
-    } yield (derivationStep.statement, derivationStep, targets)
+    } yield (derivationStep, targets)
   }
 }

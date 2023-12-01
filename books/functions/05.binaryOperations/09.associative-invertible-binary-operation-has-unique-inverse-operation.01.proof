@@ -89,7 +89,7 @@ let f invertingOperationBinaryOperation $0 t0 t1 c01064f3c40cf0c57562a46738008cf
       }
       prove ∧ function $0 functionFrom $0 product t1 t1 t1 723f4ecbdb9794317f2b63eb8b47a852f49f47ddfb89fe5c3484a35766b96a5b () ($0, t1, t1, apply t0 orderedPair $$$0 apply $$0 $$$1, t1) 1.0a 1.0.0.0
     }
-    elided 14a8a3161186dcc5b90a057a0a0be23e851b403852986852595316f6baf1177e {
+    inferenceExtraction {
       prove ↔ ∧ binaryOperation $0 binaryOperationOn $0 t1 ∧ function $0 functionFrom $0 product t1 t1 t1 14a8a3161186dcc5b90a057a0a0be23e851b403852986852595316f6baf1177e () ($0, t1)
       prove → ∧ function $0 functionFrom $0 product t1 t1 t1 ∧ binaryOperation $0 binaryOperationOn $0 t1 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∧ binaryOperation $0 binaryOperationOn $0 t1, ∧ function $0 functionFrom $0 product t1 t1 t1) () 1.0.1.0
       prove ∧ binaryOperation $0 binaryOperationOn $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ function $0 functionFrom $0 product t1 t1 t1, ∧ binaryOperation $0 binaryOperationOn $0 t1) () 1.0.1.1 1.0.0
@@ -290,7 +290,7 @@ let f invertingOperationBinaryOperation $0 t0 t1 c01064f3c40cf0c57562a46738008cf
               prove ∧ ∧ binaryOperation $0 binaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 = apply $$$0 orderedPair apply t0 orderedPair $$0 $0 $0 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ binaryOperation t0 binaryOperationOn t0 t1, ∧ ∧ binaryOperation $0 binaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 = apply $$$0 orderedPair apply t0 orderedPair $$0 $0 $0 $$0) () 1.0.3.0.0.1.0.0
               prove ∧ binaryOperation $0 binaryOperationOn $0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ binaryOperation $0 binaryOperationOn $0 t1, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 = apply $$$0 orderedPair apply t0 orderedPair $$0 $0 $0 $$0) () 1.0.3.0.0.1.0.1
             }
-            elided 14a8a3161186dcc5b90a057a0a0be23e851b403852986852595316f6baf1177e {
+            inferenceExtraction {
               prove ↔ ∧ binaryOperation $0 binaryOperationOn $0 t1 ∧ function $0 functionFrom $0 product t1 t1 t1 14a8a3161186dcc5b90a057a0a0be23e851b403852986852595316f6baf1177e () ($0, t1)
               prove → ∧ binaryOperation $0 binaryOperationOn $0 t1 ∧ function $0 functionFrom $0 product t1 t1 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ binaryOperation $0 binaryOperationOn $0 t1, ∧ function $0 functionFrom $0 product t1 t1 t1) () 1.0.3.0.0.1.1.0
               prove ∧ function $0 functionFrom $0 product t1 t1 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ binaryOperation $0 binaryOperationOn $0 t1, ∧ function $0 functionFrom $0 product t1 t1 t1) () 1.0.3.0.0.1.1.1 1.0.3.0.0.1.0

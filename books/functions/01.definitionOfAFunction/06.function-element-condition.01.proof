@@ -1,5 +1,5 @@
 assume ∈ orderedPair t3 t4 t0 {
-  elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+  inferenceExtraction {
     prove ↔ ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (t0, t1, t2)
     prove → ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ function t0 functionFrom t0 t1 t2, ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.0.0
     prove ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ function t0 functionFrom t0 t1 t2, ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.0.1 p0

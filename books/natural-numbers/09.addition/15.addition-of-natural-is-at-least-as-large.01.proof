@@ -19,7 +19,7 @@ take r {
         prove ∈ orderedPair apply +ℕ orderedPair t0 $0 successor apply +ℕ orderedPair t0 $0 <ℕ 1db20ca3deb41aeb2f93f122193bd3737a92628fa8660675a82a52ac1b7e5ce9 () (apply +ℕ orderedPair t0 $0) 3.0.0.0.0
       }
       prove ∈ orderedPair t0 successor apply +ℕ orderedPair t0 $0 <ℕ b7f321beb2d13bf399de257b118405f7d58e1fd947f2779d255c1d0afccb8391 () (t0, apply +ℕ orderedPair t0 $0, successor apply +ℕ orderedPair t0 $0) 3.0.0a 3.0.0.0
-      elided 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 {
+      inferenceExtraction {
         prove = apply +ℕ orderedPair t0 successor $0 successor apply +ℕ orderedPair t0 $0 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 () (t0, $0) p0 3.0a
         prove = successor apply +ℕ orderedPair t0 $0 apply +ℕ orderedPair t0 successor $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair t0 successor $0, successor apply +ℕ orderedPair t0 $0) 3.0.0.2.0
       }

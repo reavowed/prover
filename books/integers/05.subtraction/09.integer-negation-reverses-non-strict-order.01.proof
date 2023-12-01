@@ -1,6 +1,6 @@
 prove ↔ ∈ orderedPair t0 t1 <ℤ ∈ orderedPair negatedZ t1 negatedZ t0 <ℤ ec0e7e7e653305ff2cf9db08e8e823a1b5f038b7eeb699f2d8e8ae48ef304f23 () (t0, t1) p0 p1
 elided 4f2af95be844c1a6ad26708b2e1bec107b52964c6fbf31ef9d0d94f7097ec1c7 {
-  elided 4f2af95be844c1a6ad26708b2e1bec107b52964c6fbf31ef9d0d94f7097ec1c7 {
+  inferenceExtraction {
     prove ↔ = negatedZ t0 negatedZ t1 = t0 t1 4f2af95be844c1a6ad26708b2e1bec107b52964c6fbf31ef9d0d94f7097ec1c7 () (t0, t1) p0 p1
     prove ↔ = t0 t1 = negatedZ t0 negatedZ t1 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (= negatedZ t0 negatedZ t1, = t0 t1) () 1.0.0
   }

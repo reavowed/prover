@@ -17,7 +17,7 @@ take S {
                     prove ⊕ = $0 0ℕ ∈ 0ℕ $0 02bd7ae2d41023b89d8d6909b508437682b3b637a9958a9b75240d4cdb12be26 () ($0) 3.0.0.1.1.0.0.0.0
                     prove ∨ = $0 0ℕ ∈ 0ℕ $0 2cb695f79e67d4a66aadf665aa336968a1cec742a0feff3940335eb98c713167 (= $0 0ℕ, ∈ 0ℕ $0) () 3.0.0.1.1.0.0.0.1.0.0
                   }
-                  elided ed7b232f0ea68691151eb08591b48140cc57bbc02f27a1d8397d29f46f48c2b5 {
+                  inferenceExtraction {
                     prove ↔ = $0 0ℕ = 0ℕ $0 ed7b232f0ea68691151eb08591b48140cc57bbc02f27a1d8397d29f46f48c2b5 () ($0, 0ℕ)
                     prove → = $0 0ℕ = 0ℕ $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (= $0 0ℕ, = 0ℕ $0) () 3.0.0.1.1.0.0.0.1.1.0
                   }
@@ -240,7 +240,7 @@ take S {
                   prove ∨ ∈ orderedPair $0 successor $$0 <ℕ ∈ orderedPair successor $$0 $0 ≤ℕ 2cb695f79e67d4a66aadf665aa336968a1cec742a0feff3940335eb98c713167 (∈ orderedPair $0 successor $$0 <ℕ, ∈ orderedPair successor $$0 $0 ≤ℕ) () 3.0.0.1.1.3.1.3.1.4
                   prove ∈ orderedPair $0 successor $$0 <ℕ ff2f6dbf1f9d72bed232823eeca33745970df4eadd4712ff5dcc9db8d7b5ad1f (∈ orderedPair $0 successor $$0 <ℕ, ∈ orderedPair successor $$0 $0 ≤ℕ) () 3.0.0.1.1.3.1.3.1.5 3.0.0.1.1.3.1.3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                 }
-                elided cab6916eae683ff596e690ffacb01974242e074af96cb57c85d188f75fcfcfd8 {
+                inferenceExtraction {
                   prove ↔ ∈ orderedPair $0 successor $$0 <ℕ ∈ orderedPair $0 $$0 ≤ℕ cab6916eae683ff596e690ffacb01974242e074af96cb57c85d188f75fcfcfd8 () ($0, $$0) 3.0.0.1.1.3.1.3.0 3.0.0.1.1.3.1.0
                   prove → ∈ orderedPair $0 successor $$0 <ℕ ∈ orderedPair $0 $$0 ≤ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $0 successor $$0 <ℕ, ∈ orderedPair $0 $$0 ≤ℕ) () 3.0.0.1.1.3.1.3.2.0
                   prove ∈ orderedPair $0 $$0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 successor $$0 <ℕ, ∈ orderedPair $0 $$0 ≤ℕ) () 3.0.0.1.1.3.1.3.2.1 3.0.0.1.1.3.1.3.1

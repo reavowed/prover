@@ -2,7 +2,7 @@ prove ∀ a → ∈ $0 t1 ∃! b ∧ ∈ $0 t1 ∧ = apply t0 orderedPair $$0 $0
 prove ∃! f ∧ ∧ function $0 functionFrom $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 68b01f5ab65d0995f0c75d8c5549250cf53acdf9aeb8051355c7f9f91c7b1758 (∧ = apply t0 orderedPair $0 $1 t2 = apply t0 orderedPair $1 $0 t2) (t1, t1) 0
 take f {
   elided 95c024ce2ef4a03364afda1a7c852e0b430fa0695e09f442be98208a215ba4fa {
-    elided 95c024ce2ef4a03364afda1a7c852e0b430fa0695e09f442be98208a215ba4fa {
+    inferenceExtraction {
       prove ↔ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∧ function $0 functionFrom $0 t1 t1 95c024ce2ef4a03364afda1a7c852e0b430fa0695e09f442be98208a215ba4fa () ($0, t1)
       prove ↔ ∧ function $0 functionFrom $0 t1 t1 ∧ unaryOperation $0 unaryOperationOn $0 t1 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∧ unaryOperation $0 unaryOperationOn $0 t1, ∧ function $0 functionFrom $0 t1 t1) () 2.0.0.0
     }

@@ -26,7 +26,7 @@ let f_≈ = $0 replacementSet a t1 orderedPair equivalenceClass $0 t0 apply t2 $
                   prove = equivalenceClass $0 t0 $$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$0, equivalenceClass $0 t0) 0.0.2.0.1.0.0.1.0.0
                 }
                 prove = equivalenceClass $0 t0 equivalenceClass $$$0 t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (equivalenceClass $0 t0, $$$$0, equivalenceClass $$$0 t0) 0.0.2.0.1.0.0.1.0 0.0.2.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                elided 43ca65f36945db6667cd2ba0477801e15966d0c546ccec991169d98b809a3949 {
+                inferenceExtraction {
                   prove ↔ = equivalenceClass $0 t0 equivalenceClass $$$0 t0 ∈ orderedPair $0 $$$0 t0 43ca65f36945db6667cd2ba0477801e15966d0c546ccec991169d98b809a3949 () (t0, t1, $0, $$$0) p0 0.0.2.0.1.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.2.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                   prove → = equivalenceClass $0 t0 equivalenceClass $$$0 t0 ∈ orderedPair $0 $$$0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (= equivalenceClass $0 t0 equivalenceClass $$$0 t0, ∈ orderedPair $0 $$$0 t0) () 0.0.2.0.1.0.0.1.2.0
                   prove ∈ orderedPair $0 $$$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= equivalenceClass $0 t0 equivalenceClass $$$0 t0, ∈ orderedPair $0 $$$0 t0) () 0.0.2.0.1.0.0.1.2.1 0.0.2.0.1.0.0.1.1
@@ -53,7 +53,7 @@ let f_≈ = $0 replacementSet a t1 orderedPair equivalenceClass $0 t0 apply t2 $
     }
     elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
       prove ∧ ⊆ $0 product equivalenceQuotient t1 t0 t3 ∀ x → ∈ $0 equivalenceQuotient t1 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ $0 product equivalenceQuotient t1 t0 t3, ∀ x → ∈ $0 equivalenceQuotient t1 t0 ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.1 0.0.2
-      elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
+      inferenceExtraction {
         prove ↔ ∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3 ∧ ⊆ $0 product equivalenceQuotient t1 t0 t3 ∀ x → ∈ $0 equivalenceQuotient t1 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () ($0, equivalenceQuotient t1 t0, t3)
         prove → ∧ ⊆ $0 product equivalenceQuotient t1 t0 t3 ∀ x → ∈ $0 equivalenceQuotient t1 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 ∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3, ∧ ⊆ $0 product equivalenceQuotient t1 t0 t3 ∀ x → ∈ $0 equivalenceQuotient t1 t0 ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.3.1.0
         prove ∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ⊆ $0 product equivalenceQuotient t1 t0 t3 ∀ x → ∈ $0 equivalenceQuotient t1 t0 ∃! b ∈ orderedPair $$0 $0 $$$0, ∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3) () 0.0.3.1.1 0.0.3.0
