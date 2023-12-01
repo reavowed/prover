@@ -3,6 +3,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import {DndProvider} from "react-dnd";
 import Backend from "react-dnd-html5-backend";
+import {fetchJson} from "../../utils";
 import {SimpleDraggableList} from "../draggableList/SimpleDraggableList";
 import FlexRow from "../FlexRow";
 import BookContext from "./book/BookContext";
@@ -55,7 +56,7 @@ export class Book extends React.Component {
   };
 
   deleteChapter = (chapter) => {
-    return window.fetchJson(chapter.url, {method: "DELETE"})
+    return fetchJson(chapter.url, {method: "DELETE"})
       .then(({chapters}) => this.updateChapters(chapters));
   };
 
@@ -63,7 +64,7 @@ export class Book extends React.Component {
     if (target) {
       const newIndex = target.index + (after ? 1 : 0) - (index < target.index ? 1 : 0);
       if (newIndex !== index) {
-        return window.fetchJson(path.join(url, "index"), {method: "PUT", body: newIndex})
+        return fetchJson(path.join(url, "index"), {method: "PUT", body: newIndex})
           .then(({chapters}) => this.updateChapters(chapters));
       }
     }

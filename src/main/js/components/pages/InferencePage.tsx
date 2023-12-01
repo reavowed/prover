@@ -1,42 +1,57 @@
 import * as path from "path";
 import React, {useContext, useState} from "react";
 import Button from "react-bootstrap/Button";
+import {fetchJson} from "../../utils";
 import {DisplaySettingsContext} from "../DisplaySettings";
 import BoundVariableListContext from "../expressions/boundVariables/BoundVariableListContext";
 import ErrorAlert from "../helpers/ErrorAlert";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
 import InputWithShorthandReplacement from "../helpers/InputWithShorthandReplacement";
 import {InferenceSummary} from "../InferenceSummary";
-import {Monospace} from "../Monospace";
+import Monospace from "../Monospace";
 import {Breadcrumbs} from "./components/Breadcrumbs";
 import EditableProperty from "./components/EditableProperty";
 import {NavLinks} from "./components/NavLinks";
-import {Usages} from "./components/Usages";
+import Usages from "./components/Usages";
 import {Page} from "./Page";
 import {serializeVariable} from "./utils/entryFunctions";
+import {Inference} from "../definitions/EntryDefinitions";
+import {EntryPageProps} from "./EntryPageProps";
+import _ from "lodash";
+import {VariableDefinition} from "../definitions/DefinitionParts";
+import {PremiseRenderer} from "../ResultWithPremises";
 
-export function Inference({inference, title, url, bookLink, chapterLink, previous, next, usages, children, buttons, createPremiseElement, editable}) {
+export type InferencePageProps = EntryPageProps & {
+  inference: Inference
+  title: string
+  buttons: React.ReactNode
+  createPremiseElement: PremiseRenderer
+  editable: boolean
+}
+
+export default function InferencePage({inference, title, url, bookLink, chapterLink, previous, next, usages, children, buttons, createPremiseElement, editable}: React.PropsWithChildren<InferencePageProps>) {
   const displaySettings = useContext(DisplaySettingsContext);
   const boundVariableLists = useContext(BoundVariableListContext) || [];
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState(null);
-  const updateName = async (newName) => {
-    const {url: newUrl} = await window.fetchJson(path.join(url, "name"), {method: "PUT", body: newName});
+  const updateName = async (newName: string) => {
+    const {url: newUrl} = await fetchJson(path.join(url, "name"), {method: "PUT", body: newName});
     window.location.pathname = newUrl;
   };
-  const updatePremises = async (newPremises) => {
-    await window.fetchJson(path.join(url, "premises"), {method: "PUT", body: _.filter(newPremises.split(/\r?\n/), s => s.length)});
+  const updatePremises = async (newPremiseText: string) => {
+    const newPremises = newPremiseText.split(/\r?\n/).filter(s => s.length);
+    await fetchJson(path.join(url, "premises"), {method: "PUT", body: newPremises});
     window.location.reload();
   };
-  const updateConclusion = async (newConclusion) => {
-    await window.fetchJson(path.join(url, "conclusion"), {method: "PUT", body: newConclusion});
+  const updateConclusion = async (newConclusion: string) => {
+    await fetchJson(path.join(url, "conclusion"), {method: "PUT", body: newConclusion});
     window.location.reload();
   };
-  const updateVariables = async (newVariables) => {
-    await window.fetchJson(path.join(url, "variables"), {method: "PUT", body: newVariables});
+  const updateVariables = async (newVariables: string) => {
+    await fetchJson(path.join(url, "variables"), {method: "PUT", body: newVariables});
     window.location.reload();
   };
-  function serializeVariables(prefix, variables) {
+  function serializeVariables(prefix: string, variables: VariableDefinition[]) {
     if (variables.length > 0) {
       return prefix + " (" + variables.map(serializeVariable).join(", ") + ")"
     }

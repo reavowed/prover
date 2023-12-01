@@ -2,6 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import {fetchJson} from "../../utils";
 import {Page} from "./Page";
 
 export class Books extends React.Component {
@@ -37,7 +38,7 @@ export class Books extends React.Component {
     this.setState({newBook});
   };
   addNewBook = () => {
-    window.fetchJson("/books", {method: "POST", body: this.state.newBook})
+    fetchJson("/books", {method: "POST", body: this.state.newBook})
       .then(({books}) => {
         this.setState({books});
         this.hideNewBookModal();

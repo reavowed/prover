@@ -12,7 +12,11 @@
         "strictNullChecks": true,
         "strictFunctionTypes": false,
         "strictPropertyInitialization": true,
-      "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "typeRoots": [
+            "node_modules/@types",
+            "src/main/js/@types"
+        ]
     },
     "include": [
         "./src/main/js/**/*"

@@ -6,6 +6,7 @@ import DisplaySettings from "../../DisplaySettings";
 import {Inference} from "../../definitions/EntryDefinitions";
 import {Step} from "../../../models/Step";
 import {Reference} from "../../definitions/Reference";
+import {JsonRequestInit} from "../../../utils";
 
 type StepChangeProps = {
     path: number[]
@@ -16,9 +17,19 @@ type StepDeletionProps = {
     startIndex: number
     endIndex: number
 }
+type MultipleStepReplacementProps = {
+    parentPath: number[]
+    startIndex: number
+    endIndex: number
+    newSteps: any[]
+}
 type InsertionAndReplacementProps = {
     insertion: StepChangeProps
     replacement: StepChangeProps
+}
+type InsertionAndMultipleReplacementProps = {
+    insertion: StepChangeProps
+    replacement: MultipleStepReplacementProps
 }
 type InsertionAndDeletionProps = {
     insertion: StepChangeProps
@@ -46,14 +57,14 @@ export type TheoremContextType = {
     variableDefinitions: VariableDefinitions
     displaySettings: DisplaySettings
     inferencesToHighlight?: string[]
-    fetchJson(subpath: string, options: RequestInit): Promise<any>
-    updateTheorem(newTheoremJson: any): Promise<void>
-    insertSteps(proofIndex: number, props: ProofUpdateProps<StepChangeProps>): Promise<[number[], Step[]]>
-    replaceSteps(proofIndex: number, props: ProofUpdateProps<StepChangeProps>): Promise<[number[], Step[]]>
-    insertAndReplaceSteps(proofIndex: number, props: ProofUpdateProps<InsertionAndReplacementProps>): Promise<[number[], Step[], number[], Step[]]>
-    insertAndReplaceMultipleSteps(proofIndex: number, props: ProofUpdateProps<InsertionAndReplacementProps>): Promise<[number[], Step[], number[], Step[]]>
-    insertAndDeleteSteps(proofIndex: number, props: ProofUpdateProps<InsertionAndDeletionProps>): Promise<void>
-    setHighlighting(newHighlightedPremises: Reference[], newHighlightedConclusion: Reference, proofIndex: number): void
+    fetchJson(subpath: string, options?: JsonRequestInit): Promise<any>
+    updateTheorem(newTheoremJson: any): void
+    insertSteps(proofIndex: number, props: ProofUpdateProps<StepChangeProps>): [number[], Step[]]
+    replaceStep(proofIndex: number, props: ProofUpdateProps<StepChangeProps>): [number[], Step[]]
+    insertAndReplaceSteps(proofIndex: number, props: ProofUpdateProps<InsertionAndReplacementProps>): [number[], Step[], number[], Step[]]
+    insertAndReplaceMultipleSteps(proofIndex: number, props: ProofUpdateProps<InsertionAndMultipleReplacementProps>): [number[], Step[], number[], Step[]]
+    insertAndDeleteSteps(proofIndex: number, props: ProofUpdateProps<InsertionAndDeletionProps>): void
+    setHighlighting(newHighlightedPremises: Reference[], newHighlightedConclusion: Reference | undefined, proofIndex: number): void
     getHighlighting(proofIndex?: number): [ActionHighlight[], Reference[]]
     setHighlightingAction(actionHighlights: ActionHighlight[], staticHighlights: Reference[], proofIndex: number): void
     clearHighlightingAction(): void

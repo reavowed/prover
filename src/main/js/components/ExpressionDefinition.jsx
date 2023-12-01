@@ -6,7 +6,7 @@ import InputWithShorthandReplacement from "./helpers/InputWithShorthandReplaceme
 import {Breadcrumbs} from "./pages/components/Breadcrumbs";
 import EditableProperties from "./pages/components/EditableProperties";
 import {NavLinks} from "./pages/components/NavLinks";
-import {Usages} from "./pages/components/Usages";
+import Usages from "./pages/components/Usages";
 import {Page} from "./pages/Page";
 
 export function ExpressionDefinition({url, title, definition, setDefinition, bookLink, chapterLink, previous, next, usages, hasDisambiguator, children, availableEntries}) {

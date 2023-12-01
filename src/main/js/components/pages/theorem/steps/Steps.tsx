@@ -434,13 +434,13 @@ const Container = function Container({path: stepsPath, children}: {path: number[
       "moveSteps",
       {
         method: "POST",
-        body: JSON.stringify({
+        body: {
           sourcePath,
           sourceStartIndex: startIndex,
           sourceEndIndex: endIndex,
           destinationPath,
           destinationIndex
-        })
+        }
       });
   }
   return <DraggableList type="Steps" enabled={true} onDrop={onDrop}>

@@ -3,11 +3,12 @@ import {CopiableExpression} from "./expressions/ExpressionComponent";
 import {joinAsList, wrapWithFragment} from "./helpers/reactFunctions";
 import {Expression} from "../models/Expression";
 
+export type PremiseRenderer = (premise: Expression, index: number) => React.ReactElement
 type ResultWithPremisesProps = {
   premises: Expression[]
   result: React.ReactNode
   className?: string
-  createPremiseElement?: (premise: Expression) => React.ReactElement
+  createPremiseElement?: PremiseRenderer
 }
 export function ResultWithPremises({premises, result, createPremiseElement, className}: ResultWithPremisesProps) {
   createPremiseElement = createPremiseElement || (p => <CopiableExpression key={p.serialize()} expression={p} />);

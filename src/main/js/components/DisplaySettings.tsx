@@ -40,7 +40,7 @@ class DisplaySettings {
     return this.withVariableDefinitions(
       {
         statements: this.variableDefinitions.statements,
-        terms: [...this.variableDefinitions.terms, ...termVariableNames.map(name => {return {name, arity: 0}})]
+        terms: [...this.variableDefinitions.terms, ...termVariableNames.map(name => {return {name, arity: 0, attributes: []}})]
       });
   }
 
@@ -61,8 +61,8 @@ class DisplaySettings {
   static forExpressionDefinition(definition: ExpressionDefinition, availableEntries: AvailableEntries) {
     const summary = availableEntries.definitions[definition.symbol];
     const variableDefinitions: VariableDefinitions = {
-      statements: _.filter(summary.components, c => c.type === "statement"),
-      terms: _.filter(summary.components, c => c.type === "term")
+      statements: _.filter(summary.components, c => c.type === "statement").map(c => {return {...c, attributes: []}}),
+      terms: _.filter(summary.components, c => c.type === "term").map(c => {return {...c, attributes: []}})
     };
 
     const relevantStatements = [definition.definingStatement, ...(definition.premises || [])].filter(isDefined);

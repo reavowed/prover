@@ -1,5 +1,5 @@
 import React from "react";
-import {Usages} from "./Usages";
+import Usages from "./Usages";
 
 export default function StatementDefinitionUsages({usages, statementDefinition}) {
   return <>

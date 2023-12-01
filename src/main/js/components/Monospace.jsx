@@ -7,6 +7,11 @@ function wrapElement(element) {
   `;
 }
 
-export const Monospace = wrapElement("div");
-Monospace.Link = wrapElement("a");
-Monospace.Text = wrapElement("span");
+const Monospace = wrapElement("div");
+const Link = wrapElement("a");
+const Text = wrapElement("span");
+
+export default Object.assign(Monospace, {
+  Link,
+  Text
+})

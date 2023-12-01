@@ -1,7 +1,7 @@
 import React from "react";
 import FlexRow from "../../FlexRow";
 import {formatHtml} from "../../helpers/Formatter";
-import {Monospace} from "../../Monospace";
+import Monospace from "../../Monospace";
 
 export class NavLinks extends React.Component {
   render() {

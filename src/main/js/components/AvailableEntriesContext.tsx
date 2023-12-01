@@ -27,15 +27,15 @@ export type AvailableEntries = {
 
 const AvailableEntriesContext = React.createContext<AvailableEntries>({} as AvailableEntries);
 
-type AvailableEntriesProps = {
-    definitions: {[key: string]: ExpressionDefinitionSummary}
-    typeDefinitions: {[key: string]: TypeDefinitionSummary}
-    typeRelationDefinitions: {[key: string]: TypeRelationDefinitionSummary}
-    standalonePropertyDefinitions: {[key: string]: StandalonePropertyDefinitionSummary}
-    definitionShorthands: {[key: string]: DisambiguatedSymbol}
-    displayShorthands: any[]
-    inferences?: InferenceSummary[]
-    binaryRelations?: any[]
+export type AvailableEntriesProps = {
+  definitions: {[key: string]: ExpressionDefinitionSummary}
+  typeDefinitions: {[key: string]: TypeDefinitionSummary}
+  typeRelationDefinitions: {[key: string]: TypeRelationDefinitionSummary}
+  standalonePropertyDefinitions: {[key: string]: StandalonePropertyDefinitionSummary}
+  definitionShorthands: {[key: string]: DisambiguatedSymbol}
+  displayShorthands: any[]
+  inferences?: InferenceSummary[]
+  binaryRelations?: any[]
 }
 
 export function createAvailableEntries({definitions, typeDefinitions, typeRelationDefinitions, standalonePropertyDefinitions, definitionShorthands, displayShorthands, inferences = [], binaryRelations = []}: AvailableEntriesProps): AvailableEntries {

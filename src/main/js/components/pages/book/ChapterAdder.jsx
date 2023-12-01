@@ -1,6 +1,7 @@
 import path from "path";
 import React, {useContext, useState} from "react";
 import Button from "react-bootstrap/Button";
+import {fetchJson} from "../../../utils";
 import ObjectInputWithSimpleForm from "../../helpers/ObjectInputWithSimpleForm";
 import BookContext from "./BookContext";
 
@@ -14,7 +15,7 @@ export function ChapterAdder() {
   const [adding, setAdding] = useState(false);
   const onCancel = () => setAdding(false);
   const saveChapter = (newChapter) => {
-    return window.fetchJson(
+    return fetchJson(
       path.join(context.url, "chapters"),
       {method: "POST", body: newChapter}
     ).then(({chapters}) => context.updateChapters(chapters));

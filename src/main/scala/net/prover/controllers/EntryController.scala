@@ -30,9 +30,9 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
       entryWithContext <- bookService.findEntry[ChapterEntry](bookKey, chapterKey, entryKey)
       (viewName, baseProps) <- entryWithContext.entry match {
         case axiom: Axiom =>
-          Success(("Axiom", Map("axiom" -> axiom)))
+          Success(("AxiomPage", Map("axiom" -> axiom)))
         case theorem: Theorem =>
-          Success(("Theorem", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(GetReferencedInferences(entryWithContext), entryWithContext.globalContext))))
+          Success(("TheoremPage", Map("theorem" -> theorem, "inferences" -> BookService.getInferenceLinks(GetReferencedInferences(entryWithContext), entryWithContext.globalContext))))
         case statementDefinition: StatementDefinitionEntry =>
           Success(("StatementDefinition", Map("definition" -> statementDefinition)))
         case termDefinition: TermDefinitionEntry =>

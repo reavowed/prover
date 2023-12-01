@@ -1,6 +1,5 @@
 package net.prover.controllers
 
-import net.prover.books.model.Book
 import net.prover.controllers.models.LinkSummary
 import net.prover.entries.{ChapterWithContext, EntryWithContext, GlobalContext}
 import net.prover.model._
@@ -9,24 +8,27 @@ import net.prover.theorems.GetReferencedInferences
 
 import scala.util.Try
 
+case class UsagesForChapter(bookTitle: String, chapterTitle: String, theoremUsages: Seq[TheoremUsage])
+case class TheoremUsage(link: LinkSummary, inferenceIds: Set[String])
+
 trait UsageFinder {
   def bookService: BookService
 
-  def getInferenceUsages(entry: ChapterEntry): Seq[(String, String, Seq[(LinkSummary, Set[String])])] = {
+  def getInferenceUsages(entry: ChapterEntry): Seq[UsagesForChapter] = {
     val allInferences = entry.inferences.toSet[Inference]
-    def getInferenceLinks(chapterWithContext: ChapterWithContext): Seq[(LinkSummary, Set[String])] = {
+    def getInferenceLinks(chapterWithContext: ChapterWithContext): Seq[TheoremUsage] = {
       for {
         theoremWithContext <- chapterWithContext.theoremsWithContexts
         usedInferences = GetReferencedInferences(theoremWithContext).intersect(allInferences)
         if usedInferences.nonEmpty
-      } yield (LinkSummary(theoremWithContext), usedInferences.map(_.id))
+      } yield TheoremUsage(LinkSummary(theoremWithContext), usedInferences.map(_.id))
     }
     for {
       bookWithContext <- bookService.globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts
       inferenceLinks = getInferenceLinks(chapterWithContext)
       if inferenceLinks.nonEmpty
-    } yield (chapterWithContext.bookWithContext.book.title, chapterWithContext.chapter.title, inferenceLinks)
+    } yield UsagesForChapter(chapterWithContext.bookWithContext.book.title, chapterWithContext.chapter.title, inferenceLinks)
   }
 
   def checkNoUsages(entriesPotentiallyUsing: Iterable[EntryWithContext], entriesPotentiallyBeingUsed: Iterable[EntryWithContext]): Try[Any] = {

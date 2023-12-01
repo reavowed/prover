@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import {DndProvider} from 'react-dnd'
 import Backend from 'react-dnd-html5-backend'
 import {Parser} from "../../Parser";
+import {fetchJson} from "../../utils";
 import AvailableEntriesContext, {createAvailableEntries} from "../AvailableEntriesContext";
 import {SimpleDraggableList} from "../draggableList/SimpleDraggableList";
 import {InlineTextEditor} from "../helpers/InlineTextEditor";
@@ -52,7 +53,7 @@ export class Chapter extends React.Component {
   }
 
   updateChapter = (fetchUrl, fetchData) => {
-    return window.fetchJson(fetchUrl, fetchData)
+    return fetchJson(fetchUrl, fetchData)
       .then(newProps => {
         this.setState(this.getStateFromProps(newProps));
         if (window.location.pathname !== newProps.url) {
