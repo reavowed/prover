@@ -24,4 +24,8 @@ case class TypedStepWithContext[+T <: Step : ClassTag](
       step.specifyStepContext(stepContext),
       proofWithContext)
   }
+
+  def substeps(implicit ev: T <:< Step.WithSubsteps): StepsWithContext = {
+    forSubsteps(ev.apply(step))
+  }
 }

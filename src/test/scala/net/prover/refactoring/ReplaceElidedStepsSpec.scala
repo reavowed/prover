@@ -33,6 +33,30 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
 
       ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
     }
+
+    "replace an extraction" in {
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0))
+      implicit val outerStepContext = createOuterStepContext(Nil)
+
+      val initialSteps = recalculateReferences(Seq(
+        target(Equals(a, b)),
+        elided(membershipConditionForSingleton, Seq(
+          assertion(membershipConditionForSingleton, Nil, Seq(b)),
+          assertion(specification, Seq(Equivalence(ElementOf($, Singleton(b)), Equals($, b))), Seq(a)),
+          assertion(reverseImplicationFromEquivalence, Seq(ElementOf(a, Singleton(b)), Equals(a, b)), Nil),
+          assertion(modusPonens, Seq(Equals(a, b), ElementOf(a, Singleton(b))), Nil)))
+      )(SubstitutionContext.outsideProof))
+      val expectedSteps = recalculateReferences(Seq(
+        target(Equals(a, b)),
+        inferenceExtraction(Seq(
+          assertion(membershipConditionForSingleton, Nil, Seq(b)),
+          assertion(specification, Seq(Equivalence(ElementOf($, Singleton(b)), Equals($, b))), Seq(a)),
+          assertion(reverseImplicationFromEquivalence, Seq(ElementOf(a, Singleton(b)), Equals(a, b)), Nil),
+          assertion(modusPonens, Seq(Equals(a, b), ElementOf(a, Singleton(b))), Nil)))
+      )(SubstitutionContext.outsideProof))
+
+      ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
+    }
   }
 
 }
