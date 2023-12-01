@@ -34,7 +34,7 @@ object WriteBook {
 
   private def getChapterFiles(newBookWithContext: BookWithContext, oldBookWithContext: Option[BookWithContext]): Seq[FileDefinition] = {
     newBookWithContext.chaptersWithContexts.flatMapWithIndex { (newChapter, index) =>
-      val oldChapter = oldBookWithContext.flatMap(_.chaptersWithContexts.lift(index))
+      val oldChapter = oldBookWithContext.flatMap(_.chaptersWithContexts.lift(index)).filter(_.chapter.title == newChapter.chapter.title)
       getChapterFiles(newChapter, oldChapter, index)
     }
   }
@@ -57,7 +57,7 @@ object WriteBook {
   private def getProofFiles(chapterWithContext: ChapterWithContext, oldChapterWithContext: Option[ChapterWithContext], chapterIndex: Int, isWriteCheckRequired: Boolean): Seq[FileDefinition] = {
     import chapterWithContext._
     chapterWithContext.theoremsWithContexts.flatMapWithIndex { (theoremWithContext, theoremIndex) =>
-      val oldTheoremWithContext = oldChapterWithContext.flatMap(_.theoremsWithContexts.lift(theoremIndex))
+      val oldTheoremWithContext = oldChapterWithContext.flatMap(_.theoremsWithContexts.lift(theoremIndex)).filter(_.theorem.title == theoremWithContext.theorem.title)
       val isTheoremWriteCheckRequired = isWriteCheckRequired && !oldTheoremWithContext.exists(_.theorem eq theoremWithContext.theorem)
       getProofFiles(theoremWithContext, oldTheoremWithContext.filter(_ => isTheoremWriteCheckRequired), chapterIndex, theoremIndex, isTheoremWriteCheckRequired)
     }

@@ -19,7 +19,7 @@ case class ChapterWithContext(
 
   def getEntry[T <: ChapterEntry : ClassTag](entryKey: String): Try[TypedEntryWithContext[T]] = {
     chapter.entriesWithKeys.listWithKeys.find(_._2 == entryKey)
-      .orNotFound(s"Chapter $chapterKey")
+      .orNotFound(s"Entry $entryKey")
       .flatMap(_._1.asOptionalInstanceOf[T].orBadRequest(s"Entry is not a ${classTag[T].runtimeClass.getSimpleName}"))
       .map(TypedEntryWithContext(_, entryKey, this))
   }

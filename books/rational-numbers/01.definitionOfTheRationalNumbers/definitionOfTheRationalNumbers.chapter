@@ -35,7 +35,7 @@ premise ∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ
 premise ∈ t1 diff ℤ singleton apply ⍳_ℤ 0ℕ
 conclusion ∈ apply ×ℤ orderedPair t0 t1 diff ℤ singleton apply ⍳_ℤ 0ℕ
 
-theorem Element of Non-Zero Rationals Is Either Less than or Greater than Zero
+theorem Element of Non-Zero Integers Is Either Less than or Greater than Zero
 termVariables(a 0)
 premise ∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ
 conclusion ⊕ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ
