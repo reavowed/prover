@@ -194,8 +194,10 @@ object ExtractionCalculator {
 
   def getInferenceExtractions(inference: Inference)(implicit provingContext: ProvingContext): Seq[InferenceExtraction] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
+    val statementDefinition = provingContext.availableEntries.statementDefinitions.find(_.constructionInference.contains(inference))
     getExtractions(inference.conclusion, VariableTracker.fromInference(inference))
       .filter(extraction => !inference.premises.contains(extraction.conclusion))
+      .filter(extraction => !statementDefinition.exists(_.deconstructionInference.exists(extraction.extractionDefinition.extractionInferences.contains)))
       .map(innerExtraction => InferenceExtraction(inference.summary, innerExtraction))
   }
 
