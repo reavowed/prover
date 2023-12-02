@@ -1,10 +1,10 @@
 package net.prover.controllers
 
 import net.prover.books.management.BookStateManager
-import net.prover.refactoring.{RederivePremises, ReplaceElidedSteps, ReplaceInference}
+import net.prover.refactoring.{RederivePremises, ReplaceElidedSteps, ReplaceInference, Reprove}
 import net.prover.theorems.{ClearInference, RecalculateReferences}
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
+import org.springframework.web.bind.annotation.{GetMapping, PathVariable, RequestMapping, RequestParam, RestController}
 import scalaz.Id.Id
 
 import scala.util.Try
@@ -20,6 +20,32 @@ class OperationsController @Autowired() (implicit bookService: BookService, book
   @GetMapping(value = Array("replaceElidedSteps"))
   def replaceElidedSteps(): Unit = {
     ReplaceElidedSteps()
+  }
+
+  @GetMapping(Array("/replaceElidedSteps/{bookKey}/{chapterKey}/{theoremKey}"))
+  def replaceElidedSteps(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String
+  ): Unit = {
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { theoremWithContext =>
+      Try {
+        ReplaceElidedSteps(theoremWithContext)
+      }
+    }
+  }
+
+  @GetMapping(Array("/reprove/{bookKey}/{chapterKey}/{theoremKey}"))
+  def reprove(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String
+  ): Unit = {
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { theoremWithContext =>
+      Try {
+        Reprove(theoremWithContext)
+      }
+    }
   }
 
   @GetMapping(value = Array("rederivePremises"))
