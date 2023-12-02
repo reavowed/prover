@@ -34,7 +34,12 @@ object DirectDerivationFinder {
       } yield premiseSteps :+ assertionStep
     }
 
-    fromPremises orElse fromFact orElse byRemovingTermDefinition orElse bySimplifyingTarget
+    def byRewriting = {
+      val (rewriteSteps, rewrittenTarget) = DerivationFinder.rewriteWithKnownValues(targetStatement)
+      if (rewriteSteps.nonEmpty) findDirectDerivationForStatement(rewrittenTarget).map(_ ++ rewriteSteps) else None
+    }
+
+    fromPremises orElse fromFact orElse byRemovingTermDefinition orElse bySimplifyingTarget orElse byRewriting
   }
 
   private def findDerivationForStatementFromFact(

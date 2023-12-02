@@ -25,7 +25,7 @@ object DerivationOrTargetFinder {
     } yield (innerSteps :+ step, innerTargets, true)
 
     def asTarget = {
-      val (rewriteSteps, rewrittenStatement) = rewriteTarget(premiseStatement)
+      val (rewriteSteps, rewrittenStatement) = DerivationFinder.rewriteWithKnownValues(premiseStatement)
       val (deconstructionSteps, deconstructedStatements) = splitTarget(rewrittenStatement)
       (rewriteSteps ++ deconstructionSteps, deconstructedStatements.map(Step.Target(_)), false)
     }
@@ -76,20 +76,6 @@ object DerivationOrTargetFinder {
     implicit stepProvingContext: StepProvingContext
   ): (Seq[Step.AssertionOrExtraction], Seq[Statement]) = {
     targetStatements.map(splitTarget).splitFlatten
-  }
-
-  private def rewriteTarget(
-    premiseStatement: Statement)(
-    implicit stepProvingContext: StepProvingContext
-  ): (Seq[Step.AssertionOrExtraction], Statement) = {
-    stepProvingContext.knownValuesToProperties.foldLeft((premiseStatement, Seq.empty[Step.AssertionOrExtraction])) { case ((currentStatement, currentDerivation), propertyValue) =>
-      EqualityRewriter.getReverseReplacements(currentStatement, propertyValue.lhs, propertyValue.rhs, propertyValue.equality) match {
-        case Some((result, derivationStep)) =>
-          (result, currentDerivation ++ propertyValue.derivation :+ derivationStep)
-        case None =>
-          (currentStatement, currentDerivation)
-      }
-    }.swap
   }
 
   private def deconstruct(

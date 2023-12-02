@@ -457,5 +457,13 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
               assertion(extractRightConjunct, Seq(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Nil))),
             assertion(combineConjunction, Seq(Relation(StrictOrder, Naturals), Transitive(StrictOrder, Naturals)), Nil)))))
     }
+
+    "find a premise that has been rewritten with known values" in {
+      val f = TermVariablePlaceholder("f", 1)
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(f -> 0, a -> 0, b -> 0))
+      checkFindPremise(
+        ForAll("x")(Implication(ElementOf($, Domain(f)), φ($))),
+        Seq(ForAll("x")(Implication(ElementOf($, a), φ($))), Conjunction(Function(f), FunctionFrom(f, a, b))))
+    }
   }
 }

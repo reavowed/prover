@@ -126,4 +126,18 @@ object DerivationFinder {
   ): Option[(Seq[KnownStatement], Substitutions.Possible)] = {
     findDerivationsForStatementsBySubstituting(unsubstitutedPremiseStatements, substitutions, stepProvingContext.knownStatementsFromPremises)
   }
+
+  def rewriteWithKnownValues(
+    premiseStatement: Statement)(
+    implicit stepProvingContext: StepProvingContext
+  ): (Seq[Step.AssertionOrExtraction], Statement) = {
+    stepProvingContext.knownValuesToProperties.foldLeft((premiseStatement, Seq.empty[Step.AssertionOrExtraction])) { case ((currentStatement, currentDerivation), propertyValue) =>
+      EqualityRewriter.getReverseReplacements(currentStatement, propertyValue.lhs, propertyValue.rhs, propertyValue.equality) match {
+        case Some((result, derivationStep)) =>
+          (result, currentDerivation ++ propertyValue.derivation :+ derivationStep)
+        case None =>
+          (currentStatement, currentDerivation)
+      }
+    }.swap
+  }
 }
