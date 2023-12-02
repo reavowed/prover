@@ -18,5 +18,5 @@ object DisplayStep {
   case class Naming(variableName: String, assumption: Statement, statement: Statement, inference: Inference.Summary, path: Seq[Int], premises: Seq[Premise], substeps: Seq[DisplayStep]) extends DisplayStep
   case class Subproof(name: String, statement: Statement, path: Seq[Int], substeps: Seq[DisplayStep]) extends DisplayStep
   case class ElidedInference(statement: Statement, inference: Inference.Summary, path: Seq[Int], substeps: Seq[DisplayStep]) extends DisplayStep
-  case class ElidedWithDescription(statement: Statement, description: String, path: Seq[Int], substeps: Seq[DisplayStep]) extends DisplayStep
+  case class ElidedWithDescription(statement: Statement, description: Option[String], path: Seq[Int], substeps: Seq[DisplayStep]) extends DisplayStep
 }

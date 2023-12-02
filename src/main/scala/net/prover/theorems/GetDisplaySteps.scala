@@ -44,14 +44,14 @@ object GetDisplaySteps {
           case None =>
             DisplayStep.ElidedWithDescription(
               step.statement,
-              step.description.get,
+              step.description,
               stepPath,
               apply(step.substeps, stepPath))
         }
       case step: Step.ExistingStatementExtraction =>
         DisplayStep.ElidedWithDescription(
           step.statement,
-          "Extraction from previous step",
+          Some("Extraction from previous step"),
           stepPath,
           apply(step.substeps, stepPath))
       case step: Step.InferenceExtraction =>
@@ -69,7 +69,7 @@ object GetDisplaySteps {
       case step: Step.WrappedPremiseDerivation =>
         DisplayStep.ElidedWithDescription(
           step.statement,
-          "Premise derivation", // TODO: Could potentially point at an inference
+          Some("Premise derivation"), // TODO: Could potentially point at an inference
           stepPath,
           apply(step.substeps, stepPath))
       case step: Step.InferenceWithPremiseDerivations =>
