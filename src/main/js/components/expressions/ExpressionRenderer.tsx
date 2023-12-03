@@ -182,7 +182,7 @@ export default {
     }
   },
   renderSplitConjunction(props: RenderExpressionOptions<Expression>): SimpleReactNode[] | undefined {
-    if (!props.splitConjunction || !props.displaySettings.disableShorthands) {
+    if (!props.splitConjunction || props.displaySettings.disableShorthands) {
       return undefined;
     }
     function splitConjunctions(expression: Expression, childPath: number[]): {expression: Expression, childPath: number[]}[] {
