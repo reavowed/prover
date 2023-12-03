@@ -146,7 +146,7 @@ export default {
           disambiguatorAdderMatchResult = matchDisambiguatorAdder(expression, props.availableEntries);
         }
         if (isFormattable(expression) && expression.disambiguator && expression.components.length === 0) {
-          return this.renderFormattableExpressionWithDisambiguator(disambiguatorAdder.disambiguator, props as RenderExpressionOptions<Variable | DefinedExpression>);
+          return this.renderFormattableExpressionWithDisambiguator(disambiguatorAdder.disambiguator, {...props, expression});
         } else {
           const renderedInner = this.renderChildExpression(expression, innerPath, props);
           return [renderedInner, <sub>{disambiguatorAdder.disambiguator}</sub>];
