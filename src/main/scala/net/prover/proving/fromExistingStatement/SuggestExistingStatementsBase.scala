@@ -20,7 +20,7 @@ trait SuggestExistingStatementsBase {
     serializedPremiseStatement: String)(
     implicit bookService: BookService
   ): Try[Seq[PossibleConclusionWithPremises]] = {
-    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
+    bookService.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
         premise <- stepWithContext.stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
@@ -35,7 +35,7 @@ trait SuggestExistingStatementsBase {
 
   def getPossibleConclusionWithPremises(
     premiseExtraction: PremiseExtraction,
-    step: Step.Target,
+    step: Step.TargetStep,
     baseSubstitutions: Substitutions.Possible)(
     implicit stepProvingContext: StepProvingContext
   ): Option[PossibleConclusionWithPremises]

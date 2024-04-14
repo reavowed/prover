@@ -110,7 +110,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           variableDefinitions,
           premises,
           conclusion,
-          Seq(Theorem.Proof(Seq(Step.Target(conclusion)))))
+          Seq(Theorem.Proof(Seq(Step.TargetStep(conclusion)))))
         existingTheoremOption = availableEntries.allInferences.find(_.id == newTheorem.id)
         _ <- existingTheoremOption match {
           case Some(_) =>

@@ -10,33 +10,33 @@ import scalaz.Id.Id
 
 case class ClearInference(inferenceToClear: Inference) extends CompoundTheoremUpdater[Id] {
   override def updateNaming(
-    step: Step.Naming,
+    step: Step.NamingStep,
     stepWithContext: StepWithContext
   ): Step = {
     if (inferenceToClear == step.inference) {
-      Step.Target(step.statement)
+      Step.TargetStep(step.statement)
     } else {
       super.updateNaming(step, stepWithContext)
     }
   }
 
   override def updateElided(
-    step: Step.Elided,
+    step: Step.ElidedStep,
     stepWithContext: StepWithContext
   ): Step = {
     if (step.highlightedInference.contains(inferenceToClear)) {
-      Step.Target(step.statement)
+      Step.TargetStep(step.statement)
     } else {
       super.updateElided(step, stepWithContext)
     }
   }
 
   override def updateAssertion(
-    step: Step.Assertion,
+    step: Step.AssertionStep,
     stepWithContext: StepWithContext
   ): Step = {
     if (inferenceToClear == step.inference) {
-      Step.Target(step.statement)
+      Step.TargetStep(step.statement)
     } else {
       super.updateAssertion(step, stepWithContext)
     }

@@ -18,7 +18,7 @@ object ExtractionCalculator {
   case class ExtractionFromSinglePremise(
     premises: Seq[Statement],
     conclusion: Statement,
-    derivation: Seq[Step.Assertion],
+    derivation: Seq[Step.AssertionStep],
     variableTracker: VariableTracker,
     extractionDefinition: ExtractionDefinition)
 
@@ -72,7 +72,7 @@ object ExtractionCalculator {
       extractionSubstitutions <- extractionPremise.calculateSubstitutions(extractionSoFar.conclusion).flatMap(_.confirmTotality(inference.variableDefinitions))
       extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions)
       newPremiseOption <- otherPremiseOption.map(_.applySubstitutions(extractionSubstitutions)).swap
-      assertionStep = Step.Assertion(extractedConclusion, inference.summary, (extractionSoFar.conclusion +: newPremiseOption.toSeq).map(Premise.Pending), extractionSubstitutions)
+      assertionStep = Step.AssertionStep(extractedConclusion, inference.summary, (extractionSoFar.conclusion +: newPremiseOption.toSeq).map(Premise.Pending), extractionSubstitutions)
       newExtraction = ExtractionFromSinglePremise(
         extractionSoFar.premises ++ newPremiseOption.toSeq,
         extractedConclusion,
@@ -106,7 +106,7 @@ object ExtractionCalculator {
       (_, newIndex, newVariableTracker) = extractionSoFar.variableTracker.getAndAddUniqueVariableName(boundVariableName)
       substitutions = Substitutions(Seq(predicate), Seq(TermVariable(newIndex)))
       newConclusion <- inference.conclusion.applySubstitutions(substitutions)
-      assertionStep = Step.Assertion(newConclusion, inference.summary, Seq(Premise.Pending(extractionSoFar.conclusion)), substitutions)
+      assertionStep = Step.AssertionStep(newConclusion, inference.summary, Seq(Premise.Pending(extractionSoFar.conclusion)), substitutions)
     } yield ExtractionFromSinglePremise(
       extractionSoFar.premises,
       newConclusion,
@@ -128,7 +128,7 @@ object ExtractionCalculator {
       premise <- inference.premises.single.toSeq
       substitutions <- premise.calculateSubstitutions(extractionSoFar.conclusion).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
       deconstructedStatement <- inference.conclusion.applySubstitutions(substitutions).toSeq
-      assertionStep = Step.Assertion(deconstructedStatement, inference.summary, Seq(Premise.Pending(extractionSoFar.conclusion)), substitutions)
+      assertionStep = Step.AssertionStep(deconstructedStatement, inference.summary, Seq(Premise.Pending(extractionSoFar.conclusion)), substitutions)
     } yield ExtractionFromSinglePremise(
       extractionSoFar.premises,
       deconstructedStatement,

@@ -15,7 +15,7 @@ case class Fact(inferenceExtraction: InferenceExtraction) {
   }
 
   def toStep(implicit provingContext: ProvingContext): Step.AssertionOrExtraction = {
-    val baseAssertion = Step.Assertion(
+    val baseAssertion = Step.AssertionStep(
       inferenceExtraction.inference.conclusion,
       inferenceExtraction.inference.summary,
       Nil,

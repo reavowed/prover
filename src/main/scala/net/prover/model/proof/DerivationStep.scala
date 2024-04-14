@@ -9,7 +9,7 @@ sealed trait DerivationStep {
   def inferences: Seq[Inference]
 }
 object DerivationStep {
-  def fromAssertion(step: Step.Assertion): DerivationStepWithSingleInference = DerivationStepWithSingleInference(step.statement, step.inference, step)
+  def fromAssertion(step: Step.AssertionStep): DerivationStepWithSingleInference = DerivationStepWithSingleInference(step.statement, step.inference, step)
 
   implicit class SeqOps(derivationSteps: Seq[DerivationStep]) {
     def deduplicate: Seq[DerivationStep] = derivationSteps.distinctBy(_.statement)
@@ -19,7 +19,7 @@ object DerivationStep {
       DerivationStepWithSingleInference(
         derivationSteps.last.statement,
         inference,
-        Step.Elided.ifNecessary(derivationSteps.steps, inference).get)
+        Step.ElidedStep.ifNecessary(derivationSteps.steps, inference).get)
     }
   }
 }
@@ -30,7 +30,7 @@ case class DerivationStepWithSingleInference(statement: Statement, inference: In
     if (followingSteps.isEmpty)
       this
     else
-      DerivationStepWithSingleInference(followingSteps.last.statement, inference, Step.Elided.forInference(inference)(step +: followingSteps.steps))
+      DerivationStepWithSingleInference(followingSteps.last.statement, inference, Step.ElidedStep.forInference(inference)(step +: followingSteps.steps))
   }
 }
 

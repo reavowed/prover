@@ -22,7 +22,7 @@ class StepEditingController @Autowired() (val bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody inferenceId: String
   ): ResponseEntity[_] = {
-    bookService.modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
+    bookService.modifyStep[Step.ElidedStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
       for {
         inference <- FindInference(inferenceId)
       } yield stepWithContext.step.copy(highlightedInference = Some(inference))
@@ -38,7 +38,7 @@ class StepEditingController @Autowired() (val bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody description: String
   ): ResponseEntity[_] = {
-    bookService.modifyStep[Step.Elided](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
+    bookService.modifyStep[Step.ElidedStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
       Success(stepWithContext.step.copy(description = Some(description)))
     }.toResponseEntity
   }
@@ -51,9 +51,9 @@ class StepEditingController @Autowired() (val bookService: BookService) {
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.insertSteps[Step.Assertion](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
+    bookService.insertSteps[Step.AssertionStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { stepWithContext =>
       val targetStatements = stepWithContext.step.pendingPremises.values.map(_.statement).toSeq
-      Success(targetStatements.map(Step.Target(_)))
+      Success(targetStatements.map(Step.TargetStep(_)))
     }.toResponseEntity
   }
 

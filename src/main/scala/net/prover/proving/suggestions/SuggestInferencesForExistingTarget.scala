@@ -18,7 +18,7 @@ object SuggestInferencesForExistingTarget {
     searchText: String)(
     implicit bookService: BookService
   ): Try[Seq[PossibleInferenceWithTargets]] = {
-    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference).map(implicit stepWithContext => {
+    bookService.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepReference).map(implicit stepWithContext => {
       val possibleUnwrappedTargetStatements = UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement)
 
       def findPossibleInference(inference: Inference): Option[PossibleInferenceWithTargets] = {

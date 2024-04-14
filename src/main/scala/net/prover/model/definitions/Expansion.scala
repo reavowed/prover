@@ -11,15 +11,15 @@ trait Expansion[TComponent <: Expression] {
   implicit def wrapperIdentity: WrapperIdentity[Term, TComponent]
   protected def getSubstitutions(left: Term, right: Term, wrapper: Wrapper[Term, TComponent])(implicit substitutionContext: SubstitutionContext): Substitutions
 
-  def assertionStep(left: Term, right: Term, wrapper: Wrapper[Term, TComponent])(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
-    Step.Assertion(
+  def assertionStep(left: Term, right: Term, wrapper: Wrapper[Term, TComponent])(implicit substitutionContext: SubstitutionContext): Step.AssertionStep = {
+    Step.AssertionStep(
       resultJoiner(wrapper(left), wrapper(right)),
       inference,
       Seq(Premise.Pending(sourceJoiner(left, right))),
       getSubstitutions(left, right, wrapper))
   }
 
-  def assertionStepIfNecessary(left: Term, right: Term, wrapper: Wrapper[Term, TComponent])(implicit substitutionContext: SubstitutionContext): Option[Step.Assertion] = {
+  def assertionStepIfNecessary(left: Term, right: Term, wrapper: Wrapper[Term, TComponent])(implicit substitutionContext: SubstitutionContext): Option[Step.AssertionStep] = {
     if (wrapper.isIdentity && sourceJoiner == resultJoiner) {
       None
     } else {

@@ -28,7 +28,7 @@ object DerivationFinder {
       findDerivationForUnwrappedStatement(unwrappedStatement.statement)(unwrappedStatement.unwrappers.enhanceStepProvingContext)
         .map { derivation =>
           if (unwrappedStatement.unwrappers.nonEmpty) {
-            Seq(Step.WrappedPremiseDerivation(unwrappedStatement.unwrappers, derivation))
+            Seq(Step.WrappedPremiseDerivationStep(unwrappedStatement.unwrappers, derivation))
           } else {
             derivation
           }
@@ -85,7 +85,7 @@ object DerivationFinder {
       finalDeconstructionSubstitutions <- deconstructionPremisesWithDeconstructedStatements.foldLeft(Option(Substitutions.Possible.empty)) { case (substitutionsOption, (premise, knownStatement)) =>
         substitutionsOption.flatMap(premise.calculateSubstitutions(knownStatement.statement, _))
       }.flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
-      deconstructionStep <- Step.Assertion.forInference(deconstructionInference, finalDeconstructionSubstitutions)
+      deconstructionStep <- Step.AssertionStep.forInference(deconstructionInference, finalDeconstructionSubstitutions)
     } yield (KnownStatement.fromDerivation(foundStatements.flatMap(_.derivation) :+ deconstructionStep), innerSubstitutions)
 
     unsubstitutedPremiseStatement.tryApplySubstitutions(initialSubstitutions) match {

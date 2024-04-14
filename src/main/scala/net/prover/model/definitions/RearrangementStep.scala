@@ -10,12 +10,12 @@ case class RearrangementStep[TComponent <: Expression](result: TComponent, subst
 
 object RearrangementStep {
   def apply[TComponent <: Expression](result: TComponent, substeps: Seq[Step], inference: Inference.Summary): RearrangementStep[TComponent] = {
-    RearrangementStep(result, substeps, Step.Elided.ifNecessary(_, inference))
+    RearrangementStep(result, substeps, Step.ElidedStep.ifNecessary(_, inference))
   }
   def apply[TComponent <: Expression](result: TComponent, substeps: Seq[Step], description: String): RearrangementStep[TComponent] = {
-    RearrangementStep(result, substeps, Step.Elided.ifNecessary(_, description))
+    RearrangementStep(result, substeps, Step.ElidedStep.ifNecessary(_, description))
   }
   def apply[TComponent <: Expression](result: TComponent, substeps: Seq[Step], inference: Option[Inference.Summary], description: String): RearrangementStep[TComponent] = {
-    RearrangementStep(result, substeps, Step.Elided.ifNecessary(_, inference, description))
+    RearrangementStep(result, substeps, Step.ElidedStep.ifNecessary(_, inference, description))
   }
 }

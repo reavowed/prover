@@ -29,7 +29,7 @@ class StepProvingSpec extends ControllerSpec {
       implicit val service = mock[BookService]
       val controller = new StepProvingController
 
-      service.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns Success(
+      service.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns Success(
         createTargetStepWithContext(
           Negation(Equals(a, b)))(
           createOuterStepContext(Nil),
@@ -81,7 +81,7 @@ class StepProvingSpec extends ControllerSpec {
         PathData(stepPath),
         definitionWithPremise(premise, Nil, simpleExtraction(modusPonens, extractRightConjunct), None))
 
-      val x: SubstitutionContext => Seq[Step.Assertion] = Seq(
+      val x: SubstitutionContext => Seq[Step.AssertionStep] = Seq(
         assertion(modusPonens, Seq(φ, Conjunction(ψ, χ)), Nil),
         assertion(extractRightConjunct, Seq(ψ, χ), Nil)
       )
@@ -146,10 +146,10 @@ class StepProvingSpec extends ControllerSpec {
           assertion(forwardImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
           assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil)))
         ) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(0), Seq(0, 1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(1), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(2), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(3), Nil)})
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(0), Seq(0, 1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(1), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(2), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(3), Nil)})
     }
 
     "retain conclusion bound variable names when adding target by inference" in {
@@ -203,8 +203,8 @@ class StepProvingSpec extends ControllerSpec {
             assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil))) :+
           target(χ(a))
         ) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtraction].substeps(0), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtraction].substeps(1), Nil)})
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtractionStep].substeps(0), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtractionStep].substeps(1), Nil)})
     }
 
     "retain premise bound variable names when proving target by inference" in {
@@ -261,9 +261,9 @@ class StepProvingSpec extends ControllerSpec {
           assertion(modusPonens, Seq(Exists("z")(ψ(a, $)), φ(a)), Nil)))
         ) and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(0), Seq(0, 1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(1), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtraction].substeps(2), Seq(0))})
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(0), Seq(0, 1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(1), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(2), Seq(0))})
     }
 
     "prove a target inside a scoped deduction" in {

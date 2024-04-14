@@ -12,7 +12,7 @@ import scalaz.Scalaz._
 class IsComplete(implicit definitions: Definitions) extends RecursiveStepFinder[Boolean]()(booleanInstance.conjunction) {
   override def apply(theorem: Theorem): Boolean = theorem.proofs.exists(apply)
 
-  override def apply(step: Step.Target): Boolean = false
+  override def apply(step: Step.TargetStep): Boolean = false
   override def apply(statement: Statement): Boolean = true
   override def apply(inference: Inference.Summary): Boolean = definitions.isInferenceComplete(inference)
   override def apply(premise: Premise): Boolean = premise.isComplete

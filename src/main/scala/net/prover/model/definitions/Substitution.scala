@@ -5,8 +5,8 @@ import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{Premise, Step, SubstitutionContext}
 
 case class Substitution(relation: BinaryJoiner[Term], inference: Inference.Summary) {
-  def assertionStep(premiseTerm: Term, targetTerm: Term, wrapper: Wrapper[Term, Statement])(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
-    Step.Assertion(
+  def assertionStep(premiseTerm: Term, targetTerm: Term, wrapper: Wrapper[Term, Statement])(implicit substitutionContext: SubstitutionContext): Step.AssertionStep = {
+    Step.AssertionStep(
       wrapper(targetTerm),
       inference,
       Seq(

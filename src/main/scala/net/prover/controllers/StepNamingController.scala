@@ -25,7 +25,7 @@ class StepNamingController @Autowired() (val bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map { implicit stepWithContext =>
+    bookService.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map { implicit stepWithContext =>
       stepWithContext.provingContext.availableEntries.allInferences.filter(InferenceFilter(searchText).apply(_))
         .iterator
         .mapCollect { inference =>
@@ -55,9 +55,9 @@ class StepNamingController @Autowired() (val bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody definition: StepDefinition
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
+    bookService.replaceStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
       import stepWithContext.step
-      def getNamingWrapper(premiseStatement: Statement, resultStatement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Statement, SubstitutionContext, Step => Step.Naming)] = {
+      def getNamingWrapper(premiseStatement: Statement, resultStatement: Statement)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Statement, SubstitutionContext, Step => Step.NamingStep)] = {
         for {
           variableName <- premiseStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single)
           (namingInference, substitutionsAfterPremise) <- ProofHelper.findNamingInferences.mapFind {
@@ -74,7 +74,7 @@ class StepNamingController @Autowired() (val bookService: BookService) {
           substitutedAssumption,
           substitutedConclusion,
           SubstitutionContext.withExtraParameter,
-          (substep: Step) => Step.Naming(
+          (substep: Step) => Step.NamingStep(
             variableName,
             substitutedAssumption,
             step.statement,
@@ -91,7 +91,7 @@ class StepNamingController @Autowired() (val bookService: BookService) {
           case Some((newAssumption, newConclusion, newContext, wrapper)) =>
             wrapper(recurseNamingWrappers(newAssumption, newConclusion)(newContext))
           case None =>
-            Step.Target(currentConclusion)
+            Step.TargetStep(currentConclusion)
         }
       }
 

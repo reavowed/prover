@@ -39,7 +39,7 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
     @RequestParam("targetUnwrappers") targetUnwrappers: Array[String],
     @RequestParam("conclusionExtractionDefinition") conclusionExtractionDefinition: ExtractionDefinition.Serialized
   ): ResponseEntity[_] = {
-    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
+    bookService.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
       for {
         possibleTarget <- UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement).find(_.unwrappers.map(_.definitionSymbol) == targetUnwrappers.toSeq).orBadRequest(s"Could not find target with unwrappers ${targetUnwrappers.mkString(", ")}")
         inferenceExtraction <- stepWithContext.provingContext.findInferenceExtraction(inferenceId, conclusionExtractionDefinition).orBadRequest(s"Could not find extraction")

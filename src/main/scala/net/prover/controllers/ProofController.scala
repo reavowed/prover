@@ -23,7 +23,7 @@ class ProofController @Autowired() (implicit val bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
     bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)(stepWithContext =>
-      Success(Seq(Step.Target(stepWithContext.step.statement)))
+      Success(Seq(Step.TargetStep(stepWithContext.step.statement)))
     ).toResponseEntity
   }
 
@@ -50,9 +50,9 @@ class ProofController @Autowired() (implicit val bookService: BookService) {
   ): ResponseEntity[_] = {
     bookService.replaceStep[Step](bookKey, chapterKey, theoremKey, proofIndex, stepPath)(stepWithContext =>
       Success(stepWithContext.step match {
-        case step: Step.Naming =>
+        case step: Step.NamingStep =>
           // Deleting naming steps is confusing, just clear them
-          Seq(Step.Target(step.statement))
+          Seq(Step.TargetStep(step.statement))
         case _ =>
           Nil
       })

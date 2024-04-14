@@ -566,7 +566,7 @@ object TermRearranger {
       (lhs, rhs) <- equality.unapply(targetStatement)
       rearrangementSteps <- rearrangeTerm(lhs, rhs, Wrapper.identity, equality, equality.expansion, equality.reversal)
       steps = equality.transitivity.addToRearrangement(lhs, rearrangementSteps)
-      result <- Step.Elided.ifNecessary(steps, "Rearranged")
+      result <- Step.ElidedStep.ifNecessary(steps, "Rearranged")
     } yield result
   }
 
@@ -580,7 +580,7 @@ object TermRearranger {
       transitivity <- stepProvingContext.provingContext.transitivities.ofType[Transitivity[T]].find(_.isTransitivityForJoiner(joiner))
       rearrangementSteps <- rearrange(lhs, rhs, Wrapper.identity, equality, expansion, reversal)
       steps = transitivity.addToRearrangement(lhs, rearrangementSteps)
-      result <- Step.Elided.ifNecessary(steps, "Rearranged")
+      result <- Step.ElidedStep.ifNecessary(steps, "Rearranged")
     } yield result).headOption
 
     byJoiner(stepProvingContext.provingContext.definedBinaryConnectives, rearrangeStatement[Statement]) orElse

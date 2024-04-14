@@ -75,7 +75,7 @@ class TheoremController @Autowired() (val bookService: BookService) extends Para
           case Some(proofIndex) =>
             theorem.proofs.lift(proofIndex).orBadRequest(s"Invalid proof index $proofIndex")
           case None =>
-            Success(Theorem.Proof(Seq(Step.Target(theorem.conclusion))))
+            Success(Theorem.Proof(Seq(Step.TargetStep(theorem.conclusion))))
         }
       } yield theorem.copy(proofs = theorem.proofs :+ newProof)
     }.toResponseEntity

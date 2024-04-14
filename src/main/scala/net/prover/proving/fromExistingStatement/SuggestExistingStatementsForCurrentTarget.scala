@@ -8,7 +8,7 @@ import net.prover.proving.extraction.ExtractionCalculator.PremiseExtraction
 object SuggestExistingStatementsForCurrentTarget extends SuggestExistingStatementsBase {
   def getPossibleConclusionWithPremises(
     premiseExtraction: PremiseExtraction,
-    step: Step.Target,
+    step: Step.TargetStep,
     baseSubstitutions: Substitutions.Possible)(
     implicit stepProvingContext: StepProvingContext
   ): Option[PossibleConclusionWithPremises] = {

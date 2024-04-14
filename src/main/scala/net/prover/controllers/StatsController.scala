@@ -62,7 +62,7 @@ class StatsController @Autowired() (val bookService: BookService) {
       bookWithContext <- bookService.globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts
       theoremWithContext <- chapterWithContext.theoremsWithContexts
-      assertionWithContext <- FindStepsOfType[Step.Assertion](theoremWithContext)
+      assertionWithContext <- FindStepsOfType[Step.AssertionStep](theoremWithContext)
       assertion = assertionWithContext.step
       if assertion.inference.id == inferenceId
       if Option(statementSymbol).forall(symbol =>
@@ -80,7 +80,7 @@ class StatsController @Autowired() (val bookService: BookService) {
       bookWithContext <- bookService.globalContext.booksWithContexts
       chapterWithContext <- bookWithContext.chaptersWithContexts
       theoremWithContext <- chapterWithContext.theoremsWithContexts
-      stepWithContext <- FindStepsOfType[Step.Elided](theoremWithContext)
+      stepWithContext <- FindStepsOfType[Step.ElidedStep](theoremWithContext)
       if stepWithContext.step.highlightedInference.exists(_.id == inferenceId)
     } yield ("http://" + request.getHeader("Host") + BookService.getEntryUrl(theoremWithContext), stepWithContext.stepContext.stepReference.stepPath.mkString("."))
   }

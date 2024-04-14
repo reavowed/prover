@@ -13,26 +13,26 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
     UpdateTheorems(_ => apply)
   }
 
-  override def updateElided(step: Step.Elided, stepWithContext: StepWithContext): Step = {
+  override def updateElided(step: Step.ElidedStep, stepWithContext: StepWithContext): Step = {
     replaceWithInferenceExtraction(step, stepWithContext) orElse
     replaceWithExistingStatementExtraction(step, stepWithContext) getOrElse
       super.updateElided(step, stepWithContext)
   }
 
-  private def replaceWithInferenceExtraction(baseStep: Step.Elided, stepWithContext: StepWithContext): Option[Step] = {
+  private def replaceWithInferenceExtraction(baseStep: Step.ElidedStep, stepWithContext: StepWithContext): Option[Step] = {
     for {
       inference <- baseStep.highlightedInference
       reprovedStep <- Reprove(stepWithContext.withStep(baseStep), inference)
     } yield reprovedStep
   }
 
-  private def replaceWithExistingStatementExtraction(step: Step.Elided, stepWithContext: StepWithContext): Option[Step.ExistingStatementExtraction] = {
+  private def replaceWithExistingStatementExtraction(step: Step.ElidedStep, stepWithContext: StepWithContext): Option[Step.ExistingStatementExtractionStep] = {
     for {
-      assertionSteps <- step.substeps.map(_.asOptionalInstanceOf[Step.Assertion]).toList.sequence
+      assertionSteps <- step.substeps.map(_.asOptionalInstanceOf[Step.AssertionStep]).toList.sequence
       firstAssertion <- assertionSteps.headOption
       mainPremise <- firstAssertion.premises.headOption.map(_.statement)
       _ <- ExtractionCalculator.getPremiseExtractions(mainPremise)(stepWithContext.stepContext, stepWithContext.provingContext)
         .find(_.innerExtraction.derivation.map(_.inference) == assertionSteps.map(_.inference))
-    } yield Step.ExistingStatementExtraction(assertionSteps)
+    } yield Step.ExistingStatementExtractionStep(assertionSteps)
   }
 }

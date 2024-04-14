@@ -20,7 +20,7 @@ class SuggestExistingStatementsForNewTargetSpec extends Specification with Conte
       val target = χ
       implicit val service = mock[BookService]
       implicit val stepContext = createBaseStepContext(Seq(premise))
-      service.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
+      service.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
         Success(createTargetStepWithContext(target))
 
       val result = SuggestExistingStatementsForNewTarget(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), premise.serialized)

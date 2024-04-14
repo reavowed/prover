@@ -186,7 +186,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
       extractionStep <- ExtractionApplier.getInferenceExtractionStepWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
-      elidedStep = Step.Elided.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).distinctBy(_.statement), inference).get
+      elidedStep = Step.ElidedStep.ifNecessary((knownPremises.flatMap(_.derivation) :+ extractionStep).distinctBy(_.statement), inference).get
     } yield (removedSource, rewrittenTerm, Seq(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
   }
 
@@ -263,9 +263,9 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     val extractionSteps = extractionStepOption.toSeq :+ rewriteStep
     val updatedSteps = unwrappers.rewrap(extractionSteps)
     val finalStep = if (enhancedWrapper != wrapper)
-      Step.Elided(updatedSteps, Some(inference), None)
+      Step.ElidedStep(updatedSteps, Some(inference), None)
     else
-      Step.Elided.ifNecessary(updatedSteps, inference).get
+      Step.ElidedStep.ifNecessary(updatedSteps, inference).get
     Success((finalStep, Some(inference), enhancedWrapper))
   }
 
@@ -296,7 +296,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     @PathVariable("stepPath") stepPath: PathData,
     @RequestBody rewrites: Seq[Seq[RewriteRequest]]
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
+    bookService.replaceStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
       for {
         equality <- stepWithContext.provingContext.equalityOption.orBadRequest("No equality found")
         (step, newTarget) <- rewrite(stepWithContext.step.statement, rewrites, equality, Direction.Reverse)(substituteForRewrite(equality)) {
@@ -304,7 +304,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
         } {
           (_, steps, inferences) => Success(EqualityRewriter.optionalRewriteElider(inferences)(steps))
         }
-        targetStepOption = if (stepWithContext.stepProvingContext.allPremises.exists(_.statement == newTarget)) None else Some(Step.Target(newTarget))
+        targetStepOption = if (stepWithContext.stepProvingContext.allPremises.exists(_.statement == newTarget)) None else Some(Step.TargetStep(newTarget))
       } yield targetStepOption.toSeq ++ step.toSeq
     }.toResponseEntity
   }
@@ -317,7 +317,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData
   ): ResponseEntity[_] = {
-    bookService.replaceStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
+    bookService.replaceStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath) { implicit stepWithContext =>
       import stepWithContext.step
       EqualityRewriter.rewrite(step.statement)(stepWithContext)
         .orBadRequest(s"Could not rewrite statement ${step.statement}")
@@ -400,7 +400,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     direction: Direction
   ): ResponseEntity[_] = {
     insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateChainingSteps {
-      def createStepsWithExpansion[T <: Expression with TypedExpression[T] : ChainingMethods : RewriteMethods](targetJoiner: BinaryJoiner[T], targetLhs: T, targetRhs: T)(implicit  stepWithContext: StepWithContext): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
+      def createStepsWithExpansion[T <: Expression with TypedExpression[T] : ChainingMethods : RewriteMethods](targetJoiner: BinaryJoiner[T], targetLhs: T, targetRhs: T)(implicit  stepWithContext: StepWithContext): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.TargetStep])] = {
         for {
           equality <- stepWithContext.provingContext.equalityOption.orBadRequest("No equality found")
           expansion <- stepWithContext.provingContext.expansions.ofType[Expansion[T]]
@@ -418,7 +418,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
           (firstStep, secondStep) = direction.swapSourceAndResult(rewriteStepDefinition, targetStepDefinition)
         } yield (firstStep, secondStep, Nil)
       }
-      def createStepsWithSubstitution(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.Target])] = {
+      def createStepsWithSubstitution(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.TargetStep])] = {
         for {
           equality <- stepWithContext.provingContext.equalityOption.orBadRequest("No equality found")
           (sourceTerm, destinationTerm) = direction.swapSourceAndResult(targetLhs, targetRhs)
@@ -434,11 +434,11 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
         } yield (firstStep, secondStep, Nil)
       }
 
-      override def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.Target])] = {
+      override def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.TargetStep])] = {
         createStepsWithExpansion(targetConnective, targetLhs, targetRhs)
       }
 
-      override def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.Target])] = {
+      override def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.TargetStep])] = {
         createStepsWithExpansion(targetRelation, targetLhs, targetRhs) orElse
           createStepsWithSubstitution(targetRelation, targetLhs, targetRhs)
       }

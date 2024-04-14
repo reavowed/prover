@@ -61,7 +61,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
       }
       Success(SuggestInferences(searchText, getPossibleInference, getConclusionComplexity))
     }
-    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
+    bookService.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath)
       .flatMap(implicit stepWithContext => {
         withRelation(stepWithContext.step.statement, withJoiner[Statement, BinaryConnective], withJoiner[Term, BinaryRelation])
       }).toResponseEntity
@@ -107,7 +107,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           substitutions <- getSubstitutionsWithTermOrSubterm(direction.getSource(conclusionLhs, conclusionRhs), direction.getSource(lhs, rhs), baseSubstitutions)
         } yield substitutions)))
     }
-    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
+    bookService.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
       for {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
         premise <- stepWithContext.stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
@@ -151,10 +151,10 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     direction: Direction
   ): ResponseEntity[_] = {
     insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateChainingSteps {
-      override def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.Target])] = {
+      override def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.TargetStep])] = {
         createSteps(targetConnective, targetLhs, targetRhs, (_, _, relation, lhs, rhs) => Success(ChainingStepDefinition(lhs, rhs, relation, None)))
       }
-      override def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.Target])] = {
+      override def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.TargetStep])] = {
         def getExpansion(conclusionSource: Term, targetSource: Term, conclusionRelation: BinaryJoiner[Term], conclusionLhs: Term, conclusionRhs: Term) = for {
           wrapper <- targetSource.getTerms().filter(_._1 == conclusionSource).map(_._2).map(Wrapper.fromExpression).single.orBadRequest("Could not find conclusion LHS uniquely in target LHS")
           step <-
@@ -177,11 +177,11 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
         targetRhs: T,
         handle: (T, T, BinaryJoiner[T], T, T) => Try[ChainingStepDefinition[T]])(
         implicit stepWithContext: StepWithContext
-      ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
+      ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.TargetStep])] = {
         val (targetSource, targetResult) = direction.swapSourceAndResult(targetLhs, targetRhs)
         def getResult(
-          applyExtractions: ((ExpressionParsingContext, Substitutions) => Try[Option[Statement]]) => Try[(Statement, Option[Step], Seq[Step.Target])]
-        ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
+          applyExtractions: ((ExpressionParsingContext, Substitutions) => Try[Option[Statement]]) => Try[(Statement, Option[Step], Seq[Step.TargetStep])]
+        ): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.TargetStep])] = {
           def getIntendedConclusion(expressionParsingContext: ExpressionParsingContext, substitutions: Substitutions) = stepDefinition.serializedIntendedConclusionStatement match {
             case Some(serializedIntendedConclusionStatement) =>
               for {
@@ -203,7 +203,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           } yield (firstDefinition, secondDefinition, targets)
         }
 
-        def fromInference(inferenceId: String): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
+        def fromInference(inferenceId: String): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.TargetStep])] = {
           getResult { getIntendedTarget =>
             for {
               inferenceExtraction <- stepWithContext.provingContext.findInferenceExtraction(inferenceId, stepDefinition.extractionDefinition).orBadRequest("Could not find inference extraction")
@@ -226,7 +226,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
             } yield (inferenceExtractionStep.statement, Some(inferenceExtractionStep), targets)
           }
         }
-        def fromPremise(serializedPremiseStatement: String): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.Target])] = {
+        def fromPremise(serializedPremiseStatement: String): Try[(ChainingStepDefinition[T], ChainingStepDefinition[T], Seq[Step.TargetStep])] = {
           getResult { getIntendedConclusion =>
             for {
               premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise").recoverWithBadRequest
@@ -287,7 +287,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           provingContext.transitivities.filter(_.resultJoiner == relation).map(t => (t.firstPremiseJoiner.symbol, t.secondPremiseJoiner.symbol)))
     }
 
-    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
+    bookService.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath).flatMap(implicit stepWithContext =>
       for {
         result <- withRelation(stepWithContext.step.statement, (c, _, _) => forConnective(c), (r, _, _) => forRelation(r))
       } yield result
@@ -304,7 +304,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
     @RequestBody definition: ChainedTargetDefinition
   ): ResponseEntity[_] = {
     insertTransitivity(bookKey, chapterKey, theoremKey, proofIndex, stepPath, new CreateChainingSteps {
-      def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.Target])] = {
+      def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.TargetStep])] = {
         for {
           intermediateStatement <- Statement.parser.parseFromString(definition.serializedExpression, "target expression").recoverWithBadRequest
           leftJoiner <- stepWithContext.provingContext.definedBinaryConnectives.find(_.symbol == definition.leftJoiner).orBadRequest(s"Could not find connective with symbol ${definition.leftJoiner}")
@@ -313,7 +313,7 @@ class StepChainingController @Autowired() (val bookService: BookService) extends
           secondStep = ChainingStepDefinition.forTarget(intermediateStatement, targetRhs, rightJoiner)
         } yield (firstStep, secondStep, Nil)
       }
-      def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.Target])] = {
+      def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.TargetStep])] = {
         for {
           intermediateTerm <- Term.parser.parseFromString(definition.serializedExpression, "target expression").recoverWithBadRequest
           leftJoiner <- stepWithContext.provingContext.definedBinaryRelations.find(_.symbol == definition.leftJoiner).orBadRequest(s"Could not find relation with symbol ${definition.leftJoiner}")

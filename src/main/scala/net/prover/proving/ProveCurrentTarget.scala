@@ -18,7 +18,7 @@ object ProveCurrentTarget {
     definition: StepDefinition)(
     implicit bookService: BookService
   ): Try[ProofUpdateProps[InsertionAndReplacementProps]] = {
-    ReplaceStepAddingTargetsBeforeChain[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { implicit stepWithContext =>
+    ReplaceStepAddingTargetsBeforeChain[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepReference) { implicit stepWithContext =>
       for {
         (targetStatement, unwrappers) <- UnwrappedStatement.getUnwrappedStatements(stepWithContext.step.statement).find(_.definitionSymbols == definition.wrappingSymbols).map(x => (x.statement, x.unwrappers)).orBadRequest("Invalid wrapping symbols")
         (newStep, targets) <- CreateProofStep(definition, (_, _) => Success(Some(targetStatement)), unwrappers)

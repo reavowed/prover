@@ -13,7 +13,7 @@ import scala.util.Try
 @JsonIgnoreProperties(Array("substitutions", "isComplete", "unwrappers", "assertionStep", "premiseSteps", "innerSteps"))
 sealed trait Step {
   @JsonSerialize
-  def `type`: String = getClass.getSimpleName.decapitalize
+  def `type`: String = getClass.getSimpleName.stripSuffix("Step").decapitalize
   def statement: Statement
   def length: Int
   def serializedLines: Seq[String]
@@ -30,7 +30,7 @@ object Step {
       if (newSubsteps.lastOption.map(_.statement).contains(substeps.last.statement)) {
         replaceSubstepsInternal(newSubsteps)
       } else {
-        replaceSubstepsInternal(newSubsteps :+ Target(substeps.last.statement))
+        replaceSubstepsInternal(newSubsteps :+ TargetStep(substeps.last.statement))
       }
     }
     protected def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step
@@ -80,9 +80,9 @@ object Step {
     def extractWrappers[T](steps: Seq[Step])(f: (Seq[Unwrapper], Seq[Step]) => T)(implicit provingContext: ProvingContext): T = {
       @tailrec def helper(unwrappers: Seq[Unwrapper], steps: Seq[Step]): T = {
         steps match {
-          case Seq(Step.Generalization(variableName, substeps, generalizationDefinition)) =>
+          case Seq(Step.GeneralizationStep(variableName, substeps, generalizationDefinition)) =>
             helper(unwrappers :+ GeneralizationUnwrapper(variableName, generalizationDefinition, provingContext.specificationInferenceOption.get._1), substeps)
-          case Seq(Step.Deduction(assumption, substeps, deductionDefinition)) =>
+          case Seq(Step.DeductionStep(assumption, substeps, deductionDefinition)) =>
             helper(unwrappers :+ DeductionUnwrapper(assumption, deductionDefinition, provingContext.deductionEliminationInferenceOption.get._1), substeps)
           case steps =>
             f(unwrappers, steps)
@@ -92,21 +92,20 @@ object Step {
     }
   }
 
-
-  case class Target(statement: Statement) extends Step.WithoutSubsteps with Step.WithTopLevelStatement {
+  case class TargetStep(statement: Statement) extends Step.WithoutSubsteps with Step.WithTopLevelStatement {
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def length = 1
     def serializedLines: Seq[String] = Seq(s"target ${statement.serialized}")
   }
-  object Target {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Target] = {
+  object TargetStep {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[TargetStep] = {
       for {
         statement <- Statement.parser
-      } yield Target(statement)
+      } yield TargetStep(statement)
     }
   }
 
-  case class Assertion(
+  case class AssertionStep(
     statement: Statement,
     inference: Inference.Summary,
     premises: Seq[Premise],
@@ -125,14 +124,14 @@ object Step {
     }
     def addExtractionSteps(extractionSteps: Seq[AssertionOrExtraction]): AssertionOrExtraction = {
       if (extractionSteps.nonEmpty) {
-        InferenceExtraction(this, extractionSteps)
+        InferenceExtractionStep(this, extractionSteps)
       } else {
         this
       }
     }
   }
-  object Assertion {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Assertion] = {
+  object AssertionStep {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[AssertionStep] = {
       for {
         statement <- Statement.parser
         inference <- Inference.parser
@@ -141,18 +140,18 @@ object Step {
         premises <- premiseStatements.map(Premise.parser).traverse
         _ = inference.validatePremisesAndConclusion(premises.map(_.statement), statement, substitutions)
       } yield {
-        Assertion(statement, inference, premises, substitutions)
+        AssertionStep(statement, inference, premises, substitutions)
       }
     }
-    def forInference(inference: Inference, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Assertion] = {
+    def forInference(inference: Inference, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[AssertionStep] = {
       for {
         premises <- inference.substitutePremises(substitutions)
         conclusion <- inference.substituteConclusion(substitutions)
-      } yield Assertion(conclusion, inference.summary, premises.map(Premise.Pending), substitutions.restrictTo(inference.variableDefinitions))
+      } yield AssertionStep(conclusion, inference.summary, premises.map(Premise.Pending), substitutions.restrictTo(inference.variableDefinitions))
     }
   }
 
-  case class Deduction(
+  case class DeductionStep(
       assumption: Statement,
       substeps: Seq[Step],
       deductionDefinition: DeductionDefinition)
@@ -161,7 +160,7 @@ object Step {
     override def statement: Statement = {
       deductionDefinition(assumption, substeps.last.statement)
     }
-    override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Deduction = {
+    override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): DeductionStep = {
       copy(substeps = newSubsteps)
     }
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(assumption).map(a => copy(assumption = a))
@@ -170,18 +169,18 @@ object Step {
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
-  object Deduction {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Deduction] = {
+  object DeductionStep {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[DeductionStep] = {
       val deductionDefinition = provingContext.deductionDefinitionOption
         .getOrElse(throw new Exception("Cannot prove a deduction without an appropriate statement definition"))
       for {
         assumption <- Statement.parser
         substeps <- listParser(stepContext.addAssumption(assumption), provingContext).inBraces
-      } yield Deduction(assumption, substeps, deductionDefinition)
+      } yield DeductionStep(assumption, substeps, deductionDefinition)
     }
   }
 
-  case class Generalization(
+  case class GeneralizationStep(
       variableName: String,
       substeps: Seq[Step],
       generalizationDefinition: GeneralizationDefinition)
@@ -197,18 +196,18 @@ object Step {
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
-  object Generalization {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Generalization] = {
+  object GeneralizationStep {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[GeneralizationStep] = {
       val generalizationDefinition = provingContext.generalizationDefinitionOption
         .getOrElse(throw new Exception("Generalization step could not find generalization statement"))
       for {
         variableName <- Parser.singleWord
         substeps <- listParser(stepContext.addBoundVariable(variableName), provingContext).inBraces
-      } yield Generalization(variableName, substeps, generalizationDefinition)
+      } yield GeneralizationStep(variableName, substeps, generalizationDefinition)
     }
   }
 
-  case class Naming(
+  case class NamingStep(
       variableName: String,
       assumption: Statement,
       statement: Statement,
@@ -229,7 +228,7 @@ object Step {
         .foldLeft(Substitutions.Possible.empty) { case (substitutions, (inferencePremise, premise)) => inferencePremise.calculateSubstitutions(premise, substitutions).getOrElse(throw new Exception("Could not calculate substitutions from naming premise"))}
         .confirmTotality(inference.variableDefinitions)
         .getOrElse(throw new Exception("Naming substitutions were not total"))
-      Naming(
+      NamingStep(
         variableName,
         assumption,
         newConclusion,
@@ -246,8 +245,8 @@ object Step {
       substeps.flatMap(_.serializedLines).indent ++
       Seq(Seq("}", Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
   }
-  object Naming {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Naming] = {
+  object NamingStep {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[NamingStep] = {
       for {
         variableName <- Parser.singleWord
         assumption <- Statement.parser(ExpressionParsingContext.atStep(stepContext.addBoundVariable(variableName), provingContext))
@@ -264,12 +263,12 @@ object Step {
         internalPremise = generalizationDefinition(variableName, deductionDefinition(assumption, internalConclusion))
         _ = if (internalPremise != premiseStatements.last) throw new Exception("Invalid naming premise")
       } yield {
-        Naming(variableName, assumption, extractedConclusion, substeps, inference, premises, substitutions, generalizationDefinition, deductionDefinition)
+        NamingStep(variableName, assumption, extractedConclusion, substeps, inference, premises, substitutions, generalizationDefinition, deductionDefinition)
       }
     }
   }
 
-  case class Elided(substeps: Seq[Step], highlightedInference: Option[Inference.Summary], description: Option[String]) extends Step.WithSubsteps {
+  case class ElidedStep(substeps: Seq[Step], highlightedInference: Option[Inference.Summary], description: Option[String]) extends Step.WithSubsteps {
     override def statement: Statement = substeps.last.statement
     override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = copy(substeps = newSubsteps)
     override def length: Int = substeps.map(_.length).sum
@@ -277,13 +276,13 @@ object Step {
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
-  object Elided {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Elided] = {
+  object ElidedStep {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[ElidedStep] = {
       for {
         highlightedInference <- Inference.parser.tryOrNone
         description <- Parser.allInParens.tryOrNone
         substeps <- listParser.inBraces
-      } yield Elided(substeps, highlightedInference, description)
+      } yield ElidedStep(substeps, highlightedInference, description)
     }
     def ifNecessary(substeps: Seq[Step], elider: Seq[Step] => Step): Option[Step] = {
       substeps match {
@@ -296,21 +295,21 @@ object Step {
       ifNecessary(substeps, forInference(inference))
     }
     def ifNecessary(substeps: Seq[Step], description: String): Option[Step] = {
-      ifNecessary(substeps, Step.Elided(_, None, Some(description)))
+      ifNecessary(substeps, Step.ElidedStep(_, None, Some(description)))
     }
     def ifNecessary(substeps: Seq[Step], inferenceOption: Option[Inference], description: String): Option[Step] = {
       ifNecessary(substeps, inferenceOption.map(forInference).getOrElse(forDescription(description)))
     }
 
-    def forInference(inference: Inference): Seq[Step] => Step.Elided = {
-      Step.Elided(_, Some(inference.summary), None)
+    def forInference(inference: Inference): Seq[Step] => Step.ElidedStep = {
+      Step.ElidedStep(_, Some(inference.summary), None)
     }
-    def forDescription(description: String): Seq[Step] => Step.Elided = {
-      Step.Elided(_, None, Some(description))
+    def forDescription(description: String): Seq[Step] => Step.ElidedStep = {
+      Step.ElidedStep(_, None, Some(description))
     }
   }
 
-  case class Subproof(name: String, substeps: Seq[Step]) extends Step.WithSubsteps {
+  case class SubproofStep(name: String, substeps: Seq[Step]) extends Step.WithSubsteps {
     override def statement: Statement = substeps.last.statement
     override def length: Int = substeps.map(_.length).sum
     override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = copy(substeps = newSubsteps)
@@ -318,57 +317,57 @@ object Step {
       substeps.flatMap(_.serializedLines).indent ++
       Seq("}")
   }
-  object Subproof {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Subproof] = {
+  object SubproofStep {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[SubproofStep] = {
       for {
         name <- Parser.allInParens
         substeps <- listParser.inBraces
-      } yield Subproof(name, substeps)
+      } yield SubproofStep(name, substeps)
     }
   }
 
-  case class ExistingStatementExtraction(substeps: Seq[Step.InferenceApplicationWithoutPremises]) extends Step.Autogenerated with Step.PremiseDerivation {
+  case class ExistingStatementExtractionStep(substeps: Seq[Step.InferenceApplicationWithoutPremises]) extends Step.Autogenerated with Step.PremiseDerivation {
     override def statement: Statement = substeps.last.statement
     override def inferences: Set[Inference] = substeps.map(_.inference).toSet
     override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = {
-      ExistingStatementExtraction(newSubsteps.map(_.asInstanceOf[Step.InferenceApplicationWithoutPremises]))
+      ExistingStatementExtractionStep(newSubsteps.map(_.asInstanceOf[Step.InferenceApplicationWithoutPremises]))
     }
   }
-  object ExistingStatementExtraction {
+  object ExistingStatementExtractionStep {
     def ifNecessary(substeps: Seq[Step.InferenceApplicationWithoutPremises]): Option[Step.PremiseDerivation] = {
       substeps match {
         case Nil => None
         case Seq(step) => Some(step)
-        case substeps => Some(ExistingStatementExtraction(substeps))
+        case substeps => Some(ExistingStatementExtractionStep(substeps))
       }
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[ExistingStatementExtraction] = {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[ExistingStatementExtractionStep] = {
       for {
         substeps <- listParser.inBraces
-      } yield ExistingStatementExtraction(substeps.map(_.asInstanceOf[Step.InferenceApplicationWithoutPremises]))
+      } yield ExistingStatementExtractionStep(substeps.map(_.asInstanceOf[Step.InferenceApplicationWithoutPremises]))
     }
   }
 
-  case class InferenceExtraction(assertionStep: Step.Assertion, extractionSteps: Seq[Step.AssertionOrExtraction]) extends Step.AssertionOrExtraction with Step.Autogenerated {
+  case class InferenceExtractionStep(assertionStep: Step.AssertionStep, extractionSteps: Seq[Step.AssertionOrExtraction]) extends Step.AssertionOrExtraction with Step.Autogenerated {
     override def inference: Inference.Summary = assertionStep.inference
     override def statement: Statement = extractionSteps.last.statement
     override def substeps: Seq[Step] = assertionStep +: extractionSteps
-    override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = InferenceExtraction(newSubsteps)
+    override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = InferenceExtractionStep(newSubsteps)
   }
-  object InferenceExtraction {
-    def apply(steps: Seq[Step]) : InferenceExtraction = {
-        InferenceExtraction(
-          steps.head.asInstanceOf[Step.Assertion],
+  object InferenceExtractionStep {
+    def apply(steps: Seq[Step]) : InferenceExtractionStep = {
+        InferenceExtractionStep(
+          steps.head.asInstanceOf[Step.AssertionStep],
           steps.tail.map(_.asInstanceOf[Step.AssertionOrExtraction]))
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[InferenceExtraction] = {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[InferenceExtractionStep] = {
       for {
         substeps <- listParser.inBraces
-      } yield InferenceExtraction(substeps)
+      } yield InferenceExtractionStep(substeps)
     }
   }
 
-  case class WrappedInferenceApplication(
+  case class WrappedInferenceApplicationStep(
       unwrappers: Seq[Unwrapper],
       premiseSteps: Seq[PremiseDerivation],
       assertionStep: AssertionOrExtraction)
@@ -378,50 +377,50 @@ object Step {
     override def inference: Inference.Summary = assertionStep.inference
     override def innerSteps: Seq[Step] = premiseSteps :+ assertionStep
     override protected def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = {
-      WrappedInferenceApplication(newSubsteps)(stepProvingContext.provingContext)
+      WrappedInferenceApplicationStep(newSubsteps)(stepProvingContext.provingContext)
     }
   }
-  object WrappedInferenceApplication {
-    def apply(steps: Seq[Step])(implicit provingContext: ProvingContext): WrappedInferenceApplication = {
+  object WrappedInferenceApplicationStep {
+    def apply(steps: Seq[Step])(implicit provingContext: ProvingContext): WrappedInferenceApplicationStep = {
       Wrapped.extractWrappers(steps) { (unwrappers, steps) =>
-        WrappedInferenceApplication(
+        WrappedInferenceApplicationStep(
           unwrappers,
           steps.init.map(_.asInstanceOf[PremiseDerivation]),
           steps.last.asInstanceOf[Step.AssertionOrExtraction])
       }
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[WrappedInferenceApplication] = {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[WrappedInferenceApplicationStep] = {
       for {
         substeps <- listParser.inBraces
-      } yield WrappedInferenceApplication(substeps)
+      } yield WrappedInferenceApplicationStep(substeps)
     }
   }
 
-  case class WrappedPremiseDerivation(
+  case class WrappedPremiseDerivationStep(
       unwrappers: Seq[Unwrapper],
       innerSteps: Seq[Step.PremiseDerivation])
     extends Step.Wrapped
       with Step.PremiseDerivation
   {
     override protected def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = {
-      WrappedPremiseDerivation(newSubsteps)
+      WrappedPremiseDerivationStep(newSubsteps)
     }
     override def inferences: Set[Inference] = innerSteps.flatMap(_.inferences).toSet
   }
-  object WrappedPremiseDerivation {
-    def apply(steps: Seq[Step])(implicit provingContext: ProvingContext): WrappedPremiseDerivation = {
+  object WrappedPremiseDerivationStep {
+    def apply(steps: Seq[Step])(implicit provingContext: ProvingContext): WrappedPremiseDerivationStep = {
       Wrapped.extractWrappers(steps) { (unwrappers, steps) =>
-        WrappedPremiseDerivation(unwrappers, steps.map(_.asInstanceOf[Step.PremiseDerivation]))
+        WrappedPremiseDerivationStep(unwrappers, steps.map(_.asInstanceOf[Step.PremiseDerivation]))
       }
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[WrappedPremiseDerivation] = {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[WrappedPremiseDerivationStep] = {
       for {
         substeps <- listParser.inBraces
-      } yield WrappedPremiseDerivation(substeps)
+      } yield WrappedPremiseDerivationStep(substeps)
     }
   }
 
-  case class InferenceWithPremiseDerivations(
+  case class InferenceWithPremiseDerivationsStep(
       premiseSteps: Seq[Step.InferenceApplicationWithoutPremises],
       assertionStep: Step.InferenceApplicationWithoutPremises)
     extends Step.InferenceApplication
@@ -430,45 +429,45 @@ object Step {
     override def inference: Inference.Summary = assertionStep.inference
     override def statement: Statement = assertionStep.statement
     override def substeps: Seq[Step] = premiseSteps :+ assertionStep
-    override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = InferenceWithPremiseDerivations(newSubsteps)
+    override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = InferenceWithPremiseDerivationsStep(newSubsteps)
   }
-  object InferenceWithPremiseDerivations {
+  object InferenceWithPremiseDerivationsStep {
     def ifNecessary(
       premiseDerivationSteps: Seq[Step.InferenceApplicationWithoutPremises],
       assertion: Step.InferenceApplicationWithoutPremises
     ): Step.InferenceApplication = {
       if (premiseDerivationSteps.nonEmpty) {
-        InferenceWithPremiseDerivations(premiseDerivationSteps, assertion)
+        InferenceWithPremiseDerivationsStep(premiseDerivationSteps, assertion)
       } else {
         assertion
       }
     }
-    def apply(steps: Seq[Step]): InferenceWithPremiseDerivations = {
-      InferenceWithPremiseDerivations(
+    def apply(steps: Seq[Step]): InferenceWithPremiseDerivationsStep = {
+      InferenceWithPremiseDerivationsStep(
         steps.init.map(_.asInstanceOf[Step.InferenceApplicationWithoutPremises]),
         steps.last.asInstanceOf[Step.InferenceApplicationWithoutPremises])
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[InferenceWithPremiseDerivations] = {
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[InferenceWithPremiseDerivationsStep] = {
       for {
         substeps <- listParser.inBraces
-      } yield InferenceWithPremiseDerivations(substeps)
+      } yield InferenceWithPremiseDerivationsStep(substeps)
     }
   }
 
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Option[Step]] = {
     Parser.selectOptionalWordParser {
-      case "target" => Target.parser
-      case "prove" => Assertion.parser
-      case "assume" => Deduction.parser
-      case "take" => Generalization.parser
-      case "let" => Naming.parser
-      case "elided" => Elided.parser
-      case "subproof" => Subproof.parser
-      case "existingStatementExtraction" => ExistingStatementExtraction.parser
-      case "inferenceExtraction" => InferenceExtraction.parser
-      case "wrappedInferenceApplication" => WrappedInferenceApplication.parser
-      case "wrappedPremiseDerivation" => WrappedPremiseDerivation.parser
-      case "inferenceWithPremiseDerivations" => InferenceWithPremiseDerivations.parser
+      case "target" => TargetStep.parser
+      case "prove" => AssertionStep.parser
+      case "assume" => DeductionStep.parser
+      case "take" => GeneralizationStep.parser
+      case "let" => NamingStep.parser
+      case "elided" => ElidedStep.parser
+      case "subproof" => SubproofStep.parser
+      case "existingStatementExtraction" => ExistingStatementExtractionStep.parser
+      case "inferenceExtraction" => InferenceExtractionStep.parser
+      case "wrappedInferenceApplication" => WrappedInferenceApplicationStep.parser
+      case "wrappedPremiseDerivation" => WrappedPremiseDerivationStep.parser
+      case "inferenceWithPremiseDerivations" => InferenceWithPremiseDerivationsStep.parser
     }
   }
   def listParser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Seq[Step]] = {

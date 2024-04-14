@@ -52,7 +52,7 @@ object ChainingMethods {
         substitution <- provingContext.substitutions.find(_.relation == firstRelation)
         reversal <- provingContext.reversals.ofType[Reversal[Term]].find(_.joiner == firstRelation)
       } yield {
-        secondRelation -> Step.Elided.forInference(substitution.inference)(Seq(
+        secondRelation -> Step.ElidedStep.forInference(substitution.inference)(Seq(
           reversal.assertionStep(intermediate, source),
           substitution.assertionStep(intermediate, source, Wrapper(secondRelation(_, target)(_)))))
       }

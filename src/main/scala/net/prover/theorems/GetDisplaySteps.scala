@@ -14,15 +14,15 @@ object GetDisplaySteps {
 
   def apply(step: Step, stepPath: Seq[Int]): DisplayStep = {
     step match {
-      case step: Step.Target =>
+      case step: Step.TargetStep =>
         DisplayStep.Target(step.statement, stepPath)
-      case step: Step.Assertion =>
+      case step: Step.AssertionStep =>
         DisplayStep.Assertion(step.statement, step.inference, stepPath, step.premises)
-      case step: Step.Deduction =>
+      case step: Step.DeductionStep =>
         DisplayStep.Deduction(step.assumption, step.statement, stepPath, apply(step.substeps, stepPath))
-      case step: Step.Generalization =>
+      case step: Step.GeneralizationStep =>
         DisplayStep.Generalization(step.variableName, step.statement, apply(step.substeps, stepPath), stepPath)
-      case step: Step.Naming =>
+      case step: Step.NamingStep =>
         DisplayStep.Naming(
           step.variableName,
           step.assumption,
@@ -31,9 +31,9 @@ object GetDisplaySteps {
           stepPath,
           step.premises,
           apply(step.substeps, stepPath))
-      case step: Step.Subproof =>
+      case step: Step.SubproofStep =>
         DisplayStep.Subproof(step.name, step.statement, stepPath, apply(step.substeps, stepPath))
-      case step: Step.Elided =>
+      case step: Step.ElidedStep =>
         step.highlightedInference match {
           case Some(i) =>
             DisplayStep.ElidedInference(
@@ -48,31 +48,31 @@ object GetDisplaySteps {
               stepPath,
               apply(step.substeps, stepPath))
         }
-      case step: Step.ExistingStatementExtraction =>
+      case step: Step.ExistingStatementExtractionStep =>
         DisplayStep.ElidedWithDescription(
           step.statement,
           Some("Extraction from previous step"),
           stepPath,
           apply(step.substeps, stepPath))
-      case step: Step.InferenceExtraction =>
+      case step: Step.InferenceExtractionStep =>
         DisplayStep.ElidedInference(
           step.statement,
           step.inference,
           stepPath,
           apply(step.substeps, stepPath))
-      case step: Step.WrappedInferenceApplication =>
+      case step: Step.WrappedInferenceApplicationStep =>
         DisplayStep.ElidedInference(
           step.statement,
           step.inference,
           stepPath,
           apply(step.substeps, stepPath))
-      case step: Step.WrappedPremiseDerivation =>
+      case step: Step.WrappedPremiseDerivationStep =>
         DisplayStep.ElidedWithDescription(
           step.statement,
           Some("Premise derivation"), // TODO: Could potentially point at an inference
           stepPath,
           apply(step.substeps, stepPath))
-      case step: Step.InferenceWithPremiseDerivations =>
+      case step: Step.InferenceWithPremiseDerivationsStep =>
         DisplayStep.ElidedInference(
           step.statement,
           step.inference,

@@ -64,7 +64,7 @@ trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with C
   def beStepsThatMakeValidTheorem(boundVariables: Seq[String])(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
     beValidTheorem(availableEntries) ^^
       { (steps: Seq[Step]) => createTheorem(Nil, steps.last.statement, steps) } ^^
-      { (steps: Seq[Step]) => boundVariables.foldRight(steps)((v, steps) => Seq(Step.Generalization(v, steps, availableEntries.generalizationDefinitionOption.get))) }
+      { (steps: Seq[Step]) => boundVariables.foldRight(steps)((v, steps) => Seq(Step.GeneralizationStep(v, steps, availableEntries.generalizationDefinitionOption.get))) }
   }
 
   def beStepsThatMakeValidAndCompleteTheorem(premises: Seq[Statement], conclusion: Statement)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
@@ -84,7 +84,7 @@ trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with C
       def generalizeToDepth(statement: Statement, parameterDepth: Int): Statement = (0 until parameterDepth).foldLeft(statement)(generalizeOnce)
 
       def specificationStep(statement: Statement, parameterDepth: Int) = {
-        Step.Assertion(
+        Step.AssertionStep(
           statement,
           specification.summary,
           Seq(Premise.Pending(generalizeOnce(statement, parameterDepth).insertExternalParameters(1))),
@@ -92,7 +92,7 @@ trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with C
       }
 
       beStepsThatMakeValidAndCompleteTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>
-        (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.Generalization(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, GeneralizationDefinition)) }
+        (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.GeneralizationStep(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, GeneralizationDefinition)) }
       }
     }
   }

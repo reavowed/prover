@@ -13,7 +13,7 @@ import scala.util.Try
 
 case class ReplaceInference(oldInference: Inference, newInference: Inference) extends CompoundTheoremUpdater[Try] {
   override def updateAssertion(
-    step: Step.Assertion,
+    step: Step.AssertionStep,
     stepWithContext: StepWithContext
   ): Try[Step] = {
     import step._
@@ -33,17 +33,17 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
   }
 
   override def updateNaming(
-    step: Step.Naming,
+    step: Step.NamingStep,
     stepWithContext: StepWithContext
   ): Try[Step] = {
     if (step.inference == oldInference) {
       import step._
-      val assertion = Step.Assertion(statement, inference, premises, substitutions)
+      val assertion = Step.AssertionStep(statement, inference, premises, substitutions)
       for {
         updatedStep <- updateAssertion(assertion, stepWithContext)
-        updatedAssertion <- updatedStep.asOptionalInstanceOf[Step.Assertion].failIfUndefined(InferenceReplacementException("Cannot replace naming with an elided step", stepWithContext))
+        updatedAssertion <- updatedStep.asOptionalInstanceOf[Step.AssertionStep].failIfUndefined(InferenceReplacementException("Cannot replace naming with an elided step", stepWithContext))
         updatedSubsteps <- apply(stepWithContext.forSubsteps(step))
-      } yield Step.Naming(
+      } yield Step.NamingStep(
         variableName,
         assumption,
         statement,
@@ -58,7 +58,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
   }
 
   override def updateElided(
-    step: Step.Elided,
+    step: Step.ElidedStep,
     stepWithContext: StepWithContext
   ): Try[Step] = {
     import step._

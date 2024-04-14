@@ -16,7 +16,7 @@ object CreateProofStep {
     getConclusionOption: (ExpressionParsingContext, Substitutions) => Try[Option[Statement]],
     unwrappers: Seq[Unwrapper])(
     implicit stepProvingContext: StepProvingContext
-  ): Try[(Step, Seq[Step.Target])] = {
+  ): Try[(Step, Seq[Step.TargetStep])] = {
     def withInference(inferenceId: String) = CreateAssertionStep(inferenceId, getConclusionOption, definition, unwrappers)
 
     def withPremise(serializedPremiseStatement: String) = {

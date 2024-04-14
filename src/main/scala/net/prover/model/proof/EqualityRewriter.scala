@@ -250,7 +250,7 @@ object EqualityRewriter {
   def rewriteElider(inferences: Seq[Inference]): Seq[Step] => Option[Step] = rewriteElider(inferences.distinct.single)
   def optionalRewriteElider(inferences: Seq[Option[Inference]]): Seq[Step] => Option[Step] = rewriteElider(inferences.distinct.single.flatten)
   def rewriteElider(inference: Option[Inference]): Seq[Step] => Option[Step] = { steps =>
-    Step.Elided.ifNecessary(steps, inference, "Rewritten")
+    Step.ElidedStep.ifNecessary(steps, inference, "Rewritten")
   }
 
   def rewrite(
@@ -275,7 +275,7 @@ object EqualityRewriter {
     }
   }
 
-  def getReverseReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Step.Assertion)] = {
+  def getReverseReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Step.AssertionStep)] = {
     val paths = statement.getTerms().filter(_._1 == rhs).map(_._4)
     if (paths.nonEmpty && (equality.unapply(statement).isEmpty || paths.forall(_.length > 1))) {
       val wrapper = Wrapper.fromExpression(statement.getPredicateForTerm(rhs, substitutionContext.externalDepth))

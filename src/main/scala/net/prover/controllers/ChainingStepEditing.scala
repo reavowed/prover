@@ -63,14 +63,14 @@ trait ChainingStepEditing {
   }
   object ChainingStepDefinition {
     def forTarget[T <: Expression : ChainingMethods](lhs: T, rhs: T, joiner: BinaryJoiner[T])(implicit stepProvingContext: StepProvingContext): ChainingStepDefinition[T] = {
-      val stepOption = Some(Step.Target(joiner(lhs, rhs))).filter(step => !stepProvingContext.allPremises.exists(_.statement == step.statement))
+      val stepOption = Some(Step.TargetStep(joiner(lhs, rhs))).filter(step => !stepProvingContext.allPremises.exists(_.statement == step.statement))
       ChainingStepDefinition(lhs, rhs, joiner, stepOption)
     }
   }
 
   trait CreateChainingSteps {
-    def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.Target])]
-    def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.Target])]
+    def createStepsForConnective(targetConnective: BinaryConnective, targetLhs: Statement, targetRhs: Statement)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Statement], ChainingStepDefinition[Statement], Seq[Step.TargetStep])]
+    def createStepsForRelation(targetRelation: BinaryRelation, targetLhs: Term, targetRhs: Term)(implicit stepWithContext: StepWithContext): Try[(ChainingStepDefinition[Term], ChainingStepDefinition[Term], Seq[Step.TargetStep])]
   }
 
   protected def insertTransitivity(
@@ -88,13 +88,13 @@ trait ChainingStepEditing {
         bookService.replaceSteps[WithValue[InsertionAndMultipleReplacementProps]#Type](bookKey, chapterKey, theoremKey, proofIndex, init) { outerStepsWithContext =>
           outerStepsWithContext.stepsWithContexts.splitAtIndexIfValid(last).map { case (before, stepWithContext, after) =>
             implicit val swc = stepWithContext
-            def forConnective(connective: BinaryConnective, lhs: Statement, rhs: Statement): Try[(Seq[Step], Seq[Step.Target], MultipleStepReplacementProps)] = {
+            def forConnective(connective: BinaryConnective, lhs: Statement, rhs: Statement): Try[(Seq[Step], Seq[Step.TargetStep], MultipleStepReplacementProps)] = {
               for {
                 (firstChainingStep, secondChainingStep, targetSteps) <- createSteps.createStepsForConnective(connective, lhs, rhs)
                 (transitivitySteps, replacementProps) <- getTransitivitySteps(firstChainingStep, secondChainingStep, connective)
               } yield (transitivitySteps, targetSteps, replacementProps)
             }
-            def forRelation(relation: BinaryRelation, lhs: Term, rhs: Term): Try[(Seq[Step], Seq[Step.Target], MultipleStepReplacementProps)] = {
+            def forRelation(relation: BinaryRelation, lhs: Term, rhs: Term): Try[(Seq[Step], Seq[Step.TargetStep], MultipleStepReplacementProps)] = {
               for {
                 (firstChainingStep, secondChainingStep, targetSteps) <- createSteps.createStepsForRelation(relation, lhs, rhs)
                 (transitivitySteps, replacementProps) <- getTransitivitySteps(firstChainingStep, secondChainingStep, relation)
@@ -140,7 +140,7 @@ trait ChainingStepEditing {
             }
 
             for {
-              targetStep <- stepWithContext.step.asOptionalInstanceOf[Step.Target].orBadRequest(s"Step was not target")
+              targetStep <- stepWithContext.step.asOptionalInstanceOf[Step.TargetStep].orBadRequest(s"Step was not target")
               (transitivitySteps, targetSteps, replacementProps) <- withRelation(targetStep.statement, forConnective, forRelation)
               (finalSteps, insertionProps) = AddTargetsBeforeChain(init, before.map(_.step), transitivitySteps, targetSteps)(outerStepsWithContext)
             } yield (finalSteps, InsertionAndMultipleReplacementProps(insertionProps, replacementProps))

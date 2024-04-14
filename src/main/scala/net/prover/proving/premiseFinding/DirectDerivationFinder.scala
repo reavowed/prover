@@ -30,7 +30,7 @@ object DirectDerivationFinder {
         substitutions <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inference.variableDefinitions))
         premiseStatements <- inference.substitutePremises(substitutions)
         premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatements(premiseStatements)
-        assertionStep = Step.Assertion(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
+        assertionStep = Step.AssertionStep(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
       } yield premiseSteps :+ assertionStep
     }
 
@@ -57,7 +57,7 @@ object DirectDerivationFinder {
           premiseStatements <- inference.substitutePremises(substitutions)
           (premiseDerivations, premiseFacts) <- premiseStatements.map(findDerivationWithFactInferences).traverseOption.map(_.split)
           singleFact = premiseFacts.traverseOption.flatMap(_.distinct.single)
-          assertionStep = Step.Assertion(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
+          assertionStep = Step.AssertionStep(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
         } yield (premiseDerivations.flatten :+ assertionStep, singleFact)
       }
 
@@ -66,7 +66,7 @@ object DirectDerivationFinder {
 
     findDerivationWithFactInferences(targetStatement) flatMap {
       case (derivationSteps, Some(factInference)) =>
-        val assertion = Step.Assertion(
+        val assertion = Step.AssertionStep(
           factInference.conclusion,
           factInference.summary,
           Nil,

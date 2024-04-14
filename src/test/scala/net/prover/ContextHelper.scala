@@ -44,8 +44,8 @@ trait ContextHelper extends CustomMockitoStubs {
     statement: Statement)(
     implicit outerStepContext: StepContext,
     availableEntries: AvailableEntries
-  ): TypedStepWithContext[Step.Target] = {
-    createStepWithContext(Step.Target(statement))
+  ): TypedStepWithContext[Step.TargetStep] = {
+    createStepWithContext(Step.TargetStep(statement))
   }
 
   def createStepWithContext[T <: Step : ClassTag](

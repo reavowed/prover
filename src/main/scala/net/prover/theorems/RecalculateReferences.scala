@@ -33,12 +33,12 @@ object RecalculateReferences extends CompoundStepUpdater[FWithValue[Try, List[St
   }
 
   override def updateAssertion(
-    step: Step.Assertion,
+    step: Step.AssertionStep,
     stepWithContext: StepWithContext
   ): Try[(Step, List[StepWithReferenceChange])] = {
     super.updateAssertion(step, stepWithContext) map {
       case (newStep, innerChanges) =>
-        if (step.premises != newStep.asInstanceOf[Step.Assertion].premises) {
+        if (step.premises != newStep.asInstanceOf[Step.AssertionStep].premises) {
           (newStep, innerChanges :+ StepWithReferenceChange(newStep, stepWithContext.stepContext.stepReference.stepPath))
         } else {
           (newStep, innerChanges)
@@ -47,12 +47,12 @@ object RecalculateReferences extends CompoundStepUpdater[FWithValue[Try, List[St
   }
 
   override def updateNaming(
-    step: Step.Naming,
+    step: Step.NamingStep,
     stepWithContext: StepWithContext
   ): Try[(Step, List[StepWithReferenceChange])] = {
     super.updateNaming(step, stepWithContext) map {
       case (newStep, innerChanges) =>
-        if (step.premises != newStep.asInstanceOf[Step.Naming].premises) {
+        if (step.premises != newStep.asInstanceOf[Step.NamingStep].premises) {
           (newStep, innerChanges :+ StepWithReferenceChange(newStep, stepWithContext.stepContext.stepReference.stepPath))
         } else {
           (newStep, innerChanges)

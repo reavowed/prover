@@ -19,7 +19,7 @@ class SuggestExistingStatementsForCurrentTargetSpec extends Specification with C
       val target = Negation(φ(a))
       implicit val service = mock[BookService]
       implicit val stepContext = createBaseStepContext(Seq(premise))
-      service.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
+      service.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
         Success(createTargetStepWithContext(target))
 
       val result = SuggestExistingStatementsForCurrentTarget(bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath), premise.serialized)

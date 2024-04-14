@@ -10,8 +10,8 @@ case class Transitivity[TComponent <: Expression](
   resultJoiner: BinaryJoiner[TComponent],
   inference: Inference.Summary
 ) {
-  def assertionStep(left: TComponent, middle: TComponent, right: TComponent)(implicit substitutionContext: SubstitutionContext): Step.Assertion = {
-    Step.Assertion(
+  def assertionStep(left: TComponent, middle: TComponent, right: TComponent)(implicit substitutionContext: SubstitutionContext): Step.AssertionStep = {
+    Step.AssertionStep(
       resultJoiner(left, right),
       inference,
       Seq(Premise.Pending(firstPremiseJoiner(left, middle)), Premise.Pending(secondPremiseJoiner(middle, right))),

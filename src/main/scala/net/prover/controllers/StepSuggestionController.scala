@@ -42,7 +42,7 @@ class StepSuggestionController @Autowired() (val bookService: BookService) {
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
   ): ResponseEntity[_] = {
-    bookService.findStep[Step.Target](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map(implicit stepWithContext => {
+    bookService.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, stepPath).map(implicit stepWithContext => {
       ProofHelper.findNamingInferences
         .filter(InferenceFilter(searchText).apply)
         .reverse

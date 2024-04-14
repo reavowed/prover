@@ -8,14 +8,14 @@ object DerivationOrTargetFinder {
   private def findDerivationsOrTargets(
     premiseStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): (Seq[Step.AssertionOrExtraction], Seq[Step.Target]) = {
+  ): (Seq[Step.AssertionOrExtraction], Seq[Step.TargetStep]) = {
     findDerivationsOrTargetsWithSuccessResult(premiseStatement).strip3
   }
 
   private def findDerivationsOrTargetsWithSuccessResult(
     premiseStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): (Seq[Step.AssertionOrExtraction], Seq[Step.Target], Boolean) = {
+  ): (Seq[Step.AssertionOrExtraction], Seq[Step.TargetStep], Boolean) = {
     val directly = DerivationFinder.findDerivationForUnwrappedStatement(premiseStatement).map((_, Nil, true))
 
     def byDeconstructing = for {
@@ -27,7 +27,7 @@ object DerivationOrTargetFinder {
     def asTarget = {
       val (rewriteSteps, rewrittenStatement) = DerivationFinder.rewriteWithKnownValues(premiseStatement)
       val (deconstructionSteps, deconstructedStatements) = splitTarget(rewrittenStatement)
-      (rewriteSteps ++ deconstructionSteps, deconstructedStatements.map(Step.Target(_)), false)
+      (rewriteSteps ++ deconstructionSteps, deconstructedStatements.map(Step.TargetStep(_)), false)
     }
 
     directly orElse byDeconstructing getOrElse asTarget
@@ -36,8 +36,8 @@ object DerivationOrTargetFinder {
   def findDerivationsOrTargets(
     premiseStatements: Seq[Statement])(
     implicit stepProvingContext: StepProvingContext
-  ): (Seq[Step.AssertionOrExtraction], Seq[Step.Target]) = {
-    val (premiseSteps, targets) = premiseStatements.foldLeft((Seq.empty[Step.AssertionOrExtraction], Seq.empty[Step.Target])) { case ((premiseStepsSoFar, targetStepsSoFar), premiseStatement) =>
+  ): (Seq[Step.AssertionOrExtraction], Seq[Step.TargetStep]) = {
+    val (premiseSteps, targets) = premiseStatements.foldLeft((Seq.empty[Step.AssertionOrExtraction], Seq.empty[Step.TargetStep])) { case ((premiseStepsSoFar, targetStepsSoFar), premiseStatement) =>
       val (stepsForThisPremise, targetsForThisPremise) = findDerivationsOrTargets(premiseStatement)
       (premiseStepsSoFar ++ stepsForThisPremise, targetStepsSoFar ++ targetsForThisPremise)
     }
@@ -47,8 +47,8 @@ object DerivationOrTargetFinder {
   def findDerivationsOrTargetsWithSuccessResult(
     premiseStatements: Seq[Statement])(
     implicit stepProvingContext: StepProvingContext
-  ): (Seq[Step.AssertionOrExtraction], Seq[Step.Target], Boolean) = {
-    val (premiseSteps, targets, wasSuccessful) = premiseStatements.foldLeft((Seq.empty[Step.AssertionOrExtraction], Seq.empty[Step.Target], false)) { case ((premiseStepsSoFar, targetStepsSoFar, wasSuccessfulSoFar), premiseStatement) =>
+  ): (Seq[Step.AssertionOrExtraction], Seq[Step.TargetStep], Boolean) = {
+    val (premiseSteps, targets, wasSuccessful) = premiseStatements.foldLeft((Seq.empty[Step.AssertionOrExtraction], Seq.empty[Step.TargetStep], false)) { case ((premiseStepsSoFar, targetStepsSoFar, wasSuccessfulSoFar), premiseStatement) =>
       val (stepsForThisPremise, targetsForThisPremise, wasThisStatementSuccessful) = findDerivationsOrTargetsWithSuccessResult(premiseStatement)
       (premiseStepsSoFar ++ stepsForThisPremise, targetStepsSoFar ++ targetsForThisPremise, wasSuccessfulSoFar || wasThisStatementSuccessful)
     }
@@ -81,11 +81,11 @@ object DerivationOrTargetFinder {
   private def deconstruct(
     statement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[(Step.Assertion, Seq[Statement])] = {
+  ): Option[(Step.AssertionStep, Seq[Statement])] = {
     stepProvingContext.provingContext.statementDefinitionDeconstructions.mapFind { deconstructionInference =>
       for {
         substitutions <- deconstructionInference.conclusion.calculateSubstitutions(statement).flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
-        step <- Step.Assertion.forInference(deconstructionInference, substitutions)
+        step <- Step.AssertionStep.forInference(deconstructionInference, substitutions)
       } yield (step, step.premises.map(_.statement))
     }
   }

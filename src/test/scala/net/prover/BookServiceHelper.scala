@@ -26,7 +26,7 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
     service.replaceSteps[WithValue[InsertionAndReplacementProps]#Type](any, any, any, any, any)(any)(any) returns
       Success((
         ProofUpdateProps(
-          MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.Target(StatementVariable(i)))),
+          MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.TargetStep(StatementVariable(i)))),
           null,
           null),
         InsertionAndReplacementProps(
@@ -38,7 +38,7 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
     service.replaceSteps[WithValue[InsertionAndMultipleReplacementProps]#Type](any, any, any, any, any)(any)(any) returns
       Success((
         ProofUpdateProps(
-          MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.Target(StatementVariable(i)))),
+          MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.TargetStep(StatementVariable(i)))),
           null,
           null),
         InsertionAndMultipleReplacementProps(
@@ -50,15 +50,15 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
     service.replaceSteps[WithValue[StepInsertionProps]#Type](any, any, any, any, any)(any)(any) returns
       Success((
         ProofUpdateProps(
-          MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.Target(StatementVariable(i)))),
+          MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.TargetStep(StatementVariable(i)))),
           null,
           null),
         StepInsertionProps(outerStepPath :+ stepIndex, Nil)))
   }
 
   def mockReplaceStepsForSimpleReplacement(service: BookService): Unit = {
-    service.replaceSteps[WithValue[Seq[Step]]#Type](any, any, any, any, any)(any)(any) returns Success((ProofUpdateProps(MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.Target(StatementVariable(i)))), null, null), Nil))
-    Mockito.when(service.replaceStep[Step.Target](any, any, any, any, any)(any)(any)).thenCallRealMethod()
+    service.replaceSteps[WithValue[Seq[Step]]#Type](any, any, any, any, any)(any)(any) returns Success((ProofUpdateProps(MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.TargetStep(StatementVariable(i)))), null, null), Nil))
+    Mockito.when(service.replaceStep[Step.TargetStep](any, any, any, any, any)(any)(any)).thenCallRealMethod()
   }
 
   def checkModifySteps(
