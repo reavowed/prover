@@ -206,7 +206,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     def findCommutativities(equality: Equality): Seq[(BinaryOperator, Commutativity)] = {
       for {
         inferenceExtraction <- rearrangementInferences
-        if !inferenceExtraction.innerExtraction.derivation.lastOption.exists(_.inference == equality.reversal.inference)
+        if !inferenceExtraction.extractionDefinition.reversalInference.contains(equality.reversal.inference)
         (l, r) <- equality.unapply(inferenceExtraction.conclusion)
         if ExpressionUtils.getCombinationOfSimpleTermVariables(l).contains(Seq(0, 1))
         operator = BinaryOperator(l)
