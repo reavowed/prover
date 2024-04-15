@@ -7,22 +7,6 @@ import net.prover.model.proof._
 import scala.annotation.tailrec
 
 object ExtractionCalculator {
-  case class VariableTracker(baseVariableNames: Seq[String], additionalVariableNames: Seq[String]) {
-    def namesUsedSoFar: Seq[String] = baseVariableNames ++ additionalVariableNames
-    def getAndAddUniqueVariableName(baseName: String): (String, Int, VariableTracker) = {
-      val newName = if (!namesUsedSoFar.contains(baseName))
-        baseName
-      else {
-        val i = Stream.from(1).find(i => !namesUsedSoFar.contains(s"${baseName}_$i")).get
-        s"${baseName}_$i"
-      }
-      (newName, baseVariableNames.length + additionalVariableNames.length, VariableTracker(baseVariableNames, additionalVariableNames :+ newName))
-    }
-  }
-  object VariableTracker {
-    def fromInference(inference: Inference): VariableTracker = VariableTracker(inference.variableDefinitions.terms.map(_.name), Nil)
-    def fromStepContext(implicit stepContext: StepContext): VariableTracker = VariableTracker(stepContext.variableDefinitions.terms.map(_.name), Nil)
-  }
 
   private def getBaseExtractions(sourceStatement: Statement, variableTracker: VariableTracker): Seq[ExtractionDetails] = {
     Seq(ExtractionDetails(Nil, sourceStatement, Nil, variableTracker, ExtractionDefinition.Empty))
