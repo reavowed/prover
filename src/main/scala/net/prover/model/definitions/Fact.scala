@@ -11,7 +11,7 @@ case class Fact(inferenceExtraction: InferenceExtraction) {
   def inference: Inference = inferenceExtraction.inference
 
   def derivation(implicit provingContext: ProvingContext): Seq[Step.AssertionOrExtraction] = {
-    ExtractionApplier.groupStepsByDefinition(inferenceExtraction.innerExtraction.derivation)
+    ExtractionApplier.groupStepsByDefinition(inferenceExtraction.extractionDetails.derivation)
   }
 
   def toStep(implicit provingContext: ProvingContext): Step.AssertionOrExtraction = {

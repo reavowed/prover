@@ -5,8 +5,8 @@ import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
-import net.prover.proving.extraction.ExtractionCalculator.{ExtractionFromSinglePremise, InferenceExtraction, VariableTracker}
-import net.prover.proving.extraction.ExtractionDefinition
+import net.prover.proving.extraction.ExtractionCalculator.{InferenceExtraction, VariableTracker}
+import net.prover.proving.extraction.{ExtractionDefinition, ExtractionDetails}
 import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
@@ -73,7 +73,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowableEquality: Allowable[Equality] = allowableGeneric(Generic[Equality])
 
     implicit val allowableExtractionDefinition: Allowable[ExtractionDefinition] = allowableGeneric(Generic[ExtractionDefinition])
-    implicit val allowableExtractionFromSinglePremise: Allowable[ExtractionFromSinglePremise] = allowableGeneric(Generic[ExtractionFromSinglePremise])
+    implicit val allowableExtractionFromSinglePremise: Allowable[ExtractionDetails] = allowableGeneric(Generic[ExtractionDetails])
     implicit val allowableInferenceExtraction: Allowable[InferenceExtraction] = allowableGeneric(Generic[InferenceExtraction])
     implicit val allowableFact: Allowable[Fact] = allowableGeneric(Generic[Fact])
     implicit val allowableCommutativity: Allowable[Commutativity] = allowableGeneric(Generic[Commutativity])
@@ -162,7 +162,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   def findInferenceExtraction(baseInferenceId: String, extractionDefinition: ExtractionDefinition.Serialized): Option[InferenceExtraction] = {
     for {
       extractions <- inferenceExtractionsByInferenceId.get(baseInferenceId)
-      matchingExtraction <- extractions.find(_.innerExtraction.extractionDefinition.matches(extractionDefinition))
+      matchingExtraction <- extractions.find(_.extractionDetails.extractionDefinition.matches(extractionDefinition))
     } yield matchingExtraction
   }
 

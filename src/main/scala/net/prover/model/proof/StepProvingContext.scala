@@ -1,10 +1,10 @@
 package net.prover.model.proof
 
 import net.prover.entries.StepWithContext
+import net.prover.model.ProvingContext
 import net.prover.model.definitions.{BinaryRelation, KnownStatement, PremiseSimplificationInference}
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.utils.ExpressionUtils
-import net.prover.model.{ProvingContext, VariableDefinitions}
 import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
 
 import scala.collection.mutable
@@ -35,8 +35,8 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
     val extracted = for {
       premise <- allPremises
       extraction <- ExtractionCalculator.getPremiseExtractions(premise.statement)
-      if extraction.premises.isEmpty && !extraction.innerExtraction.derivation.exists(step => givenAndSimplified.exists(_.statement == step.statement))
-    } yield KnownStatement(extraction.conclusion, extraction.innerExtraction.derivation)
+      if extraction.premises.isEmpty && !extraction.extractionDetails.derivation.exists(step => givenAndSimplified.exists(_.statement == step.statement))
+    } yield KnownStatement(extraction.conclusion, extraction.extractionDetails.derivation)
     (givenAndSimplified ++ extracted).deduplicate
   }
 
