@@ -1,10 +1,9 @@
 package net.prover.model.definitions
 
-import net.prover.model.{Inference, ProvingContext, Substitutions}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step
-import net.prover.proving.extraction.ExtractionApplier
-import net.prover.proving.extraction.ExtractionCalculator.InferenceExtraction
+import net.prover.model.{Inference, ProvingContext, Substitutions}
+import net.prover.proving.extraction.{ExtractionApplier, InferenceExtraction}
 
 case class Fact(inferenceExtraction: InferenceExtraction) {
   def statement: Statement = inferenceExtraction.conclusion

@@ -5,10 +5,8 @@ import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
-import net.prover.proving.extraction.ExtractionApplier
-import net.prover.proving.extraction.ExtractionCalculator.InferenceExtraction
+import net.prover.proving.extraction.{ExtractionApplier, InferenceExtraction}
 import net.prover.theorems.{CompoundTheoremUpdater, GetReferencedPremises, RecalculateReferences}
-import scalaz.Scalaz
 import scalaz.Scalaz.Id
 
 import scala.annotation.tailrec

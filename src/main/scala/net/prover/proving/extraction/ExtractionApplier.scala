@@ -7,7 +7,7 @@ import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.Step.InferenceWithPremiseDerivationsStep
 import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
-import net.prover.proving.extraction.ExtractionCalculator.{InferenceExtraction, PremiseExtraction, VariableTracker}
+import net.prover.proving.extraction.ExtractionCalculator.VariableTracker
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 
 import scala.util.{Failure, Success, Try}

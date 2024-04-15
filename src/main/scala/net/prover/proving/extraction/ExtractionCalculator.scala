@@ -7,30 +7,6 @@ import net.prover.model.proof._
 import scala.annotation.tailrec
 
 object ExtractionCalculator {
-  trait Extraction {
-    def premises: Seq[Statement]
-    def conclusion: Statement
-    def variableDefinitions: VariableDefinitions
-    def extractionDefinition: ExtractionDefinition
-    def additionalVariableNames: Seq[String]
-  }
-
-  case class InferenceExtraction(inference: Inference.Summary, extractionDetails: ExtractionDetails) extends Extraction {
-    def premises: Seq[Statement] = inference.premises ++ extractionDetails.extractionPremises
-    def conclusion: Statement = extractionDetails.conclusion
-    def variableDefinitions: VariableDefinitions = inference.variableDefinitions.addSimpleTermVariableNames(extractionDetails.variableTracker.additionalVariableNames)
-    def extractionDefinition: ExtractionDefinition = extractionDetails.extractionDefinition
-    def additionalVariableNames: Seq[String] = extractionDetails.variableTracker.additionalVariableNames
-    def derivedSummary: Inference.Summary = Inference.Summary(inference.name, Inference.calculateHash(premises, conclusion), variableDefinitions, premises, conclusion)
-  }
-  case class PremiseExtraction(extractionDetails: ExtractionDetails, stepContext: StepContext) extends Extraction {
-    def premises: Seq[Statement] = extractionDetails.extractionPremises
-    def conclusion: Statement = extractionDetails.conclusion
-    def variableDefinitions: VariableDefinitions = stepContext.variableDefinitions.addSimpleTermVariableNames(extractionDetails.variableTracker.additionalVariableNames)
-    def extractionDefinition: ExtractionDefinition = extractionDetails.extractionDefinition
-    def additionalVariableNames: Seq[String] = extractionDetails.variableTracker.additionalVariableNames
-  }
-
   case class VariableTracker(baseVariableNames: Seq[String], additionalVariableNames: Seq[String]) {
     def namesUsedSoFar: Seq[String] = baseVariableNames ++ additionalVariableNames
     def getAndAddUniqueVariableName(baseName: String): (String, Int, VariableTracker) = {

@@ -3,8 +3,7 @@ package net.prover.model.definitions
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepProvingContext, SubstitutionContext}
 import net.prover.model.{ProvingContext, Substitutions}
-import net.prover.proving.extraction.ExtractionApplier
-import net.prover.proving.extraction.ExtractionCalculator.InferenceExtraction
+import net.prover.proving.extraction.{ExtractionApplier, InferenceExtraction}
 import net.prover.proving.premiseFinding.DerivationFinder
 
 case class RelationRewriteInference(

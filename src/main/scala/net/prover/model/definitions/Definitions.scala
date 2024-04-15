@@ -5,11 +5,10 @@ import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
-import net.prover.model.proof.{DerivationStepWithSingleInference, Step, SubstitutionContext}
+import net.prover.model.proof.SubstitutionContext
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
-import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
-import net.prover.proving.extraction.ExtractionCalculator.InferenceExtraction
+import net.prover.proving.extraction.{ExtractionCalculator, InferenceExtraction}
 import net.prover.util.Direction
 
 import scala.Ordering.Implicits._

@@ -3,8 +3,7 @@ package net.prover.controllers.models
 import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.StepProvingContext
 import net.prover.model.{Inference, Substitutions, VariableDefinitions}
-import net.prover.proving.extraction.ExtractionCalculator.Extraction
-import net.prover.proving.extraction.ExtractionDefinition
+import net.prover.proving.extraction.{Extraction, ExtractionDefinition}
 
 case class PossibleInferenceWithTargets(inference: Inference.Summary, possibleTargets: Seq[PossibleTarget])
 case class PossibleInferenceWithConclusions(inference: Inference.Summary, possibleConclusions: Seq[PossibleConclusionWithPremises])
