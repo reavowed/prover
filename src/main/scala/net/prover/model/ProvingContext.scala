@@ -53,14 +53,6 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
     implicit val allowableStep: Allowable[Step] = allowable(step => GetReferencedInferences(step).forall(availableEntries.allInferences.contains))
-    implicit val allowableDerivationStepWithSingleInference: Allowable[DerivationStepWithSingleInference] = allowableGeneric(Generic[DerivationStepWithSingleInference])
-    implicit val allowableDerivationStepWithMultipleInferences: Allowable[DerivationStepWithMultipleInferences] = allowableGeneric(Generic[DerivationStepWithMultipleInferences])
-    implicit val allowableDerivationStep: Allowable[DerivationStep] = allowable {
-      case derivationStepWithSingleInference: DerivationStepWithSingleInference =>
-        allowableDerivationStepWithSingleInference.isAllowed(derivationStepWithSingleInference)
-      case derivationStepWithMultipleInferences: DerivationStepWithMultipleInferences =>
-        allowableDerivationStepWithMultipleInferences.isAllowed(derivationStepWithMultipleInferences)
-    }
     implicit val allowableKnownStatement: Allowable[KnownStatement] = allowableGeneric(Generic[KnownStatement])
     implicit def allowableDesimplifiedPremise: Allowable[DesimplifiedPremise] = allowableGeneric(Generic[DesimplifiedPremise])
     implicit def allowablePremiseDesimplification: Allowable[DerivedPremise] = allowable {

@@ -1,7 +1,7 @@
 package net.prover.model.definitions
 
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{DerivationStep, Step}
+import net.prover.model.proof.Step
 
 case class KnownStatement(statement: Statement, derivation: Seq[Step.AssertionOrExtraction]) {
   def extend(newStep: Step.AssertionOrExtraction): KnownStatement = extend(Seq(newStep))

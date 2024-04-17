@@ -264,17 +264,6 @@ object EqualityRewriter {
     } yield result
   }
 
-  def getForwardReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality, wrapper: Wrapper[Statement, Statement])(implicit substitutionContext: SubstitutionContext): Option[DerivationStep] = {
-    val paths = statement.getTerms().filter(_._1 == lhs).map(_._4)
-    if (paths.nonEmpty && (equality.unapply(statement).isEmpty || paths.forall(_.length > 1))) {
-      val innerWrapper = wrapper.insertWrapper(Wrapper.fromExpression(statement.getPredicateForTerm(lhs, substitutionContext.externalDepth)))
-      val step = equality.substitution.assertionStep(lhs, rhs, innerWrapper)
-      Some(DerivationStep.fromAssertion(step))
-    } else {
-      None
-    }
-  }
-
   def getReverseReplacements(statement: Statement, lhs: Term, rhs: Term, equality: Equality)(implicit substitutionContext: SubstitutionContext): Option[(Statement, Step.AssertionStep)] = {
     val paths = statement.getTerms().filter(_._1 == rhs).map(_._4)
     if (paths.nonEmpty && (equality.unapply(statement).isEmpty || paths.forall(_.length > 1))) {
