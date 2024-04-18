@@ -5,6 +5,8 @@ import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.model.unwrapping.UnwrappedStatement
+import net.prover.model._
+import net.prover.proving.derivation.{PremiseDerivation, PremiseDerivationStep, SimpleDerivation}
 
 /**
   * Given a statement or a list of statements, attempts to automatically derive them from known statements (either
@@ -14,7 +16,7 @@ object DerivationFinder {
   def findDerivationForStatement(
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[Step.PremiseDerivation]] = {
+  ): Option[PremiseDerivation] = {
     stepProvingContext.cachedDerivations.getOrElseUpdate(
       targetStatement.serializedForHash,
       findDerivationForStatementUncached(targetStatement))
@@ -23,14 +25,14 @@ object DerivationFinder {
   private def findDerivationForStatementUncached(
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[Step.PremiseDerivation]] = {
+  ): Option[PremiseDerivation] = {
     UnwrappedStatement.getUnwrappedStatements(targetStatement).mapFind { unwrappedStatement =>
       findDerivationForUnwrappedStatement(unwrappedStatement.statement)(unwrappedStatement.unwrappers.enhanceStepProvingContext)
         .map { derivation =>
           if (unwrappedStatement.unwrappers.nonEmpty) {
-            Seq(Step.WrappedPremiseDerivationStep(unwrappedStatement.unwrappers, derivation))
+            PremiseDerivation(Seq(PremiseDerivationStep.Wrapped(unwrappedStatement.unwrappers, derivation)))
           } else {
-            derivation
+            PremiseDerivation(Seq(PremiseDerivationStep.Simple(derivation)))
           }
         }
     }
@@ -39,17 +41,17 @@ object DerivationFinder {
   def findDerivationForUnwrappedStatements(
     targetStatement: Seq[Statement])(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[Step.AssertionOrExtraction]] = {
-    targetStatement.map(findDerivationForUnwrappedStatement).traverseOption.map(_.flatten)
+  ): Option[SimpleDerivation] = {
+    targetStatement.map(findDerivationForUnwrappedStatement).traverseOption.map(_.join)
   }
 
   def findDerivationForUnwrappedStatement(
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[Step.AssertionOrExtraction]] = {
+  ): Option[SimpleDerivation] = {
     stepProvingContext.provingContext.findRelation(targetStatement).map(BinaryRelationDerivationFinder.findDirectDerivationForBinaryRelationStatement)
       .getOrElse(DirectDerivationFinder.findDirectDerivationForStatement(targetStatement))
-      .map(_.distinctBy(_.statement))
+      .map(_.distinct)
   }
 
   def findKnownStatementBySubstituting(
@@ -86,7 +88,7 @@ object DerivationFinder {
         substitutionsOption.flatMap(premise.calculateSubstitutions(knownStatement.statement, _))
       }.flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
       deconstructionStep <- Step.AssertionStep.forInference(deconstructionInference, finalDeconstructionSubstitutions)
-    } yield (KnownStatement.fromDerivation(foundStatements.flatMap(_.derivation) :+ deconstructionStep), innerSubstitutions)
+    } yield (KnownStatement.fromDerivation(foundStatements.map(_.derivation).join :+ deconstructionStep), innerSubstitutions)
 
     unsubstitutedPremiseStatement.tryApplySubstitutions(initialSubstitutions) match {
       case Some(substitutedPremiseStatement) =>
@@ -130,8 +132,8 @@ object DerivationFinder {
   def rewriteWithKnownValues(
     premiseStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): (Seq[Step.AssertionOrExtraction], Statement) = {
-    stepProvingContext.knownValuesToProperties.foldLeft((premiseStatement, Seq.empty[Step.AssertionOrExtraction])) { case ((currentStatement, currentDerivation), propertyValue) =>
+  ): (SimpleDerivation, Statement) = {
+    stepProvingContext.knownValuesToProperties.foldLeft((premiseStatement, SimpleDerivation.empty)) { case ((currentStatement, currentDerivation), propertyValue) =>
       EqualityRewriter.getReverseReplacements(currentStatement, propertyValue.lhs, propertyValue.rhs, propertyValue.equality) match {
         case Some((result, derivationStep)) =>
           (result, currentDerivation ++ propertyValue.derivation :+ derivationStep)

@@ -5,7 +5,8 @@ import net.prover.model.definitions._
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
-import net.prover.proving.extraction.{ExtractionDefinition, ExtractionDetails, InferenceExtraction, VariableTracker}
+import net.prover.proving.derivation.SimpleDerivation
+import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionDefinition, ExtractionDetails, InferenceExtraction, VariableTracker}
 import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
@@ -47,12 +48,14 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(d => availableEntries.statementDefinitionsBySymbol.contains(d.symbol))
     implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(d => availableEntries.termDefinitionsBySymbol.contains(d.symbol))
 
+    implicit val allowableSimpleDerivation: Allowable[SimpleDerivation] = allowable(derivation => derivation.inferences.forall(isAllowed))
+
     implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryJoiners.contains)
     implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
     implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.firstPremiseJoiner) && isAllowed(r.secondPremiseJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
-    implicit val allowableStep: Allowable[Step] = allowable(step => GetReferencedInferences(step).forall(availableEntries.allInferences.contains))
+    implicit val allowableStep: Allowable[Step] = allowable(step => GetReferencedInferences(step).forall(isAllowed))
     implicit val allowableKnownStatement: Allowable[KnownStatement] = allowableGeneric(Generic[KnownStatement])
     implicit def allowableDesimplifiedPremise: Allowable[DesimplifiedPremise] = allowableGeneric(Generic[DesimplifiedPremise])
     implicit def allowablePremiseDesimplification: Allowable[DerivedPremise] = allowable {

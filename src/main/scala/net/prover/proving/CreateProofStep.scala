@@ -29,7 +29,7 @@ object CreateProofStep {
         conclusionOption <- getConclusionOption(epc, substitutions)
         newTargetStatementsOption <- definition.parseIntendedPremiseStatements(epc)
         substitutedNewTargetStatementsOption <- newTargetStatementsOption.map(_.map(_.applySubstitutions(substitutions)).traverseOption.orBadRequest("Could not apply substitutions to intended new targets")).swap
-        (result, stepOption, extractionTargets) <- ExtractionApplier.getPremiseExtractionStepWithPremises(premise, extraction, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
+        (_, stepOption, extractionTargets) <- ExtractionApplier.getPremiseExtractionStepWithPremises(premise, extraction, substitutions, substitutedNewTargetStatementsOption, conclusionOption)
         step <- stepOption.orBadRequest("At least one step must be present")
       } yield (step, extractionTargets)
     }

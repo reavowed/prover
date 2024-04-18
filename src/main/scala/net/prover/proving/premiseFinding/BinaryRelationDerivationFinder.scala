@@ -1,29 +1,31 @@
 package net.prover.proving.premiseFinding
 
+import net.prover.model._
 import net.prover.model.definitions.{BinaryRelationStatement, Wrapper}
 import net.prover.model.expressions.{Statement, Term}
-import net.prover.model.proof.{KnownEquality, Step, StepProvingContext}
+import net.prover.model.proof.{KnownEquality, StepProvingContext}
 import net.prover.model.utils.ExpressionUtils
+import net.prover.proving.derivation.SimpleDerivation
 
 object BinaryRelationDerivationFinder {
   def findDirectDerivationForBinaryRelationStatement(
     binaryRelationStatement: BinaryRelationStatement)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[Seq[Step.AssertionOrExtraction]] = {
-    def withoutRewriting(binaryRelationStatement: BinaryRelationStatement): Option[Seq[Step.AssertionOrExtraction]] = {
+  ): Option[SimpleDerivation] = {
+    def withoutRewriting(binaryRelationStatement: BinaryRelationStatement): Option[SimpleDerivation] = {
       def bySimplifyingTargetRelation = stepProvingContext.provingContext.conclusionRelationSimplificationInferences.getOrElse(binaryRelationStatement.relation, Nil).iterator.findFirst { conclusionRelationSimplificationInference =>
         for {
-          (directTargets, binaryRelationTargets, derivationForInference) <- conclusionRelationSimplificationInference.getConclusionSimplification(binaryRelationStatement.baseStatement)
-          derivationForDirectTargets <- directTargets.map(DerivationFinder.findDerivationForUnwrappedStatement).traverseOption.map(_.flatten)
+          (directTargets, binaryRelationTargets, conclusionSimplifcationDerivation) <- conclusionRelationSimplificationInference.getConclusionSimplification(binaryRelationStatement.baseStatement)
+          derivationForDirectTargets <- directTargets.map(DerivationFinder.findDerivationForUnwrappedStatement).traverseOption.map(_.join)
           if !binaryRelationTargets.contains(binaryRelationStatement)
-          derivationForBinaryRelationTargets <- binaryRelationTargets.map(findDirectDerivationForBinaryRelationStatement).traverseOption.map(_.flatten)
-        } yield derivationForDirectTargets ++ derivationForBinaryRelationTargets ++ derivationForInference
+          derivationForBinaryRelationTargets <- binaryRelationTargets.map(findDirectDerivationForBinaryRelationStatement).traverseOption.map(_.join)
+        } yield derivationForDirectTargets ++ derivationForBinaryRelationTargets ++ conclusionSimplifcationDerivation
       }
 
       DirectDerivationFinder.findDirectDerivationForStatement(binaryRelationStatement.baseStatement) orElse bySimplifyingTargetRelation
     }
 
-    def withoutRenaming(binaryRelationStatement: BinaryRelationStatement): Option[Seq[Step.AssertionOrExtraction]] = {
+    def withoutRenaming(binaryRelationStatement: BinaryRelationStatement): Option[SimpleDerivation] = {
       withoutRewriting(binaryRelationStatement) orElse {
         (for {
           inference <- stepProvingContext.provingContext.conclusionRelationRewriteInferences.getOrElse(binaryRelationStatement.relation, Nil)
@@ -33,7 +35,7 @@ object BinaryRelationDerivationFinder {
       }
     }
 
-    def byRenaming: Option[Seq[Step.AssertionOrExtraction]] = {
+    def byRenaming: Option[SimpleDerivation] = {
       def directly = (for {
         KnownEquality(source, result, equality, equalityDerivation) <- stepProvingContext.knownEqualities
         if result == binaryRelationStatement.right

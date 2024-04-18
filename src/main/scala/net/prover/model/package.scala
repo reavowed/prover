@@ -61,13 +61,6 @@ package object model {
   implicit class SeqOps[T](seq: Seq[T]) {
     def headAndTailOption: Option[(T, Seq[T])] = +:.unapply(seq)
     def initAndLastOption: Option[(Seq[T], T)] = :+.unapply(seq)
-    def singleMatch: PossibleSingleMatch[T] = {
-      seq match {
-        case Nil => NoMatches
-        case singleElement +: Nil => SingleMatch(singleElement)
-        case _ => MultipleMatches
-      }
-    }
     def flatMapFold[R, S](initial: R)(f: (R, T) => (R, Seq[S])): (R, Seq[S]) = {
       seq.foldLeft((initial, seq.iterableFactory.newBuilder[S])) { case ((acc, b), t) =>
         f(acc, t).mapRight(b ++= _)
@@ -294,6 +287,19 @@ package object model {
         .collect {
           case s if implicitly[ClassTag[S]].runtimeClass.isInstance(s) => s.asInstanceOf[S]
         }
+    }
+    def singleMatch: PossibleSingleMatch[T] = {
+      if (set.isEmpty) {
+        NoMatches
+      } else {
+        val iterator = set.iterator
+        val firstMatch = iterator.next()
+        if (iterator.hasNext) {
+          MultipleMatches
+        } else {
+          SingleMatch(firstMatch)
+        }
+      }
     }
   }
 

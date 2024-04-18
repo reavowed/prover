@@ -43,7 +43,7 @@ class StepCreationController @Autowired() (implicit val bookService: BookService
             case Some(p) =>
               Left(p)
             case None =>
-              Right(provingContext.factsBySerializedStatement.get(premise.serialized).map(_.toStep).getOrElse(Step.TargetStep(premise)))
+              Right(provingContext.factsBySerializedStatement.get(premise.serialized).map(_.toProofStep).getOrElse(Step.TargetStep(premise)))
           }
         }.split
         targetSteps :+ Step.NamingStep(

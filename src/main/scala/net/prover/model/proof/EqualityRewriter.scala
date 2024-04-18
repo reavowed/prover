@@ -29,9 +29,9 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality(rewriteInference.variableDefinitions)
         simplifiedTerm <- inferenceResult.applySubstitutions(finalSubstitutions)
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
-        extractionStep <- ExtractionApplier.getInferenceExtractionStepWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
+        extractionStep <- ExtractionApplier.applyInferenceExtractionWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
-      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation) :+ extractionStep) ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
+      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation.toProofSteps) :+ extractionStep.toStep) ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
     }
 
     def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {
@@ -78,7 +78,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         for {
           premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatement(equality(premiseTerm, targetTerm))
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
-          inference = premiseSteps.map(_.inference).singleMatch match {
+          inference = premiseSteps.inferences.singleMatch match {
             case PossibleSingleMatch.NoMatches =>
               Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)
             case PossibleSingleMatch.SingleMatch(inference) =>
@@ -86,7 +86,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
             case PossibleSingleMatch.MultipleMatches =>
               None
           }
-        } yield Seq(RearrangementStepWithInference(RearrangementStep(wrapper(targetTerm), premiseSteps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
+        } yield Seq(RearrangementStepWithInference(RearrangementStep(wrapper(targetTerm), premiseSteps.toProofSteps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
       }
       findExactly orElse findDirectly
     }

@@ -3,7 +3,7 @@ package net.prover.refactoring
 import net.prover.books.management.BookStateManager
 import net.prover.entries.StepWithContext
 import net.prover.exceptions.InferenceReplacementException
-import net.prover.model.Inference
+import net.prover.model._
 import net.prover.model.proof.Step
 import net.prover.proving.extraction.ExtractionApplier
 import net.prover.theorems.CompoundTheoremUpdater
@@ -27,8 +27,8 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
       } yield (inferenceExtraction, substitutions)).headOption
       for {
         (inferenceExtraction, substitutions) <- substitutionsOption.failIfUndefined(InferenceReplacementException("Could not find extraction option", stepWithContext))
-        extractionStep <- ExtractionApplier.getInferenceExtractionStepWithoutPremises(inferenceExtraction, substitutions).failIfUndefined(InferenceReplacementException("Could not apply extraction", stepWithContext))
-      } yield extractionStep
+        extractionStep <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions).failIfUndefined(InferenceReplacementException("Could not apply extraction", stepWithContext))
+      } yield extractionStep.toStep
     } else super.updateAssertion(step, stepWithContext)
   }
 

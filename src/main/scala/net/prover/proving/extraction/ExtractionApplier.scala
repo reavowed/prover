@@ -7,12 +7,13 @@ import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.Step.InferenceWithPremiseDerivationsStep
 import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
+import net.prover.proving.derivation.SimpleDerivationStep
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 
 import scala.util.{Failure, Success, Try}
 
 object ExtractionApplier {
-  private case class ExtractionApplication(result: Statement, mainPremise: Statement, extractionSteps: Seq[Step.AssertionStep], requiredPremises: Seq[Statement])
+  private case class PartiallyAppliedExtraction(result: Statement, mainPremise: Statement, extractionSteps: Seq[Step.AssertionStep], requiredPremises: Seq[Statement])
 
   private def applySpecification(
     currentStatement: Statement,
@@ -25,7 +26,7 @@ object ExtractionApplier {
     intendedConclusion: Option[Statement])(
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
-  ): Try[ExtractionApplication] = {
+  ): Try[PartiallyAppliedExtraction] = {
     for {
       predicate <- extractionPremise.calculateSubstitutions(currentStatement).flatMap(_.statements.get(0)).orBadRequest(s"Could not get predicate for specification ${specificationInference.id}")
       boundVariableName <- currentStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).orBadRequest(s"Statement $currentStatement did not have a single variable")
@@ -33,7 +34,7 @@ object ExtractionApplier {
       term <- mainSubstitutions.terms.lift(newIndex).orBadRequest(s"Substitutions did not specify a term at index $newIndex")
       extractionSubstitutions = Substitutions(Seq(predicate), Seq(term))
       extractedConclusion <- specificationInference.conclusion.applySubstitutions(extractionSubstitutions).orBadRequest(s"Could not substitute conclusion for specification ${specificationInference.id}")
-      ExtractionApplication(innerResult, innerPremise, innerSteps, innerPremises) <-
+      PartiallyAppliedExtraction(innerResult, innerPremise, innerSteps, innerPremises) <-
         applySimpleExtractions(extractedConclusion, inferencesRemaining, mainSubstitutions, intendedPremises, intendedConclusion, newVariableTracker)
       updatedPredicate <- innerPremise.calculateApplicatives(Seq(TermVariable(newIndex, Nil)), Substitutions.Possible(Map.empty, Map(0 -> term)))
         .map(_._1)
@@ -43,8 +44,9 @@ object ExtractionApplier {
       updatedMainPremise <- extractionPremise.applySubstitutions(updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
       updatedMainPremiseWithVariable = updatedMainPremise.asInstanceOf[DefinedStatement].updateBoundVariableNames(Seq(boundVariableName))
       assertionStep = Step.AssertionStep(innerPremise, specificationInference.summary, Seq(Premise.Pending(updatedMainPremiseWithVariable)), updatedSubstitutions)
-    } yield ExtractionApplication(innerResult, updatedMainPremiseWithVariable, assertionStep +: innerSteps, innerPremises)
+    } yield PartiallyAppliedExtraction(innerResult, updatedMainPremiseWithVariable, assertionStep +: innerSteps, innerPremises)
   }
+
   private def applySimpleExtraction(
     currentStatement: Statement,
     inference: Inference,
@@ -55,7 +57,7 @@ object ExtractionApplier {
     intendedConclusion: Option[Statement])(
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
-  ): Try[ExtractionApplication] = {
+  ): Try[PartiallyAppliedExtraction] = {
     for {
       (extractionPremise, otherPremises) <- +:.unapply(inference.premises).filter(_._1.usedVariables.usesAll(inference.variableDefinitions)).orBadRequest(s"Inference ${inference.id} did not have an extraction premise")
       extractionSubstitutions <- extractionPremise.calculateSubstitutions(currentStatement).flatMap(_.confirmTotality(inference.variableDefinitions)).orBadRequest(s"Could not apply extraction premise for inference ${inference.id}")
@@ -68,7 +70,7 @@ object ExtractionApplier {
         case None =>
           Success((None, None))
       }
-      ExtractionApplication(innerResult, innerPremise, innerSteps, innerPremises) <- applySimpleExtractions(extractedConclusion, inferencesRemaining, mainSubstitutions, innerIntendedPremises, intendedConclusion, variableTracker)
+      PartiallyAppliedExtraction(innerResult, innerPremise, innerSteps, innerPremises) <- applySimpleExtractions(extractedConclusion, inferencesRemaining, mainSubstitutions, innerIntendedPremises, intendedConclusion, variableTracker)
       updatedSubstitutionsFromIntendedPremises <- intendedPremisesForThisInference match {
         case Some(intendedPremises) =>
           for {
@@ -87,7 +89,7 @@ object ExtractionApplier {
       updatedMainPremise <- extractionPremise.applySubstitutions(updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
       substitutedPremises <- otherPremises.map(_.applySubstitutions(updatedSubstitutions).orBadRequest(s"Could not apply substitutions to premise")).traverseTry
       assertionStep = Step.AssertionStep(innerPremise, inference.summary, (currentStatement +: substitutedPremises).map(Premise.Pending), extractionSubstitutions)
-    } yield ExtractionApplication(innerResult, updatedMainPremise, assertionStep +: innerSteps, substitutedPremises ++ innerPremises)
+    } yield PartiallyAppliedExtraction(innerResult, updatedMainPremise, assertionStep +: innerSteps, substitutedPremises ++ innerPremises)
   }
 
   private def applySimpleExtractions(
@@ -99,7 +101,7 @@ object ExtractionApplier {
     variableTracker: VariableTracker)(
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
-  ): Try[ExtractionApplication] = {
+  ): Try[PartiallyAppliedExtraction] = {
     inferencesRemaining match {
       case inference +: tailInferences =>
         provingContext.specificationInferenceOption.filter(_._1 == inference)
@@ -109,11 +111,11 @@ object ExtractionApplier {
       case Nil =>
         intendedConclusion match {
           case Some(matchingConclusion) if matchingConclusion == currentStatement =>
-            Success(ExtractionApplication(matchingConclusion, matchingConclusion, Nil, Nil))
+            Success(PartiallyAppliedExtraction(matchingConclusion, matchingConclusion, Nil, Nil))
           case Some(otherConclusion) =>
             Failure(BadRequestException(s"Intended conclusion '$otherConclusion' did not match expected statement '$currentStatement'"))
           case None =>
-            Success(ExtractionApplication(currentStatement, currentStatement, Nil, Nil))
+            Success(PartiallyAppliedExtraction(currentStatement, currentStatement, Nil, Nil))
         }
     }
   }
@@ -127,7 +129,7 @@ object ExtractionApplier {
     variableTracker: VariableTracker)(
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
-  ): Try[ExtractionApplication] = {
+  ): Try[PartiallyAppliedExtraction] = {
     applySimpleExtractions(statement, extractionDefinition.extractionInferences ++ extractionDefinition.reversalInference.toSeq, substitutions, intendedPremises, intendedConclusion, variableTracker)
   }
 
@@ -140,9 +142,10 @@ object ExtractionApplier {
     intendedConclusion: Option[Statement])(
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
-  ): Try[ExtractionApplication] = {
+  ): Try[PartiallyAppliedExtraction] = {
     applyExtractions(assertionStep.statement, extractionDefinition, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromInference(assertionStep.inference))
   }
+
   private def applyExtractionsForPremise(
     premise: Premise,
     extractionDefinition: ExtractionDefinition,
@@ -150,20 +153,20 @@ object ExtractionApplier {
     intendedPremises: Option[Seq[Statement]],
     intendedConclusion: Option[Statement])(
     implicit stepProvingContext: StepProvingContext
-  ): Try[ExtractionApplication] = {
+  ): Try[PartiallyAppliedExtraction] = {
     applyExtractions(premise.statement, extractionDefinition, substitutions, intendedPremises, intendedConclusion, VariableTracker.fromStepContext)
   }
 
-  def getInferenceExtractionStepWithoutPremises(
+  def applyInferenceExtractionWithoutPremises(
     inferenceExtraction: InferenceExtraction,
     substitutions: Substitutions)(
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
-  ): Option[Step.AssertionOrExtraction] = {
+  ): Option[AppliedInferenceExtraction] = {
     for {
       assertionStep <- Step.AssertionStep.forInference(inferenceExtraction.inference, substitutions)
       extractionApplication <- ExtractionApplier.applyExtractionsForInference(assertionStep, inferenceExtraction.extractionDefinition, substitutions, None, None).toOption
-    } yield createDerivationForInferenceExtraction(assertionStep, extractionApplication.extractionSteps)
+    } yield AppliedInferenceExtraction(assertionStep, groupStepsByDefinition(extractionApplication.extractionSteps))
   }
 
   def getInferenceExtractionStepWithPremises(
@@ -177,7 +180,7 @@ object ExtractionApplier {
     val wrappedStepContext = unwrappers.enhanceStepProvingContext
     for {
       mainAssertion <- Step.AssertionStep.forInference(inferenceExtraction.inference, substitutions)(wrappedStepContext).orBadRequest("Could not apply substitutions to inference")
-      ExtractionApplication(_, mainPremise, extractionSteps, extractionPremises) <-
+      PartiallyAppliedExtraction(_, mainPremise, extractionSteps, extractionPremises) <-
         ExtractionApplier.applyExtractionsForInference(
           mainAssertion,
           inferenceExtraction.extractionDefinition,
@@ -188,14 +191,14 @@ object ExtractionApplier {
           wrappedStepContext)
       mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = mainPremise) // mainPremise is equivalent to the existing conclusion here, but with the correct bound variable names
       premises = mainAssertion.premises.map(_.statement) ++ extractionPremises
-      extractionStep = createDerivationForInferenceExtraction(mainAssertionWithCorrectConclusion, extractionSteps)
+      extractionStep = AppliedInferenceExtraction(mainAssertionWithCorrectConclusion, groupStepsByDefinition(extractionSteps)).toStep
       (wrappedStep, wrappedPremises) = if (unwrappers.nonEmpty) {
         unwrappers.addNecessaryExtractions(extractionStep, premises)
       } else {
         (extractionStep, premises)
       }
-      (premiseSteps, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(wrappedPremises)
-    } yield (InferenceWithPremiseDerivationsStep.ifNecessary(premiseSteps, wrappedStep), targetSteps)
+      (premiseDerivation, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(wrappedPremises)
+    } yield (InferenceWithPremiseDerivationsStep.ifNecessary(premiseDerivation.toProofSteps, wrappedStep), targetSteps)
   }
 
   def getPremiseExtractionStepWithPremises(
@@ -207,44 +210,32 @@ object ExtractionApplier {
     implicit stepProvingContext: StepProvingContext
   ): Try[(Statement, Option[Step], Seq[Step.TargetStep])] = {
     for {
-      ExtractionApplication(extractionResult, _, extractionSteps, extractionPremises) <- ExtractionApplier.applyExtractionsForPremise(premise, premiseExtraction.extractionDefinition, substitutions, intendedPremises, intendedConclusion)
-      extractionStep = groupStepsByDefinition(extractionSteps) match {
-        case Nil => None
-        case singleStep +: Nil => Some(singleStep)
-        case steps => Some(Step.ExistingStatementExtractionStep(steps))
-      }
-      (premiseSteps, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(extractionPremises)
-      assertionWithExtractionStep = Step.ElidedStep.ifNecessary(premiseSteps ++ extractionStep.toSeq, "Extracted")
+      PartiallyAppliedExtraction(extractionResult, _, extractionSteps, extractionPremises) <- ExtractionApplier.applyExtractionsForPremise(premise, premiseExtraction.extractionDefinition, substitutions, intendedPremises, intendedConclusion)
+      extraction = AppliedPremiseExtraction(groupStepsByDefinition(extractionSteps))
+      (premiseDerivation, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(extractionPremises)
+      assertionWithExtractionStep = Step.ElidedStep.ifNecessary(premiseDerivation.toProofSteps ++ extraction.toStep.toSeq, "Extracted")
     } yield (extractionResult, assertionWithExtractionStep, targetSteps)
   }
 
-  def createDerivationForInferenceExtraction(
-    assertionStep: Step.AssertionStep,
-    extractionSteps: Seq[Step.AssertionOrExtraction])(
-    implicit provingContext: ProvingContext
-  ): Step.AssertionOrExtraction = {
-    assertionStep.addExtractionSteps(groupStepsByDefinition(extractionSteps))
-  }
-
-  def groupStepsByDefinition(steps: Seq[Step.AssertionOrExtraction])(implicit provingContext: ProvingContext): Seq[Step.AssertionOrExtraction] = {
+  def groupStepsByDefinition(steps: Seq[Step.AssertionStep])(implicit provingContext: ProvingContext): Seq[SimpleDerivationStep] = {
     val deconstructionInferenceIds = provingContext.availableEntries.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
     val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
 
     var currentMainStep: Option[Step.AssertionStep] = None
-    val currentUngroupedSteps = Seq.newBuilder[Step.AssertionOrExtraction]
-    val stepsToReturn = Seq.newBuilder[Step.AssertionOrExtraction]
+    val currentUngroupedSteps = Seq.newBuilder[Step.AssertionStep]
+    val stepsToReturn = Seq.newBuilder[SimpleDerivationStep]
 
-    def isStructuralSimplification(step: Step.AssertionOrExtraction): Boolean = {
+    def isStructuralSimplification(step: Step.AssertionStep): Boolean = {
       structuralSimplificationIds.contains(step.inference.id)
     }
 
-    def removeStructuralSimplifications(steps: Seq[Step.AssertionOrExtraction]): Seq[Step.AssertionOrExtraction] = {
+    def removeStructuralSimplifications(steps: Seq[Step.AssertionStep]): Seq[Step.AssertionStep] = {
       steps.filter(s => !isStructuralSimplification(s))
     }
 
-    def removeNonEndStructuralSimplifications(steps: Seq[Step.AssertionOrExtraction]): Seq[Step.AssertionOrExtraction] = {
+    def removeNonEndStructuralSimplifications(steps: Seq[Step.AssertionStep]): Seq[Step.AssertionStep] = {
       @scala.annotation.tailrec
-      def whileStructuralAtEnd(current: Seq[Step.AssertionOrExtraction], end: Seq[Step.AssertionOrExtraction]): Seq[Step.AssertionOrExtraction] = {
+      def whileStructuralAtEnd(current: Seq[Step.AssertionStep], end: Seq[Step.AssertionStep]): Seq[Step.AssertionStep] = {
         current match {
           case init :+ last if isStructuralSimplification(last) =>
             whileStructuralAtEnd(init, last +: end)
@@ -256,10 +247,10 @@ object ExtractionApplier {
       whileStructuralAtEnd(steps, Nil)
     }
 
-    def groupSteps(steps: Seq[Step.AssertionOrExtraction], retainEndSimplifications: Boolean): Unit = {
+    def groupSteps(steps: Seq[Step.AssertionStep], retainEndSimplifications: Boolean): Unit = {
       currentMainStep match {
         case Some(step) =>
-          stepsToReturn += step.addExtractionSteps(removeNonEndStructuralSimplifications(steps))
+          stepsToReturn += SimpleDerivationStep.Simplification(AppliedInferenceExtraction(step, removeNonEndStructuralSimplifications(steps)))
         case None =>
           stepsToReturn ++= (if (retainEndSimplifications) removeNonEndStructuralSimplifications(steps) else removeStructuralSimplifications(steps))
       }

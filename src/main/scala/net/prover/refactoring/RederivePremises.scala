@@ -28,11 +28,11 @@ object RederivePremises extends CompoundTheoremUpdater[Try] {
   private def reprove(step: Step.InferenceWithPremiseDerivationsStep, stepWithContext: StepWithContext): Try[Step] = {
     val assertionStepWithContext = stepWithContext.forSubsteps(step).atIndex(step.premiseSteps.length).get
     val premises = GetReferencedPremises(assertionStepWithContext).map(_.statement)
-    val (premiseSteps, targets) = DerivationOrTargetFinder.findDerivationsOrTargets(premises) (stepWithContext)
+    val (premiseDerivation, targets) = DerivationOrTargetFinder.findDerivationsOrTargets(premises) (stepWithContext)
     if (targets.nonEmpty) {
       Failure(InferenceReplacementException("Could not rederive all premises", stepWithContext))
     } else {
-      RecalculateReferences(stepWithContext.withStep(InferenceWithPremiseDerivationsStep(premiseSteps, step.assertionStep))).map(_._1)
+      RecalculateReferences(stepWithContext.withStep(InferenceWithPremiseDerivationsStep(premiseDerivation.toProofSteps, step.assertionStep))).map(_._1)
     }
   }
 }

@@ -5,7 +5,8 @@ import net.prover.model.ProvingContext
 import net.prover.model.definitions.{BinaryRelation, KnownStatement, PremiseSimplificationInference}
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.utils.ExpressionUtils
-import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
+import net.prover.proving.derivation.{PremiseDerivation, SimpleDerivation}
+import net.prover.proving.extraction.ExtractionCalculator
 
 import scala.collection.mutable
 
@@ -29,14 +30,14 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
   }
 
   private lazy val allPremiseExtractions: Seq[KnownStatement] = {
-    val given = premisesAndSimplifications.map(_._1).map(p => KnownStatement(p.statement, Nil))
-    val simplified = premisesAndSimplifications.flatMap(_._2).map(p => KnownStatement(p.statement, Nil))
+    val given = premisesAndSimplifications.map(_._1).map(p => KnownStatement(p.statement, SimpleDerivation.empty))
+    val simplified = premisesAndSimplifications.flatMap(_._2).map(p => KnownStatement(p.statement, SimpleDerivation.empty))
     val givenAndSimplified = given ++ simplified
     val extracted = for {
       premise <- allPremises
       extraction <- ExtractionCalculator.getPremiseExtractions(premise.statement)
       if extraction.premises.isEmpty && !extraction.extractionDetails.derivation.exists(step => givenAndSimplified.exists(_.statement == step.statement))
-    } yield KnownStatement(extraction.conclusion, extraction.extractionDetails.derivation)
+    } yield KnownStatement.fromExtraction(extraction)
     (givenAndSimplified ++ extracted).deduplicate
   }
 
@@ -62,11 +63,7 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
   }
 
   private lazy val allPremisesAfterSimplifications = simplifyAll(Nil, allPremiseExtractions, provingContext.premiseRelationSimplificationInferences)
-  private lazy val allPremisesAfterRewrites = simplifyAll(Nil, allPremisesAfterSimplifications, provingContext.premiseRelationRewriteInferences)
-
-  lazy val knownStatementsFromPremises: Seq[KnownStatement] = allPremisesAfterRewrites.map {
-    ks => ks.copy(derivation = ExtractionApplier.groupStepsByDefinition(ks.derivation))
-  }
+  lazy val knownStatementsFromPremises: Seq[KnownStatement] = simplifyAll(Nil, allPremisesAfterSimplifications, provingContext.premiseRelationRewriteInferences)
   lazy val knownStatementsFromPremisesBySerializedStatement: Map[String, KnownStatement] = {
     knownStatementsFromPremises.map(s => s.statement.serializedForHash -> s).toMapPreservingEarliest
   }
@@ -92,7 +89,7 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
     allPremises.find(_.statement == statement)
   }
 
-  val cachedDerivations: mutable.Map[String, Option[Seq[Step.PremiseDerivation]]] = mutable.Map.empty
+  val cachedDerivations: mutable.Map[String, Option[PremiseDerivation]] = mutable.Map.empty
 }
 
 object StepProvingContext {
