@@ -1,5 +1,7 @@
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
 module.exports = env => {
   return {
     entry: './src/main/js/App.jsx',
@@ -11,6 +13,9 @@ module.exports = env => {
     },
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      fallback: {
+        path: require.resolve('path-browserify')
+      }
     },
     module: {
       rules: [
@@ -32,7 +37,7 @@ module.exports = env => {
       ]
     },
     target: 'web',
-    mode: 'development',
+    mode: isDevelopment ? 'development' : 'production',
     devtool: 'source-map',
     devServer: {
       port: 8079,
@@ -41,10 +46,6 @@ module.exports = env => {
         "Access-Control-Allow-Origin": "*"
       }
     },
-    externals: {
-      "react": "React",
-      "react-dom": "ReactDOM"
-    },
-    plugins: [env.NODE_ENV === "development" && new ReactRefreshWebpackPlugin({useLegacyWDSSockets: true})].filter(Boolean)
+    plugins: [isDevelopment && new ReactRefreshWebpackPlugin()].filter(Boolean)
   }
 };

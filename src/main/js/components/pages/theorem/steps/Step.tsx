@@ -1,6 +1,6 @@
 import DraggableList from "../../../draggableList/DraggableList";
 import Steps from "./Steps";
-import {PropsWithChildren} from "react";
+import React, {PropsWithChildren} from "react";
 
 export default {
   WithoutSubsteps({children}: PropsWithChildren<{}>) {
