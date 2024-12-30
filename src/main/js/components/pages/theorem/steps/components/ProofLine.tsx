@@ -59,10 +59,11 @@ const ProofLine = styled(React.forwardRef(function ProofLine(props: ProofLinePro
                                            onChange={setSubproofName}
                                            onSave={createSubproof}/>;
 
+  const stepReference = new StepReference(path, suffix || null);
   const onMouseEnter = () => {
     context.setHighlighting(
       premiseReferences || [],
-      path && new StepReference(path, suffix || null)
+      path && stepReference
     );
     setIsHovered(true);
   };
@@ -92,6 +93,11 @@ const ProofLine = styled(React.forwardRef(function ProofLine(props: ProofLinePro
       props.onClick(event);
     }
   }
+  const copyStepLink = () => {
+    const url = new URL(window.location.href);
+    url.hash = "stepToHighlight=" + context.index + "." + stepReference.toString();
+    navigator.clipboard.writeText(url.toString());
+  }
 
   return <div onMouseEnter={onMouseEnter}
               onMouseOver={onMouseEnter}
@@ -101,7 +107,9 @@ const ProofLine = styled(React.forwardRef(function ProofLine(props: ProofLinePro
               onKeyDown={onKeyDown}
               tabIndex={0}
               ref={containerRef}
-              className={"mb-1 " + className}>
+              className={"mb-1 " + className}
+              style={context.stepToHighlight === stepReference.toString() ? {border: "1px solid red", borderRadius: "5px", padding: "0 0.25rem"} : {}}
+  >
     <FlexRow>
       <span ref={spanRef}
             onClick={onClick}
@@ -122,6 +130,7 @@ const ProofLine = styled(React.forwardRef(function ProofLine(props: ProofLinePro
               <Popover.Content>
                 <Button onClick={() => setShouldShowSubproofNameModal(true)} variant="success" size="sm" className="ml-1">To subproof</Button>
                 <Button onClick={elide} variant="success" size="sm" className="ml-1">Elide</Button>
+                <Button onClick={copyStepLink} variant="primary" size="sm" className="ml-1"><span className="fas fa-link"/></Button>
                 <Button onClick={clearStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-redo"/></Button>
                 <Button onClick={deleteStep} variant="danger" size="sm" className="ml-1"><span className="fas fa-trash"/></Button>
               </Popover.Content>

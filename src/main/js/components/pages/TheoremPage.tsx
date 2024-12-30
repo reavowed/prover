@@ -57,6 +57,7 @@ export default function TheoremPage(props: TheoremPageProps) {
     variableDefinitions: theorem.variableDefinitions,
     displaySettings,
     inferencesToHighlight: hashParams.inferencesToHighlight ? (hashParams.inferencesToHighlight as string).split(",") : [],
+    stepToHighlight: hashParams.stepToHighlight as string,
     fetchJson(subpath, options) {
       return fetchJson(path.join(url, subpath), options);
     },

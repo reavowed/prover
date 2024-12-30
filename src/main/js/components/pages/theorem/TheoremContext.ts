@@ -57,6 +57,7 @@ export type TheoremContextType = {
     variableDefinitions: VariableDefinitions
     displaySettings: DisplaySettings
     inferencesToHighlight?: string[]
+    stepToHighlight?: string
     fetchJson(subpath: string, options?: JsonRequestInit): Promise<any>
     updateTheorem(newTheoremJson: any): void
     insertSteps(proofIndex: number, props: ProofUpdateProps<StepChangeProps>): [number[], Step[]]

@@ -47,9 +47,14 @@ export default function Proof({title, index, steps, deleteable}: ProofProps) {
     });
   }, [steps]);
   const theoremContext = useContext(TheoremContext)!;
+  const stepToHighlight = theoremContext.stepToHighlight && theoremContext.stepToHighlight.startsWith(index + ".") ?
+    theoremContext.stepToHighlight.substring((index + ".").length) :
+    undefined;
   const proofContext: ProofContextType = {
+    index,
     parser: theoremContext.parser,
     variableDefinitions: theoremContext.variableDefinitions,
+    stepToHighlight,
     registerStep,
     unregisterStep,
     callOnStep,

@@ -10,8 +10,10 @@ export type StepActions = {
     [key: string]: () => void
 }
 export type ProofContextType = {
+    index: number
     parser: Parser
     variableDefinitions: VariableDefinitions
+    stepToHighlight?: string
     registerStep(actions: StepActions, path: number[]): void
     unregisterStep(actions: StepActions, path: number[]): void
     callOnStep(path: number[], action: string): void
