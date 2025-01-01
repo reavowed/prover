@@ -100,7 +100,7 @@ export function ElidedStepProofLine({step, children}: React.PropsWithChildren<St
     {showProofCard ?
       <Step.WithSubsteps path={step.path}>
         <Step.Antecedent>{proofLine}</Step.Antecedent>
-        <div className="card" style={{margin: ".5rem -0.75rem .5rem 2rem", padding: ".5rem .75rem"}}>
+        <div className="card" style={{padding: "0.5rem 0rem"}}>
           <Steps.Children steps={step.substeps}
                           path={step.path}
                           propsForLastStep={{showConclusion: true}}/>

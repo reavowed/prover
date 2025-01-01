@@ -108,7 +108,7 @@ const ProofLine = styled(React.forwardRef(function ProofLine(props: ProofLinePro
               tabIndex={0}
               ref={containerRef}
               className={"mb-1 " + className}
-              style={context.stepToHighlight === stepReference.toString() ? {border: "1px solid red", borderRadius: "5px", padding: "0 0.25rem"} : {}}
+              style={context.stepToHighlight === stepReference.toString() ? {border: "1px solid red", borderRadius: "5px", padding: "0 0.25rem", margin: "0 0.25rem 0 -0.25rem"} : {}}
   >
     <FlexRow>
       <span ref={spanRef}
