@@ -21,10 +21,17 @@ const SubproofOutline = styled.div`
 export function SubproofStep({step, additionalReferences = []}: StepProps<SubproofStepModel>) {
   const proofContext = useContext(ProofContext)!;
   const theoremContext = useContext(TheoremContext)!;
+  const reference = new StepReference(step.path);
 
-  const [showingSubproof, setShowingSubproof] = useState(() =>
-    !step.isComplete && (step.substeps.length > 1 || step.substeps[0].type !== "target") || _.intersection(_.map(step.inferencesUsed, "id"), theoremContext.inferencesToHighlight || []).length > 0
-  );
+  const [showingSubproof, setShowingSubproof] = useState(() => {
+    const containsSingleTarget = step.substeps.length === 1 && step.substeps[0].type === "target";
+    const containsHighlightedInference = _.intersection(_.map(step.inferencesUsed, "id"), theoremContext.inferencesToHighlight || []).length > 0;
+    const containsHighlightedStep = proofContext.stepToHighlight && proofContext.stepToHighlight.startsWith(reference.toString());
+    const isHighlightedStep = proofContext.stepToHighlight && proofContext.stepToHighlight === reference.toString();
+    return (!step.isComplete && !containsSingleTarget) ||
+        containsHighlightedInference ||
+        (containsHighlightedStep && !isHighlightedStep);
+  });
   const toggleSubproof = () => setShowingSubproof(v => !v);
   const unpackStep = () => proofContext.fetchJsonForStepAndReplace(step.path, "unpack", {method: "POST"});
   const onProofLineKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
@@ -32,7 +39,6 @@ export function SubproofStep({step, additionalReferences = []}: StepProps<Subpro
       unpackStep();
     }
   };
-  let reference = new StepReference(step.path);
   const titleElement = <div onClick={toggleSubproof} className={"font-weight-bold mt-1 mb-1"} style={{cursor: "pointer"}}>{formatHtml(step.name)}</div>;
   return showingSubproof ?
     <SubproofOutline>

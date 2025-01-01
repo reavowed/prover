@@ -12,14 +12,20 @@ import Step from "./Step";
 import Steps, {StepProps} from "./Steps";
 import _ from "lodash";
 import {isDefined} from "../../../../utils";
+import {StepReference} from "../../../definitions/Reference";
 
 export function ElidedStepProofLine({step, children}: React.PropsWithChildren<StepProps<ElidedStepModel>>) {
   const proofContext = useContext(ProofContext)!;
   const theoremContext = useContext(TheoremContext)!;
-    const [showProofCard, setShowProofCard] = useState(() => {
+  const reference = new StepReference(step.path);
+  const [showProofCard, setShowProofCard] = useState(() => {
     const containsHighlightedInference = !!theoremContext.inferencesToHighlight && _.intersection(_.map(step.inferencesUsed, "id"), theoremContext.inferencesToHighlight).length > 0;
     const isHighlightedInference = !!step.highlightedInference && _.isEqual(theoremContext.inferencesToHighlight, [step.highlightedInference.id]);
-    return !step.isComplete || (containsHighlightedInference && !isHighlightedInference);
+    const containsHighlightedStep = proofContext.stepToHighlight && proofContext.stepToHighlight.startsWith(reference.toString());
+    const isHighlightedStep = proofContext.stepToHighlight && proofContext.stepToHighlight === reference.toString();
+    return !step.isComplete ||
+      (containsHighlightedInference && !isHighlightedInference) ||
+      (containsHighlightedStep && !isHighlightedStep);
   });
   const [draftDescription, setDraftDescription] = useState('');
   const [savingDescription, setSavingDescription] = useState(false);
