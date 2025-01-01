@@ -1,0 +1,56 @@
+let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 t0 with ($0) s0, ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0) () {
+  take x {
+    assume ∈ $0 t0 {
+      prove ∃! y ∨ ∧ with ($$0) s0 = $0 $$0 ∧ ¬ with ($$0) s0 = $0 $$$0 87f6070529ebc545256e9deb3d6e2f7f95966f7d6433960bfb43502e1ed1f89c (with ($0) s0) ($0, $$0)
+    }
+  }
+  prove ∃! x ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$$0 b9824fd6f00092a866dd6293c23a983e93e0ddf13a433df477ab83cd6fbf83fa (∨ ∧ with ($$0) s0 = $$1 $$0 ∧ ¬ with ($$0) s0 = $$1 $0) (t0) 0.0
+  subproof (Simplify membership condition ) {
+    take y {
+      assume ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 {
+        let x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 t0 ∨ ∧ with ($$$0) s0 = $0 $$$0 ∧ ¬ with ($$$0) s0 = $0 $$0, ∧ ∈ $0 t0 with ($0) s0) () {
+          assume with ($0) s0 {
+            inferenceWithPremiseDerivations {
+              prove ¬ ¬ with ($0) s0 3df4534886dd61f6ef0a8462fb7cdbff93a3381c7b5ce4d4871f1d25450b688a (with ($0) s0) () 0.2.0.0.0.0a
+              inferenceExtraction {
+                prove ↔ ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 = $$0 $0 bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 (with ($0) s0, ¬ with ($0) s0, = $$0 $0, = $$0 $$$0) () 0.2.0.0.0.0a 0.2.0.0.0.0.0.0
+                prove → ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 = $$0 $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0, = $$0 $0) () 0.2.0.0.0.0.0.1.0
+                prove = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0, = $$0 $0) () 0.2.0.0.0.0.0.1.1 0.2.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              }
+            }
+            inferenceWithPremiseDerivations {
+              prove ∧ ∈ $0 t0 with ($0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 t0, with ($0) s0) () 0.2.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.2.0.0.0.0a
+              prove ∧ ∈ $$0 t0 with ($$0) s0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∧ ∈ $$$$0 t0 with ($$$$0) s0) ($$0, $0) 0.2.0.0.0.0.0 0.2.0.0.0.0.1.0
+            }
+          }
+          assume ¬ with ($0) s0 {
+            inferenceWithPremiseDerivations {
+              prove ∨ ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ with ($0) s0 = $$0 $0 b134472f96d09743ef31ae01b078b0eb39e40cae7af88a3daa98c677ba777f89 (∧ with ($0) s0 = $$0 $0, ∧ ¬ with ($0) s0 = $$0 $$$0) () 0.2.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              inferenceExtraction {
+                prove ↔ ∨ ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ with ($0) s0 = $$0 $0 = $$0 $$$0 bd93bc362ef83f27bde9771b3d7af1487bb0716344107ffcd84a766693502be1 (¬ with ($0) s0, with ($0) s0, = $$0 $$$0, = $$0 $0) () 0.2.0.0.0.1a 0.2.0.0.0.1a
+                prove → ∨ ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ with ($0) s0 = $$0 $0 = $$0 $$$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∨ ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ with ($0) s0 = $$0 $0, = $$0 $$$0) () 0.2.0.0.0.1.0.1.0
+                prove = $$0 $$$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ with ($0) s0 = $$0 $0, = $$0 $$$0) () 0.2.0.0.0.1.0.1.1 0.2.0.0.0.1.0.0
+              }
+            }
+            prove ∧ ∈ $$0 t0 with ($$0) s0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∧ ∈ $$$$0 t0 with ($$$$0) s0) ($$0, $$$0) 0.2.0.0.0.1.0 0a
+          }
+          prove ∧ ∈ $$0 t0 with ($$0) s0 12afb9df21eda1ecba39f95a0b7af6e3087951e80382722b0e143de0e3443389 (with ($0) s0, ∧ ∈ $$0 t0 with ($$0) s0) () 0.2.0.0.0.0 0.2.0.0.0.1
+        } 0.2.0.0a
+      }
+      assume ∧ ∈ $0 t0 with ($0) s0 {
+        prove = $0 $0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () ($0)
+        inferenceWithPremiseDerivations {
+          prove ∧ with ($0) s0 = $0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) s0, = $0 $0) () 0.2.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.2.0.1.0
+          prove ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 $$0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ with ($0) s0 = $0 $0, ∧ ¬ with ($0) s0 = $0 $$0) () 0.2.0.1.1.0
+          prove ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 $$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 t0, ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 $$0) () 0.2.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.2.0.1.1.1
+          prove ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 t0 ∨ ∧ with ($$$0) s0 = $0 $$$0 ∧ ¬ with ($$$0) s0 = $0 $$0) ($0) 0.2.0.1.1.2
+        }
+      }
+      inferenceWithPremiseDerivations {
+        prove ∧ → ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ ∈ $0 t0 with ($0) s0 → ∧ ∈ $0 t0 with ($0) s0 ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ ∈ $0 t0 with ($0) s0, → ∧ ∈ $0 t0 with ($0) s0 ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0) () 0.2.0.0 0.2.0.1
+        prove ↔ ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ ∈ $0 t0 with ($0) s0 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0, ∧ ∈ $0 t0 with ($0) s0) () 0.2.0.2.0
+      }
+    }
+  }
+  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0 8ae8122d854da1474bddaf18a318cb348535112ca944d8e70f9ebf555a97ed2e (∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$$0 $0 ∧ ¬ with ($0) s0 = $$$0 $$0, ∧ ∈ $$0 t0 with ($$0) s0) () 0.1 0.2
+} p0

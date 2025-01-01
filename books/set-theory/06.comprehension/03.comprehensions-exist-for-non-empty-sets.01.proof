@@ -1,9 +1,0 @@
-let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 t0 with ($0) s0, ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0) () {
-  take x {
-    prove ∃! y ∨ ∧ with ($$0) s0 = $0 $$0 ∧ ¬ with ($$0) s0 = $0 $$$0 87f6070529ebc545256e9deb3d6e2f7f95966f7d6433960bfb43502e1ed1f89c (with ($0) s0) ($0, $$0)
-    prove → ∈ $0 t0 ∃! y ∨ ∧ with ($$0) s0 = $0 $$0 ∧ ¬ with ($$0) s0 = $0 $$$0 acbe547cc61228898842cf6a8732b10d52cf1f493dd2455a7cecc64235f53854 (∃! y ∨ ∧ with ($$0) s0 = $0 $$0 ∧ ¬ with ($$0) s0 = $0 $$$0, ∈ $0 t0) () 0.0.0
-  }
-  prove ∃! x ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$$0 b9824fd6f00092a866dd6293c23a983e93e0ddf13a433df477ab83cd6fbf83fa (∨ ∧ with ($$0) s0 = $$1 $$0 ∧ ¬ with ($$0) s0 = $$1 $0) (t0) 0.0
-  prove ∀ y ↔ ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ ∈ $0 t0 with ($0) s0 bbefb146f9fe36f8ec14cbd5140e7f95d8305f7b934f41c34d1e5221dcd85d26 (with ($$0) s0) ($0, t0) 0a
-  prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0 8ae8122d854da1474bddaf18a318cb348535112ca944d8e70f9ebf555a97ed2e (∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$$0 $0 ∧ ¬ with ($0) s0 = $$$0 $$0, ∧ ∈ $$0 t0 with ($$0) s0) () 0.1 0.2
-} p0

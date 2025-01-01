@@ -6,12 +6,6 @@ termVariables(A 0)
 premise ¬ ∃ x ∧ ∈ $0 t0 with ($0) s0
 conclusion ∃! y ∀ x ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0
 
-theorem Comprehensions Exist for Non-Empty Sets Lemma
-statementVariables(φ 1)
-termVariables(a 0, A 0)
-premise ∧ ∈ t0 t1 with (t0) s0
-conclusion ∀ y ↔ ∃ x ∧ ∈ $0 t1 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 t0 ∧ ∈ $0 t1 with ($0) s0
-
 theorem Comprehensions Exist for Non-Empty Sets
 statementVariables(φ 1)
 termVariables(A 0)
