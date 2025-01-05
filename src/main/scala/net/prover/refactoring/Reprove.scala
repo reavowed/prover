@@ -84,7 +84,7 @@ object Reprove extends CompoundTheoremUpdater[Id] {
         substitutions,
         unwrappers,
         None,
-        None).toOption
+        Some(unwrappedResult)).toOption
       if targets.isEmpty
       (updatedStep, _) <- RecalculateReferences(stepWithContext.withStep(replacementStep)).toOption
     } yield updatedStep

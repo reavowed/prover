@@ -88,7 +88,7 @@ object ExtractionApplier {
       updatedSubstitutions <- extractionPremise.calculateSubstitutions(currentStatement, updatedSubstitutionsFromInnerPremise).flatMap(_.confirmTotality(inference.variableDefinitions)).orBadRequest("Could not calculate updated substitutions from extraction premise")
       updatedMainPremise <- extractionPremise.applySubstitutions(updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
       substitutedPremises <- otherPremises.map(_.applySubstitutions(updatedSubstitutions).orBadRequest(s"Could not apply substitutions to premise")).traverseTry
-      assertionStep = Step.AssertionStep(innerPremise, inference.summary, (currentStatement +: substitutedPremises).map(Premise.Pending), extractionSubstitutions)
+      assertionStep = Step.AssertionStep(innerPremise, inference.summary, (currentStatement +: substitutedPremises).map(Premise.Pending), updatedSubstitutions)
     } yield PartiallyAppliedExtraction(innerResult, updatedMainPremise, assertionStep +: innerSteps, substitutedPremises ++ innerPremises)
   }
 
@@ -104,10 +104,12 @@ object ExtractionApplier {
   ): Try[PartiallyAppliedExtraction] = {
     inferencesRemaining match {
       case inference +: tailInferences =>
-        provingContext.specificationInferenceOption.filter(_._1 == inference)
-          .map { case (_, singlePremise) =>
+        provingContext.specificationInferenceOption match {
+          case Some((`inference`, singlePremise)) =>
             applySpecification(currentStatement, inference, singlePremise, variableTracker, tailInferences, substitutions, intendedPremises, intendedConclusion)
-          } getOrElse applySimpleExtraction(currentStatement, inference, variableTracker,  tailInferences, substitutions, intendedPremises, intendedConclusion)
+          case _ =>
+            applySimpleExtraction(currentStatement, inference, variableTracker,  tailInferences, substitutions, intendedPremises, intendedConclusion)
+        }
       case Nil =>
         intendedConclusion match {
           case Some(matchingConclusion) if matchingConclusion == currentStatement =>
