@@ -8,18 +8,13 @@ import scala.annotation.tailrec
 
 object ExtractionCalculator {
 
-  private def getBaseExtractions(sourceStatement: Statement, variableTracker: VariableTracker): Seq[ExtractionDetails] = {
-    Seq(ExtractionDetails(Nil, sourceStatement, Nil, variableTracker, ExtractionDefinition.Empty))
-  }
-
   private def getSimpleExtraction(
     extractionSoFar: ExtractionDetails,
     inference: Inference,
     extractionPremise: Statement,
     otherPremiseOption: Option[Statement],
     updateExtractionDefinition: (ExtractionDefinition, Inference.Summary) => ExtractionDefinition)(
-    implicit substitutionContext: SubstitutionContext,
-    provingContext: ProvingContext
+    implicit substitutionContext: SubstitutionContext
   ): Option[ExtractionDetails] = {
     for {
       extractionSubstitutions <- extractionPremise.calculateSubstitutions(extractionSoFar.conclusion).flatMap(_.confirmTotality(inference.variableDefinitions))
@@ -42,7 +37,7 @@ object ExtractionCalculator {
     provingContext: ProvingContext
   ): Seq[ExtractionDetails] = {
     for {
-      (inference, extractionPremise, otherPremiseOption) <- provingContext.statementExtractionInferences
+      StatementExtractionInference(inference, extractionPremise, otherPremiseOption) <- provingContext.statementExtractionInferences
       extraction <- getSimpleExtraction(extractionSoFar, inference, extractionPremise, otherPremiseOption, _.addNextExtractionInference(_))
     } yield extraction
   }

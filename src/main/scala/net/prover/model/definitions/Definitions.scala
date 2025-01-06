@@ -8,7 +8,7 @@ import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
-import net.prover.proving.extraction.{ExtractionCalculator, InferenceExtraction}
+import net.prover.proving.extraction.{ExtractionCalculator, InferenceExtraction, StatementExtractionInference}
 import net.prover.util.Direction
 
 import scala.Ordering.Implicits._
@@ -79,17 +79,9 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     for {
       inference <- inferenceEntries
       relation <- definedBinaryStatements
-      if (inference match {
-        case Inference(
-          _,
-          Seq(relation(ExpressionVariable(0, Nil), ExpressionVariable(1, Nil))),
-          relation(ExpressionVariable(1, Nil), ExpressionVariable(0, Nil))
-        ) =>
-          true
-        case _ =>
-          false
-      })
-    } yield relation.reversal(inference.summary)
+      premise <- inference.premises.single.toSeq
+      if premise == relation.withVariables(0, 1) && inference.conclusion == relation.withVariables(1, 0)
+    } yield relation.reversal(inference.summary, premise)
   }
 
   lazy val transitivities: Seq[Transitivity[_ <: Expression]] = {
@@ -101,11 +93,11 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
         case _ => Nil
       }
       conclusionJoiner <- definedBinaryStatements.ofType[BinaryJoiner[T]]
-      (ExpressionVariable(0, Nil), ExpressionVariable(2, Nil)) <- conclusionJoiner.unapply(inference.conclusion).toSeq
+      if inference.conclusion == conclusionJoiner.withVariables(0, 2)
       firstPremiseJoiner <- definedBinaryStatements.ofType[BinaryJoiner[T]]
-      (ExpressionVariable(0, Nil), ExpressionVariable(1, Nil)) <- firstPremiseJoiner.unapply(firstPremise).toSeq
+      if firstPremise == firstPremiseJoiner.withVariables(0, 1)
       secondPremiseJoiner <- definedBinaryStatements.ofType[BinaryJoiner[T]]
-      (ExpressionVariable(1, Nil), ExpressionVariable(2, Nil)) <- secondPremiseJoiner.unapply(secondPremise).toSeq
+      if secondPremise == secondPremiseJoiner.withVariables(1, 2)
     } yield Transitivity[T](firstPremiseJoiner, secondPremiseJoiner, conclusionJoiner, inference.summary)).headOption
 
     for {
@@ -115,24 +107,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
   }
 
   lazy val expansions: Seq[Expansion[_ <: Expression]] = {
-    implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof
-    for {
-      inference <- inferenceEntries
-      premise <- inference.premises.single
-      sourceRelation <- definedBinaryRelations.find(r => r.unapply(premise).nonEmpty)
-      (targetRelation, constructor) <- definedBinaryRelations.find(_.unapply(inference.conclusion).nonEmpty).map(r => r -> ((i: Inference.Summary) => RelationExpansion.apply(sourceRelation, r, i))) orElse
-       definedBinaryConnectives.find(_.unapply(inference.conclusion).nonEmpty).map(c => c -> ((i: Inference.Summary) => ConnectiveExpansion.apply(sourceRelation, c, i)))
-      if (inference match {
-        case Inference(
-          _,
-          Seq(sourceRelation(TermVariable(0, Nil), TermVariable(1, Nil))),
-          targetRelation(ExpressionVariable(0|2, Seq(TermVariable(0, Nil))), ExpressionVariable(0|2, Seq(TermVariable(1, Nil))))
-        ) =>
-          true
-        case _ =>
-          false
-      })
-    } yield constructor(inference.summary)
+    inferenceEntries.mapCollect(Expansion.fromInference(_, this))
   }
 
   lazy val substitutions: Seq[Substitution] = {
@@ -556,29 +531,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     }.toMap
   }
 
-  def isValidSinglePremiseExtraction(premise: Statement, conclusion: Statement): Boolean = {
-    def isSingleStatementSimplification = ExpressionUtils.getWrappedSimpleStatementVariable(premise).exists(ExpressionUtils.getWrappedSimpleStatementVariable(conclusion).contains)
-    def isDoubleStatementSimplification = ExpressionUtils.getWrappedBinaryStatementVariables(premise).map(_.toSet).exists(ExpressionUtils.getWrappedBinaryStatementVariables(conclusion).map(_.toSet).contains)
-    def isDoubleToSingleStatementSimplification = ExpressionUtils.getWrappedBinaryStatementVariables(premise).map(_.toSet).exists { v => ExpressionUtils.getWrappedSimpleStatementVariable(conclusion).exists(v.contains) }
-    conclusion.complexity < premise.complexity && (isSingleStatementSimplification || isDoubleStatementSimplification || isDoubleToSingleStatementSimplification)
-  }
-  def isValidDoublePremiseExtraction(mainPremise: Statement, subsidiaryPremise: Statement, conclusion: Statement): Boolean = {
-    conclusion.complexity < mainPremise.complexity && (for {
-      subsidiaryPremiseVariable <- ExpressionUtils.getWrappedSimpleStatementVariable(subsidiaryPremise)
-      conclusionVariable <- ExpressionUtils.getWrappedSimpleStatementVariable(conclusion)
-      if subsidiaryPremiseVariable != conclusionVariable
-      if ExpressionUtils.getWrappedBinaryStatementVariables(mainPremise).exists { t => t == (subsidiaryPremiseVariable, conclusionVariable) || t == (conclusionVariable, subsidiaryPremiseVariable)}
-    } yield true).getOrElse(false)
-  }
-
-  lazy val statementExtractionInferences: Seq[(Inference, Statement, Option[Statement])] = inferenceEntries.collect {
-    case inference @ Inference(_, Seq(singlePremise), conclusion)
-      if isValidSinglePremiseExtraction(singlePremise, conclusion)
-    =>
-      (inference, singlePremise, None)
-    case inference @ Inference(_, Seq(firstPremise, secondPremise), conclusion) if isValidDoublePremiseExtraction(firstPremise, secondPremise, conclusion) =>
-      (inference, firstPremise, Some(secondPremise))
-  }
+  lazy val statementExtractionInferences: Seq[StatementExtractionInference] = inferenceEntries.mapCollect(StatementExtractionInference.fromInference)
 
   lazy val termRewriteInferences: Seq[TermRewriteInference] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof

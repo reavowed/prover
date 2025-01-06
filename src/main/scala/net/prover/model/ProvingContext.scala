@@ -6,7 +6,7 @@ import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.proving.derivation.SimpleDerivation
-import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionDefinition, ExtractionDetails, InferenceExtraction, VariableTracker}
+import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionDefinition, ExtractionDetails, InferenceExtraction, StatementExtractionInference, VariableTracker}
 import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
@@ -87,6 +87,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowableLeftOperatorExtraction: Allowable[LeftOperatorExtraction] = allowableGeneric(Generic[LeftOperatorExtraction])
     implicit val allowableRightOperatorExtraction: Allowable[RightOperatorExtraction] = allowableGeneric(Generic[RightOperatorExtraction])
 
+    implicit val allowableStatementExtractionInference: Allowable[StatementExtractionInference] = allowableGeneric(Generic[StatementExtractionInference])
     implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowableGeneric(Generic[PremiseRelationSimplificationInference])
     implicit val allowablePremiseRelationRewriteInference: Allowable[RelationRewriteInference] = allowableGeneric(Generic[RelationRewriteInference])
     implicit val allowableConclusionRelationSimplificationInference: Allowable[ConclusionRelationSimplificationInference] = allowableGeneric(Generic[ConclusionRelationSimplificationInference])
@@ -214,7 +215,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   lazy val conclusionSimplificationInferences: Seq[Inference] = filter(definitions.conclusionSimplificationInferences)
   lazy val termDefinitionRemovals: Map[TermDefinition, Seq[InferenceExtraction]] = filter(definitions.termDefinitionRemovals)
 
-  lazy val statementExtractionInferences: Seq[(Inference, Statement, Option[Statement])] = {
+  lazy val statementExtractionInferences: Seq[StatementExtractionInference] = {
     filter(definitions.statementExtractionInferences)
   }
 

@@ -20,7 +20,10 @@ sealed trait BinaryJoiner[TComponent <: Expression] extends ExpressionLenses[TCo
     } yield (left, right)
   }
 
-  def reversal(inference: Inference.Summary): Reversal[TComponent] = Reversal[TComponent](this, inference)
+  def withVariables(firstIndex: Int, secondIndex: Int)(implicit substitutionContext: SubstitutionContext): Statement = {
+    apply(createSimpleVariable(firstIndex), createSimpleVariable(secondIndex))
+  }
+  def reversal(inference: Inference.Summary, inferencePremise: Statement): Reversal[TComponent] = Reversal[TComponent](this, inference, inferencePremise)
 
   override def toString: String = symbol
 }

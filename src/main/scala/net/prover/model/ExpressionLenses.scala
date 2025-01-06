@@ -3,7 +3,7 @@ package net.prover.model
 import monocle.Lens
 import monocle.macros.GenLens
 import net.prover.model.Substitutions.Possible
-import net.prover.model.expressions.{Expression, Statement, Term}
+import net.prover.model.expressions.{Expression, Statement, StatementVariable, Term, TermVariable}
 
 trait ExpressionLenses[TExpression <: Expression] {
   def variableDefinitionsLens: Lens[VariableDefinitions, Seq[VariableDefinition]]
@@ -18,6 +18,8 @@ trait ExpressionLenses[TExpression <: Expression] {
   def getSubstitutions(possible: Possible): Map[Int, TExpression] = {
     possibleSubstitutionsLens.get(possible)
   }
+
+  def createSimpleVariable(index: Int): TExpression
 }
 
 object ExpressionLenses {
@@ -28,6 +30,7 @@ object ExpressionLenses {
     override def substitutionsLens = GenLens[Substitutions](_.statements)
     override def possibleSubstitutionsLens = Possible.statementsLens
     override def possibleSubstitutionsApplicationsLens = Possible.statementApplicationsLens
+    override def createSimpleVariable(index: Int): Statement = StatementVariable(index)
   }
   implicit object ForStatements extends ForStatements
   trait ForTerms extends ExpressionLenses[Term] {
@@ -36,6 +39,7 @@ object ExpressionLenses {
     override def substitutionsLens = GenLens[Substitutions](_.terms)
     override def possibleSubstitutionsLens = Possible.termsLens
     override def possibleSubstitutionsApplicationsLens = Possible.termApplicationsLens
+    override def createSimpleVariable(index: Int): Term = TermVariable(index)
   }
   implicit object ForTerms extends ForTerms
 }
