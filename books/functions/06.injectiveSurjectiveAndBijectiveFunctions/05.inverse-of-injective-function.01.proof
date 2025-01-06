@@ -161,9 +161,7 @@ subproof (Right inverse) {
       prove = apply compose t0 inverseFunction t0 $0 apply identityFunction codomain t0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply compose t0 inverseFunction t0 $0, $0, apply identityFunction codomain t0 $0) 4.2.0.3 4.2.0.4
     }
   }
-  inferenceWithPremiseDerivations {
-    prove = compose t0 inverseFunction t0 identityFunction codomain t0 d062dc18912b8cffa422e3e7fc85cd6f2f4146355f0ba48999b4e1cc1a2cd96b () (compose t0 inverseFunction t0, codomain t0, codomain t0, identityFunction codomain t0) 4.0 4.1 4.2
-  }
+  prove = compose t0 inverseFunction t0 identityFunction codomain t0 d062dc18912b8cffa422e3e7fc85cd6f2f4146355f0ba48999b4e1cc1a2cd96b () (compose t0 inverseFunction t0, codomain t0, codomain t0, identityFunction codomain t0) 4.0 4.1 4.2
 }
 subproof (Bijective) {
   subproof (Injective) {

@@ -362,9 +362,7 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                                     }
                                   }
                                 }
-                                inferenceWithPremiseDerivations {
-                                  prove ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ $0 successor $$$$$$0, = $0 successor $$$$$$0, ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.0 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2
-                                }
+                                prove ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ $0 successor $$$$$$0, = $0 successor $$$$$$0, ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.0 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2
                               }
                             }
                             prove ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 2675666723e5a17ef041d85c43dad465dfd282e6739857d16692114b32aced76 (= $0 0ℕ, ∧ = $0 0ℕ = apply $$0 $0 t2, ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.0 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1

@@ -35,6 +35,11 @@ class OperationsController @Autowired() (implicit bookService: BookService, book
     }
   }
 
+  @GetMapping(Array("/reprove"))
+  def reprove(): Unit = {
+    Reprove()
+  }
+
   @GetMapping(Array("/reprove/{bookKey}/{chapterKey}/{theoremKey}"))
   def reprove(
     @PathVariable("bookKey") bookKey: String,

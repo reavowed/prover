@@ -56,9 +56,7 @@ assume = absZ t0 negatedZ t0 {
       prove ∈ orderedPair negatedZ absZ t0 apply ⍳_ℤ 0ℕ ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ, ∈ orderedPair negatedZ absZ t0 apply ⍳_ℤ 0ℕ ≤ℤ) () 2.2.1.1 2.1
     }
   }
-  inferenceWithPremiseDerivations {
-    prove ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ) (negatedZ absZ t0, t0) 2.0 2.2
-  }
+  prove ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ) (negatedZ absZ t0, t0) 2.0 2.2
   prove ∈ orderedPair t0 absZ t0 ≤ℤ e0d9403290816f5062d356700170ecb541becdff22ae7b31297aacef17a33403 () (t0, apply ⍳_ℤ 0ℕ, absZ t0) 2.3 2.1
 }
 prove ∈ orderedPair t0 absZ t0 ≤ℤ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= absZ t0 t0, = absZ t0 negatedZ t0, ∈ orderedPair t0 absZ t0 ≤ℤ) () 0 1 2
