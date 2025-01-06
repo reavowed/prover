@@ -1,4 +1,4 @@
-existingStatementExtraction {
+inferenceExtraction {
   prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 0.0
 }

@@ -12,7 +12,7 @@ inferenceWithPremiseDerivations {
 }
 elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
   prove bijectiveFunction t0 t1 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function t0 functionFrom t0 t1 t2, bijectiveFunction t0 t1 t2) () p0
-  existingStatementExtraction {
+  inferenceExtraction {
     prove ∧ ∧ function t0 functionFrom t0 t1 t2 ∧ injectiveFunction t0 surjectiveFunction t0 t1 t2 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (t0, t1, t2) 1.0
     prove ∧ injectiveFunction t0 surjectiveFunction t0 t1 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function t0 functionFrom t0 t1 t2, ∧ injectiveFunction t0 surjectiveFunction t0 t1 t2) () 1.1.0
     prove injectiveFunction t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (injectiveFunction t0, surjectiveFunction t0 t1 t2) () 1.1.1

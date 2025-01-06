@@ -1,13 +1,13 @@
 assume ∧ binaryOperation t0 binaryOperationOn t0 t1 {
   prove ∧ function t0 functionFrom t0 product baseSet t0 baseSet t0 baseSet t0 f495d0479711bafa144326d86109ce6ee78538a2ee268e7779996098952fba71 () (t0) 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-  existingStatementExtraction {
+  inferenceExtraction {
     prove ∧ binaryOperation t0 = baseSet t0 t1 f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (t0, t1) 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     prove = baseSet t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation t0, = baseSet t0 t1) () 0.1.0
   }
   prove ∧ function t0 functionFrom t0 product t1 t1 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function t0 functionFrom t0 product $0 $0 $0) (baseSet t0, t1) 0.1 0.0
 }
 assume ∧ function t0 functionFrom t0 product t1 t1 t1 {
-  existingStatementExtraction {
+  inferenceExtraction {
     prove ∧ function t0 ∧ = domain t0 product t1 t1 ⊆ codomain t0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, product t1 t1, t1) 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     prove ∧ = domain t0 product t1 t1 ⊆ codomain t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 product t1 t1 ⊆ codomain t0 t1) () 1.0.0
     prove = domain t0 product t1 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 product t1 t1, ⊆ codomain t0 t1) () 1.0.1

@@ -1,10 +1,10 @@
-existingStatementExtraction {
+inferenceExtraction {
   prove ∧ ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 transitiveRelation t0 t1 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de () (t0, t1) p0
   prove ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1, transitiveRelation t0 t1) () 0.0
   prove ∧ relation t0 t1 reflexiveRelation t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ relation t0 t1 reflexiveRelation t0 t1, symmetricRelation t0 t1) () 0.1
   prove relation t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (relation t0 t1, reflexiveRelation t0 t1) () 0.2
 }
-existingStatementExtraction {
+inferenceExtraction {
   prove ∧ ∧ ∧ relation t2 t3 reflexiveRelation t2 t3 symmetricRelation t2 t3 transitiveRelation t2 t3 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de () (t2, t3) p1
   prove ∧ ∧ relation t2 t3 reflexiveRelation t2 t3 symmetricRelation t2 t3 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation t2 t3 reflexiveRelation t2 t3 symmetricRelation t2 t3, transitiveRelation t2 t3) () 1.0
   prove ∧ relation t2 t3 reflexiveRelation t2 t3 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ relation t2 t3 reflexiveRelation t2 t3, symmetricRelation t2 t3) () 1.1

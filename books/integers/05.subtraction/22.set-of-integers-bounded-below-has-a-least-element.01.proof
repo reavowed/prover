@@ -160,7 +160,7 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
       elided f6c23f1d31f74adf3fc2e789729a077cfc0df1246f2943ca90f641972b190f21 {
         elided f6c23f1d31f74adf3fc2e789729a077cfc0df1246f2943ca90f641972b190f21 {
           prove bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, bijectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.1
-          existingStatementExtraction {
+          inferenceExtraction {
             prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.6.1.0.0
             prove ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.6.1.0.1.0
             prove injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (injectiveFunction ⍳_ℤ, surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.6.1.0.1.1
@@ -270,7 +270,7 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
             elided 80caebb81b56ae485470657bb18dfc522b3f2cd5dc427099905fae9d47526627 {
               elided 80caebb81b56ae485470657bb18dfc522b3f2cd5dc427099905fae9d47526627 {
                 prove bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, bijectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.1
-                existingStatementExtraction {
+                inferenceExtraction {
                   prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.6.3.2.0.4.0.0
                   prove ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.6.3.2.0.4.0.1.0
                   prove injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (injectiveFunction ⍳_ℤ, surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.6.3.2.0.4.0.1.1

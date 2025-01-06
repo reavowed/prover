@@ -2,7 +2,7 @@ take a {
   assume ∈ $0 t3 {
     take b {
       assume ∈ $0 t3 {
-        existingStatementExtraction {
+        inferenceExtraction {
           prove ∧ ∧ binaryOperation t0 binaryOperationOn t0 t3 ∧ ∧ unaryOperation t2 unaryOperationOn t2 t3 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0 476dae61e61409a7e90a657b24d6c2fb7104877637fc7d7e035008a11b9b4246 () (t2, t0, t3) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
           prove ∧ ∧ unaryOperation t2 unaryOperationOn t2 t3 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ binaryOperation t0 binaryOperationOn t0 t3, ∧ ∧ unaryOperation t2 unaryOperationOn t2 t3 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0) () 0.0.0.0.0.0
           prove ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ unaryOperation t2 unaryOperationOn t2 t3, ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0) () 0.0.0.0.0.1
@@ -101,7 +101,7 @@ take a {
           }
           prove = apply t1 orderedPair $$$0 $$0 apply t1 orderedPair apply t0 orderedPair apply t0 orderedPair $$$0 apply t2 $$0 $$0 $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply t1 orderedPair $$$0 $$0, apply t1 orderedPair apply t0 orderedPair $$$0 apply t0 orderedPair apply t2 $$0 $$0 $$0, apply t1 orderedPair apply t0 orderedPair apply t0 orderedPair $$$0 apply t2 $$0 $$0 $$0) 0.0.0.0.1.2 0.0.0.0.1.3
           elided 2afa88ae4acc163c3a5515f1841982db90fc45caa13910242806ac810a465843 {
-            existingStatementExtraction {
+            inferenceExtraction {
               prove ∧ function t0 functionFrom t0 product baseSet t0 baseSet t0 baseSet t0 f495d0479711bafa144326d86109ce6ee78538a2ee268e7779996098952fba71 () (t0) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
               prove function t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (function t0, functionFrom t0 product baseSet t0 baseSet t0 baseSet t0) () 0.0.0.0.1.5.0.0
             }
@@ -110,17 +110,17 @@ take a {
               prove = t3 baseSet t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet t0, t3) 0.0.0.0.1.5.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             }
             prove ∈ $$$0 baseSet t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$0 $$$$0) (t3, baseSet t0) 0.0.0.0.1.5.1 0.0a
-            existingStatementExtraction {
+            inferenceExtraction {
               prove ∧ ∧ binaryOperation t0 binaryOperationOn t0 t3 ∧ ∧ unaryOperation t2 unaryOperationOn t2 t3 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0 476dae61e61409a7e90a657b24d6c2fb7104877637fc7d7e035008a11b9b4246 () (t2, t0, t3) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove ∧ ∧ unaryOperation t2 unaryOperationOn t2 t3 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ binaryOperation t0 binaryOperationOn t0 t3, ∧ ∧ unaryOperation t2 unaryOperationOn t2 t3 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0) () 0.0.0.0.1.5.3.0
               prove ∧ unaryOperation t2 unaryOperationOn t2 t3 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ unaryOperation t2 unaryOperationOn t2 t3, ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0) () 0.0.0.0.1.5.3.1
               prove unaryOperation t2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (unaryOperation t2, unaryOperationOn t2 t3) () 0.0.0.0.1.5.3.2
             }
-            existingStatementExtraction {
+            inferenceExtraction {
               prove ∧ function t2 functionFrom t2 domain t2 domain t2 65302ad667918f8e4353bdf303ef416424efde343876d93d3419ea9dcfcafeb4 () (t2) 0.0.0.0.1.5.3
               prove function t2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (function t2, functionFrom t2 domain t2 domain t2) () 0.0.0.0.1.5.4.0
             }
-            existingStatementExtraction {
+            inferenceExtraction {
               prove ∧ ∧ binaryOperation t0 binaryOperationOn t0 t3 ∧ ∧ unaryOperation t2 unaryOperationOn t2 t3 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0 476dae61e61409a7e90a657b24d6c2fb7104877637fc7d7e035008a11b9b4246 () (t2, t0, t3) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove ∧ ∧ unaryOperation t2 unaryOperationOn t2 t3 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ binaryOperation t0 binaryOperationOn t0 t3, ∧ ∧ unaryOperation t2 unaryOperationOn t2 t3 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0) () 0.0.0.0.1.5.5.0
               prove ∧ unaryOperation t2 unaryOperationOn t2 t3 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ unaryOperation t2 unaryOperationOn t2 t3, ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0) () 0.0.0.0.1.5.5.1
@@ -132,11 +132,11 @@ take a {
             }
             prove ∈ $$0 domain t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$0 $$$$0) (t3, domain t2) 0.0.0.0.1.5.6 0.0.0.0a
             prove ∈ apply t2 $$0 codomain t2 efc99ff765a81eb7b927af90cd2691becadb0bf21892d67709f64f02d0c5ff95 () (t2, $$0) 0.0.0.0.1.5.4 0.0.0.0.1.5.7
-            existingStatementExtraction {
+            inferenceExtraction {
               prove ∧ function t2 functionFrom t2 domain t2 domain t2 65302ad667918f8e4353bdf303ef416424efde343876d93d3419ea9dcfcafeb4 () (t2) 0.0.0.0.1.5.3
               prove functionFrom t2 domain t2 domain t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t2, functionFrom t2 domain t2 domain t2) () 0.0.0.0.1.5.9.0
             }
-            existingStatementExtraction {
+            inferenceExtraction {
               prove ∧ function t2 ∧ = domain t2 domain t2 ⊆ codomain t2 domain t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t2, domain t2, domain t2) 0.0.0.0.1.5.9
               prove ∧ = domain t2 domain t2 ⊆ codomain t2 domain t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t2, ∧ = domain t2 domain t2 ⊆ codomain t2 domain t2) () 0.0.0.0.1.5.10.0
               prove ⊆ codomain t2 domain t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= domain t2 domain t2, ⊆ codomain t2 domain t2) () 0.0.0.0.1.5.10.1
@@ -146,14 +146,14 @@ take a {
               prove → ∈ apply t2 $$0 codomain t2 ∈ apply t2 $$0 domain t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 codomain t2 ∈ $$$$0 domain t2) (apply t2 $$0) 0.0.0.0.1.5.11.0
               prove ∈ apply t2 $$0 domain t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply t2 $$0 codomain t2, ∈ apply t2 $$0 domain t2) () 0.0.0.0.1.5.11.1 0.0.0.0.1.5.8
             }
-            existingStatementExtraction {
+            inferenceExtraction {
               prove ∧ unaryOperation t2 = domain t2 t3 189bbce21d7943a5b44679f49e66cb4b6e56ef34e97ad259e56f82953fe55c2a () (t2, t3) 0.0.0.0.1.5.5
               prove = domain t2 t3 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (unaryOperation t2, = domain t2 t3) () 0.0.0.0.1.5.12.0
             }
             prove = domain t2 baseSet t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (domain t2, t3, baseSet t0) 0.0.0.0.1.5.12 0.0.0.0.1.5.1
             prove ∈ apply t2 $$0 baseSet t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ apply t2 $$0 $$$$0) (domain t2, baseSet t0) 0.0.0.0.1.5.13 0.0.0.0.1.5.11
             prove ∈ orderedPair $$$0 apply t2 $$0 product baseSet t0 baseSet t0 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$$0, baseSet t0, apply t2 $$0, baseSet t0) 0.0.0.0.1.5.2 0.0.0.0.1.5.14
-            existingStatementExtraction {
+            inferenceExtraction {
               prove ∧ function t0 functionFrom t0 product baseSet t0 baseSet t0 baseSet t0 f495d0479711bafa144326d86109ce6ee78538a2ee268e7779996098952fba71 () (t0) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
               prove functionFrom t0 product baseSet t0 baseSet t0 baseSet t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, functionFrom t0 product baseSet t0 baseSet t0 baseSet t0) () 0.0.0.0.1.5.16.0
             }
@@ -163,7 +163,7 @@ take a {
             }
             prove ∈ orderedPair $$$0 apply t2 $$0 domain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$0 apply t2 $$0 $$$$0) (product baseSet t0 baseSet t0, domain t0) 0.0.0.0.1.5.17 0.0.0.0.1.5.15
             prove ∈ apply t0 orderedPair $$$0 apply t2 $$0 codomain t0 efc99ff765a81eb7b927af90cd2691becadb0bf21892d67709f64f02d0c5ff95 () (t0, orderedPair $$$0 apply t2 $$0) 0.0.0.0.1.5.0 0.0.0.0.1.5.18
-            existingStatementExtraction {
+            inferenceExtraction {
               prove ∧ function t0 ∧ = domain t0 product baseSet t0 baseSet t0 ⊆ codomain t0 baseSet t0 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, product baseSet t0 baseSet t0, baseSet t0) 0.0.0.0.1.5.16
               prove ∧ = domain t0 product baseSet t0 baseSet t0 ⊆ codomain t0 baseSet t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 product baseSet t0 baseSet t0 ⊆ codomain t0 baseSet t0) () 0.0.0.0.1.5.20.0
               prove ⊆ codomain t0 baseSet t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= domain t0 product baseSet t0 baseSet t0, ⊆ codomain t0 baseSet t0) () 0.0.0.0.1.5.20.1
@@ -173,7 +173,7 @@ take a {
               prove → ∈ apply t0 orderedPair $$$0 apply t2 $$0 codomain t0 ∈ apply t0 orderedPair $$$0 apply t2 $$0 baseSet t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 codomain t0 ∈ $$$$0 baseSet t0) (apply t0 orderedPair $$$0 apply t2 $$0) 0.0.0.0.1.5.21.0
               prove ∈ apply t0 orderedPair $$$0 apply t2 $$0 baseSet t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply t0 orderedPair $$$0 apply t2 $$0 codomain t0, ∈ apply t0 orderedPair $$$0 apply t2 $$0 baseSet t0) () 0.0.0.0.1.5.21.1 0.0.0.0.1.5.19
             }
-            existingStatementExtraction {
+            inferenceExtraction {
               prove ∧ binaryOperation t0 = baseSet t0 t3 f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (t0, t3) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove = baseSet t0 t3 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation t0, = baseSet t0 t3) () 0.0.0.0.1.5.22.0
             }

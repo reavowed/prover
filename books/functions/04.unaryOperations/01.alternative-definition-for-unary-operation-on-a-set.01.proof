@@ -1,5 +1,5 @@
 assume ∧ unaryOperation t0 unaryOperationOn t0 t1 {
-  existingStatementExtraction {
+  inferenceExtraction {
     prove ∧ unaryOperation t0 = domain t0 t1 189bbce21d7943a5b44679f49e66cb4b6e56ef34e97ad259e56f82953fe55c2a () (t0, t1) 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     prove = domain t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (unaryOperation t0, = domain t0 t1) () 0.0.0
   }
@@ -7,7 +7,7 @@ assume ∧ unaryOperation t0 unaryOperationOn t0 t1 {
   prove ∧ function t0 functionFrom t0 t1 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function t0 functionFrom t0 $0 $0) (domain t0, t1) 0.0 0.1
 }
 assume ∧ function t0 functionFrom t0 t1 t1 {
-  existingStatementExtraction {
+  inferenceExtraction {
     prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t1) 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     prove ∧ = domain t0 t1 ⊆ codomain t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t1) () 1.0.0
     prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t1) () 1.0.1
