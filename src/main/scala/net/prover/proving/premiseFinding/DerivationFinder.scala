@@ -1,12 +1,11 @@
 package net.prover.proving.premiseFinding
 
-import net.prover.model.Substitutions
+import net.prover.model.{Substitutions, _}
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.model.unwrapping.UnwrappedStatement
-import net.prover.model._
-import net.prover.proving.derivation.{PremiseDerivation, PremiseDerivationStep, SimpleDerivation}
+import net.prover.proving.derivation.{PremiseDerivation, SimpleDerivation}
 
 /**
   * Given a statement or a list of statements, attempts to automatically derive them from known statements (either
@@ -28,13 +27,7 @@ object DerivationFinder {
   ): Option[PremiseDerivation] = {
     UnwrappedStatement.getUnwrappedStatements(targetStatement).mapFind { unwrappedStatement =>
       findDerivationForUnwrappedStatement(unwrappedStatement.statement)(unwrappedStatement.unwrappers.enhanceStepProvingContext)
-        .map { derivation =>
-          if (unwrappedStatement.unwrappers.nonEmpty) {
-            PremiseDerivation(Seq(PremiseDerivationStep.Wrapped(unwrappedStatement.unwrappers, derivation)))
-          } else {
-            PremiseDerivation(Seq(PremiseDerivationStep.Simple(derivation)))
-          }
-        }
+        .map(PremiseDerivation(unwrappedStatement.unwrappers, _))
     }
   }
 

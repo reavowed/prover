@@ -1,9 +1,9 @@
 package net.prover.model.definitions
 
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, StepProvingContext, SubstitutionContext}
+import net.prover.model.proof.{StepProvingContext, SubstitutionContext}
 import net.prover.model.{ProvingContext, Substitutions}
-import net.prover.proving.derivation.{PremiseDerivation, SimpleDerivation}
+import net.prover.proving.derivation.SimpleDerivation
 import net.prover.proving.extraction.{ExtractionApplier, InferenceExtraction}
 import net.prover.proving.premiseFinding.DerivationFinder
 
