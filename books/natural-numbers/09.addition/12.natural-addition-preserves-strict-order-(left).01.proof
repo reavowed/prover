@@ -1,13 +1,13 @@
 elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
   elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
-    elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+    inferenceExtraction {
       prove ∧ = apply +ℕ orderedPair t0 0ℕ t0 = apply +ℕ orderedPair 0ℕ t0 t0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (t0) p0
       prove = apply +ℕ orderedPair t0 0ℕ t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply +ℕ orderedPair t0 0ℕ t0, = apply +ℕ orderedPair 0ℕ t0 t0) () 0.0.0.0
     }
     prove ↔ ∈ orderedPair apply +ℕ orderedPair t0 0ℕ apply +ℕ orderedPair t1 0ℕ <ℕ ∈ orderedPair t0 apply +ℕ orderedPair t1 0ℕ <ℕ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $0 apply +ℕ orderedPair t1 0ℕ <ℕ) (apply +ℕ orderedPair t0 0ℕ, t0) 0.0.0
   }
   elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
-    elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+    inferenceExtraction {
       prove ∧ = apply +ℕ orderedPair t1 0ℕ t1 = apply +ℕ orderedPair 0ℕ t1 t1 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (t1) p1
       prove = apply +ℕ orderedPair t1 0ℕ t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply +ℕ orderedPair t1 0ℕ t1, = apply +ℕ orderedPair 0ℕ t1 t1) () 0.1.0.0
     }
@@ -32,7 +32,7 @@ take x {
       elided ac655308c0c8f6d9b87822890e94593d950cc462d2a5f4839c2fef7dd122e23e {
         prove ∈ apply +ℕ orderedPair t0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (t0, $0) p0 1.0a
         prove ∈ apply +ℕ orderedPair t1 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (t1, $0) p1 1.0a
-        elided ac655308c0c8f6d9b87822890e94593d950cc462d2a5f4839c2fef7dd122e23e {
+        inferenceExtraction {
           prove ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ orderedPair successor $$0 successor $0 <ℕ ∈ orderedPair $$0 $0 <ℕ ac655308c0c8f6d9b87822890e94593d950cc462d2a5f4839c2fef7dd122e23e () ()
           prove → ∈ apply +ℕ orderedPair t0 $0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ orderedPair successor apply +ℕ orderedPair t0 $$0 successor $0 <ℕ ∈ orderedPair apply +ℕ orderedPair t0 $$0 $0 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ ∀ m → ∈ $0 ℕ ↔ ∈ orderedPair successor $$$0 successor $0 <ℕ ∈ orderedPair $$$0 $0 <ℕ) (apply +ℕ orderedPair t0 $0) 1.0.0.1.2.0
           prove ∀ m → ∈ $0 ℕ ↔ ∈ orderedPair successor apply +ℕ orderedPair t0 $$0 successor $0 <ℕ ∈ orderedPair apply +ℕ orderedPair t0 $$0 $0 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply +ℕ orderedPair t0 $0 ℕ, ∀ m → ∈ $0 ℕ ↔ ∈ orderedPair successor apply +ℕ orderedPair t0 $$0 successor $0 <ℕ ∈ orderedPair apply +ℕ orderedPair t0 $$0 $0 <ℕ) () 1.0.0.1.2.1 1.0.0.1.0
@@ -45,7 +45,7 @@ take x {
     }
   }
 }
-elided 19929f12c2d837743d530233061fddca190c574115ac9b3835bea89d29e3e4d7 {
+inferenceExtraction {
   prove ∀ n → ∈ $0 ℕ ↔ ∈ orderedPair apply +ℕ orderedPair t0 $0 apply +ℕ orderedPair t1 $0 <ℕ ∈ orderedPair t0 t1 <ℕ 19929f12c2d837743d530233061fddca190c574115ac9b3835bea89d29e3e4d7 (↔ ∈ orderedPair apply +ℕ orderedPair t0 $0 apply +ℕ orderedPair t1 $0 <ℕ ∈ orderedPair t0 t1 <ℕ) () 0 1
   prove → ∈ t2 ℕ ↔ ∈ orderedPair apply +ℕ orderedPair t0 t2 apply +ℕ orderedPair t1 t2 <ℕ ∈ orderedPair t0 t1 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ↔ ∈ orderedPair apply +ℕ orderedPair t0 $0 apply +ℕ orderedPair t1 $0 <ℕ ∈ orderedPair t0 t1 <ℕ) (t2) 2.0
   prove ↔ ∈ orderedPair apply +ℕ orderedPair t0 t2 apply +ℕ orderedPair t1 t2 <ℕ ∈ orderedPair t0 t1 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t2 ℕ, ↔ ∈ orderedPair apply +ℕ orderedPair t0 t2 apply +ℕ orderedPair t1 t2 <ℕ ∈ orderedPair t0 t1 <ℕ) () 2.1 p2

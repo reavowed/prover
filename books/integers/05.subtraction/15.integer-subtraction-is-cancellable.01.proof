@@ -1,6 +1,6 @@
 elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
   elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
-    elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
+    inferenceExtraction {
       prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair $$0 $0 apply +ℤ orderedPair $$0 negatedZ $0 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 () ()
       prove → ∈ t0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t0 $0 apply +ℤ orderedPair t0 negatedZ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair $$0 $0 apply +ℤ orderedPair $$0 negatedZ $0) (t0) 0.0.0.0
       prove ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t0 $0 apply +ℤ orderedPair t0 negatedZ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t0 $0 apply +ℤ orderedPair t0 negatedZ $0) () 0.0.0.1 p0
@@ -10,7 +10,7 @@ elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
     prove ↔ = apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2 = apply +ℤ orderedPair t0 negatedZ t2 apply -ℤ orderedPair t1 t2 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (= $0 apply -ℤ orderedPair t1 t2) (apply -ℤ orderedPair t0 t2, apply +ℤ orderedPair t0 negatedZ t2) 0.0.0
   }
   elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
-    elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
+    inferenceExtraction {
       prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair $$0 $0 apply +ℤ orderedPair $$0 negatedZ $0 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 () ()
       prove → ∈ t1 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t1 $0 apply +ℤ orderedPair t1 negatedZ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair $$0 $0 apply +ℤ orderedPair $$0 negatedZ $0) (t1) 0.1.0.0
       prove ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t1 $0 apply +ℤ orderedPair t1 negatedZ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℤ, ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t1 $0 apply +ℤ orderedPair t1 negatedZ $0) () 0.1.0.1 p1
@@ -22,12 +22,12 @@ elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
   prove ↔ = apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2 = apply +ℤ orderedPair t0 negatedZ t2 apply +ℤ orderedPair t1 negatedZ t2 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (= apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2, = apply +ℤ orderedPair t0 negatedZ t2 apply -ℤ orderedPair t1 t2, = apply +ℤ orderedPair t0 negatedZ t2 apply +ℤ orderedPair t1 negatedZ t2) () 0.0 0.1
 }
 elided 178c70bf3136f9718ba1e6365248bc4ab5f515fc7c3ce6211e420a928891961c {
-  elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+  inferenceExtraction {
     prove ∧ ∈ negatedZ t2 ℤ ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t2) p2
     prove ∈ negatedZ t2 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t2 ℤ, ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ) () 1.0.0
   }
   prove ∈ apply +ℤ orderedPair t0 negatedZ t2 ℤ 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 () (t0, negatedZ t2) p0 1.0
-  elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+  inferenceExtraction {
     prove ∧ ∈ negatedZ t2 ℤ ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t2) p2
     prove ∈ negatedZ t2 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t2 ℤ, ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ) () 1.2.0
   }
@@ -41,7 +41,7 @@ prove ↔ = apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2 = apply +�
 elided e3d1fb30e9c464132544cd71d958b4c744ee32e31e8a3cbf805da2d9f91bd9a1 {
   elided e3d1fb30e9c464132544cd71d958b4c744ee32e31e8a3cbf805da2d9f91bd9a1 {
     elided e3d1fb30e9c464132544cd71d958b4c744ee32e31e8a3cbf805da2d9f91bd9a1 {
-      elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+      inferenceExtraction {
         prove ∧ ∈ negatedZ t2 ℤ ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t2) p2
         prove ∈ negatedZ t2 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t2 ℤ, ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ) () 3.0.0.0.0
       }
@@ -54,7 +54,7 @@ elided e3d1fb30e9c464132544cd71d958b4c744ee32e31e8a3cbf805da2d9f91bd9a1 {
   }
   elided e3d1fb30e9c464132544cd71d958b4c744ee32e31e8a3cbf805da2d9f91bd9a1 {
     elided e3d1fb30e9c464132544cd71d958b4c744ee32e31e8a3cbf805da2d9f91bd9a1 {
-      elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+      inferenceExtraction {
         prove ∧ ∈ negatedZ t2 ℤ ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t2) p2
         prove ∈ negatedZ t2 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t2 ℤ, ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ) () 3.1.0.0.0
       }
@@ -70,7 +70,7 @@ elided e3d1fb30e9c464132544cd71d958b4c744ee32e31e8a3cbf805da2d9f91bd9a1 {
 prove ↔ = apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2 = apply +ℤ orderedPair t0 apply +ℤ orderedPair negatedZ t2 t2 apply +ℤ orderedPair t1 apply +ℤ orderedPair negatedZ t2 t2 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (= apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2, = apply +ℤ orderedPair apply +ℤ orderedPair t0 negatedZ t2 t2 apply +ℤ orderedPair apply +ℤ orderedPair t1 negatedZ t2 t2, = apply +ℤ orderedPair t0 apply +ℤ orderedPair negatedZ t2 t2 apply +ℤ orderedPair t1 apply +ℤ orderedPair negatedZ t2 t2) () 2 3
 elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
   elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
-    elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+    inferenceExtraction {
       prove ∧ ∈ negatedZ t2 ℤ ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t2) p2
       prove ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ negatedZ t2 ℤ, ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ) () 5.0.0.0
       prove = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ, = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ) () 5.0.0.1
@@ -78,7 +78,7 @@ elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
     prove ↔ = apply +ℤ orderedPair t0 apply +ℤ orderedPair negatedZ t2 t2 apply +ℤ orderedPair t1 apply +ℤ orderedPair negatedZ t2 t2 = apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply +ℤ orderedPair t1 apply +ℤ orderedPair negatedZ t2 t2 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (= apply +ℤ orderedPair t0 $0 apply +ℤ orderedPair t1 apply +ℤ orderedPair negatedZ t2 t2) (apply +ℤ orderedPair negatedZ t2 t2, apply ⍳_ℤ 0ℕ) 5.0.0
   }
   elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
-    elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+    inferenceExtraction {
       prove ∧ ∈ negatedZ t2 ℤ ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t2) p2
       prove ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ negatedZ t2 ℤ, ∧ = apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ) () 5.1.0.0
       prove = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply +ℤ orderedPair t2 negatedZ t2 apply ⍳_ℤ 0ℕ, = apply +ℤ orderedPair negatedZ t2 t2 apply ⍳_ℤ 0ℕ) () 5.1.0.1
@@ -90,14 +90,14 @@ elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
 prove ↔ = apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2 = apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply +ℤ orderedPair t1 apply ⍳_ℤ 0ℕ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (= apply -ℤ orderedPair t0 t2 apply -ℤ orderedPair t1 t2, = apply +ℤ orderedPair t0 apply +ℤ orderedPair negatedZ t2 t2 apply +ℤ orderedPair t1 apply +ℤ orderedPair negatedZ t2 t2, = apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply +ℤ orderedPair t1 apply ⍳_ℤ 0ℕ) () 4 5
 elided 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d {
   elided 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d {
-    elided 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d {
+    inferenceExtraction {
       prove ∧ = apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ t0 = apply +ℤ orderedPair apply ⍳_ℤ 0ℕ t0 t0 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d () (t0) p0
       prove = apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ t0, = apply +ℤ orderedPair apply ⍳_ℤ 0ℕ t0 t0) () 7.0.0.0
     }
     prove ↔ = apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply +ℤ orderedPair t1 apply ⍳_ℤ 0ℕ = t0 apply +ℤ orderedPair t1 apply ⍳_ℤ 0ℕ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (= $0 apply +ℤ orderedPair t1 apply ⍳_ℤ 0ℕ) (apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ, t0) 7.0.0
   }
   elided 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d {
-    elided 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d {
+    inferenceExtraction {
       prove ∧ = apply +ℤ orderedPair t1 apply ⍳_ℤ 0ℕ t1 = apply +ℤ orderedPair apply ⍳_ℤ 0ℕ t1 t1 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d () (t1) p1
       prove = apply +ℤ orderedPair t1 apply ⍳_ℤ 0ℕ t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply +ℤ orderedPair t1 apply ⍳_ℤ 0ℕ t1, = apply +ℤ orderedPair apply ⍳_ℤ 0ℕ t1 t1) () 7.1.0.0
     }

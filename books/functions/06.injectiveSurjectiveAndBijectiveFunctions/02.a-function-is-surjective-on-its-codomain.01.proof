@@ -1,14 +1,14 @@
 prove ∧ function t0 functionFrom t0 domain t0 codomain t0 e1df1d082add3cbbeb41a8493936caefd4fd412cc858e6d1453dc5bbd4c850f2 () (t0) p0
 take b {
   assume ∈ $0 codomain t0 {
-    elided 5d216992c8d22567fe99eb3320078b9f72154f2787ddff69923a834812da168f {
+    inferenceExtraction {
       prove ∀ b ↔ ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 5d216992c8d22567fe99eb3320078b9f72154f2787ddff69923a834812da168f () (t0)
       prove ↔ ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 codomain t0 ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$$0 t0) ($0) 1.0.0.0
       prove → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 codomain t0, ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0) () 1.0.0.1
       prove ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 codomain t0, ∃ a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0) () 1.0.0.2 1.0a
     }
     let a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 domain t0 ∈ orderedPair $$0 $0 t0, ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0) () {
-      elided bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 {
+      inferenceExtraction {
         prove ↔ ∈ orderedPair $0 $$0 t0 ∧ ∈ $0 domain t0 = $$0 apply t0 $0 bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 () (t0, domain t0, codomain t0, $0, $$0) 0
         prove → ∈ orderedPair $0 $$0 t0 ∧ ∈ $0 domain t0 = $$0 apply t0 $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $0 $$0 t0, ∧ ∈ $0 domain t0 = $$0 apply t0 $0) () 1.0.1.0.0
         prove ∧ ∈ $0 domain t0 = $$0 apply t0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 $$0 t0, ∧ ∈ $0 domain t0 = $$0 apply t0 $0) () 1.0.1.0.1 1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29

@@ -1,6 +1,6 @@
 take x {
   assume ∈ $0 t0 {
-    elided 7e4a263499153833741e6776b870472812d9d8ff8bbcb4aa457cde22bf4a87c3 {
+    inferenceExtraction {
       prove ∀ s ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t3 ∃ b ∧ ∈ $0 t4 ∧ ∈ orderedPair $$0 $0 t1 = $$$0 with ($$0 $0) t2 7e4a263499153833741e6776b870472812d9d8ff8bbcb4aa457cde22bf4a87c3 () (t0, t1, with ($$0 $$1) t2, t3, t4) p0 p1
       prove ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t3 ∃ b ∧ ∈ $0 t4 ∧ ∈ orderedPair $$0 $0 t1 = $$$0 with ($$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∃ a ∧ ∈ $0 t3 ∃ b ∧ ∈ $0 t4 ∧ ∈ orderedPair $$0 $0 t1 = $$$$0 with ($$0 $0) t2) ($0) 0.0.0.0
       prove → ∈ $0 t0 ∃ a ∧ ∈ $0 t3 ∃ b ∧ ∈ $0 t4 ∧ ∈ orderedPair $$0 $0 t1 = $$$0 with ($$0 $0) t2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 t0, ∃ a ∧ ∈ $0 t3 ∃ b ∧ ∈ $0 t4 ∧ ∈ orderedPair $$0 $0 t1 = $$$0 with ($$0 $0) t2) () 0.0.0.1

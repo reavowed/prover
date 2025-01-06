@@ -16,7 +16,7 @@ subproof (Reverse implication (generalised)) {
                   prove → ∈ orderedPair $$0 successor $0 <ℕ ∈ orderedPair $$0 $0 ≤ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 successor $0 <ℕ, ∈ orderedPair $$0 $0 ≤ℕ) () 0.0.0.1.0.0.0.0.0.0
                   prove ∈ orderedPair $$0 $0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 successor $0 <ℕ, ∈ orderedPair $$0 $0 ≤ℕ) () 0.0.0.1.0.0.0.0.0.1 0.0.0.1.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                 }
-                elided 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 {
+                inferenceExtraction {
                   prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 () ()
                   prove → ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ℕ ∨ ∈ orderedPair $$$0 $0 <ℕ = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$0 $0 ≤ℕ ∨ ∈ orderedPair $$$$0 $0 <ℕ = $$$$0 $0) ($$0) 0.0.0.1.0.0.0.0.1.0
                   prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ℕ ∨ ∈ orderedPair $$$0 $0 <ℕ = $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ℕ ∨ ∈ orderedPair $$$0 $0 <ℕ = $$$0 $0) () 0.0.0.1.0.0.0.0.1.1 0.0.0a
@@ -72,23 +72,25 @@ subproof (Forward Implication) {
     assume = t2 0ℕ {
       elided 8f6a96d7cf632f350314453ef98fb26941b5a31038b1c8088c2eb3bc0398d7c6 {
         prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-        elided 8f6a96d7cf632f350314453ef98fb26941b5a31038b1c8088c2eb3bc0398d7c6 {
+        inferenceExtraction {
           prove ∧ relation <ℕ ℕ irreflexiveRelation <ℕ ℕ 8f6a96d7cf632f350314453ef98fb26941b5a31038b1c8088c2eb3bc0398d7c6 () ()
-          prove ∧ relation <ℕ ℕ ∀ a → ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ 53d28d71f5bce6c5f88168e17bbb622c7e9f01586b05290613d6a4206cfad5e2 () (<ℕ, ℕ) 1.0.0.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          prove → ∈ 0ℕ ℕ ¬ ∈ orderedPair 0ℕ 0ℕ <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ) (0ℕ) 1.0.0.0.1.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          prove ¬ ∈ orderedPair 0ℕ 0ℕ <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ 0ℕ ℕ, ¬ ∈ orderedPair 0ℕ 0ℕ <ℕ) () 1.0.0.0.1.2 1.0.0.0.0
+          inferenceExtraction {
+            prove ∧ relation <ℕ ℕ ∀ a → ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ 53d28d71f5bce6c5f88168e17bbb622c7e9f01586b05290613d6a4206cfad5e2 () (<ℕ, ℕ) 1.0.0.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            prove → ∈ 0ℕ ℕ ¬ ∈ orderedPair 0ℕ 0ℕ <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ) (0ℕ) 1.0.0.0.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            prove ¬ ∈ orderedPair 0ℕ 0ℕ <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ 0ℕ ℕ, ¬ ∈ orderedPair 0ℕ 0ℕ <ℕ) () 1.0.0.0.1.1.1 1.0.0.0.0
+          }
         }
       }
       elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
         elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
-          elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
+          inferenceExtraction {
             prove ∧ = apply ×ℕ orderedPair t0 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ t0 0ℕ 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c () (t0) p0
             prove = 0ℕ apply ×ℕ orderedPair t0 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair t0 0ℕ, 0ℕ) 1.0.0.1.0.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           }
           prove ¬ ∈ orderedPair apply ×ℕ orderedPair t0 0ℕ 0ℕ <ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ orderedPair $0 0ℕ <ℕ) (0ℕ, apply ×ℕ orderedPair t0 0ℕ) 1.0.0.1.0.0 1.0.0.0
         }
         elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
-          elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
+          inferenceExtraction {
             prove ∧ = apply ×ℕ orderedPair t1 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ t1 0ℕ 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c () (t1) p1
             prove = 0ℕ apply ×ℕ orderedPair t1 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair t1 0ℕ, 0ℕ) 1.0.0.1.1.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           }
@@ -108,26 +110,30 @@ subproof (Forward Implication) {
       prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ) () 1.0a 1.0.0.2
     }
     prove ¬ = t2 0ℕ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (= t2 0ℕ) () 1.0.0
-    elided 3a892325f069a905737f5f700d91ff187d047c348fcb1605168bbd0a24a248d0 {
+    inferenceExtraction {
       prove strictTotalOrder <ℕ ℕ 3a892325f069a905737f5f700d91ff187d047c348fcb1605168bbd0a24a248d0 () ()
-      prove ∧ ∧ ∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ transitiveRelation <ℕ ℕ semicompleteRelation <ℕ ℕ 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (<ℕ, ℕ) 1.0.2.0
-      prove ∧ relation <ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∨ ∈ orderedPair $$0 $0 <ℕ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℕ 26ecf966f6277ba1610988bfbdc58adf42a06d99e0007d50b14e1e223f384ae3 () (<ℕ, ℕ) 1.0.2.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove → ∈ t0 ℕ ∀ b → ∈ $0 ℕ ∨ ∈ orderedPair t0 $0 <ℕ ∨ = t0 $0 ∈ orderedPair $0 t0 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∨ ∈ orderedPair $$0 $0 <ℕ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℕ) (t0) 1.0.2.2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove ∀ b → ∈ $0 ℕ ∨ ∈ orderedPair t0 $0 <ℕ ∨ = t0 $0 ∈ orderedPair $0 t0 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ b → ∈ $0 ℕ ∨ ∈ orderedPair t0 $0 <ℕ ∨ = t0 $0 ∈ orderedPair $0 t0 <ℕ) () 1.0.2.3 p0
-      prove → ∈ t1 ℕ ∨ ∈ orderedPair t0 t1 <ℕ ∨ = t0 t1 ∈ orderedPair t1 t0 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∨ ∈ orderedPair t0 $0 <ℕ ∨ = t0 $0 ∈ orderedPair $0 t0 <ℕ) (t1) 1.0.2.4
-      prove ∨ ∈ orderedPair t0 t1 <ℕ ∨ = t0 t1 ∈ orderedPair t1 t0 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℕ, ∨ ∈ orderedPair t0 t1 <ℕ ∨ = t0 t1 ∈ orderedPair t1 t0 <ℕ) () 1.0.2.5 p1
+      inferenceExtraction {
+        prove ∧ ∧ ∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ transitiveRelation <ℕ ℕ semicompleteRelation <ℕ ℕ 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (<ℕ, ℕ) 1.0.2.0
+        prove semicompleteRelation <ℕ ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ ∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ transitiveRelation <ℕ ℕ, semicompleteRelation <ℕ ℕ) () 1.0.2.1.0
+      }
+      inferenceExtraction {
+        prove ∧ relation <ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∨ ∈ orderedPair $$0 $0 <ℕ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℕ 26ecf966f6277ba1610988bfbdc58adf42a06d99e0007d50b14e1e223f384ae3 () (<ℕ, ℕ) 1.0.2.1
+        prove → ∈ t0 ℕ ∀ b → ∈ $0 ℕ ∨ ∈ orderedPair t0 $0 <ℕ ∨ = t0 $0 ∈ orderedPair $0 t0 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∨ ∈ orderedPair $$0 $0 <ℕ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℕ) (t0) 1.0.2.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove ∀ b → ∈ $0 ℕ ∨ ∈ orderedPair t0 $0 <ℕ ∨ = t0 $0 ∈ orderedPair $0 t0 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ b → ∈ $0 ℕ ∨ ∈ orderedPair t0 $0 <ℕ ∨ = t0 $0 ∈ orderedPair $0 t0 <ℕ) () 1.0.2.2.1 p0
+        prove → ∈ t1 ℕ ∨ ∈ orderedPair t0 t1 <ℕ ∨ = t0 t1 ∈ orderedPair t1 t0 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∨ ∈ orderedPair t0 $0 <ℕ ∨ = t0 $0 ∈ orderedPair $0 t0 <ℕ) (t1) 1.0.2.2.2
+        prove ∨ ∈ orderedPair t0 t1 <ℕ ∨ = t0 t1 ∈ orderedPair t1 t0 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℕ, ∨ ∈ orderedPair t0 t1 <ℕ ∨ = t0 t1 ∈ orderedPair t1 t0 <ℕ) () 1.0.2.2.3 p1
+      }
     }
     assume = t0 t1 {
       elided 8f6a96d7cf632f350314453ef98fb26941b5a31038b1c8088c2eb3bc0398d7c6 {
         prove ∈ apply ×ℕ orderedPair t0 t2 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (t0, t2) p0 p2
-        elided 8f6a96d7cf632f350314453ef98fb26941b5a31038b1c8088c2eb3bc0398d7c6 {
+        inferenceExtraction {
           prove ∧ relation <ℕ ℕ irreflexiveRelation <ℕ ℕ 8f6a96d7cf632f350314453ef98fb26941b5a31038b1c8088c2eb3bc0398d7c6 () ()
-          existingStatementExtraction {
+          inferenceExtraction {
             prove ∧ relation <ℕ ℕ ∀ a → ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ 53d28d71f5bce6c5f88168e17bbb622c7e9f01586b05290613d6a4206cfad5e2 () (<ℕ, ℕ) 1.0.3.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-            prove ∀ a → ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation <ℕ ℕ, ∀ a → ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ) () 1.0.3.0.1.1.0
+            prove → ∈ apply ×ℕ orderedPair t0 t2 ℕ ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t0 t2 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ) (apply ×ℕ orderedPair t0 t2) 1.0.3.0.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            prove ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t0 t2 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ×ℕ orderedPair t0 t2 ℕ, ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t0 t2 <ℕ) () 1.0.3.0.1.1.1 1.0.3.0.0
           }
-          prove → ∈ apply ×ℕ orderedPair t0 t2 ℕ ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t0 t2 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ) (apply ×ℕ orderedPair t0 t2) 1.0.3.0.1.1
-          prove ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t0 t2 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ×ℕ orderedPair t0 t2 ℕ, ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t0 t2 <ℕ) () 1.0.3.0.1.2 1.0.3.0.0
         }
       }
       prove ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair $0 t2 <ℕ) (t0, t1) 1.0.3a 1.0.3.0
@@ -148,15 +154,22 @@ subproof (Forward Implication) {
       elided 3a892325f069a905737f5f700d91ff187d047c348fcb1605168bbd0a24a248d0 {
         prove ∈ apply ×ℕ orderedPair t1 t2 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (t1, t2) p1 p2
         prove ∈ apply ×ℕ orderedPair t0 t2 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (t0, t2) p0 p2
-        elided 3a892325f069a905737f5f700d91ff187d047c348fcb1605168bbd0a24a248d0 {
+        inferenceExtraction {
           prove strictTotalOrder <ℕ ℕ 3a892325f069a905737f5f700d91ff187d047c348fcb1605168bbd0a24a248d0 () ()
-          prove ∧ ∧ ∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ transitiveRelation <ℕ ℕ semicompleteRelation <ℕ ℕ 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (<ℕ, ℕ) 1.0.5.1.2.0
-          prove ∧ relation <ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $$0 $0 <ℕ ¬ ∈ orderedPair $0 $$0 <ℕ d0c44f4a2e491bbf3b1a889c3dd4e29f32a8bd4e6d0bd0236d799093ea2a0971 () (<ℕ, ℕ) 1.0.5.1.2.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          prove → ∈ apply ×ℕ orderedPair t1 t2 ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair apply ×ℕ orderedPair t1 t2 $0 <ℕ ¬ ∈ orderedPair $0 apply ×ℕ orderedPair t1 t2 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $$0 $0 <ℕ ¬ ∈ orderedPair $0 $$0 <ℕ) (apply ×ℕ orderedPair t1 t2) 1.0.5.1.2.2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          prove ∀ b → ∈ $0 ℕ → ∈ orderedPair apply ×ℕ orderedPair t1 t2 $0 <ℕ ¬ ∈ orderedPair $0 apply ×ℕ orderedPair t1 t2 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ×ℕ orderedPair t1 t2 ℕ, ∀ b → ∈ $0 ℕ → ∈ orderedPair apply ×ℕ orderedPair t1 t2 $0 <ℕ ¬ ∈ orderedPair $0 apply ×ℕ orderedPair t1 t2 <ℕ) () 1.0.5.1.2.3 1.0.5.1.0
-          prove → ∈ apply ×ℕ orderedPair t0 t2 ℕ → ∈ orderedPair apply ×ℕ orderedPair t1 t2 apply ×ℕ orderedPair t0 t2 <ℕ ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ → ∈ orderedPair apply ×ℕ orderedPair t1 t2 $0 <ℕ ¬ ∈ orderedPair $0 apply ×ℕ orderedPair t1 t2 <ℕ) (apply ×ℕ orderedPair t0 t2) 1.0.5.1.2.4
-          prove → ∈ orderedPair apply ×ℕ orderedPair t1 t2 apply ×ℕ orderedPair t0 t2 <ℕ ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ×ℕ orderedPair t0 t2 ℕ, → ∈ orderedPair apply ×ℕ orderedPair t1 t2 apply ×ℕ orderedPair t0 t2 <ℕ ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ) () 1.0.5.1.2.5 1.0.5.1.1
-          prove ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply ×ℕ orderedPair t1 t2 apply ×ℕ orderedPair t0 t2 <ℕ, ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ) () 1.0.5.1.2.6 1.0.5.0
+          inferenceExtraction {
+            prove ∧ ∧ ∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ transitiveRelation <ℕ ℕ semicompleteRelation <ℕ ℕ 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (<ℕ, ℕ) 1.0.5.1.2.0
+            prove ∧ ∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ transitiveRelation <ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ transitiveRelation <ℕ ℕ, semicompleteRelation <ℕ ℕ) () 1.0.5.1.2.1.0
+            prove ∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ relation <ℕ ℕ asymmetricRelation <ℕ ℕ, transitiveRelation <ℕ ℕ) () 1.0.5.1.2.1.1
+            prove asymmetricRelation <ℕ ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation <ℕ ℕ, asymmetricRelation <ℕ ℕ) () 1.0.5.1.2.1.2
+          }
+          inferenceExtraction {
+            prove ∧ relation <ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $$0 $0 <ℕ ¬ ∈ orderedPair $0 $$0 <ℕ d0c44f4a2e491bbf3b1a889c3dd4e29f32a8bd4e6d0bd0236d799093ea2a0971 () (<ℕ, ℕ) 1.0.5.1.2.1
+            prove → ∈ apply ×ℕ orderedPair t1 t2 ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair apply ×ℕ orderedPair t1 t2 $0 <ℕ ¬ ∈ orderedPair $0 apply ×ℕ orderedPair t1 t2 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $$0 $0 <ℕ ¬ ∈ orderedPair $0 $$0 <ℕ) (apply ×ℕ orderedPair t1 t2) 1.0.5.1.2.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            prove ∀ b → ∈ $0 ℕ → ∈ orderedPair apply ×ℕ orderedPair t1 t2 $0 <ℕ ¬ ∈ orderedPair $0 apply ×ℕ orderedPair t1 t2 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ×ℕ orderedPair t1 t2 ℕ, ∀ b → ∈ $0 ℕ → ∈ orderedPair apply ×ℕ orderedPair t1 t2 $0 <ℕ ¬ ∈ orderedPair $0 apply ×ℕ orderedPair t1 t2 <ℕ) () 1.0.5.1.2.2.1 1.0.5.1.0
+            prove → ∈ apply ×ℕ orderedPair t0 t2 ℕ → ∈ orderedPair apply ×ℕ orderedPair t1 t2 apply ×ℕ orderedPair t0 t2 <ℕ ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ → ∈ orderedPair apply ×ℕ orderedPair t1 t2 $0 <ℕ ¬ ∈ orderedPair $0 apply ×ℕ orderedPair t1 t2 <ℕ) (apply ×ℕ orderedPair t0 t2) 1.0.5.1.2.2.2
+            prove → ∈ orderedPair apply ×ℕ orderedPair t1 t2 apply ×ℕ orderedPair t0 t2 <ℕ ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ×ℕ orderedPair t0 t2 ℕ, → ∈ orderedPair apply ×ℕ orderedPair t1 t2 apply ×ℕ orderedPair t0 t2 <ℕ ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ) () 1.0.5.1.2.2.3 1.0.5.1.1
+            prove ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply ×ℕ orderedPair t1 t2 apply ×ℕ orderedPair t0 t2 <ℕ, ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ) () 1.0.5.1.2.2.4 1.0.5.0
+          }
         }
       }
       prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ) () 1.0a 1.0.5.1

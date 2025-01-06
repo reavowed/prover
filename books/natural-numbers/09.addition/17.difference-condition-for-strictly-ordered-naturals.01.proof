@@ -13,7 +13,7 @@ subproof (Forward implication) {
               prove → ∈ orderedPair t0 successor $0 <ℕ ∈ orderedPair t0 $0 ≤ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t0 successor $0 <ℕ, ∈ orderedPair t0 $0 ≤ℕ) () 0.1.0.0.0.0.0.0
               prove ∈ orderedPair t0 $0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 successor $0 <ℕ, ∈ orderedPair t0 $0 ≤ℕ) () 0.1.0.0.0.0.0.1 0.1.0.0.0.0a
             }
-            elided 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 {
+            inferenceExtraction {
               prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 () ()
               prove → ∈ t0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ℕ ∨ ∈ orderedPair $$$0 $0 <ℕ = $$$0 $0) (t0) 0.1.0.0.0.0.1.0
               prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0) () 0.1.0.0.0.0.1.1 p0
@@ -47,7 +47,7 @@ subproof (Forward implication) {
                 prove = successor 0ℕ 1ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (1ℕ, successor 0ℕ) 0.1.0.0.0.0.3.1.0
                 prove ¬ = 1ℕ 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ = $$0 0ℕ) (successor 0ℕ, 1ℕ) 0.1.0.0.0.0.3.1.1 0.1.0.0.0.0.3.0
               }
-              elided 0d51a3bb6f56acfd73312d7c6fc6c5a9fe660988bf46a6ad90b362d4b2ac539f {
+              inferenceExtraction {
                 prove = successor t0 apply +ℕ orderedPair t0 1ℕ 0d51a3bb6f56acfd73312d7c6fc6c5a9fe660988bf46a6ad90b362d4b2ac539f () (t0) p0
                 prove = apply +ℕ orderedPair t0 1ℕ successor t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (successor t0, apply +ℕ orderedPair t0 1ℕ) 0.1.0.0.0.0.3.2.0
               }
@@ -66,7 +66,7 @@ subproof (Forward implication) {
       }
     }
   }
-  elided 19929f12c2d837743d530233061fddca190c574115ac9b3835bea89d29e3e4d7 {
+  inferenceExtraction {
     prove ∀ n → ∈ $0 ℕ → ∈ orderedPair t0 $0 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 $$0 19929f12c2d837743d530233061fddca190c574115ac9b3835bea89d29e3e4d7 (→ ∈ orderedPair t0 $0 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 $$0) () 0.0 0.1
     prove → ∈ t1 ℕ → ∈ orderedPair t0 t1 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ → ∈ orderedPair t0 $0 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 $$0) (t1) 0.2.0
     prove → ∈ orderedPair t0 t1 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℕ, → ∈ orderedPair t0 t1 <ℕ ∃ d ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t0 $0 t1) () 0.2.1 p1

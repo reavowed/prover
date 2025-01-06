@@ -1,6 +1,6 @@
-elided 39a4a0b58fd0350180fbaa5054a7ac890a57bb416bf5f07a71553e8d94706219 {
+wrappedInferenceApplication {
   take f {
-    elided 39a4a0b58fd0350180fbaa5054a7ac890a57bb416bf5f07a71553e8d94706219 {
+    inferenceExtraction {
       prove ∀ f ↔ ∈ $0 functionSpace ℕ t0 ∧ function $0 functionFrom $0 ℕ t0 39a4a0b58fd0350180fbaa5054a7ac890a57bb416bf5f07a71553e8d94706219 () (ℕ, t0)
       prove ↔ ∈ $0 functionSpace ℕ t0 ∧ function $0 functionFrom $0 ℕ t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 functionSpace ℕ t0 ∧ function $$0 functionFrom $$0 ℕ t0) ($0) 0.0.0.0
       prove ↔ ∧ function $0 functionFrom $0 ℕ t0 ∈ $0 functionSpace ℕ t0 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ $0 functionSpace ℕ t0, ∧ function $0 functionFrom $0 ℕ t0) () 0.0.0.1

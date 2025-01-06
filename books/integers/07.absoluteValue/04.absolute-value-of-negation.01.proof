@@ -10,7 +10,7 @@ elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
     }
   }
   elided 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b {
-    elided 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b {
+    inferenceExtraction {
       prove = t0 negatedZ negatedZ t0 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b () (t0) p0
       prove = negatedZ negatedZ t0 t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, negatedZ negatedZ t0) 0.1.0.0
     }
@@ -19,21 +19,21 @@ elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
 }
 elided 67b7ad54221f99c690a841d9b3d0dd2bc8da51d735b4b19655114da4a0237b35 {
   elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
-    elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+    inferenceExtraction {
       prove ∧ ∈ negatedZ t0 ℤ ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t0) p0
       prove ∈ negatedZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t0 ℤ, ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ) () 1.0.0.0
     }
-    elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
+    inferenceExtraction {
       prove ∧ ∈ absZ negatedZ t0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ negatedZ t0 ≤ℤ ∨ = absZ negatedZ t0 negatedZ t0 = absZ negatedZ t0 negatedZ negatedZ t0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (negatedZ t0) 1.0.0
       prove ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ negatedZ t0 ≤ℤ ∨ = absZ negatedZ t0 negatedZ t0 = absZ negatedZ t0 negatedZ negatedZ t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ absZ negatedZ t0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ negatedZ t0 ≤ℤ ∨ = absZ negatedZ t0 negatedZ t0 = absZ negatedZ t0 negatedZ negatedZ t0) () 1.0.1.0
       prove ∈ orderedPair apply ⍳_ℤ 0ℕ absZ negatedZ t0 ≤ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ orderedPair apply ⍳_ℤ 0ℕ absZ negatedZ t0 ≤ℤ, ∨ = absZ negatedZ t0 negatedZ t0 = absZ negatedZ t0 negatedZ negatedZ t0) () 1.0.1.1
     }
   }
-  elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+  inferenceExtraction {
     prove ∧ ∈ negatedZ t0 ℤ ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t0) p0
     prove ∈ negatedZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t0 ℤ, ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ) () 1.1.0
   }
-  elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
+  inferenceExtraction {
     prove ∧ ∈ absZ negatedZ t0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ negatedZ t0 ≤ℤ ∨ = absZ negatedZ t0 negatedZ t0 = absZ negatedZ t0 negatedZ negatedZ t0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (negatedZ t0) 1.1
     prove ∈ absZ negatedZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ negatedZ t0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ negatedZ t0 ≤ℤ ∨ = absZ negatedZ t0 negatedZ t0 = absZ negatedZ t0 negatedZ negatedZ t0) () 1.2.0
   }

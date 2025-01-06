@@ -1,7 +1,7 @@
 take a {
   assume ∈ $0 t1 {
     assume ∈ orderedPair $0 $0 t0 {
-      elided d0c44f4a2e491bbf3b1a889c3dd4e29f32a8bd4e6d0bd0236d799093ea2a0971 {
+      inferenceExtraction {
         prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0 d0c44f4a2e491bbf3b1a889c3dd4e29f32a8bd4e6d0bd0236d799093ea2a0971 () (t0, t1) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$$0 $0 t0 ¬ ∈ orderedPair $0 $$$0 t0) ($0) 0.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ¬ ∈ orderedPair $0 $$0 t0) () 0.0.0.0.1 0.0a

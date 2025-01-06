@@ -15,7 +15,7 @@ inferenceExtraction {
 prove ∈ orderedPair t1 t2 product ℕ ℕ f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (≤ℕ, product ℕ ℕ, orderedPair t1 t2) 0 p1
 prove ∈ t1 ℕ d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () (t1, t2, ℕ, ℕ) 1
 prove ∈ t2 ℕ 6cd156e422d6cfba504e0632433c59f2eac64b90aec16bce29bd31ef9780c1dc () (t1, t2, ℕ, ℕ) 1
-elided 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 {
+inferenceExtraction {
   prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 () ()
   prove → ∈ t1 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t1 $0 ≤ℕ ∨ ∈ orderedPair t1 $0 <ℕ = t1 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0) (t1) 4.0
   prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t1 $0 ≤ℕ ∨ ∈ orderedPair t1 $0 <ℕ = t1 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t1 $0 ≤ℕ ∨ ∈ orderedPair t1 $0 <ℕ = t1 $0) () 4.1 2

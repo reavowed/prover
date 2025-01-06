@@ -18,7 +18,7 @@ elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
 prove = apply ×ℤ orderedPair negatedZ t0 negatedZ t1 negatedZ negatedZ apply ×ℤ orderedPair t0 t1 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair negatedZ t0 negatedZ t1, negatedZ apply ×ℤ orderedPair t0 negatedZ t1, negatedZ negatedZ apply ×ℤ orderedPair t0 t1) 0 1
 elided 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b {
   prove ∈ apply ×ℤ orderedPair t0 t1 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t0, t1) p0 p1
-  elided 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b {
+  inferenceExtraction {
     prove = apply ×ℤ orderedPair t0 t1 negatedZ negatedZ apply ×ℤ orderedPair t0 t1 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b () (apply ×ℤ orderedPair t0 t1) 3.0
     prove = negatedZ negatedZ apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t0 t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair t0 t1, negatedZ negatedZ apply ×ℤ orderedPair t0 t1) 3.1.0
   }

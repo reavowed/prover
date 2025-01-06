@@ -1,8 +1,8 @@
 take x {
-  elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+  wrappedInferenceApplication {
     take b {
       assume ∈ $0 codomain ∅ {
-        elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+        inferenceExtraction {
           prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
           prove ¬ ∈ orderedPair $$0 $0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$$0 ∅) (orderedPair $$0 $0) 0.0.0.0.0.0
         }
@@ -33,7 +33,7 @@ take x {
       prove ¬ ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅, ¬ ∀ b ¬ ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅) () 0.1.3.0 0.1.2
     }
   }
-  elided 599dfc696517a7bb4212a58bf9846f4d911a39afcb1c77c4033044ada81fe184 {
+  inferenceExtraction {
     prove ∀ a ↔ ∈ $0 domain ∅ ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ 599dfc696517a7bb4212a58bf9846f4d911a39afcb1c77c4033044ada81fe184 () (∅)
     prove ↔ ∈ $0 domain ∅ ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 domain ∅ ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$$0 $0 ∅) ($0) 0.2.0
     prove → ∈ $0 domain ∅ ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 domain ∅, ∃ b ∧ ∈ $0 codomain ∅ ∈ orderedPair $$0 $0 ∅) () 0.2.1

@@ -1,5 +1,5 @@
 prove ∈ orderedPair t1 apply t0 t1 t0 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb () (t0, t1) p0 p1
-elided 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a {
+inferenceExtraction {
   prove ∧ ∈ t1 domain t0 ∈ apply t0 t1 codomain t0 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a () (t1, apply t0 t1, t0) 0
   prove ∈ apply t0 t1 codomain t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ t1 domain t0, ∈ apply t0 t1 codomain t0) () 1.0
 }

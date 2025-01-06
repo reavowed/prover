@@ -1,4 +1,4 @@
-elided 02bd7ae2d41023b89d8d6909b508437682b3b637a9958a9b75240d4cdb12be26 {
+inferenceExtraction {
   prove ⊕ = t0 0ℕ ∈ 0ℕ t0 02bd7ae2d41023b89d8d6909b508437682b3b637a9958a9b75240d4cdb12be26 () (t0) p0
   prove ∨ = t0 0ℕ ∈ 0ℕ t0 2cb695f79e67d4a66aadf665aa336968a1cec742a0feff3940335eb98c713167 (= t0 0ℕ, ∈ 0ℕ t0) () 0.0
 }
@@ -9,7 +9,7 @@ take a {
       assume ∈ t0 $0 {
         elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
           prove ∨ ∈ t0 $0 = t0 $0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ t0 $0, = t0 $0) () 2.0.0.0a
-          elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
+          inferenceExtraction {
             prove ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 () ()
             prove ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ ∈ $0 successor $$$0 ∨ ∈ $0 $$$0 = $0 $$$0) ($0) 2.0.0.0.0.1.0
             prove ↔ ∈ t0 successor $0 ∨ ∈ t0 $0 = t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 successor $0 ∨ ∈ $$0 $0 = $$0 $0) (t0) 2.0.0.0.0.1.1
@@ -25,7 +25,7 @@ take a {
         prove ∨ ∈ t0 successor $0 ∨ = t0 successor $0 ∈ successor $0 t0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ t0 successor $0, ∨ = t0 successor $0 ∈ successor $0 t0) () 2.0.0.1.1
       }
       assume ∈ $0 t0 {
-        elided c06768d75c05348690098b02ae1dd805419c16771314db00c4d82f16a9522255 {
+        inferenceExtraction {
           prove ∀ n → ∈ $0 ℕ ∀ m ↔ ∈ $0 $$0 ∨ ∈ successor $0 $$0 = successor $0 $$0 c06768d75c05348690098b02ae1dd805419c16771314db00c4d82f16a9522255 () ()
           prove → ∈ t0 ℕ ∀ m ↔ ∈ $0 t0 ∨ ∈ successor $0 t0 = successor $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ ∀ m ↔ ∈ $0 $$$0 ∨ ∈ successor $0 $$$0 = successor $0 $$$0) (t0) 2.0.0.2.0.0
           prove ∀ m ↔ ∈ $0 t0 ∨ ∈ successor $0 t0 = successor $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ m ↔ ∈ $0 t0 ∨ ∈ successor $0 t0 = successor $0 t0) () 2.0.0.2.0.1 p0

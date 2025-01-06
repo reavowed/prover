@@ -1,15 +1,17 @@
 elided 8f6a96d7cf632f350314453ef98fb26941b5a31038b1c8088c2eb3bc0398d7c6 {
   prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
-  elided 8f6a96d7cf632f350314453ef98fb26941b5a31038b1c8088c2eb3bc0398d7c6 {
+  inferenceExtraction {
     prove ∧ relation <ℕ ℕ irreflexiveRelation <ℕ ℕ 8f6a96d7cf632f350314453ef98fb26941b5a31038b1c8088c2eb3bc0398d7c6 () ()
-    prove ∧ relation <ℕ ℕ ∀ a → ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ 53d28d71f5bce6c5f88168e17bbb622c7e9f01586b05290613d6a4206cfad5e2 () (<ℕ, ℕ) 0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-    prove → ∈ 1ℕ ℕ ¬ ∈ orderedPair 1ℕ 1ℕ <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ) (1ℕ) 0.1.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-    prove ¬ ∈ orderedPair 1ℕ 1ℕ <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ 1ℕ ℕ, ¬ ∈ orderedPair 1ℕ 1ℕ <ℕ) () 0.1.2 0.0
+    inferenceExtraction {
+      prove ∧ relation <ℕ ℕ ∀ a → ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ 53d28d71f5bce6c5f88168e17bbb622c7e9f01586b05290613d6a4206cfad5e2 () (<ℕ, ℕ) 0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove → ∈ 1ℕ ℕ ¬ ∈ orderedPair 1ℕ 1ℕ <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ¬ ∈ orderedPair $0 $0 <ℕ) (1ℕ) 0.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ¬ ∈ orderedPair 1ℕ 1ℕ <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ 1ℕ ℕ, ¬ ∈ orderedPair 1ℕ 1ℕ <ℕ) () 0.1.1.1 0.0
+    }
   }
 }
 elided 364bbd79cbb397680f370a451f83ed23bcc45deb7d5d0295f038decaaa51657d {
   assume prime 1ℕ {
-    elided 364bbd79cbb397680f370a451f83ed23bcc45deb7d5d0295f038decaaa51657d {
+    inferenceExtraction {
       prove ∧ ∈ 1ℕ ℕ ∧ ∈ orderedPair 1ℕ 1ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 1ℕ |ℕ ∨ = $0 1ℕ = $0 1ℕ 364bbd79cbb397680f370a451f83ed23bcc45deb7d5d0295f038decaaa51657d () (1ℕ) 1.0a
       prove ∧ ∈ orderedPair 1ℕ 1ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 1ℕ |ℕ ∨ = $0 1ℕ = $0 1ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ 1ℕ ℕ, ∧ ∈ orderedPair 1ℕ 1ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 1ℕ |ℕ ∨ = $0 1ℕ = $0 1ℕ) () 1.0.0.0
       prove ∈ orderedPair 1ℕ 1ℕ <ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ orderedPair 1ℕ 1ℕ <ℕ, ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 1ℕ |ℕ ∨ = $0 1ℕ = $0 1ℕ) () 1.0.0.1

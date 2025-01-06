@@ -5,7 +5,7 @@ elided 5b35fbcf3a704bca18fa74ce4e6954a98aea2d5ddfb13b2b890ed2ab29a7cdcd {
 subproof (Subset) {
   take x {
     assume ∈ $0 t0 {
-      elided a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec {
+      inferenceExtraction {
         prove ∀ s ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 with ($0) t2 a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec () (t0, t1, orderedPair $$0 with ($$0) t2) 0
         prove ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 with ($0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∃ a ∧ ∈ $0 t1 = $$$0 orderedPair $0 with ($0) t2) ($0) 1.0.0.0.0
         prove → ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 with ($0) t2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 t0, ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 with ($0) t2) () 1.0.0.0.1
@@ -29,7 +29,7 @@ subproof (Uniqueness) {
       prove ∈ orderedPair $0 with ($0) t2 t0 c9f2bb871030aba7cefe90ec5d1063e3fede02bed65e9e77472830a9b98bcc95 () (t0, t1, orderedPair $$0 with ($$0) t2, $0) 0 2.0.0a
       take x {
         assume ∈ orderedPair $$0 $0 t0 {
-          elided a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec {
+          inferenceExtraction {
             prove ∀ x ↔ ∈ $0 t0 ∃ a' ∧ ∈ $0 t1 = $$0 orderedPair $0 with ($0) t2 a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec () (t0, t1, orderedPair $$$0 with ($$$0) t2) 0
             prove ↔ ∈ orderedPair $$0 $0 t0 ∃ a' ∧ ∈ $0 t1 = orderedPair $$$0 $$0 orderedPair $0 with ($0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 t0 ∃ a' ∧ ∈ $0 t1 = $$$$0 orderedPair $0 with ($0) t2) (orderedPair $$0 $0) 2.0.0.1.0.0.0
             prove → ∈ orderedPair $$0 $0 t0 ∃ a' ∧ ∈ $0 t1 = orderedPair $$$0 $$0 orderedPair $0 with ($0) t2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 t0, ∃ a ∧ ∈ $0 t1 = orderedPair $$$0 $$0 orderedPair $0 with ($0) t2) () 2.0.0.1.0.0.1

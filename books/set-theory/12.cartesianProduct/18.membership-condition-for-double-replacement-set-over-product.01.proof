@@ -3,9 +3,9 @@ elided be269a4b0cd317daa897c5e8f7922f09b50f613296445fc2014c6474b2c28e24 {
   prove = t0 replacementSet x product t1 t2 with (first $0 second $0) t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (replacementSet2 a b product t1 t2 with ($0 $1) t3, replacementSet x product t1 t2 with (first $0 second $0) t3) 0.0 p0
 }
 take s {
-  elided a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec {
+  inferenceExtraction {
     prove ∀ s ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 product t1 t2 = $$0 with (first $0 second $0) t3 a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec () (t0, product t1 t2, with (first $$0 second $$0) t3) 0
-    prove ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 product t1 t2 = $$0 with (first $0 second $0) t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∃ a ∧ ∈ $0 product t1 t2 = $$$0 with (first $0 second $0) t3) ($0) 1.0.0
+    prove ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 product t1 t2 = $$0 with (first $0 second $0) t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∃ x ∧ ∈ $0 product t1 t2 = $$$0 with (first $0 second $0) t3) ($0) 1.0.0
   }
   prove ↔ ∃ x ∧ ∈ $0 product t1 t2 = $$0 with (first $0 second $0) t3 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = $$$0 with ($$0 $0) t3 dd7b34cfabe761d72ca27a7de038393c6aeb230006e774252d2b74d9a26f8aa0 (= $0 with ($$0 $$1) t3) (t1, t2)
   prove ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = $$$0 with ($$0 $0) t3 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 t0, ∃ a ∧ ∈ $0 product t1 t2 = $$0 with (first $0 second $0) t3, ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = $$$0 with ($$0 $0) t3) () 1.0 1.1

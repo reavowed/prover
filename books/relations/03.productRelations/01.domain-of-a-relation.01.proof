@@ -1,22 +1,22 @@
 prove ⊆ t0 product t1 t1 e3a7e3f727ccfe95728f3df8bab36dc71f8f578c1df1cabdf75f51ddfe4baaa2 () (t0, t1) p0
 take x {
   assume ∈ $0 union union t0 {
-    elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
+    inferenceExtraction {
       prove ∀ x ↔ ∈ $0 union union t0 ∃ y ∧ ∈ $$0 $0 ∈ $0 union t0 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (union t0)
       prove ↔ ∈ $0 union union t0 ∃ y ∧ ∈ $$0 $0 ∈ $0 union t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 union union t0 ∃ y ∧ ∈ $$$0 $0 ∈ $0 union t0) ($0) 1.0.0.0
       prove → ∈ $0 union union t0 ∃ y ∧ ∈ $$0 $0 ∈ $0 union t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 union union t0, ∃ y ∧ ∈ $$0 $0 ∈ $0 union t0) () 1.0.0.1
       prove ∃ y ∧ ∈ $$0 $0 ∈ $0 union t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 union union t0, ∃ y ∧ ∈ $$0 $0 ∈ $0 union t0) () 1.0.0.2 1.0a
     }
     let y ∧ ∈ $$0 $0 ∈ $0 union t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 $$0 ∈ $$0 union t0, ∈ $0 t1) () {
-      elided 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 {
+      inferenceExtraction {
         prove ∀ x ↔ ∈ $0 union t0 ∃ z ∧ ∈ $$0 $0 ∈ $0 t0 076c0bf97b11643e5ecef35533846ad05343c4d11d6f05eebd3ba7c4c55edea9 () (t0)
-        prove ↔ ∈ $0 union t0 ∃ z ∧ ∈ $$0 $0 ∈ $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 union t0 ∃ y ∧ ∈ $$$$0 $0 ∈ $0 t0) ($0) 1.0.1.0.0
-        prove → ∈ $0 union t0 ∃ z ∧ ∈ $$0 $0 ∈ $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 union t0, ∃ y ∧ ∈ $$0 $0 ∈ $0 t0) () 1.0.1.0.1
-        prove ∃ z ∧ ∈ $$0 $0 ∈ $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 union t0, ∃ y ∧ ∈ $$0 $0 ∈ $0 t0) () 1.0.1.0.2 1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove ↔ ∈ $0 union t0 ∃ z ∧ ∈ $$0 $0 ∈ $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 union t0 ∃ z ∧ ∈ $$$$0 $0 ∈ $0 t0) ($0) 1.0.1.0.0
+        prove → ∈ $0 union t0 ∃ z ∧ ∈ $$0 $0 ∈ $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 union t0, ∃ z ∧ ∈ $$0 $0 ∈ $0 t0) () 1.0.1.0.1
+        prove ∃ z ∧ ∈ $$0 $0 ∈ $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 union t0, ∃ z ∧ ∈ $$0 $0 ∈ $0 t0) () 1.0.1.0.2 1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       }
       let z ∧ ∈ $$0 $0 ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 $$$0 ∈ $$$0 t0, ∈ $$0 t1) () {
         prove ∈ $0 product t1 t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t0, product t1 t1, $0) 0 1.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        elided a0786e2b34cbee2ca3ec244ec8e2eb25fa09ded87551329c9a33850fb72ff379 {
+        inferenceExtraction {
           prove ∀ x ↔ ∈ $0 product t1 t1 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 a0786e2b34cbee2ca3ec244ec8e2eb25fa09ded87551329c9a33850fb72ff379 () (t1, t1)
           prove ↔ ∈ $0 product t1 t1 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 product t1 t1 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t1 = $$$$$$0 orderedPair $$0 $0) ($0) 1.0.1.1.1.0
           prove → ∈ $0 product t1 t1 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 product t1 t1, ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0) () 1.0.1.1.1.1
@@ -28,7 +28,7 @@ take x {
             prove ∨ = $$$$0 singleton $$0 = $$$$0 pair $$0 $0 83ec046daec13a9f63167db62849e99d77e053a3d9bd0fd4bbe48c98efe9b63e () ($$$$0, $$0, $0) 1.0.1.1.2.0.0
             assume = $$$$0 singleton $$0 {
               prove ∈ $$$$$0 singleton $$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$$$0 $$$$$$0) ($$$$0, singleton $$0) 1.0.1.1.2.0.2a 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-              elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+              inferenceExtraction {
                 prove ∀ x ↔ ∈ $0 singleton $$$0 = $0 $$$0 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () ($$0)
                 prove ↔ ∈ $$$$$0 singleton $$0 = $$$$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$0 singleton $$0 = $$$$$$0 $$0) ($$$$$0) 1.0.1.1.2.0.2.1.0
                 prove → ∈ $$$$$0 singleton $$0 = $$$$$0 $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $$$$$0 singleton $$0, = $$$$$0 $$0) () 1.0.1.1.2.0.2.1.1

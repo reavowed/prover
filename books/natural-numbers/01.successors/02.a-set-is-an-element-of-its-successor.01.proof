@@ -1,7 +1,7 @@
 prove = t0 t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (t0)
 elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
   prove ∨ ∈ t0 t0 = t0 t0 e26256cffbab382c0f78ce9ea79be88776c22b645a13ecc8352cc3296e3b8b87 (= t0 t0, ∈ t0 t0) () 0
-  elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
+  inferenceExtraction {
     prove ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 () ()
     prove ∀ m ↔ ∈ $0 successor t0 ∨ ∈ $0 t0 = $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0) (t0) 1.1.0
     prove ↔ ∈ t0 successor t0 ∨ ∈ t0 t0 = t0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 successor t0 ∨ ∈ $0 t0 = $0 t0) (t0) 1.1.1

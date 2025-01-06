@@ -1,4 +1,4 @@
-elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
+inferenceExtraction {
   prove ∧ = apply ×ℕ orderedPair t0 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ t0 0ℕ 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c () (t0) p0
   prove = apply ×ℕ orderedPair t0 0ℕ 0ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℕ orderedPair t0 0ℕ 0ℕ, = apply ×ℕ orderedPair 0ℕ t0 0ℕ) () 0.0
 }
@@ -9,7 +9,7 @@ inferenceWithPremiseDerivations {
 }
 elided 85610f95d8025a79147939840f4ee93a9455b91e71ac4febd7ffe20fcee30cc9 {
   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-  elided 85610f95d8025a79147939840f4ee93a9455b91e71ac4febd7ffe20fcee30cc9 {
+  inferenceExtraction {
     prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 |ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair $$$0 $0 $$0 85610f95d8025a79147939840f4ee93a9455b91e71ac4febd7ffe20fcee30cc9 () ()
     prove → ∈ t0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 |ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 |ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair $$$0 $0 $$0) (t0) 2.1.0
     prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 |ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 |ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 $$0) () 2.1.1 p0

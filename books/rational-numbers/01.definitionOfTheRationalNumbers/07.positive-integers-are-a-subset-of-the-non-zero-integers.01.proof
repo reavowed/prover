@@ -1,6 +1,6 @@
 take x {
   assume ∈ $0 ℤ^+ {
-    elided 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 {
+    inferenceExtraction {
       prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 () ()
       prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 ℤ^+ ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 <ℤ) ($0) 0.0.0.0
       prove → ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ) () 0.0.0.1
@@ -19,14 +19,14 @@ take x {
         prove ¬ = $0 apply ⍳_ℤ 0ℕ 63df87633696587242ebf84efb37d81a35fdc0713905a3d019bd45c73e2f66be () (apply ⍳_ℤ 0ℕ, $0) 0.0.1.3.0
       }
     }
-    elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+    inferenceExtraction {
       prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (apply ⍳_ℤ 0ℕ)
       prove ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 singleton apply ⍳_ℤ 0ℕ = $$0 apply ⍳_ℤ 0ℕ) ($0) 0.0.2.0
       prove → ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 singleton apply ⍳_ℤ 0ℕ, = $0 apply ⍳_ℤ 0ℕ) () 0.0.2.1
       prove ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ $0 singleton apply ⍳_ℤ 0ℕ, = $0 apply ⍳_ℤ 0ℕ) () 0.0.2.2 0.0.1
     }
     elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
-      elided 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 {
+      inferenceExtraction {
         prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 () ()
         prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 ℤ^+ ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 <ℤ) ($0) 0.0.3.0.0
         prove → ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 ℤ^+, ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ) () 0.0.3.0.1
@@ -34,7 +34,7 @@ take x {
         prove ∈ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ) () 0.0.3.0.3
       }
       prove ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 ℤ, ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.0.3.0 0.0.2
-      elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+      inferenceExtraction {
         prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
         prove ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton apply ⍳_ℤ 0ℕ) ($0) 0.0.3.2.0
         prove → ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.0.3.2.1

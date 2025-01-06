@@ -1,6 +1,6 @@
 assume ∈ orderedPair t0 t1 ≤ℕ {
   assume = t0 t1 {
-    elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+    inferenceExtraction {
       prove ∧ = apply +ℕ orderedPair t0 0ℕ t0 = apply +ℕ orderedPair 0ℕ t0 t0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (t0) p0
       prove = apply +ℕ orderedPair t0 0ℕ t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply +ℕ orderedPair t0 0ℕ t0, = apply +ℕ orderedPair 0ℕ t0 t0) () 0.0.0.0
     }
@@ -11,7 +11,7 @@ assume ∈ orderedPair t0 t1 ≤ℕ {
       prove ∃ x ∧ ∈ $0 ℕ = apply +ℕ orderedPair t0 $0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 ℕ = apply +ℕ orderedPair t0 $0 t1) (0ℕ) 0.0.2.1
     }
   }
-  elided 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 {
+  inferenceExtraction {
     prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 () ()
     prove → ∈ t0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0) (t0) 0.1.0
     prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0) () 0.1.1 p0

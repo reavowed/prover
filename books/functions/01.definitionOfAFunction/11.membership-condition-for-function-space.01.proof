@@ -9,7 +9,7 @@ take f {
     }
     prove ∈ $0 powerSet product t0 t1 2fb214b164fda9228f3b23750ff85e26619ba5a1123272663ea1c7d2135cd58e () ($0, product t0 t1) 1.0.0
   }
-  elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+  inferenceExtraction {
     prove ∀ y ↔ ∈ $0 functionSpace t0 t1 ∧ ∈ $0 powerSet product t0 t1 ∧ function $0 functionFrom $0 t0 t1 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ function $$0 functionFrom $$0 t0 t1) (functionSpace t0 t1, powerSet product t0 t1) 0
     prove ↔ ∈ $0 functionSpace t0 t1 ∧ ∈ $0 powerSet product t0 t1 ∧ function $0 functionFrom $0 t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 functionSpace t0 t1 ∧ ∈ $$0 powerSet product t0 t1 ∧ function $$0 functionFrom $$0 t0 t1) ($0) 1.1.0
   }

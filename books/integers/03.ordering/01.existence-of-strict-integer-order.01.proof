@@ -17,7 +17,7 @@ subproof (Forward condition) {
                                 assume ∈ $0 ℕ {
                                   assume ∧ ∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 ~_ℤ ∈ orderedPair orderedPair $$$$$$0 $$$$$0 orderedPair $$0 $0 ~_ℤ {
                                     assume ∈ orderedPair apply +ℕ orderedPair $$$$$$$$0 $$$$$0 apply +ℕ orderedPair $$$$$$$0 $$$$$$0 <ℕ {
-                                      elided c5b28dc11a75d63cccf3a5bdc33b72b71d9a599880c5f3faf8e31811f9870c52 {
+                                      inferenceExtraction {
                                         prove ∧ relation ~_ℤ product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 c5b28dc11a75d63cccf3a5bdc33b72b71d9a599880c5f3faf8e31811f9870c52 () ()
                                         prove → ∈ $$$$$$$$0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$$$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply +ℕ orderedPair $$$$$$$$$$$0 $0 apply +ℕ orderedPair $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$$$$0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$$$$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply +ℕ orderedPair $$$$$$$$$$$$0 $0 apply +ℕ orderedPair $$$0 $$0) ($$$$$$$$0) 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                                         prove ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$$$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply +ℕ orderedPair $$$$$$$$$$$0 $0 apply +ℕ orderedPair $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$$$$$$0 ℕ, ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$$$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply +ℕ orderedPair $$$$$$$$$$$0 $0 apply +ℕ orderedPair $$$0 $$0) () 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1 0.0.0a
@@ -30,7 +30,7 @@ subproof (Forward condition) {
                                         prove → ∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 ~_ℤ = apply +ℕ orderedPair $$$$$$$$0 $$$0 apply +ℕ orderedPair $$$$$$$0 $$$$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 ~_ℤ, = apply +ℕ orderedPair $$$$$$$$0 $$$0 apply +ℕ orderedPair $$$$$$$0 $$$$0) () 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8
                                         prove = apply +ℕ orderedPair $$$$$$$$0 $$$0 apply +ℕ orderedPair $$$$$$$0 $$$$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 ~_ℤ, = apply +ℕ orderedPair $$$$$$$$0 $$$0 apply +ℕ orderedPair $$$$$$$0 $$$$0) () 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.9 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                                       }
-                                      elided c5b28dc11a75d63cccf3a5bdc33b72b71d9a599880c5f3faf8e31811f9870c52 {
+                                      inferenceExtraction {
                                         prove ∧ relation ~_ℤ product ℕ ℕ ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 c5b28dc11a75d63cccf3a5bdc33b72b71d9a599880c5f3faf8e31811f9870c52 () ()
                                         prove → ∈ $$$$$$0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply +ℕ orderedPair $$$$$$$$$0 $0 apply +ℕ orderedPair $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$$$$0 ℕ ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$$$$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply +ℕ orderedPair $$$$$$$$$$$$0 $0 apply +ℕ orderedPair $$$0 $$0) ($$$$$$0) 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                                         prove ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply +ℕ orderedPair $$$$$$$$$0 $0 apply +ℕ orderedPair $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$$$$0 ℕ, ∀ b → ∈ $0 ℕ ∀ c → ∈ $0 ℕ ∀ d → ∈ $0 ℕ ↔ ∈ orderedPair orderedPair $$$$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply +ℕ orderedPair $$$$$$$$$0 $0 apply +ℕ orderedPair $$$0 $$0) () 0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1 0.0.0.0.0.0.0a
@@ -155,12 +155,19 @@ take a {
       assume ∈ $0 ℕ {
         elided 459d141ac7e7021353f809dbe31e38d1a6638a074975a411a362a7e5f9d91017 {
           prove ∈ orderedPair $$0 $0 product ℕ ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, ℕ, $0, ℕ) 1.0a 1.0.0.0a
-          elided 459d141ac7e7021353f809dbe31e38d1a6638a074975a411a362a7e5f9d91017 {
+          inferenceExtraction {
             prove equivalenceRelation ~_ℤ product ℕ ℕ 459d141ac7e7021353f809dbe31e38d1a6638a074975a411a362a7e5f9d91017 () ()
-            prove ∧ ∧ ∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ symmetricRelation ~_ℤ product ℕ ℕ transitiveRelation ~_ℤ product ℕ ℕ 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de () (~_ℤ, product ℕ ℕ) 1.0.0.0.0.1.0
-            prove ∧ relation ~_ℤ product ℕ ℕ ∀ a → ∈ $0 product ℕ ℕ ∈ orderedPair $0 $0 ~_ℤ f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 () (~_ℤ, product ℕ ℕ) 1.0.0.0.0.1.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-            prove → ∈ orderedPair $$0 $0 product ℕ ℕ ∈ orderedPair orderedPair $$0 $0 orderedPair $$0 $0 ~_ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 product ℕ ℕ ∈ orderedPair $$$0 $$$0 ~_ℤ) (orderedPair $$0 $0) 1.0.0.0.0.1.2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-            prove ∈ orderedPair orderedPair $$0 $0 orderedPair $$0 $0 ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 product ℕ ℕ, ∈ orderedPair orderedPair $$0 $0 orderedPair $$0 $0 ~_ℤ) () 1.0.0.0.0.1.3 1.0.0.0.0.0
+            inferenceExtraction {
+              prove ∧ ∧ ∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ symmetricRelation ~_ℤ product ℕ ℕ transitiveRelation ~_ℤ product ℕ ℕ 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de () (~_ℤ, product ℕ ℕ) 1.0.0.0.0.1.0
+              prove ∧ ∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ symmetricRelation ~_ℤ product ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ symmetricRelation ~_ℤ product ℕ ℕ, transitiveRelation ~_ℤ product ℕ ℕ) () 1.0.0.0.0.1.1.0
+              prove ∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ relation ~_ℤ product ℕ ℕ reflexiveRelation ~_ℤ product ℕ ℕ, symmetricRelation ~_ℤ product ℕ ℕ) () 1.0.0.0.0.1.1.1
+              prove reflexiveRelation ~_ℤ product ℕ ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation ~_ℤ product ℕ ℕ, reflexiveRelation ~_ℤ product ℕ ℕ) () 1.0.0.0.0.1.1.2
+            }
+            inferenceExtraction {
+              prove ∧ relation ~_ℤ product ℕ ℕ ∀ a → ∈ $0 product ℕ ℕ ∈ orderedPair $0 $0 ~_ℤ f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 () (~_ℤ, product ℕ ℕ) 1.0.0.0.0.1.1
+              prove → ∈ orderedPair $$0 $0 product ℕ ℕ ∈ orderedPair orderedPair $$0 $0 orderedPair $$0 $0 ~_ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 product ℕ ℕ ∈ orderedPair $$$0 $$$0 ~_ℤ) (orderedPair $$0 $0) 1.0.0.0.0.1.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              prove ∈ orderedPair orderedPair $$0 $0 orderedPair $$0 $0 ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 product ℕ ℕ, ∈ orderedPair orderedPair $$0 $0 orderedPair $$0 $0 ~_ℤ) () 1.0.0.0.0.1.2.1 1.0.0.0.0.0
+            }
           }
         }
         inferenceWithPremiseDerivations {

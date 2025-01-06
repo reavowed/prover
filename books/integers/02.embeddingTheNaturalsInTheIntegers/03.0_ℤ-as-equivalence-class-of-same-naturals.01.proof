@@ -1,7 +1,7 @@
 prove = apply +ℕ orderedPair 0ℕ t0 apply +ℕ orderedPair 0ℕ t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (apply +ℕ orderedPair 0ℕ t0)
 elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-  elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
+  inferenceExtraction {
     prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
     prove → ∈ 0ℕ ℕ = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) (0ℕ) 1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     prove = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ 0ℕ ℕ, = apply ⍳_ℤ 0ℕ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) () 1.1.1 1.0

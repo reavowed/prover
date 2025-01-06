@@ -6,37 +6,49 @@ take z {
           elided 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 {
             elided aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 {
               prove ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ) () 0.0a 0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-              elided aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 {
+              inferenceExtraction {
                 prove ∀ a ↔ ∈ $0 ℤ^≥0 ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 () ()
                 prove ↔ ∈ $$0 ℤ^≥0 ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 ℤ^≥0 ∧ ∈ $$$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 ≤ℤ) ($$0) 0.0.0.0.0.0.0.1.0
                 prove → ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ ∈ $$0 ℤ^≥0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $$0 ℤ^≥0, ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ) () 0.0.0.0.0.0.0.1.1
                 prove ∈ $$0 ℤ^≥0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ, ∈ $$0 ℤ^≥0) () 0.0.0.0.0.0.0.1.2 0.0.0.0.0.0.0.0
               }
             }
-            elided 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 {
+            inferenceExtraction {
               prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 () ()
-              prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.0.0.0.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∀ b → ∈ $0 ℤ^≥0 ∃ z' ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.0.0.0.0.1.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove → ∈ $$0 ℤ^≥0 ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ^≥0 ∃ z' ∧ ∈ $0 ℕ = $$$$0 apply ⍳_ℤ $0) ($$0) 0.0.0.0.0.0.1.2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℤ^≥0, ∃ a ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0) () 0.0.0.0.0.0.1.3 0.0.0.0.0.0.0
+              inferenceExtraction {
+                prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.0.0.0.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                prove ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.0.0.0.0.1.1.0
+                prove surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (injectiveFunction ⍳_ℤ, surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.0.0.0.0.1.1.1
+              }
+              inferenceExtraction {
+                prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∀ b → ∈ $0 ℤ^≥0 ∃ z' ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.0.0.0.0.1.1
+                prove → ∈ $$0 ℤ^≥0 ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ^≥0 ∃ z' ∧ ∈ $0 ℕ = $$$$0 apply ⍳_ℤ $0) ($$0) 0.0.0.0.0.0.1.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                prove ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℤ^≥0, ∃ z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0) () 0.0.0.0.0.0.1.2.1 0.0.0.0.0.0.0
+              }
             }
           }
           let z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℕ = $$0 apply ⍳_ℤ $$$0, ↔ ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair $$0 $0 |ℤ ∨ ∈ orderedPair apply ⍳_ℤ t0 $$0 |ℤ ∈ orderedPair apply ⍳_ℤ t0 $0 |ℤ) () {
             elided aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 {
               prove ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ) () 0.0.0.0a 0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              elided aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 {
+              inferenceExtraction {
                 prove ∀ a ↔ ∈ $0 ℤ^≥0 ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 () ()
                 prove ↔ ∈ $$0 ℤ^≥0 ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 ℤ^≥0 ∧ ∈ $$$$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 ≤ℤ) ($$0) 0.0.0.0.0.1.0.1.0
                 prove → ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ ∈ $$0 ℤ^≥0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $$0 ℤ^≥0, ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ) () 0.0.0.0.0.1.0.1.1
                 prove ∈ $$0 ℤ^≥0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ, ∈ $$0 ℤ^≥0) () 0.0.0.0.0.1.0.1.2 0.0.0.0.0.1.0.0
               }
             }
-            elided 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 {
+            inferenceExtraction {
               prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 () ()
-              prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.0.0.0.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∀ b → ∈ $0 ℤ^≥0 ∃ y' ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.0.0.0.1.1.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove → ∈ $$0 ℤ^≥0 ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ^≥0 ∃ y' ∧ ∈ $0 ℕ = $$$$$0 apply ⍳_ℤ $0) ($$0) 0.0.0.0.0.1.1.2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℤ^≥0, ∃ a ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0) () 0.0.0.0.0.1.1.3 0.0.0.0.0.1.0
+              inferenceExtraction {
+                prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 ae86a66ed3058a2cc887b55cc198d7965b31396a7ea36e01b3dd85f7b09b73bd () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.0.0.0.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                prove ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0, ∧ injectiveFunction ⍳_ℤ surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.0.0.0.1.1.1.0
+                prove surjectiveFunction ⍳_ℤ ℕ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (injectiveFunction ⍳_ℤ, surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 0.0.0.0.0.1.1.1.1
+              }
+              inferenceExtraction {
+                prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 ∀ b → ∈ $0 ℤ^≥0 ∃ y' ∧ ∈ $0 ℕ = $$0 apply ⍳_ℤ $0 f9e0ed1983b5bd41eca2d8cbb4a77502fb1314bc3c872c8cbe71bdeb62d95035 () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.0.0.0.1.1.1
+                prove → ∈ $$0 ℤ^≥0 ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ^≥0 ∃ y' ∧ ∈ $0 ℕ = $$$$$0 apply ⍳_ℤ $0) ($$0) 0.0.0.0.0.1.1.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                prove ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℤ^≥0, ∃ y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0) () 0.0.0.0.0.1.1.2.1 0.0.0.0.0.1.0
+              }
             }
             let y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℕ = $$0 apply ⍳_ℤ $$$$0, ↔ ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair $$$0 $$0 |ℤ ∨ ∈ orderedPair apply ⍳_ℤ t0 $$$0 |ℤ ∈ orderedPair apply ⍳_ℤ t0 $$0 |ℤ) () {
               elided 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 {
@@ -117,7 +129,7 @@ take z {
               prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
               prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 1.0.0.0.0.2.0.0
               prove ∨ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ = $0 apply ⍳_ℤ 0ℕ 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ, = $0 apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.2a
-              elided a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 {
+              inferenceExtraction {
                 prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0 a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 () ()
                 prove → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$$$0 $0 ≤ℤ ∨ ∈ orderedPair $$$$0 $0 <ℤ = $$$$0 $0) ($0) 1.0.0.0.0.2.0.3.0
                 prove ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℤ, ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0) () 1.0.0.0.0.2.0.3.1 1.0.0.0a
@@ -127,7 +139,7 @@ take z {
                 prove ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ = $0 apply ⍳_ℤ 0ℕ, ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ) () 1.0.0.0.0.2.0.3.5 1.0.0.0.0.2.0.2
               }
             }
-            elided e9b48a9cf942187ed461d350965af8d62f9d59557f31a5bff9a5573e611b8c5a {
+            inferenceExtraction {
               prove ↔ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 ≤ℤ e9b48a9cf942187ed461d350965af8d62f9d59557f31a5bff9a5573e611b8c5a () ($0) 1.0.0.0a
               prove → ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 ≤ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 ≤ℤ) () 1.0.0.0.0.2.1.0
               prove ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 ≤ℤ) () 1.0.0.0.0.2.1.1 1.0.0.0.0.2.0
@@ -146,7 +158,7 @@ take z {
             }
             prove ↔ ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair $$0 $0 |ℤ ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair $$0 negatedZ $0 |ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair $$0 $0 |ℤ, ∈ orderedPair apply ⍳_ℤ t0 negatedZ apply ×ℤ orderedPair $$0 $0 |ℤ, ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair $$0 negatedZ $0 |ℤ) () 1.0.0.0.0.2.2 1.0.0.0.0.2.3
             elided (Extracted) {
-              elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+              inferenceExtraction {
                 prove ∧ ∈ negatedZ $0 ℤ ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () ($0) 1.0.0.0a
                 prove ∈ negatedZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $0 ℤ, ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.2.5.0.0
               }
@@ -204,7 +216,7 @@ take z {
             prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
             prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 2.0.0.0.2.0.0
             prove ∨ ∈ orderedPair $$0 apply ⍳_ℤ 0ℕ <ℤ = $$0 apply ⍳_ℤ 0ℕ 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ orderedPair $$0 apply ⍳_ℤ 0ℕ <ℤ, = $$0 apply ⍳_ℤ 0ℕ) () 2.0.0.0.2a
-            elided a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 {
+            inferenceExtraction {
               prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 ≤ℤ ∨ ∈ orderedPair $$0 $0 <ℤ = $$0 $0 a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 () ()
               prove → ∈ $$0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$$0 $0 ≤ℤ ∨ ∈ orderedPair $$$0 $0 <ℤ = $$$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$$$0 $0 ≤ℤ ∨ ∈ orderedPair $$$$0 $0 <ℤ = $$$$0 $0) ($$0) 2.0.0.0.2.0.3.0
               prove ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$$0 $0 ≤ℤ ∨ ∈ orderedPair $$$0 $0 <ℤ = $$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℤ, ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$$0 $0 ≤ℤ ∨ ∈ orderedPair $$$0 $0 <ℤ = $$$0 $0) () 2.0.0.0.2.0.3.1 2.0a
@@ -214,7 +226,7 @@ take z {
               prove ∈ orderedPair $$0 apply ⍳_ℤ 0ℕ ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∨ ∈ orderedPair $$0 apply ⍳_ℤ 0ℕ <ℤ = $$0 apply ⍳_ℤ 0ℕ, ∈ orderedPair $$0 apply ⍳_ℤ 0ℕ ≤ℤ) () 2.0.0.0.2.0.3.5 2.0.0.0.2.0.2
             }
           }
-          elided e9b48a9cf942187ed461d350965af8d62f9d59557f31a5bff9a5573e611b8c5a {
+          inferenceExtraction {
             prove ↔ ∈ orderedPair $$0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $$0 ≤ℤ e9b48a9cf942187ed461d350965af8d62f9d59557f31a5bff9a5573e611b8c5a () ($$0) 2.0a
             prove → ∈ orderedPair $$0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $$0 ≤ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 apply ⍳_ℤ 0ℕ ≤ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $$0 ≤ℤ) () 2.0.0.0.2.1.0
             prove ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $$0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 apply ⍳_ℤ 0ℕ ≤ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $$0 ≤ℤ) () 2.0.0.0.2.1.1 2.0.0.0.2.0
@@ -233,7 +245,7 @@ take z {
           }
           prove ↔ ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair $$0 $0 |ℤ ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair negatedZ $$0 $0 |ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair $$0 $0 |ℤ, ∈ orderedPair apply ⍳_ℤ t0 negatedZ apply ×ℤ orderedPair $$0 $0 |ℤ, ∈ orderedPair apply ⍳_ℤ t0 apply ×ℤ orderedPair negatedZ $$0 $0 |ℤ) () 2.0.0.0.2.2 2.0.0.0.2.3
           elided (Extracted) {
-            elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+            inferenceExtraction {
               prove ∧ ∈ negatedZ $$0 ℤ ∧ = apply +ℤ orderedPair $$0 negatedZ $$0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $$0 $$0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () ($$0) 2.0a
               prove ∈ negatedZ $$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $$0 ℤ, ∧ = apply +ℤ orderedPair $$0 negatedZ $$0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $$0 $$0 apply ⍳_ℤ 0ℕ) () 2.0.0.0.2.5.0.0
             }

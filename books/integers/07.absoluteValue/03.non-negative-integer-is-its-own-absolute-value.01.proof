@@ -6,7 +6,7 @@ assume ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ {
   }
 }
 assume = t0 absZ t0 {
-  elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
+  inferenceExtraction {
     prove ∧ ∈ absZ t0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t0) p0
     prove ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ absZ t0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0) () 1.0.0
     prove ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ, ∨ = absZ t0 t0 = absZ t0 negatedZ t0) () 1.0.1

@@ -7,7 +7,7 @@ assume = product t0 t1 ∅ {
         assume ∈ $0 t1 {
           prove ∈ orderedPair $$0 $0 product t0 t1 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t0, $0, t1) 1.0.1a 1.0.1.0.0a
           elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
-            elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+            inferenceExtraction {
               prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
               prove ¬ ∈ orderedPair $$0 $0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$$0 ∅) (orderedPair $$0 $0) 1.0.1.0.0.1.0.0
             }
@@ -30,7 +30,7 @@ assume ∨ = t0 ∅ = t1 ∅ {
     assume = t0 ∅ {
       take a {
         elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
-          elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+          inferenceExtraction {
             prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
             prove ¬ ∈ $0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$$0 ∅) ($0) 2.0.0.0.0.0.0
           }
@@ -71,7 +71,7 @@ assume ∨ = t0 ∅ = t1 ∅ {
         assume ∈ $0 t0 {
           take b {
             elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
-              elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+              inferenceExtraction {
                 prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
                 prove ¬ ∈ $0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$$$0 ∅) ($0) 2.0.1.0.0.0.0.0.0
               }
@@ -158,7 +158,7 @@ assume ∨ = t0 ∅ = t1 ∅ {
       }
     }
     prove ¬ ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (= t0 ∅, = t1 ∅, ¬ ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0) () 2a 2.0.0 2.0.1
-    elided a0786e2b34cbee2ca3ec244ec8e2eb25fa09ded87551329c9a33850fb72ff379 {
+    inferenceExtraction {
       prove ∀ x ↔ ∈ $0 product t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 a0786e2b34cbee2ca3ec244ec8e2eb25fa09ded87551329c9a33850fb72ff379 () (t0, t1)
       prove ↔ ∈ $0 product t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 product t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$$0 orderedPair $$0 $0) ($0) 2.0.3.0
       prove → ∈ $0 product t0 t1 ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 product t0 t1, ∃ a ∧ ∈ $0 t0 ∃ b ∧ ∈ $0 t1 = $$$0 orderedPair $$0 $0) () 2.0.3.1

@@ -1,7 +1,7 @@
 elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
   prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0
-  elided 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 {
+  inferenceExtraction {
     prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair $$0 $0 apply +ℤ orderedPair $$0 negatedZ $0 59765a10b238df97446251ecc75f45bda6b12d38feaa856050315b27da29c294 () ()
     prove → ∈ t0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t0 $0 apply +ℤ orderedPair t0 negatedZ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair $$0 $0 apply +ℤ orderedPair $$0 negatedZ $0) (t0) 0.2.0
     prove ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t0 $0 apply +ℤ orderedPair t0 negatedZ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, ∀ b → ∈ $0 ℤ = apply -ℤ orderedPair t0 $0 apply +ℤ orderedPair t0 negatedZ $0) () 0.2.1 p0
@@ -17,7 +17,7 @@ elided 780bb169aa5fbcf54489be01508749717565853bd1740e0e7c3cdedd0ea51f2a {
   prove = apply +ℤ orderedPair t0 negatedZ apply ⍳_ℤ 0ℕ apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (negatedZ apply ⍳_ℤ 0ℕ, apply ⍳_ℤ 0ℕ, apply +ℤ orderedPair t0 $0) 1.0
 }
 prove = apply -ℤ orderedPair t0 apply ⍳_ℤ 0ℕ apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply -ℤ orderedPair t0 apply ⍳_ℤ 0ℕ, apply +ℤ orderedPair t0 negatedZ apply ⍳_ℤ 0ℕ, apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ) 0 1
-elided 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d {
+inferenceExtraction {
   prove ∧ = apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ t0 = apply +ℤ orderedPair apply ⍳_ℤ 0ℕ t0 t0 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d () (t0) p0
   prove = apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply +ℤ orderedPair t0 apply ⍳_ℤ 0ℕ t0, = apply +ℤ orderedPair apply ⍳_ℤ 0ℕ t0 t0) () 3.0
 }

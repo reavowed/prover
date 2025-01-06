@@ -3,7 +3,7 @@ elided be269a4b0cd317daa897c5e8f7922f09b50f613296445fc2014c6474b2c28e24 {
   prove = t0 replacementSet x t1 with (first $0 second $0) t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (replacementSet2 a b t1 with ($0 $1) t2, replacementSet x t1 with (first $0 second $0) t2) 0.0 p0
 }
 take s {
-  elided a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec {
+  inferenceExtraction {
     prove ∀ s ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 t1 = $$0 with (first $0 second $0) t2 a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec () (t0, t1, with (first $$0 second $$0) t2) 0
     prove ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 t1 = $$0 with (first $0 second $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∃ x ∧ ∈ $0 t1 = $$$0 with (first $0 second $0) t2) ($0) 1.0.0
   }

@@ -2,25 +2,30 @@ subproof (Existence) {
   elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
     prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
     prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0.0
-    elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
+    inferenceExtraction {
       prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
-      prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 0.0.2.0
-      prove ∧ relation ≤ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ efc8a8fab5710dc659c194c157e920d36c2ce470acce1196955beb0c5079aed4 () (≤ℤ, ℤ) 0.0.2.1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove → ∈ t0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair t0 $0 ≤ℤ ∈ orderedPair $0 t0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ) (t0) 0.0.2.2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair t0 $0 ≤ℤ ∈ orderedPair $0 t0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair t0 $0 ≤ℤ ∈ orderedPair $0 t0 ≤ℤ) () 0.0.2.3 p0
-      prove → ∈ apply ⍳_ℤ 0ℕ ℤ ∨ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∨ ∈ orderedPair t0 $0 ≤ℤ ∈ orderedPair $0 t0 ≤ℤ) (apply ⍳_ℤ 0ℕ) 0.0.2.4
-      prove ∨ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ 0ℕ ℤ, ∨ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ) () 0.0.2.5 0.0.1
+      inferenceExtraction {
+        prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 0.0.2.0
+        prove completeRelation ≤ℤ ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ, completeRelation ≤ℤ ℤ) () 0.0.2.1.0
+      }
+      inferenceExtraction {
+        prove ∧ relation ≤ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ efc8a8fab5710dc659c194c157e920d36c2ce470acce1196955beb0c5079aed4 () (≤ℤ, ℤ) 0.0.2.1
+        prove → ∈ t0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair t0 $0 ≤ℤ ∈ orderedPair $0 t0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ) (t0) 0.0.2.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+        prove ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair t0 $0 ≤ℤ ∈ orderedPair $0 t0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℤ, ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair t0 $0 ≤ℤ ∈ orderedPair $0 t0 ≤ℤ) () 0.0.2.2.1 p0
+        prove → ∈ apply ⍳_ℤ 0ℕ ℤ ∨ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∨ ∈ orderedPair t0 $0 ≤ℤ ∈ orderedPair $0 t0 ≤ℤ) (apply ⍳_ℤ 0ℕ) 0.0.2.2.2
+        prove ∨ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ 0ℕ ℤ, ∨ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ) () 0.0.2.2.3 0.0.1
+      }
     }
   }
   assume ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ {
-    elided e9b48a9cf942187ed461d350965af8d62f9d59557f31a5bff9a5573e611b8c5a {
+    inferenceExtraction {
       prove ↔ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ t0 ≤ℤ e9b48a9cf942187ed461d350965af8d62f9d59557f31a5bff9a5573e611b8c5a () (t0) p0
       prove → ∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ t0 ≤ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ t0 ≤ℤ) () 0.1.0.0
       prove ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ t0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 apply ⍳_ℤ 0ℕ ≤ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ t0 ≤ℤ) () 0.1.0.1 0.1a
     }
     prove = negatedZ t0 negatedZ t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (negatedZ t0)
     elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-      elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+      inferenceExtraction {
         prove ∧ ∈ negatedZ t0 ℤ ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t0) p0
         prove ∈ negatedZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t0 ℤ, ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ) () 0.1.2.0.0
       }
@@ -47,7 +52,7 @@ subproof (Uniqueness) {
       assume ∧ ∧ ∈ $$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ ∨ = $$0 t0 = $$0 negatedZ t0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0 {
         assume = $$0 negatedZ $0 {
           prove ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 ≤ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 ≤ℤ) ($$0, negatedZ $0) 1.0.0.0.0a 1.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-          elided e9b48a9cf942187ed461d350965af8d62f9d59557f31a5bff9a5573e611b8c5a {
+          inferenceExtraction {
             prove ↔ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 ≤ℤ e9b48a9cf942187ed461d350965af8d62f9d59557f31a5bff9a5573e611b8c5a () ($0) 1.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             prove → ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 ≤ℤ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 ≤ℤ) () 1.0.0.0.0.1.0
             prove ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 ≤ℤ, ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ) () 1.0.0.0.0.1.1 1.0.0.0.0.0
@@ -56,15 +61,22 @@ subproof (Uniqueness) {
             prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
             prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 1.0.0.0.0.2.0
             prove ∧ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ) () 1.0.0.0.0.1 1.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-            elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
+            inferenceExtraction {
               prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
-              prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 1.0.0.0.0.2.3.0
-              prove ∧ relation ≤ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 5a0a54f24273485bc6a1cfcb0f67d3542cdb926c7865f180b339c8f5881cc581 () (≤ℤ, ℤ) 1.0.0.0.0.2.3.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$$$0 $0 ≤ℤ ∈ orderedPair $0 $$$$0 ≤ℤ = $$$$0 $0) ($0) 1.0.0.0.0.2.3.2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℤ, ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0) () 1.0.0.0.0.2.3.3 1.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-              prove → ∈ apply ⍳_ℤ 0ℕ ℤ → ∧ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ = $0 apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ → ∧ ∈ orderedPair $0 $$$0 ≤ℤ ∈ orderedPair $$$0 $0 ≤ℤ = $0 $$$0) (apply ⍳_ℤ 0ℕ) 1.0.0.0.0.2.3.4
-              prove → ∧ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ = $0 apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ 0ℕ ℤ, → ∧ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ = $0 apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.2.3.5 1.0.0.0.0.2.1
-              prove = $0 apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ, = $0 apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.2.3.6 1.0.0.0.0.2.2
+              inferenceExtraction {
+                prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 1.0.0.0.0.2.3.0
+                prove ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ, completeRelation ≤ℤ ℤ) () 1.0.0.0.0.2.3.1.0
+                prove ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ, transitiveRelation ≤ℤ ℤ) () 1.0.0.0.0.2.3.1.1
+                prove antisymmetricRelation ≤ℤ ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation ≤ℤ ℤ, antisymmetricRelation ≤ℤ ℤ) () 1.0.0.0.0.2.3.1.2
+              }
+              inferenceExtraction {
+                prove ∧ relation ≤ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 5a0a54f24273485bc6a1cfcb0f67d3542cdb926c7865f180b339c8f5881cc581 () (≤ℤ, ℤ) 1.0.0.0.0.2.3.1
+                prove → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$$$0 $0 ≤ℤ ∈ orderedPair $0 $$$$0 ≤ℤ = $$$$0 $0) ($0) 1.0.0.0.0.2.3.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                prove ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℤ, ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0) () 1.0.0.0.0.2.3.2.1 1.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                prove → ∈ apply ⍳_ℤ 0ℕ ℤ → ∧ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ = $0 apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ → ∧ ∈ orderedPair $0 $$$0 ≤ℤ ∈ orderedPair $$$0 $0 ≤ℤ = $0 $$$0) (apply ⍳_ℤ 0ℕ) 1.0.0.0.0.2.3.2.2
+                prove → ∧ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ = $0 apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ 0ℕ ℤ, → ∧ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ = $0 apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.2.3.2.3 1.0.0.0.0.2.1
+                prove = $0 apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ orderedPair $0 apply ⍳_ℤ 0ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ, = $0 apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.2.3.2.4 1.0.0.0.0.2.2
+              }
             }
           }
           prove = $$0 negatedZ apply ⍳_ℤ 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 negatedZ $$$0) ($0, apply ⍳_ℤ 0ℕ) 1.0.0.0.0.2 1.0.0.0.0a

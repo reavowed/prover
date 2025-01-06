@@ -6,7 +6,7 @@ inferenceExtraction {
     prove ∈ orderedPair t0 t0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∈ orderedPair t0 t0 ≤ℕ) () 0.1.1 p0
   }
 }
-elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+inferenceExtraction {
   prove ∧ = apply +ℕ orderedPair t0 0ℕ t0 = apply +ℕ orderedPair 0ℕ t0 t0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (t0) p0
   prove = t0 apply +ℕ orderedPair t0 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair t0 0ℕ, t0) 1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
 }
@@ -28,7 +28,7 @@ take r {
         prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 3.0a
         prove ∈ apply +ℕ orderedPair t0 successor $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (t0, successor $0) p0 3.0.0.4.0
         prove ∨ ∈ orderedPair t0 apply +ℕ orderedPair t0 successor $0 <ℕ = t0 apply +ℕ orderedPair t0 successor $0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∈ orderedPair t0 apply +ℕ orderedPair t0 successor $0 <ℕ, = t0 apply +ℕ orderedPair t0 successor $0) () 3.0.0.3
-        elided 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 {
+        inferenceExtraction {
           prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 () ()
           prove → ∈ t0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$0 $0 ≤ℕ ∨ ∈ orderedPair $$$0 $0 <ℕ = $$$0 $0) (t0) 3.0.0.4.3.0
           prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair t0 $0 ≤ℕ ∨ ∈ orderedPair t0 $0 <ℕ = t0 $0) () 3.0.0.4.3.1 p0

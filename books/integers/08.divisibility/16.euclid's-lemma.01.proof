@@ -3,7 +3,7 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
     prove ¬ = t1 0ℕ 8fcd46cb680f8623012e9c9c58daf95f0a206f37482996b61131a04539d5f361 () (t0, t1) p0 p1 0.0a
     elided 22d18cf6f71958706e602c9ba92183850fb27406b1c3528c8c1db0438721faa7 {
       elided 8467ac37103105969c44c5be619b12eef7acfaee02ece0daae89b62384589638 {
-        elided de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 {
+        inferenceExtraction {
           prove ⊕ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 () (t1) p1
           prove ∨ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 2cb695f79e67d4a66aadf665aa336968a1cec742a0feff3940335eb98c713167 (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 0.0.1.0.0.0
           prove ∈ orderedPair 0ℕ t1 <ℕ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 0.0.1.0.0.1 0.0.0
@@ -18,7 +18,7 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
         prove = gcdℕ t0 t1 1ℕ 22d18cf6f71958706e602c9ba92183850fb27406b1c3528c8c1db0438721faa7 () (t0, t1) p0 p1 p3 0.0a
         elided d34da2b1194ef6c8dd91fa724261999d22d136106d7005d269803a451759fa7b {
           elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
-            elided de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 {
+            inferenceExtraction {
               prove ⊕ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 () (t1) p1
               prove ∨ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 2cb695f79e67d4a66aadf665aa336968a1cec742a0feff3940335eb98c713167 (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 0.0.1.1.1.0.0.0
               prove ∈ orderedPair 0ℕ t1 <ℕ f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 0.0.1.1.1.0.0.1 0.0.0
@@ -106,7 +106,7 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
         prove = apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2 $0 apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℤ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ⍳_ℤ t2 apply ×ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t1 apply ⍳_ℤ t2 $0, apply ×ℤ orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $0 apply ⍳_ℤ t2, apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t2) 0.0.3.0.0 0.0.3.0.1
         elided 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 {
           prove ∈ apply ⍳_ℤ t2 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t2) p2
-          elided 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 {
+          inferenceExtraction {
             prove ∧ = apply ×ℤ orderedPair apply ⍳_ℤ t2 apply ⍳_ℤ 1ℕ apply ⍳_ℤ t2 = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t2 apply ⍳_ℤ t2 784343703d4224e13c2386c8c5c01a8416929ff7ca1fd95accef10e8df2a7540 () (apply ⍳_ℤ t2) 0.0.3.0.3.0
             prove = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t2 apply ⍳_ℤ t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply ×ℤ orderedPair apply ⍳_ℤ t2 apply ⍳_ℤ 1ℕ apply ⍳_ℤ t2, = apply ×ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t2 apply ⍳_ℤ t2) () 0.0.3.0.3.1.0
           }

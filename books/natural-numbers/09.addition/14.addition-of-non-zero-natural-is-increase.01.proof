@@ -21,7 +21,7 @@ take x {
     }
   }
 }
-elided fa974907f8e352c293acb8d9bfb24b2c2d595b318e2a8203d3bf0d94cc1feebe {
+inferenceExtraction {
   prove ∀ n → ∈ $0 ℕ → ¬ = $0 0ℕ ∈ orderedPair t0 apply +ℕ orderedPair t0 $0 <ℕ fa974907f8e352c293acb8d9bfb24b2c2d595b318e2a8203d3bf0d94cc1feebe (∈ orderedPair t0 apply +ℕ orderedPair t0 $0 <ℕ) () 2 3
   prove → ∈ t1 ℕ → ¬ = t1 0ℕ ∈ orderedPair t0 apply +ℕ orderedPair t0 t1 <ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ → ¬ = $0 0ℕ ∈ orderedPair t0 apply +ℕ orderedPair t0 $0 <ℕ) (t1) 4.0
   prove → ¬ = t1 0ℕ ∈ orderedPair t0 apply +ℕ orderedPair t0 t1 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t1 ℕ, → ¬ = t1 0ℕ ∈ orderedPair t0 apply +ℕ orderedPair t0 t1 <ℕ) () 4.1 p1

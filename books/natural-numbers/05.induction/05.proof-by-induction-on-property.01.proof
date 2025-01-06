@@ -3,7 +3,7 @@ let S = $0 comprehension n ℕ with ($0) s0 70db594f573e921867af9e9ef002f3a90d23
     elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
       prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
       prove ∧ ∈ 0ℕ ℕ with (0ℕ) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, with (0ℕ) s0) () 0.0.0.0 p0
-      elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+      inferenceExtraction {
         prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 ℕ with ($0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with ($$0) s0) ($0, ℕ) 0a
         prove ↔ ∈ 0ℕ $0 ∧ ∈ 0ℕ ℕ with (0ℕ) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 $0 ∧ ∈ $$0 ℕ with ($$0) s0) (0ℕ) 0.0.0.2.0
         prove → ∧ ∈ 0ℕ ℕ with (0ℕ) s0 ∈ 0ℕ $0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ 0ℕ $0, ∧ ∈ 0ℕ ℕ with (0ℕ) s0) () 0.0.0.2.1
@@ -14,7 +14,7 @@ let S = $0 comprehension n ℕ with ($0) s0 70db594f573e921867af9e9ef002f3a90d23
   subproof (Inductive case) {
     take n {
       assume ∈ $0 $$0 {
-        elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+        inferenceExtraction {
           prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ with ($0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with ($$$0) s0) ($$0, ℕ) 0a
           prove ↔ ∈ $0 $$0 ∧ ∈ $0 ℕ with ($0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℕ with ($$$0) s0) ($0) 0.1.0.0.0.0
           prove → ∈ $0 $$0 ∧ ∈ $0 ℕ with ($0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$0, ∧ ∈ $0 ℕ with ($0) s0) () 0.1.0.0.0.1
@@ -28,7 +28,7 @@ let S = $0 comprehension n ℕ with ($0) s0 70db594f573e921867af9e9ef002f3a90d23
         elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
           prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 0.1.0.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           prove ∧ ∈ successor $0 ℕ with (successor $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ successor $0 ℕ, with (successor $0) s0) () 0.1.0.0.2.0 0.1.0.0.1
-          elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+          inferenceExtraction {
             prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ with ($0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with ($$$0) s0) ($$0, ℕ) 0a
             prove ↔ ∈ successor $0 $$0 ∧ ∈ successor $0 ℕ with (successor $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℕ with ($$$0) s0) (successor $0) 0.1.0.0.2.2.0
             prove → ∧ ∈ successor $0 ℕ with (successor $0) s0 ∈ successor $0 $$0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ successor $0 $$0, ∧ ∈ successor $0 ℕ with (successor $0) s0) () 0.1.0.0.2.2.1
@@ -45,7 +45,7 @@ let S = $0 comprehension n ℕ with ($0) s0 70db594f573e921867af9e9ef002f3a90d23
         prove = ℕ $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$0, ℕ) 0.2
         prove ∈ $0 $$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$$0) (ℕ, $$0) 0.3.0.0.0 0.3.0a
       }
-      elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+      inferenceExtraction {
         prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ with ($0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with ($$$0) s0) ($$0, ℕ) 0a
         prove ↔ ∈ $0 $$0 ∧ ∈ $0 ℕ with ($0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℕ with ($$$0) s0) ($0) 0.3.0.1.0
         prove → ∈ $0 $$0 ∧ ∈ $0 ℕ with ($0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$0, ∧ ∈ $0 ℕ with ($0) s0) () 0.3.0.1.1

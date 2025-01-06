@@ -8,7 +8,7 @@ subproof (Reflexive) {
       elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
         prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 1.0.0a
         prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 1.0.0a
-        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+        inferenceExtraction {
           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
           prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 1.0.0.0.2.0
           prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 1.0.0.0.2.1
@@ -20,7 +20,7 @@ subproof (Reflexive) {
       elided 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 {
         prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 1.0.0a
         prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 1.0.0a
-        elided 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 {
+        inferenceExtraction {
           prove ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 () ()
           prove → ∈ first $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) (first $0) 1.0.0.1.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
           prove ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first $0 ℤ, ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 1.0.0.1.2.1 1.0.0.1.0
@@ -36,14 +36,14 @@ subproof (Reflexive) {
       }
       elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
         elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-          elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
+          inferenceExtraction {
             prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 1.0.0a
             prove = orderedPair first $0 second $0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, orderedPair first $0 second $0) 1.0.0.2.0.0.0
           }
           prove ∈ orderedPair $0 orderedPair first $0 second $0 ~_ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$0 orderedPair first $0 second $0 ~_ℚ) (orderedPair first $0 second $0, $0) 1.0.0.2.0.0 1.0.0.1
         }
         elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-          elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
+          inferenceExtraction {
             prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 1.0.0a
             prove = orderedPair first $0 second $0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, orderedPair first $0 second $0) 1.0.0.2.1.0.0
           }
@@ -78,7 +78,7 @@ subproof (Symmetric) {
               prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2.0.0a
               prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2.0.0.0.0a
               prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2.0.0.0.0a
-              elided 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 {
+              inferenceExtraction {
                 prove ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 () ()
                 prove → ∈ first $$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) (first $$0) 2.0.0.0.0.0.1.4.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                 prove ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first $$0 ℤ, ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 2.0.0.0.0.0.1.4.1 2.0.0.0.0.0.1.0
@@ -126,7 +126,7 @@ subproof (Symmetric) {
               prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2.0.0.0.0a
               prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2.0.0a
               prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2.0.0a
-              elided 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 {
+              inferenceExtraction {
                 prove ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 () ()
                 prove → ∈ first $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) (first $0) 2.0.0.0.0.0.3.4.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                 prove ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first $0 ℤ, ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 2.0.0.0.0.0.3.4.1 2.0.0.0.0.0.3.0
@@ -142,14 +142,14 @@ subproof (Symmetric) {
             }
             elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
               elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-                elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
+                inferenceExtraction {
                   prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2.0.0.0.0a
                   prove = orderedPair first $0 second $0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, orderedPair first $0 second $0) 2.0.0.0.0.0.4.0.0.0
                 }
                 prove ∈ orderedPair $0 orderedPair first $$0 second $$0 ~_ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$0 orderedPair first $$0 second $$0 ~_ℚ) (orderedPair first $0 second $0, $0) 2.0.0.0.0.0.4.0.0 2.0.0.0.0.0.3
               }
               elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-                elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
+                inferenceExtraction {
                   prove = $$0 orderedPair first $$0 second $$0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2.0.0a
                   prove = orderedPair first $$0 second $$0 $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$0, orderedPair first $$0 second $$0) 2.0.0.0.0.0.4.1.0.0
                 }
@@ -199,7 +199,7 @@ subproof (Transitive) {
                   prove ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0a
                   prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                   prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                  elided 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 {
+                  inferenceExtraction {
                     prove ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 () ()
                     prove → ∈ first $$$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) (first $$$0) 3.0.0.0.0.0.0.0.2.4.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                     prove ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first $$$0 ℤ, ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 3.0.0.0.0.0.0.0.2.4.1 3.0.0.0.0.0.0.0.2.0
@@ -218,7 +218,7 @@ subproof (Transitive) {
                   prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                   prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
                   prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
-                  elided 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 {
+                  inferenceExtraction {
                     prove ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 () ()
                     prove → ∈ first $$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) (first $$0) 3.0.0.0.0.0.0.0.3.4.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                     prove ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first $$0 ℤ, ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 3.0.0.0.0.0.0.0.3.4.1 3.0.0.0.0.0.0.0.3.0
@@ -237,14 +237,14 @@ subproof (Transitive) {
                   prove = apply ×ℤ orderedPair first $$$0 second $$0 apply ×ℤ orderedPair second $$$0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair first $$$0 second $$0, apply ×ℤ orderedPair second $$$0 first $$0, apply ×ℤ orderedPair second $$$0 apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0.0.2 3.0.0.0.0.0.0.0.4.0
                   elided b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 {
                     prove ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$$0) 3.0.0.0.0.0.0.0.4.2.1.0
                       prove → ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.2.1.1
                       prove ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.2.1.2 3.0.0.0.0.0.0.0.4.2.0
                       prove ∈ second $$$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ second $$$0 ℤ, ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.2.1.3
                     }
-                    elided b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 {
+                    inferenceExtraction {
                       prove ∧ = apply ×ℤ orderedPair second $$$0 apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $$$0 apply ⍳_ℤ 0ℕ b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 () (second $$$0) 3.0.0.0.0.0.0.0.4.2.1
                       prove = apply ×ℤ orderedPair second $$$0 apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℤ orderedPair second $$$0 apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ, = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $$$0 apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.2.2.0
                     }
@@ -253,7 +253,7 @@ subproof (Transitive) {
                   elided 07d426b42b42809acbff0ae40cf7a8280c197462baa6259d18f62b04343d7174 {
                     prove ∈ first $$$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0a
                     prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.4.4.2.0
                       prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.4.2.1
@@ -261,14 +261,14 @@ subproof (Transitive) {
                       prove ∈ second $$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ second $$0 ℤ, ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.4.2.3
                     }
                     prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.4.4.4.0
                       prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.4.4.1
                       prove ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.4.4.2 3.0.0.0.0.0.0.0.4.4.3
                       prove ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ second $$0 ℤ, ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.4.4.3
                     }
-                    elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+                    inferenceExtraction {
                       prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ = second $$0 apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ = $$$$0 apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.4.4.5.0
                       prove → = second $$0 apply ⍳_ℤ 0ℕ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ second $$0 singleton apply ⍳_ℤ 0ℕ, = second $$0 apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.4.5.1
@@ -286,14 +286,14 @@ subproof (Transitive) {
                   prove = apply ×ℤ orderedPair second $$0 first $0 apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair second $$0 first $0, apply ×ℤ orderedPair first $$0 second $0, apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $0) 3.0.0.0.0.0.0.0.4.5 3.0.0.0.0.0.0.0.4.6
                   elided b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 {
                     prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 3.0.0.0.0.0.0.0.4.8.1.0
                       prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.8.1.1
                       prove ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.8.1.2 3.0.0.0.0.0.0.0.4.8.0
                       prove ∈ second $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ second $0 ℤ, ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.8.1.3
                     }
-                    elided b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 {
+                    inferenceExtraction {
                       prove ∧ = apply ×ℤ orderedPair second $0 apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $0 apply ⍳_ℤ 0ℕ b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 () (second $0) 3.0.0.0.0.0.0.0.4.8.1
                       prove = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $0 apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply ×ℤ orderedPair second $0 apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ, = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $0 apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.8.2.0
                     }
@@ -301,7 +301,7 @@ subproof (Transitive) {
                   prove = apply ×ℤ orderedPair second $$0 first $0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair second $$0 first $0, apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $0, apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0.0.4.7 3.0.0.0.0.0.0.0.4.8
                   elided 07d426b42b42809acbff0ae40cf7a8280c197462baa6259d18f62b04343d7174 {
                     prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.4.10.1.0
                       prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.10.1.1
@@ -309,14 +309,14 @@ subproof (Transitive) {
                       prove ∈ second $$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ second $$0 ℤ, ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.10.1.3
                     }
                     prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.4.10.3.0
                       prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.10.3.1
                       prove ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.10.3.2 3.0.0.0.0.0.0.0.4.10.0
                       prove ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ second $$0 ℤ, ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.10.3.3
                     }
-                    elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+                    inferenceExtraction {
                       prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ = second $$0 apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ = $$$$0 apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.4.10.4.0
                       prove → = second $$0 apply ⍳_ℤ 0ℕ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ second $$0 singleton apply ⍳_ℤ 0ℕ, = second $$0 apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.10.4.1
@@ -332,14 +332,14 @@ subproof (Transitive) {
                   prove = apply ×ℤ orderedPair first $$$0 second $0 apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (first $$$0, apply ⍳_ℤ 0ℕ, apply ×ℤ orderedPair $$$$0 second $0) 3.0.0.0.0.0.0.0.4.4
                   elided b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 {
                     prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 3.0.0.0.0.0.0.0.4.12.1.0
                       prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.12.1.1
                       prove ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.12.1.2 3.0.0.0.0.0.0.0.4.12.0
                       prove ∈ second $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ second $0 ℤ, ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.12.1.3
                     }
-                    elided b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 {
+                    inferenceExtraction {
                       prove ∧ = apply ×ℤ orderedPair second $0 apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $0 apply ⍳_ℤ 0ℕ b2da1888afe5087dc6f709138cc6343f642a69b7d745fdb157f19f862d794020 () (second $0) 3.0.0.0.0.0.0.0.4.12.1
                       prove = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $0 apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply ×ℤ orderedPair second $0 apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ, = apply ×ℤ orderedPair apply ⍳_ℤ 0ℕ second $0 apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.4.12.2.0
                     }
@@ -377,7 +377,7 @@ subproof (Transitive) {
                       elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                         prove ∈ first $$$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0a
                         prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 3.0.0.0.0.0.0.0.5.1.0.0.2.0
                           prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.0.0.2.1
@@ -386,7 +386,7 @@ subproof (Transitive) {
                         }
                         prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                         prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.1.0.0.5.0
                           prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.0.0.5.1
@@ -401,7 +401,7 @@ subproof (Transitive) {
                     elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
                       elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
                         prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 3.0.0.0.0.0.0.0.5.1.1.0.1.0
                           prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.1.0.1.1
@@ -410,7 +410,7 @@ subproof (Transitive) {
                         }
                         prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                         prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.1.1.0.4.0
                           prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.1.0.4.1
@@ -427,7 +427,7 @@ subproof (Transitive) {
                       elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
                         prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                         prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.1.3.0.2.0
                           prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.3.0.2.1
@@ -442,7 +442,7 @@ subproof (Transitive) {
                     elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                       elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                         prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.1.5.0.1.0
                           prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.5.0.1.1
@@ -451,7 +451,7 @@ subproof (Transitive) {
                         }
                         prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                         prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 3.0.0.0.0.0.0.0.5.1.5.0.4.0
                           prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.5.0.4.1
@@ -467,7 +467,7 @@ subproof (Transitive) {
                     elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                       prove ∈ first $$$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0a
                       prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                      elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                      inferenceExtraction {
                         prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                         prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.1.7.2.0
                         prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.7.2.1
@@ -476,7 +476,7 @@ subproof (Transitive) {
                       }
                       prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                       prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
-                      elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                      inferenceExtraction {
                         prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                         prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 3.0.0.0.0.0.0.0.5.1.7.5.0
                         prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.7.5.1
@@ -491,7 +491,7 @@ subproof (Transitive) {
                     elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                       elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                         prove ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$$0) 3.0.0.0.0.0.0.0.5.1.10.0.1.0
                           prove → ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.10.0.1.1
@@ -500,7 +500,7 @@ subproof (Transitive) {
                         }
                         prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                         prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.1.10.0.4.0
                           prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.10.0.4.1
@@ -518,7 +518,7 @@ subproof (Transitive) {
                       elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
                         prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                         prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.1.12.0.2.0
                           prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.12.0.2.1
@@ -552,7 +552,7 @@ subproof (Transitive) {
                       elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                         prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
                         prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.1.16.0.2.0
                           prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.16.0.2.1
@@ -568,7 +568,7 @@ subproof (Transitive) {
                     prove = apply ×ℤ orderedPair apply ×ℤ orderedPair first $$$0 second $0 apply ×ℤ orderedPair first $$0 second $$0 apply ×ℤ orderedPair second $$$0 apply ×ℤ orderedPair first $0 apply ×ℤ orderedPair second $$0 first $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair apply ×ℤ orderedPair first $$$0 second $0 apply ×ℤ orderedPair first $$0 second $$0, apply ×ℤ orderedPair second $$$0 apply ×ℤ orderedPair apply ×ℤ orderedPair first $0 second $$0 first $$0, apply ×ℤ orderedPair second $$$0 apply ×ℤ orderedPair first $0 apply ×ℤ orderedPair second $$0 first $$0) 3.0.0.0.0.0.0.0.5.1.15 3.0.0.0.0.0.0.0.5.1.16
                     elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                       prove ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0a
-                      elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                      inferenceExtraction {
                         prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                         prove ↔ ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$$0) 3.0.0.0.0.0.0.0.5.1.18.1.0
                         prove → ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.18.1.1
@@ -577,7 +577,7 @@ subproof (Transitive) {
                       }
                       prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
                       prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                      elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                      inferenceExtraction {
                         prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                         prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.1.18.4.0
                         prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.18.4.1
@@ -592,7 +592,7 @@ subproof (Transitive) {
                     elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
                       elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
                         prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                        inferenceExtraction {
                           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                           prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.1.20.0.1.0
                           prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.1.20.0.1.1
@@ -609,7 +609,7 @@ subproof (Transitive) {
                   elided 07d426b42b42809acbff0ae40cf7a8280c197462baa6259d18f62b04343d7174 {
                     prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                     prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.2.2.0
                       prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.2.2.1
@@ -617,14 +617,14 @@ subproof (Transitive) {
                       prove ∈ second $$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ second $$0 ℤ, ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.2.2.3
                     }
                     prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.2.4.0
                       prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.2.4.1
                       prove ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.2.4.2 3.0.0.0.0.0.0.0.5.2.3
                       prove ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ second $$0 ℤ, ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.2.4.3
                     }
-                    elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+                    inferenceExtraction {
                       prove ∀ x ↔ ∈ $0 singleton apply ⍳_ℤ 0ℕ = $0 apply ⍳_ℤ 0ℕ 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () (apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ = second $$0 apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ = $$$$0 apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.2.5.0
                       prove → = second $$0 apply ⍳_ℤ 0ℕ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ second $$0 singleton apply ⍳_ℤ 0ℕ, = second $$0 apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.2.5.1
@@ -640,7 +640,7 @@ subproof (Transitive) {
                   elided 12723c6fc7982984ea496be141e256bf4157a4df22cc9173a979d8d60cb8c2a1 {
                     prove ∈ first $$$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0a
                     prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 3.0.0.0.0.0.0.0.5.3.2.0
                       prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.3.2.1
@@ -649,7 +649,7 @@ subproof (Transitive) {
                     }
                     prove ∈ apply ×ℤ orderedPair first $$$0 second $0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (first $$$0, second $0) 3.0.0.0.0.0.0.0.5.3.0 3.0.0.0.0.0.0.0.5.3.2
                     prove ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$$0) 3.0.0.0.0.0.0.0.5.3.5.0
                       prove → ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$$0 ℤ ¬ ∈ second $$$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.3.5.1
@@ -660,7 +660,7 @@ subproof (Transitive) {
                     prove ∈ apply ×ℤ orderedPair second $$$0 first $0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (second $$$0, first $0) 3.0.0.0.0.0.0.0.5.3.5 3.0.0.0.0.0.0.0.5.3.6
                     prove ∈ first $$0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
                     prove ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0a
-                    elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+                    inferenceExtraction {
                       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                       prove ↔ ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$0 ℤ ¬ ∈ $$$$0 singleton apply ⍳_ℤ 0ℕ) (second $$0) 3.0.0.0.0.0.0.0.5.3.10.0
                       prove → ∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $$0 ℤ ¬ ∈ second $$0 singleton apply ⍳_ℤ 0ℕ) () 3.0.0.0.0.0.0.0.5.3.10.1
@@ -682,7 +682,7 @@ subproof (Transitive) {
                   prove ∈ second $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($$$0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0a
                   prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
                   prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0a
-                  elided 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 {
+                  inferenceExtraction {
                     prove ∧ relation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 34362893242eee68b5d21400db43bdd1beec795789f580b220d0d95c03fbf691 () ()
                     prove → ∈ first $$$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair $$$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) (first $$$0) 3.0.0.0.0.0.0.0.7.4.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                     prove ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first $$$0 ℤ, ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first $$$$$$0 $$$0 orderedPair $$0 $0 ~_ℚ = apply ×ℤ orderedPair first $$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 3.0.0.0.0.0.0.0.7.4.1 3.0.0.0.0.0.0.0.7.0

@@ -7,7 +7,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
       prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 0.0.2.0
       prove ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ t0 |ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ t1 |ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair apply ⍳_ℤ 1ℕ t0 |ℤ, ∈ orderedPair apply ⍳_ℤ 1ℕ t1 |ℤ) () 0.0.1 0.0.0
       prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ t0 |ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ t1 |ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 1ℕ ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ t0 |ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ t1 |ℤ) () 0.0.2.1 0.0.2.2
-      elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+      inferenceExtraction {
         prove ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ ∈ orderedPair $$0 t0 |ℤ ∈ orderedPair $$0 t1 |ℤ) ($0, ℤ) 0a
         prove ↔ ∈ apply ⍳_ℤ 1ℕ $0 ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ t0 |ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ t1 |ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 $0 ∧ ∈ $$0 ℤ ∧ ∈ orderedPair $$0 t0 |ℤ ∈ orderedPair $$0 t1 |ℤ) (apply ⍳_ℤ 1ℕ) 0.0.2.4.0
         prove → ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ t0 |ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ t1 |ℤ ∈ apply ⍳_ℤ 1ℕ $0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ apply ⍳_ℤ 1ℕ $0, ∧ ∈ apply ⍳_ℤ 1ℕ ℤ ∧ ∈ orderedPair apply ⍳_ℤ 1ℕ t0 |ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ t1 |ℤ) () 0.0.2.4.1
@@ -20,7 +20,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
     assume ¬ = t0 apply ⍳_ℤ 0ℕ {
       take d {
         assume ∈ $0 $$0 {
-          elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+          inferenceExtraction {
             prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($$0, ℤ) 0a
             prove ↔ ∈ $0 $$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℤ ∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($0) 0.2.0.0.0.0.0
             prove → ∈ $0 $$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$0, ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ) () 0.2.0.0.0.0.1
@@ -29,7 +29,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
           }
           elided d02bc693aae45ecce1c53a5e5073f1cbfd4e813c0911b3236b4db68ccca25c45 {
             prove ⊆ $$0 ℤ a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($$0, ℤ) 0a
-            elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+            inferenceExtraction {
               prove ∀ x → ∈ $0 $$$0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () ($$0, ℤ) 0.2.0.0.0.1.0
               prove → ∈ $0 $$0 ∈ $0 ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 $$0 ∈ $$$0 ℤ) ($0) 0.2.0.0.0.1.1.0
               prove ∈ $0 ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$0, ∈ $0 ℤ) () 0.2.0.0.0.1.1.1 0.2.0.0.0a
@@ -42,7 +42,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
         }
       }
       elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-        elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
+        inferenceExtraction {
           prove ∧ ∈ absZ t0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t0) p0
           prove ∈ absZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ t0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0) () 0.2.0.1.0.0
         }
@@ -53,7 +53,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
     assume ¬ = t1 apply ⍳_ℤ 0ℕ {
       take d {
         assume ∈ $0 $$0 {
-          elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+          inferenceExtraction {
             prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($$0, ℤ) 0a
             prove ↔ ∈ $0 $$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℤ ∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($0) 0.2.1.0.0.0.0
             prove → ∈ $0 $$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$0, ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ) () 0.2.1.0.0.0.1
@@ -62,7 +62,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
           }
           elided d02bc693aae45ecce1c53a5e5073f1cbfd4e813c0911b3236b4db68ccca25c45 {
             prove ⊆ $$0 ℤ a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($$0, ℤ) 0a
-            elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+            inferenceExtraction {
               prove ∀ x → ∈ $0 $$$0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () ($$0, ℤ) 0.2.1.0.0.1.0
               prove → ∈ $0 $$0 ∈ $0 ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 $$0 ∈ $$$0 ℤ) ($0) 0.2.1.0.0.1.1.0
               prove ∈ $0 ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$0, ∈ $0 ℤ) () 0.2.1.0.0.1.1.1 0.2.1.0.0a
@@ -75,7 +75,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
         }
       }
       elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-        elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
+        inferenceExtraction {
           prove ∧ ∈ absZ t1 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ ∨ = absZ t1 t1 = absZ t1 negatedZ t1 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t1) p1
           prove ∈ absZ t1 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ t1 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ ∨ = absZ t1 t1 = absZ t1 negatedZ t1) () 0.2.1.1.0.0
         }
@@ -90,7 +90,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
     prove ∃ b ∧ ∈ $0 $$0 ∀ s → ∈ $0 $$$0 ∈ orderedPair $0 $$0 ≤ℤ a56e497243c5b388453b33bd647ef862db00b192b91bfb4b81a611c798d311c3 () ($0) 0.3.0 0.1 0.2
   }
   let c ∧ ∈ $0 $$0 ∀ s → ∈ $0 $$$0 ∈ orderedPair $0 $$0 ≤ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 $0 ∀ s → ∈ $0 $$0 ∈ orderedPair $0 $$$0 ≤ℤ, ∃! c ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∧ ∈ orderedPair $0 t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ orderedPair $0 $$0 ≤ℤ) () {
-    elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+    inferenceExtraction {
       prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($$0, ℤ) 0a
       prove ↔ ∈ $0 $$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℤ ∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($0) 0.4.0.0
       prove → ∈ $0 $$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$0, ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ) () 0.4.0.1
@@ -106,7 +106,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
         prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
         prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.4.1.1.0
         prove ⊆ $$0 ℤ a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($$0, ℤ) 0a
-        elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+        inferenceExtraction {
           prove ∀ x → ∈ $0 $$$0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () ($$0, ℤ) 0.4.1.1.2
           prove → ∈ $0 $$0 ∈ $0 ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 $$0 ∈ $$$0 ℤ) ($0) 0.4.1.1.3.0
           prove ∈ $0 ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$0, ∈ $0 ℤ) () 0.4.1.1.3.1 0.4a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -114,12 +114,12 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
         elided 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d {
           elided 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d {
             prove ⊆ $$0 ℤ a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($$0, ℤ) 0a
-            elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+            inferenceExtraction {
               prove ∀ x → ∈ $0 $$$0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () ($$0, ℤ) 0.4.1.1.4.0.0
               prove → ∈ apply ⍳_ℤ 1ℕ $$0 ∈ apply ⍳_ℤ 1ℕ ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 $$0 ∈ $$$0 ℤ) (apply ⍳_ℤ 1ℕ) 0.4.1.1.4.0.1.0
               prove ∈ apply ⍳_ℤ 1ℕ ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ 1ℕ $$0, ∈ apply ⍳_ℤ 1ℕ ℤ) () 0.4.1.1.4.0.1.1 0.0
             }
-            elided 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d {
+            inferenceExtraction {
               prove ∧ = apply +ℤ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ = apply +ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ apply ⍳_ℤ 1ℕ 93525a2a21fbe32d6f4150f10506c1028644bac0e81a61e0f19763d363291e7d () (apply ⍳_ℤ 1ℕ) 0.4.1.1.4.0.1
               prove = apply ⍳_ℤ 1ℕ apply +ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℤ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 1ℕ, apply ⍳_ℤ 1ℕ) 0.4.1.1.4.0.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             }
@@ -139,7 +139,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
           assume ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ {
             elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
               prove ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 ℤ, ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ) () 0.4.2.0.0a 0.4.2.0.0.0a
-              elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+              inferenceExtraction {
                 prove ∀ y ↔ ∈ $0 $$$$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ ∈ orderedPair $$$$0 t0 |ℤ ∈ orderedPair $$$$0 t1 |ℤ) ($$$0, ℤ) 0a
                 prove ↔ ∈ $0 $$$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 $$$0 ∧ ∈ $$$$0 ℤ ∧ ∈ orderedPair $$$$0 t0 |ℤ ∈ orderedPair $$$$0 t1 |ℤ) ($0) 0.4.2.0.0.0.0.1.0
                 prove → ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ $0 $$$0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $0 $$$0, ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ) () 0.4.2.0.0.0.0.1.1
@@ -160,7 +160,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
           elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
             prove ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $0 t0 |ℤ, ∈ orderedPair $0 t1 |ℤ) () 0.4.3.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.4.3.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             prove ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 ℤ, ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ) () 0.4.3.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.4.3.0.0.0.0
-            elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+            inferenceExtraction {
               prove ∀ y ↔ ∈ $0 $$$$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ ∈ orderedPair $$$$0 t0 |ℤ ∈ orderedPair $$$$0 t1 |ℤ) ($$$0, ℤ) 0a
               prove ↔ ∈ $0 $$$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 $$$0 ∧ ∈ $$$$0 ℤ ∧ ∈ orderedPair $$$$0 t0 |ℤ ∈ orderedPair $$$$0 t1 |ℤ) ($0) 0.4.3.0.0.0.2.0
               prove → ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ $0 $$$0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ $0 $$$0, ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ) () 0.4.3.0.0.0.2.1
@@ -173,7 +173,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
           }
           elided (Extracted) {
             prove ⊆ $$$0 ℤ a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (∧ ∈ orderedPair $$$$0 t0 |ℤ ∈ orderedPair $$$$0 t1 |ℤ) ($$$0, ℤ) 0a
-            elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+            inferenceExtraction {
               prove ∀ x → ∈ $0 $$$$0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () ($$$0, ℤ) 0.4.3.0.0.2.0
               prove → ∈ $$0 $$$0 ∈ $$0 ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 $$$0 ∈ $$$$0 ℤ) ($$0) 0.4.3.0.0.2.1.0
               prove ∈ $$0 ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 $$$0, ∈ $$0 ℤ) () 0.4.3.0.0.2.1.1 0.4a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -185,7 +185,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
             }
           }
           elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
-            elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+            inferenceExtraction {
               prove ∀ y ↔ ∈ $0 $$$$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ ∈ orderedPair $$$$0 t0 |ℤ ∈ orderedPair $$$$0 t1 |ℤ) ($$$0, ℤ) 0a
               prove ↔ ∈ $$0 $$$0 ∧ ∈ $$0 ℤ ∧ ∈ orderedPair $$0 t0 |ℤ ∈ orderedPair $$0 t1 |ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 $$$0 ∧ ∈ $$$$0 ℤ ∧ ∈ orderedPair $$$$0 t0 |ℤ ∈ orderedPair $$$$0 t1 |ℤ) ($$0) 0.4.3.0.0.3.0.0
               prove → ∈ $$0 $$$0 ∧ ∈ $$0 ℤ ∧ ∈ orderedPair $$0 t0 |ℤ ∈ orderedPair $$0 t1 |ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $$0 $$$0, ∧ ∈ $$0 ℤ ∧ ∈ orderedPair $$0 t0 |ℤ ∈ orderedPair $$0 t1 |ℤ) () 0.4.3.0.0.3.0.1
@@ -193,15 +193,22 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
               prove ∈ $$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $$0 ℤ, ∧ ∈ orderedPair $$0 t0 |ℤ ∈ orderedPair $$0 t1 |ℤ) () 0.4.3.0.0.3.0.3
             }
             prove ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $0 $$0 ≤ℤ, ∈ orderedPair $$0 $0 ≤ℤ) () 0.4.3.0.0.1 0.4.3.0.0.2
-            elided 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 {
+            inferenceExtraction {
               prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
-              prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 0.4.3.0.0.3.2.0
-              prove ∧ relation ≤ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 5a0a54f24273485bc6a1cfcb0f67d3542cdb926c7865f180b339c8f5881cc581 () (≤ℤ, ℤ) 0.4.3.0.0.3.2.1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$$$$0 $0 ≤ℤ ∈ orderedPair $0 $$$$$0 ≤ℤ = $$$$$0 $0) ($0) 0.4.3.0.0.3.2.2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℤ, ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0) () 0.4.3.0.0.3.2.3 0.4.3.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-              prove → ∈ $$0 ℤ → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ → ∧ ∈ orderedPair $0 $$$$0 ≤ℤ ∈ orderedPair $$$$0 $0 ≤ℤ = $0 $$$$0) ($$0) 0.4.3.0.0.3.2.4
-              prove → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℤ, → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0) () 0.4.3.0.0.3.2.5 0.4.3.0.0.3.0
-              prove = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ, = $0 $$0) () 0.4.3.0.0.3.2.6 0.4.3.0.0.3.1
+              inferenceExtraction {
+                prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 0.4.3.0.0.3.2.0
+                prove ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ, completeRelation ≤ℤ ℤ) () 0.4.3.0.0.3.2.1.0
+                prove ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ, transitiveRelation ≤ℤ ℤ) () 0.4.3.0.0.3.2.1.1
+                prove antisymmetricRelation ≤ℤ ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation ≤ℤ ℤ, antisymmetricRelation ≤ℤ ℤ) () 0.4.3.0.0.3.2.1.2
+              }
+              inferenceExtraction {
+                prove ∧ relation ≤ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 5a0a54f24273485bc6a1cfcb0f67d3542cdb926c7865f180b339c8f5881cc581 () (≤ℤ, ℤ) 0.4.3.0.0.3.2.1
+                prove → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$$$$0 $0 ≤ℤ ∈ orderedPair $0 $$$$$0 ≤ℤ = $$$$$0 $0) ($0) 0.4.3.0.0.3.2.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                prove ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℤ, ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0) () 0.4.3.0.0.3.2.2.1 0.4.3.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                prove → ∈ $$0 ℤ → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ → ∧ ∈ orderedPair $0 $$$$0 ≤ℤ ∈ orderedPair $$$$0 $0 ≤ℤ = $0 $$$$0) ($$0) 0.4.3.0.0.3.2.2.2
+                prove → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℤ, → ∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ = $0 $$0) () 0.4.3.0.0.3.2.2.3 0.4.3.0.0.3.0
+                prove = $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ orderedPair $0 $$0 ≤ℤ ∈ orderedPair $$0 $0 ≤ℤ, = $0 $$0) () 0.4.3.0.0.3.2.2.4 0.4.3.0.0.3.1
+              }
             }
           }
         }
@@ -209,7 +216,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
     }
     elided f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 {
       prove ⊆ $$0 ℤ a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($$0, ℤ) 0a
-      elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+      inferenceExtraction {
         prove ∀ x → ∈ $0 $$$0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () ($$0, ℤ) 0.4.4.0
         prove → ∈ $0 $$0 ∈ $0 ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 $$0 ∈ $$$0 ℤ) ($0) 0.4.4.1.0
         prove ∈ $0 ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$0, ∈ $0 ℤ) () 0.4.4.1.1 0.4a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a

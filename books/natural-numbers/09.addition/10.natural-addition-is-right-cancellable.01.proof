@@ -1,14 +1,14 @@
 assume = apply +ℕ orderedPair t0 0ℕ apply +ℕ orderedPair t1 0ℕ {
   elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
     elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
-      elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+      inferenceExtraction {
         prove ∧ = apply +ℕ orderedPair t0 0ℕ t0 = apply +ℕ orderedPair 0ℕ t0 t0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (t0) p0
         prove = apply +ℕ orderedPair t0 0ℕ t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply +ℕ orderedPair t0 0ℕ t0, = apply +ℕ orderedPair 0ℕ t0 t0) () 0.0.0.0.0
       }
       prove = t0 apply +ℕ orderedPair t1 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $0 apply +ℕ orderedPair t1 0ℕ) (apply +ℕ orderedPair t0 0ℕ, t0) 0.0.0.0 0a
     }
     elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
-      elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+      inferenceExtraction {
         prove ∧ = apply +ℕ orderedPair t1 0ℕ t1 = apply +ℕ orderedPair 0ℕ t1 t1 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (t1) p1
         prove = apply +ℕ orderedPair t1 0ℕ t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply +ℕ orderedPair t1 0ℕ t1, = apply +ℕ orderedPair 0ℕ t1 t1) () 0.0.1.0.0
       }
@@ -27,7 +27,7 @@ take x {
         prove = successor apply +ℕ orderedPair t0 $0 apply +ℕ orderedPair t1 successor $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (successor apply +ℕ orderedPair t0 $0, apply +ℕ orderedPair t0 successor $0, apply +ℕ orderedPair t1 successor $0) 1.0.0.0.0 1.0.0.0a
         prove = apply +ℕ orderedPair t1 successor $0 successor apply +ℕ orderedPair t1 $0 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 () (t1, $0) p1 1.0a
         prove = successor apply +ℕ orderedPair t0 $0 successor apply +ℕ orderedPair t1 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (successor apply +ℕ orderedPair t0 $0, apply +ℕ orderedPair t1 successor $0, successor apply +ℕ orderedPair t1 $0) 1.0.0.0.1 1.0.0.0.2
-        elided 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd {
+        inferenceExtraction {
           prove ∀ n ∀ m ↔ = successor $$0 successor $0 = $$0 $0 27b78a293b02263cd9b1049c3ab98fc8c47043e80a8306a73a35589435d57ccd () ()
           prove ∀ m ↔ = successor apply +ℕ orderedPair t0 $$0 successor $0 = apply +ℕ orderedPair t0 $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ = successor $$$0 successor $0 = $$$0 $0) (apply +ℕ orderedPair t0 $0) 1.0.0.0.4.0
           prove ↔ = successor apply +ℕ orderedPair t0 $0 successor apply +ℕ orderedPair t1 $0 = apply +ℕ orderedPair t0 $0 apply +ℕ orderedPair t1 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ = successor apply +ℕ orderedPair t0 $0 successor $$0 = apply +ℕ orderedPair t0 $0 $$0) (apply +ℕ orderedPair t1 $0) 1.0.0.0.4.1

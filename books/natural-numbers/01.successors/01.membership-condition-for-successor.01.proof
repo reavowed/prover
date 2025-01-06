@@ -1,11 +1,11 @@
 take n {
   take m {
-    elided 6df17685ff2fcdfe09e7677621a4ee11bf84d2594d923cf2839b7c7388bf089d {
+    inferenceExtraction {
       prove ∀ x ↔ ∈ $0 ∪ $$$0 singleton $$$0 ∨ ∈ $0 $$$0 ∈ $0 singleton $$$0 6df17685ff2fcdfe09e7677621a4ee11bf84d2594d923cf2839b7c7388bf089d () ($$0, singleton $$0)
       prove ↔ ∈ $0 ∪ $$0 singleton $$0 ∨ ∈ $0 $$0 ∈ $0 singleton $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 ∪ $$0 singleton $$0 ∨ ∈ $$$0 $$0 ∈ $$$0 singleton $$0) ($0) 0.0.0.0
     }
     elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
-      elided 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 {
+      inferenceExtraction {
         prove ∀ x ↔ ∈ $0 singleton $$$0 = $0 $$$0 19e511af33b9278a59a765d4b36d99c1e7725ab7eeb23390bf272ad621a42ff1 () ($$0)
         prove ↔ ∈ $0 singleton $$0 = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 singleton $$0 = $$$0 $$0) ($0) 0.0.1.0.0
       }

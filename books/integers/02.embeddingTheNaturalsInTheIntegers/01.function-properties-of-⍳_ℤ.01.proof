@@ -13,7 +13,7 @@ subproof (Function) {
 subproof (Function value) {
   take n {
     assume ∈ $0 ℕ {
-      elided 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 {
+      inferenceExtraction {
         prove ∀ a → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 () (⍳_ℤ, ℕ, equivalenceClass orderedPair $$0 0ℕ ~_ℤ) 0
         prove → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ = apply ⍳_ℤ $$0 equivalenceClass orderedPair $$0 0ℕ ~_ℤ) ($0) 2.0.0.0.0
         prove = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 2.0.0.0.1 2.0.0a
@@ -51,14 +51,14 @@ subproof (Injective) {
             }
             elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
               elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
-                elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+                inferenceExtraction {
                   prove ∧ = apply +ℕ orderedPair $$0 0ℕ $$0 = apply +ℕ orderedPair 0ℕ $$0 $$0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () ($$0) 3.0.0a
                   prove = apply +ℕ orderedPair $$0 0ℕ $$0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply +ℕ orderedPair $$0 0ℕ $$0, = apply +ℕ orderedPair 0ℕ $$0 $$0) () 3.0.0.0.0.0.4.0.0.0
                 }
                 prove = $$0 apply +ℕ orderedPair 0ℕ $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$0 apply +ℕ orderedPair 0ℕ $0) (apply +ℕ orderedPair $$0 0ℕ, $$0) 3.0.0.0.0.0.4.0.0 3.0.0.0.0.0.3
               }
               elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
-                elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+                inferenceExtraction {
                   prove ∧ = apply +ℕ orderedPair $0 0ℕ $0 = apply +ℕ orderedPair 0ℕ $0 $0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () ($0) 3.0.0.0.0a
                   prove = apply +ℕ orderedPair 0ℕ $0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply +ℕ orderedPair $0 0ℕ $0, = apply +ℕ orderedPair 0ℕ $0 $0) () 3.0.0.0.0.0.4.1.0.0
                 }

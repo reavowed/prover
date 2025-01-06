@@ -20,7 +20,7 @@ let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594
             }
             elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
               prove ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair $$0 $0 product t0 t1, with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 0.0.1.0.1.0.0 0.0.1.0.1.0.2
-              elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+              inferenceExtraction {
                 prove ∀ y ↔ ∈ $0 $$$$0 ∧ ∈ $0 product t0 t1 with (first $0 second $0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with (first $$$$0 second $$$$0) s0) ($$$0, product t0 t1) 0a
                 prove ↔ ∈ orderedPair $$0 $0 $$$0 ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 $$$0 ∧ ∈ $$$$0 product t0 t1 with (first $$$$0 second $$$$0) s0) (orderedPair $$0 $0) 0.0.1.0.1.0.3.1.0
                 prove → ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 ∈ orderedPair $$0 $0 $$$0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair $$0 $0 $$$0, ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 0.0.1.0.1.0.3.1.1
@@ -29,7 +29,7 @@ let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594
             }
           }
           assume ∈ orderedPair $$0 $0 $$$0 {
-            elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+            inferenceExtraction {
               prove ∀ y ↔ ∈ $0 $$$$0 ∧ ∈ $0 product t0 t1 with (first $0 second $0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with (first $$$$0 second $$$$0) s0) ($$$0, product t0 t1) 0a
               prove ↔ ∈ orderedPair $$0 $0 $$$0 ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 $$$0 ∧ ∈ $$$$0 product t0 t1 with (first $$$$0 second $$$$0) s0) (orderedPair $$0 $0) 0.0.1.0.1.1.0.0
               prove → ∈ orderedPair $$0 $0 $$$0 ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 $$$0, ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 0.0.1.0.1.1.0.1
@@ -37,7 +37,7 @@ let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594
               prove ∈ orderedPair $$0 $0 product t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ orderedPair $$0 $0 product t0 t1, with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 0.0.1.0.1.1.0.3
             }
             prove ∈ $0 t1 6cd156e422d6cfba504e0632433c59f2eac64b90aec16bce29bd31ef9780c1dc () ($$0, $0, t0, t1) 0.0.1.0.1.1.0
-            elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+            inferenceExtraction {
               prove ∀ y ↔ ∈ $0 $$$$0 ∧ ∈ $0 product t0 t1 with (first $0 second $0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with (first $$$$0 second $$$$0) s0) ($$$0, product t0 t1) 0a
               prove ↔ ∈ orderedPair $$0 $0 $$$0 ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 $$$0 ∧ ∈ $$$$0 product t0 t1 with (first $$$$0 second $$$$0) s0) (orderedPair $$0 $0) 0.0.1.0.1.1.2.0
               prove → ∈ orderedPair $$0 $0 $$$0 ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 $$$0, ∧ ∈ orderedPair $$0 $0 product t0 t1 with (first orderedPair $$0 $0 second orderedPair $$0 $0) s0) () 0.0.1.0.1.1.2.1
@@ -79,7 +79,7 @@ let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594
           prove ∈ $0 domain $$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$$0) (t0, domain $$0) 0.1.0.0.0.0 0.1.0.0a
           prove ∈ orderedPair $0 apply $$0 $0 $$0 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb () ($$0, $0) 0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.0.0.1
         }
-        elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
+        inferenceExtraction {
           prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 product t0 t1 with (first $0 second $0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with (first $$$0 second $$$0) s0) ($$0, product t0 t1) 0a
           prove ↔ ∈ orderedPair $0 apply $$0 $0 $$0 ∧ ∈ orderedPair $0 apply $$0 $0 product t0 t1 with (first orderedPair $0 apply $$0 $0 second orderedPair $0 apply $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 product t0 t1 with (first $$$0 second $$$0) s0) (orderedPair $0 apply $$0 $0) 0.1.0.0.1.0
           prove → ∈ orderedPair $0 apply $$0 $0 $$0 ∧ ∈ orderedPair $0 apply $$0 $0 product t0 t1 with (first orderedPair $0 apply $$0 $0 second orderedPair $0 apply $$0 $0) s0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $0 apply $$0 $0 $$0, ∧ ∈ orderedPair $0 apply $$0 $0 product t0 t1 with (first orderedPair $0 apply $$0 $0 second orderedPair $0 apply $$0 $0) s0) () 0.1.0.0.1.1

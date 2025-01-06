@@ -3,12 +3,12 @@ let S^- = $0 replacementSet s t0 negatedZ $0 70db594f573e921867af9e9ef002f3a90d2
     take a {
       assume ∈ $0 t0 {
         elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
-          elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+          inferenceExtraction {
             prove ∀ x → ∈ $0 t0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, ℤ) p0
             prove → ∈ $0 t0 ∈ $0 ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t0 ∈ $$$0 ℤ) ($0) 0.0.0.0.0.0.0
             prove ∈ $0 ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, ∈ $0 ℤ) () 0.0.0.0.0.0.1 0.0.0.0a
           }
-          elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+          inferenceExtraction {
             prove ∧ ∈ negatedZ $0 ℤ ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () ($0) 0.0.0.0.0.0
             prove ∈ negatedZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $0 ℤ, ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ) () 0.0.0.0.0.1.0
           }
@@ -28,11 +28,11 @@ let S^- = $0 replacementSet s t0 negatedZ $0 70db594f573e921867af9e9ef002f3a90d2
     let b ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $0 $$0 ≤ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $0 $$$0 ≤ℤ, ∃ b ∧ ∈ $0 ℤ ∀ s → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℤ) () {
       take s^- {
         assume ∈ $0 $$$0 {
-          elided a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec {
+          inferenceExtraction {
             prove ∀ s ↔ ∈ $0 $$$$0 ∃ s ∧ ∈ $0 t0 = $$0 negatedZ $0 a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec () ($$$0, t0, negatedZ $$$$0) 0a
             prove ↔ ∈ $0 $$$0 ∃ s ∧ ∈ $0 t0 = $$0 negatedZ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 $$$0 ∃ s ∧ ∈ $0 t0 = $$$$$0 negatedZ $0) ($0) 0.3.0.0.0.0.0
-            prove → ∈ $0 $$$0 ∃ s ∧ ∈ $0 t0 = $$0 negatedZ $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$$0, ∃ a ∧ ∈ $0 t0 = $$0 negatedZ $0) () 0.3.0.0.0.0.1
-            prove ∃ s ∧ ∈ $0 t0 = $$0 negatedZ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$$0, ∃ a ∧ ∈ $0 t0 = $$0 negatedZ $0) () 0.3.0.0.0.0.2 0.3.0.0.0a
+            prove → ∈ $0 $$$0 ∃ s ∧ ∈ $0 t0 = $$0 negatedZ $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$$0, ∃ s ∧ ∈ $0 t0 = $$0 negatedZ $0) () 0.3.0.0.0.0.1
+            prove ∃ s ∧ ∈ $0 t0 = $$0 negatedZ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$$0, ∃ s ∧ ∈ $0 t0 = $$0 negatedZ $0) () 0.3.0.0.0.0.2 0.3.0.0.0a
           }
           let s ∧ ∈ $0 t0 = $$0 negatedZ $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 t0 = $0 negatedZ $$$$0, ∈ orderedPair negatedZ $$0 $0 ≤ℤ) () {
             existingStatementExtraction {
@@ -40,7 +40,7 @@ let S^- = $0 replacementSet s t0 negatedZ $0 70db594f573e921867af9e9ef002f3a90d2
               prove ∈ orderedPair $0 $$$0 ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, ∈ orderedPair $0 $$$0 ≤ℤ) () 0.3.0.0.0.1.0.0 0.3.0.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             }
             elided e9cba88319c97cee2cf101df1c74e1c466acc093f2a71f0d1149afac3211be7e {
-              elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+              inferenceExtraction {
                 prove ∀ x → ∈ $0 t0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, ℤ) p0
                 prove → ∈ $0 t0 ∈ $0 ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 t0 ∈ $$$$$0 ℤ) ($0) 0.3.0.0.0.1.1.0.0
                 prove ∈ $0 ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, ∈ $0 ℤ) () 0.3.0.0.0.1.1.0.1 0.3.0.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -59,7 +59,7 @@ let S^- = $0 replacementSet s t0 negatedZ $0 70db594f573e921867af9e9ef002f3a90d2
         }
       }
       elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
-        elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+        inferenceExtraction {
           prove ∧ ∈ negatedZ $0 ℤ ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () ($0) 0.3.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           prove ∈ negatedZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $0 ℤ, ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ) () 0.3.0.1.0.0
         }
@@ -70,11 +70,11 @@ let S^- = $0 replacementSet s t0 negatedZ $0 70db594f573e921867af9e9ef002f3a90d2
   }
   prove ∃ b ∧ ∈ $0 $$0 ∀ s → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℤ 1e853485b705086897f309e1ce6a8ed3fe6c809648b435aaec2663b0b626b278 () ($0) 0.1 0.2 0.3
   let b^- ∧ ∈ $0 $$0 ∀ s → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 $0 ∀ s → ∈ $0 $$0 ∈ orderedPair $$$0 $0 ≤ℤ, ∃ b ∧ ∈ $0 t0 ∀ s → ∈ $0 t0 ∈ orderedPair $0 $$0 ≤ℤ) () {
-    elided a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec {
+    inferenceExtraction {
       prove ∀ s ↔ ∈ $0 $$$0 ∃ b ∧ ∈ $0 t0 = $$0 negatedZ $0 a3f282079afb1fa8f19f1ec41d266e04f42bbbfda380567062641fe163fab6ec () ($$0, t0, negatedZ $$$0) 0a
       prove ↔ ∈ $0 $$0 ∃ b ∧ ∈ $0 t0 = $$0 negatedZ $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∃ b ∧ ∈ $0 t0 = $$$$0 negatedZ $0) ($0) 0.5.0.0
-      prove → ∈ $0 $$0 ∃ b ∧ ∈ $0 t0 = $$0 negatedZ $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$0, ∃ a ∧ ∈ $0 t0 = $$0 negatedZ $0) () 0.5.0.1
-      prove ∃ b ∧ ∈ $0 t0 = $$0 negatedZ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$0, ∃ a ∧ ∈ $0 t0 = $$0 negatedZ $0) () 0.5.0.2 0.5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      prove → ∈ $0 $$0 ∃ b ∧ ∈ $0 t0 = $$0 negatedZ $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 $$0, ∃ b ∧ ∈ $0 t0 = $$0 negatedZ $0) () 0.5.0.1
+      prove ∃ b ∧ ∈ $0 t0 = $$0 negatedZ $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$0, ∃ b ∧ ∈ $0 t0 = $$0 negatedZ $0) () 0.5.0.2 0.5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
     }
     let b ∧ ∈ $0 t0 = $$0 negatedZ $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 t0 = $0 negatedZ $$$0, ∃ b ∧ ∈ $0 t0 ∀ s → ∈ $0 t0 ∈ orderedPair $0 $$0 ≤ℤ) () {
       take s {
@@ -86,12 +86,12 @@ let S^- = $0 replacementSet s t0 negatedZ $0 70db594f573e921867af9e9ef002f3a90d2
           }
           prove ∈ orderedPair negatedZ $$0 negatedZ $0 ≤ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$0 negatedZ $0 ≤ℤ) ($$$0, negatedZ $$0) 0.5.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.5.1.0.0.1
           elided e9cba88319c97cee2cf101df1c74e1c466acc093f2a71f0d1149afac3211be7e {
-            elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+            inferenceExtraction {
               prove ∀ x → ∈ $0 t0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, ℤ) p0
               prove → ∈ $0 t0 ∈ $0 ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 t0 ∈ $$$$$0 ℤ) ($0) 0.5.1.0.0.3.0.0
               prove ∈ $0 ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, ∈ $0 ℤ) () 0.5.1.0.0.3.0.1 0.5.1.0.0a
             }
-            elided 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 {
+            inferenceExtraction {
               prove ∀ x → ∈ $0 t0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t0, ℤ) p0
               prove → ∈ $$0 t0 ∈ $$0 ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 t0 ∈ $$$$$0 ℤ) ($$0) 0.5.1.0.0.3.1.0
               prove ∈ $$0 ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 t0, ∈ $$0 ℤ) () 0.5.1.0.0.3.1.1 0.5.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a

@@ -8,7 +8,7 @@ elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
       prove injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (injectiveFunction ⍳_ℤ, surjectiveFunction ⍳_ℤ ℕ ℤ^≥0) () 1.0.1.1
     }
     prove ∧ function ⍳_ℤ injectiveFunction ⍳_ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function ⍳_ℤ, injectiveFunction ⍳_ℤ) () 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1
-    elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
+    inferenceExtraction {
       prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ bijectiveFunction inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction domain ⍳_ℤ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction codomain ⍳_ℤ 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 () (⍳_ℤ) 1.0.2
       prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ bijectiveFunction inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ bijectiveFunction inverseFunction ⍳_ℤ codomain ⍳_ℤ domain ⍳_ℤ, ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction domain ⍳_ℤ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction codomain ⍳_ℤ) () 1.0.3.0
     }
@@ -44,7 +44,7 @@ elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
 }
 elided aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 {
   prove ∧ ∈ t0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ) () p0 p1
-  elided aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 {
+  inferenceExtraction {
     prove ∀ a ↔ ∈ $0 ℤ^≥0 ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 () ()
     prove ↔ ∈ t0 ℤ^≥0 ∧ ∈ t0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 ℤ^≥0 ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ) (t0) 2.1.0
     prove → ∧ ∈ t0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ ∈ t0 ℤ^≥0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ t0 ℤ^≥0, ∧ ∈ t0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ) () 2.1.1

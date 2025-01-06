@@ -8,13 +8,13 @@ take x {
       prove ↔ = $$0 orderedPair $0 apply t0 $0 = $$0 orderedPair $0 apply t3 $0 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (= $$0 orderedPair $0 $$$0) (apply t0 $0, apply t3 $0) 0.0.0.0
     }
   }
-  elided 5f1c20a8f8a861577492998961522fd8f3eb442c87c4f477900cf27d1618789c {
+  inferenceExtraction {
     prove ∀ x ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t0 $0 5f1c20a8f8a861577492998961522fd8f3eb442c87c4f477900cf27d1618789c () (t0, t1, t2) p0
     prove ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∃ a ∧ ∈ $0 t1 = $$$0 orderedPair $0 apply t0 $0) ($0) 0.1.0
   }
   prove ↔ ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t0 $0 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t3 $0 4cb43000bb83d45aed68b3fcf827f03cdf4bf5f595e8b72cf4c3579ba2807c53 (∈ $$0 t1, = $0 orderedPair $$0 apply t0 $$0, = $0 orderedPair $$0 apply t3 $$0) () 0.0
   prove ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t3 $0 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ $0 t0, ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t0 $0, ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t3 $0) () 0.1 0.2
-  elided 5f1c20a8f8a861577492998961522fd8f3eb442c87c4f477900cf27d1618789c {
+  inferenceExtraction {
     prove ∀ x ↔ ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t3 $0 5f1c20a8f8a861577492998961522fd8f3eb442c87c4f477900cf27d1618789c () (t3, t1, t2) p1
     prove ↔ ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t3 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t3 ∃ a ∧ ∈ $0 t1 = $$$0 orderedPair $0 apply t3 $0) ($0) 0.4.0
     prove ↔ ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t3 $0 ∈ $0 t3 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ $0 t3, ∃ a ∧ ∈ $0 t1 = $$0 orderedPair $0 apply t3 $0) () 0.4.1

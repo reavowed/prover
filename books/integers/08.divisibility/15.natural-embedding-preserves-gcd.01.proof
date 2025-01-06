@@ -1,6 +1,6 @@
 elided de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 {
   assume ∈ orderedPair 0ℕ t0 <ℕ {
-    elided de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 {
+    inferenceExtraction {
       prove ⊕ = t0 0ℕ ∈ orderedPair 0ℕ t0 <ℕ de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 () (t0) p0
       prove ¬ = t0 0ℕ cd6001b6685e6efd134062cc83085a05f31e3c2e205f0db675e8a53aadfe8a86 (= t0 0ℕ, ∈ orderedPair 0ℕ t0 <ℕ) () 0.0.0.0 0.0a
     }
@@ -14,7 +14,7 @@ elided de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 {
     }
   }
   assume ∈ orderedPair 0ℕ t1 <ℕ {
-    elided de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 {
+    inferenceExtraction {
       prove ⊕ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 () (t1) p1
       prove ¬ = t1 0ℕ cd6001b6685e6efd134062cc83085a05f31e3c2e205f0db675e8a53aadfe8a86 (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 0.1.0.0 0.1a
     }
@@ -51,18 +51,18 @@ inferenceExtraction {
 take d {
   assume ∈ $0 ℤ {
     assume ∧ ∈ orderedPair $0 apply ⍳_ℤ t0 |ℤ ∈ orderedPair $0 apply ⍳_ℤ t1 |ℤ {
-      elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
+      inferenceExtraction {
         prove ∧ ∈ absZ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($0) 5.0a
         prove ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ absZ $0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0) () 5.0.0.0.0
         prove ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ, ∨ = absZ $0 $0 = absZ $0 negatedZ $0) () 5.0.0.0.1
       }
       elided aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 {
-        elided d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d {
+        inferenceExtraction {
           prove ∧ ∈ absZ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($0) 5.0a
           prove ∈ absZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ $0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0) () 5.0.0.1.0.0
         }
         prove ∧ ∈ absZ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ absZ $0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ) () 5.0.0.1.0 5.0.0.0
-        elided aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 {
+        inferenceExtraction {
           prove ∀ a ↔ ∈ $0 ℤ^≥0 ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ aa500dd0926346f7a688bb1a3f73f66f6b8af8c7e3748b2e3a81ec314c86cb21 () ()
           prove ↔ ∈ absZ $0 ℤ^≥0 ∧ ∈ absZ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 ℤ^≥0 ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 ≤ℤ) (absZ $0) 5.0.0.1.2.0
           prove → ∧ ∈ absZ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∈ absZ $0 ℤ^≥0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ absZ $0 ℤ^≥0, ∧ ∈ absZ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ) () 5.0.0.1.2.1
@@ -88,7 +88,7 @@ take d {
       elided a9ca11d9fe5c42494a321e7174c6092afca266f7e5c782fcc29bef2f721d20d3 {
         elided 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 {
           prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 () ()
-          elided 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df {
+          inferenceExtraction {
             prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df () (⍳_ℤ, ℕ, ℤ^≥0) 5.0.0.4.0.0
             prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ, ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0) () 5.0.0.4.0.1.0
             prove ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ) () 5.0.0.4.0.1.1
@@ -125,7 +125,7 @@ take d {
         }
         elided a9ca11d9fe5c42494a321e7174c6092afca266f7e5c782fcc29bef2f721d20d3 {
           prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 () ()
-          elided 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df {
+          inferenceExtraction {
             prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df () (⍳_ℤ, ℕ, ℤ^≥0) 5.0.0.4.2.0
             prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ, ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0) () 5.0.0.4.2.1.0
             prove ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ) () 5.0.0.4.2.1.1
@@ -169,7 +169,7 @@ take d {
         }
         elided a9ca11d9fe5c42494a321e7174c6092afca266f7e5c782fcc29bef2f721d20d3 {
           prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 () ()
-          elided 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df {
+          inferenceExtraction {
             prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df () (⍳_ℤ, ℕ, ℤ^≥0) 5.0.0.5.1.0
             prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ, ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0) () 5.0.0.5.1.1.0
             prove ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ) () 5.0.0.5.1.1.1
@@ -184,14 +184,14 @@ take d {
       }
       elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
         prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 () ()
-        elided 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df {
+        inferenceExtraction {
           prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df () (⍳_ℤ, ℕ, ℤ^≥0) 5.0.0.6.0
           prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ, ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0) () 5.0.0.6.1.0
           prove ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ) () 5.0.0.6.1.1
         }
         prove ∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (inverseFunction ⍳_ℤ, ℤ^≥0, ℕ, absZ $0) 5.0.0.6.1 5.0.0.1
         prove ∧ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 t0 |ℕ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 t1 |ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 t0 |ℕ, ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 t1 |ℕ) () 5.0.0.4 5.0.0.5
-        elided 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 {
+        inferenceExtraction {
           prove ∧ ∈ gcdℕ t0 t1 ℕ ∧ ∈ orderedPair 0ℕ gcdℕ t0 t1 <ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t0 |ℕ ∧ ∈ orderedPair gcdℕ t0 t1 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 gcdℕ t0 t1 ≤ℕ 2b45e83849309bc8ea36f7f2511f8a587519b965a1f45be1cefddae7c60d1c97 () (t0, t1) p0 p1 p2
           prove → ∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ → ∧ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 t0 |ℕ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 t1 |ℕ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 gcdℕ t0 t1 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ → ∧ ∈ orderedPair $$0 t0 |ℕ ∈ orderedPair $$0 t1 |ℕ ∈ orderedPair $$0 gcdℕ t0 t1 ≤ℕ) (apply inverseFunction ⍳_ℤ absZ $0) 5.0.0.6.4.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
           prove → ∧ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 t0 |ℕ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 t1 |ℕ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 gcdℕ t0 t1 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply inverseFunction ⍳_ℤ absZ $0 ℕ, → ∧ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 t0 |ℕ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 t1 |ℕ ∈ orderedPair apply inverseFunction ⍳_ℤ absZ $0 gcdℕ t0 t1 ≤ℕ) () 5.0.0.6.4.1 5.0.0.6.2
@@ -227,7 +227,7 @@ take d {
       prove ∈ orderedPair $0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0 ≤ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $0 $$0 ≤ℤ) (absZ $0, apply ⍳_ℤ apply inverseFunction ⍳_ℤ absZ $0) 5.0.0.8 5.0.0.7
       elided 66be4b89731844768fc5d40c78664d6dde824e5f291e6da34abeea92f130ce93 {
         prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 () ()
-        elided 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df {
+        inferenceExtraction {
           prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df () (⍳_ℤ, ℕ, ℤ^≥0) 5.0.0.10.0
           prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ, ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0) () 5.0.0.10.1.0
           prove ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ, bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ) () 5.0.0.10.1.1

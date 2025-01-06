@@ -18,7 +18,7 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
     }
     elided 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 {
       prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-      elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+      inferenceExtraction {
         prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
         prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 2.1.1.1.0
         prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 2.1.1.1.1
@@ -26,7 +26,7 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
         prove ∈ second $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ second $0 ℤ, ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 2.1.1.1.3
       }
       prove ∧ ∈ second $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ second $0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ) () 2.1.1.1 2.1a
-      elided 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 {
+      inferenceExtraction {
         prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 () ()
         prove ↔ ∈ second $0 ℤ^+ ∧ ∈ second $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 ℤ^+ ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 <ℤ) (second $0) 2.1.1.3.0
         prove → ∧ ∈ second $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ ∈ second $0 ℤ^+ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ second $0 ℤ^+, ∧ ∈ second $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ) () 2.1.1.3.1
@@ -61,19 +61,19 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
     }
     elided 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 {
       prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-      elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+      inferenceExtraction {
         prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
         prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 2.2.1.1.0
         prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 2.2.1.1.1
         prove ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 2.2.1.1.2 2.2.1.0
         prove ∈ second $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ second $0 ℤ, ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 2.2.1.1.3
       }
-      elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+      inferenceExtraction {
         prove ∧ ∈ negatedZ second $0 ℤ ∧ = apply +ℤ orderedPair second $0 negatedZ second $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ second $0 second $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (second $0) 2.2.1.1
         prove ∈ negatedZ second $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ second $0 ℤ, ∧ = apply +ℤ orderedPair second $0 negatedZ second $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ second $0 second $0 apply ⍳_ℤ 0ℕ) () 2.2.1.2.0
       }
       prove ∧ ∈ negatedZ second $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ second $0 <ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ negatedZ second $0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ second $0 <ℤ) () 2.2.1.2 2.2.0
-      elided 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 {
+      inferenceExtraction {
         prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 () ()
         prove ↔ ∈ negatedZ second $0 ℤ^+ ∧ ∈ negatedZ second $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ second $0 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 ℤ^+ ∧ ∈ $$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$0 <ℤ) (negatedZ second $0) 2.2.1.4.0
         prove → ∧ ∈ negatedZ second $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ second $0 <ℤ ∈ negatedZ second $0 ℤ^+ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ negatedZ second $0 ℤ^+, ∧ ∈ negatedZ second $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ second $0 <ℤ) () 2.2.1.4.1
@@ -83,7 +83,7 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
     elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
       prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
       prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-      elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+      inferenceExtraction {
         prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
         prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 2.2.2.2.0
         prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 2.2.2.2.1
@@ -99,7 +99,7 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
       elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
         prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-        elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+        inferenceExtraction {
           prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
           prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 2.2.3.0.2.0
           prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 2.2.3.0.2.1
@@ -113,7 +113,7 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
     prove = apply ×ℤ orderedPair first $0 negatedZ second $0 negatedZ apply ×ℤ orderedPair second $0 first $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair first $0 negatedZ second $0, negatedZ apply ×ℤ orderedPair first $0 second $0, negatedZ apply ×ℤ orderedPair second $0 first $0) 2.2.2 2.2.3
     elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
       prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-      elided e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 {
+      inferenceExtraction {
         prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
         prove ↔ ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$0 ℤ ¬ ∈ $$0 singleton apply ⍳_ℤ 0ℕ) (second $0) 2.2.5.1.0
         prove → ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ second $0 ℤ ¬ ∈ second $0 singleton apply ⍳_ℤ 0ℕ) () 2.2.5.1.1
@@ -137,7 +137,7 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
       prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
       elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
         prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-        elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+        inferenceExtraction {
           prove ∧ ∈ negatedZ first $0 ℤ ∧ = apply +ℤ orderedPair first $0 negatedZ first $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ first $0 first $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (first $0) 2.2.8.3.0
           prove ∈ negatedZ first $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ first $0 ℤ, ∧ = apply +ℤ orderedPair first $0 negatedZ first $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ first $0 first $0 apply ⍳_ℤ 0ℕ) () 2.2.8.3.1.0
         }
@@ -158,7 +158,7 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
     elided 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 {
       elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
         prove ∈ first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-        elided a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 {
+        inferenceExtraction {
           prove ∧ ∈ negatedZ first $0 ℤ ∧ = apply +ℤ orderedPair first $0 negatedZ first $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ first $0 first $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (first $0) 2.2.11.0.0
           prove ∈ negatedZ first $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ first $0 ℤ, ∧ = apply +ℤ orderedPair first $0 negatedZ first $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ first $0 first $0 apply ⍳_ℤ 0ℕ) () 2.2.11.0.1.0
         }

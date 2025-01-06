@@ -1,6 +1,6 @@
 subproof (Base case) {
   take m {
-    elided d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 {
+    inferenceExtraction {
       prove ∀ x ¬ ∈ $0 ∅ d72e10372d8a1ee2e0f947c54069ce256ea3b40090f16d222a270b6d01a23ba0 () ()
       prove ¬ ∈ $0 ∅ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (¬ ∈ $$0 ∅) ($0) 0.0.0.0
     }
@@ -18,7 +18,7 @@ subproof (Inductive case) {
       assume ∀ m → ∈ $0 $$0 ⊆ $0 $$0 {
         take m {
           assume ∈ $0 successor $$0 {
-            elided f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 {
+            inferenceExtraction {
               prove ∀ n ∀ m ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 f363488f0789948ae53fd540e237a23444e7c0942543ae2782f4a41b9d7d9d97 () ()
               prove ∀ m ↔ ∈ $0 successor $$$0 ∨ ∈ $0 $$$0 = $0 $$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ m ↔ ∈ $0 successor $$$$0 ∨ ∈ $0 $$$$0 = $0 $$$$0) ($$0) 1.0.0.0.0.0.0.0
               prove ↔ ∈ $0 successor $$0 ∨ ∈ $0 $$0 = $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 successor $$0 ∨ ∈ $$$0 $$0 = $$$0 $$0) ($0) 1.0.0.0.0.0.0.1

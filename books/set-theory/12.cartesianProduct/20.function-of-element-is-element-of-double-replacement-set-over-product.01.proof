@@ -11,7 +11,7 @@ inferenceWithPremiseDerivations {
   prove ∧ ∈ t4 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with (t4 $0) t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t4 t1, ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with (t4 $0) t3) () p1 2
   prove ∃ x ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with ($$0 $0) t3 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with ($$0 $0) t3) (t4) 3.0
 }
-elided 498d6624618f2a98d46994f24df9de9aa4ff1920c6c2f7a9448ad996c30d9522 {
+inferenceExtraction {
   prove ∀ s ↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = $$$0 with ($$0 $0) t3 498d6624618f2a98d46994f24df9de9aa4ff1920c6c2f7a9448ad996c30d9522 () (t0, t1, t2, with ($0 $1) t3) p0
   prove ↔ ∈ with (t4 t5) t3 t0 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with ($$0 $0) t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 t0 ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = $$$0 with ($$0 $0) t3) (with (t4 t5) t3) 4.0
   prove → ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with ($$0 $0) t3 ∈ with (t4 t5) t3 t0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ with (t4 t5) t3 t0, ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with ($$0 $0) t3) () 4.1

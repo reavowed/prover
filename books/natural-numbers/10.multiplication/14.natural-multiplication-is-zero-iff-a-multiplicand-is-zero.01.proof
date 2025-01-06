@@ -1,10 +1,10 @@
 assume = apply ×ℕ orderedPair t0 t1 0ℕ {
   assume ¬ = t0 0ℕ {
-    elided 78c6b771f9f16fe1dbd7ba619181455a1e98e6459bea33ab9a564859db82f71a {
+    inferenceExtraction {
       prove ∀ n → ∈ $0 ℕ ∨ = $0 0ℕ ∃ n^- ∧ ∈ $0 ℕ = $$0 successor $0 78c6b771f9f16fe1dbd7ba619181455a1e98e6459bea33ab9a564859db82f71a () ()
       prove → ∈ t0 ℕ ∨ = t0 0ℕ ∃ n^- ∧ ∈ $0 ℕ = t0 successor $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℕ ∨ = $0 0ℕ ∃ n^- ∧ ∈ $0 ℕ = $$0 successor $0) (t0) 0.0.0.0
-      prove ∨ = t0 0ℕ ∃ n^- ∧ ∈ $0 ℕ = t0 successor $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∨ = t0 0ℕ ∃ m ∧ ∈ $0 ℕ = t0 successor $0) () 0.0.0.1 p0
-      prove ∃ n^- ∧ ∈ $0 ℕ = t0 successor $0 f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= t0 0ℕ, ∃ m ∧ ∈ $0 ℕ = t0 successor $0) () 0.0.0.2 0.0a
+      prove ∨ = t0 0ℕ ∃ n^- ∧ ∈ $0 ℕ = t0 successor $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 ℕ, ∨ = t0 0ℕ ∃ n^- ∧ ∈ $0 ℕ = t0 successor $0) () 0.0.0.1 p0
+      prove ∃ n^- ∧ ∈ $0 ℕ = t0 successor $0 f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (= t0 0ℕ, ∃ n^- ∧ ∈ $0 ℕ = t0 successor $0) () 0.0.0.2 0.0a
     }
     let n^- ∧ ∈ $0 ℕ = t0 successor $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ = t0 successor $0, = t1 0ℕ) () {
       inferenceExtraction {
@@ -28,7 +28,7 @@ assume = apply ×ℕ orderedPair t0 t1 0ℕ {
 }
 assume = t0 0ℕ {
   prove = apply ×ℕ orderedPair t0 t1 apply ×ℕ orderedPair 0ℕ t1 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (t0, 0ℕ, apply ×ℕ orderedPair $0 t1) 1a
-  elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
+  inferenceExtraction {
     prove ∧ = apply ×ℕ orderedPair t1 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ t1 0ℕ 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c () (t1) p1
     prove = apply ×ℕ orderedPair 0ℕ t1 0ℕ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply ×ℕ orderedPair t1 0ℕ 0ℕ, = apply ×ℕ orderedPair 0ℕ t1 0ℕ) () 1.1.0
   }
@@ -36,7 +36,7 @@ assume = t0 0ℕ {
 }
 assume = t1 0ℕ {
   prove = apply ×ℕ orderedPair t0 t1 apply ×ℕ orderedPair t0 0ℕ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (t1, 0ℕ, apply ×ℕ orderedPair t0 $0) 2a
-  elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
+  inferenceExtraction {
     prove ∧ = apply ×ℕ orderedPair t0 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ t0 0ℕ 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c () (t0) p0
     prove = apply ×ℕ orderedPair t0 0ℕ 0ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply ×ℕ orderedPair t0 0ℕ 0ℕ, = apply ×ℕ orderedPair 0ℕ t0 0ℕ) () 2.1.0
   }

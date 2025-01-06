@@ -2,14 +2,14 @@ subproof (Base case) {
   take y {
     assume ∈ $0 ℕ {
       assume ∈ orderedPair 0ℕ $0 <ℕ {
-        elided 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c {
+        inferenceExtraction {
           prove ∧ = apply ×ℕ orderedPair $0 0ℕ 0ℕ = apply ×ℕ orderedPair 0ℕ $0 0ℕ 76e59d4e22b9c598b34cc71acae1263fc6805c3bf352129103681d3095e4549c () ($0) 0.0.0a
           prove = 0ℕ apply ×ℕ orderedPair 0ℕ $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair 0ℕ $0, 0ℕ) 0.0.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         }
         elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
           prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
           prove ∈ apply ×ℕ orderedPair 0ℕ $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (0ℕ, $0) 0.0.0.0.1.0 0.0.0a
-          elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+          inferenceExtraction {
             prove ∧ = apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ $0 0ℕ apply ×ℕ orderedPair 0ℕ $0 = apply +ℕ orderedPair 0ℕ apply ×ℕ orderedPair 0ℕ $0 apply ×ℕ orderedPair 0ℕ $0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (apply ×ℕ orderedPair 0ℕ $0) 0.0.0.0.1.1
             prove = apply ×ℕ orderedPair 0ℕ $0 apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ $0 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ $0 0ℕ, apply ×ℕ orderedPair 0ℕ $0) 0.0.0.0.1.2.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           }
@@ -51,7 +51,7 @@ subproof (Inductive case) {
                   }
                   elided 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 {
                     prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 1.0.0.0.0.0.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    elided 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 {
+                    inferenceExtraction {
                       prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 () ()
                       prove → ∈ successor $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair successor $$0 $0 ≤ℕ ∨ ∈ orderedPair successor $$0 $0 <ℕ = successor $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$$$0 $0 ≤ℕ ∨ ∈ orderedPair $$$$$$0 $0 <ℕ = $$$$$$0 $0) (successor $0) 1.0.0.0.0.0.0.1.0.1.1.0
                       prove ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair successor $$0 $0 ≤ℕ ∨ ∈ orderedPair successor $$0 $0 <ℕ = successor $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ successor $0 ℕ, ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair successor $$0 $0 ≤ℕ ∨ ∈ orderedPair successor $$0 $0 <ℕ = successor $$0 $0) () 1.0.0.0.0.0.0.1.0.1.1.1 1.0.0.0.0.0.0.1.0.1.0
@@ -102,7 +102,7 @@ subproof (Inductive case) {
                     elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
                       prove ∈ successor $$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$0) 1.0.0.0.0.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                       prove ∈ apply ×ℕ orderedPair successor $$0 $$$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (successor $$0, $$$0) 1.0.0.0.0.0.0.1.0.3.7.0 1.0.0.0.0.0a
-                      elided ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef {
+                      inferenceExtraction {
                         prove ∧ = apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 $$$0 0ℕ apply ×ℕ orderedPair successor $$0 $$$0 = apply +ℕ orderedPair 0ℕ apply ×ℕ orderedPair successor $$0 $$$0 apply ×ℕ orderedPair successor $$0 $$$0 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (apply ×ℕ orderedPair successor $$0 $$$0) 1.0.0.0.0.0.0.1.0.3.7.1
                         prove = apply ×ℕ orderedPair successor $$0 $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 $$$0 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 $$$0 0ℕ, apply ×ℕ orderedPair successor $$0 $$$0) 1.0.0.0.0.0.0.1.0.3.7.2.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                       }

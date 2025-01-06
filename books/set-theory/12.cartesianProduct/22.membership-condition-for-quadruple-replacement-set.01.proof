@@ -3,9 +3,9 @@ elided 4326d901a2c6d2454d7cdf30ecf5002d807b388b1459191199ddc8a35bcac5f5 {
   prove = t0 replacementSet2 x y t1 with (first $0 second $0 first $1 second $1) t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (quadrupleReplacementSet a b c d t1 with ($0 $1 $2 $3) t2, replacementSet2 x y t1 with (first $0 second $0 first $1 second $1) t2) 0.0 p0
 }
 take s {
-  elided 7e4a263499153833741e6776b870472812d9d8ff8bbcb4aa457cde22bf4a87c3 {
+  inferenceExtraction {
     prove ∀ s ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 product t3 t4 ∃ y ∧ ∈ $0 product t5 t6 ∧ ∈ orderedPair $$0 $0 t1 = $$$0 with (first $$0 second $$0 first $0 second $0) t2 7e4a263499153833741e6776b870472812d9d8ff8bbcb4aa457cde22bf4a87c3 () (t0, t1, with (first $$0 second $$0 first $$1 second $$1) t2, product t3 t4, product t5 t6) 0 p1
-    prove ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 product t3 t4 ∃ y ∧ ∈ $0 product t5 t6 ∧ ∈ orderedPair $$0 $0 t1 = $$$0 with (first $$0 second $$0 first $0 second $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∃ a ∧ ∈ $0 product t3 t4 ∃ b ∧ ∈ $0 product t5 t6 ∧ ∈ orderedPair $$0 $0 t1 = $$$$0 with (first $$0 second $$0 first $0 second $0) t2) ($0) 1.0.0
+    prove ↔ ∈ $0 t0 ∃ x ∧ ∈ $0 product t3 t4 ∃ y ∧ ∈ $0 product t5 t6 ∧ ∈ orderedPair $$0 $0 t1 = $$$0 with (first $$0 second $$0 first $0 second $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 t0 ∃ x ∧ ∈ $0 product t3 t4 ∃ y ∧ ∈ $0 product t5 t6 ∧ ∈ orderedPair $$0 $0 t1 = $$$$0 with (first $$0 second $$0 first $0 second $0) t2) ($0) 1.0.0
   }
   elided dd7b34cfabe761d72ca27a7de038393c6aeb230006e774252d2b74d9a26f8aa0 {
     elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
