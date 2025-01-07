@@ -1,9 +1,9 @@
 assume ∃ y ∈ $0 t0 {
-  let b ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ $0 t0, ∈ t1 t0) () {
+  let b ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ $0 t0, ∈ t1 t0) () 0a {
     prove ∈ $0 singleton t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t0, singleton t1, $0) p0 0.0a
     prove = $0 t1 6acf06be48fa49ac292909853e78fdb76495f5eee6ccc72143d1c51f5f3e56d4 () ($0, t1) 0.0.0
     prove ∈ t1 t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$0 t0) ($0, t1) 0.0.1 0.0a
-  } 0a
+  }
   prove ⊆ singleton t1 t0 0b12623ee6714e2d19658cded86d4dd9badc9ff00665610d50c4ebe0ed9e7d60 () (t1, t0) 0.0
   prove = t0 singleton t1 9f48c2bb0ba338d6e4e1a339ac98f11e5822b9a48ce717c13e45c6046c6798b2 () (t0, singleton t1) p0 0.1
 }

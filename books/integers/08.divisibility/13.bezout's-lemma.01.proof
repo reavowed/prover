@@ -399,7 +399,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
       }
     }
     prove ∃ b ∧ ∈ $0 $$0 ∀ s → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℤ 1e853485b705086897f309e1ce6a8ed3fe6c809648b435aaec2663b0b626b278 () ($0) 0.0.0 0.0.1 0.0.2
-    let g ∧ ∈ $0 $$0 ∀ s → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 $0 ∀ s → ∈ $0 $$0 ∈ orderedPair $$$$0 $0 ≤ℤ, ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 gcdℤ t0 t1) () {
+    let g ∧ ∈ $0 $$0 ∀ s → ∈ $0 $$$0 ∈ orderedPair $$0 $0 ≤ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 $0 ∀ s → ∈ $0 $$0 ∈ orderedPair $$$$0 $0 ≤ℤ, ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 gcdℤ t0 t1) () 0.0.3 {
       subproof (g is the gcd of a and b) {
         inferenceExtraction {
           prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 $$$$0 ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 <ℤ) ($$0, $$$0) 0.0a
@@ -428,8 +428,8 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
             prove ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ ∧ ∈ orderedPair $$0 $0 product ℤ ℤ = $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$$0, ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ ∧ ∈ orderedPair $$0 $0 product ℤ ℤ = $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0) () 0.0.4.0.2.1.2 0.0.4.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           }
         }
-        let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ ∧ ∈ orderedPair $$0 $0 product ℤ ℤ = $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℤ ∃ y ∧ ∈ $0 ℤ ∧ ∈ orderedPair $$$$$0 $0 product ℤ ℤ = $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$$0 apply ×ℤ orderedPair t1 $0, = $0 gcdℤ t0 t1) () {
-          let y ∧ ∈ $0 ℤ ∧ ∈ orderedPair $$0 $0 product ℤ ℤ = $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℤ ∧ ∈ orderedPair $0 $$$$$0 product ℤ ℤ = $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $0 apply ×ℤ orderedPair t1 $$$$$0, = $$0 gcdℤ t0 t1) () {
+        let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ ∧ ∈ orderedPair $$0 $0 product ℤ ℤ = $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℤ ∃ y ∧ ∈ $0 ℤ ∧ ∈ orderedPair $$$$$0 $0 product ℤ ℤ = $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$$$$0 apply ×ℤ orderedPair t1 $0, = $0 gcdℤ t0 t1) () 0.0.4.0.2 {
+          let y ∧ ∈ $0 ℤ ∧ ∈ orderedPair $$0 $0 product ℤ ℤ = $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℤ ∧ ∈ orderedPair $0 $$$$$0 product ℤ ℤ = $$0 apply +ℤ orderedPair apply ×ℤ orderedPair t0 $0 apply ×ℤ orderedPair t1 $$$$$0, = $$0 gcdℤ t0 t1) () 0.0.4.0.3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
             subproof (g divides a) {
               elided bd9e10c4e598a4afaaeacbbe2e23485930f62721276d236ac6ce376328e78f57 {
                 inferenceExtraction {
@@ -439,8 +439,8 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                 }
                 prove ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ bd9e10c4e598a4afaaeacbbe2e23485930f62721276d236ac6ce376328e78f57 () (t0, $$$0) p0 0.0.4.0.3.0.0.0.0 0.0.4.0.1
               }
-              let q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t0 apply +ℤ orderedPair apply ×ℤ orderedPair $$$$$$$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ, ∈ orderedPair $$$0 t0 |ℤ) () {
-                let r ∧ ∈ $0 ℤ ∧ = t0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$0 ℤ ∧ = t0 apply +ℤ orderedPair apply ×ℤ orderedPair $0 $$$$0 $$$$$$$0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$$0 ≤ℤ ∈ orderedPair $$$$$$$0 absZ $$$$0 <ℤ, ∈ orderedPair $$$$0 t0 |ℤ) () {
+              let q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t0 apply +ℤ orderedPair apply ×ℤ orderedPair $$$$$$$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ, ∈ orderedPair $$$0 t0 |ℤ) () 0.0.4.0.3.0.0.0 {
+                let r ∧ ∈ $0 ℤ ∧ = t0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$0 ℤ ∧ = t0 apply +ℤ orderedPair apply ×ℤ orderedPair $0 $$$$0 $$$$$$$0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$$0 ≤ℤ ∈ orderedPair $$$$$$$0 absZ $$$$0 <ℤ, ∈ orderedPair $$$$0 t0 |ℤ) () 0.0.4.0.3.0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
                   subproof (r is zero) {
                     elided (Rearranged) {
                       inferenceExtraction {
@@ -854,8 +854,8 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                       prove ∈ orderedPair $$$$$0 t0 |ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$$$$0 $0 t0, ∈ orderedPair $$$$$0 t0 |ℤ) () 0.0.4.0.3.0.0.1.0.7.1.5 0.0.4.0.3.0.0.1.0.6
                     }
                   }
-                } 0.0.4.0.3.0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              } 0.0.4.0.3.0.0.0
+                }
+              }
             }
             subproof (g divides b) {
               elided bd9e10c4e598a4afaaeacbbe2e23485930f62721276d236ac6ce376328e78f57 {
@@ -866,8 +866,8 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                 }
                 prove ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t1 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ bd9e10c4e598a4afaaeacbbe2e23485930f62721276d236ac6ce376328e78f57 () (t1, $$$0) p1 0.0.4.0.3.0.1.0.0 0.0.4.0.1
               }
-              let q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t1 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t1 apply +ℤ orderedPair apply ×ℤ orderedPair $$$$$$$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ, ∈ orderedPair $$$0 t1 |ℤ) () {
-                let r ∧ ∈ $0 ℤ ∧ = t1 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$0 ℤ ∧ = t1 apply +ℤ orderedPair apply ×ℤ orderedPair $0 $$$$0 $$$$$$$0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$$0 ≤ℤ ∈ orderedPair $$$$$$$0 absZ $$$$0 <ℤ, ∈ orderedPair $$$$0 t1 |ℤ) () {
+              let q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t1 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = t1 apply +ℤ orderedPair apply ×ℤ orderedPair $$$$$$$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ, ∈ orderedPair $$$0 t1 |ℤ) () 0.0.4.0.3.0.1.0 {
+                let r ∧ ∈ $0 ℤ ∧ = t1 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$0 ℤ ∧ = t1 apply +ℤ orderedPair apply ×ℤ orderedPair $0 $$$$0 $$$$$$$0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$$0 ≤ℤ ∈ orderedPair $$$$$$$0 absZ $$$$0 <ℤ, ∈ orderedPair $$$$0 t1 |ℤ) () 0.0.4.0.3.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
                   subproof (r is zero) {
                     elided (Rearranged) {
                       inferenceExtraction {
@@ -1315,8 +1315,8 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                       prove ∈ orderedPair $$$$$0 t1 |ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$$$$0 $0 t1, ∈ orderedPair $$$$$0 t1 |ℤ) () 0.0.4.0.3.0.1.1.0.7.1.5 0.0.4.0.3.0.1.1.0.6
                     }
                   }
-                } 0.0.4.0.3.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              } 0.0.4.0.3.0.1.0
+                }
+              }
             }
             take d {
               assume ∈ $0 ℤ {
@@ -1330,7 +1330,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                     prove → ∈ orderedPair $0 t0 |ℤ ∃ u ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $0 t0 |ℤ, ∃ u ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t0) () 0.0.4.0.3.0.2.0.0.0.4
                     prove ∃ u ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 t0 |ℤ, ∃ u ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t0) () 0.0.4.0.3.0.2.0.0.0.5 0.0.4.0.3.0.2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                   }
-                  let u ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$0 ℤ = apply ×ℤ orderedPair $0 $$$$$$$0 t0, ∈ orderedPair $0 $$$$0 |ℤ) () {
+                  let u ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$0 ℤ = apply ×ℤ orderedPair $0 $$$$$$$0 t0, ∈ orderedPair $0 $$$$0 |ℤ) () 0.0.4.0.3.0.2.0.0.0 {
                     inferenceExtraction {
                       prove ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$0 $0 |ℤ ∃ v ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 () ()
                       prove → ∈ $$0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$$0 $0 |ℤ ∃ v ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$$0 $0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$$$0 ℤ ∀ b → ∈ $0 ℤ ↔ ∈ orderedPair $$$$$$$$$0 $0 |ℤ ∃ v ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$$$$$$$$0 $0 $$0) ($$0) 0.0.4.0.3.0.2.0.0.1.0.0
@@ -1340,7 +1340,7 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                       prove → ∈ orderedPair $$0 t1 |ℤ ∃ v ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 t1 |ℤ, ∃ v ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 t1) () 0.0.4.0.3.0.2.0.0.1.0.4
                       prove ∃ v ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 t1 |ℤ, ∃ v ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 t1) () 0.0.4.0.3.0.2.0.0.1.0.5 0.0.4.0.3.0.2.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                     }
-                    let v ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$$0 ℤ = apply ×ℤ orderedPair $$0 $$$$$$$$0 t1, ∈ orderedPair $$0 $$$$$0 |ℤ) () {
+                    let v ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$$0 ℤ = apply ×ℤ orderedPair $$0 $$$$$$$$0 t1, ∈ orderedPair $$0 $$$$$0 |ℤ) () 0.0.4.0.3.0.2.0.0.1.0 {
                       elided (Rearranged) {
                         inferenceWithPremiseDerivations {
                           prove ∈ apply ×ℤ orderedPair $$0 $$$$$0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () ($$0, $$$$$0) 0.0.4.0.3.0.2.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.4.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -1391,8 +1391,8 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                           prove ∈ orderedPair $$$0 $$$$$$0 |ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$$0 $0 $$$$$$$0, ∈ orderedPair $$$0 $$$$$$0 |ℤ) () 0.0.4.0.3.0.2.0.0.1.1.6.1.5 0.0.4.0.3.0.2.0.0.1.1.5
                         }
                       }
-                    } 0.0.4.0.3.0.2.0.0.1.0
-                  } 0.0.4.0.3.0.2.0.0.0
+                    }
+                  }
                   elided d02bc693aae45ecce1c53a5e5073f1cbfd4e813c0911b3236b4db68ccca25c45 {
                     inferenceExtraction {
                       prove ∀ x → ∈ $0 $$$$$$0 ∈ $0 ℤ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () ($$$$$0, ℤ) 0.0.0
@@ -1462,8 +1462,8 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
                 prove = $$$0 gcdℤ t0 t1 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∧ ∈ $$$$$$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$$0 <ℤ ∧ ∈ orderedPair $$$$$$0 t0 |ℤ ∧ ∈ orderedPair $$$$$$0 t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ orderedPair $0 $$$$$$$0 ≤ℤ) ($$$0, gcdℤ t0 t1) 0.0.4.0.3.0.3.0 0.0.4.0.3.0.3.2.4 0.0.4.0.3.0.3.1
               }
             }
-          } 0.0.4.0.3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        } 0.0.4.0.2
+          }
+        }
       }
       elided 498d6624618f2a98d46994f24df9de9aa4ff1920c6c2f7a9448ad996c30d9522 {
         elided 498d6624618f2a98d46994f24df9de9aa4ff1920c6c2f7a9448ad996c30d9522 {
@@ -1502,6 +1502,6 @@ let S = $0 replacementSet2 x y product ℤ ℤ apply +ℤ orderedPair apply ×�
         }
       }
       prove ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 gcdℤ t0 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair t0 $$0 apply ×ℤ orderedPair t1 $0 $$$$$$0) ($0, gcdℤ t0 t1) 0.0.4.0 0.0.4.1
-    } 0.0.3
+    }
   }
 }

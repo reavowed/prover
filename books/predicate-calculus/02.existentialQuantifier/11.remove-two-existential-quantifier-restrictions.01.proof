@@ -1,6 +1,6 @@
-let a' ∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2, ∃ a ∃ b with ($$0 $0) s2) () {
-  let b' ∧ with ($0) s1 with ($$0 $0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($$0) s1 with ($0 $$0) s2, ∃ a ∃ b with ($$0 $0) s2) () {
+let a' ∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($0) s0 ∃ b ∧ with ($0) s1 with ($$0 $0) s2, ∃ a ∃ b with ($$0 $0) s2) () p0 {
+  let b' ∧ with ($0) s1 with ($$0 $0) s2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ with ($$0) s1 with ($0 $$0) s2, ∃ a ∃ b with ($$0 $0) s2) () 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
     prove ∃ b with ($$$0 $0) s2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0 $$$0) s2) ($0) 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     prove ∃ a ∃ b with ($$0 $0) s2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∃ b with ($$$$0 $0) s2) ($$0) 0.0.0
-  } 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-} p0
+  }
+}

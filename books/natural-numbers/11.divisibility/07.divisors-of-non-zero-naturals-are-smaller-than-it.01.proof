@@ -7,7 +7,7 @@ inferenceExtraction {
   prove → ∈ orderedPair t0 t1 |ℕ ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t0 t1 |ℕ, ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 t1) () 0.4
   prove ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 t1 |ℕ, ∃ c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 t1) () 0.5 p2
 }
-let c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 t1, ∧ ∈ orderedPair 1ℕ t0 ≤ℕ ∈ orderedPair t0 t1 ≤ℕ) () {
+let c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 t1, ∧ ∈ orderedPair 1ℕ t0 ≤ℕ ∈ orderedPair t0 t1 ≤ℕ) () 0 {
   inferenceExtraction {
     prove ⊕ = t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ de2c2424cb4993fd3ba623ee2e4eeb46309cd85f077f8af580ba296d820b5852 () (t1) p1
     prove ¬ = t1 0ℕ cd6001b6685e6efd134062cc83085a05f31e3c2e205f0db675e8a53aadfe8a86 (= t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 1.0.0 p3
@@ -51,4 +51,4 @@ let c ∧ ∈ $0 ℕ = apply ×ℕ orderedPair t0 $0 t1 30412315b8eb88fa8dd1fa23
   prove ∈ orderedPair t0 apply ×ℕ orderedPair t0 $0 ≤ℕ 5429beef8ab3174fc1cfe81b0114e2d64e26d219ad07702377efe343d9cd6f8f () (t0, $0) p0 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.6
   prove ∈ orderedPair t0 t1 ≤ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair t0 $$0 ≤ℕ) (apply ×ℕ orderedPair t0 $0, t1) 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 1.7
   prove ∧ ∈ orderedPair 1ℕ t0 ≤ℕ ∈ orderedPair t0 t1 ≤ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair 1ℕ t0 ≤ℕ, ∈ orderedPair t0 t1 ≤ℕ) () 1.5 1.8
-} 0
+}

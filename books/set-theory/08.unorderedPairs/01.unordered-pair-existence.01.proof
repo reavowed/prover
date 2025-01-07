@@ -8,7 +8,7 @@ take x {
 prove ∃! x ∀ y ↔ ∈ $0 $$0 ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 b9824fd6f00092a866dd6293c23a983e93e0ddf13a433df477ab83cd6fbf83fa (∨ ∧ = $0 singleton ∅ = $1 t0 ∧ = $0 ∅ = $1 t1) (powerSet singleton ∅) 0
 take y {
   assume ∃ x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 {
-    let x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 t0 ∧ = $$0 ∅ = $0 t1, ∨ = $0 t0 = $0 t1) () {
+    let x ∧ ∈ $0 powerSet singleton ∅ ∨ ∧ = $0 singleton ∅ = $$0 t0 ∧ = $0 ∅ = $$0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 powerSet singleton ∅ ∨ ∧ = $$0 singleton ∅ = $0 t0 ∧ = $$0 ∅ = $0 t1, ∨ = $0 t0 = $0 t1) () 2.0a {
       elided 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 {
         assume ∧ = $0 singleton ∅ = $$0 t0 {
           prove ∨ = $$0 t0 = $$0 t1 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (= $$0 t0, = $$0 t1) () 2.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -18,7 +18,7 @@ take y {
         }
         prove ∨ = $$0 t0 = $$0 t1 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∧ = $0 singleton ∅ = $$0 t0, ∧ = $0 ∅ = $$0 t1, ∨ = $$0 t0 = $$0 t1) () 2.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.0.0.0.0 2.0.0.0.1
       }
-    } 2.0a
+    }
   }
   assume ∨ = $0 t0 = $0 t1 {
     assume = $0 t0 {

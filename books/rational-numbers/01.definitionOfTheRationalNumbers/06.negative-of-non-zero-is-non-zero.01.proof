@@ -8,8 +8,8 @@ elided 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 {
   }
   prove ∃ a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () (t0) 0.0
 }
-let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ, ∈ negatedZ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ) () {
-  let a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℕ = t0 equivalenceClass orderedPair $0 $$0 ~_ℤ, ∈ negatedZ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ) () {
+let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ, ∈ negatedZ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ) () 0 {
+  let a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℕ = t0 equivalenceClass orderedPair $0 $$0 ~_ℤ, ∈ negatedZ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ) () 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
     inferenceExtraction {
       prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
       prove ↔ ∈ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ t0 ℤ ¬ ∈ t0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ) (t0) 1.0.0.0
@@ -116,5 +116,5 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
         prove ∈ negatedZ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ negatedZ t0 ℤ ¬ ∈ negatedZ t0 singleton apply ⍳_ℤ 0ℕ, ∈ negatedZ t0 diff ℤ singleton apply ⍳_ℤ 0ℕ) () 1.0.9.3.2 1.0.9.2
       }
     }
-  } 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-} 0
+  }
+}

@@ -1,4 +1,4 @@
-let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 t0 with ($0) s0, ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0) () {
+let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 t0 with ($0) s0, ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0) () p0 {
   take x {
     assume ∈ $0 t0 {
       prove ∃! y ∨ ∧ with ($$0) s0 = $0 $$0 ∧ ¬ with ($$0) s0 = $0 $$$0 87f6070529ebc545256e9deb3d6e2f7f95966f7d6433960bfb43502e1ed1f89c (with ($0) s0) ($0, $$0)
@@ -8,7 +8,7 @@ let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747
   subproof (Simplify membership condition ) {
     take y {
       assume ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 {
-        let x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 t0 ∨ ∧ with ($$$0) s0 = $0 $$$0 ∧ ¬ with ($$$0) s0 = $0 $$0, ∧ ∈ $0 t0 with ($0) s0) () {
+        let x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 t0 ∨ ∧ with ($$$0) s0 = $0 $$$0 ∧ ¬ with ($$$0) s0 = $0 $$0, ∧ ∈ $0 t0 with ($0) s0) () 0.2.0.0a {
           assume with ($0) s0 {
             inferenceWithPremiseDerivations {
               prove ¬ ¬ with ($0) s0 3df4534886dd61f6ef0a8462fb7cdbff93a3381c7b5ce4d4871f1d25450b688a (with ($0) s0) () 0.2.0.0.0.0a
@@ -35,7 +35,7 @@ let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747
             prove ∧ ∈ $$0 t0 with ($$0) s0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∧ ∈ $$$$0 t0 with ($$$$0) s0) ($$0, $$$0) 0.2.0.0.0.1.0 0a
           }
           prove ∧ ∈ $$0 t0 with ($$0) s0 12afb9df21eda1ecba39f95a0b7af6e3087951e80382722b0e143de0e3443389 (with ($0) s0, ∧ ∈ $$0 t0 with ($$0) s0) () 0.2.0.0.0.0 0.2.0.0.0.1
-        } 0.2.0.0a
+        }
       }
       assume ∧ ∈ $0 t0 with ($0) s0 {
         prove = $0 $0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () ($0)
@@ -53,4 +53,4 @@ let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747
     }
   }
   prove ∃! Y ∀ y ↔ ∈ $0 $$0 ∧ ∈ $0 t0 with ($0) s0 8ae8122d854da1474bddaf18a318cb348535112ca944d8e70f9ebf555a97ed2e (∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$$0 $0 ∧ ¬ with ($0) s0 = $$$0 $$0, ∧ ∈ $$0 t0 with ($$0) s0) () 0.1 0.2
-} p0
+}

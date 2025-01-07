@@ -58,8 +58,8 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
       }
       prove ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $0 apply ⍳_ℤ 1ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $0 $$$0) (gcdℤ apply ⍳_ℤ t0 apply ⍳_ℤ t1, apply ⍳_ℤ 1ℕ) 0.0.1 0.0.2.1
     }
-    let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $0 apply ⍳_ℤ 1ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $0 apply ⍳_ℤ 1ℕ, ∈ orderedPair t0 t2 |ℕ) () {
-      let y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $0 apply ⍳_ℤ 1ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $$0 apply ⍳_ℤ 1ℕ, ∈ orderedPair t0 t2 |ℕ) () {
+    let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $0 apply ⍳_ℤ 1ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $0 apply ⍳_ℤ 1ℕ, ∈ orderedPair t0 t2 |ℕ) () 0.0.2 {
+      let y ∧ ∈ $0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $$0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $0 apply ⍳_ℤ 1ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ = apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 $0 apply ×ℤ orderedPair apply ⍳_ℤ t1 $$0 apply ⍳_ℤ 1ℕ, ∈ orderedPair t0 t2 |ℕ) () 0.0.3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
         elided (Rearranged) {
           elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
             inferenceWithPremiseDerivations {
@@ -170,8 +170,8 @@ assume ∈ orderedPair t0 apply ×ℕ orderedPair t1 t2 |ℕ {
           prove → ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t2 |ℤ ∈ orderedPair t0 t2 |ℕ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair t0 t2 |ℕ, ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t2 |ℤ) () 0.0.3.0.8.0
           prove ∈ orderedPair t0 t2 |ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t2 |ℤ, ∈ orderedPair t0 t2 |ℕ) () 0.0.3.0.8.1 0.0.3.0.7
         }
-      } 0.0.3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-    } 0.0.2
+      }
+    }
   }
   prove ∨ ∈ orderedPair t0 t1 |ℕ ∈ orderedPair t0 t2 |ℕ f1907fcb38bc4edb92cfc8dab5e442371437f79540509ece7bfd74945e1ea932 (∈ orderedPair t0 t1 |ℕ, ∈ orderedPair t0 t2 |ℕ) () 0.0
 }

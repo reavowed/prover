@@ -19,7 +19,7 @@ wrappedInferenceApplication {
   }
 }
 prove ∃! f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2 68b01f5ab65d0995f0c75d8c5549250cf53acdf9aeb8051355c7f9f91c7b1758 (∧ = apply $1 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply $$1 successor $0 with ($$0 apply $$1 $0) t2) (ℕ, functionSpace ℕ t0) 1
-let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2, ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2) () {
+let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2, ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2) () 2 {
   prove ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 0f288e6d953d0e4246260cd926e823969cbfa3d913d01937d6394711c1857652 () ($0, ℕ, ℕ, t0) 3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
   subproof (Equivalence of definitions) {
     take g {
@@ -125,4 +125,4 @@ let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈
     }
   }
   prove ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 fa494b94116d4ec710d4ceb82c71d51b73634a10ba39f8dac40ed155bda028b6 (∧ function $$0 functionFrom $$0 product ℕ ℕ t0, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 $0 apply apply $$$0 $$0 $0, ∧ ∀ n → ∈ $0 ℕ = apply $$$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 successor $0 with ($$0 apply $$$$0 orderedPair $$0 $0) t2) () 3.0 3.1
-} 2
+}

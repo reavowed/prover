@@ -12,7 +12,7 @@ take z {
             prove → ∈ orderedPair $$0 $0 |ℤ ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $$0 $0 |ℤ, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0) () 0.0.0.0.0.0.4
             prove ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$0 $0 |ℤ, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0) () 0.0.0.0.0.0.5 0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           }
-          let c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ = apply ×ℤ orderedPair $$0 $$$0 $0, ∈ orderedPair $$0 absZ $0 ≤ℤ) () {
+          let c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$$0 $0 $$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ = apply ×ℤ orderedPair $$0 $$$0 $0, ∈ orderedPair $$0 absZ $0 ≤ℤ) () 0.0.0.0.0.0 {
             inferenceExtraction {
               prove ∧ ∈ absZ $$$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($$$0) 0.0a
               prove ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ absZ $$$0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0) () 0.0.0.0.0.1.0.0
@@ -90,7 +90,7 @@ take z {
             prove ∈ orderedPair $$$0 absZ apply ×ℤ orderedPair $$$0 $0 ≤ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$0 $$$$0 ≤ℤ) (apply ×ℤ orderedPair absZ $$$0 absZ $0, absZ apply ×ℤ orderedPair $$$0 $0) 0.0.0.0.0.1.12 0.0.0.0.0.1.11
             prove = absZ apply ×ℤ orderedPair $$$0 $0 absZ $$0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ×ℤ orderedPair $$$0 $0, $$0, absZ $$$$0) 0.0.0.0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             prove ∈ orderedPair $$$0 absZ $$0 ≤ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$0 $$$$0 ≤ℤ) (absZ apply ×ℤ orderedPair $$$0 $0, absZ $$0) 0.0.0.0.0.1.14 0.0.0.0.0.1.13
-          } 0.0.0.0.0.0
+          }
         }
       }
     }

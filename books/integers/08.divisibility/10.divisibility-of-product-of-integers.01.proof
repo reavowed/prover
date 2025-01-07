@@ -8,7 +8,7 @@ assume ∈ orderedPair t0 t1 |ℤ {
     prove → ∈ orderedPair t0 t1 |ℤ ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t0 t1 |ℤ, ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1) () 0.0.4
     prove ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 t1 |ℤ, ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1) () 0.0.5 0a
   }
-  let x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1, ∈ orderedPair t0 apply ×ℤ orderedPair t1 t2 |ℤ) () {
+  let x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t1, ∈ orderedPair t0 apply ×ℤ orderedPair t1 t2 |ℤ) () 0.0 {
     prove = apply ×ℤ orderedPair t0 apply ×ℤ orderedPair $0 t2 apply ×ℤ orderedPair apply ×ℤ orderedPair t0 $0 t2 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f () (t0, $0, t2) p0 0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p2
     prove = apply ×ℤ orderedPair apply ×ℤ orderedPair t0 $0 t2 apply ×ℤ orderedPair t1 t2 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ×ℤ orderedPair t0 $0, t1, apply ×ℤ orderedPair $$0 t2) 0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     prove = apply ×ℤ orderedPair t0 apply ×ℤ orderedPair $0 t2 apply ×ℤ orderedPair t1 t2 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair t0 apply ×ℤ orderedPair $0 t2, apply ×ℤ orderedPair apply ×ℤ orderedPair t0 $0 t2, apply ×ℤ orderedPair t1 t2) 0.1.0 0.1.1
@@ -31,7 +31,7 @@ assume ∈ orderedPair t0 t1 |ℤ {
         }
       }
     }
-  } 0.0
+  }
 }
 assume ∈ orderedPair t0 t2 |ℤ {
   inferenceExtraction {
@@ -43,7 +43,7 @@ assume ∈ orderedPair t0 t2 |ℤ {
     prove → ∈ orderedPair t0 t2 |ℤ ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t2 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair t0 t2 |ℤ, ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t2) () 1.0.4
     prove ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair t0 t2 |ℤ, ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t2) () 1.0.5 1a
   }
-  let x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t2, ∈ orderedPair t0 apply ×ℤ orderedPair t1 t2 |ℤ) () {
+  let x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t2, ∈ orderedPair t0 apply ×ℤ orderedPair t1 t2 |ℤ) () 1.0 {
     elided (Rearranged) {
       inferenceWithPremiseDerivations {
         prove ∈ apply ×ℤ orderedPair t1 $0 ℤ b5883fd1dce941c216e8e600685e39e0ebf2f0e13b4f468a9fb7b8acae6cad3a () (t1, $0) p1 1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -80,6 +80,6 @@ assume ∈ orderedPair t0 t2 |ℤ {
         }
       }
     }
-  } 1.0
+  }
 }
 prove ∈ orderedPair t0 apply ×ℤ orderedPair t1 t2 |ℤ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair t0 t1 |ℤ, ∈ orderedPair t0 t2 |ℤ, ∈ orderedPair t0 apply ×ℤ orderedPair t1 t2 |ℤ) () p3 0 1

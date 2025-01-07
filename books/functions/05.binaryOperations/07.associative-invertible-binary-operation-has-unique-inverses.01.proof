@@ -18,7 +18,7 @@ take a {
         prove ∃ b ∧ ∈ $0 t1 ∧ = apply t0 orderedPair $$0 $0 t2 = apply t0 orderedPair $0 $$0 t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∃ b ∧ ∈ $0 $$$0 ∧ = apply t0 orderedPair $$0 $0 t2 = apply t0 orderedPair $0 $$0 t2) (baseSet t0, t1) 0.0.0.3.0 0.0.0.2
       }
     }
-    let b ∧ ∈ $0 t1 ∧ = apply t0 orderedPair $$0 $0 t2 = apply t0 orderedPair $0 $$0 t2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 t1 ∧ = apply t0 orderedPair $0 $$0 t2 = apply t0 orderedPair $$0 $0 t2, ∃! b ∧ ∈ $0 t1 ∧ = apply t0 orderedPair $$0 $0 t2 = apply t0 orderedPair $0 $$0 t2) () {
+    let b ∧ ∈ $0 t1 ∧ = apply t0 orderedPair $$0 $0 t2 = apply t0 orderedPair $0 $$0 t2 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 t1 ∧ = apply t0 orderedPair $0 $$0 t2 = apply t0 orderedPair $$0 $0 t2, ∃! b ∧ ∈ $0 t1 ∧ = apply t0 orderedPair $$0 $0 t2 = apply t0 orderedPair $0 $$0 t2) () 0.0.0 {
       take c {
         assume ∧ ∈ $0 t1 ∧ = apply t0 orderedPair $$$0 $0 t2 = apply t0 orderedPair $0 $$$0 t2 {
           elided 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 {
@@ -77,6 +77,6 @@ take a {
         }
       }
       prove ∃! b ∧ ∈ $0 t1 ∧ = apply t0 orderedPair $$$0 $0 t2 = apply t0 orderedPair $0 $$$0 t2 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ ∈ $$$0 t1 ∧ = apply t0 orderedPair $$0 $$$0 t2 = apply t0 orderedPair $$$0 $$0 t2) ($0) 0.0.1a 0.0.1.0
-    } 0.0.0
+    }
   }
 }

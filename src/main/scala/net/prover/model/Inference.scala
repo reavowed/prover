@@ -41,29 +41,21 @@ trait Inference {
     }
   }
 
-  def validatePremisesAndConclusion(expectedPremises: Seq[Statement], expectedConclusion: Statement, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Unit] = {
-    for {
-      substitutedConclusion <- substituteConclusion(substitutions)
-      if substitutedConclusion == expectedConclusion
-      substitutedPremises <- substitutePremises(substitutions)
-      if substitutedPremises == expectedPremises
-    } yield ()
-  }
-
-  def substitutePremisesAndValidateConclusion(expectedConclusion: Statement, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Seq[Statement]] = {
-    for {
-      substitutedConclusion <- substituteConclusion(substitutions)
-      if substitutedConclusion == expectedConclusion
-      substitutedPremises <- substitutePremises(substitutions)
-    } yield substitutedPremises
-  }
-
   def substitutePremises(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Seq[Statement]] = {
     premises.map(substituteStatement(_, substitutions)).traverseOption
   }
 
   def substituteConclusion(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {
     conclusion.applySubstitutions(substitutions)
+  }
+
+  def validatePremisesAndConclusion(expectedPremises: Seq[Statement], expectedConclusion: Statement, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Unit] = {
+    for {
+      substitutedPremises <- substitutePremises(substitutions)
+      substitutedConclusion <- substituteConclusion(substitutions)
+      if substitutedPremises == expectedPremises
+      if substitutedConclusion == expectedConclusion
+    } yield ()
   }
 
   def substituteStatement(statement: Statement, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[Statement] = {

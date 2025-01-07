@@ -1,9 +1,9 @@
 prove ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = t0 orderedPair $$0 $0 04d25940483e2da57ec763affbce387d793357cc8cb7702aef82750d69f52ec4 () (t0, t1, t2) p0
 prove ∃ a ∃ b = t0 orderedPair $$0 $0 9aa6f3e8f4b9fe99e869fdf177edf601da568b1ee1d7cadc2be14344862a5119 (∈ $0 t1, ∈ $0 t2, = t0 orderedPair $0 $1) () 0
-let a_x ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = t0 orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = t0 orderedPair $$0 $0, ∈ first t0 t1) () {
+let a_x ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = t0 orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = t0 orderedPair $$0 $0, ∈ first t0 t1) () 0 {
   prove ∃! a ∃ b = t0 orderedPair $$0 $0 612f42a32ed48c046b6b6218e8af87fab20b39b998283327366a591871805394 () (t0) 1
   prove ∃ b = t0 orderedPair first t0 $0 42e1743439c10d376487e853e872a3ef82d4745abd8f77dfb88542c261df885c () (t0) 1
   prove ∃ b = t0 orderedPair $$0 $0 5bfddbf7f0eb474d65e75bc4262847dafdf03537ebe9724a8dfb2d9407353974 (∈ $$0 t2, = t0 orderedPair $0 $$0) () 2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   prove = first t0 $0 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ b = t0 orderedPair $$$0 $0) (first t0, $0) 2.0 2.1 2.2
   prove ∈ first t0 t1 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$0 t1) (first t0, $0) 2.3 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-} 0
+}

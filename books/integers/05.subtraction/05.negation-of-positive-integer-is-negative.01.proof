@@ -1,6 +1,6 @@
 prove ∃ a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () (t0) p0
-let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ, ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ ∈ orderedPair negatedZ t0 apply ⍳_ℤ 0ℕ <ℤ) () {
-  let a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℕ = t0 equivalenceClass orderedPair $0 $$0 ~_ℤ, ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ ∈ orderedPair negatedZ t0 apply ⍳_ℤ 0ℕ <ℤ) () {
+let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ, ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ ∈ orderedPair negatedZ t0 apply ⍳_ℤ 0ℕ <ℤ) () 0 {
+  let a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℕ = t0 equivalenceClass orderedPair $0 $$0 ~_ℤ, ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ ∈ orderedPair negatedZ t0 apply ⍳_ℤ 0ℕ <ℤ) () 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
     assume ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ {
       elided (Rewritten) {
         elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
@@ -180,5 +180,5 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
       }
     }
     prove ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ ∈ orderedPair negatedZ t0 apply ⍳_ℤ 0ℕ <ℤ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ orderedPair apply ⍳_ℤ 0ℕ t0 <ℤ, ∈ orderedPair negatedZ t0 apply ⍳_ℤ 0ℕ <ℤ) () 1.0.0 1.0.1
-  } 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-} 0
+  }
+}

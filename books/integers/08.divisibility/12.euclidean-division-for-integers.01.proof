@@ -19,9 +19,9 @@ subproof (Both non-negative) {
               }
             }
             prove ∃! z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 48f8127108ae40044d384bad77d1919bd81569be2ffde5f2785509d2018fb42b () ($$0) 0.0.0a 0.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-            let z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ ∈ $$$0 ℕ = $$0 apply ⍳_ℤ $$$0, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ) () {
+            let z' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ ∈ $$$0 ℕ = $$0 apply ⍳_ℤ $$$0, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ) () 0.0.0.0.0.0.1 {
               prove ∃! y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 48f8127108ae40044d384bad77d1919bd81569be2ffde5f2785509d2018fb42b () ($$0) 0.0.0.0.0a 0.0.0.0.0.0.0
-              let y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ ∈ $$$$0 ℕ = $$0 apply ⍳_ℤ $$$$0, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ) () {
+              let y' ∧ ∈ $0 ℕ = $$$0 apply ⍳_ℤ $0 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ ∈ $$$$0 ℕ = $$0 apply ⍳_ℤ $$$$0, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ) () 0.0.0.0.0.0.2.0 {
                 elided 1760e1b115ad354c2948efe51448d9a3ba82aee7f9c2b8c25909a515461f5ab2 {
                   prove ∈ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ $0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair apply ⍳_ℤ 0ℕ $$$$$0 <ℤ) ($$$0, apply ⍳_ℤ $0) 0.0.0.0.0.0.2.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   elided 1760e1b115ad354c2948efe51448d9a3ba82aee7f9c2b8c25909a515461f5ab2 {
@@ -34,8 +34,8 @@ subproof (Both non-negative) {
                   }
                 }
                 prove ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ 8d2342f2bbf9ea3c835941d7c5c726d4ea8d49de311feb1978bbbddfd6b1f0db () ($$0, $0) 0.0.0.0.0.0.2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0.0.0.0.2.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0.0.0.0.2.1.0
-                let q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $$0 $0 ∈ orderedPair $0 $$0 <ℕ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ) () {
-                  let r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℕ ∧ = $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $$0 $$$$$$0 ∈ orderedPair $$$$$$0 $$0 <ℕ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$$0 <ℤ) () {
+                let q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $$0 $0 ∈ orderedPair $0 $$0 <ℕ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ) () 0.0.0.0.0.0.2.1.1 {
+                  let r ∧ ∈ $0 ℕ ∧ = $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 ∈ orderedPair $0 $$$0 <ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℕ ∧ = $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $$0 $$$$$$0 ∈ orderedPair $$$$$$0 $$0 <ℕ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$$0 <ℤ) () 0.0.0.0.0.0.2.1.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
                     prove = apply ⍳_ℤ $$$$0 apply ⍳_ℤ apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$$0, apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0, apply ⍳_ℤ $$$$$$$0) 0.0.0.0.0.0.2.1.2.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove = $$$$$$0 apply ⍳_ℤ apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$$$$$0, apply ⍳_ℤ $$$$0, apply ⍳_ℤ apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $$$0 $0) 0.0.0.0.0.0.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.0.0.0.0.0.2.1.2.0.0
                     inferenceWithPremiseDerivations {
@@ -87,10 +87,10 @@ subproof (Both non-negative) {
                       prove ∧ ∈ apply ⍳_ℤ $$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ $$$0 $$$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$$0 <ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ $$0 ℤ, ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ $$$0 $$$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$$0 <ℤ) () 0.0.0.0.0.0.2.1.2.0.15.0 0.0.0.0.0.0.2.1.2.0.14
                       prove ∃ x ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$$$0 <ℤ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$$$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$$$$$$$0 $$$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$$0 <ℤ) (apply ⍳_ℤ $$0) 0.0.0.0.0.0.2.1.2.0.15.1
                     }
-                  } 0.0.0.0.0.0.2.1.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                } 0.0.0.0.0.0.2.1.1
-              } 0.0.0.0.0.0.2.0
-            } 0.0.0.0.0.0.1
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -154,8 +154,8 @@ subproof (Dividend negative, divisor positive) {
                 prove ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = negatedZ $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $$0 ≤ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = negatedZ $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ) () 1.0.0.0.0.0.3.2.3 1.0.0.0.0.0.3.1
               }
             }
-            let q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = negatedZ $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = negatedZ $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$0 <ℤ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ) () {
-              let r ∧ ∈ $0 ℤ ∧ = negatedZ $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℤ ∧ = negatedZ $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $0 $$0 $$$$0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 ≤ℤ ∈ orderedPair $$$$0 absZ $$0 <ℤ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ) () {
+            let q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = negatedZ $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = negatedZ $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$0 <ℤ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ) () 1.0.0.0.0.0.3 {
+              let r ∧ ∈ $0 ℤ ∧ = negatedZ $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℤ ∧ = negatedZ $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $0 $$0 $$$$0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 ≤ℤ ∈ orderedPair $$$$0 absZ $$0 <ℤ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ) () 1.0.0.0.0.0.4a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
                 elided a351f2eba1b34cef3b7a90d73badb9db49ac88b59034352ce7ee8d101220d4f8 {
                   prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
                   prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 1.0.0.0.0.0.4.0.0.0
@@ -453,8 +453,8 @@ subproof (Dividend negative, divisor positive) {
                   }
                 }
                 prove ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ, = apply ⍳_ℤ 0ℕ $0, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ) () 1.0.0.0.0.0.4.0.0 1.0.0.0.0.0.4.0.1 1.0.0.0.0.0.4.0.2
-              } 1.0.0.0.0.0.4a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-            } 1.0.0.0.0.0.3
+              }
+            }
           }
         }
       }
@@ -530,8 +530,8 @@ subproof (Divisor negative) {
                 prove ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 negatedZ $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ negatedZ $$$0 <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply ⍳_ℤ 0ℕ negatedZ $0 <ℤ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 negatedZ $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ negatedZ $$$0 <ℤ) () 3.0.0.0.0.0.1.1.3 3.0.0.0.0.0.0
               }
             }
-            let q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 negatedZ $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ negatedZ $$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 negatedZ $$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ negatedZ $$0 <ℤ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ) () {
-              let r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 negatedZ $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ negatedZ $$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℤ ∧ = $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $0 negatedZ $$0 $$$$0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 ≤ℤ ∈ orderedPair $$$$0 absZ negatedZ $$0 <ℤ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ) () {
+            let q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 negatedZ $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ negatedZ $$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 negatedZ $$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ negatedZ $$0 <ℤ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$0 <ℤ) () 3.0.0.0.0.0.1 {
+              let r ∧ ∈ $0 ℤ ∧ = $$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 negatedZ $$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ negatedZ $$$0 <ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℤ ∧ = $$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $0 negatedZ $$0 $$$$0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 ≤ℤ ∈ orderedPair $$$$0 absZ negatedZ $$0 <ℤ, ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ) () 3.0.0.0.0.0.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
                 elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
                   inferenceExtraction {
                     prove ∧ = apply ×ℤ orderedPair $$0 negatedZ $$$0 negatedZ apply ×ℤ orderedPair $$0 $$$0 = apply ×ℤ orderedPair negatedZ $$0 $$$0 negatedZ apply ×ℤ orderedPair $$0 $$$0 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 () ($$0, $$$0) 3.0.0.0.0.0.2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 3.0.0.0.0a
@@ -565,8 +565,8 @@ subproof (Divisor negative) {
                   prove ∧ ∈ negatedZ $$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair negatedZ $$$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ negatedZ $$0 ℤ, ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair negatedZ $$$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ) () 3.0.0.0.0.0.2.0.5.0 3.0.0.0.0.0.2.0.4
                   prove ∃ q ∧ ∈ $0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$0 $$$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$$0 <ℤ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$0 ℤ ∃ r ∧ ∈ $0 ℤ ∧ = $$$$$0 apply +ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$$0 $0 ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∈ orderedPair $0 absZ $$$$0 <ℤ) (negatedZ $$0) 3.0.0.0.0.0.2.0.5.1
                 }
-              } 3.0.0.0.0.0.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-            } 3.0.0.0.0.0.1
+              }
+            }
           }
         }
       }

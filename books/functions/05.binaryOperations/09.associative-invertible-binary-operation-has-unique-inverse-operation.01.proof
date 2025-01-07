@@ -1,5 +1,5 @@
 prove ∃! f invertingOperationBinaryOperation $0 t0 t1 40fe68c7a029520db2f71b1ae89f2ab154d9b609cc5478773976de0020d753c7 () (t0, t1, t2) p0
-let f invertingOperationBinaryOperation $0 t0 t1 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (invertingOperationBinaryOperation $0 t0 t1, ∃! ∗ inverseOperationBinaryOperation $0 t0 t1) () {
+let f invertingOperationBinaryOperation $0 t0 t1 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (invertingOperationBinaryOperation $0 t0 t1, ∃! ∗ inverseOperationBinaryOperation $0 t0 t1) () 0 {
   let g = $0 functionMap2 a b t1 t1 apply t0 orderedPair $0 apply $$$0 $1 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∃! ∗ inverseOperationBinaryOperation $0 t0 t1) (functionMap2 a b t1 t1 apply t0 orderedPair $0 apply $$0 $1) {
     elided 723f4ecbdb9794317f2b63eb8b47a852f49f47ddfb89fe5c3484a35766b96a5b {
       take a {
@@ -302,4 +302,4 @@ let f invertingOperationBinaryOperation $0 t0 t1 c01064f3c40cf0c57562a46738008cf
     }
     prove ∃! ∗ inverseOperationBinaryOperation $0 t0 t1 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (inverseOperationBinaryOperation $$$0 t0 t1) ($0) 1.0.2 1.0.3
   }
-} 0
+}

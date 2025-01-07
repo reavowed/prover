@@ -2,7 +2,7 @@ prove = product t0 t1 comprehension x powerSet powerSet ∪ t0 t1 ∃ a ∧ ∈ 
 assume = product t0 t1 ∅ {
   assume ¬ = t0 ∅ {
     prove ∃ a ∈ $0 t0 3533f6dbdbf8d0f28da330a846256442487d9d249dba242bb407d5b7ec57865d () (t0) 1.0a
-    let a ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ $0 t0, = t1 ∅) () {
+    let a ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ $0 t0, = t1 ∅) () 1.0.0 {
       take x {
         assume ∈ $0 t1 {
           prove ∈ orderedPair $$0 $0 product t0 t1 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t0, $0, t1) 1.0.1a 1.0.1.0.0a
@@ -21,7 +21,7 @@ assume = product t0 t1 ∅ {
         prove ¬ ∈ $0 t1 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (∈ $0 t1) () 1.0.1.0.0
       }
       prove = t1 ∅ 486b54d6aae6ee342bf0d2dc2f5c8cbf7cd8b55d00a364066240c0bca925c1f4 () (t1) 1.0.1.0
-    } 1.0.0
+    }
   }
   prove ∨ = t0 ∅ = t1 ∅ f1907fcb38bc4edb92cfc8dab5e442371437f79540509ece7bfd74945e1ea932 (= t0 ∅, = t1 ∅) () 1.0
 }

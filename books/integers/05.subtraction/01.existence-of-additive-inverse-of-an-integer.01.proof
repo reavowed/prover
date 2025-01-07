@@ -1,6 +1,6 @@
 prove ∃ a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () (t0) p0
-let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ, ∃! b ∧ ∈ $0 ℤ ∧ = apply +ℤ orderedPair t0 $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $0 t0 apply ⍳_ℤ 0ℕ) () {
-  let a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℕ = t0 equivalenceClass orderedPair $0 $$0 ~_ℤ, ∃! b ∧ ∈ $0 ℤ ∧ = apply +ℤ orderedPair t0 $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $0 t0 apply ⍳_ℤ 0ℕ) () {
+let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ, ∃! b ∧ ∈ $0 ℤ ∧ = apply +ℤ orderedPair t0 $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $0 t0 apply ⍳_ℤ 0ℕ) () 0 {
+  let a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℕ = t0 equivalenceClass orderedPair $0 $$0 ~_ℤ, ∃! b ∧ ∈ $0 ℤ ∧ = apply +ℤ orderedPair t0 $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $0 t0 apply ⍳_ℤ 0ℕ) () 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
     prove ∈ equivalenceClass orderedPair $0 $$0 ~_ℤ ℤ 2828eb31e21168a6591aab7944684f81081c3903544879d9877bb3aec1a48047 () ($0, $$0) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
     elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
       prove = apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair $0 $$0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () ($$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -51,5 +51,5 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
       prove ∧ ∈ equivalenceClass orderedPair $0 $$0 ~_ℤ ℤ ∧ = apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ equivalenceClass orderedPair $0 $$0 ~_ℤ ℤ, ∧ = apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ) () 1.0.0 1.0.11.0
       prove ∃! x ∧ ∈ $0 ℤ ∧ = apply +ℤ orderedPair t0 $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $0 t0 apply ⍳_ℤ 0ℕ f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ ∈ $$$0 ℤ ∧ = apply +ℤ orderedPair t0 $$$0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $$$0 t0 apply ⍳_ℤ 0ℕ) (equivalenceClass orderedPair $0 $$0 ~_ℤ) 1.0.11.1 1.0.10
     }
-  } 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-} 0
+  }
+}

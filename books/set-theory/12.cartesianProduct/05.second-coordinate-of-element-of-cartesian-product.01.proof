@@ -1,10 +1,10 @@
 prove ∃ a ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = t0 orderedPair $$0 $0 04d25940483e2da57ec763affbce387d793357cc8cb7702aef82750d69f52ec4 () (t0, t1, t2) p0
 prove ∃ a ∃ b = t0 orderedPair $$0 $0 9aa6f3e8f4b9fe99e869fdf177edf601da568b1ee1d7cadc2be14344862a5119 (∈ $0 t1, ∈ $0 t2, = t0 orderedPair $0 $1) () 0
 prove ∃ b ∧ ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = t0 orderedPair $0 $$0 3140f89790aeb93a75670e465d02b4d9eb20f75c9d36900d02c4e27862d3e145 (∈ $0 t1, ∈ $0 t2, = t0 orderedPair $0 $1) () 0
-let b_x ∧ ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = t0 orderedPair $0 $$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = t0 orderedPair $0 $$0, ∈ second t0 t2) () {
+let b_x ∧ ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = t0 orderedPair $0 $$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = t0 orderedPair $0 $$0, ∈ second t0 t2) () 2 {
   prove ∃! b ∃ a = t0 orderedPair $0 $$0 02f42cedcfe11c54fb2e8062e25d54b9db41940ffc3c8bc09dcf5c93627b2dac () (t0) 1
   prove ∃ a = t0 orderedPair $0 second t0 c14edf76b6364ae3dc2af1590340e017789f9fc579e6c9a042bb21ac7bbd68f7 () (t0) 1
   prove ∃ a = t0 orderedPair $0 $$0 5bfddbf7f0eb474d65e75bc4262847dafdf03537ebe9724a8dfb2d9407353974 (∈ $$0 t1, = t0 orderedPair $$0 $0) () 3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   prove = second t0 $0 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ a = t0 orderedPair $0 $$$0) (second t0, $0) 3.0 3.1 3.2
   prove ∈ second t0 t2 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∈ $$0 t2) (second t0, $0) 3.3 3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-} 2
+}

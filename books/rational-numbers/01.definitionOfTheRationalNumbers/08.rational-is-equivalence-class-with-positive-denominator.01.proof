@@ -6,7 +6,7 @@ inferenceWithPremiseDerivations {
   prove equivalenceRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ c0bc32c877360e5315af8a448d415d129cf44fa28fa06e859a1fdc3b5663fd66 () ()
   prove ∃ a ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivalenceClass $0 ~_ℚ 3fdbf8c86f0169d84bd9add269e4118a039eff55e0cbdfa2fa08daeaefc350b3 () (~_ℚ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, t0) 1.0 0
 }
-let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivalenceClass $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivalenceClass $0 ~_ℚ, ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ) () {
+let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivalenceClass $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivalenceClass $0 ~_ℚ, ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ) () 1 {
   inferenceWithPremiseDerivations {
     prove ∈ second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
     prove ⊕ ∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ ∈ orderedPair second $0 apply ⍳_ℤ 0ℕ <ℤ 6dbb59ec78a53a900eb46c21483eaf006f56c24a7438eed689724b161d9ce809 () (second $0) 2.0.0
@@ -171,4 +171,4 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
     prove ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ ∈ orderedPair second $0 apply ⍳_ℤ 0ℕ <ℤ 2cb695f79e67d4a66aadf665aa336968a1cec742a0feff3940335eb98c713167 (∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ, ∈ orderedPair second $0 apply ⍳_ℤ 0ℕ <ℤ) () 2.0
     prove ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ 3e9800d493cd5840a0081a9676ec986846a2652aefcc549f1d631ee37a06dde0 (∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ, ∈ orderedPair second $0 apply ⍳_ℤ 0ℕ <ℤ, ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$0 $0 ~_ℚ) () 2.3.0 2.1 2.2
   }
-} 1
+}

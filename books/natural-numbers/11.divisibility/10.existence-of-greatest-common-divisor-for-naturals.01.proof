@@ -80,7 +80,7 @@ let D = $0 comprehension n ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0
     prove ⊆ $0 ℕ a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (∧ ∈ orderedPair $$0 t0 |ℕ ∈ orderedPair $$0 t1 |ℕ) ($0, ℕ) 0a
     prove ∃! c ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $0 $$0 ≤ℕ ebc018d298e4cca1660b832ce02ff50904ea7bd08f189eb02184a47beb6a3d98 () ($0) 0.3.0 0.1 0.2
   }
-  let c ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $0 $$0 ≤ℕ c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ ∈ $$0 $0 ∀ b → ∈ $0 $$0 ∈ orderedPair $0 $$$0 ≤ℕ, ∃! c ∧ ∈ $0 ℕ ∧ ∈ orderedPair 0ℕ $0 <ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∧ ∈ orderedPair $0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ) () {
+  let c ∧ ∈ $0 $$0 ∀ b → ∈ $0 $$$0 ∈ orderedPair $0 $$0 ≤ℕ c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ ∈ $$0 $0 ∀ b → ∈ $0 $$0 ∈ orderedPair $0 $$$0 ≤ℕ, ∃! c ∧ ∈ $0 ℕ ∧ ∈ orderedPair 0ℕ $0 <ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∧ ∈ orderedPair $0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ) () 0.3 {
     subproof (c satisfies condition) {
       inferenceExtraction {
         prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ ∈ orderedPair $$$0 t0 |ℕ ∈ orderedPair $$$0 t1 |ℕ) ($$0, ℕ) 0a
@@ -175,5 +175,5 @@ let D = $0 comprehension n ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0
       }
     }
     prove ∃! c ∧ ∈ $0 ℕ ∧ ∈ orderedPair 0ℕ $0 <ℕ ∧ ∈ orderedPair $0 t0 |ℕ ∧ ∈ orderedPair $0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$0 ≤ℕ f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ ∈ $$$0 ℕ ∧ ∈ orderedPair 0ℕ $$$0 <ℕ ∧ ∈ orderedPair $$$0 t0 |ℕ ∧ ∈ orderedPair $$$0 t1 |ℕ ∀ d → ∈ $0 ℕ → ∧ ∈ orderedPair $0 t0 |ℕ ∈ orderedPair $0 t1 |ℕ ∈ orderedPair $0 $$$$0 ≤ℕ) ($0) 0.4.0 0.4.1
-  } 0.3
+  }
 }

@@ -1,12 +1,12 @@
 take a {
   assume ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 {
-    let b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 codomain product t1 t0 ∈ orderedPair $0 $$0 product t1 t0, ∈ $0 t1) () {
+    let b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 codomain product t1 t0 ∈ orderedPair $0 $$0 product t1 t0, ∈ $0 t1) () 0.0a {
       prove ∈ $$0 t1 d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () ($$0, $0, t1, t0) 0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-    } 0.0a
+    }
   }
   assume ∈ $0 t1 {
     prove ∃ b ∈ $0 t0 3533f6dbdbf8d0f28da330a846256442487d9d249dba242bb407d5b7ec57865d () (t0) p0
-    let b ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ $$0 t0, ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0) () {
+    let b ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ $$0 t0, ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0) () 0.1.0 {
       elided 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a {
         prove ∈ orderedPair $$0 $0 product t1 t0 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t1, $0, t0) 0.1a 0.1.1a
         inferenceExtraction {
@@ -19,7 +19,7 @@ take a {
         prove ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 codomain product t1 t0, ∈ orderedPair $$0 $0 product t1 t0) () 0.1.1.0 0.1.1.1.0
         prove ∃ x ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$$0 $0 product t1 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 codomain product t1 t0 ∈ orderedPair $$0 $$$0 product t1 t0) ($0) 0.1.1.1.1
       }
-    } 0.1.0
+    }
   }
   inferenceExtraction {
     prove ∀ a ↔ ∈ $0 domain product t1 t0 ∃ b ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 599dfc696517a7bb4212a58bf9846f4d911a39afcb1c77c4033044ada81fe184 () (product t1 t0)

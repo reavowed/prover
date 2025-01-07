@@ -1,21 +1,21 @@
 assume ∃ x with ($0) s0 {
-  let x with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0) s0, ∃ x with ($0) s1) () {
+  let x with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0) s0, ∃ x with ($0) s1) () 0a {
     existingStatementExtraction {
       prove ↔ with ($0) s0 with ($0) s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$0) s0 with ($$0) s1) ($0) p0
       prove → with ($0) s0 with ($0) s1 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (with ($0) s0, with ($0) s1) () 0.0.0.0
       prove with ($0) s1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s0, with ($0) s1) () 0.0.0.1 0.0a
     }
     prove ∃ x with ($0) s1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0) s1) ($0) 0.0.0
-  } 0a
+  }
 }
 assume ∃ x with ($0) s1 {
-  let x with ($0) s1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0) s1, ∃ x with ($0) s0) () {
+  let x with ($0) s1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (with ($0) s1, ∃ x with ($0) s0) () 1a {
     existingStatementExtraction {
       prove ↔ with ($0) s0 with ($0) s1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ with ($$0) s0 with ($$0) s1) ($0) p0
       prove → with ($0) s1 with ($0) s0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (with ($0) s0, with ($0) s1) () 1.0.0.0
       prove with ($0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (with ($0) s1, with ($0) s0) () 1.0.0.1 1.0a
     }
     prove ∃ x with ($0) s0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (with ($$0) s0) ($0) 1.0.0
-  } 1a
+  }
 }
 prove ↔ ∃ x with ($0) s0 ∃ x with ($0) s1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∃ x with ($0) s0, ∃ x with ($0) s1) () 0 1

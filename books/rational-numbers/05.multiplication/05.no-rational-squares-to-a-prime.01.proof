@@ -1,8 +1,8 @@
 assume ∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply ⍳_ℤ t0 {
-  let a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply ⍳_ℤ t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply ⍳_ℤ t0, ⊥) () {
+  let a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply ⍳_ℤ t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply ⍳_ℤ t0, ⊥) () 0a {
     prove ∃ x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ ∧ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ d62bbecc88f419fe3de8e633199ecc267a367e6268be3dec27cf06d200ef68c3 () ($0) 0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-    let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ ∧ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ ∃ y ∧ ∈ $0 ℤ^+ ∧ = $$0 equivalenceClass orderedPair $$$0 $0 ~_ℚ = gcdℤ $$$0 $0 apply ⍳_ℤ 1ℕ, ⊥) () {
-      let y ∧ ∈ $0 ℤ^+ ∧ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ^+ ∧ = $$0 equivalenceClass orderedPair $0 $$$0 ~_ℚ = gcdℤ $0 $$$0 apply ⍳_ℤ 1ℕ, ⊥) () {
+    let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ ∧ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ ∃ y ∧ ∈ $0 ℤ^+ ∧ = $$0 equivalenceClass orderedPair $$$0 $0 ~_ℚ = gcdℤ $$$0 $0 apply ⍳_ℤ 1ℕ, ⊥) () 0.0.0 {
+      let y ∧ ∈ $0 ℤ^+ ∧ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ = gcdℤ $$0 $0 apply ⍳_ℤ 1ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ^+ ∧ = $$0 equivalenceClass orderedPair $0 $$$0 ~_ℚ = gcdℤ $0 $$$0 apply ⍳_ℤ 1ℕ, ⊥) () 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
         prove = apply ×ℚ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ apply ⍳_ℚ apply ⍳_ℤ t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply ×ℚ orderedPair $$$$0 $$$$0 apply ⍳_ℚ apply ⍳_ℤ t0) ($$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ) 0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {
           elided a88751fd3ae7ff1f4a70b5c12beb820a00a6ec7166a61be8f257847d345e94ed {
@@ -271,8 +271,8 @@ assume ∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply 
             prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∧ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t0 <ℤ) () 0.0.1.0.11.2.0 0.0.1.0.11.1
           }
         }
-      } 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-    } 0.0.0
-  } 0a
+      }
+    }
+  }
 }
 prove ¬ ∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply ⍳_ℤ t0 f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply ⍳_ℤ t0) () 0

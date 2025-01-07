@@ -1,5 +1,5 @@
-let a' ∃ b = t0 orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∃ b = t0 orderedPair $$0 $0, = t0 orderedPair first t0 second t0) () {
-  let b' = t0 orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $0 $$0, = t0 orderedPair first t0 second t0) () {
+let a' ∃ b = t0 orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∃ b = t0 orderedPair $$0 $0, = t0 orderedPair first t0 second t0) () p0 {
+  let b' = t0 orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $0 $$0, = t0 orderedPair first t0 second t0) () 0a {
     prove ∃ a = t0 orderedPair $0 $$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (= t0 orderedPair $$$0 $0) ($$0) 0.0a
     elided 612f42a32ed48c046b6b6218e8af87fab20b39b998283327366a591871805394 {
       prove ∃! a ∃ b = t0 orderedPair $$0 $0 612f42a32ed48c046b6b6218e8af87fab20b39b998283327366a591871805394 () (t0) p0
@@ -15,5 +15,5 @@ let a' ∃ b = t0 orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70b
       prove = t0 orderedPair $$0 second t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 orderedPair $$0 $$$0) ($0, second t0) 0.0.2 0.0a
       prove = t0 orderedPair first t0 second t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 orderedPair $$$0 second t0) ($$0, first t0) 0.0.1 0.0.3.0
     }
-  } 0a
-} p0
+  }
+}

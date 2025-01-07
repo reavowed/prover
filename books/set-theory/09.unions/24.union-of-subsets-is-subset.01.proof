@@ -1,11 +1,11 @@
 take y {
   assume ∈ $0 union t0 {
     prove ∃ a ∧ ∈ $$0 $0 ∈ $0 t0 ce5a9a7773b7207b1433fe33c1f6357cff535a178c0d2991eb1e5b5781102e99 () ($0, t0) 0.0a
-    let a ∧ ∈ $$0 $0 ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 $$0 ∈ $$0 t0, ∈ $0 t1) () {
+    let a ∧ ∈ $$0 $0 ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 $$0 ∈ $$0 t0, ∈ $0 t1) () 0.0.0 {
       prove ∈ $0 powerSet t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t0, powerSet t1, $0) p0 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       prove ⊆ $0 t1 b7b1206bf99e07b82c7074270c78694962f0d6ef74bc67aab87aec9e21593456 () ($0, t1) 0.0.1.0
       prove ∈ $$0 t1 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () ($0, t1, $$0) 0.0.1.1 0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-    } 0.0.0
+    }
   }
 }
 prove ⊆ union t0 t1 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () (union t0, t1) 0

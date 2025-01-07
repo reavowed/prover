@@ -3,7 +3,7 @@ inferenceExtraction {
   prove ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation t0, ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () 0.0
   prove ∃! e identityBinaryOperation $0 t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∃! e identityBinaryOperation $0 t0, ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () 0.1
 }
-let e identityBinaryOperation $0 t0 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (identityBinaryOperation $0 t0, cancellableBinaryOperation t0) () {
+let e identityBinaryOperation $0 t0 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (identityBinaryOperation $0 t0, cancellableBinaryOperation t0) () 0 {
   take a {
     assume ∈ $0 baseSet t0 {
       take b {
@@ -18,7 +18,7 @@ let e identityBinaryOperation $0 t0 c01064f3c40cf0c57562a46738008cfc111791cbb626
                   prove → ∈ $$$0 baseSet t0 ∃ a^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$$$0 $0 $$$$$0 = apply t0 orderedPair $0 $$$$0 $$$$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 baseSet t0 ∃ a^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$$$$$0 $0 $$$$$0 = apply t0 orderedPair $0 $$$$$$0 $$$$$0) ($$$0) 1.0.0.0.0.0.0.0.0.2
                   prove ∃ a^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$$$0 $0 $$$$$0 = apply t0 orderedPair $0 $$$$0 $$$$$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$0 baseSet t0, ∃ a^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$$$0 $0 $$$$$0 = apply t0 orderedPair $0 $$$$0 $$$$$0) () 1.0.0.0.0.0.0.0.0.3 1.0.0a
                 }
-                let a^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$$$0 $0 $$$$$0 = apply t0 orderedPair $0 $$$$0 $$$$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 baseSet t0 ∧ = apply t0 orderedPair $$$0 $$$$$0 $$$$0 = apply t0 orderedPair $$$$$0 $$$0 $$$$0, = $$0 $0) () {
+                let a^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$$$0 $0 $$$$$0 = apply t0 orderedPair $0 $$$$0 $$$$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 baseSet t0 ∧ = apply t0 orderedPair $$$0 $$$$$0 $$$$0 = apply t0 orderedPair $$$$$0 $$$0 $$$$0, = $$0 $0) () 1.0.0.0.0.0.0.0.0 {
                   inferenceExtraction {
                     prove ∧ binaryOperation t0 ∧ ∈ $$$$$0 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 $$$$$$0 $0 = apply t0 orderedPair $$$$$$0 $0 $0 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 () ($$$$$0, t0) 1a
                     prove → ∈ $$$0 baseSet t0 ∧ = apply t0 orderedPair $$$0 $$$$$0 $$$0 = apply t0 orderedPair $$$$$0 $$$0 $$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$0 baseSet t0 ∧ = apply t0 orderedPair $$$$$$0 $$$$$0 $$$$$$0 = apply t0 orderedPair $$$$$0 $$$$$$0 $$$$$$0) ($$$0) 1.0.0.0.0.0.0.0.1.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -62,7 +62,7 @@ let e identityBinaryOperation $0 t0 c01064f3c40cf0c57562a46738008cfc111791cbb626
                     prove = apply t0 orderedPair $$$$$0 $$0 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply t0 orderedPair $$0 $$$$$0 $$0, = apply t0 orderedPair $$$$$0 $$0 $$0) () 1.0.0.0.0.0.0.0.1.11.2
                   }
                   prove = $$$0 $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$$0, apply t0 orderedPair $$$$$0 $$0, $$0) 1.0.0.0.0.0.0.0.1.10 1.0.0.0.0.0.0.0.1.11
-                } 1.0.0.0.0.0.0.0.0
+                }
               }
             }
           }
@@ -88,7 +88,7 @@ let e identityBinaryOperation $0 t0 c01064f3c40cf0c57562a46738008cfc111791cbb626
                   prove → ∈ $0 baseSet t0 ∃ c^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$$$0 = apply t0 orderedPair $0 $$0 $$$$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 baseSet t0 ∃ c^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$$$$$0 $0 $$$$$0 = apply t0 orderedPair $0 $$$$$$0 $$$$$0) ($0) 1.2.0.0.0.0.0.0.0.2
                   prove ∃ c^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$$$0 = apply t0 orderedPair $0 $$0 $$$$$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 baseSet t0, ∃ c^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$$$0 = apply t0 orderedPair $0 $$0 $$$$$0) () 1.2.0.0.0.0.0.0.0.3 1.2.0.0.0.0.0a
                 }
-                let c^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$$$0 = apply t0 orderedPair $0 $$0 $$$$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 baseSet t0 ∧ = apply t0 orderedPair $0 $$$$$0 $$$$0 = apply t0 orderedPair $$$$$0 $0 $$$$0, = $$$0 $$0) () {
+                let c^-1 ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$$$0 = apply t0 orderedPair $0 $$0 $$$$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 baseSet t0 ∧ = apply t0 orderedPair $0 $$$$$0 $$$$0 = apply t0 orderedPair $$$$$0 $0 $$$$0, = $$$0 $$0) () 1.2.0.0.0.0.0.0.0 {
                   inferenceExtraction {
                     prove ∧ binaryOperation t0 ∧ ∈ $$$$$0 baseSet t0 ∀ a → ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $0 $$$$$$0 $0 = apply t0 orderedPair $$$$$$0 $0 $0 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 () ($$$$$0, t0) 1a
                     prove → ∈ $$$$0 baseSet t0 ∧ = apply t0 orderedPair $$$$0 $$$$$0 $$$$0 = apply t0 orderedPair $$$$$0 $$$$0 $$$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$0 baseSet t0 ∧ = apply t0 orderedPair $$$$$$0 $$$$$0 $$$$$$0 = apply t0 orderedPair $$$$$0 $$$$$$0 $$$$$$0) ($$$$0) 1.2.0.0.0.0.0.0.1.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -132,7 +132,7 @@ let e identityBinaryOperation $0 t0 c01064f3c40cf0c57562a46738008cfc111791cbb626
                     prove = apply t0 orderedPair $$$0 $$$$$0 $$$0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= apply t0 orderedPair $$$0 $$$$$0 $$$0, = apply t0 orderedPair $$$$$0 $$$0 $$$0) () 1.2.0.0.0.0.0.0.1.11.2
                   }
                   prove = $$$$0 $$$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$$$0, apply t0 orderedPair $$$0 $$$$$0, $$$0) 1.2.0.0.0.0.0.0.1.10 1.2.0.0.0.0.0.0.1.11
-                } 1.2.0.0.0.0.0.0.0
+                }
               }
             }
           }
@@ -149,4 +149,4 @@ let e identityBinaryOperation $0 t0 c01064f3c40cf0c57562a46738008cfc111791cbb626
     prove ∧ binaryOperation t0 ∧ leftCancellableBinaryOperation t0 rightCancellableBinaryOperation t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∧ leftCancellableBinaryOperation t0 rightCancellableBinaryOperation t0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.4.0
     prove cancellableBinaryOperation t0 5c526c4d03061adc6ecc97c3420de927a6142441e89a30d385ec447f3f183dda () (t0) 1.4.1
   }
-} 0
+}

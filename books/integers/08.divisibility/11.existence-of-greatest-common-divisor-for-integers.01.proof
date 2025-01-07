@@ -89,7 +89,7 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
     prove ⊆ $0 ℤ a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (∧ ∈ orderedPair $$0 t0 |ℤ ∈ orderedPair $$0 t1 |ℤ) ($0, ℤ) 0a
     prove ∃ b ∧ ∈ $0 $$0 ∀ s → ∈ $0 $$$0 ∈ orderedPair $0 $$0 ≤ℤ a56e497243c5b388453b33bd647ef862db00b192b91bfb4b81a611c798d311c3 () ($0) 0.3.0 0.1 0.2
   }
-  let c ∧ ∈ $0 $$0 ∀ s → ∈ $0 $$$0 ∈ orderedPair $0 $$0 ≤ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 $0 ∀ s → ∈ $0 $$0 ∈ orderedPair $0 $$$0 ≤ℤ, ∃! c ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∧ ∈ orderedPair $0 t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ orderedPair $0 $$0 ≤ℤ) () {
+  let c ∧ ∈ $0 $$0 ∀ s → ∈ $0 $$$0 ∈ orderedPair $0 $$0 ≤ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 $0 ∀ s → ∈ $0 $$0 ∈ orderedPair $0 $$$0 ≤ℤ, ∃! c ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∧ ∈ orderedPair $0 t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ orderedPair $0 $$0 ≤ℤ) () 0.3 {
     inferenceExtraction {
       prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($$0, ℤ) 0a
       prove ↔ ∈ $0 $$0 ∧ ∈ $0 ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 ℤ ∧ ∈ orderedPair $$$0 t0 |ℤ ∈ orderedPair $$$0 t1 |ℤ) ($0) 0.4.0.0
@@ -227,5 +227,5 @@ let D = $0 comprehension z ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0
       prove ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∧ ∈ orderedPair $0 t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ orderedPair $0 $$0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∧ ∈ orderedPair $0 t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ orderedPair $0 $$0 ≤ℤ) () 0.4.4.1 0.4.4.4
       prove ∃! c ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∧ ∈ orderedPair $0 t0 |ℤ ∧ ∈ orderedPair $0 t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ orderedPair $0 $$0 ≤ℤ f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ ∈ $$$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 <ℤ ∧ ∈ orderedPair $$$0 t0 |ℤ ∧ ∈ orderedPair $$$0 t1 |ℤ ∀ d → ∈ $0 ℤ → ∧ ∈ orderedPair $0 t0 |ℤ ∈ orderedPair $0 t1 |ℤ ∈ orderedPair $0 $$$$0 ≤ℤ) ($0) 0.4.4.5 0.4.3
     }
-  } 0.3
+  }
 }

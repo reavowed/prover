@@ -1,8 +1,8 @@
 take a {
   assume ∈ $0 ℚ {
     prove ∃ a_1 ∧ ∈ $0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 9072e0dad0fa03b50897133096ad4fbb9c8ef21ad962d3bbbdb26f84b47972e8 () ($0) 0.0a
-    let a_1 ∧ ∈ $0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$0 equivalenceClass orderedPair $$$0 $0 ~_ℚ, ∃ b ∧ ∈ $0 ℚ ∧ = apply +ℚ orderedPair $$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) () {
-      let a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ^+ = $$0 equivalenceClass orderedPair $0 $$$0 ~_ℚ, ∃ b ∧ ∈ $0 ℚ ∧ = apply +ℚ orderedPair $$$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) () {
+    let a_1 ∧ ∈ $0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$0 equivalenceClass orderedPair $$$0 $0 ~_ℚ, ∃ b ∧ ∈ $0 ℚ ∧ = apply +ℚ orderedPair $$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) () 0.0.0 {
+      let a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ^+ = $$0 equivalenceClass orderedPair $0 $$$0 ~_ℚ, ∃ b ∧ ∈ $0 ℚ ∧ = apply +ℚ orderedPair $$$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) () 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
         prove = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply +ℚ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ, apply +ℚ orderedPair $$$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ) 0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         elided ac61855b19ac32afee72eccba64043473ef1d1e3915b345687db044260e31833 {
           prove ⊆ ℤ^+ diff ℤ singleton apply ⍳_ℤ 0ℕ 12eaa1fd89f53d0b5c2eb4fd7ba05ce6bc58a4b887590031ea49de9a7a485150 () ()
@@ -149,8 +149,8 @@ take a {
           prove ∧ ∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ ℚ ∧ = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ $$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ ℚ, ∧ = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ $$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) () 0.0.1.0.8.3 0.0.1.0.8.4
           prove ∃ b ∧ ∈ $0 ℚ ∧ = apply +ℚ orderedPair $$$$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$0 ℚ ∧ = apply +ℚ orderedPair $$$0 $$$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $$$$0 $$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) (equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ) 0.0.1.0.8.5
         }
-      } 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-    } 0.0.0
+      }
+    }
   }
 }
 elided 122defbd1ecbb66d35fd7422f2a5d2f4beab253a7c3d2f3c5b4b00661363946d {

@@ -2,12 +2,12 @@ prove ∃ b ∃ a = t0 orderedPair $0 $$0 089db608f66b0d3d28865a12a6f14788a7399a
 take b_1 {
   take b_2 {
     assume ∧ ∃ a = t0 orderedPair $0 $$$0 ∃ a = t0 orderedPair $0 $$0 {
-      let a_1 = t0 orderedPair $0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $$$0 $$0, = $$0 $0) () {
-        let a_2 = t0 orderedPair $0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $$$$0 $$0, = $$$0 $$0) () {
+      let a_1 = t0 orderedPair $0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $$$0 $$0, = $$0 $0) () 1.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a {
+        let a_2 = t0 orderedPair $0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (= t0 orderedPair $$$$0 $$0, = $$$0 $$0) () 1.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
           prove = orderedPair $$0 $$$$0 orderedPair $0 $$$0 17ea1189d21985c734cf2ff359fbe657b6f31d5a78f5d8746e6b5e2b5c2f39e3 () (t0, orderedPair $$0 $$$$0, orderedPair $0 $$$0) 1.0.0.0a 1.0.0.0.0a
           prove = $$$$0 $$$0 19a66c6e2472407a6bc0db6ef3785ff4af4337ccc0c3ee8053164db261062df3 () ($$0, $$$$0, $0, $$$0) 1.0.0.0.0.0
-        } 1.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      } 1.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        }
+      }
     }
   }
 }

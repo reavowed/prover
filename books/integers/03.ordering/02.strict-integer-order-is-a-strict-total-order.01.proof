@@ -10,10 +10,10 @@ subproof (Asymmetric) {
           assume ∈ orderedPair $$0 $0 <ℤ {
             prove ∃ a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () ($$0) 1.0.0a
             prove ∃ b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () ($0) 1.0.0.0.0a
-            let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$$$0 $0 ~_ℤ, ¬ ∈ orderedPair $0 $$0 <ℤ) () {
-              let a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℕ = $$$0 equivalenceClass orderedPair $0 $$$$0 ~_ℤ, ¬ ∈ orderedPair $$0 $$$0 <ℤ) () {
-                let b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$$$$$0 $0 ~_ℤ, ¬ ∈ orderedPair $$$0 $$$$0 <ℤ) () {
-                  let b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℕ = $$$$0 equivalenceClass orderedPair $0 $$$$$$0 ~_ℤ, ¬ ∈ orderedPair $$$$0 $$$$$0 <ℤ) () {
+            let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$$$0 $0 ~_ℤ, ¬ ∈ orderedPair $0 $$0 <ℤ) () 1.0.0.0.0.0.0 {
+              let a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℕ = $$$0 equivalenceClass orderedPair $0 $$$$0 ~_ℤ, ¬ ∈ orderedPair $$0 $$$0 <ℤ) () 1.0.0.0.0.0.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
+                let b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$$$$$0 $0 ~_ℤ, ¬ ∈ orderedPair $$$0 $$$$0 <ℤ) () 1.0.0.0.0.0.1 {
+                  let b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℕ = $$$$0 equivalenceClass orderedPair $0 $$$$$$0 ~_ℤ, ¬ ∈ orderedPair $$$$0 $$$$$0 <ℤ) () 1.0.0.0.0.0.2.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
                     elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
                       prove ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ $$$$$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$0 $$$$$0 <ℤ) ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 1.0.0.0.0.0.2.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 1.0.0.0.0.0a
                       prove ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ $$$$$$$0 <ℤ) ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.0.0.0.0.2.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 1.0.0.0.0.0.2.0.0.0.0.0
@@ -87,10 +87,10 @@ subproof (Asymmetric) {
                         prove ¬ ∈ orderedPair $$$$$0 $$$$$$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ orderedPair $$$$$0 $$$$$$$0 <ℤ) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, $$$$$$0) 1.0.0.0.0.0.2.0.0.0.5.1.0 1.0.0.0.0.0.2.0.0.0.5.0
                       }
                     }
-                  } 1.0.0.0.0.0.2.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                } 1.0.0.0.0.0.1
-              } 1.0.0.0.0.0.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-            } 1.0.0.0.0.0.0
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -112,12 +112,12 @@ subproof (Transitive) {
                 prove ∃ a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () ($$$0) 2.0.0a
                 prove ∃ b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () ($$0) 2.0.0.0.0a
                 prove ∃ c_1 ∧ ∈ $0 ℕ ∃ c_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () ($0) 2.0.0.0.0.0.0a
-                let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$$$$0 $0 ~_ℤ, ∈ orderedPair $$$0 $0 <ℤ) () {
-                  let a_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℕ = $$$$0 equivalenceClass orderedPair $0 $$$$$0 ~_ℤ, ∈ orderedPair $$$$0 $$0 <ℤ) () {
-                    let b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$$$$$$0 $0 ~_ℤ, ∈ orderedPair $$$$$0 $$$0 <ℤ) () {
-                      let b_2 ∧ ∈ $0 ℕ = $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$0 ℕ = $$$$$0 equivalenceClass orderedPair $0 $$$$$$$0 ~_ℤ, ∈ orderedPair $$$$$$0 $$$$0 <ℤ) () {
-                        let c_1 ∧ ∈ $0 ℕ ∃ c_2 ∧ ∈ $0 ℕ = $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$$0 ℕ ∃ c_2 ∧ ∈ $0 ℕ = $$$$$$0 equivalenceClass orderedPair $$$$$$$$$0 $0 ~_ℤ, ∈ orderedPair $$$$$$$0 $$$$$0 <ℤ) () {
-                          let c_2 ∧ ∈ $0 ℕ = $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$$$0 ℕ = $$$$$$0 equivalenceClass orderedPair $0 $$$$$$$$$0 ~_ℤ, ∈ orderedPair $$$$$$$$0 $$$$$$0 <ℤ) () {
+                let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$$$$0 $0 ~_ℤ, ∈ orderedPair $$$0 $0 <ℤ) () 2.0.0.0.0.0.0.0.0 {
+                  let a_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℕ = $$$$0 equivalenceClass orderedPair $0 $$$$$0 ~_ℤ, ∈ orderedPair $$$$0 $$0 <ℤ) () 2.0.0.0.0.0.0.0.3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
+                    let b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$$$$$$0 $0 ~_ℤ, ∈ orderedPair $$$$$0 $$$0 <ℤ) () 2.0.0.0.0.0.0.0.1 {
+                      let b_2 ∧ ∈ $0 ℕ = $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$0 ℕ = $$$$$0 equivalenceClass orderedPair $0 $$$$$$$0 ~_ℤ, ∈ orderedPair $$$$$$0 $$$$0 <ℤ) () 2.0.0.0.0.0.0.0.3.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
+                        let c_1 ∧ ∈ $0 ℕ ∃ c_2 ∧ ∈ $0 ℕ = $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$$0 ℕ ∃ c_2 ∧ ∈ $0 ℕ = $$$$$$0 equivalenceClass orderedPair $$$$$$$$$0 $0 ~_ℤ, ∈ orderedPair $$$$$$$0 $$$$$0 <ℤ) () 2.0.0.0.0.0.0.0.2 {
+                          let c_2 ∧ ∈ $0 ℕ = $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$$$0 ℕ = $$$$$$0 equivalenceClass orderedPair $0 $$$$$$$$$0 ~_ℤ, ∈ orderedPair $$$$$$$$0 $$$$$$0 <ℤ) () 2.0.0.0.0.0.0.0.3.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
                             elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
                               prove ∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ $$$$$$$$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$$$$0 $$$$$$$$0 <ℤ) ($$$$$$$$$0, equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ) 2.0.0.0.0.0.0.0.3.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.0.0.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                               prove ∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ $$$$$$$$$$0 <ℤ) ($$$$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 2.0.0.0.0.0.0.0.3.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.0.0.0.0.0.0.0.3.0.0.0.0.0.0.0
@@ -282,12 +282,12 @@ subproof (Transitive) {
                                 prove ∈ orderedPair $$$$$$$$$0 $$$$$$$0 <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$$$0 $$$$$$$$$$0 <ℤ) (equivalenceClass orderedPair $$0 $0 ~_ℤ, $$$$$$$0) 2.0.0.0.0.0.0.0.3.0.0.0.0.0.13.1.0 2.0.0.0.0.0.0.0.3.0.0.0.0.0.13.0
                               }
                             }
-                          } 2.0.0.0.0.0.0.0.3.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                        } 2.0.0.0.0.0.0.0.2
-                      } 2.0.0.0.0.0.0.0.3.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                    } 2.0.0.0.0.0.0.0.1
-                  } 2.0.0.0.0.0.0.0.3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                } 2.0.0.0.0.0.0.0.0
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -307,10 +307,10 @@ subproof (Semi-complete) {
         assume ∈ $0 ℤ {
           prove ∃ a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () ($$0) 3.0.0a
           prove ∃ b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () ($0) 3.0.0.0.0a
-          let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$$$0 $0 ~_ℤ, ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ) () {
-            let a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℕ = $$$0 equivalenceClass orderedPair $0 $$$$0 ~_ℤ, ∨ ∈ orderedPair $$$0 $$0 <ℤ ∨ = $$$0 $$0 ∈ orderedPair $$0 $$$0 <ℤ) () {
-              let b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$$$$$0 $0 ~_ℤ, ∨ ∈ orderedPair $$$$0 $$$0 <ℤ ∨ = $$$$0 $$$0 ∈ orderedPair $$$0 $$$$0 <ℤ) () {
-                let b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℕ = $$$$0 equivalenceClass orderedPair $0 $$$$$$0 ~_ℤ, ∨ ∈ orderedPair $$$$$0 $$$$0 <ℤ ∨ = $$$$$0 $$$$0 ∈ orderedPair $$$$0 $$$$$0 <ℤ) () {
+          let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = $$$0 equivalenceClass orderedPair $$$$0 $0 ~_ℤ, ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ) () 3.0.0.0.0.0 {
+            let a_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℕ = $$$0 equivalenceClass orderedPair $0 $$$$0 ~_ℤ, ∨ ∈ orderedPair $$$0 $$0 <ℤ ∨ = $$$0 $$0 ∈ orderedPair $$0 $$$0 <ℤ) () 3.0.0.0.0.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
+              let b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = $$$$0 equivalenceClass orderedPair $$$$$$0 $0 ~_ℤ, ∨ ∈ orderedPair $$$$0 $$$0 <ℤ ∨ = $$$$0 $$$0 ∈ orderedPair $$$0 $$$$0 <ℤ) () 3.0.0.0.0.1 {
+                let b_2 ∧ ∈ $0 ℕ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℕ = $$$$0 equivalenceClass orderedPair $0 $$$$$$0 ~_ℤ, ∨ ∈ orderedPair $$$$$0 $$$$0 <ℤ ∨ = $$$$$0 $$$$0 ∈ orderedPair $$$$0 $$$$$0 <ℤ) () 3.0.0.0.0.2.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
                   inferenceWithPremiseDerivations {
                     prove ∈ apply +ℕ orderedPair $$$$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$$0, $0) 3.0.0.0.0.2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 3.0.0.0.0.2.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply +ℕ orderedPair $$$0 $$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$0, $$0) 3.0.0.0.0.2.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 3.0.0.0.0.2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -411,10 +411,10 @@ subproof (Semi-complete) {
                     }
                     prove ∨ ∈ orderedPair $$$$$$0 $$$$$0 <ℤ ∨ = $$$$$$0 $$$$$0 ∈ orderedPair $$$$$0 $$$$$$0 <ℤ 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (∈ orderedPair apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 <ℕ, ∨ = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 ∈ orderedPair apply +ℕ orderedPair $$$0 $$0 apply +ℕ orderedPair $$$$0 $0 <ℕ, ∈ orderedPair $$$$$$0 $$$$$0 <ℤ, ∨ = $$$$$$0 $$$$$0 ∈ orderedPair $$$$$0 $$$$$$0 <ℤ) () 3.0.0.0.0.2.0.0.0.0 3.0.0.0.0.2.0.0.0.3 3.0.0.0.0.2.0.0.0.4.0
                   }
-                } 3.0.0.0.0.2.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              } 3.0.0.0.0.1
-            } 3.0.0.0.0.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-          } 3.0.0.0.0.0
+                }
+              }
+            }
+          }
         }
       }
     }

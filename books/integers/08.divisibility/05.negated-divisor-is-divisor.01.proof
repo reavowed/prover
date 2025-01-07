@@ -1,7 +1,7 @@
 take x {
   assume ∈ $0 ℤ {
     assume ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t1 {
-      let c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ = apply ×ℤ orderedPair $0 $$0 t1, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ $$0 $0 t1) () {
+      let c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair $$0 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ = apply ×ℤ orderedPair $0 $$0 t1, ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ $$0 $0 t1) () 0.0.0a {
         elided 9ba6600a0fca89941904b8210aa17319410cb72e25e6587fd5644c7244da0a22 {
           inferenceExtraction {
             prove = apply ×ℤ orderedPair negatedZ $$0 negatedZ $0 apply ×ℤ orderedPair $$0 $0 9ba6600a0fca89941904b8210aa17319410cb72e25e6587fd5644c7244da0a22 () ($$0, $0) 0.0a 0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -17,7 +17,7 @@ take x {
           prove ∧ ∈ negatedZ $0 ℤ = apply ×ℤ orderedPair negatedZ $$0 negatedZ $0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ negatedZ $0 ℤ, = apply ×ℤ orderedPair negatedZ $$0 negatedZ $0 t1) () 0.0.0.0.1.0 0.0.0.0.0
           prove ∃ c ∧ ∈ $0 ℤ = apply ×ℤ orderedPair negatedZ $$$0 $0 t1 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 ℤ = apply ×ℤ orderedPair negatedZ $$0 $$$0 t1) (negatedZ $0) 0.0.0.0.1.1
         }
-      } 0.0.0a
+      }
     }
   }
 }

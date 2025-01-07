@@ -1,8 +1,8 @@
 take a {
   assume ∈ $0 ℚ {
     prove ∃ a_1 ∧ ∈ $0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 9072e0dad0fa03b50897133096ad4fbb9c8ef21ad962d3bbbdb26f84b47972e8 () ($0) 0.0a
-    let a_1 ∧ ∈ $0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$0 equivalenceClass orderedPair $$$0 $0 ~_ℚ, ∧ = apply +ℚ orderedPair $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 = apply +ℚ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 $0) () {
-      let a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ^+ = $$0 equivalenceClass orderedPair $0 $$$0 ~_ℚ, ∧ = apply +ℚ orderedPair $$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$0 = apply +ℚ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$0 $$0) () {
+    let a_1 ∧ ∈ $0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$0 equivalenceClass orderedPair $$$0 $0 ~_ℚ, ∧ = apply +ℚ orderedPair $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 = apply +ℚ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $0 $0) () 0.0.0 {
+      let a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ^+ = $$0 equivalenceClass orderedPair $0 $$$0 ~_ℚ, ∧ = apply +ℚ orderedPair $$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$0 = apply +ℚ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$0 $$0) () 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
         inferenceWithPremiseDerivations {
           prove = apply +ℚ orderedPair $$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ apply +ℚ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ, apply +ℚ orderedPair $$$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) 0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         }
@@ -194,8 +194,8 @@ take a {
           prove = apply +ℚ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$$0 $$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$$0 $$$0) (apply +ℚ orderedPair $$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ, apply +ℚ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$$0) 0.0.1.0.9.0 0.0.1.0.8
         }
         prove ∧ = apply +ℚ orderedPair $$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$$0 = apply +ℚ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= apply +ℚ orderedPair $$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$$0, = apply +ℚ orderedPair apply ⍳_ℚ apply ⍳_ℤ 0ℕ $$$0 $$$0) () 0.0.1.0.8 0.0.1.0.9
-      } 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-    } 0.0.0
+      }
+    }
   }
 }
 elided 23b9075e363ada7bcda1e0c41cc95fc195a8958f52ce49caa9e7056e5b28bf9b {

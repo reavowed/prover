@@ -8,7 +8,7 @@ take a {
           prove ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ unaryOperation t2 unaryOperationOn t2 t3, ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0) () 0.0.0.0.0.1
           prove ∃! e identityBinaryOperation $0 t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∃! e identityBinaryOperation $0 t0, ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 t3 ∧ = apply t0 orderedPair $0 apply t2 $0 $$0 = apply t0 orderedPair apply t2 $0 $0 $$0) () 0.0.0.0.0.2
         }
-        let e identityBinaryOperation $0 t0 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (identityBinaryOperation $$$0 t0, = apply t1 orderedPair $$0 $0 apply t0 orderedPair $$0 apply t2 $0) () {
+        let e identityBinaryOperation $0 t0 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (identityBinaryOperation $$$0 t0, = apply t1 orderedPair $$0 $0 apply t0 orderedPair $$0 apply t2 $0) () 0.0.0.0.0 {
           elided 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 {
             elided 345c4cc06a243c34dd850701b46187e93c3ef779c7eb8c97e2948a77b2164af8 {
               inferenceExtraction {
@@ -187,7 +187,7 @@ take a {
             }
           }
           prove = apply t1 orderedPair $$$0 $$0 apply t0 orderedPair $$$0 apply t2 $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply t1 orderedPair $$$0 $$0, apply t1 orderedPair apply t0 orderedPair apply t0 orderedPair $$$0 apply t2 $$0 $$0 $$0, apply t0 orderedPair $$$0 apply t2 $$0) 0.0.0.0.1.4 0.0.0.0.1.5
-        } 0.0.0.0.0
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 prove ∃ x ∃ y ∈ $0 $$0 2cccf54c4f38ed8afb8227abf888c17e48598e20266c00a7f8d4977ba6408c73 () ()
-let b ∃ y ∈ $0 $$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∃ y ∈ $0 $$0, ∃! z ∀ x ↔ ∈ $0 $$0 = $0 t0) () {
+let b ∃ y ∈ $0 $$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∃ y ∈ $0 $$0, ∃! z ∀ x ↔ ∈ $0 $$0 = $0 t0) () 0 {
   prove ∃! x = $0 t0 8bd430aa127bd6eb6ab68bdc4b82882686238ffa92fc641c4ddb1f14b418aa1f () (t0)
   wrappedInferenceApplication {
     take y {
@@ -13,4 +13,4 @@ let b ∃ y ∈ $0 $$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9
     }
   }
   prove ∃! z ∀ x ↔ ∈ $0 $$0 = $0 t0 8ae8122d854da1474bddaf18a318cb348535112ca944d8e70f9ebf555a97ed2e (∃ y ∧ ∈ $0 $$0 = $$$0 t0, = $$0 t0) () 1.2 1.3
-} 0
+}

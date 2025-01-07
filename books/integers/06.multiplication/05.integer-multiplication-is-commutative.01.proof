@@ -1,9 +1,9 @@
 prove ∃ a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () (t0) p0
-let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ, = apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t1 t0) () {
-  let a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℕ = t0 equivalenceClass orderedPair $0 $$0 ~_ℤ, = apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t1 t0) () {
+let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ, = apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t1 t0) () 0 {
+  let a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℕ = t0 equivalenceClass orderedPair $0 $$0 ~_ℤ, = apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t1 t0) () 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
     prove ∃ b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = t1 equivalenceClass orderedPair $$0 $0 ~_ℤ 3a53fff51a8f47341a0977758a5264738cecbe589e7194b474163a6a6f006ea2 () (t1) p1
-    let b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = t1 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = t1 equivalenceClass orderedPair $$$$0 $0 ~_ℤ, = apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t1 t0) () {
-      let b_2 ∧ ∈ $0 ℕ = t1 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℕ = t1 equivalenceClass orderedPair $0 $$$$0 ~_ℤ, = apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t1 t0) () {
+    let b_1 ∧ ∈ $0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = t1 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℕ ∃ b_2 ∧ ∈ $0 ℕ = t1 equivalenceClass orderedPair $$$$0 $0 ~_ℤ, = apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t1 t0) () 1.0.0 {
+      let b_2 ∧ ∈ $0 ℕ = t1 equivalenceClass orderedPair $$0 $0 ~_ℤ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$0 ℕ = t1 equivalenceClass orderedPair $0 $$$$0 ~_ℤ, = apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t1 t0) () 1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
         elided (Rewritten) {
           prove = apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ t1 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (t0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, apply ×ℤ orderedPair $$$$$0 t1) 1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
           prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ t1 apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (t1, equivalenceClass orderedPair $$0 $0 ~_ℤ, apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ $$$$$0) 1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -59,7 +59,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
           prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ apply ×ℤ orderedPair t1 t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, apply ×ℤ orderedPair t1 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, apply ×ℤ orderedPair t1 t0) 1.0.1.0.7.0 1.0.1.0.7.1
         }
         prove = apply ×ℤ orderedPair t0 t1 apply ×ℤ orderedPair t1 t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair t0 t1, apply ×ℤ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, apply ×ℤ orderedPair t1 t0) 1.0.1.0.6 1.0.1.0.7
-      } 1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-    } 1.0.0
-  } 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-} 0
+      }
+    }
+  }
+}
