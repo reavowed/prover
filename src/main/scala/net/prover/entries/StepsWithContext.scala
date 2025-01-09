@@ -29,11 +29,10 @@ case class StepsWithContext(
     steps.splitAtIndexIfValid(index).map { case (before, step, _) => atChild(before, step) }
   }
   def atChild[T <: Step : ClassTag](before: Seq[Step], step: T): TypedStepWithContext[T] = {
-    val index = before.length
     TypedStepWithContext(
       step,
       proofWithContext)(
       implicitly,
-      outerStepContext.addSteps(before).atIndex(index))
+      outerStepContext.addSteps(before))
   }
 }

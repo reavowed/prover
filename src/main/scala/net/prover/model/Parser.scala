@@ -351,21 +351,21 @@ object Parser {
     }
   }
 
-  def foldWhileDefined[T, R](
+  def mapFoldWhileDefined[T, R](
     initial: R)(
-    getParser: (Seq[T], Int, R) => Parser[Option[(T, R)]]
-  ): Parser[(Seq[T], R)] = {
+    getParser: (Seq[T], R) => Parser[Option[(T, R)]]
+  ): Parser[Seq[T]] = {
     Parser { initialTokenStream =>
-      def parseRemaining(currentAccumulator: R, valuesSoFar: Seq[T], currentIndex: Int, currentTokenStream: TokenStream): ((Seq[T], R), TokenStream) = {
-        val (newValueAndAccumulatorOption, newTokenStream) = getParser(valuesSoFar, currentIndex, currentAccumulator).parse(currentTokenStream)
+      def parseRemaining(currentAccumulator: R, valuesSoFar: Seq[T], currentTokenStream: TokenStream): ((Seq[T], R), TokenStream) = {
+        val (newValueAndAccumulatorOption, newTokenStream) = getParser(valuesSoFar, currentAccumulator).parse(currentTokenStream)
         newValueAndAccumulatorOption match {
           case Some((newValue, newAccumulator)) =>
-            parseRemaining(newAccumulator, valuesSoFar :+ newValue, currentIndex + 1, newTokenStream)
+            parseRemaining(newAccumulator, valuesSoFar :+ newValue, newTokenStream)
           case None =>
             ((valuesSoFar, currentAccumulator), currentTokenStream)
         }
       }
-      parseRemaining(initial, Nil, 0, initialTokenStream)
+      parseRemaining(initial, Nil, initialTokenStream).mapLeft(_._1)
     }
   }
 }

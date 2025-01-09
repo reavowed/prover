@@ -6,7 +6,7 @@ import net.prover.entries._
 import net.prover.model.definitions.Definitions
 import net.prover.model.entries.{ChapterEntry, Theorem}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.{Step, StepContext, StepProvingContext}
+import net.prover.model.proof.{Step, StepContext, StepProvingContext, StepReference}
 import net.prover.model.{AvailableEntries, Chapter, ProvingContext, VariableDefinitions}
 import org.mockito.Mockito.when
 
@@ -36,8 +36,7 @@ trait ContextHelper extends CustomMockitoStubs {
   }
 
   def createOuterStepContext(boundVariables: Seq[String])(implicit variableDefinitions: VariableDefinitions, availableEntries: AvailableEntries): StepContext = {
-    val baseContext = createBaseStepContext(Nil, boundVariables)
-    outerStepPath.foldLeft(baseContext) { case (context, index) => context.atIndex(index) }
+    createBaseStepContext(Nil, boundVariables).copy(parentReference = StepReference(outerStepPath))
   }
 
   def createTargetStepWithContext(

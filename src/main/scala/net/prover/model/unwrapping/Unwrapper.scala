@@ -30,7 +30,7 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
   val depth = 1
   def inference = specificationInference
   def enhanceStepContext(implicit stepContext: StepContext): StepContext = {
-    stepContext.addBoundVariable(variableName).atIndex(0)
+    stepContext.addBoundVariable(variableName).forChild()
   }
   def enhanceWrapper(wrapper: Wrapper[Term, Statement]): Wrapper[Term, Statement] = {
     Wrapper((t, sc) => addToStatement(wrapper(t)(SubstitutionContext.withExtraParameter(sc))))
@@ -70,7 +70,7 @@ case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: Deduct
   val depth = 0
   def inference = deductionEliminationInference
   def enhanceStepContext(implicit stepContext: StepContext): StepContext = {
-    stepContext.addAssumption(antecedent).atIndex(0)
+    stepContext.addAssumption(antecedent).forChild()
   }
   def enhanceWrapper(wrapper: Wrapper[Term, Statement]): Wrapper[Term, Statement] = {
     Wrapper((t, sc) => addToStatement(wrapper(t)(sc)))
