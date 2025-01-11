@@ -127,9 +127,10 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
       case AppliedExtractionStep.Assertion(step) =>
         apply(TypedStepWithContext(step, proofWithContext)(implicitly, stepContext)).map(step => AppliedExtractionStep.Assertion(step.asInstanceOf[Step.AssertionStep]))
       case AppliedExtractionStep.DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
+        val innerContext = stepContext.forChild()
         for {
-          newDeconstructionStep <- apply(TypedStepWithContext(deconstructionStep, proofWithContext)(implicitly, stepContext))
-          newAdditionalSteps <- additionalSteps.toList.foldLeftM((List.empty[Step.AssertionStep], stepContext.addStep(deconstructionStep))) {
+          newDeconstructionStep <- apply(TypedStepWithContext(deconstructionStep, proofWithContext)(implicitly, innerContext))
+          newAdditionalSteps <- additionalSteps.toList.foldLeftM((List.empty[Step.AssertionStep], innerContext.addStep(deconstructionStep))) {
             case ((newSteps, stepContext), step) =>
               for {
                 newStep <- apply(TypedStepWithContext(step, proofWithContext)(implicitly, stepContext))

@@ -65,7 +65,7 @@ object RecalculateReferences extends CompoundStepUpdater[FWithValue[Try, List[St
     stepWithContext: StepWithContext
   ): Try[(Premise, List[StepWithReferenceChange])] = {
     stepWithContext.stepProvingContext.findPremise(premise.statement)
-      .orBadRequest("Premise reference broken")
+      .orBadRequest(s"Premise '${premise.statement}' not found")
       .map(_ -> Nil)
   }
 }

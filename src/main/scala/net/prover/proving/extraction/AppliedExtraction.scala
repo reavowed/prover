@@ -37,17 +37,21 @@ object AppliedExtractionStep {
       step.inferenceExtraction.assertionStep,
       step.inferenceExtraction.extraction.extractionSteps.collect { case AppliedExtractionStep.Assertion(step) => step })
   }
+
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Option[AppliedExtractionStep]] = {
     Parser.selectOptionalWordParser {
       case Step.AssertionStep.label => Step.AssertionStep.parser.map(Assertion)
-      case DefinitionDeconstructionBase.label => (for {
-        deconstructionStep <- Parser.requiredWord(Step.AssertionStep.label).flatMap(_ => Step.AssertionStep.parser)
-        stepContextAfterDeconstructionStep = stepContext.addStep(deconstructionStep)
-        additionalSteps <- Step.listParser(stepContext =>
-          Parser.optionalWord(Step.AssertionStep.label)
-            .flatMapMap(_ => Step.AssertionStep.parser(stepContext, implicitly))
-        )(stepContextAfterDeconstructionStep).map(_._1)
-      } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)).inBraces
+      case DefinitionDeconstructionBase.label => {
+        val innerContext = stepContext.forChild()
+        for {
+          deconstructionStep <- Parser.requiredWord(Step.AssertionStep.label).flatMap(_ => Step.AssertionStep.parser(innerContext, implicitly))
+          stepContextAfterDeconstructionStep = innerContext.addStep(deconstructionStep)
+          additionalSteps <- Step.listParser(stepContext =>
+            Parser.optionalWord(Step.AssertionStep.label)
+              .flatMapMap(_ => Step.AssertionStep.parser(stepContext, implicitly))
+          )(stepContextAfterDeconstructionStep).map(_._1)
+        } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)
+      }.inBraces
     }
   }
 }

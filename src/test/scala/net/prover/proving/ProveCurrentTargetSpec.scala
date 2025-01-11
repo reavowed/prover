@@ -47,6 +47,68 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
             Nil))
     }
 
+    "replace target with an inference extraction containing a deconstruction" in {
+      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0))
+
+      implicit val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+
+      ProveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        StepDefinition(
+          Some(integerAdditionIsCommutative.id),
+          None,
+          SerializedSubstitutions(Nil, Seq(a.serialized, b.serialized)),
+          ExtractionDefinition(
+            Seq(
+              Commutative.deconstructionInference.summary,
+              extractRightConjunct.summary,
+              specification.summary,
+              modusPonens.summary,
+              specification.summary,
+              modusPonens.summary),
+            None
+          ).serialized,
+          Nil,
+          None,
+          None,
+          None))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex - 2) :+
+          target(ElementOf(a, BaseSet(IntegerAddition))) :+
+          target(ElementOf(b, BaseSet(IntegerAddition))) :+
+          target(Equals(addZ(a, b), addZ(b, a))),
+        fillerSteps(stepIndex - 2) :+
+          target(ElementOf(a, BaseSet(IntegerAddition))) :+
+          target(ElementOf(b, BaseSet(IntegerAddition))) :+
+          inferenceExtraction(Seq(
+            assertion(integerAdditionIsCommutative, Nil, Nil),
+            inferenceExtraction(Seq(
+              assertion(Commutative.deconstructionInference, Nil, Seq(IntegerAddition)),
+              assertion(
+                specification,
+                Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(Apply(IntegerAddition, Pair($.^, $)), Apply(IntegerAddition, Pair($, $.^)))))),
+                Seq(a)),
+              assertion(
+                modusPonens,
+                Seq(ElementOf(a, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(Apply(IntegerAddition, Pair(a, $)), Apply(IntegerAddition, Pair($, a))))),
+                Nil),
+              assertion(
+                specification,
+                Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), Equals(Apply(IntegerAddition, Pair(a, $)), Apply(IntegerAddition, Pair($, a))))),
+                Seq(b)),
+              assertion(
+                modusPonens,
+                Seq(ElementOf(b, BaseSet(IntegerAddition)), Equals(Apply(IntegerAddition, Pair(a, b)), Apply(IntegerAddition, Pair(b, a)))),
+                Nil))))))
+    }
+
     "add premise finding steps" in {
       implicit val service = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
