@@ -2,6 +2,7 @@ package net.prover.proving.derivation
 
 import net.prover.model._
 import net.prover.model.proof.{Step, StepLike}
+import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 
 trait DefinitionDeconstructionBase extends StepLike.Wrapper {
   def deconstructionStep: Step.AssertionStep
@@ -10,11 +11,9 @@ trait DefinitionDeconstructionBase extends StepLike.Wrapper {
   def inference: Inference = deconstructionStep.inference
   override def substeps: Seq[StepLike] = deconstructionStep +: additionalSteps
   def toProofStep: Step.AssertionOrExtraction = {
-    if (additionalSteps.nonEmpty) {
-      Step.InferenceExtractionStep(deconstructionStep, additionalSteps)
-    } else {
-      deconstructionStep
-    }
+    Step.InferenceExtractionStep.ifNecessary(AppliedInferenceExtraction(
+      deconstructionStep,
+      AppliedExtraction(additionalSteps.map(AppliedExtractionStep.Assertion))))
   }
   override def serializedLines: Seq[String] = {
     super.serializedLines.indentInLabelledBracesIfPresent(DefinitionDeconstructionBase.label)

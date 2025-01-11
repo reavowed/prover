@@ -10,7 +10,7 @@ case class AppliedExtraction(extractionSteps: Seq[AppliedExtractionStep]) extend
 }
 object AppliedExtraction {
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[AppliedExtraction] = {
-    Parser.mapFoldWhileDefined[AppliedExtractionStep, StepContext](stepContext.forChild()) { (_, currentStepContext) =>
+    Parser.mapFoldWhileDefined[AppliedExtractionStep, StepContext](stepContext) { (_, currentStepContext) =>
       AppliedExtractionStep.parser(currentStepContext, implicitly)
         .mapMap(step => step -> currentStepContext.addStep(step.toProofStep))
     }.map(_._1).map(AppliedExtraction(_))
@@ -31,17 +31,23 @@ object AppliedExtractionStep {
   ) extends AppliedExtractionStep
     with DefinitionDeconstructionBase
 
+  def apply(step: Step.AssertionOrExtraction): AppliedExtractionStep = step match {
+    case step: Step.AssertionStep => Assertion(step)
+    case step: Step.InferenceExtractionStep => DefinitionDeconstruction(
+      step.inferenceExtraction.assertionStep,
+      step.inferenceExtraction.extraction.extractionSteps.collect { case AppliedExtractionStep.Assertion(step) => step })
+  }
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Option[AppliedExtractionStep]] = {
     Parser.selectOptionalWordParser {
       case Step.AssertionStep.label => Step.AssertionStep.parser.map(Assertion)
-      case DefinitionDeconstructionBase.label => for {
+      case DefinitionDeconstructionBase.label => (for {
         deconstructionStep <- Parser.requiredWord(Step.AssertionStep.label).flatMap(_ => Step.AssertionStep.parser)
         stepContextAfterDeconstructionStep = stepContext.addStep(deconstructionStep)
         additionalSteps <- Step.listParser(stepContext =>
           Parser.optionalWord(Step.AssertionStep.label)
             .flatMapMap(_ => Step.AssertionStep.parser(stepContext, implicitly))
         )(stepContextAfterDeconstructionStep).map(_._1)
-      } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)
+      } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)).inBraces
     }
   }
 }

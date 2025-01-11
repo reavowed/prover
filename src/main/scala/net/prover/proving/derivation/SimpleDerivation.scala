@@ -68,7 +68,7 @@ object SimpleDerivationStep {
     override def inference: Inference = appliedInferenceExtraction.assertionStep.inference
     override def substeps: Seq[StepLike] = Seq(appliedInferenceExtraction)
     override def toProofStep: Step.AssertionOrExtraction = {
-      Step.InferenceExtractionStep(appliedInferenceExtraction)
+      Step.InferenceExtractionStep.ifNecessary(appliedInferenceExtraction)
     }
   }
   implicit def fromSeq[T](seq: Seq[T])(implicit f: T => SimpleDerivationStep): Seq[SimpleDerivationStep] = seq.map(f)

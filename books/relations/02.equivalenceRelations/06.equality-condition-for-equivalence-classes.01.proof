@@ -38,7 +38,7 @@ assume ∈ orderedPair t2 t3 t0 {
       }
       inferenceExtraction {
         prove ∧ ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 transitiveRelation t0 t1 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de () (t0, t1) p0
-        inferenceExtraction {
+        deconstruction {
           prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 t0 288f2db982543b964eeecd4221a45143385475311faafada98fe1bd14cd811a1 () (t0, t1) 4.0.0.3.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
           prove → ∈ t2 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair t2 $0 t0 ∈ orderedPair $0 t2 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∀ b → ∈ $0 t1 → ∈ orderedPair $$$0 $0 t0 ∈ orderedPair $0 $$$0 t0) (t2) 4.0.0.3.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
           prove ∀ b → ∈ $0 t1 → ∈ orderedPair t2 $0 t0 ∈ orderedPair $0 t2 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t2 t1, ∀ b → ∈ $0 t1 → ∈ orderedPair t2 $0 t0 ∈ orderedPair $0 t2 t0) () 4.0.0.3.1.1 p1
@@ -51,7 +51,7 @@ assume ∈ orderedPair t2 t3 t0 {
         prove ∧ ∈ orderedPair t3 t2 t0 ∈ orderedPair t2 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair t3 t2 t0, ∈ orderedPair t2 $0 t0) () 4.0.0.3 4.0.0.2
         inferenceExtraction {
           prove ∧ ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 transitiveRelation t0 t1 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de () (t0, t1) p0
-          inferenceExtraction {
+          deconstruction {
             prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$0 $0 t0 cb8e0b640eea706781148c47a28077ca99b5e7bdfa096ca8d53dc922f6c67dee () (t0, t1) 4.0.0.4.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             prove → ∈ t3 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair t3 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair t3 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$$0 $0 t0) (t3) 4.0.0.4.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             prove ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair t3 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair t3 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t3 t1, ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair t3 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair t3 $0 t0) () 4.0.0.4.1.1.1 p2
@@ -93,7 +93,7 @@ assume ∈ orderedPair t2 t3 t0 {
         prove ∧ ∈ orderedPair t2 t3 t0 ∈ orderedPair t3 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair t2 t3 t0, ∈ orderedPair t3 $0 t0) () 4a 4.0.1.2
         inferenceExtraction {
           prove ∧ ∧ ∧ relation t0 t1 reflexiveRelation t0 t1 symmetricRelation t0 t1 transitiveRelation t0 t1 38bcebdedc33f57192ee3a6526cdcfa5bf49be0e309d7494b44e70d1e402a4de () (t0, t1) p0
-          inferenceExtraction {
+          deconstruction {
             prove ∧ relation t0 t1 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$0 $0 t0 cb8e0b640eea706781148c47a28077ca99b5e7bdfa096ca8d53dc922f6c67dee () (t0, t1) 4.0.1.3.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             prove → ∈ t2 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair t2 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair t2 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair $$$$0 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair $$$$0 $0 t0) (t2) 4.0.1.3.1.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             prove ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair t2 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair t2 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t2 t1, ∀ b → ∈ $0 t1 ∀ c → ∈ $0 t1 → ∧ ∈ orderedPair t2 $$0 t0 ∈ orderedPair $$0 $0 t0 ∈ orderedPair t2 $0 t0) () 4.0.1.3.1.1.1 p1

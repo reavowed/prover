@@ -59,7 +59,7 @@ object GetDisplaySteps {
           step.statement,
           step.inference,
           stepPath,
-          apply(step.substeps, stepPath))
+          apply(step.inferenceExtraction.assertionStep +: step.inferenceExtraction.extraction.toProofSteps, stepPath))
       case step: Step.WrappedInferenceApplicationStep =>
         DisplayStep.ElidedInference(
           step.statement,

@@ -696,13 +696,13 @@ let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$
             prove ∧ ∈ orderedPair apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 gcdℤ $$0 $0 gcdℤ $$$$0 $$$0 ≤ℤ ∈ orderedPair gcdℤ $$$$0 $$$0 apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 gcdℤ $$0 $0 ≤ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 gcdℤ $$0 $0 gcdℤ $$$$0 $$$0 ≤ℤ, ∈ orderedPair gcdℤ $$$$0 $$$0 apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 gcdℤ $$0 $0 ≤ℤ) () 1.0.1.1.1.6 1.0.1.1.1.7
             inferenceExtraction {
               prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
-              inferenceExtraction {
+              deconstruction {
                 prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 1.0.1.1.1.8.14.0
                 prove ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ, completeRelation ≤ℤ ℤ) () 1.0.1.1.1.8.14.1.0
                 prove ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ, transitiveRelation ≤ℤ ℤ) () 1.0.1.1.1.8.14.1.1
                 prove antisymmetricRelation ≤ℤ ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (relation ≤ℤ ℤ, antisymmetricRelation ≤ℤ ℤ) () 1.0.1.1.1.8.14.1.2
               }
-              inferenceExtraction {
+              deconstruction {
                 prove ∧ relation ≤ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$0 $0 ≤ℤ ∈ orderedPair $0 $$0 ≤ℤ = $$0 $0 5a0a54f24273485bc6a1cfcb0f67d3542cdb926c7865f180b339c8f5881cc581 () (≤ℤ, ℤ) 1.0.1.1.1.8.14.1
                 prove → ∈ apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 gcdℤ $$0 $0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 ≤ℤ ∈ orderedPair $0 apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 ≤ℤ = apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$0 ℤ ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair $$$$$$0 $0 ≤ℤ ∈ orderedPair $0 $$$$$$0 ≤ℤ = $$$$$$0 $0) (apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 gcdℤ $$0 $0) 1.0.1.1.1.8.14.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                 prove ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 ≤ℤ ∈ orderedPair $0 apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 ≤ℤ = apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 gcdℤ $$0 $0 ℤ, ∀ b → ∈ $0 ℤ → ∧ ∈ orderedPair apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0 ≤ℤ ∈ orderedPair $0 apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 ≤ℤ = apply ×ℤ orderedPair gcdℤ $$$$$0 $$$$0 gcdℤ $$$0 $$0 $0) () 1.0.1.1.1.8.14.2.1 1.0.1.1.1.8.12

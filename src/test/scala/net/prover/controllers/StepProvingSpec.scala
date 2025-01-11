@@ -4,7 +4,7 @@ import net.prover.controllers.models.PathData
 import net.prover.model.Substitutions
 import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.{DefinedStatement, TermVariable}
-import net.prover.model.proof.{Step, SubstitutionContext}
+import net.prover.model.proof.{Step, StepLike, SubstitutionContext}
 import net.prover.proving.extraction.ExtractionDefinition
 import org.specs2.matcher.Matcher
 import org.springframework.http.ResponseEntity
@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity
 import scala.util.Success
 
 class StepProvingSpec extends ControllerSpec {
-  def getBoundVariable(step: Step, path: Seq[Int]): String = {
+  def getBoundVariable(step: StepLike, path: Seq[Int]): String = {
     path.foldLeft(step.statement.asInstanceOf[DefinedStatement]) { case (s, i) =>
       s.components(i).asInstanceOf[DefinedStatement]
     }.boundVariableNames.head
@@ -146,10 +146,10 @@ class StepProvingSpec extends ControllerSpec {
           assertion(forwardImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
           assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil)))
         ) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(0), Seq(0, 1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(1), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(2), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(3), Nil)})
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.assertionStep, Seq(0, 1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(0), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(1), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(2), Nil)})
     }
 
     "retain conclusion bound variable names when adding target by inference" in {
@@ -261,9 +261,9 @@ class StepProvingSpec extends ControllerSpec {
           assertion(modusPonens, Seq(Exists("z")(ψ(a, $)), φ(a)), Nil)))
         ) and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(0), Seq(0, 1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(1), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].substeps(2), Seq(0))})
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.assertionStep, Seq(0, 1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(0), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(1), Seq(0))})
     }
 
     "prove a target inside a scoped deduction" in {

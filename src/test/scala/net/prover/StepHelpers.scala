@@ -4,7 +4,7 @@ import net.prover.model.{Inference, ProvingContext, Substitutions}
 import net.prover.model.expressions.{Statement, Term, TermVariable}
 import net.prover.model.proof.{Step, SubstitutionContext}
 import net.prover.model.TestDefinitions._
-import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep}
+import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 
 import scala.language.implicitConversions
 
@@ -48,9 +48,12 @@ trait StepHelpers {
     Step.ExistingStatementExtractionStep(AppliedExtraction(steps(sc).map(AppliedExtractionStep.Assertion(_))))
   }
   def inferenceExtraction(
-    steps: SubstitutionContext => Seq[Step]
-  ): SubstitutionContext => Step.InferenceExtractionStep = { sc =>
-    Step.InferenceExtractionStep(steps(sc))
+    stepsConstructor: SubstitutionContext => Seq[Step]
+  ): SubstitutionContext => Step = { sc =>
+    val steps = stepsConstructor(sc)
+    val assertionStep = steps.head.asInstanceOf[Step.AssertionStep]
+    val extractionSteps = steps.tail.map(step => AppliedExtractionStep(step.asInstanceOf[Step.AssertionOrExtraction]))
+    Step.InferenceExtractionStep(AppliedInferenceExtraction(assertionStep, AppliedExtraction(extractionSteps)))
   }
   def wrappedInferenceApplication(
     steps: SubstitutionContext => Seq[Step])(

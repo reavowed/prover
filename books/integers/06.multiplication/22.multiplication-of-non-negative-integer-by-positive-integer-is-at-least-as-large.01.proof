@@ -58,7 +58,7 @@ assume = apply ⍳_ℤ 0ℕ t0 {
     prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 2.0.0
     inferenceExtraction {
       prove reflexiveRelation ≤ℤ ℤ 6578ec30209db85378efd09cbf2575bb3058f5095838da843c42f6c7a10dcab9 () ()
-      inferenceExtraction {
+      deconstruction {
         prove ∧ relation ≤ℤ ℤ ∀ a → ∈ $0 ℤ ∈ orderedPair $0 $0 ≤ℤ f963421edf2ba0cb345168c395503e2cd1b10b3991b70aa815a2871baa37e0f3 () (≤ℤ, ℤ) 2.0.2.0
         prove → ∈ apply ⍳_ℤ 0ℕ ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ ≤ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $0 ℤ ∈ orderedPair $0 $0 ≤ℤ) (apply ⍳_ℤ 0ℕ) 2.0.2.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove ∈ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ ≤ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ 0ℕ ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ ≤ℤ) () 2.0.2.1.1 2.0.1

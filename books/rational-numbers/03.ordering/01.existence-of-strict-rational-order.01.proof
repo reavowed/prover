@@ -82,11 +82,11 @@ subproof (Replace single equivalent pair) {
                               prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0
                               inferenceExtraction {
                                 prove strictTotalOrder <ℤ ℤ f4db2383530e98ba4f9dd6571bf45f88dfdbff0b9e0d2dc455904facb2d69548 () ()
-                                inferenceExtraction {
+                                deconstruction {
                                   prove ∧ ∧ ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ transitiveRelation <ℤ ℤ semicompleteRelation <ℤ ℤ 2f48f16c767f8214844b39f474770d02f67ecd08cf161bc3e1d4bf856ee2b37c () (<ℤ, ℤ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.0
                                   prove semicompleteRelation <ℤ ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ ∧ relation <ℤ ℤ asymmetricRelation <ℤ ℤ transitiveRelation <ℤ ℤ, semicompleteRelation <ℤ ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.1.0
                                 }
-                                inferenceExtraction {
+                                deconstruction {
                                   prove ∧ relation <ℤ ℤ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$0 $0 <ℤ ∨ = $$0 $0 ∈ orderedPair $0 $$0 <ℤ 26ecf966f6277ba1610988bfbdc58adf42a06d99e0007d50b14e1e223f384ae3 () (<ℤ, ℤ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.1
                                   prove → ∈ apply ⍳_ℤ 0ℕ ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$$0 ℤ ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair $$$$$$$$0 $0 <ℤ ∨ = $$$$$$$$0 $0 ∈ orderedPair $0 $$$$$$$$0 <ℤ) (apply ⍳_ℤ 0ℕ) 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.2.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                                   prove ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ 0ℕ ℤ, ∀ b → ∈ $0 ℤ ∨ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ ∨ = apply ⍳_ℤ 0ℕ $0 ∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ) () 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.2.2.1 1.0.0.0.0.0.0.0.0.0.0.0.0.0.1.1
