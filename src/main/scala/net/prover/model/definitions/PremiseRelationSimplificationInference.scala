@@ -10,6 +10,6 @@ case class PremiseRelationSimplificationInference(inferenceExtraction: Inference
     for {
       substitutions <- premise.calculateSubstitutions(currentStatement.statement).flatMap(_.confirmTotality(inferenceExtraction.variableDefinitions))
       appliedSimplification <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
-    } yield currentStatement.extend(Seq(appliedSimplification))
+    } yield currentStatement.extend(appliedSimplification)
   }
 }

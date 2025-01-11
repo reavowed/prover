@@ -1,16 +1,14 @@
 package net.prover.proving.extraction
 
-import net.prover.model.expressions.Statement
-import net.prover.model.proof.Step
-import net.prover.proving.derivation.SimpleDerivationStep
+import net.prover.model.proof.{Step, StepLike}
 
-case class AppliedInferenceExtraction(assertionStep: Step.AssertionStep, extractionSteps: Seq[SimpleDerivationStep]) {
+case class AppliedInferenceExtraction(assertionStep: Step.AssertionStep, extraction: AppliedExtraction) extends StepLike.Wrapper {
+  override def substeps: Seq[StepLike] = assertionStep +: extraction.extractionSteps
   def toStep: Step.AssertionOrExtraction = {
-    if (extractionSteps.isEmpty) {
+    if (extraction.extractionSteps.isEmpty) {
       assertionStep
     } else {
-      Step.InferenceExtractionStep(assertionStep, extractionSteps.map(_.toProofStep))
+      Step.InferenceExtractionStep(assertionStep, extraction.extractionSteps.map(_.toProofStep))
     }
   }
-  def statement: Statement = extractionSteps.lastOption.map(_.statement).getOrElse(assertionStep.statement)
 }

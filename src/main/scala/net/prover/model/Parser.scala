@@ -354,7 +354,7 @@ object Parser {
   def mapFoldWhileDefined[T, R](
     initial: R)(
     getParser: (Seq[T], R) => Parser[Option[(T, R)]]
-  ): Parser[Seq[T]] = {
+  ): Parser[(Seq[T], R)] = {
     Parser { initialTokenStream =>
       def parseRemaining(currentAccumulator: R, valuesSoFar: Seq[T], currentTokenStream: TokenStream): ((Seq[T], R), TokenStream) = {
         val (newValueAndAccumulatorOption, newTokenStream) = getParser(valuesSoFar, currentAccumulator).parse(currentTokenStream)
@@ -365,7 +365,7 @@ object Parser {
             ((valuesSoFar, currentAccumulator), currentTokenStream)
         }
       }
-      parseRemaining(initial, Nil, initialTokenStream).mapLeft(_._1)
+      parseRemaining(initial, Nil, initialTokenStream)
     }
   }
 }

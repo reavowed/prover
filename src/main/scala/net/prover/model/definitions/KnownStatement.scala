@@ -3,10 +3,12 @@ package net.prover.model.definitions
 import net.prover.model.ProvingContext
 import net.prover.model.expressions.Statement
 import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
-import net.prover.proving.extraction.{ExtractionApplier, PremiseExtraction}
+import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionApplier, PremiseExtraction}
 
 case class KnownStatement(statement: Statement, derivation: SimpleDerivation) {
-  def extend(newStep: SimpleDerivationStep): KnownStatement = extend(Seq(newStep))
+  def extend(appliedInferenceExtraction: AppliedInferenceExtraction): KnownStatement = {
+    extend(Seq(SimpleDerivationStep.InferenceExtraction(appliedInferenceExtraction)))
+  }
   def extend(newDerivation: SimpleDerivation): KnownStatement = {
     extend(newDerivation.steps)
   }
@@ -24,7 +26,8 @@ object KnownStatement {
     KnownStatement(derivation.statement, derivation)
   }
   def fromExtraction(premiseExtraction: PremiseExtraction)(implicit provingContext: ProvingContext) : KnownStatement = {
-    KnownStatement(premiseExtraction.conclusion, SimpleDerivation(ExtractionApplier.groupStepsByDefinition(premiseExtraction.extractionDetails.derivation)))
+    val appliedExtraction = ExtractionApplier.groupStepsByDefinition(premiseExtraction.extractionDetails.derivation)
+    KnownStatement(premiseExtraction.conclusion, SimpleDerivation.fromExtraction(appliedExtraction))
   }
 
   implicit class SeqOps(knownStatements: Seq[KnownStatement]) {

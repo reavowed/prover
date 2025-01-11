@@ -203,8 +203,8 @@ class StepProvingSpec extends ControllerSpec {
             assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil))) :+
           target(χ(a))
         ) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtractionStep].substeps(0), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtractionStep].substeps(1), Nil)})
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtractionStep].extraction.toProofSteps(0), Seq(1))} and
+          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtractionStep].extraction.toProofSteps(1), Nil)})
     }
 
     "retain premise bound variable names when proving target by inference" in {

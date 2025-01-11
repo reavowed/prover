@@ -4,28 +4,28 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step
 import net.prover.model.{Inference, ProvingContext, Substitutions}
 import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
-import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionApplier, InferenceExtraction}
+import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction, ExtractionApplier, InferenceExtraction}
 
 case class Fact(inferenceExtraction: InferenceExtraction) {
   def statement: Statement = inferenceExtraction.conclusion
   def inference: Inference = inferenceExtraction.inference
 
-  def derivation(implicit provingContext: ProvingContext): SimpleDerivation = {
-    SimpleDerivation(ExtractionApplier.groupStepsByDefinition(inferenceExtraction.extractionDetails.derivation))
+  def extraction(implicit provingContext: ProvingContext): AppliedExtraction = {
+    ExtractionApplier.groupStepsByDefinition(inferenceExtraction.extractionDetails.derivation)
   }
-  def toSingleDerivationStep(implicit provingContext: ProvingContext): SimpleDerivationStep = {
+  def toExtraction(implicit provingContext: ProvingContext): AppliedInferenceExtraction = {
     val baseAssertion = Step.AssertionStep(
       inferenceExtraction.inference.conclusion,
       inferenceExtraction.inference.summary,
       Nil,
       Substitutions.empty)
-    SimpleDerivationStep.Simplification(AppliedInferenceExtraction(baseAssertion, derivation.steps))
+    AppliedInferenceExtraction(baseAssertion, extraction)
   }
   def toProofStep(implicit provingContext: ProvingContext): Step = {
-    toSingleDerivationStep.toProofStep
+    Step.InferenceExtractionStep(toExtraction)
   }
 
   def toKnownStatement(implicit provingContext: ProvingContext): KnownStatement = {
-    KnownStatement.fromSingleStep(toSingleDerivationStep)
+    KnownStatement.fromSingleStep(SimpleDerivationStep.InferenceExtraction(toExtraction))
   }
 }

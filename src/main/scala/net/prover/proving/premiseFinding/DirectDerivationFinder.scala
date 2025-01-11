@@ -6,7 +6,7 @@ import net.prover.model.proof._
 import net.prover.model._
 import net.prover.model.{Inference, Substitutions}
 import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
-import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionApplier}
+import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction, ExtractionApplier}
 
 object DirectDerivationFinder {
   def findDirectDerivationForStatement(
@@ -50,8 +50,10 @@ object DirectDerivationFinder {
   ): Option[SimpleDerivation] = {
     import stepProvingContext.provingContext._
 
-    def findDerivationWithFactInferences(targetStatement: Statement): Option[(SimpleDerivation, Option[Inference])] = {
-      def directly = factsBySerializedStatement.get(targetStatement.serialized).map(fact => (fact.derivation, Some(fact.inference)))
+    def findDerivationWithFactInferences(targetStatement: Statement): Option[(Seq[AppliedExtractionStep], Option[Inference])] = {
+      def directly = factsBySerializedStatement.get(targetStatement.serialized).map(fact =>
+        (fact.extraction.extractionSteps, Some(fact.inference))
+      )
 
       def bySimplifying = conclusionSimplificationInferences.iterator.findFirst { inference =>
         for {
@@ -60,7 +62,7 @@ object DirectDerivationFinder {
           (premiseDerivations, premiseFacts) <- premiseStatements.map(findDerivationWithFactInferences).traverseOption.map(_.split)
           singleFact = premiseFacts.traverseOption.flatMap(_.distinct.single)
           assertionStep = Step.AssertionStep(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
-        } yield (premiseDerivations.join :+ assertionStep, singleFact)
+        } yield (premiseDerivations.reduce(_ ++ _) :+ AppliedExtractionStep.Assertion(assertionStep), singleFact)
       }
 
       directly orElse bySimplifying
@@ -73,7 +75,7 @@ object DirectDerivationFinder {
           factInference.summary,
           Nil,
           Substitutions.empty)
-        Some(SimpleDerivation(Seq(SimpleDerivationStep.Simplification(AppliedInferenceExtraction(assertion, derivation.steps.distinctBy(_.statement))))))
+        Some(SimpleDerivation.empty :+ AppliedInferenceExtraction(assertion, AppliedExtraction(derivation.distinctBy(_.statement))))
       case _ =>
         None
     }

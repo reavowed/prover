@@ -53,7 +53,7 @@ object GetDisplaySteps {
           step.statement,
           Some("Extraction from previous step"),
           stepPath,
-          apply(step.substeps, stepPath))
+          apply(step.extraction.toProofSteps, stepPath))
       case step: Step.InferenceExtractionStep =>
         DisplayStep.ElidedInference(
           step.statement,

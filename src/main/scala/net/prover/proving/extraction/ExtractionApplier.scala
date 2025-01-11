@@ -213,19 +213,20 @@ object ExtractionApplier {
   ): Try[(Statement, Option[Step], Seq[Step.TargetStep])] = {
     for {
       PartiallyAppliedExtraction(extractionResult, _, extractionSteps, extractionPremises) <- ExtractionApplier.applyExtractionsForPremise(premise, premiseExtraction.extractionDefinition, substitutions, intendedPremises, intendedConclusion)
-      extraction = AppliedPremiseExtraction(groupStepsByDefinition(extractionSteps))
+      extraction = groupStepsByDefinition(extractionSteps)
+      extractionStep = Step.ExistingStatementExtractionStep.ifNecessary(extraction)
       (premiseDerivation, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(extractionPremises)
-      assertionWithExtractionStep = Step.ElidedStep.ifNecessary(premiseDerivation.toProofSteps ++ extraction.toStep.toSeq, "Extracted")
+      assertionWithExtractionStep = Step.ElidedStep.ifNecessary(premiseDerivation.toProofSteps ++ extractionStep.toSeq, "Extracted")
     } yield (extractionResult, assertionWithExtractionStep, targetSteps)
   }
 
-  def groupStepsByDefinition(steps: Seq[Step.AssertionStep])(implicit provingContext: ProvingContext): Seq[SimpleDerivationStep] = {
+  def groupStepsByDefinition(steps: Seq[Step.AssertionStep])(implicit provingContext: ProvingContext): AppliedExtraction = {
     val deconstructionInferenceIds = provingContext.availableEntries.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
     val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
 
     var currentMainStep: Option[Step.AssertionStep] = None
     val currentUngroupedSteps = Seq.newBuilder[Step.AssertionStep]
-    val stepsToReturn = Seq.newBuilder[SimpleDerivationStep]
+    val stepsToReturn = Seq.newBuilder[AppliedExtractionStep]
 
     def isStructuralSimplification(step: Step.AssertionStep): Boolean = {
       structuralSimplificationIds.contains(step.inference.id)
@@ -252,9 +253,10 @@ object ExtractionApplier {
     def groupSteps(steps: Seq[Step.AssertionStep], retainEndSimplifications: Boolean): Unit = {
       currentMainStep match {
         case Some(step) =>
-          stepsToReturn += SimpleDerivationStep.Simplification(AppliedInferenceExtraction(step, removeNonEndStructuralSimplifications(steps)))
+          stepsToReturn += AppliedExtractionStep.DefinitionDeconstruction(step, removeNonEndStructuralSimplifications(steps))
         case None =>
           stepsToReturn ++= (if (retainEndSimplifications) removeNonEndStructuralSimplifications(steps) else removeStructuralSimplifications(steps))
+            .map(AppliedExtractionStep.Assertion)
       }
     }
 
@@ -269,6 +271,6 @@ object ExtractionApplier {
       }
     }
     groupSteps(currentUngroupedSteps.result(), true)
-    stepsToReturn.result()
+    AppliedExtraction(stepsToReturn.result())
   }
 }
