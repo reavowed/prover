@@ -310,7 +310,7 @@ trait TestInferenceDefinitions extends TestExpressionDefinitions {
   }
 
   val specification = createInference("Specification", Seq(ForAll("x")(φ($))), φ(a))
-  val existence = createInference("Existence", Seq(φ(a)), Exists("x")(φ($)))
+  val valueForExistence = createInference("Existence", Seq(φ(a)), Exists("x")(φ($)))
   val modusPonens = createInference("Modus Ponens", Seq(Implication(φ, ψ), φ), ψ)
   val modusTollens = createInference("Modus Tollens", Seq(Implication(φ, ψ), Negation(ψ)), Negation(φ))
   val implicationIsTransitive = createInference("Implication Is Transitive", Seq(Implication(φ, ψ), Implication(ψ, χ)), Implication(φ, χ))
@@ -393,7 +393,7 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
       NaturalsDefinition, Successor, ZeroDefinition, OneDefinition, AdditionDefinition, MultiplicationDefinition, Apply, LessThanDefinition,
       IntegersDefinition, IntegerEmbeddingDefinition, IntegerAdditionDefinition, IntegerNegation, IntegerMultiplicationDefinition) ++
     Seq(
-      specification, existence, modusPonens, modusTollens, implicationIsTransitive,
+      specification, valueForExistence, modusPonens, modusTollens, implicationIsTransitive,
       addDoubleNegation, removeDoubleNegation,
       extractLeftConjunct, extractRightConjunct, combineConjunction,
       addLeftDisjunct, addRightDisjunct,

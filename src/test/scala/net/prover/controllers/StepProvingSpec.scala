@@ -167,12 +167,12 @@ class StepProvingSpec extends ControllerSpec {
         theoremKey,
         proofIndex,
         PathData(stepPath),
-        definitionWithInference(existence, Seq(φ($)), Seq(b), ExtractionDefinition.Empty, conclusionOption = Some(Exists("z")(φ($)))))
+        definitionWithInference(valueForExistence, Seq(φ($)), Seq(b), ExtractionDefinition.Empty, conclusionOption = Some(Exists("z")(φ($)))))
 
       checkModifyStepsWithMatcher(
         service,
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(ψ),
-        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(existence, Seq(φ($)), Seq(b)) :+ target(ψ)) and
+        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(valueForExistence, Seq(φ($)), Seq(b)) :+ target(ψ)) and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)})
     }
 

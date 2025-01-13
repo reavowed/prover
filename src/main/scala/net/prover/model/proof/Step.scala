@@ -206,7 +206,7 @@ object Step {
       substitutions: Substitutions,
       @JsonIgnore generalizationDefinition: GeneralizationDefinition,
       @JsonIgnore deductionDefinition: DeductionDefinition)
-    extends Step.WithSubsteps with WithTopLevelStatement with WithVariable with WithAssumption
+    extends Step.WithSubsteps with WithTopLevelStatement with WithAssumption with WithVariable
   {
     override def replaceVariableName(newVariableName: String): Step = copy(variableName = newVariableName)
     override def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = {
