@@ -12,6 +12,8 @@ import net.prover.model.unwrapping.Unwrapper
 import net.prover.proving.extraction.{ExtractionApplier, ExtractionDefinition}
 import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.proving.stepReplacement.InsertStepBeforeChain
+import net.prover.proving.structure.inferences.{Equality, Expansion, Transitivity}
+import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation}
 import net.prover.proving.suggestions.InferenceFilter
 import net.prover.proving.suggestions.SuggestInferences.NumberOfSuggestionsToReturn
 import net.prover.util.Direction

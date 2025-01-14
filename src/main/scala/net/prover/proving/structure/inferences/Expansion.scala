@@ -1,8 +1,10 @@
-package net.prover.model.definitions
+package net.prover.proving.structure.inferences
 
-import net.prover.model.{Inference, Substitutions}
-import net.prover.model.expressions.{Expression, ExpressionVariable, Statement, StatementVariable, Term, TermVariable}
+import net.prover.model.definitions.{Definitions, Wrapper, WrapperIdentity}
+import net.prover.model.expressions._
 import net.prover.model.proof.{Premise, Step, SubstitutionContext}
+import net.prover.model.{Inference, Substitutions}
+import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation}
 
 // An inference that expands a simple binary joiner into a more complex one.
 // The motivating inferences for this class are `a = b ⊢ F(a) = F(b)` and `a = b ⊢ φ(a) ↔ φ(b)`.

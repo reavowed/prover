@@ -1,12 +1,14 @@
 package net.prover.model.proof
 
 import net.prover.entries.StepWithContext
-import net.prover.model.ProvingContext
-import net.prover.model.definitions.{BinaryRelation, KnownStatement, PremiseSimplificationInference}
+import net.prover.model._
+import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.utils.ExpressionUtils
 import net.prover.proving.derivation.{PremiseDerivation, SimpleDerivation}
 import net.prover.proving.extraction.ExtractionCalculator
+import net.prover.proving.structure.inferences.PremiseSimplificationInference
+import net.prover.proving.structure.statements.BinaryRelation
 
 import scala.collection.mutable
 

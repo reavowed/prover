@@ -3,7 +3,7 @@ package net.prover.proving.extraction
 import com.fasterxml.jackson.annotation.{JsonCreator, JsonProperty}
 import net.prover.JsonMapping
 import net.prover.model.Inference
-import net.prover.model.definitions.Equality
+import net.prover.proving.structure.inferences.Equality
 import net.prover.util.Direction
 import org.springframework.core.convert.converter.Converter
 import org.springframework.stereotype.Component

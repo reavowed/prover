@@ -1,9 +1,11 @@
-package net.prover.model.definitions
+package net.prover.proving.structure.statements
 
+import net.prover.model.definitions.{StatementDefinition, TermDefinition}
 import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{ExpressionLenses, Inference}
+import net.prover.proving.structure.inferences.Reversal
 
 sealed trait BinaryJoiner[TComponent <: Expression] extends ExpressionLenses[TComponent] {
   def symbol: String

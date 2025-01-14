@@ -1,11 +1,12 @@
 package net.prover.model.unwrapping
 
 import net.prover.controllers._
-import net.prover.model.definitions.{BinaryJoiner, DeductionDefinition, GeneralizationDefinition, Wrapper}
+import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition, Wrapper}
 import net.prover.model.expressions._
 import net.prover.model.proof.Step.ExistingStatementExtractionStep
 import net.prover.model.proof._
 import net.prover.model.{Inference, ProvingContext, Substitutions}
+import net.prover.proving.structure.statements.BinaryJoiner
 
 import scala.util.{Success, Try}
 

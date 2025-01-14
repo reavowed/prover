@@ -4,6 +4,7 @@ import net.prover.model.expressions.{Expression, Term}
 import net.prover.model.proof.{StepProvingContext, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
 import net.prover.proving.extraction.{ExtractionApplier, InferenceExtraction}
+import net.prover.proving.structure.inferences.{Expansion, Reversal}
 import net.prover.util.Direction
 
 sealed trait RearrangementOperation {

@@ -1,11 +1,12 @@
 package net.prover.proving.premiseFinding
 
 import net.prover.model._
-import net.prover.model.definitions.{BinaryRelationStatement, Wrapper}
+import net.prover.model.definitions.Wrapper
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.{KnownEquality, StepProvingContext}
 import net.prover.model.utils.ExpressionUtils
 import net.prover.proving.derivation.SimpleDerivation
+import net.prover.proving.structure.statements.BinaryRelationStatement
 
 object BinaryRelationDerivationFinder {
   def findDirectDerivationForBinaryRelationStatement(

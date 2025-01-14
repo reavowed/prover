@@ -1,4 +1,4 @@
-package net.prover.model.definitions
+package net.prover.proving.structure.statements
 
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.SubstitutionContext

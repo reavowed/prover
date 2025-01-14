@@ -1,7 +1,9 @@
-package net.prover.model.definitions
+package net.prover.proving.structure.inferences
 
+import net.prover.model.definitions.{RearrangementStep, Wrapper}
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.SubstitutionContext
+import net.prover.proving.structure.statements.BinaryRelation
 
 case class Equality(relation: BinaryRelation, expansion: Expansion[Term], substitution: Substitution, reversal: Reversal[Term], transitivity: Transitivity[Term]) {
   def apply(left: Term, right: Term)(implicit substitutionContext: SubstitutionContext): Statement = relation(left, right)

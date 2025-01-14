@@ -9,6 +9,8 @@ import net.prover.model.proof.SubstitutionContext
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.proving.extraction.{ExtractionCalculator, InferenceExtraction, StatementExtractionInference}
+import net.prover.proving.structure.inferences.{ConclusionRelationSimplificationInference, Equality, Expansion, PremiseRelationSimplificationInference, RelationExpansion, RelationRewriteInference, Reversal, Substitution, Transitivity}
+import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation, BinaryRelationFromDefinition, BinaryRelationFromGeneralShorthand, BinaryRelationFromSpecificShorthand, BinaryRelationStatement}
 import net.prover.util.Direction
 
 import scala.Ordering.Implicits._
@@ -305,113 +307,6 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     } yield RightOperatorExtraction(unaryOperator, binaryOperator, inferenceExtraction)
   }
 
-  lazy val premiseRelationSimplificationInferences: Map[BinaryRelation, Seq[PremiseRelationSimplificationInference]] = {
-    def checkLhsIsValid(premiseLhs: Term, conclusionLhs: Term): Boolean = {
-      // valid examples:
-      //   a -> a
-      //   a -> a_0
-      //   (a, b) -> a
-      (ExpressionUtils.isSimpleTermVariable(premiseLhs) && premiseLhs == conclusionLhs) || // a -> a
-        ExpressionUtils.getSimpleTermVariable(premiseLhs).exists(ExpressionUtils.getWrappedSimpleTermVariable(conclusionLhs).contains) || // a -> a_0
-        ExpressionUtils.getSimpleTermVariable(conclusionLhs).exists(premiseLhs.usedVariables.terms.variableIndices.contains) // (a, b) -> a
-    }
-    def checkRhsIsValidSimplification(premiseRhs: Term, conclusionRhs: Term): Boolean = {
-      // valid examples:
-      //   {a} -> a
-      //   A x B -> A
-      //   ℤ+ -> ℤ
-      premiseRhs.complexity > conclusionRhs.complexity &&
-        (ExpressionUtils.getSimpleTermVariable(conclusionRhs).exists(premiseRhs.usedVariables.terms.variableIndices.contains) ||
-          ExpressionUtils.getTermConstantDefinition(conclusionRhs).exists(conclusionDefinition => ExpressionUtils.getTermConstantDefinition(premiseRhs).exists(premiseDefinition => premiseDefinition.definingStatement.referencedDefinitions.contains(conclusionDefinition))))
-    }
-    def checkNoSubstitutionOverlap(premiseLhs: Term, conclusionRhs: Term): Boolean = {
-      (premiseLhs.usedVariables.terms.variableIndices.toSet intersect conclusionRhs.usedVariables.terms.variableIndices.toSet).isEmpty
-    }
-
-    implicit val substitutionContext = SubstitutionContext.outsideProof
-    (for {
-      inferenceExtraction <- allInferenceExtractions
-      singlePremise <- inferenceExtraction.premises.single.toSeq
-      if singlePremise.usedVariables.contains(inferenceExtraction.conclusion.usedVariables)
-      if inferenceExtraction.variableDefinitions.statements.isEmpty && inferenceExtraction.variableDefinitions.hasNoApplications
-      BinaryRelationStatement(_, conclusionLhs, conclusionRhs) <- findRelation(inferenceExtraction.conclusion).toSeq
-      BinaryRelationStatement(premiseRelation, premiseLhs, premiseRhs) <- findRelation(singlePremise).toSeq
-      if checkLhsIsValid(premiseLhs, conclusionLhs) && checkRhsIsValidSimplification(premiseRhs, conclusionRhs) && checkNoSubstitutionOverlap(premiseLhs, conclusionRhs)
-    } yield premiseRelation -> PremiseRelationSimplificationInference(inferenceExtraction, singlePremise)).toSeqMap
-  }
-
-  lazy val relationRewriteInferences: Seq[RelationRewriteInference] = {
-    implicit val substitutionContext = SubstitutionContext.outsideProof
-
-    def findPremiseRelation(lastPremise: Statement): Seq[(BinaryRelationStatement, Substitutions.Possible)] = {
-      val relationsFromTemplate = definedBinaryRelations.ofType[BinaryRelationFromGeneralShorthand].mapCollect { relation =>
-        val generalTemplate = relation.shorthand.template.expand(
-          Map.empty,
-          Map(
-            relation.lhsVariableName -> TermVariable(0),
-            relation.rhsVariableName -> TermVariable(1),
-            relation.symbolVariableName -> TermVariable(2))
-        ).asInstanceOf[Statement]
-        for {
-          substitutions <- generalTemplate.calculateSubstitutions(lastPremise)
-          lhsVariableIndex <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(0))
-          rhsVariableIndex <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(1))
-          symbolVariableIndex <- ExpressionUtils.getSimpleTermVariable(substitutions.terms(2))
-        } yield (BinaryRelationStatement.construct(relation, TermVariable(lhsVariableIndex), TermVariable(rhsVariableIndex)), Substitutions.Possible(terms = Map(symbolVariableIndex -> relation.definition())))
-      }
-      if (relationsFromTemplate.nonEmpty)
-        relationsFromTemplate
-      else
-        findRelation(lastPremise).toSeq.map(_ -> Substitutions.Possible.empty)
-    }
-    def areValidSecondaryComponents(premiseComponent: Term, conclusionComponent: Term): Boolean = {
-      (ExpressionUtils.isSimpleTermVariable(premiseComponent) && ExpressionUtils.isSimpleTermVariable(conclusionComponent)) ||
-        (ExpressionUtils.isCombinationOfTermConstants(premiseComponent) && ExpressionUtils.isCombinationOfTermConstants(conclusionComponent))
-    }
-    def isValidRewrite(premise: BinaryRelationStatement, conclusion: BinaryRelationStatement): Boolean = {
-      // e.g. a ∈ A -> a ∈ B
-      // or   a ~ b -> a ≠ b
-      // or   a ∈ ℤ+ -> 0 < a
-      ExpressionUtils.isSimpleTermVariable(premise.left) &&
-        ((premise.left == conclusion.left && areValidSecondaryComponents(premise.right, conclusion.right)) ||
-        (premise.left == conclusion.right && areValidSecondaryComponents(premise.right, conclusion.left)))
-    }
-    def isValidInitialPremise(initialPremiseOption: Option[Statement], conclusion: BinaryRelationStatement) = {
-      def isValidTypeStatement(initialPremise: Statement): Boolean = {
-        ExpressionUtils.getTypeLikeStatement(initialPremise)(allAvailableEntries).exists { typeStatement =>
-          ExpressionUtils.isSimpleTermVariable(typeStatement.mainTerm)
-        }
-      }
-      def isValidRelation(initialPremise: Statement): Boolean = {
-        findRelation(initialPremise).exists { initialPremiseRelation =>
-          ExpressionUtils.isSimpleTermVariable(initialPremiseRelation.left) &&
-            ExpressionUtils.isSimpleTermVariable(initialPremiseRelation.right) &&
-            initialPremiseRelation.relation != conclusion.relation
-        }
-      }
-      initialPremiseOption match {
-        case None =>
-          true
-        case Some(initialPremise) =>
-          isValidTypeStatement(initialPremise) || isValidRelation(initialPremise)
-      }
-    }
-
-    for {
-      inferenceExtraction <- allInferenceExtractions
-      (initialPremiseOption, mainPremiseStatement) <- inferenceExtraction.premises match {
-        case Seq(a) => Seq((None, a))
-        case Seq(a, b) => Seq((Some(a), b))
-        case _ => Nil
-      }
-      if inferenceExtraction.premises.usedVariables.contains(inferenceExtraction.conclusion.usedVariables)
-      if (initialPremiseOption.toSeq :+ inferenceExtraction.conclusion).usedVariables.contains(mainPremiseStatement.usedVariables)
-      conclusion <- findRelation(inferenceExtraction.conclusion).toSeq
-      (mainPremise, initialSubstitutions) <- findPremiseRelation(mainPremiseStatement)
-      if isValidRewrite(mainPremise, conclusion) && isValidInitialPremise(initialPremiseOption, conclusion)
-    } yield RelationRewriteInference(inferenceExtraction, initialPremiseOption, mainPremiseStatement, mainPremise.relation, conclusion.relation, initialSubstitutions)
-  }
-
   def getPossiblePremiseDesimplifications(premise: Statement): Seq[DerivedPremise] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     def directly = DirectPremise(premise)
@@ -429,81 +324,15 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     premises.foldProduct(getPossiblePremiseDesimplifications)
   }
 
-  lazy val conclusionRelationSimplificationInferences: Map[BinaryRelation, Seq[ConclusionRelationSimplificationInference]] = {
-
-    implicit val substitutionContext = SubstitutionContext.outsideProof
-
-    def isValidSimplification(premises: Seq[BinaryRelationStatement], conclusion: BinaryRelationStatement, optionalTypeStatement: Option[TypeLikeStatement]): Boolean = {
-      // e.g. a ∈ ℕ, b ∈ ℕ -> (a, b)ℤ ∈ ℤ
-      // e.g. a ∈ ℤ, b ∈ ℤ/{0} -> (a, b)ℚ ∈ ℚ
-      // or a ∈ ℤ, b ∈ ℤ -> a + b ∈ ℤ
-      val isLhsBreakdown: Boolean = {
-        ExpressionUtils.isCombinationOfTermConstants(conclusion.right) && premises.forall(p => ExpressionUtils.isCombinationOfTermConstants(p.right)) &&
-          premises.forall(p => p.left.complexity < conclusion.left.complexity) &&
-          ExpressionUtils.getCombinationOfSimpleTermVariables(conclusion.left).exists { termVariables =>
-            termVariables.zipStrict(premises).exists(_.forall { case (variableName, premise) => ExpressionUtils.getSimpleTermVariable(premise.left).contains(variableName)})
-          }
-      }
-      // e.g. a ∈ A, a ∉ B -> a ∈ A/B
-      val isRhsBreakdown: Boolean = {
-        ExpressionUtils.getSimpleTermVariable(conclusion.left).exists(v => premises.forall(p => ExpressionUtils.getSimpleTermVariable(p.left).contains(v))) &&
-          premises.forall(p => p.right.complexity < conclusion.right.complexity) &&
-          ExpressionUtils.getCombinationOfSimpleTermVariables(conclusion.right).exists { termVariables =>
-            termVariables.zipStrict(premises).exists(_.forall { case (variableName, premise) => ExpressionUtils.getSimpleTermVariable(premise.right).contains(variableName)})
-          }
-      }
-      val isDoubleSimplification: Boolean = {
-        // e.g. a ∈ ℕ, b ∈ ℕ, a = b -> aℤ = bℤ
-        premises.lastOption.exists { lastPremise =>
-          lastPremise.left.complexity < conclusion.left.complexity && lastPremise.right.complexity < conclusion.right.complexity &&
-          ExpressionUtils.getSimpleTermVariable(lastPremise.left).exists { lastPremiseLhsVariable =>
-            ExpressionUtils.getSimpleTermVariable(lastPremise.right).exists { lastPremiseRhsVariable =>
-              ExpressionUtils.getSingleSimpleTermVariable(conclusion.left).contains(lastPremiseLhsVariable) &&
-                ExpressionUtils.getSingleSimpleTermVariable(conclusion.right).contains(lastPremiseRhsVariable) &&
-                premises.init.forall { premise =>
-                  ExpressionUtils.getSimpleTermVariable(premise.left).exists(v => v == lastPremiseLhsVariable || v == lastPremiseRhsVariable) &&
-                    ExpressionUtils.isTermConstant(premise.right)
-                }
-            }
-          }
-        }
-      }
-      val isTypeDefinitionSimplification: Boolean = {
-        // e.g. f is a function, a ∈ domain(f) -> f(a) ∈ range(f)
-        (for {
-          typeStatement <- optionalTypeStatement
-          typeVariable <- ExpressionUtils.getSimpleTermVariable(typeStatement.mainTerm)
-          singlePremise <- premises.single
-          conclusionLhsVariables <- ExpressionUtils.getCombinationOfSimpleTermVariables(conclusion.left)
-          otherVariable <- conclusionLhsVariables match {
-            case Seq(`typeVariable`, otherVariable) => Some(otherVariable)
-            case Seq(otherVariable, `typeVariable`) => Some(otherVariable)
-            case _ => None
-          }
-          if ExpressionUtils.getWrappedSimpleTermVariable(conclusion.right).contains(typeVariable)
-          if ExpressionUtils.getWrappedSimpleTermVariable(singlePremise.right).contains(typeVariable)
-          if ExpressionUtils.getSimpleTermVariable(singlePremise.left).contains(otherVariable)
-        } yield true) getOrElse false
-      }
-      isLhsBreakdown || isRhsBreakdown || isDoubleSimplification || isTypeDefinitionSimplification
-    }
-
-    def breakOffTypeStatement(premises: Seq[Statement]): (Option[TypeLikeStatement], Seq[Statement]) = {
-      premises.headAndTailOption
-        .flatMap { case (head, tail) => ExpressionUtils.getTypeLikeStatement(head)(allAvailableEntries).map(t => Some(t) -> tail)}
-        .getOrElse(None -> premises)
-    }
-
-    (for {
-      inferenceExtraction <- allInferenceExtractions
-      if inferenceExtraction.premises.nonEmpty && inferenceExtraction.conclusion.usedVariables.usesAll(inferenceExtraction.variableDefinitions)
-      (optionalTypeStatement, otherPremises) = breakOffTypeStatement(inferenceExtraction.premises)
-      premiseDesimplifications <- getPossiblePremiseDesimplifications(otherPremises)
-      premises <- premiseDesimplifications.flatMap(_.getRootPremises).map(findRelation).traverseOption.toSeq
-      conclusion <- findRelation(inferenceExtraction.conclusion).toSeq
-      if isValidSimplification(premises, conclusion, optionalTypeStatement)
-    } yield conclusion.relation -> ConclusionRelationSimplificationInference(inferenceExtraction, optionalTypeStatement, premiseDesimplifications)).toSeqMap
+  lazy val premiseRelationSimplificationInferences: Map[BinaryRelation, Seq[PremiseRelationSimplificationInference]] = {
+    PremiseRelationSimplificationInference.getAll(this)
   }
+
+  lazy val conclusionRelationSimplificationInferences: Map[BinaryRelation, Seq[ConclusionRelationSimplificationInference]] = {
+    ConclusionRelationSimplificationInference.getAll(this)
+  }
+
+  lazy val relationRewriteInferences: Seq[RelationRewriteInference] = RelationRewriteInference.getAll(this)
 
   // An inference such as `φ,ψ ⊢ φ∧ψ` or `φ ⊢ φ∨ψ` that can be run in reverse to allow a target conclusion to be
   // decomposed into smaller parts

@@ -9,6 +9,7 @@ import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.Premise.SingleLinePremise
 import net.prover.model.proof.{Step, StepProvingContext, StepReference, SubstitutionContext}
 import net.prover.proving.stepReplacement.AddTargetsBeforeChain
+import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation}
 import net.prover.theorems.GetReferencedPremises
 import net.prover.util.FunctorTypes._
 import org.springframework.http.ResponseEntity

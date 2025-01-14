@@ -1,6 +1,7 @@
-package net.prover.model.definitions
+package net.prover.proving.structure.inferences
 
 import net.prover.model.ProvingContext
+import net.prover.model.definitions.KnownStatement
 import net.prover.model.proof.SubstitutionContext
 import net.prover.proving.extraction.InferenceExtraction
 

@@ -3,6 +3,8 @@ package net.prover.model.proof
 import net.prover.model._
 import net.prover.model.definitions._
 import net.prover.model.expressions._
+import net.prover.proving.structure.inferences.{Equality, Expansion, Reversal, Transitivity}
+import net.prover.proving.structure.statements.BinaryJoiner
 import net.prover.util.Direction
 
 case class TermRearranger[T <: Expression](

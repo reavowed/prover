@@ -9,6 +9,8 @@ import net.prover.model.proof._
 import net.prover.model.{ExpressionParsingContext, Inference, ProvingContext, SeqOps, Substitutions}
 import net.prover.proving.FindInference
 import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
+import net.prover.proving.structure.inferences.RelationExpansion
+import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation}
 import net.prover.proving.suggestions.SuggestInferences
 import net.prover.util.Direction
 import org.springframework.beans.factory.annotation.Autowired

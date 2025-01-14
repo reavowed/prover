@@ -6,6 +6,8 @@ import net.prover.model.expressions._
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.proving.extraction.ExtractionApplier
 import net.prover.proving.premiseFinding.DerivationFinder
+import net.prover.proving.structure.inferences.Equality
+import net.prover.proving.structure.statements.BinaryJoiner
 import net.prover.util.{Direction, PossibleSingleMatch}
 
 import scala.Ordering.Implicits._

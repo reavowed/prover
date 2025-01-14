@@ -1,9 +1,11 @@
 package net.prover.controllers
 
 import net.prover.model.{ExpressionParsingContext, Parser, ProvingContext}
-import net.prover.model.definitions.{BinaryConnective, BinaryJoiner, BinaryRelation, Reversal, Transitivity, Wrapper}
+import net.prover.model.definitions.Wrapper
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.{Step, SubstitutionContext}
+import net.prover.proving.structure.inferences.{Reversal, Transitivity}
+import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation}
 
 import scala.reflect.ClassTag
 
