@@ -3,11 +3,11 @@ package net.prover.model.proof
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
-import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.proving.extraction
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
+import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 
 import scala.annotation.tailrec
 import scala.util.Try

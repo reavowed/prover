@@ -1,12 +1,12 @@
 package net.prover.theorems.steps
 
-import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.{Inference, Substitutions}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep}
+import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import scalaz.Monoid
 import scalaz.Scalaz._
 

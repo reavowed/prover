@@ -5,8 +5,9 @@ import net.prover.entries.{ChapterWithContext, EntryParsingContext, EntryWithCon
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
-import net.prover.model.definitions.{ConjunctionDefinition, ExpressionDefinition, StatementDefinition}
+import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.{Statement, TermVariable}
+import net.prover.proving.structure.definitions.ConjunctionDefinition
 
 case class TypeRelationDefinition(
     symbol: String,

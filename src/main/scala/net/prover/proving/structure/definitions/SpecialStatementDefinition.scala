@@ -1,8 +1,9 @@
-package net.prover.model.definitions
+package net.prover.proving.structure.definitions
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
+import net.prover.model.definitions.StatementDefinition
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{DefinedStatement, Statement}
 
@@ -13,7 +14,7 @@ sealed trait SpecialStatementDefinition {
 }
 
 object SpecialStatementDefinition {
-  sealed trait BinaryConnective extends SpecialStatementDefinition {
+  trait BinaryConnective extends SpecialStatementDefinition {
     def apply(firstComponent: Statement, secondComponent: Statement): Statement = statementDefinition(firstComponent, secondComponent)
     def unapply(statement: Statement): Option[(Statement, Statement)] = statement match {
       case DefinedStatement(Seq(antecedent: Statement, consequent: Statement), `statementDefinition`) =>
@@ -22,7 +23,7 @@ object SpecialStatementDefinition {
         None
     }
   }
-  sealed trait Quantifier extends SpecialStatementDefinition {
+  trait Quantifier extends SpecialStatementDefinition {
     def apply(variableName: String, predicate: Statement): Statement = statementDefinition.bind(variableName)(predicate)
     def unapply(statement: Statement): Option[(String, Statement)] = statement match {
       case definedStatement @ DefinedStatement(Seq(predicate: Statement), `statementDefinition`) =>
@@ -37,13 +38,6 @@ object SpecialStatementDefinition {
     }
   }
 }
-
-case class ConjunctionDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.BinaryConnective {
-  def all(statements: Statement*): Statement = statements.reduceRight(apply)
-}
-case class DeductionDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.BinaryConnective
-case class GeneralizationDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.Quantifier
-case class UniqueExistenceDefinition(statementDefinition: StatementDefinition) extends SpecialStatementDefinition.Quantifier
 
 class SpecialStatementDefinitionSymbolSerializer extends JsonSerializer[SpecialStatementDefinition] {
   override def serialize(value: SpecialStatementDefinition, gen: JsonGenerator, serializers: SerializerProvider): Unit = {

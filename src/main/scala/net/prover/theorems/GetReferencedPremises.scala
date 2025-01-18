@@ -2,10 +2,10 @@ package net.prover.theorems
 
 import net.prover.entries.StepWithContext
 import net.prover.model.{Inference, Substitutions}
-import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, StepReference}
 import net.prover.model.proof.Premise.SingleLinePremise
+import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.theorems.steps.RecursiveStepFinder
 import scalaz.Scalaz._
 

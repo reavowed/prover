@@ -1,10 +1,11 @@
 package net.prover.theorems
 
 import net.prover.entries.StepWithContext
-import net.prover.model.definitions.{DeductionDefinition, ExpressionDefinition, GeneralizationDefinition}
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, SubstitutionContext}
 import net.prover.model.{AvailableEntries, Inference, Substitutions}
+import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import scalaz.Id.Id
 
 case class ReplaceDefinitions(definitionsToReplace: Map[ExpressionDefinition, ExpressionDefinition], availableEntries: AvailableEntries) extends CompoundTheoremUpdater[Id] {

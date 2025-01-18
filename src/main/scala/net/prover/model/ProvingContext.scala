@@ -7,6 +7,7 @@ import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.proving.derivation.SimpleDerivation
 import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionDefinition, ExtractionDetails, InferenceExtraction, StatementExtractionInference, VariableTracker}
+import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.proving.structure.inferences.{ConclusionRelationSimplificationInference, Equality, Expansion, PremiseRelationSimplificationInference, RelationRewriteInference, Reversal, Substitution, Transitivity}
 import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation, BinaryRelationStatement}
 import net.prover.theorems.GetReferencedInferences

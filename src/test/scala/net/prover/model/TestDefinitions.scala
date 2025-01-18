@@ -7,6 +7,7 @@ import net.prover.model.definitions._
 import net.prover.model.entries.ChapterEntry.HasStatementDefinition
 import net.prover.model.entries._
 import net.prover.model.expressions._
+import net.prover.proving.structure.definitions
 
 import scala.language.implicitConversions
 

@@ -1,11 +1,11 @@
 package net.prover.theorems.steps
 
 import net.prover.entries.{ProofWithContext, StepWithContext, StepsWithContext, TypedStepWithContext}
-import net.prover.model.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step, StepContext, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
+import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import scalaz.Monad
 import scalaz.Scalaz._
 

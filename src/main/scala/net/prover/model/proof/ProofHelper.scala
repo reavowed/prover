@@ -1,9 +1,10 @@
 package net.prover.model.proof
 
 import net.prover.model._
-import net.prover.model.definitions.{DeductionDefinition, Fact, GeneralizationDefinition, NamingInference}
+import net.prover.model.definitions.{Fact, NamingInference}
 import net.prover.model.expressions._
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
+import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 
 object ProofHelper {
   def findFactBySubstituting(target: Statement, substitutionsSoFar: Substitutions.Possible)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(Fact, Substitutions.Possible)] = {

@@ -1,9 +1,10 @@
 package net.prover.theorems
 
-import net.prover.model.definitions.{DeductionDefinition, ExpressionDefinition, GeneralizationDefinition}
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Premise
 import net.prover.model.{Inference, Substitutions}
+import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.theorems.steps.RecursiveStepFinder
 import scalaz.Scalaz._
 

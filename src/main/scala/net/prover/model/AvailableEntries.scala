@@ -6,6 +6,7 @@ import net.prover.model.AvailableEntries.getStatementDefinitionFromEntry
 import net.prover.model.definitions._
 import net.prover.model.entries._
 import net.prover.model.expressions._
+import net.prover.proving.structure.definitions.{ConjunctionDefinition, DeductionDefinition, GeneralizationDefinition, UniqueExistenceDefinition}
 
 case class AvailableEntries(entriesWithContexts: Seq[EntryWithContext])
 {
