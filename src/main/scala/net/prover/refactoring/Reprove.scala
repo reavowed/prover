@@ -48,9 +48,9 @@ object Reprove extends CompoundTheoremUpdater[Id] {
         case Seq(singleStepWithContext) =>
           singleStepWithContext.step match {
             case step@Step.GeneralizationStep(variableName, _, generalizationDefinition) =>
-              unwrap(singleStepWithContext.forSubsteps(step).stepsWithContexts, unwrappersSoFar :+ GeneralizationUnwrapper(variableName, generalizationDefinition, stepWithContext.provingContext.specificationInferenceOption.get._1))
+              unwrap(singleStepWithContext.forSubsteps(step).stepsWithContexts, unwrappersSoFar :+ GeneralizationUnwrapper(variableName, generalizationDefinition, stepWithContext.provingContext.specificationInferenceOption.get))
             case step@Step.DeductionStep(assumption, _, generalizationDefinition) =>
-              unwrap(singleStepWithContext.forSubsteps(step).stepsWithContexts, unwrappersSoFar :+ DeductionUnwrapper(assumption, generalizationDefinition, stepWithContext.provingContext.deductionEliminationInferenceOption.get._1))
+              unwrap(singleStepWithContext.forSubsteps(step).stepsWithContexts, unwrappersSoFar :+ DeductionUnwrapper(assumption, generalizationDefinition, stepWithContext.provingContext.deductionEliminationInferenceOption.get))
             case _ =>
               (stepsWithContext, unwrappersSoFar)
           }

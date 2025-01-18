@@ -3,6 +3,7 @@ package net.prover.model.proof
 import net.prover.model._
 import net.prover.model.definitions.Wrapper
 import net.prover.model.expressions.{DefinedStatement, Statement}
+import net.prover.proving.structure.inferences.{DeductionEliminationInference, SpecificationInference}
 
 object DefinitionRewriter {
   private case class DefinitionRewriteStep(steps: Seq[Step], inference: Inference, source: Statement, result: Statement) {
@@ -92,7 +93,7 @@ object DefinitionRewriter {
     def insideDeductionStatement: Seq[DefinitionRewriteStep] = {
       for {
         deductionDefinition <- provingContext.deductionDefinitionOption.toSeq
-        (eliminationInference, eliminationPremise, _) <- provingContext.deductionEliminationInferenceOption.toSeq
+        DeductionEliminationInference(eliminationInference, eliminationPremise, _) <- provingContext.deductionEliminationInferenceOption.toSeq
         (antecedent, premiseConsequent) <- deductionDefinition.unapply(premise).toSeq
         (targetAntecedent, targetConsequent) <- deductionDefinition.unapply(target).toSeq
         if antecedent == targetAntecedent
@@ -107,7 +108,7 @@ object DefinitionRewriter {
     def insideGeneralizationStatement: Seq[DefinitionRewriteStep] = {
       for {
         generalizationDefinition <- provingContext.generalizationDefinitionOption.toSeq
-        (specificationInference, specificationPremise) <- provingContext.specificationInferenceOption.toSeq
+        SpecificationInference(specificationInference, specificationPremise) <- provingContext.specificationInferenceOption.toSeq
         (_, premisePredicate) <- generalizationDefinition.unapply(premise).toSeq
         (_, targetPredicate) <- generalizationDefinition.unapply(target).toSeq
         variableName <- premise.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).toSeq

@@ -9,6 +9,7 @@ import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.proving.derivation.SimpleDerivationStep
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
+import net.prover.proving.structure.inferences.SpecificationInference
 
 import scala.util.{Failure, Success, Try}
 
@@ -17,8 +18,7 @@ object ExtractionApplier {
 
   private def applySpecification(
     currentStatement: Statement,
-    specificationInference: Inference,
-    extractionPremise: Statement,
+    specificationInference: SpecificationInference,
     variableTracker: VariableTracker,
     inferencesRemaining: Seq[Inference],
     mainSubstitutions: Substitutions,
@@ -28,12 +28,12 @@ object ExtractionApplier {
     substitutionContext: SubstitutionContext
   ): Try[PartiallyAppliedExtraction] = {
     for {
-      predicate <- extractionPremise.calculateSubstitutions(currentStatement).flatMap(_.statements.get(0)).orBadRequest(s"Could not get predicate for specification ${specificationInference.id}")
+      predicate <- specificationInference.premise.calculateSubstitutions(currentStatement).flatMap(_.statements.get(0)).orBadRequest(s"Could not get predicate for specification ${specificationInference.inference.id}")
       boundVariableName <- currentStatement.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).orBadRequest(s"Statement $currentStatement did not have a single variable")
       (_, newIndex, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(boundVariableName)
       term <- mainSubstitutions.terms.lift(newIndex).orBadRequest(s"Substitutions did not specify a term at index $newIndex")
       extractionSubstitutions = Substitutions(Seq(predicate), Seq(term))
-      extractedConclusion <- specificationInference.conclusion.applySubstitutions(extractionSubstitutions).orBadRequest(s"Could not substitute conclusion for specification ${specificationInference.id}")
+      extractedConclusion <- specificationInference.inference.conclusion.applySubstitutions(extractionSubstitutions).orBadRequest(s"Could not substitute conclusion for specification ${specificationInference.inference.id}")
       PartiallyAppliedExtraction(innerResult, innerPremise, innerSteps, innerPremises) <-
         applySimpleExtractions(extractedConclusion, inferencesRemaining, mainSubstitutions, intendedPremises, intendedConclusion, newVariableTracker)
       updatedPredicate <- innerPremise.calculateApplicatives(Seq(TermVariable(newIndex, Nil)), Substitutions.Possible(Map.empty, Map(0 -> term)))
@@ -41,9 +41,9 @@ object ExtractionApplier {
         .find(_ == predicate)
         .orBadRequest("Could not recalculate applicative")
       updatedSubstitutions = Substitutions(Seq(updatedPredicate), Seq(term))
-      updatedMainPremise <- extractionPremise.applySubstitutions(updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
+      updatedMainPremise <- specificationInference.premise.applySubstitutions(updatedSubstitutions).orBadRequest("Could not apply updated substitutions")
       updatedMainPremiseWithVariable = updatedMainPremise.asInstanceOf[DefinedStatement].updateBoundVariableNames(Seq(boundVariableName))
-      assertionStep = Step.AssertionStep(innerPremise, specificationInference.summary, Seq(Premise.Pending(updatedMainPremiseWithVariable)), updatedSubstitutions)
+      assertionStep = Step.AssertionStep(innerPremise, specificationInference.inference.summary, Seq(Premise.Pending(updatedMainPremiseWithVariable)), updatedSubstitutions)
     } yield PartiallyAppliedExtraction(innerResult, updatedMainPremiseWithVariable, assertionStep +: innerSteps, innerPremises)
   }
 
@@ -105,8 +105,8 @@ object ExtractionApplier {
     inferencesRemaining match {
       case inference +: tailInferences =>
         provingContext.specificationInferenceOption match {
-          case Some((`inference`, singlePremise)) =>
-            applySpecification(currentStatement, inference, singlePremise, variableTracker, tailInferences, substitutions, intendedPremises, intendedConclusion)
+          case Some(specificationInference) if specificationInference.inference == inference =>
+            applySpecification(currentStatement, specificationInference, variableTracker, tailInferences, substitutions, intendedPremises, intendedConclusion)
           case _ =>
             applySimpleExtraction(currentStatement, inference, variableTracker,  tailInferences, substitutions, intendedPremises, intendedConclusion)
         }

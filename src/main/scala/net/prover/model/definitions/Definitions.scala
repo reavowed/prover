@@ -9,7 +9,7 @@ import net.prover.model.proof.SubstitutionContext
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.proving.extraction.{ExtractionCalculator, InferenceExtraction, StatementExtractionInference}
-import net.prover.proving.structure.inferences.{ConclusionRelationSimplificationInference, Equality, Expansion, PremiseRelationSimplificationInference, RelationExpansion, RelationRewriteInference, Reversal, Substitution, Transitivity}
+import net.prover.proving.structure.inferences.{ConclusionRelationSimplificationInference, DeductionEliminationInference, Equality, Expansion, PremiseRelationSimplificationInference, RelationExpansion, RelationRewriteInference, Reversal, SpecificationInference, Substitution, Transitivity}
 import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation, BinaryRelationFromDefinition, BinaryRelationFromGeneralShorthand, BinaryRelationFromSpecificShorthand, BinaryRelationStatement}
 import net.prover.util.Direction
 
@@ -42,7 +42,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     inferencesWithExtractions.map(_.mapLeft(_.id)).toMap
   }
 
-  lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
+  lazy val deductionEliminationInferenceOption: Option[DeductionEliminationInference] = {
     allAvailableEntries.deductionDefinitionOption.flatMap { deductionDefinition =>
       inferenceEntries.iterator.collect {
         case inference @ Inference(
@@ -50,12 +50,12 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
         Seq(deductionPremise @ deductionDefinition(StatementVariable(antecedentName, Nil), StatementVariable(consequentName, Nil)), antecedentPremise @ StatementVariable(antecedentName2, Nil)),
         StatementVariable(consequentName2, Nil)
         ) if antecedentName == antecedentName2 && consequentName == consequentName2 =>
-          (inference, deductionPremise, antecedentPremise)
+          DeductionEliminationInference(inference, deductionPremise, antecedentPremise)
       }.headOption
     }
   }
 
-  lazy val specificationInferenceOption: Option[(Inference, Statement)] = {
+  lazy val specificationInferenceOption: Option[SpecificationInference] = {
     allAvailableEntries.generalizationDefinitionOption.flatMap { generalizationDefinition =>
       inferenceEntries.iterator.collect {
         case inference @ Inference(
@@ -63,7 +63,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
           Seq(singlePremise @ generalizationDefinition(_, StatementVariable(0, Seq(FunctionParameter(0, 0))))),
           StatementVariable(0, Seq(TermVariable(0, Nil)))
         ) =>
-          (inference, singlePremise)
+          SpecificationInference(inference, singlePremise)
       }.headOption
     }
   }

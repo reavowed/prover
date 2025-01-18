@@ -7,6 +7,7 @@ import net.prover.model.proof.Step.ExistingStatementExtractionStep
 import net.prover.model.proof._
 import net.prover.model.{Inference, ProvingContext, Substitutions}
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
+import net.prover.proving.structure.inferences.{DeductionEliminationInference, SpecificationInference}
 import net.prover.proving.structure.statements.BinaryJoiner
 
 import scala.util.{Success, Try}
@@ -27,10 +28,10 @@ sealed trait Unwrapper {
   def remove(source: Term, premises: Seq[Statement], wrapperStatement: Statement): Option[(Term, Seq[Statement], Statement)]
 }
 
-case class GeneralizationUnwrapper(variableName: String, generalizationDefinition: GeneralizationDefinition, specificationInference: Inference) extends Unwrapper {
+case class GeneralizationUnwrapper(variableName: String, generalizationDefinition: GeneralizationDefinition, specificationInference: SpecificationInference) extends Unwrapper {
   val definitionSymbol: String = generalizationDefinition.statementDefinition.symbol
   val depth = 1
-  def inference = specificationInference
+  def inference = specificationInference.inference
   def enhanceStepContext(implicit stepContext: StepContext): StepContext = {
     stepContext.addBoundVariable(variableName).forChild()
   }
@@ -67,10 +68,10 @@ case class GeneralizationUnwrapper(variableName: String, generalizationDefinitio
   }
 }
 
-case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: DeductionDefinition, deductionEliminationInference: Inference) extends Unwrapper {
+case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: DeductionDefinition, deductionEliminationInference: DeductionEliminationInference) extends Unwrapper {
   val definitionSymbol: String = deductionDefinition.statementDefinition.symbol
   val depth = 0
-  def inference = deductionEliminationInference
+  def inference = deductionEliminationInference.inference
   def enhanceStepContext(implicit stepContext: StepContext): StepContext = {
     stepContext.addAssumption(antecedent).forChild()
   }
@@ -82,7 +83,7 @@ case class DeductionUnwrapper(antecedent: Statement, deductionDefinition: Deduct
   }
   def extractionStep(result: Statement, innerUnwrappers: Seq[Unwrapper])(implicit substitutionContext: SubstitutionContext): Step.AssertionStep = {
     val substitutions = Substitutions(Seq(antecedent.insertExternalParameters(innerUnwrappers.depth), result), Nil)
-    Step.AssertionStep.forInference(deductionEliminationInference, substitutions).get
+    Step.AssertionStep.forInference(inference, substitutions).get
   }
   def rewrap(steps: Seq[Step]): Step = {
     Step.DeductionStep(antecedent, steps, deductionDefinition)

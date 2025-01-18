@@ -14,14 +14,14 @@ object UnwrappedStatement {
     def helper(currentUnwrappedStatement: UnwrappedStatement, resultsSoFar: Seq[UnwrappedStatement], variableTracker: VariableTracker): Seq[UnwrappedStatement] = {
       def byGeneralization = for {
         generalizationDefinition <- provingContext.generalizationDefinitionOption
-        (specificationInference, _) <- provingContext.specificationInferenceOption
+        specificationInference <- provingContext.specificationInferenceOption
         (variableName, predicate) <- generalizationDefinition.unapply(currentUnwrappedStatement.statement)
         (uniqueVariableName, _, newVariableTracker) = variableTracker.getAndAddUniqueVariableName(variableName)
         newUnwrappedStatement = UnwrappedStatement(predicate, currentUnwrappedStatement.unwrappers :+ GeneralizationUnwrapper(uniqueVariableName, generalizationDefinition, specificationInference))
       } yield (newUnwrappedStatement, newVariableTracker)
       def byDeduction = for {
         deductionDefinition <- provingContext.deductionDefinitionOption
-        (deductionEliminationInference, _, _) <- provingContext.deductionEliminationInferenceOption
+        deductionEliminationInference <- provingContext.deductionEliminationInferenceOption
         (antecedent, consequent) <- deductionDefinition.unapply(currentUnwrappedStatement.statement)
         newUnwrappedStatement = UnwrappedStatement(consequent, currentUnwrappedStatement.unwrappers :+ DeductionUnwrapper(antecedent, deductionDefinition, deductionEliminationInference))
       } yield (newUnwrappedStatement, variableTracker)

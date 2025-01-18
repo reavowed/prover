@@ -6,7 +6,7 @@ import net.prover.model.expressions._
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.proving.extraction.ExtractionApplier
 import net.prover.proving.premiseFinding.DerivationFinder
-import net.prover.proving.structure.inferences.Equality
+import net.prover.proving.structure.inferences.{DeductionEliminationInference, Equality, SpecificationInference}
 import net.prover.proving.structure.statements.BinaryJoiner
 import net.prover.util.{Direction, PossibleSingleMatch}
 
@@ -305,14 +305,14 @@ object EqualityRewriter {
       override def getRewritePossibilitiesFromOuterExpression(statement: Statement, path: Seq[Int], unwrappers: Seq[Unwrapper])(implicit stepContext: StepContext, provingContext: ProvingContext): Seq[RewritePossibility[Statement]] = {
         def byGeneralization = for {
           generalizationDefinition <- provingContext.availableEntries.generalizationDefinitionOption
-          (specificationInference, _) <- provingContext.specificationInferenceOption
+          specificationInference <- provingContext.specificationInferenceOption
           (variableName, predicate) <- generalizationDefinition.unapply(statement)
           unwrapper = GeneralizationUnwrapper(variableName, generalizationDefinition, specificationInference)
         } yield getRewritePossibilitiesFromOuterExpression(predicate, path :+ 0, unwrappers :+ unwrapper)(unwrapper.enhanceStepContext, provingContext)
 
         def byDeduction = for {
           deductionDefinition <- provingContext.deductionDefinitionOption
-          (deductionEliminationInference, _, _) <- provingContext.deductionEliminationInferenceOption
+          deductionEliminationInference <- provingContext.deductionEliminationInferenceOption
           (antecedent, consequent) <- deductionDefinition.unapply(statement)
           unwrapper = DeductionUnwrapper(antecedent, deductionDefinition, deductionEliminationInference)
         } yield getRewritePossibilitiesFromExpression(antecedent, path :+ 0, unwrappers, deductionDefinition(_, consequent)) ++ getRewritePossibilitiesFromOuterExpression(consequent, path :+ 1, unwrappers :+ unwrapper)(unwrapper.enhanceStepContext, provingContext)

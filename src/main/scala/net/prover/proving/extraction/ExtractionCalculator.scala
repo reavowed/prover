@@ -3,6 +3,7 @@ package net.prover.proving.extraction
 import net.prover.model._
 import net.prover.model.expressions._
 import net.prover.model.proof._
+import net.prover.proving.structure.inferences.SpecificationInference
 
 import scala.annotation.tailrec
 
@@ -48,7 +49,7 @@ object ExtractionCalculator {
     provingContext: ProvingContext
   ): Option[ExtractionDetails] = {
     for {
-      (inference, extractionPremise) <- provingContext.specificationInferenceOption
+      SpecificationInference(inference, extractionPremise) <- provingContext.specificationInferenceOption
       predicate <- extractionPremise.calculateSubstitutions(extractionSoFar.conclusion).flatMap(_.statements.get(0)) // missing external depth increase?
       boundVariableName <- extractionSoFar.conclusion.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single)
       (_, newIndex, newVariableTracker) = extractionSoFar.variableTracker.getAndAddUniqueVariableName(boundVariableName)

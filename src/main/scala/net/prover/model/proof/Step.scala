@@ -76,9 +76,9 @@ object Step {
       @tailrec def helper(unwrappers: Seq[Unwrapper], steps: Seq[Step]): T = {
         steps match {
           case Seq(Step.GeneralizationStep(variableName, substeps, generalizationDefinition)) =>
-            helper(unwrappers :+ GeneralizationUnwrapper(variableName, generalizationDefinition, provingContext.specificationInferenceOption.get._1), substeps)
+            helper(unwrappers :+ GeneralizationUnwrapper(variableName, generalizationDefinition, provingContext.specificationInferenceOption.get), substeps)
           case Seq(Step.DeductionStep(assumption, substeps, deductionDefinition)) =>
-            helper(unwrappers :+ DeductionUnwrapper(assumption, deductionDefinition, provingContext.deductionEliminationInferenceOption.get._1), substeps)
+            helper(unwrappers :+ DeductionUnwrapper(assumption, deductionDefinition, provingContext.deductionEliminationInferenceOption.get), substeps)
           case steps =>
             f(unwrappers, steps)
         }

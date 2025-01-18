@@ -8,7 +8,7 @@ import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.proving.derivation.SimpleDerivation
 import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionDefinition, ExtractionDetails, InferenceExtraction, StatementExtractionInference, VariableTracker}
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
-import net.prover.proving.structure.inferences.{ConclusionRelationSimplificationInference, Equality, Expansion, PremiseRelationSimplificationInference, RelationRewriteInference, Reversal, Substitution, Transitivity}
+import net.prover.proving.structure.inferences.{ConclusionRelationSimplificationInference, DeductionEliminationInference, Equality, Expansion, PremiseRelationSimplificationInference, RelationRewriteInference, Reversal, SpecificationInference, Substitution, Transitivity}
 import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation, BinaryRelationStatement}
 import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
@@ -90,6 +90,8 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowableLeftOperatorExtraction: Allowable[LeftOperatorExtraction] = allowableGeneric(Generic[LeftOperatorExtraction])
     implicit val allowableRightOperatorExtraction: Allowable[RightOperatorExtraction] = allowableGeneric(Generic[RightOperatorExtraction])
 
+    implicit val allowableDeductionEliminationInference: Allowable[DeductionEliminationInference] = allowableGeneric(Generic[DeductionEliminationInference])
+    implicit val allowableSpecificationInference: Allowable[SpecificationInference] = allowableGeneric(Generic[SpecificationInference])
     implicit val allowableStatementExtractionInference: Allowable[StatementExtractionInference] = allowableGeneric(Generic[StatementExtractionInference])
     implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowableGeneric(Generic[PremiseRelationSimplificationInference])
     implicit val allowablePremiseRelationRewriteInference: Allowable[RelationRewriteInference] = allowableGeneric(Generic[RelationRewriteInference])
@@ -165,12 +167,12 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   }
 
   lazy val deductionDefinitionOption: Option[DeductionDefinition] = availableEntries.deductionDefinitionOption
-  lazy val deductionEliminationInferenceOption: Option[(Inference, Statement, Statement)] = {
+  lazy val deductionEliminationInferenceOption: Option[DeductionEliminationInference] = {
     filter(definitions.deductionEliminationInferenceOption)
   }
 
   lazy val generalizationDefinitionOption: Option[GeneralizationDefinition] = availableEntries.generalizationDefinitionOption
-  lazy val specificationInferenceOption: Option[(Inference, Statement)] = {
+  lazy val specificationInferenceOption: Option[SpecificationInference] = {
     filter(definitions.specificationInferenceOption)
   }
 
