@@ -11,7 +11,7 @@ case class Fact(inferenceExtraction: InferenceExtraction) {
   def inference: Inference = inferenceExtraction.inference
 
   def extraction(implicit provingContext: ProvingContext): AppliedExtraction = {
-    ExtractionApplier.groupStepsByDefinition(inferenceExtraction.extractionDetails.derivation)
+    inferenceExtraction.extractionDetails.finalise
   }
   def toExtraction(implicit provingContext: ProvingContext): AppliedInferenceExtraction = {
     val baseAssertion = Step.AssertionStep(

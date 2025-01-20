@@ -63,7 +63,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
           Seq(singlePremise @ generalizationDefinition(_, StatementVariable(0, Seq(FunctionParameter(0, 0))))),
           StatementVariable(0, Seq(TermVariable(0, Nil)))
         ) =>
-          SpecificationInference(inference, singlePremise)
+          SpecificationInference(inference, singlePremise, generalizationDefinition)
       }.headOption
     }
   }

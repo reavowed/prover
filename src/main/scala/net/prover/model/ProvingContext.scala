@@ -6,9 +6,9 @@ import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof._
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.proving.derivation.SimpleDerivation
-import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionDefinition, ExtractionDetails, InferenceExtraction, StatementExtractionInference, VariableTracker}
+import net.prover.proving.extraction._
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
-import net.prover.proving.structure.inferences.{ConclusionRelationSimplificationInference, DeductionEliminationInference, Equality, Expansion, PremiseRelationSimplificationInference, RelationRewriteInference, Reversal, SpecificationInference, Substitution, Transitivity}
+import net.prover.proving.structure.inferences._
 import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation, BinaryRelationStatement}
 import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
@@ -69,8 +69,10 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val alwaysAllowableOperator: Allowable[Operator] = alwaysAllowable
     implicit val allowableEquality: Allowable[Equality] = allowableGeneric(Generic[Equality])
 
+    implicit val allowableGeneralizationDefinition: Allowable[GeneralizationDefinition] = allowableGeneric(Generic[GeneralizationDefinition])
+
     implicit val allowableExtractionDefinition: Allowable[ExtractionDefinition] = allowableGeneric(Generic[ExtractionDefinition])
-    implicit val allowableExtractionFromSinglePremise: Allowable[ExtractionDetails] = allowableGeneric(Generic[ExtractionDetails])
+    implicit val allowablePartiallyAppliedExtraction: Allowable[PartiallyAppliedExtraction] = allowableGeneric(Generic[PartiallyAppliedExtraction])
     implicit val allowableInferenceExtraction: Allowable[InferenceExtraction] = allowableGeneric(Generic[InferenceExtraction])
     implicit val allowableFact: Allowable[Fact] = allowableGeneric(Generic[Fact])
     implicit val allowableCommutativity: Allowable[Commutativity] = allowableGeneric(Generic[Commutativity])

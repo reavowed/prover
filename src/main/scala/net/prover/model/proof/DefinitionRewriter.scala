@@ -107,8 +107,7 @@ object DefinitionRewriter {
     }
     def insideGeneralizationStatement: Seq[DefinitionRewriteStep] = {
       for {
-        generalizationDefinition <- provingContext.generalizationDefinitionOption.toSeq
-        SpecificationInference(specificationInference, specificationPremise) <- provingContext.specificationInferenceOption.toSeq
+        SpecificationInference(specificationInference, specificationPremise, generalizationDefinition) <- provingContext.specificationInferenceOption.toSeq
         (_, premisePredicate) <- generalizationDefinition.unapply(premise).toSeq
         (_, targetPredicate) <- generalizationDefinition.unapply(target).toSeq
         variableName <- premise.asOptionalInstanceOf[DefinedStatement].flatMap(_.boundVariableNames.single).toSeq

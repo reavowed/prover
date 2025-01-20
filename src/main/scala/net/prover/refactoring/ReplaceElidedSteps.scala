@@ -32,7 +32,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
       firstAssertion <- assertionSteps.headOption
       mainPremise <- firstAssertion.premises.headOption.map(_.statement)
       _ <- ExtractionCalculator.getPremiseExtractions(mainPremise)(stepWithContext.stepContext, stepWithContext.provingContext)
-        .find(_.extractionDetails.derivation.map(_.inference) == assertionSteps.map(_.inference))
+        .find(_.extractionDetails.allSteps.map(_.inference) == assertionSteps.map(_.inference))
       appliedExtraction = ExtractionApplier.groupStepsByDefinition(assertionSteps)(stepWithContext.provingContext)
     } yield Step.ExistingStatementExtractionStep(appliedExtraction)
   }

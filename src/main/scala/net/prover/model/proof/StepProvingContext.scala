@@ -38,7 +38,7 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
     val extracted = for {
       premise <- allPremises
       extraction <- ExtractionCalculator.getPremiseExtractions(premise.statement)
-      if extraction.premises.isEmpty && !extraction.extractionDetails.derivation.exists(step => givenAndSimplified.exists(_.statement == step.statement))
+      if extraction.premises.isEmpty && !extraction.extractionDetails.allSteps.exists(step => givenAndSimplified.exists(_.statement == step.statement))
     } yield KnownStatement.fromExtraction(extraction)
     (givenAndSimplified ++ extracted).deduplicate
   }

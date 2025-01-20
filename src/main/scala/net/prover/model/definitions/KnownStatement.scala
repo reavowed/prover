@@ -26,7 +26,7 @@ object KnownStatement {
     KnownStatement(derivation.statement, derivation)
   }
   def fromExtraction(premiseExtraction: PremiseExtraction)(implicit provingContext: ProvingContext) : KnownStatement = {
-    val appliedExtraction = ExtractionApplier.groupStepsByDefinition(premiseExtraction.extractionDetails.derivation)
+    val appliedExtraction = premiseExtraction.extractionDetails.finalise
     KnownStatement(premiseExtraction.conclusion, SimpleDerivation.fromExtraction(appliedExtraction))
   }
 

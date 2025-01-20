@@ -12,7 +12,7 @@ sealed trait Extraction {
   def additionalVariableNames: Seq[String]
 }
 
-case class InferenceExtraction(inference: Inference.Summary, extractionDetails: ExtractionDetails) extends Extraction {
+case class InferenceExtraction(inference: Inference.Summary, extractionDetails: PartiallyAppliedExtraction) extends Extraction {
   def premises: Seq[Statement] = inference.premises ++ extractionDetails.extractionPremises
   def conclusion: Statement = extractionDetails.conclusion
   def variableDefinitions: VariableDefinitions = inference.variableDefinitions.addSimpleTermVariableNames(extractionDetails.variableTracker.additionalVariableNames)
@@ -21,7 +21,7 @@ case class InferenceExtraction(inference: Inference.Summary, extractionDetails: 
   def derivedSummary: Inference.Summary = Inference.Summary(inference.name, Inference.calculateHash(premises, conclusion), variableDefinitions, premises, conclusion)
 }
 
-case class PremiseExtraction(extractionDetails: ExtractionDetails, stepContext: StepContext) extends Extraction {
+case class PremiseExtraction(extractionDetails: PartiallyAppliedExtraction, stepContext: StepContext) extends Extraction {
   def premises: Seq[Statement] = extractionDetails.extractionPremises
   def conclusion: Statement = extractionDetails.conclusion
   def variableDefinitions: VariableDefinitions = stepContext.variableDefinitions.addSimpleTermVariableNames(extractionDetails.variableTracker.additionalVariableNames)
