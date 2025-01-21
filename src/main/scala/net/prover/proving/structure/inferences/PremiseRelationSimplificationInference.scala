@@ -52,8 +52,8 @@ object PremiseRelationSimplificationInference {
       singlePremise <- inferenceExtraction.premises.single.toSeq
       if singlePremise.usedVariables.contains(inferenceExtraction.conclusion.usedVariables)
       if inferenceExtraction.variableDefinitions.statements.isEmpty && inferenceExtraction.variableDefinitions.hasNoApplications
-      BinaryRelationStatement(_, conclusionLhs, conclusionRhs) <- definitions.findRelation(inferenceExtraction.conclusion).toSeq
-      BinaryRelationStatement(premiseRelation, premiseLhs, premiseRhs) <- definitions.findRelation(singlePremise).toSeq
+      BinaryRelationStatement(_, conclusionLhs, conclusionRhs) <- definitions.asBinaryRelationStatement(inferenceExtraction.conclusion).toSeq
+      BinaryRelationStatement(premiseRelation, premiseLhs, premiseRhs) <- definitions.asBinaryRelationStatement(singlePremise).toSeq
       if checkLhsIsValid(premiseLhs, conclusionLhs) && checkRhsIsValidSimplification(premiseRhs, conclusionRhs) && checkNoSubstitutionOverlap(premiseLhs, conclusionRhs)
     } yield premiseRelation -> PremiseRelationSimplificationInference(inferenceExtraction, singlePremise)).toSeqMap
   }

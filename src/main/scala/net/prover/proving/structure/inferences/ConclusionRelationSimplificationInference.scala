@@ -24,7 +24,7 @@ case class ConclusionRelationSimplificationInference(inferenceExtraction: Infere
       if extractionApplication.statement == target
       substitutedTypeStatement <- typePremiseOption.map(_.baseStatement.applySubstitutions(substitutions)).swap
       (simplifiedTargets, derivationSteps) <- derivedPremises.getSubstitutedPremises(substitutions)
-      targetRelationStatements <- simplifiedTargets.map(provingContext.findRelation).traverseOption
+      targetRelationStatements <- simplifiedTargets.map(provingContext.asBinaryRelationStatement).traverseOption
     } yield (substitutedTypeStatement.toSeq, targetRelationStatements, SimpleDerivation.fromAssertions(derivationSteps) :+ extractionApplication)
   }
 }
@@ -105,11 +105,11 @@ object ConclusionRelationSimplificationInference {
 
     (for {
       inferenceExtraction <- definitions.allInferenceExtractions
-      conclusion <- definitions.findRelation(inferenceExtraction.conclusion).toSeq
+      conclusion <- definitions.asBinaryRelationStatement(inferenceExtraction.conclusion).toSeq
       if inferenceExtraction.premises.nonEmpty && inferenceExtraction.conclusion.usedVariables.usesAll(inferenceExtraction.variableDefinitions)
       (optionalTypeStatement, otherPremises) = breakOffTypeStatement(inferenceExtraction.premises)
       premiseDesimplifications <- definitions.getPossiblePremiseDesimplifications(otherPremises)
-      premises <- premiseDesimplifications.flatMap(_.getRootPremises).map(definitions.findRelation).traverseOption.toSeq
+      premises <- premiseDesimplifications.flatMap(_.getRootPremises).map(definitions.asBinaryRelationStatement).traverseOption.toSeq
       if isValidSimplification(premises, conclusion, optionalTypeStatement)
     } yield conclusion.relation -> ConclusionRelationSimplificationInference(inferenceExtraction, optionalTypeStatement, premiseDesimplifications)).toSeqMap
   }

@@ -53,7 +53,7 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
     else {
       val existing = previous ++ current
       val newSimplifications = current.flatMap { currentKnownStatement => {
-        val simplifiers = provingContext.findRelation(currentKnownStatement.statement).flatMap(r => simplifiersByRelation.get(r.relation)).getOrElse(Nil)
+        val simplifiers = provingContext.asBinaryRelationStatement(currentKnownStatement.statement).flatMap(r => simplifiersByRelation.get(r.relation)).getOrElse(Nil)
         simplifiers.mapCollect { simplifier =>
           simplifier.getPremiseSimplification(currentKnownStatement, existing)
             .filter { newKnownStatement => !existing.exists(_.statement == newKnownStatement.statement) }

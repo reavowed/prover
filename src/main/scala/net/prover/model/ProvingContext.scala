@@ -9,7 +9,7 @@ import net.prover.proving.derivation.SimpleDerivation
 import net.prover.proving.extraction._
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.proving.structure.inferences._
-import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation, BinaryRelationStatement}
+import net.prover.proving.structure.statements.{BinaryConnective, BinaryConnectiveStatement, BinaryJoiner, BinaryRelation, BinaryRelationStatement, BinaryStatement}
 import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
 import shapeless.{::, Generic, HList, HNil}
@@ -72,6 +72,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowableGeneralizationDefinition: Allowable[GeneralizationDefinition] = allowableGeneric(Generic[GeneralizationDefinition])
 
     implicit val allowableExtractionDefinition: Allowable[ExtractionDefinition] = allowableGeneric(Generic[ExtractionDefinition])
+    implicit val allowableChainedRewriteStep: Allowable[PartiallyAppliedExtraction.ChainedRewriteStep] = allowableGeneric(Generic[PartiallyAppliedExtraction.ChainedRewriteStep])
     implicit val allowablePartiallyAppliedExtraction: Allowable[PartiallyAppliedExtraction] = allowableGeneric(Generic[PartiallyAppliedExtraction])
     implicit val allowableInferenceExtraction: Allowable[InferenceExtraction] = allowableGeneric(Generic[InferenceExtraction])
     implicit val allowableFact: Allowable[Fact] = allowableGeneric(Generic[Fact])
@@ -98,6 +99,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowableGeneric(Generic[PremiseRelationSimplificationInference])
     implicit val allowablePremiseRelationRewriteInference: Allowable[RelationRewriteInference] = allowableGeneric(Generic[RelationRewriteInference])
     implicit val allowableConclusionRelationSimplificationInference: Allowable[ConclusionRelationSimplificationInference] = allowableGeneric(Generic[ConclusionRelationSimplificationInference])
+    implicit val allowableChainableRewriteInference: Allowable[ChainableRewriteInference] = allowableGeneric(Generic[ChainableRewriteInference])
 
     implicit val allowableTermRewriteInference: Allowable[TermRewriteInference] = allowableGeneric(Generic[TermRewriteInference])
 
@@ -187,7 +189,10 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryJoiners.ofType[BinaryConnective]
   lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryJoiners.ofType[BinaryRelation]
 
-  def findRelation(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryRelationStatement] = {
+  def asBinaryConnectiveStatement(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryConnectiveStatement] = {
+    definedBinaryConnectives.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => BinaryConnectiveStatement(relation, lhs, rhs)(statement) })
+  }
+  def asBinaryRelationStatement(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryRelationStatement] = {
     definedBinaryRelations.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => BinaryRelationStatement(relation, lhs, rhs)(statement) })
   }
 
@@ -217,6 +222,8 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   lazy val relationRewriteInferences: Seq[RelationRewriteInference] = filter(definitions.relationRewriteInferences)
   lazy val premiseRelationRewriteInferences: Map[BinaryRelation, Seq[RelationRewriteInference]] = relationRewriteInferences.groupBy(_.premiseRelation)
   lazy val conclusionRelationRewriteInferences: Map[BinaryRelation, Seq[RelationRewriteInference]] = relationRewriteInferences.groupBy(_.conclusionRelation)
+
+  lazy val chainableRewriteInferences: Seq[ChainableRewriteInference] = filter(definitions.chainableRewriteInferences)
 
   lazy val conclusionRelationSimplificationInferences: Map[BinaryRelation, Seq[ConclusionRelationSimplificationInference]] = filter(definitions.conclusionRelationSimplificationInferences)
   lazy val conclusionSimplificationInferences: Seq[Inference] = filter(definitions.conclusionSimplificationInferences)

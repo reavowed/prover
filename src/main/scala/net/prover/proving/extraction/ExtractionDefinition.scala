@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component
 
 case class ExtractionDefinition(
   extractionInferences: Seq[Inference.Summary],
-  reversalInference: Option[Inference.Summary])
+  reversalInference: Option[Inference.Summary],
+  leftRewrite: Option[Inference.Summary] = None,
+  rightRewrite: Option[Inference.Summary] = None)
 {
   def serialized: ExtractionDefinition.Serialized = {
     ExtractionDefinition.Serialized(extractionInferences.map(_.id), reversalInference.map(_.id))
@@ -28,7 +30,7 @@ case class ExtractionDefinition(
 }
 
 object ExtractionDefinition {
-  val Empty: ExtractionDefinition = ExtractionDefinition(Nil, None)
+  val Empty: ExtractionDefinition = ExtractionDefinition(Nil, None, None, None)
 
   case class Serialized @JsonCreator() (@JsonProperty("extractionInferenceIds") extractionInferenceIds: Seq[String], reversalInferenceId: Option[String]) {
     def depth: Int = extractionInferenceIds.length

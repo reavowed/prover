@@ -49,7 +49,7 @@ case class RelationRewriteInference(
       substitutions <- substitutionsAfterInitialPremise.confirmTotality(inferenceExtraction.variableDefinitions)
       derivationStep <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
       substitutedPremise <- mainPremise.applySubstitutions(substitutions)
-      premiseRelationStatement <- stepProvingContext.provingContext.findRelation(substitutedPremise)
+      premiseRelationStatement <- stepProvingContext.provingContext.asBinaryRelationStatement(substitutedPremise)
     } yield (premiseRelationStatement, premiseDerivation :+ derivationStep)
   }
 }
@@ -77,7 +77,7 @@ object RelationRewriteInference {
       if (relationsFromTemplate.nonEmpty)
         relationsFromTemplate
       else
-        definitions.findRelation(lastPremise).toSeq.map(_ -> Substitutions.Possible.empty)
+        definitions.asBinaryRelationStatement(lastPremise).toSeq.map(_ -> Substitutions.Possible.empty)
     }
     def areValidSecondaryComponents(premiseComponent: Term, conclusionComponent: Term): Boolean = {
       (ExpressionUtils.isSimpleTermVariable(premiseComponent) && ExpressionUtils.isSimpleTermVariable(conclusionComponent)) ||
@@ -98,7 +98,7 @@ object RelationRewriteInference {
         }
       }
       def isValidRelation(initialPremise: Statement): Boolean = {
-        definitions.findRelation(initialPremise).exists { initialPremiseRelation =>
+        definitions.asBinaryRelationStatement(initialPremise).exists { initialPremiseRelation =>
           ExpressionUtils.isSimpleTermVariable(initialPremiseRelation.left) &&
             ExpressionUtils.isSimpleTermVariable(initialPremiseRelation.right) &&
             initialPremiseRelation.relation != conclusion.relation
@@ -121,7 +121,7 @@ object RelationRewriteInference {
       }
       if inferenceExtraction.premises.usedVariables.contains(inferenceExtraction.conclusion.usedVariables)
       if (initialPremiseOption.toSeq :+ inferenceExtraction.conclusion).usedVariables.contains(mainPremiseStatement.usedVariables)
-      conclusion <- definitions.findRelation(inferenceExtraction.conclusion).toSeq
+      conclusion <- definitions.asBinaryRelationStatement(inferenceExtraction.conclusion).toSeq
       (mainPremise, initialSubstitutions) <- findPremiseRelation(mainPremiseStatement)
       if isValidRewrite(mainPremise, conclusion) && isValidInitialPremise(initialPremiseOption, conclusion)
     } yield RelationRewriteInference(inferenceExtraction, initialPremiseOption, mainPremiseStatement, mainPremise.relation, conclusion.relation, initialSubstitutions)

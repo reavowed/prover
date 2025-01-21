@@ -3,6 +3,7 @@ package net.prover.proving.extraction
 import net.prover.model.ProvingContext
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step
+import net.prover.proving.extraction.PartiallyAppliedExtraction.ChainedRewriteStep
 
 case class PartiallyAppliedExtraction(
   mainPremise: Statement,
@@ -10,6 +11,8 @@ case class PartiallyAppliedExtraction(
   conclusion: Statement,
   extractionSteps: Seq[Step.AssertionStep],
   reversalStep: Option[Step.AssertionStep],
+  leftRewrite: Option[ChainedRewriteStep],
+  rightRewrite: Option[ChainedRewriteStep],
   variableTracker: VariableTracker)
 {
   def getDefinition: ExtractionDefinition = {
@@ -48,10 +51,24 @@ case class PartiallyAppliedExtraction(
     appendStepPremisesAndConclusion(newReversalStep)
       .copy(reversalStep = Some(newReversalStep))
   }
+  def appendLeftRewrite(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep): PartiallyAppliedExtraction = {
+    copy(
+      extractionPremises = extractionPremises ++ rewriteStep.premises.map(_.statement),
+      conclusion = chainingStep.statement,
+      leftRewrite = Some(ChainedRewriteStep(rewriteStep, chainingStep)))
+  }
+  def appendRightRewrite(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep): PartiallyAppliedExtraction = {
+    copy(
+      extractionPremises = extractionPremises ++ rewriteStep.premises.map(_.statement),
+      conclusion = chainingStep.statement,
+      rightRewrite = Some(ChainedRewriteStep(rewriteStep, chainingStep)))
+  }
 
   def extractionDefinition: ExtractionDefinition = ExtractionDefinition(
     extractionSteps.map(_.inference),
-    reversalStep.map(_.inference))
+    reversalStep.map(_.inference),
+    leftRewrite.map(_.rewriteStep.inference),
+    rightRewrite.map(_.rewriteStep.inference))
 
   def allSteps: Seq[Step.AssertionStep] = extractionSteps ++ reversalStep.toSeq
   def finalise(implicit provingContext: ProvingContext): AppliedExtraction = {
@@ -61,6 +78,8 @@ case class PartiallyAppliedExtraction(
 
 object PartiallyAppliedExtraction {
   def initial(statement: Statement, variableTracker: VariableTracker): PartiallyAppliedExtraction = {
-    PartiallyAppliedExtraction(statement, Nil, statement, Nil, None, variableTracker)
+    PartiallyAppliedExtraction(statement, Nil, statement, Nil, None, None, None, variableTracker)
   }
+
+  case class ChainedRewriteStep(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep)
 }

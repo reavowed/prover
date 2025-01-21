@@ -4,6 +4,7 @@ import net.prover.model._
 import net.prover.model.expressions._
 import net.prover.model.proof._
 import net.prover.proving.structure.inferences.SpecificationInference
+import net.prover.proving.structure.statements.BinaryConnectiveStatement
 
 import scala.annotation.tailrec
 
@@ -71,18 +72,6 @@ object ExtractionCalculator {
     } yield extractionSoFar.appendExtractionStep(assertionStep)
   }
 
-  private def getReversal(
-    extractionSoFar: PartiallyAppliedExtraction)(
-    implicit substitutionContext: SubstitutionContext,
-    provingContext: ProvingContext
-  ): Option[PartiallyAppliedExtraction] = {
-    for {
-      reversal <- provingContext.reversals.find(_.joiner.unapply(extractionSoFar.conclusion).nonEmpty)
-      premise <- reversal.inference.premises.single
-      result <- getSimpleExtraction(extractionSoFar, reversal.inference, premise, None, _.appendReversal(_))
-    } yield result
-  }
-
   private def getNextSimplificationExtractions(
     extractionSoFar: PartiallyAppliedExtraction)(
     implicit substitutionContext: SubstitutionContext,
@@ -110,15 +99,78 @@ object ExtractionCalculator {
     getSimplificationExtractions(Seq(baseExtraction), Nil)
   }
 
+  private def addReversal(
+    extractionSoFar: PartiallyAppliedExtraction)(
+    implicit substitutionContext: SubstitutionContext,
+    provingContext: ProvingContext
+  ): Option[PartiallyAppliedExtraction] = {
+    for {
+      reversal <- provingContext.reversals.find(_.joiner.unapply(extractionSoFar.conclusion).nonEmpty)
+      premise <- reversal.inference.premises.single
+      result <- getSimpleExtraction(extractionSoFar, reversal.inference, premise, None, _.appendReversal(_))
+    } yield result
+  }
+
+  private def addLeftRewrites(
+    extractionSoFar: PartiallyAppliedExtraction)(
+    implicit substitutionContext: SubstitutionContext,
+    provingContext: ProvingContext
+  ): Seq[PartiallyAppliedExtraction] = {
+    for {
+      BinaryConnectiveStatement(connective, left, right) <- provingContext.asBinaryConnectiveStatement(extractionSoFar.conclusion).toSeq
+      rewrite <- provingContext.chainableRewriteInferences
+      transitivity <- rewrite.findValidTransitivity(connective)
+      rewriteSubstitutions <- rewrite.right.calculateSubstitutions(left).flatMap(_.confirmTotality(rewrite.inference.variableDefinitions))
+      rewrittenLeft <- rewrite.left.applySubstitutions(rewriteSubstitutions)
+      assertionStep = Step.AssertionStep(connective(rewrittenLeft, left), rewrite.inference.summary, Seq(Premise.Pending(extractionSoFar.conclusion)), rewriteSubstitutions)
+      transitivityStep = transitivity.assertionStep(rewrittenLeft, left, right)
+    } yield extractionSoFar.appendLeftRewrite(assertionStep, transitivityStep)
+  }
+
+  private def addRightRewrites(
+    extractionSoFar: PartiallyAppliedExtraction)(
+    implicit substitutionContext: SubstitutionContext,
+    provingContext: ProvingContext
+  ): Seq[PartiallyAppliedExtraction] = {
+    for {
+      BinaryConnectiveStatement(connective, left, right) <- provingContext.asBinaryConnectiveStatement(extractionSoFar.conclusion).toSeq
+      rewrite <- provingContext.chainableRewriteInferences
+      transitivity <- rewrite.findValidTransitivity(connective)
+      rewriteSubstitutions <- rewrite.left.calculateSubstitutions(right).flatMap(_.confirmTotality(rewrite.inference.variableDefinitions))
+      rewrittenRight <- rewrite.right.applySubstitutions(rewriteSubstitutions)
+      assertionStep = Step.AssertionStep(connective(right, rewrittenRight), rewrite.inference.summary, Seq(Premise.Pending(extractionSoFar.conclusion)), rewriteSubstitutions)
+      transitivityStep = transitivity.assertionStep(left, right, rewrittenRight)
+    } yield extractionSoFar.appendLeftRewrite(assertionStep, transitivityStep)
+  }
+
+  private def addAll(extractions: Seq[PartiallyAppliedExtraction], getNext: PartiallyAppliedExtraction => IterableOnce[PartiallyAppliedExtraction]): Seq[PartiallyAppliedExtraction] = {
+    val newExtractions = extractions.flatMap(getNext)
+    extractions ++ newExtractions
+  }
+
+  private def getExtractions(
+    sourceStatement: Statement,
+    variableTracker: VariableTracker,
+    getInitial: (Statement, VariableTracker) => Seq[PartiallyAppliedExtraction],
+    getNexts: (PartiallyAppliedExtraction => IterableOnce[PartiallyAppliedExtraction])*
+  ): Seq[PartiallyAppliedExtraction] = {
+    val initial = getInitial(sourceStatement, variableTracker)
+    getNexts.foldLeft(initial)(addAll)
+  }
+
   private def getExtractions(
     sourceStatement: Statement,
     variableTracker: VariableTracker)(
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[PartiallyAppliedExtraction] = {
-    val simplificationExtractions = getSimplificationExtractions(sourceStatement, variableTracker)
-    val rewriteExtractions = simplificationExtractions.flatMap(getReversal(_))
-    simplificationExtractions ++ rewriteExtractions
+    getExtractions(
+      sourceStatement,
+      variableTracker,
+      getSimplificationExtractions,
+      addReversal,
+      addLeftRewrites,
+      addRightRewrites)
   }
 
   def getInferenceExtractions(inference: Inference)(implicit provingContext: ProvingContext): Seq[InferenceExtraction] = {

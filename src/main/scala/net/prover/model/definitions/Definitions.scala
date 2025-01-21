@@ -7,10 +7,9 @@ import net.prover.model.entries.DisplayShorthand
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.utils.ExpressionUtils
-import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.proving.extraction.{ExtractionCalculator, InferenceExtraction, StatementExtractionInference}
-import net.prover.proving.structure.inferences.{ConclusionRelationSimplificationInference, DeductionEliminationInference, Equality, Expansion, PremiseRelationSimplificationInference, RelationExpansion, RelationRewriteInference, Reversal, SpecificationInference, Substitution, Transitivity}
-import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation, BinaryRelationFromDefinition, BinaryRelationFromGeneralShorthand, BinaryRelationFromSpecificShorthand, BinaryRelationStatement}
+import net.prover.proving.structure.inferences._
+import net.prover.proving.structure.statements._
 import net.prover.util.Direction
 
 import scala.Ordering.Implicits._
@@ -72,7 +71,13 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
   lazy val definedBinaryConnectives: Seq[BinaryConnective] = definedBinaryStatements.ofType[BinaryConnective]
   lazy val definedBinaryRelations: Seq[BinaryRelation] = definedBinaryStatements.ofType[BinaryRelation]
 
-  def findRelation(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryRelationStatement] = {
+  def asBinaryStatement(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryStatement[_ <: Expression]] = {
+    asBinaryConnectiveStatement(statement) orElse asBinaryRelationStatement(statement)
+  }
+  def asBinaryConnectiveStatement(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryConnectiveStatement] = {
+    definedBinaryConnectives.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => BinaryConnectiveStatement(relation, lhs, rhs)(statement) })
+  }
+  def asBinaryRelationStatement(statement: Statement)(implicit substitutionContext: SubstitutionContext): Option[BinaryRelationStatement] = {
     definedBinaryRelations.mapFind(relation => relation.unapply(statement).map { case (lhs, rhs) => BinaryRelationStatement(relation, lhs, rhs)(statement) })
   }
 
@@ -171,7 +176,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       inferenceExtraction.variableDefinitions.hasNoApplications &&
       inferenceExtraction.conclusion.usedVariables.usesAll(inferenceExtraction.variableDefinitions) &&
       inferenceExtraction.premises.forall { premise =>
-        findRelation(premise)(SubstitutionContext.outsideProof).exists { case BinaryRelationStatement(_, left, right) =>
+        asBinaryRelationStatement(premise)(SubstitutionContext.outsideProof).exists { case BinaryRelationStatement(_, left, right) =>
           ExpressionUtils.isSimpleTermVariable(left) && ExpressionUtils.isCombinationOfTermConstants(right)
         }
       }
@@ -333,6 +338,8 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
   }
 
   lazy val relationRewriteInferences: Seq[RelationRewriteInference] = RelationRewriteInference.getAll(this)
+
+  lazy val chainableRewriteInferences: Seq[ChainableRewriteInference] = ChainableRewriteInference.getAll(this)
 
   // An inference such as `φ,ψ ⊢ φ∧ψ` or `φ ⊢ φ∨ψ` that can be run in reverse to allow a target conclusion to be
   // decomposed into smaller parts

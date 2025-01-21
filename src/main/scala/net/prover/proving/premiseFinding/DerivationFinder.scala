@@ -42,7 +42,7 @@ object DerivationFinder {
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
   ): Option[SimpleDerivation] = {
-    stepProvingContext.provingContext.findRelation(targetStatement).map(BinaryRelationDerivationFinder.findDirectDerivationForBinaryRelationStatement)
+    stepProvingContext.provingContext.asBinaryRelationStatement(targetStatement).map(BinaryRelationDerivationFinder.findDirectDerivationForBinaryRelationStatement)
       .getOrElse(DirectDerivationFinder.findDirectDerivationForStatement(targetStatement))
       .map(_.distinct)
   }
