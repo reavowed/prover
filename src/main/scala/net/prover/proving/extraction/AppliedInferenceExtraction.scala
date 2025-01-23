@@ -6,8 +6,9 @@ import net.prover.model.{Inference, Parser, ProvingContext}
 
 case class AppliedInferenceExtraction(assertionStep: Step.AssertionStep, extraction: AppliedExtraction) extends StepLike.Wrapper {
   def inference: Inference = assertionStep.inference
-  override def substeps: Seq[StepLike] = assertionStep +: extraction.extractionSteps
+  override def substeps: Seq[StepLike] = assertionStep +: extraction.substeps
   def toStep: Step.AssertionOrExtraction = Step.InferenceExtractionStep.ifNecessary(this)
+  override def serializedLines: Seq[String] = Seq(assertionStep, extraction).flatMap(_.serializedLines)
 }
 object AppliedInferenceExtraction {
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[AppliedInferenceExtraction] = {

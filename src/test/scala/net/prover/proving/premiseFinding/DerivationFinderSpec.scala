@@ -250,10 +250,11 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
           additionProperty))
 
       findPremise(Function(Addition), Nil)(defaultAvailableEntriesPlus(axiom)) must beSome(Seq(
-        inferenceExtraction(Seq(
+        inferenceExtraction(
           assertion(axiom, Nil, Nil),
-          assertion(extractLeftConjunct, Seq(Conjunction(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), additionProperty), Nil),
-          assertion(extractLeftConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))))(SubstitutionContext.outsideProof))
+          Seq(
+            assertion(extractLeftConjunct, Seq(Conjunction(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), additionProperty), Nil),
+            assertion(extractLeftConjunct, Seq(Function(Addition), FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)), Nil))))(SubstitutionContext.outsideProof))
     }
 
     "find a premise using a simplification that has a type statement premise" in {
@@ -318,34 +319,41 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
         ElementOf(Apply(∗, Pair(a , b)), A),
         Seq(Conjunction(BinaryOperation(∗), BinaryOperationOn(∗, A)), ElementOf(a, A), ElementOf(b, A)),
         Seq(
-          inferenceExtraction(Seq(
+          inferenceExtraction(
             assertion(BinaryOperation.deconstructionInference, Nil, Seq(∗)),
-            assertion(extractLeftConjunct, Seq(Function(∗), FunctionFrom(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))), Nil))), // ∗ is a function
-          inferenceExtraction(Seq(
+            Seq(
+              assertion(extractLeftConjunct, Seq(Function(∗), FunctionFrom(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))), Nil))), // ∗ is a function
+          inferenceExtraction(
             assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(∗, A)),
-            assertion(reverseEquality, Nil, Seq(BaseSet(∗), A)))),                                                                  // A = BaseSet(∗)
+            Seq(
+              assertion(reverseEquality, Nil, Seq(BaseSet(∗), A)))),                                                                  // A = BaseSet(∗)
           assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(A, BaseSet(∗))),                                                // a ∈ baseSet(∗)
           assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(A, BaseSet(∗))),                                                // b ∈ baseSet(∗)
           assertion(orderedPairIsElementOfCartesianProduct, Nil, Seq(a, BaseSet(∗), b, BaseSet(∗))),                                // (a, b) ∈ baseSet(∗) × baseSet(∗)
-          inferenceExtraction(Seq(
+          inferenceExtraction(
             assertion(BinaryOperation.deconstructionInference, Nil, Seq(∗)),
-            assertion(extractRightConjunct, Seq(Function(∗), FunctionFrom(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))), Nil))),  // ∗ is from baseSet(∗) × baseSet(∗) to baseSet(∗)
-          inferenceExtraction(Seq(
+            Seq(
+              assertion(extractRightConjunct, Seq(Function(∗), FunctionFrom(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))), Nil))),  // ∗ is from baseSet(∗) × baseSet(∗) to baseSet(∗)
+          inferenceExtraction(
             assertion(FunctionFrom.deconstructionInference, Nil, Seq(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))),
-            assertion(reverseEquality, Nil, Seq(Domain(∗), Product(BaseSet(∗), BaseSet(∗)))))),                                      // baseSet(∗) × baseSet(∗) = domain(∗)
+            Seq(
+              assertion(reverseEquality, Nil, Seq(Domain(∗), Product(BaseSet(∗), BaseSet(∗)))))),                                      // baseSet(∗) × baseSet(∗) = domain(∗)
           assertion(substitutionOfEquals, Seq(ElementOf(Pair(a, b), $)), Seq(Product(BaseSet(∗), BaseSet(∗)), Domain(∗))),           // (a, b) ∈ domain(∗)
           assertion(functionApplicationIsElementOfRange, Nil, Seq(∗, Pair(a, b))),                                                   // (a ∗ b) ∈ codomain(∗)
-          inferenceExtraction(Seq(
+          inferenceExtraction(
             assertion(FunctionFrom.deconstructionInference, Nil, Seq(∗, Product(BaseSet(∗), BaseSet(∗)), BaseSet(∗))),
-            assertion(extractRightConjunct, Seq(Function(∗), Conjunction(Equals(Domain(∗), Product(BaseSet(∗), BaseSet(∗))), Subset(Range(∗), BaseSet(∗)))), Nil),
-            assertion(extractRightConjunct, Seq(Equals(Domain(∗), Product(BaseSet(∗), BaseSet(∗))), Subset(Range(∗), BaseSet(∗))), Nil))), // codomain(∗) ⊆ baseSet(∗)
-          inferenceExtraction(Seq(
+            Seq(
+              assertion(extractRightConjunct, Seq(Function(∗), Conjunction(Equals(Domain(∗), Product(BaseSet(∗), BaseSet(∗))), Subset(Range(∗), BaseSet(∗)))), Nil),
+              assertion(extractRightConjunct, Seq(Equals(Domain(∗), Product(BaseSet(∗), BaseSet(∗))), Subset(Range(∗), BaseSet(∗))), Nil))), // codomain(∗) ⊆ baseSet(∗)
+          inferenceExtraction(
             assertion(Subset.deconstructionInference.get, Nil, Seq(Range(∗), BaseSet(∗))),
-            assertion(specification, Seq(Implication(ElementOf($, Range(∗)), ElementOf($, BaseSet(∗)))), Seq(Apply(∗, Pair(a, b)))),
-            assertion(modusPonens, Seq(ElementOf(Apply(∗, Pair(a, b)), Range(∗)), ElementOf(Apply(∗, Pair(a, b)), BaseSet(∗))), Nil))), // (a ∗ b) ∈ baseSet(∗)
-          inferenceExtraction(Seq(
+            Seq(
+              assertion(specification, Seq(Implication(ElementOf($, Range(∗)), ElementOf($, BaseSet(∗)))), Seq(Apply(∗, Pair(a, b)))),
+              assertion(modusPonens, Seq(ElementOf(Apply(∗, Pair(a, b)), Range(∗)), ElementOf(Apply(∗, Pair(a, b)), BaseSet(∗))), Nil))), // (a ∗ b) ∈ baseSet(∗)
+          inferenceExtraction(
             assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(∗, A)),
-            assertion(extractRightConjunct, Seq(BinaryOperation(∗), Equals(BaseSet(∗), A)), Nil))),                                  // BaseSet(∗) = A
+            Seq(
+              assertion(extractRightConjunct, Seq(BinaryOperation(∗), Equals(BaseSet(∗), A)), Nil))),                                  // BaseSet(∗) = A
           assertion(substitutionOfEquals, Seq(ElementOf(Apply(∗, Pair(a, b)), $)), Seq(BaseSet(∗), A))))
     }
 
@@ -359,9 +367,10 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
         ElementOf(a, BaseSet(∗)),
         Seq(Distributive(∗, ∘), ElementOf(a, BaseSet(∘))),
         Seq(
-          inferenceExtraction(Seq(
+          inferenceExtraction(
             assertion(Distributive.deconstructionInference, Nil, Seq(∗, ∘)),
-            assertion(reverseEquality, Nil, Seq(BaseSet(∗), BaseSet(∘))))),
+            Seq(
+              assertion(reverseEquality, Nil, Seq(BaseSet(∗), BaseSet(∘))))),
           assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(BaseSet(∘), BaseSet(∗)))))
     }
 
@@ -444,17 +453,20 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
         Conjunction(Relation(StrictOrder, Naturals), Transitive(StrictOrder, Naturals)),
         Nil,
         Seq(
-          inferenceExtraction(Seq(
+          inferenceExtraction(
             assertion(StrictOrderIsATotalOrder, Nil, Nil),
-            inferenceExtraction(Seq(
-              assertion(TotalOrder.deconstructionInference, Nil, Seq(StrictOrder, Naturals)),
-              assertion(extractLeftConjunct, Seq(Conjunction(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Complete(StrictOrder, Naturals)), Nil),
-              assertion(extractLeftConjunct, Seq(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Nil),
-              assertion(extractLeftConjunct, Seq(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Nil))),
-            inferenceExtraction(Seq(
-              assertion(TotalOrder.deconstructionInference, Nil, Seq(StrictOrder, Naturals)),
-              assertion(extractLeftConjunct, Seq(Conjunction(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Complete(StrictOrder, Naturals)), Nil),
-              assertion(extractRightConjunct, Seq(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Nil))),
+            Seq(
+              inferenceExtraction(
+                assertion(TotalOrder.deconstructionInference, Nil, Seq(StrictOrder, Naturals)),
+                Seq(
+                  assertion(extractLeftConjunct, Seq(Conjunction(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Complete(StrictOrder, Naturals)), Nil),
+                  assertion(extractLeftConjunct, Seq(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Nil),
+                  assertion(extractLeftConjunct, Seq(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Nil))),
+              inferenceExtraction(
+                assertion(TotalOrder.deconstructionInference, Nil, Seq(StrictOrder, Naturals)),
+                Seq(
+                  assertion(extractLeftConjunct, Seq(Conjunction(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Complete(StrictOrder, Naturals)), Nil),
+                  assertion(extractRightConjunct, Seq(Conjunction(Relation(StrictOrder, Naturals), Antisymmetric(StrictOrder, Naturals)), Transitive(StrictOrder, Naturals)), Nil))),
             assertion(combineConjunction, Seq(Relation(StrictOrder, Naturals), Transitive(StrictOrder, Naturals)), Nil)))))
     }
 

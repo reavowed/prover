@@ -332,7 +332,7 @@ object Step {
   }
   object ExistingStatementExtractionStep {
     def ifNecessary(substeps: Seq[Step.AssertionStep]): Option[Step.PremiseDerivation] = {
-      ifNecessary(AppliedExtraction(substeps.map(AppliedExtractionStep.Assertion(_))))
+      ifNecessary(AppliedExtraction.fromSimpleExtraction(substeps))
     }
     def ifNecessary(extraction: AppliedExtraction): Option[Step.PremiseDerivation] = {
       extraction.extractionSteps match {
@@ -356,7 +356,7 @@ object Step {
   }
   object InferenceExtractionStep {
     def ifNecessary(appliedInferenceExtraction: AppliedInferenceExtraction): Step.AssertionOrExtraction = {
-      if (appliedInferenceExtraction.extraction.extractionSteps.isEmpty) {
+      if (appliedInferenceExtraction.extraction.substeps.isEmpty) {
         appliedInferenceExtraction.assertionStep
       } else {
         InferenceExtractionStep(appliedInferenceExtraction)

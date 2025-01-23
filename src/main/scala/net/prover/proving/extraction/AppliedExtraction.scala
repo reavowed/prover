@@ -4,16 +4,38 @@ import net.prover.model._
 import net.prover.model.proof.{Step, StepContext, StepLike}
 import net.prover.proving.derivation.DefinitionDeconstructionBase
 
-case class AppliedExtraction(extractionSteps: Seq[AppliedExtractionStep]) extends StepLike.Wrapper {
-  override def substeps: Seq[StepLike] = extractionSteps
-  def toProofSteps: Seq[Step.AssertionOrExtraction] = extractionSteps.map(_.toProofStep)
+case class AppliedExtraction(extractionSteps: Seq[AppliedExtractionStep], chainedRewriteSteps: Seq[Step.AssertionStep]) extends StepLike.Wrapper {
+  override def substeps: Seq[StepLike] = extractionSteps ++ chainedRewriteSteps
+  def toProofSteps: Seq[Step.AssertionOrExtraction] = extractionSteps.map(_.toProofStep) ++ chainedRewriteSteps
+
+  override def serializedLines: Seq[String] = {
+    extractionSteps.flatMap(_.serializedLines) ++
+      Seq(chainedRewriteSteps)
+        .filter(_.nonEmpty)
+        .flatMap(_.flatMap(_.serializedLines).indentInLabelledBracesIfPresent("chainedRewrite"))
+  }
 }
 object AppliedExtraction {
+  def fromSimpleExtraction(extractionSteps: Seq[Step.AssertionStep]): AppliedExtraction = {
+    AppliedExtraction(extractionSteps.map(AppliedExtractionStep.Assertion(_)), Nil)
+  }
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[AppliedExtraction] = {
-    Parser.mapFoldWhileDefined[AppliedExtractionStep, StepContext](stepContext) { (_, currentStepContext) =>
-      AppliedExtractionStep.parser(currentStepContext, implicitly)
-        .mapMap(step => step -> currentStepContext.addStep(step.toProofStep))
-    }.map(_._1).map(AppliedExtraction(_))
+    for {
+      extractionStepsAndContext <- Parser.mapFoldWhileDefined[AppliedExtractionStep, StepContext](stepContext) { (_, currentStepContext) =>
+        AppliedExtractionStep.parser(currentStepContext, implicitly)
+          .mapMap(step => step -> currentStepContext.addStep(step.toProofStep))
+      }
+      (extractionSteps, stepContext) = extractionStepsAndContext
+      rewriteSteps <- Parser.optional(
+        "chainedRewrite",
+        Parser.mapFoldWhileDefined[Step.AssertionStep, StepContext](stepContext) { (_, stepContext) =>
+          Parser.optionalWord(Step.AssertionStep.label)
+            .flatMapMap(_ => Step.AssertionStep.parser(stepContext, implicitly)
+              .map(step => step -> stepContext.addStep(step))
+            )
+        }.inBraces.map(_._1),
+        Nil)
+    } yield AppliedExtraction(extractionSteps, rewriteSteps)
   }
 }
 

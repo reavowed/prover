@@ -9,6 +9,7 @@ import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 import net.prover.proving.structure.inferences.SpecificationInference
+import net.prover.proving.structure.statements.BinaryConnectiveStatement
 
 import scala.util.{Failure, Success, Try}
 
@@ -102,6 +103,43 @@ object ExtractionApplier {
     } yield updateExtraction(innerExtraction, assertionStep)
   }
 
+  private def applyLeftRewrite(
+    currentStatement: Statement,
+    inference: Inference,
+    variableTracker: VariableTracker,
+    innerExtractionDefinition: ExtractionDefinition,
+    mainSubstitutions: Substitutions,
+    intendedPremisesOption: Option[Seq[Statement]],
+    intendedConclusion: Option[Statement])(
+    implicit provingContext: ProvingContext,
+    substitutionContext: SubstitutionContext
+  ): Try[PartiallyAppliedExtraction] = {
+    for {
+      BinaryConnectiveStatement(connective, left, right) <- provingContext.asBinaryConnectiveStatement(currentStatement)
+        .orBadRequest(s"Statement $currentStatement not a connective")
+      rewrite <- provingContext.chainableRewriteInferences.find(_.inference == inference)
+        .orBadRequest(s"Could not find chainable rewrite with inference ${inference.id}")
+      transitivity <- rewrite.findValidTransitivity(connective)
+        .orBadRequest("Could not find transitivity")
+      rewriteSubstitutions <- rewrite.right.calculateSubstitutions(left)
+        .flatMap(_.confirmTotality(rewrite.inference.variableDefinitions))
+        .orBadRequest("Could not calculate rewrite substitutions")
+      rewrittenLeft <- rewrite.left.applySubstitutions(rewriteSubstitutions)
+        .orBadRequest("Could not apply rewrite substitutions")
+      rewrittenStatement = connective(rewrittenLeft, right)
+      innerExtraction <- applyExtraction(rewrittenStatement, innerExtractionDefinition, mainSubstitutions, intendedPremisesOption, intendedConclusion, variableTracker)
+      (updatedRewrittenLeft, updatedRight) <- connective.unapply(innerExtraction.mainPremise)
+        .orBadRequest("Inner extraction main premise did not match connective")
+      updatedSubstitutions <- rewrite.left.calculateSubstitutions(updatedRewrittenLeft)
+        .flatMap(_.confirmTotality(rewrite.inference.variableDefinitions))
+        .orBadRequest("Could not calculate updated substitutions from inner premise")
+      updatedLeft <- rewrite.right.applySubstitutions(updatedSubstitutions)
+        .orBadRequest("Could not apply substitutions to rewrite premise ")
+      rewriteStep = Step.AssertionStep(connective(updatedRewrittenLeft, updatedLeft), rewrite.inference.summary, Nil, updatedSubstitutions)
+      transitivityStep = transitivity.assertionStep(updatedRewrittenLeft, updatedLeft, updatedRight)
+    } yield innerExtraction.prependLeftRewrite(rewriteStep, transitivityStep)
+  }
+
   private def applyExtraction(
     currentStatement: Statement,
     extractionDefinition: ExtractionDefinition,
@@ -148,13 +186,25 @@ object ExtractionApplier {
               intendedPremises,
               intendedConclusion)
           case None =>
-            intendedConclusion match {
-              case Some(matchingConclusion) if matchingConclusion == currentStatement =>
-                Success(PartiallyAppliedExtraction.initial(matchingConclusion, variableTracker))
-              case Some(otherConclusion) =>
-                Failure(BadRequestException(s"Intended conclusion '$otherConclusion' did not match expected statement '$currentStatement'"))
+            extractionDefinition.leftRewrite match {
+              case Some(inference) =>
+                applyLeftRewrite(
+                  currentStatement,
+                  inference,
+                  variableTracker,
+                  extractionDefinition.copy(leftRewrite = None),
+                  substitutions,
+                  intendedPremises,
+                  intendedConclusion)
               case None =>
-                Success(PartiallyAppliedExtraction.initial(currentStatement, variableTracker))
+                  intendedConclusion match {
+                    case Some(matchingConclusion) if matchingConclusion == currentStatement =>
+                      Success(PartiallyAppliedExtraction.initial(matchingConclusion, variableTracker))
+                    case Some(otherConclusion) =>
+                      Failure(BadRequestException(s"Intended conclusion '$otherConclusion' did not match expected statement '$currentStatement'"))
+                    case None =>
+                      Success(PartiallyAppliedExtraction.initial(currentStatement, variableTracker))
+                  }
             }
         }
     }
@@ -242,7 +292,7 @@ object ExtractionApplier {
     } yield (extraction.conclusion, assertionWithExtractionStep, targetSteps)
   }
 
-  def groupStepsByDefinition(steps: Seq[Step.AssertionStep])(implicit provingContext: ProvingContext): AppliedExtraction = {
+  def groupStepsByDefinition(steps: Seq[Step.AssertionStep])(implicit provingContext: ProvingContext): Seq[AppliedExtractionStep] = {
     val deconstructionInferenceIds = provingContext.availableEntries.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
     val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
 
@@ -293,6 +343,6 @@ object ExtractionApplier {
       }
     }
     groupSteps(currentUngroupedSteps.result(), true)
-    AppliedExtraction(stepsToReturn.result())
+    stepsToReturn.result()
   }
 }

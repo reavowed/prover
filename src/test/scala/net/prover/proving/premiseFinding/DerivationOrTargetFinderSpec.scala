@@ -45,11 +45,13 @@ class DerivationOrTargetFinderSpec extends Specification with ContextHelper with
         defaultAvailableEntriesPlus(axiom)
       ) mustEqual (
         Seq(
-          inferenceExtraction(Seq(
+          inferenceExtraction(
             assertion(axiom, Nil, Nil),
-            inferenceExtraction(Seq(
-              assertion(FunctionFrom.deconstructionInference, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
-              assertion(reverseEquality, Nil, Seq(Domain(Addition), Product(Naturals, Naturals))))))),
+            Seq(
+              inferenceExtraction(
+                assertion(FunctionFrom.deconstructionInference, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
+                Seq(
+                  assertion(reverseEquality, Nil, Seq(Domain(Addition), Product(Naturals, Naturals))))))),
           assertion(substitutionOfEquals, Seq(ForAllIn("x", $.^)(ForAllIn("y", $.^^)(φ($.^, $)))), Seq(Product(Naturals, Naturals), Domain(Addition))))(SubstitutionContext.outsideProof),
         Seq(ForAllIn("x", Product(Naturals, Naturals))(ForAllIn("y", Product(Naturals, Naturals))(φ($.^, $)))))
     }

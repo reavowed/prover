@@ -51,11 +51,12 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
       )(SubstitutionContext.outsideProof))
       val expectedSteps = recalculateReferences(Seq(
         target(Equals(a, b)),
-        inferenceExtraction(Seq(
+        inferenceExtraction(
           assertion(membershipConditionForSingleton, Nil, Seq(b)),
-          assertion(specification, Seq(Equivalence(ElementOf($, Singleton(b)), Equals($, b))), Seq(a)),
-          assertion(reverseImplicationFromEquivalence, Seq(ElementOf(a, Singleton(b)), Equals(a, b)), Nil),
-          assertion(modusPonens, Seq(Equals(a, b), ElementOf(a, Singleton(b))), Nil)))
+          Seq(
+            assertion(specification, Seq(Equivalence(ElementOf($, Singleton(b)), Equals($, b))), Seq(a)),
+            assertion(reverseImplicationFromEquivalence, Seq(ElementOf(a, Singleton(b)), Equals(a, b)), Nil),
+            assertion(modusPonens, Seq(Equals(a, b), ElementOf(a, Singleton(b))), Nil)))
       )(SubstitutionContext.outsideProof))
 
       ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
@@ -78,10 +79,11 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
       val expectedSteps = recalculateReferences(Seq(
         target(Function(f)),
         target(ElementOf(x, Domain(f))),
-        inferenceExtraction(Seq(
+        inferenceExtraction(
           assertion(Function.deconstructionInference, Nil, Seq(f)),
-          assertion(specification, Seq(Implication(ElementOf($, Domain(f)), ExistsUnique("y")(ElementOf(Pair($.^, $), f)))), Seq(x)),
-          assertion(modusPonens, Seq(ElementOf(x, Domain(f)), ExistsUnique("y")(ElementOf(Pair(x, $), f))), Nil)))
+          Seq(
+            assertion(specification, Seq(Implication(ElementOf($, Domain(f)), ExistsUnique("y")(ElementOf(Pair($.^, $), f)))), Seq(x)),
+            assertion(modusPonens, Seq(ElementOf(x, Domain(f)), ExistsUnique("y")(ElementOf(Pair(x, $), f))), Nil)))
       )(SubstitutionContext.outsideProof))
 
       val actualSteps = ReplaceElidedSteps(createStepsWithContext(initialSteps))

@@ -2,7 +2,7 @@ package net.prover.proving.extraction
 
 import net.prover.model.ProvingContext
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.Step
+import net.prover.model.proof.{Step, StepLike}
 import net.prover.proving.extraction.PartiallyAppliedExtraction.ChainedRewriteStep
 
 case class PartiallyAppliedExtraction(
@@ -57,6 +57,12 @@ case class PartiallyAppliedExtraction(
       conclusion = chainingStep.statement,
       leftRewrite = Some(ChainedRewriteStep(rewriteStep, chainingStep)))
   }
+  def prependLeftRewrite(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep): PartiallyAppliedExtraction = {
+    copy(
+      mainPremise = chainingStep.premises.last.statement,
+      extractionPremises = extractionPremises ++ rewriteStep.premises.map(_.statement),
+      leftRewrite = Some(ChainedRewriteStep(rewriteStep, chainingStep)))
+  }
   def appendRightRewrite(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep): PartiallyAppliedExtraction = {
     copy(
       extractionPremises = extractionPremises ++ rewriteStep.premises.map(_.statement),
@@ -72,7 +78,9 @@ case class PartiallyAppliedExtraction(
 
   def allSteps: Seq[Step.AssertionStep] = extractionSteps ++ reversalStep.toSeq
   def finalise(implicit provingContext: ProvingContext): AppliedExtraction = {
-    ExtractionApplier.groupStepsByDefinition(allSteps)
+    AppliedExtraction(
+      ExtractionApplier.groupStepsByDefinition(extractionSteps ++ reversalStep.toSeq),
+      leftRewrite.toSeq.flatMap(_.substeps) ++ rightRewrite.toSeq.flatMap(_.substeps))
   }
 }
 
@@ -81,5 +89,7 @@ object PartiallyAppliedExtraction {
     PartiallyAppliedExtraction(statement, Nil, statement, Nil, None, None, None, variableTracker)
   }
 
-  case class ChainedRewriteStep(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep)
+  case class ChainedRewriteStep(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep) extends StepLike.Wrapper {
+    override def substeps: Seq[Step.AssertionStep] = Seq(rewriteStep, chainingStep)
+  }
 }

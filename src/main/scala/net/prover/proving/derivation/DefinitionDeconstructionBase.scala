@@ -13,7 +13,7 @@ trait DefinitionDeconstructionBase extends StepLike.Wrapper {
   def toProofStep: Step.AssertionOrExtraction = {
     Step.InferenceExtractionStep.ifNecessary(AppliedInferenceExtraction(
       deconstructionStep,
-      AppliedExtraction(additionalSteps.map(AppliedExtractionStep.Assertion))))
+      AppliedExtraction.fromSimpleExtraction(additionalSteps)))
   }
   override def serializedLines: Seq[String] = {
     super.serializedLines.indentInLabelledBracesIfPresent(DefinitionDeconstructionBase.label)

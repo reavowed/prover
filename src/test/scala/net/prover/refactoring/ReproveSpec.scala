@@ -25,9 +25,10 @@ class ReproveSpec extends Specification with StepBuilderHelper {
       )(outerStepContext))
       val expectedSteps = recalculateReferences(Seq(
         target(Conjunction(Function(f), FunctionFrom(f, A, B))),
-        inferenceExtraction(Seq(
+        inferenceExtraction(
           assertion(FunctionFrom.deconstructionInference, Nil, Seq(f, A, B)),
-          assertion(extractRightConjunct, Seq(Function(f), Conjunction(Equals(Domain(f), A), Subset(Range(f), B))), Nil)))
+          Seq(
+            assertion(extractRightConjunct, Seq(Function(f), Conjunction(Equals(Domain(f), A), Subset(Range(f), B))), Nil)))
       )(outerStepContext))
 
       Reprove(createStepsWithContext(initialSteps)) mustEqual expectedSteps

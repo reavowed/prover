@@ -75,7 +75,7 @@ object DirectDerivationFinder {
           factInference.summary,
           Nil,
           Substitutions.empty)
-        Some(SimpleDerivation.empty :+ AppliedInferenceExtraction(assertion, AppliedExtraction(derivation.distinctBy(_.statement))))
+        Some(SimpleDerivation.empty :+ AppliedInferenceExtraction(assertion, AppliedExtraction(derivation.distinctBy(_.statement), Nil)))
       case _ =>
         None
     }

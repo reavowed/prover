@@ -45,15 +45,17 @@ trait StepHelpers {
   def existingStatementExtraction(
     steps: SubstitutionContext => Seq[Step.AssertionStep]
   ): SubstitutionContext => Step.ExistingStatementExtractionStep = { sc =>
-    Step.ExistingStatementExtractionStep(AppliedExtraction(steps(sc).map(AppliedExtractionStep.Assertion(_))))
+    Step.ExistingStatementExtractionStep(AppliedExtraction(steps(sc).map(AppliedExtractionStep.Assertion(_)), Nil))
   }
   def inferenceExtraction(
-    stepsConstructor: SubstitutionContext => Seq[Step]
-  ): SubstitutionContext => Step = { sc =>
-    val steps = stepsConstructor(sc)
-    val assertionStep = steps.head.asInstanceOf[Step.AssertionStep]
-    val extractionSteps = steps.tail.map(step => AppliedExtractionStep(step.asInstanceOf[Step.AssertionOrExtraction]))
-    Step.InferenceExtractionStep(AppliedInferenceExtraction(assertionStep, AppliedExtraction(extractionSteps)))
+    assertionStepConstructor: SubstitutionContext => Step.AssertionStep,
+    extractionStepsConstructor: SubstitutionContext => Seq[Step.AssertionOrExtraction],
+    rewriteStepsConstructor: SubstitutionContext => Seq[Step.AssertionStep] = (_ => Nil)
+  ): SubstitutionContext => Step.InferenceExtractionStep = { sc =>
+    val assertionStep = assertionStepConstructor(sc)
+    val extractionSteps = extractionStepsConstructor(sc).map(AppliedExtractionStep(_))
+    val rewriteSteps = rewriteStepsConstructor(sc)
+    Step.InferenceExtractionStep(AppliedInferenceExtraction(assertionStep, AppliedExtraction(extractionSteps, rewriteSteps)))
   }
   def wrappedInferenceApplication(
     steps: SubstitutionContext => Seq[Step])(

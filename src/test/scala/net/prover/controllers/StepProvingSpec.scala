@@ -140,11 +140,12 @@ class StepProvingSpec extends ControllerSpec {
       checkModifyStepsWithMatcher(
         service,
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(statementToProve),
-        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ inferenceExtraction(Seq(
+        matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ inferenceExtraction(
           assertion(axiom, Seq(φ($), ψ($(0), $(1))), Nil),
-          assertion(specification, Seq(Equivalence(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
-          assertion(forwardImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
-          assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil)))
+          Seq(
+            assertion(specification, Seq(Equivalence(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
+            assertion(forwardImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
+            assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil)))
         ) and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.assertionStep, Seq(0, 1))} and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(0), Seq(1))} and
@@ -254,11 +255,12 @@ class StepProvingSpec extends ControllerSpec {
       checkModifyStepsWithMatcher(
         service,
         fillerSteps(stepIndex - 1) :+ target(ψ(b, c)) :+ target(statementToProve),
-        matchSteps(fillerSteps(stepIndex - 1) :+ target(ψ(b, c)) :+ target(premise) :+ inferenceExtraction(Seq(
+        matchSteps(fillerSteps(stepIndex - 1) :+ target(ψ(b, c)) :+ target(premise) :+ inferenceExtraction(
           assertion(axiom, Seq(φ($), ψ($(0), $(1))), Nil),
-          assertion(specification, Seq(Equivalence(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
-          assertion(reverseImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
-          assertion(modusPonens, Seq(Exists("z")(ψ(a, $)), φ(a)), Nil)))
+          Seq(
+            assertion(specification, Seq(Equivalence(φ($), Exists("z")(ψ($.^, $)))), Seq(a)),
+            assertion(reverseImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
+            assertion(modusPonens, Seq(Exists("z")(ψ(a, $)), φ(a)), Nil)))
         ) and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)} and
           beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.assertionStep, Seq(0, 1))} and
@@ -328,12 +330,14 @@ class StepProvingSpec extends ControllerSpec {
         service,
         fillerSteps(stepIndex) :+ target(Equals(Domain(Addition), Product(Naturals, Naturals))),
         fillerSteps(stepIndex) :+
-          inferenceExtraction(Seq(
+          inferenceExtraction(
             assertion(axiom, Nil, Nil),
-            inferenceExtraction(Seq(
-              assertion(FunctionFrom.statementDefinition.deconstructionInference.get, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
-              assertion(extractRightConjunct, Seq(Function(Addition), Conjunction(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals))), Nil),
-              assertion(extractLeftConjunct, Seq(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals)), Nil))))))
+            Seq(
+              inferenceExtraction(
+                assertion(FunctionFrom.statementDefinition.deconstructionInference.get, Nil, Seq(Addition, Product(Naturals, Naturals), Naturals)),
+                Seq(
+                  assertion(extractRightConjunct, Seq(Function(Addition), Conjunction(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals))), Nil),
+                  assertion(extractLeftConjunct, Seq(Equals(Domain(Addition), Product(Naturals, Naturals)), Subset(Range(Addition), Naturals)), Nil))))))
     }
 
     "prove a new target by extracting inside a bound variable" in {

@@ -34,7 +34,7 @@ object Reprove extends CompoundTheoremUpdater[Id] {
   ): Step = {
     step.extraction.extractionSteps.head match {
       case AppliedExtractionStep.Assertion(assertionStep) if stepWithContext.stepProvingContext.provingContext.availableEntries.statementDefinitions.exists(_.deconstructionInference.contains(assertionStep.inference)) => {
-        Step.InferenceExtractionStep(AppliedInferenceExtraction(assertionStep, AppliedExtraction(step.extraction.extractionSteps.tail)))
+        Step.InferenceExtractionStep(AppliedInferenceExtraction(assertionStep, AppliedExtraction(step.extraction.extractionSteps.tail, step.extraction.chainedRewriteSteps)))
       }
       case _ =>
         super.updateExistingStatementExtraction(step, stepWithContext)

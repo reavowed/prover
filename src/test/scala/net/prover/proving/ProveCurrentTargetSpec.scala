@@ -87,26 +87,82 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
         fillerSteps(stepIndex - 2) :+
           target(ElementOf(a, BaseSet(IntegerAddition))) :+
           target(ElementOf(b, BaseSet(IntegerAddition))) :+
-          inferenceExtraction(Seq(
+          inferenceExtraction(
             assertion(integerAdditionIsCommutative, Nil, Nil),
-            inferenceExtraction(Seq(
-              assertion(Commutative.deconstructionInference, Nil, Seq(IntegerAddition)),
-              assertion(
-                specification,
-                Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(Apply(IntegerAddition, Pair($.^, $)), Apply(IntegerAddition, Pair($, $.^)))))),
-                Seq(a)),
-              assertion(
-                modusPonens,
-                Seq(ElementOf(a, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(Apply(IntegerAddition, Pair(a, $)), Apply(IntegerAddition, Pair($, a))))),
-                Nil),
-              assertion(
-                specification,
-                Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), Equals(Apply(IntegerAddition, Pair(a, $)), Apply(IntegerAddition, Pair($, a))))),
-                Seq(b)),
-              assertion(
-                modusPonens,
-                Seq(ElementOf(b, BaseSet(IntegerAddition)), Equals(Apply(IntegerAddition, Pair(a, b)), Apply(IntegerAddition, Pair(b, a)))),
-                Nil))))))
+            Seq(
+              inferenceExtraction(
+                assertion(Commutative.deconstructionInference, Nil, Seq(IntegerAddition)),
+                Seq(
+                  assertion(
+                    specification,
+                    Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(Apply(IntegerAddition, Pair($.^, $)), Apply(IntegerAddition, Pair($, $.^)))))),
+                    Seq(a)),
+                  assertion(
+                    modusPonens,
+                    Seq(ElementOf(a, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(Apply(IntegerAddition, Pair(a, $)), Apply(IntegerAddition, Pair($, a))))),
+                    Nil),
+                  assertion(
+                    specification,
+                    Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), Equals(Apply(IntegerAddition, Pair(a, $)), Apply(IntegerAddition, Pair($, a))))),
+                    Seq(b)),
+                  assertion(
+                    modusPonens,
+                    Seq(ElementOf(b, BaseSet(IntegerAddition)), Equals(Apply(IntegerAddition, Pair(a, b)), Apply(IntegerAddition, Pair(b, a)))),
+                    Nil))))))
+    }
+
+    "replace target with an inference extraction with a left rewrite" in {
+      implicit val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Nil)
+
+      val disjoinedConjunctEquivalence = createInference(
+        "Disjoined Conjunct Equivalence",
+        Seq(φ, Negation(χ)),
+        Equivalence(Disjunction(Conjunction(φ, ψ), Conjunction(χ, ω)), φ))
+      val orIsSymmetric = createInference(
+        "Or Is Symmetric",
+        Nil,
+        Equivalence(Disjunction(φ, ψ), Disjunction(ψ, φ)))
+      implicit val availableEntries = defaultAvailableEntries.addEntry(disjoinedConjunctEquivalence).addEntry(orIsSymmetric)
+
+      ProveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        StepDefinition(
+          Some(disjoinedConjunctEquivalence.id),
+          None,
+          SerializedSubstitutions(Seq(φ.serialized, ψ.serialized, χ.serialized, ω.serialized), Nil),
+          ExtractionDefinition(
+            Nil,
+            None,
+            Some(orIsSymmetric.summary),
+            None
+          ).serialized,
+          Nil,
+          None,
+          None,
+          None))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex - 2) :+
+          target(φ) :+
+          target(Negation(χ)) :+
+          target(Equivalence(Disjunction(Conjunction(χ, ω), Conjunction(φ, ψ)), φ)),
+        fillerSteps(stepIndex - 2) :+
+          target(φ) :+
+          target(Negation(χ)) :+
+          inferenceExtraction(
+            assertion(disjoinedConjunctEquivalence, Seq(φ, ψ, χ, ω), Nil),
+            Nil,
+            Seq(
+              assertion(orIsSymmetric, Seq(Conjunction(χ, ω), Conjunction(φ, ψ)), Nil),
+              assertion(equivalenceIsTransitive, Seq(Disjunction(Conjunction(χ, ω), Conjunction(φ, ψ)), Disjunction(Conjunction(φ, ψ), Conjunction(χ, ω)), φ), Nil))))
     }
 
     "add premise finding steps" in {

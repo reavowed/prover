@@ -4,7 +4,7 @@ import net.prover.books.management.BookStateManager
 import net.prover.entries.StepWithContext
 import net.prover.model._
 import net.prover.model.proof.Step
-import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
+import net.prover.proving.extraction.{AppliedExtraction, ExtractionApplier, ExtractionCalculator}
 import net.prover.theorems.CompoundTheoremUpdater
 import scalaz.Scalaz._
 
@@ -33,7 +33,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
       mainPremise <- firstAssertion.premises.headOption.map(_.statement)
       _ <- ExtractionCalculator.getPremiseExtractions(mainPremise)(stepWithContext.stepContext, stepWithContext.provingContext)
         .find(_.extractionDetails.allSteps.map(_.inference) == assertionSteps.map(_.inference))
-      appliedExtraction = ExtractionApplier.groupStepsByDefinition(assertionSteps)(stepWithContext.provingContext)
-    } yield Step.ExistingStatementExtractionStep(appliedExtraction)
+      appliedExtractionSteps = ExtractionApplier.groupStepsByDefinition(assertionSteps)(stepWithContext.provingContext)
+    } yield Step.ExistingStatementExtractionStep(AppliedExtraction(appliedExtractionSteps, Nil))
   }
 }

@@ -114,13 +114,20 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
   }
   def updateAppliedExtraction(appliedExtraction: AppliedExtraction, stepContext: StepContext, proofWithContext: ProofWithContext): F[AppliedExtraction] = {
     for {
-      newSteps <- appliedExtraction.extractionSteps.toList.foldLeftM((List.empty[AppliedExtractionStep], stepContext)) {
+      newExtractionStepsAndContext <- appliedExtraction.extractionSteps.toList.foldLeftM((List.empty[AppliedExtractionStep], stepContext)) {
         case ((newSteps, stepContext), appliedExtractionStep) =>
           for {
             newStep <- updateAppliedExtractionStep(appliedExtractionStep, stepContext, proofWithContext)
           } yield (newSteps :+ newStep, stepContext.addStep(newStep.toProofStep))
+      }
+      (newExtractionSteps, stepContext) = newExtractionStepsAndContext
+      newRewriteSteps <- appliedExtraction.chainedRewriteSteps.toList.foldLeftM((List.empty[Step.AssertionStep], stepContext)) {
+        case ((newSteps, stepContext), step) =>
+          for {
+            newStep <- updateAssertion(step, TypedStepWithContext(step, proofWithContext)(implicitly, stepContext))
+          } yield (newSteps :+ newStep.asInstanceOf[Step.AssertionStep], stepContext.addStep(newStep))
       }.map(_._1)
-    } yield AppliedExtraction(newSteps)
+    } yield AppliedExtraction(newExtractionSteps, newRewriteSteps)
   }
   def updateAppliedExtractionStep(appliedExtractionStep: AppliedExtractionStep, stepContext: StepContext, proofWithContext: ProofWithContext): F[AppliedExtractionStep] = {
     appliedExtractionStep match {
