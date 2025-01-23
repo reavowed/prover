@@ -122,7 +122,7 @@ object ExtractionCalculator {
       transitivity <- rewrite.findValidTransitivity(connective)
       rewriteSubstitutions <- rewrite.right.calculateSubstitutions(left).flatMap(_.confirmTotality(rewrite.inference.variableDefinitions))
       rewrittenLeft <- rewrite.left.applySubstitutions(rewriteSubstitutions)
-      assertionStep = Step.AssertionStep(connective(rewrittenLeft, left), rewrite.inference.summary, Seq(Premise.Pending(extractionSoFar.conclusion)), rewriteSubstitutions)
+      assertionStep = Step.AssertionStep(connective(rewrittenLeft, left), rewrite.inference.summary, Nil, rewriteSubstitutions)
       transitivityStep = transitivity.assertionStep(rewrittenLeft, left, right)
     } yield extractionSoFar.appendLeftRewrite(assertionStep, transitivityStep)
   }
@@ -140,7 +140,7 @@ object ExtractionCalculator {
       rewrittenRight <- rewrite.right.applySubstitutions(rewriteSubstitutions)
       assertionStep = Step.AssertionStep(connective(right, rewrittenRight), rewrite.inference.summary, Seq(Premise.Pending(extractionSoFar.conclusion)), rewriteSubstitutions)
       transitivityStep = transitivity.assertionStep(left, right, rewrittenRight)
-    } yield extractionSoFar.appendLeftRewrite(assertionStep, transitivityStep)
+    } yield extractionSoFar.appendRightRewrite(assertionStep, transitivityStep)
   }
 
   private def addAll(extractions: Seq[PartiallyAppliedExtraction], getNext: PartiallyAppliedExtraction => IterableOnce[PartiallyAppliedExtraction]): Seq[PartiallyAppliedExtraction] = {

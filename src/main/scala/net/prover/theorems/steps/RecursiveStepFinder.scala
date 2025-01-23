@@ -77,7 +77,7 @@ abstract class RecursiveStepFinder[T : Monoid] {
         apply(step)
       case AppliedExtractionStep.DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
         apply(deconstructionStep) |+| additionalSteps.toList.foldMap(apply)
-    }
+    } |+| apply(extraction.chainedRewriteSteps)
   }
 
   def apply(statement: Statement): T
