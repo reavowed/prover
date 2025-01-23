@@ -51,17 +51,23 @@ case class PartiallyAppliedExtraction(
     appendStepPremisesAndConclusion(newReversalStep)
       .copy(reversalStep = Some(newReversalStep))
   }
+  def prependLeftRewrite(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep): PartiallyAppliedExtraction = {
+    copy(
+      mainPremise = chainingStep.premises.last.statement,
+      extractionPremises = extractionPremises ++ rewriteStep.premises.map(_.statement),
+      leftRewrite = Some(ChainedRewriteStep(rewriteStep, chainingStep)))
+  }
   def appendLeftRewrite(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep): PartiallyAppliedExtraction = {
     copy(
       extractionPremises = extractionPremises ++ rewriteStep.premises.map(_.statement),
       conclusion = chainingStep.statement,
       leftRewrite = Some(ChainedRewriteStep(rewriteStep, chainingStep)))
   }
-  def prependLeftRewrite(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep): PartiallyAppliedExtraction = {
+  def prependRightRewrite(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep): PartiallyAppliedExtraction = {
     copy(
-      mainPremise = chainingStep.premises.last.statement,
+      mainPremise = chainingStep.premises.head.statement,
       extractionPremises = extractionPremises ++ rewriteStep.premises.map(_.statement),
-      leftRewrite = Some(ChainedRewriteStep(rewriteStep, chainingStep)))
+      rightRewrite = Some(ChainedRewriteStep(rewriteStep, chainingStep)))
   }
   def appendRightRewrite(rewriteStep: Step.AssertionStep, chainingStep: Step.AssertionStep): PartiallyAppliedExtraction = {
     copy(

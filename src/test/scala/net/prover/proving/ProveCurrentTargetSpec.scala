@@ -165,6 +165,60 @@ class ProveCurrentTargetSpec extends Specification with BookServiceHelper with S
               assertion(equivalenceIsTransitive, Seq(Disjunction(Conjunction(χ, ω), Conjunction(φ, ψ)), Disjunction(Conjunction(φ, ψ), Conjunction(χ, ω)), φ), Nil))))
     }
 
+    "replace target with an inference extraction with a right rewrite" in {
+      implicit val service = mock[BookService]
+      mockReplaceStepsForSimpleReplacement(service)
+
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Nil)
+
+      val disjoinedConjunctEquivalence = createInference(
+        "Disjoined Conjunct Equivalence",
+        Seq(φ, Negation(χ)),
+        Equivalence(Disjunction(Conjunction(φ, ψ), Conjunction(χ, ω)), φ))
+      val orIsSymmetric = createInference(
+        "Or Is Symmetric",
+        Nil,
+        Equivalence(Disjunction(φ, ψ), Disjunction(ψ, φ)))
+      implicit val availableEntries = defaultAvailableEntries.addEntry(disjoinedConjunctEquivalence).addEntry(orIsSymmetric)
+
+      ProveCurrentTarget(
+        bookKey,
+        chapterKey,
+        theoremKey,
+        proofIndex,
+        PathData(stepPath),
+        StepDefinition(
+          Some(disjoinedConjunctEquivalence.id),
+          None,
+          SerializedSubstitutions(Seq(φ.serialized, ψ.serialized, χ.serialized, ω.serialized), Nil),
+          ExtractionDefinition(
+            Nil,
+            Some(reverseEquivalence.summary),
+            None,
+            Some(orIsSymmetric.summary)
+          ).serialized,
+          Nil,
+          None,
+          None,
+          None))
+
+      checkModifySteps(
+        service,
+        fillerSteps(stepIndex - 2) :+
+          target(φ) :+
+          target(Negation(χ)) :+
+          target(Equivalence(φ, Disjunction(Conjunction(χ, ω), Conjunction(φ, ψ)))),
+        fillerSteps(stepIndex - 2) :+
+          target(φ) :+
+          target(Negation(χ)) :+
+          inferenceExtraction(
+            assertion(disjoinedConjunctEquivalence, Seq(φ, ψ, χ, ω), Nil),
+            Seq(assertion(reverseEquivalence.summary, Seq(Disjunction(Conjunction(φ, ψ), Conjunction(χ, ω)), φ), Nil)),
+            Seq(
+              assertion(orIsSymmetric, Seq(Conjunction(φ, ψ), Conjunction(χ, ω)), Nil),
+              assertion(equivalenceIsTransitive, Seq(φ, Disjunction(Conjunction(φ, ψ), Conjunction(χ, ω)), Disjunction(Conjunction(χ, ω), Conjunction(φ, ψ))), Nil))))
+    }
+
     "add premise finding steps" in {
       implicit val service = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)

@@ -140,6 +140,43 @@ object ExtractionApplier {
     } yield innerExtraction.prependLeftRewrite(rewriteStep, transitivityStep)
   }
 
+  private def applyRightRewrite(
+    currentStatement: Statement,
+    inference: Inference,
+    variableTracker: VariableTracker,
+    innerExtractionDefinition: ExtractionDefinition,
+    mainSubstitutions: Substitutions,
+    intendedPremisesOption: Option[Seq[Statement]],
+    intendedConclusion: Option[Statement])(
+    implicit provingContext: ProvingContext,
+    substitutionContext: SubstitutionContext
+  ): Try[PartiallyAppliedExtraction] = {
+    for {
+      BinaryConnectiveStatement(connective, left, right) <- provingContext.asBinaryConnectiveStatement(currentStatement)
+        .orBadRequest(s"Statement $currentStatement not a connective")
+      rewrite <- provingContext.chainableRewriteInferences.find(_.inference == inference)
+        .orBadRequest(s"Could not find chainable rewrite with inference ${inference.id}")
+      transitivity <- rewrite.findValidTransitivity(connective)
+        .orBadRequest("Could not find transitivity")
+      rewriteSubstitutions <- rewrite.left.calculateSubstitutions(right)
+        .flatMap(_.confirmTotality(rewrite.inference.variableDefinitions))
+        .orBadRequest("Could not calculate rewrite substitutions")
+      rewrittenRight <- rewrite.right.applySubstitutions(rewriteSubstitutions)
+        .orBadRequest("Could not apply rewrite substitutions")
+      rewrittenStatement = connective(left, rewrittenRight)
+      innerExtraction <- applyExtraction(rewrittenStatement, innerExtractionDefinition, mainSubstitutions, intendedPremisesOption, intendedConclusion, variableTracker)
+      (updatedLeft, updatedRewrittenRight) <- connective.unapply(innerExtraction.mainPremise)
+        .orBadRequest("Inner extraction main premise did not match connective")
+      updatedSubstitutions <- rewrite.right.calculateSubstitutions(updatedRewrittenRight)
+        .flatMap(_.confirmTotality(rewrite.inference.variableDefinitions))
+        .orBadRequest("Could not calculate updated substitutions from inner premise")
+      updatedRight <- rewrite.left.applySubstitutions(updatedSubstitutions)
+        .orBadRequest("Could not apply substitutions to rewrite premise ")
+      rewriteStep = Step.AssertionStep(connective(updatedRight, updatedRewrittenRight), rewrite.inference.summary, Nil, updatedSubstitutions)
+      transitivityStep = transitivity.assertionStep(updatedLeft, updatedRight, updatedRewrittenRight)
+    } yield innerExtraction.prependRightRewrite(rewriteStep, transitivityStep)
+  }
+
   private def applyExtraction(
     currentStatement: Statement,
     extractionDefinition: ExtractionDefinition,
@@ -197,14 +234,26 @@ object ExtractionApplier {
                   intendedPremises,
                   intendedConclusion)
               case None =>
-                  intendedConclusion match {
-                    case Some(matchingConclusion) if matchingConclusion == currentStatement =>
-                      Success(PartiallyAppliedExtraction.initial(matchingConclusion, variableTracker))
-                    case Some(otherConclusion) =>
-                      Failure(BadRequestException(s"Intended conclusion '$otherConclusion' did not match expected statement '$currentStatement'"))
-                    case None =>
-                      Success(PartiallyAppliedExtraction.initial(currentStatement, variableTracker))
-                  }
+                extractionDefinition.rightRewrite match {
+                  case Some(inference) =>
+                    applyRightRewrite(
+                      currentStatement,
+                      inference,
+                      variableTracker,
+                      extractionDefinition.copy(rightRewrite = None),
+                      substitutions,
+                      intendedPremises,
+                      intendedConclusion)
+                  case None =>
+                    intendedConclusion match {
+                      case Some(matchingConclusion) if matchingConclusion == currentStatement =>
+                        Success(PartiallyAppliedExtraction.initial(matchingConclusion, variableTracker))
+                      case Some(otherConclusion) =>
+                        Failure(BadRequestException(s"Intended conclusion '$otherConclusion' did not match expected statement '$currentStatement'"))
+                      case None =>
+                        Success(PartiallyAppliedExtraction.initial(currentStatement, variableTracker))
+                    }
+                }
             }
         }
     }
