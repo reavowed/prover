@@ -1,9 +1,10 @@
 package net.prover.refactoring
 
 import net.prover.books.management.BookStateManager
-import net.prover.entries.StepWithContext
+import net.prover.entries.{StepWithContext, TheoremWithContext}
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model._
+import net.prover.model.entries.Theorem
 import net.prover.model.proof.Step
 import net.prover.proving.extraction.ExtractionApplier
 import net.prover.theorems.CompoundTheoremUpdater
@@ -83,5 +84,14 @@ object ReplaceInference {
       val newInference = globalContext.definitions.allInferences.find(_.id == newInferenceId).get
       ReplaceInference(oldInference, newInference)(_).get
     })
+  }
+  def apply(
+    theoremWithContext: TheoremWithContext,
+    oldInferenceId: String,
+    newInferenceId: String
+  ): Try[Theorem] = {
+    val oldInference = theoremWithContext.globalContext.definitions.allInferences.find(_.id == oldInferenceId).get
+    val newInference = theoremWithContext.globalContext.definitions.allInferences.find(_.id == newInferenceId).get
+    ReplaceInference(oldInference, newInference)(theoremWithContext)
   }
 }

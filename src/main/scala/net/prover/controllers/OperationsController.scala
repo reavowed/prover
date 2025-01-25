@@ -80,6 +80,19 @@ class OperationsController @Autowired() (implicit bookService: BookService, book
     ReplaceInference(oldInferenceId, newInferenceId)
   }
 
+  @GetMapping(value = Array("replaceInference/{bookKey}/{chapterKey}/{theoremKey}"))
+  def replaceInferenceInTheorem(
+    @PathVariable("bookKey") bookKey: String,
+    @PathVariable("chapterKey") chapterKey: String,
+    @PathVariable("theoremKey") theoremKey: String,
+    @RequestParam("old") oldInferenceId: String,
+    @RequestParam("new") newInferenceId: String
+  ): Unit = {
+    bookService.modifyTheorem[Id](bookKey, chapterKey, theoremKey) { theoremWithContext =>
+      ReplaceInference(theoremWithContext, oldInferenceId, newInferenceId)
+    }.get
+  }
+
   @GetMapping(value = Array("clearInference"))
   def clearInference(
     @RequestParam("id") inferenceId: String
