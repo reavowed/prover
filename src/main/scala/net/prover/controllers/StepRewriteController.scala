@@ -11,6 +11,7 @@ import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
 import net.prover.proving.extraction.{ExtractionApplier, ExtractionDefinition}
 import net.prover.proving.premiseFinding.DerivationFinder
+import net.prover.proving.rewrite.{RewritePremise, RewriteStep}
 import net.prover.proving.stepReplacement.InsertStepBeforeChain
 import net.prover.proving.structure.inferences.{Equality, Expansion, Transitivity}
 import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation}
@@ -170,7 +171,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     direction: Direction,
     equality: Equality)(
     implicit stepProvingContext: StepProvingContext
-  ): Try[(Term, Term, Seq[Step], Option[Inference.Summary], Option[Inference.Summary], Seq[Unwrapper], TExpression)] = {
+  ): Try[RewriteStep[TExpression]] = {
     val extractionDefinition = rewrite.extractionDefinition.reverseIfNecessary(direction, equality)
     for {
       inferenceExtraction <- stepProvingContext.provingContext.findInferenceExtraction(inferenceId, extractionDefinition).orBadRequest(s"Could not find extraction")
@@ -187,8 +188,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
       appliedInferenceExtraction <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
-      elidedStep = Step.ElidedStep.ifNecessary((knownPremises.map(_.derivation).join.toProofSteps :+ appliedInferenceExtraction.toStep).distinctBy(_.statement), inference).get
-    } yield (removedSource, rewrittenTerm, Seq(elidedStep), Some(inference), None, removedUnwrappers, removedWrapperExpression)
+    } yield RewriteStep(removedSource, rewrittenTerm, RewritePremise.Inference(knownPremises, appliedInferenceExtraction), Some(inference), None, removedUnwrappers, removedWrapperExpression)
   }
 
   def getRewriteStepForPremise[TExpression <: Expression with TypedExpression[TExpression] : RewriteMethods](
@@ -200,7 +200,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     direction: Direction,
     equality: Equality)(
     implicit stepWithContext: StepWithContext
-  ): Try[(Term, Term, Seq[Step], Option[Inference.Summary], Option[Inference.Summary], Seq[Unwrapper], TExpression)] = {
+  ): Try[RewriteStep[TExpression]] = {
     for {
       premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest.map(_.insertExternalParameters(unwrappers.depth))
       (removedUnwrappers, removedSource, Seq(removedPremiseStatement), removedWrapperExpression) = RewriteMethods[TExpression].removeUnwrappers(baseTerm, Seq(premiseStatement), wrapperExpression, unwrappers)
@@ -208,7 +208,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       _ <- (removedSource == premiseLhs).orBadRequest("Premise did not match term at path")
       statementToFind = (equality.apply _).tupled(direction.swapSourceAndResult(premiseLhs, premiseRhs))
       knownStatement <- stepWithContext.stepProvingContext.knownStatementsFromPremisesBySerializedStatement.get(statementToFind.serializedForHash).orBadRequest(s"Could not find premise ${statementToFind.toString}")
-    } yield (premiseLhs, premiseRhs, knownStatement.derivation.toProofSteps, None, knownStatement.derivation.inferences.single.map(_.summary), removedUnwrappers, removedWrapperExpression)
+    } yield RewriteStep(premiseLhs, premiseRhs, RewritePremise.Known(knownStatement), None, knownStatement.derivation.inferences.single.map(_.summary), removedUnwrappers, removedWrapperExpression)
   }
 
   def rewrite[TExpression <: Expression with TypedExpression[TExpression] : RewriteMethods, TStep](
@@ -216,7 +216,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     rewriteList: Seq[Seq[RewriteRequest]],
     equality: Equality,
     direction: Direction)(
-    applyRewrite: (Term, Term, Seq[Unwrapper], Wrapper[Term, TExpression], Seq[Step], Option[Inference.Summary], Option[Inference.Summary]) => Try[(TStep, Option[Inference.Summary], Wrapper[Term, TExpression])])(
+    applyRewrite: (Term, Term, Seq[Unwrapper], Wrapper[Term, TExpression], RewritePremise, Option[Inference.Summary], Option[Inference.Summary]) => Try[(TStep, Option[Inference.Summary], Wrapper[Term, TExpression])])(
     combine: (TExpression, TExpression, Seq[TStep], Seq[Option[Inference.Summary]]) => Try[TStep])(
     elide: (TExpression, Seq[TStep], Seq[Option[Inference.Summary]]) => Try[Option[Step]])(
     implicit stepWithContext: StepWithContext
@@ -230,12 +230,12 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
               (currentInnerExpression, stepsSoFar, inferencesSoFar) <- trySoFar
               rewritePossibilities = getRewritePossibilities(currentInnerExpression)
               RewritePossibility(baseTerm, function, _, _, baseUnwrappers, replacementStepContext) <- rewritePossibilities.find(_.path == rewrite.path).orBadRequest(s"No term at path ${rewrite.path.mkString(".")}")
-              (term, rewrittenTerm, rewriteSteps, inferenceOption, fallbackInferenceOption, unwrappers, wrapperExpression) <- ((rewrite.inferenceId.map(getRewriteStepForInference(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality)(implicitly, stepWithContext.stepProvingContext.withStepContext(replacementStepContext))) orElse
+              RewriteStep(term, rewrittenTerm, rewritePremise, inferenceOption, fallbackInferenceOption, unwrappers, wrapperExpression) <- ((rewrite.inferenceId.map(getRewriteStepForInference(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality)(implicitly, stepWithContext.stepProvingContext.withStepContext(replacementStepContext))) orElse
                 rewrite.serializedPremiseStatement.map(getRewriteStepForPremise(_, baseTerm, rewrite, baseUnwrappers, function, direction, equality))) orBadRequest
                 "Neither inference nor premise supplied").flatten
               wrapper = Wrapper.fromExpression(wrapperExpression)
               (source, result) = direction.swapSourceAndResult(term, rewrittenTerm)
-              (step, resultInferenceOption, updatedWrapper) <- applyRewrite(source, result, unwrappers, wrapper, rewriteSteps, inferenceOption, fallbackInferenceOption)
+              (step, resultInferenceOption, updatedWrapper) <- applyRewrite(source, result, unwrappers, wrapper, rewritePremise, inferenceOption, fallbackInferenceOption)
             } yield (updatedWrapper(rewrittenTerm), stepsSoFar :+ step, inferencesSoFar :+ resultInferenceOption)
           }.map(_.map2(direction.reverseIfNecessary))
           step <- combine(currentExpression, newTarget, steps, inferences)
@@ -251,7 +251,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     result: Term,
     unwrappers: Seq[Unwrapper],
     wrapper: Wrapper[Term, Statement],
-    steps: Seq[Step],
+    premise: RewritePremise,
     rewriteInferenceOption: Option[Inference.Summary],
     fallbackInferenceOption: Option[Inference.Summary])(
     implicit stepWithContext: StepWithContext
@@ -260,7 +260,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     val inference = rewriteInferenceOption.getOrElse(equality.substitution.inference.summary)
     val enhancedWrapper = unwrappers.enhanceWrapper(wrapper)
     val extractionStepOption = unwrappers.getTargetExtraction(wrapper(source)(unwrappers.enhanceStepContext(implicitly)))._2
-    val rewriteStep = EqualityRewriter.rewriteElider(Some(inference))(steps :+ substitutionStep).get
+    val rewriteStep = EqualityRewriter.rewriteElider(Some(inference))(premise.toProofSteps :+ substitutionStep).get
     val extractionSteps = extractionStepOption.toSeq :+ rewriteStep
     val updatedSteps = unwrappers.rewrap(extractionSteps)
     val finalStep = if (enhancedWrapper != wrapper)
@@ -276,7 +276,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     result: Term,
     unwrappers: Seq[Unwrapper],
     wrapper: Wrapper[Term, TExpression],
-    steps: Seq[Step],
+    premise: RewritePremise,
     rewriteInferenceOption: Option[Inference.Summary],
     fallbackInferenceOption: Option[Inference.Summary])(
     implicit stepWithContext: StepWithContext
@@ -284,7 +284,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     val expansionStepOption = expansion.assertionStepIfNecessary(source, result, wrapper)(unwrappers.enhanceStepContext(implicitly))
     val inferenceOption = rewriteInferenceOption orElse Some(expansion.inference.summary).filter(_ => expansionStepOption.nonEmpty) orElse fallbackInferenceOption
     for {
-      (updatedSteps, updatedWrapper) <- RewriteMethods[TExpression].rewrapWithDistribution(unwrappers, expansion.resultJoiner, source, result, steps ++ expansionStepOption.toSeq, wrapper, inferenceOption)
+      (updatedSteps, updatedWrapper) <- RewriteMethods[TExpression].rewrapWithDistribution(unwrappers, expansion.resultJoiner, source, result, premise.toProofSteps ++ expansionStepOption.toSeq, wrapper, inferenceOption)
     } yield (RearrangementStep(updatedWrapper(result), updatedSteps, EqualityRewriter.rewriteElider(inferenceOption)), inferenceOption, updatedWrapper)
   }
 
