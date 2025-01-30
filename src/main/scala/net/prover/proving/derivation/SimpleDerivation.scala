@@ -1,7 +1,7 @@
 package net.prover.proving.derivation
 
 import net.prover.model._
-import net.prover.model.proof.{Step, StepLike}
+import net.prover.model.proof.{Step, StepContext, StepLike}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 
 case class SimpleDerivation(steps: Seq[SimpleDerivationStep]) extends StepLike.Wrapper {
@@ -30,6 +30,7 @@ case class SimpleDerivation(steps: Seq[SimpleDerivationStep]) extends StepLike.W
   def inferences: Set[Inference] = steps.map(_.inference).toSet
   def toProofSteps: Seq[Step.AssertionOrExtraction] = steps.map(_.toProofStep)
   def nonEmpty: Boolean = steps.nonEmpty
+  def isEmpty: Boolean = steps.isEmpty
   def distinct: SimpleDerivation = SimpleDerivation(steps.distinctBy(_.statement))
 }
 object SimpleDerivation {
@@ -48,6 +49,9 @@ object SimpleDerivation {
       case AppliedExtractionStep.DefinitionDeconstruction(deconstructionStep, additionalSteps) => SimpleDerivationStep.DefinitionDeconstruction(deconstructionStep, additionalSteps)
     })
   }
+  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[SimpleDerivation] = {
+    SimpleDerivationStep.parser.whileDefined.map(SimpleDerivation(_))
+  }
 }
 
 sealed trait SimpleDerivationStep extends StepLike.Wrapper {
@@ -63,13 +67,32 @@ object SimpleDerivationStep {
   case class DefinitionDeconstruction(
     deconstructionStep: Step.AssertionStep,
     additionalSteps: Seq[Step.AssertionStep]
-  ) extends SimpleDerivationStep with DefinitionDeconstructionBase
+  ) extends SimpleDerivationStep with DefinitionDeconstructionBase {
+    override def serializedLines: Seq[String] = super.serializedLines.indentInLabelledBracesIfPresent("definition")
+  }
   case class InferenceExtraction(appliedInferenceExtraction: AppliedInferenceExtraction) extends SimpleDerivationStep {
     override def inference: Inference = appliedInferenceExtraction.assertionStep.inference
     override def substeps: Seq[StepLike] = Seq(appliedInferenceExtraction)
     override def toProofStep: Step.AssertionOrExtraction = {
       Step.InferenceExtractionStep.ifNecessary(appliedInferenceExtraction)
     }
+    override def serializedLines: Seq[String] = super.serializedLines.indentInLabelledBracesIfPresent("extraction")
   }
+
+  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Option[SimpleDerivationStep]] = {
+    Parser.selectOptionalWordParser {
+      case Step.AssertionStep.label =>
+        Step.AssertionStep.parser.map(Assertion(_))
+      case "definition" =>
+        (for {
+          _ <- Parser.requiredWord(Step.AssertionStep.label)
+          deconstructionStep <- Step.AssertionStep.parser
+          additionalSteps <- Parser.optionalWord(Step.AssertionStep.label).flatMapMap(_ => Step.AssertionStep.parser).whileDefined
+        } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)).inBraces
+      case "extraction" =>
+        AppliedInferenceExtraction.parser.inBraces.map(InferenceExtraction(_))
+    }
+  }
+
   implicit def fromSeq[T](seq: Seq[T])(implicit f: T => SimpleDerivationStep): Seq[SimpleDerivationStep] = seq.map(f)
 }

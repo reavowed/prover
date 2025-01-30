@@ -27,7 +27,7 @@ object FindStep {
     else stepWithContext.step match {
       case step: Step.WithSubsteps =>
         apply(stepWithContext.forSubsteps(step), stepIndexes)
-      case _: Step.WithoutSubsteps =>
+      case _ =>
         None
     }
   }

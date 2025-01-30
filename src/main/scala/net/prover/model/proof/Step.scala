@@ -7,6 +7,7 @@ import net.prover.model.expressions.Statement
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.proving.extraction
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
+import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 
 import scala.annotation.tailrec
@@ -363,7 +364,7 @@ object Step {
       }
     }
     def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[InferenceExtractionStep] = {
-      AppliedInferenceExtraction.parser.map(InferenceExtractionStep(_))
+      AppliedInferenceExtraction.parser.inBraces.map(InferenceExtractionStep(_))
     }
   }
 
@@ -453,6 +454,33 @@ object Step {
     }
   }
 
+  case class RewriteStep(
+      premise: RewritePremise,
+      substitutionStep: Step.AssertionStep)
+    extends Step
+  {
+    override def statement: Statement = substitutionStep.statement
+    override def length: Int = premise.length + substitutionStep.length
+    override def serializedLines: Seq[String] = Seq(premise, substitutionStep).flatMap(_.serializedLines).indentInLabelledBracesIfPresent("rewrite")
+  }
+  object RewriteStep {
+    def ifNecessary(premise: RewritePremise, substitutionStep: Step.AssertionStep): Step = {
+      premise match {
+        case RewritePremise.Known(knownStatement) if knownStatement.derivation.isEmpty =>
+          substitutionStep
+        case _ =>
+          RewriteStep(premise, substitutionStep)
+      }
+    }
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[RewriteStep] = {
+      (for {
+        premise <- RewritePremise.parser(stepContext.forChild(), implicitly)
+        _ <- Parser.requiredWord(AssertionStep.label)
+        substitutionStep <- AssertionStep.parser(stepContext.forChild().addSteps(premise.toProofSteps), implicitly)
+      } yield RewriteStep(premise, substitutionStep)).inBraces
+    }
+  }
+
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Option[Step]] = {
     Parser.selectOptionalWordParser {
       case "target" => TargetStep.parser
@@ -467,6 +495,7 @@ object Step {
       case "wrappedInferenceApplication" => WrappedInferenceApplicationStep.parser
       case "wrappedPremiseDerivation" => WrappedPremiseDerivationStep.parser
       case "inferenceWithPremiseDerivations" => InferenceWithPremiseDerivationsStep.parser
+      case "rewrite" => RewriteStep.parser
     }
   }
   def childStepsParser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Seq[Step]] = {

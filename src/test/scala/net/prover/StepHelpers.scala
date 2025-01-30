@@ -4,7 +4,11 @@ import net.prover.model.{Inference, ProvingContext, Substitutions}
 import net.prover.model.expressions.{Statement, Term, TermVariable}
 import net.prover.model.proof.{Step, SubstitutionContext}
 import net.prover.model.TestDefinitions._
+import net.prover.model.definitions.KnownStatement
+import net.prover.model.proof.Step.RewriteStep
+import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
+import net.prover.proving.rewrite.RewritePremise
 
 import scala.language.implicitConversions
 
@@ -67,6 +71,35 @@ trait StepHelpers {
     steps: SubstitutionContext => Seq[Step]
   ): SubstitutionContext => Step.InferenceWithPremiseDerivationsStep = { sc =>
     Step.InferenceWithPremiseDerivationsStep(steps(sc))
+  }
+  def rewriteStep(
+    createPremise: SubstitutionContext => KnownStatement,
+    createAssertion: SubstitutionContext => Step.AssertionStep
+  ): SubstitutionContext => Step.RewriteStep = { sc =>
+    Step.RewriteStep(RewritePremise.Known(createPremise(sc)), createAssertion(sc))
+  }
+  def rewriteStep(
+    createPremises: SubstitutionContext => Seq[KnownStatement],
+    createExtraction: SubstitutionContext => Step.InferenceExtractionStep,
+    createAssertion: SubstitutionContext => Step.AssertionStep
+  ): SubstitutionContext => Step.RewriteStep = { sc =>
+    Step.RewriteStep(
+      RewritePremise.ByInference(
+        createPremises(sc),
+        createExtraction(sc).inferenceExtraction),
+      createAssertion(sc))
+  }
+  def known(
+    statement: Statement
+  ): SubstitutionContext => KnownStatement = { sc =>
+    KnownStatement(statement, SimpleDerivation.empty)
+  }
+  def known(
+    createSteps: SubstitutionContext => Seq[Step]
+  ): SubstitutionContext => KnownStatement = { sc =>
+    val steps = createSteps(sc)
+    val derivation = SimpleDerivation(steps.map(s => SimpleDerivationStep.Assertion(s.asInstanceOf[Step.AssertionStep])))
+    KnownStatement(derivation.statement, derivation)
   }
 
   def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = (0 until number).map(i => target(ForAll("x")(Equals($, add($, $)))))

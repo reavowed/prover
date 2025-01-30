@@ -29,7 +29,7 @@ object ReplaceSteps {
     stepWithContext.step match {
       case step: Step.WithSubsteps =>
         apply(stepWithContext.forSubsteps(step), stepIndexes)(f).map(_.map(step.replaceSubsteps(_)(stepWithContext.stepProvingContext)))
-      case _: Step.WithoutSubsteps =>
+      case _ =>
         None
     }
   }

@@ -17,6 +17,6 @@ object AppliedInferenceExtraction {
       _ <- Parser.requiredWord(AssertionStep.label)
       assertionStep <- AssertionStep.parser(innerStepContext, implicitly)
       extraction <- AppliedExtraction.parser(innerStepContext.addStep(assertionStep), implicitly)
-    } yield AppliedInferenceExtraction(assertionStep, extraction)).inBraces
+    } yield AppliedInferenceExtraction(assertionStep, extraction))
   }
 }

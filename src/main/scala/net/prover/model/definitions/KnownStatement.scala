@@ -1,11 +1,13 @@
 package net.prover.model.definitions
 
-import net.prover.model.ProvingContext
+import net.prover.model._
 import net.prover.model.expressions.Statement
+import net.prover.model.proof.{StepContext, StepLike}
 import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
-import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionApplier, PremiseExtraction}
+import net.prover.proving.extraction.{AppliedInferenceExtraction, PremiseExtraction}
 
-case class KnownStatement(statement: Statement, derivation: SimpleDerivation) {
+case class KnownStatement(override val statement: Statement, derivation: SimpleDerivation) extends StepLike.Wrapper {
+  override def substeps: Seq[StepLike] = Seq(derivation)
   def extend(appliedInferenceExtraction: AppliedInferenceExtraction): KnownStatement = {
     extend(Seq(SimpleDerivationStep.InferenceExtraction(appliedInferenceExtraction)))
   }
@@ -14,6 +16,12 @@ case class KnownStatement(statement: Statement, derivation: SimpleDerivation) {
   }
   def extend(newSteps: Seq[SimpleDerivationStep]): KnownStatement = {
     KnownStatement.fromDerivation(derivation ++ newSteps)
+  }
+  override def serializedLines: Seq[String] = {
+    if (derivation.nonEmpty)
+      derivation.serializedLines.indentInLabelledBracesIfPresent("knownDerived " + statement.serialized)
+    else
+      Seq("knownDirect " + statement.serialized)
   }
 }
 
@@ -32,5 +40,17 @@ object KnownStatement {
 
   implicit class SeqOps(knownStatements: Seq[KnownStatement]) {
     def deduplicate: Seq[KnownStatement] = knownStatements.distinctBy(_.statement)
+  }
+
+  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Option[KnownStatement]] = {
+    Parser.selectOptionalWordParser {
+      case "knownDirect" =>
+        Statement.parser.map(KnownStatement(_, SimpleDerivation.empty))
+      case "knownDerived" =>
+        for {
+          statement <- Statement.parser
+          derivation <- SimpleDerivation.parser.inBraces
+        } yield KnownStatement(statement, derivation)
+    }
   }
 }

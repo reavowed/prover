@@ -38,9 +38,9 @@ class StepRewriteSpec extends ControllerSpec {
         fillerSteps(stepIndex - 1) :+ target(equalityPremise) :+ target(φ(a)),
         fillerSteps(stepIndex - 1) :+ target(equalityPremise) :+
           target(φ(b)) :+
-          elided(substitutionOfEquals, Seq(
-            assertion(reverseEquality, Nil, Seq(a, b)),
-            assertion(substitutionOfEquals, Seq(φ($)), Seq(b, a)))))
+          rewriteStep(
+            known(Seq(assertion(reverseEquality, Nil, Seq(a, b)))),
+            assertion(substitutionOfEquals, Seq(φ($)), Seq(b, a))))
     }
 
     "rewrite target using a reversed premise" in {
@@ -114,9 +114,9 @@ class StepRewriteSpec extends ControllerSpec {
         service,
         fillerSteps(stepIndex - 2) :+ target(equalityPremise) :+ target(premiseToRewrite) :+ target(ψ),
         fillerSteps(stepIndex - 2) :+ target(equalityPremise) :+ target(premiseToRewrite) :+
-          elided(substitutionOfEquals, Seq(
-            assertion(reverseEquality, Nil, Seq(a, b)),
-            assertion(substitutionOfEquals, Seq(φ($)), Seq(b, a)))) :+
+          rewriteStep(
+            known(Seq(assertion(reverseEquality, Nil, Seq(a, b)))),
+            assertion(substitutionOfEquals, Seq(φ($)), Seq(b, a))) :+
           target(ψ))
     }
 
@@ -299,12 +299,13 @@ class StepRewriteSpec extends ControllerSpec {
                 existingStatementExtraction(Seq(
                   assertion(specification, Seq(Implication(ElementOf($.^, Product(A, B)), Equals(Pair(First($.^), Second($.^)), Zero))), Seq($)),
                   assertion(modusPonens, Seq(ElementOf($, Product(A, B)), Equals(Pair(First($), Second($)), Zero)), Nil))),
-                elided(elementOfCartesianProductFromCoordinates, Seq(
+                rewriteStep(
+                  Seq(known(ElementOf($, Product(A, B)))),
                   inferenceExtraction(
                     assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
                     Seq(
                       assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))))),
-                  assertion(substitutionOfEquals, Seq(Equals($.^, Zero)), Seq(Pair(First($), Second($)), $)))))))))))
+                  assertion(substitutionOfEquals, Seq(Equals($.^, Zero)), Seq(Pair(First($), Second($)), $))))))))))
     }
 
     "apply multiple rewrites using a generalized deduction premise at depth" in {
@@ -342,12 +343,13 @@ class StepRewriteSpec extends ControllerSpec {
                   existingStatementExtraction(Seq(
                     assertion(specification, Seq(Implication(ElementOf($.^^, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^^^), Second($.^^^)), Pair(First($), Second($))), $.^^))))), Seq($)),
                     assertion(modusPonens, Seq(ElementOf($, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair(Pair(First($.^), Second($.^)), Pair(First($), Second($))), $.^^)))), Nil))),
-                  elided(elementOfCartesianProductFromCoordinates, Seq(
+                  rewriteStep(
+                    Seq(known(ElementOf($.^, Product(A, B)))),
                     inferenceExtraction(
                       assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, A, B)),
                       Seq(
                         assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))))),
-                    assertion(substitutionOfEquals, Seq(ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^^^, Pair(First($), Second($))), $.^^)))), Seq(Pair(First($), Second($)), $)))))))))),
+                    assertion(substitutionOfEquals, Seq(ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^^^, Pair(First($), Second($))), $.^^)))), Seq(Pair(First($), Second($)), $))))))))),
             elided(elementOfCartesianProductFromCoordinates, Seq(
               generalization("x", Seq(
                 deduction(ElementOf($, Product(A, B)), Seq(
@@ -358,12 +360,13 @@ class StepRewriteSpec extends ControllerSpec {
                         assertion(modusPonens, Seq(ElementOf($.^, Product(A, B)), ForAll("y")(Implication(ElementOf($, Product(C, D)), Equals(Pair($.^^, Pair(First($), Second($))), $.^^^)))), Nil),
                         assertion(specification, Seq(Implication(ElementOf($.^^^, Product(C, D)), Equals(Pair($.^, Pair(First($.^^^), Second($.^^^))), $.^^))), Seq($)),
                         assertion(modusPonens, Seq(ElementOf($, Product(C, D)), Equals(Pair($.^, Pair(First($), Second($))), $.^^)), Nil))),
-                      elided(elementOfCartesianProductFromCoordinates, Seq(
+                      rewriteStep(
+                        Seq(known(ElementOf($, Product(C, D)))),
                         inferenceExtraction(
                           assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, C, D)),
                           Seq(
                             assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))))),
-                        assertion(substitutionOfEquals, Seq(Equals(Pair($.^, $.^^^), $.^^)), Seq(Pair(First($), Second($)), $)))))))))))))))),
+                        assertion(substitutionOfEquals, Seq(Equals(Pair($.^, $.^^^), $.^^)), Seq(Pair(First($), Second($)), $))))))))))))))),
         Seq("f"))
     }
 
@@ -530,12 +533,13 @@ class StepRewriteSpec extends ControllerSpec {
                 existingStatementExtraction(Seq(
                   assertion(specification, Seq(Implication(ElementOf($.^, Product(a, b)), Implication(Equals(Pair(First($.^), Second($.^)), Zero), φ))), Seq($)),
                   assertion(modusPonens, Seq(ElementOf($, Product(a, b)), Implication(Equals(Pair(First($), Second($)), Zero), φ)), Nil))),
-                elided(elementOfCartesianProductFromCoordinates, Seq(
+                rewriteStep(
+                  Seq(known(ElementOf($, Product(a, b)))),
                   inferenceExtraction(
                     assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, a, b)),
                     Seq(
                       assertion(reverseEquality, Nil, Seq($, Pair(First($), Second($)))))),
-                  assertion(substitutionOfEquals, Seq(Implication(Equals($.^, Zero), φ)), Seq(Pair(First($), Second($)), $)))))))))))
+                  assertion(substitutionOfEquals, Seq(Implication(Equals($.^, Zero), φ)), Seq(Pair(First($), Second($)), $))))))))))
     }
 
     "correctly increase depth of bound variables when getting rewrite premise suggestions inside a generalization" in {
@@ -581,7 +585,6 @@ class StepRewriteSpec extends ControllerSpec {
       val premise = Equals($, $.^)
       val premiseReference = StepReference(outerStepPath :+ (stepIndex - 1))
       val statement = ForAllIn("x", a)(φ($, $.^))
-      implicit val stepContext = createOuterStepContext(boundVariables).addPremise(premise, premiseReference)
 
       controller.rewriteManually(
         bookKey,
@@ -594,9 +597,10 @@ class StepRewriteSpec extends ControllerSpec {
       checkModifyStepsWithoutProps(
         service,
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(statement),
-        fillerSteps(stepIndex - 1) :+ target(premise) :+ target(ForAllIn("x", a)(φ($, $.^^))) :+ elided(substitutionOfEquals, Seq(
-          assertion(reverseEquality, Nil, Seq($, $.^)),
-          assertion(substitutionOfEquals, Seq(ForAllIn("x", a)(φ($, $.^^^))), Seq($.^, $)))),
+        fillerSteps(stepIndex - 1) :+ target(premise) :+ target(ForAllIn("x", a)(φ($, $.^^))) :+
+          rewriteStep(
+            known(Seq(assertion(reverseEquality, Nil, Seq($, $.^)))),
+            assertion(substitutionOfEquals, Seq(ForAllIn("x", a)(φ($, $.^^^))), Seq($.^, $))),
         boundVariables)
     }
 

@@ -258,7 +258,7 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
     val inference = premise.explicitInference.getOrElse(equality.substitution.inference.summary)
     val enhancedWrapper = unwrappers.enhanceWrapper(wrapper)
     val extractionStepOption = unwrappers.getTargetExtraction(wrapper(source)(unwrappers.enhanceStepContext(implicitly)))._2
-    val rewriteStep = EqualityRewriter.rewriteElider(Some(inference))(premise.toProofSteps :+ substitutionStep).get
+    val rewriteStep = Step.RewriteStep.ifNecessary(premise, substitutionStep)
     val extractionSteps = extractionStepOption.toSeq :+ rewriteStep
     val updatedSteps = unwrappers.rewrap(extractionSteps)
     val finalStep = if (enhancedWrapper != wrapper)
