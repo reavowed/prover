@@ -80,13 +80,18 @@ trait StepHelpers {
   }
   def rewriteStep(
     createPremises: SubstitutionContext => Seq[KnownStatement],
-    createExtraction: SubstitutionContext => Step.InferenceExtractionStep,
+    createExtraction: SubstitutionContext => Step.AssertionOrExtraction,
     createAssertion: SubstitutionContext => Step.AssertionStep
   ): SubstitutionContext => Step.RewriteStep = { sc =>
     Step.RewriteStep(
       RewritePremise.ByInference(
         createPremises(sc),
-        createExtraction(sc).inferenceExtraction),
+        createExtraction(sc) match {
+          case step: Step.AssertionStep =>
+            AppliedInferenceExtraction(step, AppliedExtraction(Nil, Nil))
+          case step: Step.InferenceExtractionStep =>
+            step.inferenceExtraction
+        }),
       createAssertion(sc))
   }
   def known(
@@ -95,10 +100,13 @@ trait StepHelpers {
     KnownStatement(statement, SimpleDerivation.empty)
   }
   def known(
-    createSteps: SubstitutionContext => Seq[Step]
+    createSteps: SubstitutionContext => Seq[Step.AssertionOrExtraction]
   ): SubstitutionContext => KnownStatement = { sc =>
     val steps = createSteps(sc)
-    val derivation = SimpleDerivation(steps.map(s => SimpleDerivationStep.Assertion(s.asInstanceOf[Step.AssertionStep])))
+    val derivation = SimpleDerivation(steps.map {
+      case step: Step.AssertionStep => SimpleDerivationStep.Assertion(step)
+      case step: Step.InferenceExtractionStep => SimpleDerivationStep.InferenceExtraction(step.inferenceExtraction)
+    })
     KnownStatement(derivation.statement, derivation)
   }
 

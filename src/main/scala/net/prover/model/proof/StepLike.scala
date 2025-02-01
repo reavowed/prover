@@ -1,5 +1,6 @@
 package net.prover.model.proof
 
+import net.prover.model.Parser
 import net.prover.model.expressions.Statement
 
 trait StepLike {
@@ -14,5 +15,16 @@ object StepLike {
     def statement: Statement = substeps.last.statement
     def length: Int = substeps.map(_.length).sum + 1
     def serializedLines: Seq[String] = substeps.flatMap(_.serializedLines)
+  }
+
+  def listParser[T](
+    getParser: StepContext => Parser[Option[T]],
+    addToContext: (StepContext, T) => StepContext)(
+    implicit stepContext: StepContext
+  ): Parser[(Seq[T], StepContext)] = {
+    Parser.mapFoldWhileDefined[T, StepContext](stepContext) { (_, stepContext) =>
+      getParser(stepContext)
+        .mapMap(step => step -> addToContext(stepContext, step))
+    }
   }
 }

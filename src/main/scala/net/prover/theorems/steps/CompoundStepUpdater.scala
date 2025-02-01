@@ -204,6 +204,9 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
           newDeconstructionStep <- updateAssertion(deconstructionStep, stepContext, proofWithContext)
           newAdditionalSteps <- updateAssertions(additionalSteps, stepContext.addStep(newDeconstructionStep), proofWithContext)
         } yield SimpleDerivationStep.DefinitionDeconstruction(newDeconstructionStep, newAdditionalSteps)
+      case SimpleDerivationStep.InferenceExtraction(extraction) =>
+        updateAppliedInferenceExtraction(extraction, stepContext, proofWithContext)
+          .map(SimpleDerivationStep.InferenceExtraction(_))
     }
   }
   def updateStatement(statement: Statement, substitutionContext: SubstitutionContext): F[Statement] = Monad[F].point(statement)

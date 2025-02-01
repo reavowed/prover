@@ -96,9 +96,9 @@ class StepChainingSpec extends ControllerSpec {
         fillerSteps(stepIndex) :+
           assertion(zeroIsRightIdentityForAddition, Nil, Seq(a)) :+
           target(lessThan(add(a, Zero), b)) :+
-          elided(substitutionOfEquals, Seq(
-            assertion(reverseEquality, Nil, Seq(a, add(a, Zero))),
-            assertion(substitutionOfEquals, Seq(lessThan($, b)), Seq(add(a, Zero), a)))))
+          rewriteStep(
+            known(Seq(assertion(reverseEquality, Nil, Seq(a, add(a, Zero))))),
+            assertion(substitutionOfEquals, Seq(lessThan($, b)), Seq(add(a, Zero), a))))
     }
     "rewrite RHS using equality substitution" in {
       implicit val service = mock[BookService]
@@ -131,9 +131,10 @@ class StepChainingSpec extends ControllerSpec {
         service,
         fillerSteps(stepIndex) :+ target(Equivalence(ψ(a), φ)),
         fillerSteps(stepIndex) :+
-          elided(zeroIsRightIdentityForAddition, Seq(
+          rewriteStep(
+            Nil,
             assertion(zeroIsRightIdentityForAddition, Nil, Seq(a)),
-            assertion(equivalenceOfSubstitutedEquals, Seq(ψ($)), Seq(a, add(a, Zero))))) :+
+            assertion(equivalenceOfSubstitutedEquals, Seq(ψ($)), Seq(a, add(a, Zero)))) :+
           target(Equivalence(ψ(add(a, Zero)), φ)) :+
           assertion(equivalenceIsTransitive, Seq(ψ(a), ψ(add(a, Zero)), φ), Nil))
     }
@@ -151,12 +152,12 @@ class StepChainingSpec extends ControllerSpec {
         fillerSteps(stepIndex) :+ target(Equivalence(φ, ψ(a))),
         fillerSteps(stepIndex) :+
           target(Equivalence(φ, ψ(add(a, Zero)))) :+
-          elided(zeroIsRightIdentityForAddition, Seq(
+          rewriteStep(
+            Nil,
             inferenceExtraction(
               assertion(zeroIsRightIdentityForAddition, Nil, Seq(a)),
-              Seq(
-                assertion(reverseEquality, Nil, Seq(a, add(a, Zero))))),
-            assertion(equivalenceOfSubstitutedEquals, Seq(ψ($)), Seq(add(a, Zero), a)))) :+
+              Seq(assertion(reverseEquality, Nil, Seq(a, add(a, Zero))))),
+            assertion(equivalenceOfSubstitutedEquals, Seq(ψ($)), Seq(add(a, Zero), a))) :+
           assertion(equivalenceIsTransitive, Seq(φ, ψ(add(a, Zero)), ψ(a)), Nil))
     }
 

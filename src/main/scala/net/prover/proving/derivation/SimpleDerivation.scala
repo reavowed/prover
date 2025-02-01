@@ -50,7 +50,10 @@ object SimpleDerivation {
     })
   }
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[SimpleDerivation] = {
-    SimpleDerivationStep.parser.whileDefined.map(SimpleDerivation(_))
+    StepLike.listParser[SimpleDerivationStep](
+      SimpleDerivationStep.parser(_, implicitly),
+      (sc, sds) => sc.addStep(sds.toProofStep)
+    ).map(_._1).map(SimpleDerivation(_))
   }
 }
 

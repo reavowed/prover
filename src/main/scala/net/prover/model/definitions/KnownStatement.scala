@@ -53,4 +53,7 @@ object KnownStatement {
         } yield KnownStatement(statement, derivation)
     }
   }
+  def listParser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[(Seq[KnownStatement], StepContext)] = {
+    StepLike.listParser[KnownStatement](parser(_, implicitly), (sc, ks) => sc.addSteps(ks.derivation.toProofSteps))
+  }
 }

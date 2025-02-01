@@ -30,14 +30,14 @@ trait ChainingStepEditing {
       case connective: BinaryConnective =>
         for {
           (lhs, rhs) <- connective.unapply(statement)
-        } yield () => forConnective(connective, lhs, rhs)
+        } yield forConnective(connective, lhs, rhs)
       case relation: BinaryRelation =>
         for {
           (lhs, rhs) <- relation.unapply(statement)
-        } yield () => forRelation(relation, lhs, rhs)
+        } yield forRelation(relation, lhs, rhs)
       case _ =>
         None
-    }.map(_())
+    }
       .orBadRequest("Target step is not a relation").flatten
   }
 

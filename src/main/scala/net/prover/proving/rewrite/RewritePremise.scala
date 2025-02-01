@@ -30,8 +30,9 @@ object RewritePremise {
       .orElse(
         Parser.requiredWord("byInference").flatMap(_ =>
           (for {
-            premises <- KnownStatement.parser.whileDefined
-            extraction <- AppliedInferenceExtraction.parser
+            premisesAndStepContext <- KnownStatement.listParser
+            (premises, stepContext) = premisesAndStepContext
+            extraction <- AppliedInferenceExtraction.parser(stepContext, implicitly)
           } yield ByInference(premises, extraction)).inBraces
         ))
   }

@@ -144,9 +144,9 @@ class StepRewriteSpec extends ControllerSpec {
           target(equalityPremise) :+
           assertion(substitutionOfEqualsIntoFunction, Nil, Seq(b, Zero, add(a, $))) :+
           target(lessThan(add(a, Zero), c)) :+
-          elided(substitutionOfEquals, Seq(
-            assertion(reverseEquality, Nil, Seq(add(a, b), add(a, Zero))),
-            assertion(substitutionOfEquals, Seq(lessThan($, c)), Seq(add(a, Zero), add(a, b))))))
+          rewriteStep(
+            known(Seq(assertion(reverseEquality, Nil, Seq(add(a, b), add(a, Zero))))),
+            assertion(substitutionOfEquals, Seq(lessThan($, c)), Seq(add(a, Zero), add(a, b)))))
     }
 
     "rewrite left using a reversed premise" in {
@@ -171,13 +171,13 @@ class StepRewriteSpec extends ControllerSpec {
           target(lessThan(add(a, b), c)),
         fillerSteps(stepIndex - 1) :+
           target(equalityPremise) :+
-          elided(substitutionOfEqualsIntoFunction, Seq(
-            assertion(reverseEquality, Nil, Seq(Zero, b)),
-            assertion(substitutionOfEqualsIntoFunction, Nil, Seq(b, Zero, add(a, $))))) :+
+          rewriteStep(
+            known(Seq(assertion(reverseEquality, Nil, Seq(Zero, b)))),
+            assertion(substitutionOfEqualsIntoFunction, Nil, Seq(b, Zero, add(a, $)))) :+
           target(lessThan(add(a, Zero), c)) :+
-          elided(substitutionOfEquals, Seq(
-            assertion(reverseEquality, Nil, Seq(add(a, b), add(a, Zero))),
-            assertion(substitutionOfEquals, Seq(lessThan($, c)), Seq(add(a, Zero), add(a, b))))))
+          rewriteStep(
+            known(Seq(assertion(reverseEquality, Nil, Seq(add(a, b), add(a, Zero))))),
+            assertion(substitutionOfEquals, Seq(lessThan($, c)), Seq(add(a, Zero), add(a, b)))))
     }
 
     "rewrite right using a direct premise" in {
@@ -203,9 +203,9 @@ class StepRewriteSpec extends ControllerSpec {
         fillerSteps(stepIndex - 1) :+
           target(equalityPremise) :+
           target(lessThan(a, add(b, Zero))) :+
-          elided(substitutionOfEqualsIntoFunction, Seq(
-            assertion(reverseEquality, Nil, Seq(c, Zero)),
-            assertion(substitutionOfEqualsIntoFunction, Nil, Seq(Zero, c, add(b, $))))) :+
+          rewriteStep(
+            known(Seq(assertion(reverseEquality, Nil, Seq(c, Zero)))),
+            assertion(substitutionOfEqualsIntoFunction, Nil, Seq(Zero, c, add(b, $)))) :+
           assertion(substitutionOfEquals, Seq(lessThan(a, $)), Seq(add(b, Zero), add(b, c))))
     }
 
@@ -394,9 +394,10 @@ class StepRewriteSpec extends ControllerSpec {
           elided(elementOfCartesianProductFromCoordinates, Seq(
             generalization("x", Seq(
               deduction(ElementOf($, Product(a, b)), Seq(
-                elided(elementOfCartesianProductFromCoordinates, Seq(
+                rewriteStep(
+                  Seq(known(ElementOf($, Product(a, b)))),
                   assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, a, b)),
-                  assertion(equivalenceOfSubstitutedEquals, Seq(Equals($.^, Zero)), Seq($, Pair(First($), Second($)))))))),
+                  assertion(equivalenceOfSubstitutedEquals, Seq(Equals($.^, Zero)), Seq($, Pair(First($), Second($))))))),
               assertion(distributeImplicationOverEquivalence, Seq(ElementOf($, Product(a, b)), Equals($, Zero), Equals(Pair(First($), Second($)), Zero)), Nil))),
             assertion(distributeUniversalQuantifierOverEquivalence, Seq(Implication(ElementOf($, Product(a, b)), Equals($, Zero)), Implication(ElementOf($, Product(a, b)), Equals(Pair(First($), Second($)), Zero))), Nil))) :+
           target(Equivalence(ForAll("x")(Implication(ElementOf($, Product(a, b)), Equals(Pair(First($), Second($)), Zero))), φ)) :+
@@ -436,9 +437,10 @@ class StepRewriteSpec extends ControllerSpec {
             elided(elementOfCartesianProductFromCoordinates, Seq(
               generalization("x", Seq(
                 deduction(ElementOf($, Product(a, b)), Seq(
-                  elided(elementOfCartesianProductFromCoordinates, Seq(
+                  rewriteStep(
+                    Seq(known(ElementOf($.^, Product(a, b)))),
                     assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, a, b)),
-                    assertion(equivalenceOfSubstitutedEquals, Seq(ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair($.^^^, $), $.^^)))), Seq($, Pair(First($), Second($)))))))),
+                    assertion(equivalenceOfSubstitutedEquals, Seq(ForAll("y")(Implication(ElementOf($, Product(c, d)), Equals(Pair($.^^^, $), $.^^)))), Seq($, Pair(First($), Second($))))))),
                 assertion(
                   distributeImplicationOverEquivalence,
                   Seq(
@@ -457,9 +459,10 @@ class StepRewriteSpec extends ControllerSpec {
                 deduction(ElementOf($, Product(a, b)), Seq(
                   generalization("y", Seq(
                     deduction(ElementOf($, Product(c, d)), Seq(
-                      elided(elementOfCartesianProductFromCoordinates, Seq(
+                      rewriteStep(
+                        Seq(known(ElementOf($, Product(c, d)))),
                         assertion(elementOfCartesianProductFromCoordinates, Nil, Seq($, c, d)),
-                        assertion(equivalenceOfSubstitutedEquals, Seq(Equals(Pair(Pair(First($.^), Second($.^)), $.^^^), $.^^)), Seq($, Pair(First($), Second($)))))))),
+                        assertion(equivalenceOfSubstitutedEquals, Seq(Equals(Pair(Pair(First($.^), Second($.^)), $.^^^), $.^^)), Seq($, Pair(First($), Second($))))))),
                     assertion(
                       distributeImplicationOverEquivalence,
                       Seq(
@@ -629,16 +632,22 @@ class StepRewriteSpec extends ControllerSpec {
           fillerSteps(stepIndex - 4) :+ target(ElementOf(a, Integers)) :+ target(ElementOf(b, Integers)) :+ target(ElementOf(c, Integers)) :+ target(ElementOf(d, Integers)) :+ target(statement),
           fillerSteps(stepIndex - 4) :+ target(ElementOf(a, Integers)) :+ target(ElementOf(b, Integers)) :+ target(ElementOf(c, Integers)) :+ target(ElementOf(d, Integers)) :+
             elided(integerAdditionIsCommutative, Seq(
-              elided(integerAdditionIsCommutative, Seq(
-                elided(integerAdditionIsCommutative, Seq(
-                  inferenceExtraction(
-                    assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),Seq(
-                      inferenceExtraction(
+              rewriteStep(
+                Seq(
+                  known(Seq(
+                    inferenceExtraction(
+                      assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
+                      Seq(inferenceExtraction(
                         assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
-                        Seq(
-                          assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
-                  assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(Integers, BaseSet(IntegerAddition))),
-                  assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(Integers, BaseSet(IntegerAddition))),
+                        Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
+                    assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(Integers, BaseSet(IntegerAddition))))),
+                  known(Seq(
+                    inferenceExtraction(
+                      assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
+                      Seq(inferenceExtraction(
+                        assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
+                        Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
+                    assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(Integers, BaseSet(IntegerAddition)))))),
                   inferenceExtraction(
                     assertion(integerAdditionIsCommutative, Nil, Nil),
                     Seq(
@@ -648,31 +657,35 @@ class StepRewriteSpec extends ControllerSpec {
                           assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(addZ($.^, $), addZ($, $.^))))), Seq(a)),
                           assertion(modusPonens, Seq(ElementOf(a, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(addZ(a, $), addZ($, a)))), Nil),
                           assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), Equals(addZ(a, $), addZ($, a)))), Seq(b)),
-                          assertion(modusPonens, Seq(ElementOf(b, BaseSet(IntegerAddition)), Equals(addZ(a, b), addZ(b, a))), Nil))))))),
-                assertion(substitutionOfEqualsIntoFunction, Nil, Seq(addZ(a, b), addZ(b, a), F($, addZ(c, d)))))),
-
-              elided(integerAdditionIsCommutative, Seq(
-                elided(integerAdditionIsCommutative, Seq(
-                  inferenceExtraction(
-                    assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
-                    Seq(
-                      inferenceExtraction(
+                          assertion(modusPonens, Seq(ElementOf(b, BaseSet(IntegerAddition)), Equals(addZ(a, b), addZ(b, a))), Nil))))),
+                  assertion(substitutionOfEqualsIntoFunction, Nil, Seq(addZ(a, b), addZ(b, a), F($, addZ(c, d))))),
+              rewriteStep(
+                Seq(
+                  known(Seq(
+                    inferenceExtraction(
+                      assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
+                      Seq(inferenceExtraction(
                         assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
-                        Seq(
-                          assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
-                  assertion(substitutionOfEquals, Seq(ElementOf(c, $)), Seq(Integers, BaseSet(IntegerAddition))),
-                  assertion(substitutionOfEquals, Seq(ElementOf(d, $)), Seq(Integers, BaseSet(IntegerAddition))),
-                  inferenceExtraction(
-                    assertion(integerAdditionIsCommutative, Nil, Nil),
-                    Seq(
-                      inferenceExtraction(
-                        assertion(Commutative.deconstructionInference, Nil, Seq(IntegerAddition)),
-                        Seq(
-                          assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(addZ($.^, $), addZ($, $.^))))), Seq(c)),
-                          assertion(modusPonens, Seq(ElementOf(c, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(addZ(c, $), addZ($, c)))), Nil),
-                          assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), Equals(addZ(c, $), addZ($, c)))), Seq(d)),
-                          assertion(modusPonens, Seq(ElementOf(d, BaseSet(IntegerAddition)), Equals(addZ(c, d), addZ(d, c))), Nil))))))),
-                assertion(substitutionOfEqualsIntoFunction, Nil, Seq(addZ(c, d), addZ(d, c), F(addZ(b, a), $))))),
+                        Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
+                    assertion(substitutionOfEquals, Seq(ElementOf(c, $)), Seq(Integers, BaseSet(IntegerAddition))))),
+                  known(Seq(
+                    inferenceExtraction(
+                      assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
+                      Seq(inferenceExtraction(
+                        assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
+                        Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
+                    assertion(substitutionOfEquals, Seq(ElementOf(d, $)), Seq(Integers, BaseSet(IntegerAddition)))))),
+                inferenceExtraction(
+                  assertion(integerAdditionIsCommutative, Nil, Nil),
+                  Seq(
+                    inferenceExtraction(
+                      assertion(Commutative.deconstructionInference, Nil, Seq(IntegerAddition)),
+                      Seq(
+                        assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(addZ($.^, $), addZ($, $.^))))), Seq(c)),
+                        assertion(modusPonens, Seq(ElementOf(c, BaseSet(IntegerAddition)), ForAllIn("b", BaseSet(IntegerAddition))(Equals(addZ(c, $), addZ($, c)))), Nil),
+                        assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), Equals(addZ(c, $), addZ($, c)))), Seq(d)),
+                        assertion(modusPonens, Seq(ElementOf(d, BaseSet(IntegerAddition)), Equals(addZ(c, d), addZ(d, c))), Nil))))),
+                assertion(substitutionOfEqualsIntoFunction, Nil, Seq(addZ(c, d), addZ(d, c), F(addZ(b, a), $)))),
               assertion(equalityIsTransitive, Nil, Seq(F(addZ(a, b), addZ(c, d)), F(addZ(b, a), addZ(c, d)), F(addZ(b, a), addZ(d, c)))))) :+
             target(Equals(F(addZ(b, a), addZ(d, c)), e)) :+
             assertion(equalityIsTransitive, Nil, Seq(F(addZ(a, b), addZ(c, d)), F(addZ(b, a), addZ(d, c)), e)))

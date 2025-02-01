@@ -505,9 +505,6 @@ object Step {
     listParser(parser(_, implicitly)).map(_._1)
   }
   def listParser[T <: Step](getStepParser: StepContext => Parser[Option[T]])(implicit stepContext: StepContext): Parser[(Seq[T], StepContext)] = {
-    Parser.mapFoldWhileDefined[T, StepContext](stepContext) { (_, currentStepContext) =>
-      getStepParser(currentStepContext)
-        .mapMap(step => step -> currentStepContext.addStep(step))
-    }
+    StepLike.listParser[T](getStepParser(_), _.addStep(_))
   }
 }

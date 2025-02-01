@@ -279,8 +279,14 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
   ): Try[(RearrangementStep[TExpression], Option[Inference.Summary], Wrapper[Term, TExpression])] = {
     val expansionStepOption = expansion.assertionStepIfNecessary(source, result, wrapper)(unwrappers.enhanceStepContext(implicitly))
     val inferenceOption = premise.explicitInference orElse Some(expansion.inference.summary).filter(_ => expansionStepOption.nonEmpty) orElse premise.fallbackInference
+    val steps = expansionStepOption match {
+      case Some(expansionStep) =>
+        Seq(Step.RewriteStep.ifNecessary(premise, expansionStep))
+      case None =>
+        premise.toProofSteps
+    }
     for {
-      (updatedSteps, updatedWrapper) <- RewriteMethods[TExpression].rewrapWithDistribution(unwrappers, expansion.resultJoiner, source, result, premise.toProofSteps ++ expansionStepOption.toSeq, wrapper, inferenceOption)
+      (updatedSteps, updatedWrapper) <- RewriteMethods[TExpression].rewrapWithDistribution(unwrappers, expansion.resultJoiner, source, result, steps, wrapper, inferenceOption)
     } yield (RearrangementStep(updatedWrapper(result), updatedSteps, EqualityRewriter.rewriteElider(inferenceOption)), inferenceOption, updatedWrapper)
   }
 
