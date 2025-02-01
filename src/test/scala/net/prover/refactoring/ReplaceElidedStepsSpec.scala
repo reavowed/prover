@@ -9,7 +9,6 @@ import net.prover.model.proof.{Step, SubstitutionContext}
 import org.specs2.mutable.Specification
 
 class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
-
   implicit val availableEntries = defaultAvailableEntries
 
   "replace elided steps" should {
@@ -100,6 +99,28 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
         .inferenceExtraction.extraction.extractionSteps.init.last.statement.asInstanceOf[DefinedStatement]
         .components.last.asInstanceOf[DefinedStatement]
         .boundVariableNames mustEqual Seq("y")
+    }
+
+    "replace a rewrite" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0, b -> 0))
+      implicit val outerStepContext = createOuterStepContext(Nil)
+        val initialSteps = recalculateReferences(Seq(
+          target(ElementOf(a, Naturals)),
+          target(ElementOf(b, Naturals)),
+          elided(additionIsCommutative, Seq(
+            assertion(additionIsCommutative, Nil, Seq(a, b)),
+            assertion(equivalenceOfSubstitutedEquals, Seq(φ($)), Seq(add(a, b), add(b, a)))))
+        )(SubstitutionContext.outsideProof))
+        val expectedSteps = recalculateReferences(Seq(
+          target(ElementOf(a, Naturals)),
+          target(ElementOf(b, Naturals)),
+          rewriteStep(
+            Nil,
+            assertion(additionIsCommutative, Nil, Seq(a, b)),
+            assertion(equivalenceOfSubstitutedEquals, Seq(φ($)), Seq(add(a, b), add(b, a))))
+        )(SubstitutionContext.outsideProof))
+
+        ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
     }
   }
 
