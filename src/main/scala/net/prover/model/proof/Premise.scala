@@ -31,7 +31,7 @@ object Premise {
 
   def parser(statement: Statement)(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Premise] = {
     @scala.annotation.tailrec
-    def helper(inferences: Seq[Inference], premise: SingleLinePremise): SingleLinePremise = {
+    def applyPremiseSimplifications(inferences: Seq[Inference], premise: SingleLinePremise): SingleLinePremise = {
       inferences match {
         case Nil =>
           premise
@@ -40,7 +40,7 @@ object Premise {
           val substitutions = inferencePremise.calculateSubstitutions(premise.statement).flatMap(_.confirmTotality(inference.variableDefinitions)).getOrElse(throw new Exception("Could not calculate substitutions for simplification"))
           val result = inference.conclusion.applySubstitutions(substitutions).getOrElse(throw new Exception("Could not apply substitutions for simplification"))
           val path = inferencePremise.findComponentPath(inference.conclusion).getOrElse(throw new Exception("Could not find simplification path"))
-          helper(tailInferences, Simplification(result, premise, inference.summary, substitutions, path))
+          applyPremiseSimplifications(tailInferences, Simplification(result, premise, inference.summary, substitutions, path))
       }
     }
     val pendingParser = Parser.optionalWord("???").mapMap(_ => Premise.Pending(statement))
@@ -49,9 +49,9 @@ object Premise {
       baseRef = ref.withoutInternalPath
       givenPremise = stepContext.premises.find(_.referencedLine == baseRef).getOrElse(throw new Exception(s"Could not find reference ${baseRef.serialize}"))
       inferences <- Inference.parser.tryOrNone.whileDefined
-      result = helper(inferences, givenPremise)
+      result = applyPremiseSimplifications(inferences, givenPremise)
       _ = if (result.statement != statement) throw new Exception(s"Given premise ${result.statement} did not match expected premise $statement")
-    } yield helper(inferences, givenPremise)
+    } yield result
     pendingParser orElse singleLinePremiseParser
   }
 
