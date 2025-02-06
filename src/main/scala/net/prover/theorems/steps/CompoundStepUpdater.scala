@@ -168,8 +168,8 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
         updateKnownStatement(knownStatement, stepContext, proofWithContext).map(RewritePremise.Known(_))
       case RewritePremise.ByInference(premises, extraction) =>
         for {
-          newPremises <- updateKnownStatements(premises, stepContext, proofWithContext)
-          newExtraction <- updateAppliedInferenceExtraction(extraction, stepContext.addSteps(newPremises.flatMap(_.derivation.toProofSteps)), proofWithContext)
+          newPremises <- updateKnownStatements(premises, stepContext.forChild(), proofWithContext)
+          newExtraction <- updateAppliedInferenceExtraction(extraction, stepContext.forChild().addSteps(newPremises.flatMap(_.derivation.toProofSteps)), proofWithContext)
         } yield RewritePremise.ByInference(newPremises, newExtraction)
     }
   }
