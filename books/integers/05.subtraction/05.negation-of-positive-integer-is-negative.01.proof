@@ -106,8 +106,10 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
           prove ∈ orderedPair negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ $$$0 <ℤ) (apply ⍳_ℤ 0ℕ, equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) 1.0.1.0.1.0 1.0.1.0.0
         }
       }
-      elided b34175d29d4eab981b8fa9105b52c815b5b0fd99d5ed22d76b278aef3204ba43 {
-        prove = negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $0 $$0 ~_ℤ b34175d29d4eab981b8fa9105b52c815b5b0fd99d5ed22d76b278aef3204ba43 () ($$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      rewrite {
+        byInference {
+          prove = negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair $0 $$0 ~_ℤ b34175d29d4eab981b8fa9105b52c815b5b0fd99d5ed22d76b278aef3204ba43 () ($$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        }
         prove ∈ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ <ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$0 equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ <ℤ) (negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ, equivalenceClass orderedPair $0 $$0 ~_ℤ) 1.0.1.1.0 1.0.1.0
       }
       elided 099e2609908d9688a62987a8fa7f613209d3ca6cfe5a832d431504424c0a5f0e {

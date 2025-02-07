@@ -1,5 +1,7 @@
-elided 4326d901a2c6d2454d7cdf30ecf5002d807b388b1459191199ddc8a35bcac5f5 {
-  prove = quadrupleReplacementSet a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) t5 replacementSet2 x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 4326d901a2c6d2454d7cdf30ecf5002d807b388b1459191199ddc8a35bcac5f5 () (product product t1 t2 product t3 t4, with ($0 $1 $2 $3) t5)
+rewrite {
+  byInference {
+    prove = quadrupleReplacementSet a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) t5 replacementSet2 x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 4326d901a2c6d2454d7cdf30ecf5002d807b388b1459191199ddc8a35bcac5f5 () (product product t1 t2 product t3 t4, with ($0 $1 $2 $3) t5)
+  }
   prove = t0 replacementSet2 x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (quadrupleReplacementSet a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) t5, replacementSet2 x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5) 0.0 p0
 }
 take s {

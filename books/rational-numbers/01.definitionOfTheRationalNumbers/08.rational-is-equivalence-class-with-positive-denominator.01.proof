@@ -1,5 +1,7 @@
-elided 5d19c8a1c5740fc4b77d5e6c266a207cbef6ae107b27d6893bb8c603fd5f287d {
-  prove = ℚ equivalenceQuotient product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ~_ℚ 5d19c8a1c5740fc4b77d5e6c266a207cbef6ae107b27d6893bb8c603fd5f287d () ()
+rewrite {
+  byInference {
+    prove = ℚ equivalenceQuotient product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ~_ℚ 5d19c8a1c5740fc4b77d5e6c266a207cbef6ae107b27d6893bb8c603fd5f287d () ()
+  }
   prove ∈ t0 equivalenceQuotient product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ~_ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ t0 $0) (ℚ, equivalenceQuotient product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ~_ℚ) 0.0 p0
 }
 inferenceWithPremiseDerivations {
@@ -12,8 +14,10 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
     prove ⊕ ∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ ∈ orderedPair second $0 apply ⍳_ℤ 0ℕ <ℤ 6dbb59ec78a53a900eb46c21483eaf006f56c24a7438eed689724b161d9ce809 () (second $0) 2.0.0
   }
   assume ∈ orderedPair apply ⍳_ℤ 0ℕ second $0 <ℤ {
-    elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-      prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+    rewrite {
+      byInference {
+        prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      }
       prove = t0 equivalenceClass orderedPair first $0 second $0 ~_ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 equivalenceClass $$0 ~_ℚ) ($0, orderedPair first $0 second $0) 2.1.0.0 2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     }
     elided 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 {
@@ -127,8 +131,10 @@ let b ∧ ∈ $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ = t0 equivale
       }
     }
     prove = apply ×ℤ orderedPair first $0 negatedZ second $0 apply ×ℤ orderedPair second $0 negatedZ first $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair first $0 negatedZ second $0, negatedZ apply ×ℤ orderedPair second $0 first $0, apply ×ℤ orderedPair second $0 negatedZ first $0) 2.2.4 2.2.5
-    elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-      prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+    rewrite {
+      byInference {
+        prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      }
       prove = t0 equivalenceClass orderedPair first $0 second $0 ~_ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 equivalenceClass $$0 ~_ℚ) ($0, orderedPair first $0 second $0) 2.2.7.0 2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     }
     elided 522b246576a6bb2e76c7d3917e4e9c66e78d974362fb77197832983b366e44c8 {

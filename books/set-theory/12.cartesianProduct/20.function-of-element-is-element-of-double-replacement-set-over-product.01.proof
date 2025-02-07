@@ -1,5 +1,7 @@
-elided be269a4b0cd317daa897c5e8f7922f09b50f613296445fc2014c6474b2c28e24 {
-  prove = replacementSet2 a b product t1 t2 with ($0 $1) t3 replacementSet x product t1 t2 with (first $0 second $0) t3 be269a4b0cd317daa897c5e8f7922f09b50f613296445fc2014c6474b2c28e24 () (product t1 t2, with ($0 $1) t3)
+rewrite {
+  byInference {
+    prove = replacementSet2 a b product t1 t2 with ($0 $1) t3 replacementSet x product t1 t2 with (first $0 second $0) t3 be269a4b0cd317daa897c5e8f7922f09b50f613296445fc2014c6474b2c28e24 () (product t1 t2, with ($0 $1) t3)
+  }
   prove = t0 replacementSet x product t1 t2 with (first $0 second $0) t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (replacementSet2 a b product t1 t2 with ($0 $1) t3, replacementSet x product t1 t2 with (first $0 second $0) t3) 0.0 p0
 }
 prove = with (t4 t5) t3 with (t4 t5) t3 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (with (t4 t5) t3)

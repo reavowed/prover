@@ -38,12 +38,16 @@ elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
   }
 }
 elided b9d58423774e4a0aef310597d6a0e5886341830a3a2ebe49b8bdf308447be856 {
-  elided b9d58423774e4a0aef310597d6a0e5886341830a3a2ebe49b8bdf308447be856 {
-    prove = codomain ⍳_ℤ ℤ^≥0 b9d58423774e4a0aef310597d6a0e5886341830a3a2ebe49b8bdf308447be856 () ()
+  rewrite {
+    byInference {
+      prove = codomain ⍳_ℤ ℤ^≥0 b9d58423774e4a0aef310597d6a0e5886341830a3a2ebe49b8bdf308447be856 () ()
+    }
     prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ codomain ⍳_ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ $0 bijectiveFunction ⍳_ℤ ℕ codomain ⍳_ℤ) (codomain ⍳_ℤ, ℤ^≥0) 2.0.0 1
   }
-  elided b9d58423774e4a0aef310597d6a0e5886341830a3a2ebe49b8bdf308447be856 {
-    prove = codomain ⍳_ℤ ℤ^≥0 b9d58423774e4a0aef310597d6a0e5886341830a3a2ebe49b8bdf308447be856 () ()
+  rewrite {
+    byInference {
+      prove = codomain ⍳_ℤ ℤ^≥0 b9d58423774e4a0aef310597d6a0e5886341830a3a2ebe49b8bdf308447be856 () ()
+    }
     prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ $0) (codomain ⍳_ℤ, ℤ^≥0) 2.1.0 2.0
   }
 }

@@ -14,12 +14,16 @@ subproof (Conditions are equivalent) {
                   }
                 }
                 elided (Rewritten) {
-                  elided 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f {
-                    prove = first orderedPair $$0 $0 $$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () ($$0, $0)
+                  rewrite {
+                    byInference {
+                      prove = first orderedPair $$0 $0 $$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () ($$0, $0)
+                    }
                     prove = apply $$$0 orderedPair $$0 $0 with ($$0 second orderedPair $$0 $0) t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply $$$0 orderedPair $$0 $0 with ($$$$0 second orderedPair $$0 $0) t3) (first orderedPair $$0 $0, $$0) 0.0.0.0.0.0.0.0.1.0.0 0.0.0.0.0.0.0.0.0
                   }
-                  elided d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b {
-                    prove = second orderedPair $$0 $0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () ($$0, $0)
+                  rewrite {
+                    byInference {
+                      prove = second orderedPair $$0 $0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () ($$0, $0)
+                    }
                     prove = apply $$$0 orderedPair $$0 $0 with ($$0 $0) t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply $$$0 orderedPair $$0 $0 with ($$0 $$$$0) t3) (second orderedPair $$0 $0, $0) 0.0.0.0.0.0.0.0.1.1.0 0.0.0.0.0.0.0.0.1.0
                   }
                 }

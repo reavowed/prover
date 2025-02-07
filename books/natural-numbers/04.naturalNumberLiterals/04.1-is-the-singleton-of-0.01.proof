@@ -1,8 +1,10 @@
 prove = 1ℕ successor 0ℕ 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b () ()
 prove = successor 0ℕ ∪ 0ℕ singleton 0ℕ dec42ee681a0e7646e6b484e545639882290b9e728e0ee4b71ecc4f80cfe3aff () (0ℕ)
 prove = 1ℕ ∪ 0ℕ singleton 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (1ℕ, successor 0ℕ, ∪ 0ℕ singleton 0ℕ) 0 1
-elided 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 {
-  prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
+rewrite {
+  byInference {
+    prove = 0ℕ ∅ 606fb44fa74019a62b70eeee104c78edf0c97a8b6665ae4b21ea5441a4aa07a4 () ()
+  }
   prove = 1ℕ ∪ ∅ singleton 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= 1ℕ ∪ $0 singleton 0ℕ) (0ℕ, ∅) 3.0 2
 }
 prove = ∪ ∅ singleton 0ℕ singleton 0ℕ b60aef05df40560ef12c40893ab1e73fad69743f6925e8db01195f179e78fd61 () (singleton 0ℕ)

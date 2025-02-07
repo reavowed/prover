@@ -2,8 +2,10 @@ inferenceWithPremiseDerivations {
   prove ∈ equivalenceClass orderedPair t0 t1 ~_ℤ ℤ 2828eb31e21168a6591aab7944684f81081c3903544879d9877bb3aec1a48047 () (t0, t1) p0 p1
   prove ∃! b ∧ ∈ $0 ℤ ∧ = apply +ℤ orderedPair equivalenceClass orderedPair t0 t1 ~_ℤ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $0 equivalenceClass orderedPair t0 t1 ~_ℤ apply ⍳_ℤ 0ℕ c186607b0c66bf2f22efac5abf07ea607364c75eb6041e672fa04101b8437b27 () (equivalenceClass orderedPair t0 t1 ~_ℤ) 0.0
 }
-elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-  prove = apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair t1 t0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () (t0, t1) p0 p1
+rewrite {
+  byInference {
+    prove = apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair t1 t0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () (t0, t1) p0 p1
+  }
   prove = apply +ℕ orderedPair apply +ℕ orderedPair t0 t1 0ℕ apply +ℕ orderedPair apply +ℕ orderedPair t1 t0 0ℕ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply +ℕ orderedPair t0 t1, apply +ℕ orderedPair t1 t0, apply +ℕ orderedPair $0 0ℕ) 1.0
 }
 prove = apply +ℤ orderedPair equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceClass orderedPair t1 t0 ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair t1 t0 ~_ℤ 4f36ab93fe8b10412b906287d575f992ab33a5551274262365d4437fa48fc916 () (t0, t1, t1, t0) p0 p1 p1 p0

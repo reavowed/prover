@@ -11,8 +11,10 @@ let a' ∃ b = t0 orderedPair $$0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70b
       prove ∃ a = t0 orderedPair $0 second t0 c14edf76b6364ae3dc2af1590340e017789f9fc579e6c9a042bb21ac7bbd68f7 () (t0) p0
       prove = $0 second t0 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∃ a = t0 orderedPair $0 $$$$0) ($0, second t0) 0.0.2.0 0.0.0 0.0.2.1
     }
-    elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-      prove = t0 orderedPair $$0 second t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 orderedPair $$0 $$$0) ($0, second t0) 0.0.2 0.0a
+    rewrite {
+      byInference {
+        prove = t0 orderedPair $$0 second t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 orderedPair $$0 $$$0) ($0, second t0) 0.0.2 0.0a
+      }
       prove = t0 orderedPair first t0 second t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 orderedPair $$$0 second t0) ($$0, first t0) 0.0.1 0.0.3.0
     }
   }

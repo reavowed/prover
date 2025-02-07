@@ -1,10 +1,14 @@
 elided 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 {
-  elided 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 {
-    prove = apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t0 t2 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 () (t2, t0) p2 p0
+  rewrite {
+    byInference {
+      prove = apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t0 t2 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 () (t2, t0) p2 p0
+    }
     prove ↔ = apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t2 t1 = apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t2 t1 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (= $0 apply ×ℕ orderedPair t2 t1) (apply ×ℕ orderedPair t2 t0, apply ×ℕ orderedPair t0 t2) 0.0.0
   }
-  elided 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 {
-    prove = apply ×ℕ orderedPair t2 t1 apply ×ℕ orderedPair t1 t2 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 () (t2, t1) p2 p1
+  rewrite {
+    byInference {
+      prove = apply ×ℕ orderedPair t2 t1 apply ×ℕ orderedPair t1 t2 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 () (t2, t1) p2 p1
+    }
     prove ↔ = apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t2 t1 = apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (= apply ×ℕ orderedPair t0 t2 $0) (apply ×ℕ orderedPair t2 t1, apply ×ℕ orderedPair t1 t2) 0.1.0
   }
   prove ↔ = apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t2 t1 = apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (= apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t2 t1, = apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t2 t1, = apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2) () 0.0 0.1

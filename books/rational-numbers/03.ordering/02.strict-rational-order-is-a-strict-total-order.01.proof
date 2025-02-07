@@ -14,8 +14,10 @@ subproof (Asymmetric) {
                 prove ∃ b_1 ∧ ∈ $0 ℤ ∃ b_2 ∧ ∈ $0 ℤ^+ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 9072e0dad0fa03b50897133096ad4fbb9c8ef21ad962d3bbbdb26f84b47972e8 () ($$$0) 1.0.0.0.0a
                 let b_1 ∧ ∈ $0 ℤ ∃ b_2 ∧ ∈ $0 ℤ^+ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$0 ℤ ∃ b_2 ∧ ∈ $0 ℤ^+ = $$$$0 equivalenceClass orderedPair $$$$$$0 $0 ~_ℚ, ¬ ∈ orderedPair $$$0 $$$$0 <ℚ) () 1.0.0.0.0.0.1.0.0 {
                   let b_2 ∧ ∈ $0 ℤ^+ = $$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$0 ℤ^+ = $$$$0 equivalenceClass orderedPair $0 $$$$$$0 ~_ℚ, ¬ ∈ orderedPair $$$$0 $$$$$0 <ℚ) () 1.0.0.0.0.0.1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
-                    elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                      prove ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$0 <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$0 $$$$$0 <ℚ) ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 1.0.0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 1.0.0.0.0.0a
+                    rewrite {
+                      byInference {
+                        prove ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$0 <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$0 $$$$$0 <ℚ) ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 1.0.0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 1.0.0.0.0.0a
+                      }
                       prove ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$$0 <ℚ) ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ) 1.0.0.0.0.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 1.0.0.0.0.0.1.0.1.0.0.0
                     }
                     inferenceExtraction {
@@ -148,12 +150,16 @@ subproof (Transitive) {
                         prove ∃ c_1 ∧ ∈ $0 ℤ ∃ c_2 ∧ ∈ $0 ℤ^+ = $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 9072e0dad0fa03b50897133096ad4fbb9c8ef21ad962d3bbbdb26f84b47972e8 () ($$$$$0) 2.0.0.0.0.0.0a
                         let c_1 ∧ ∈ $0 ℤ ∃ c_2 ∧ ∈ $0 ℤ^+ = $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$$0 ℤ ∃ c_2 ∧ ∈ $0 ℤ^+ = $$$$$$0 equivalenceClass orderedPair $$$$$$$$$0 $0 ~_ℚ, ∈ orderedPair $$$$$$$0 $$$$$0 <ℚ) () 2.0.0.0.0.0.0.0.1.0.1.0.0 {
                           let c_2 ∧ ∈ $0 ℤ^+ = $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$$$$$$$0 ℤ^+ = $$$$$$0 equivalenceClass orderedPair $0 $$$$$$$$$0 ~_ℚ, ∈ orderedPair $$$$$$$$0 $$$$$$0 <ℚ) () 2.0.0.0.0.0.0.0.1.0.1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
-                            elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                              prove ∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ $$$$$$$$0 <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$$$$0 $$$$$$$$0 <ℚ) ($$$$$$$$$0, equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ) 2.0.0.0.0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.0.0.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                            rewrite {
+                              byInference {
+                                prove ∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ $$$$$$$$0 <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$$$$0 $$$$$$$$0 <ℚ) ($$$$$$$$$0, equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ) 2.0.0.0.0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.0.0.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                              }
                               prove ∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ $$$$$$$$$$0 <ℚ) ($$$$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 2.0.0.0.0.0.0.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.0.0.0.0.0.0.0.1.0.1.0.1.0.0.0
                             }
-                            elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                              prove ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$$0 <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$$$$0 $$$$$$$0 <ℚ) ($$$$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 2.0.0.0.0.0.0.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.0.0.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                            rewrite {
+                              byInference {
+                                prove ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$$0 <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$$$$0 $$$$$$$0 <ℚ) ($$$$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 2.0.0.0.0.0.0.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.0.0.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                              }
                               prove ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$$$$$0 <ℚ) ($$$$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ) 2.0.0.0.0.0.0.0.1.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 2.0.0.0.0.0.0.0.1.0.1.0.1.0.1.0
                             }
                             inferenceExtraction {

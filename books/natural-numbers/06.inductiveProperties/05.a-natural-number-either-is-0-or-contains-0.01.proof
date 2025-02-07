@@ -4,8 +4,10 @@ take m {
   assume ∈ $0 ℕ {
     assume ∨ = $0 0ℕ ∈ 0ℕ $0 {
       assume = $0 0ℕ {
-        elided fe3e3ed1a695fe6d7d69ea9843ee5b5a2ad74543046fa92c170ced1188ee5964 {
-          prove ∈ $0 successor $0 fe3e3ed1a695fe6d7d69ea9843ee5b5a2ad74543046fa92c170ced1188ee5964 () ($0)
+        rewrite {
+          byInference {
+            prove ∈ $0 successor $0 fe3e3ed1a695fe6d7d69ea9843ee5b5a2ad74543046fa92c170ced1188ee5964 () ($0)
+          }
           prove ∈ 0ℕ successor $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$0 successor $0) ($0, 0ℕ) 2.0.0.0a 2.0.0.0.0.0
         }
       }

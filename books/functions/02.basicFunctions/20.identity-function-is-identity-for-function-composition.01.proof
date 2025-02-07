@@ -14,8 +14,10 @@ prove ∧ function compose t0 identityFunction t1 functionFrom compose t0 identi
 take a {
   assume ∈ $0 t1 {
     prove = apply compose t0 identityFunction t1 $0 apply t0 apply identityFunction t1 $0 dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc () (identityFunction t1, t1, t1, t0, t2, $0) 4 p0 6.0a
-    elided 12943fec453bd8b1d073280cbf411da07a378b1979e8355c5a48fe3c2fe11fd8 {
-      prove = apply identityFunction t1 $0 $0 12943fec453bd8b1d073280cbf411da07a378b1979e8355c5a48fe3c2fe11fd8 () ($0, t1) 6.0a
+    rewrite {
+      byInference {
+        prove = apply identityFunction t1 $0 $0 12943fec453bd8b1d073280cbf411da07a378b1979e8355c5a48fe3c2fe11fd8 () ($0, t1) 6.0a
+      }
       prove = apply t0 apply identityFunction t1 $0 apply t0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply identityFunction t1 $0, $0, apply t0 $$0) 6.0.1.0
     }
     prove = apply compose t0 identityFunction t1 $0 apply t0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply compose t0 identityFunction t1 $0, apply t0 apply identityFunction t1 $0, apply t0 $0) 6.0.0 6.0.1

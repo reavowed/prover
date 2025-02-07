@@ -98,8 +98,10 @@ subproof (Uniqueness) {
             }
           }
           assume = $0 negatedZ t0 {
-            elided 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b {
-              prove = t0 negatedZ negatedZ t0 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b () (t0) p0
+            rewrite {
+              byInference {
+                prove = t0 negatedZ negatedZ t0 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b () (t0) p0
+              }
               prove = $$0 negatedZ negatedZ t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 $$$0) (t0, negatedZ negatedZ t0) 1.0.0.0.1.1.0.0 1.0.0.0.1a
             }
             inferenceWithPremiseDerivations {

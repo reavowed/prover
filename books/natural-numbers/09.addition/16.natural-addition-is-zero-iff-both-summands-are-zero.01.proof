@@ -27,8 +27,10 @@ take x {
   }
 }
 assume = apply +ℕ orderedPair t0 t1 0ℕ {
-  elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
-    prove = apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair t1 t0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () (t0, t1) p0 p1
+  rewrite {
+    byInference {
+      prove = apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair t1 t0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () (t0, t1) p0 p1
+    }
     prove = apply +ℕ orderedPair t1 t0 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $0 0ℕ) (apply +ℕ orderedPair t0 t1, apply +ℕ orderedPair t1 t0) 1.0.0 1a
   }
   existingStatementExtraction {

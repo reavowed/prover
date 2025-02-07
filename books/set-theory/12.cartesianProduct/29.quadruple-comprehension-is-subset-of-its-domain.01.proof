@@ -1,5 +1,7 @@
-elided d33651137768d3c411b5cf291cdd305870237f09afa6e43997fca4e350cfe42d {
-  prove = quadrupleComprehension a b c d t1 with ($0 $1 $2 $3) s0 productComprehension x y t1 with (first $0 second $0 first $1 second $1) s0 d33651137768d3c411b5cf291cdd305870237f09afa6e43997fca4e350cfe42d (with ($0 $1 $2 $3) s0) (t1)
+rewrite {
+  byInference {
+    prove = quadrupleComprehension a b c d t1 with ($0 $1 $2 $3) s0 productComprehension x y t1 with (first $0 second $0 first $1 second $1) s0 d33651137768d3c411b5cf291cdd305870237f09afa6e43997fca4e350cfe42d (with ($0 $1 $2 $3) s0) (t1)
+  }
   prove = t0 productComprehension x y t1 with (first $0 second $0 first $1 second $1) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (quadrupleComprehension a b c d t1 with ($0 $1 $2 $3) s0, productComprehension x y t1 with (first $0 second $0 first $1 second $1) s0) 0.0 p0
 }
 prove ⊆ t0 t1 81b5dbe32279dbd5d93496d0e9d0489e46443ce8779f383a18c2222e389730ce (with (first $0 second $0 first $1 second $1) s0) (t0, t1) 0

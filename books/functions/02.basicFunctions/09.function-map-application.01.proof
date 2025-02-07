@@ -1,5 +1,7 @@
-elided 5b35fbcf3a704bca18fa74ce4e6954a98aea2d5ddfb13b2b890ed2ab29a7cdcd {
-  prove = functionMap a t1 with ($0) t2 replacementSet a t1 orderedPair $0 with ($0) t2 5b35fbcf3a704bca18fa74ce4e6954a98aea2d5ddfb13b2b890ed2ab29a7cdcd () (t1, with ($0) t2)
+rewrite {
+  byInference {
+    prove = functionMap a t1 with ($0) t2 replacementSet a t1 orderedPair $0 with ($0) t2 5b35fbcf3a704bca18fa74ce4e6954a98aea2d5ddfb13b2b890ed2ab29a7cdcd () (t1, with ($0) t2)
+  }
   prove = t0 replacementSet a t1 orderedPair $0 with ($0) t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (functionMap a t1 with ($0) t2, replacementSet a t1 orderedPair $0 with ($0) t2) 0.0 p0
 }
 let B = $0 replacementSet x t1 with ($0) t2 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∀ a → ∈ $0 t1 = apply t0 $0 with ($0) t2) (replacementSet x t1 with ($0) t2) {

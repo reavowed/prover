@@ -192,12 +192,16 @@ elided df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 {
   prove ↔ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ ∧ ∈ orderedPair t0 t1 <ℕ ¬ = t2 0ℕ df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ, ∧ ∈ orderedPair t0 t1 <ℕ ¬ = t2 0ℕ) () 1 2.0
 }
 elided 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 {
-  elided 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 {
-    prove = apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t0 t2 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 () (t2, t0) p2 p0
+  rewrite {
+    byInference {
+      prove = apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t0 t2 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 () (t2, t0) p2 p0
+    }
     prove ↔ ∈ orderedPair apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t2 t1 <ℕ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t2 t1 <ℕ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $0 apply ×ℕ orderedPair t2 t1 <ℕ) (apply ×ℕ orderedPair t2 t0, apply ×ℕ orderedPair t0 t2) 3.0.0
   }
-  elided 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 {
-    prove = apply ×ℕ orderedPair t2 t1 apply ×ℕ orderedPair t1 t2 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 () (t2, t1) p2 p1
+  rewrite {
+    byInference {
+      prove = apply ×ℕ orderedPair t2 t1 apply ×ℕ orderedPair t1 t2 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 () (t2, t1) p2 p1
+    }
     prove ↔ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t2 t1 <ℕ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair apply ×ℕ orderedPair t0 t2 $0 <ℕ) (apply ×ℕ orderedPair t2 t1, apply ×ℕ orderedPair t1 t2) 3.1.0
   }
   prove ↔ ∈ orderedPair apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t2 t1 <ℕ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t2 t1 <ℕ, ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t2 t1 <ℕ, ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ) () 3.0 3.1

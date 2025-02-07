@@ -1,5 +1,7 @@
-elided 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b {
-  prove = t0 negatedZ negatedZ t0 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b () (t0) p0
+rewrite {
+  byInference {
+    prove = t0 negatedZ negatedZ t0 4c0c83de93a4ecf693e7acad6ad0f2cddf84c138360598ceac7bdb26d012506b () (t0) p0
+  }
   prove ↔ ∈ orderedPair t0 apply ⍳_ℤ 0ℕ <ℤ ∈ orderedPair negatedZ negatedZ t0 apply ⍳_ℤ 0ℕ <ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $0 apply ⍳_ℤ 0ℕ <ℤ) (t0, negatedZ negatedZ t0) 0.0
 }
 elided 553d6da4ccf2e8074c9c7b8f787b6b3ccba8f00f68ed15ebfa9c976c060c8b41 {

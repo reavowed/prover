@@ -1,5 +1,7 @@
-elided b31db7756d9bd655dacd813b36cf1a5a943443633176c44fd79177600ad50b04 {
-  prove = functionMap4 a b c d t1 t2 t3 t4 with ($0 $1 $2 $3) t5 functionMap2 x y product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 b31db7756d9bd655dacd813b36cf1a5a943443633176c44fd79177600ad50b04 () (t1, t2, t3, t4, with ($0 $1 $2 $3) t5)
+rewrite {
+  byInference {
+    prove = functionMap4 a b c d t1 t2 t3 t4 with ($0 $1 $2 $3) t5 functionMap2 x y product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 b31db7756d9bd655dacd813b36cf1a5a943443633176c44fd79177600ad50b04 () (t1, t2, t3, t4, with ($0 $1 $2 $3) t5)
+  }
   prove = t0 functionMap2 x y product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (functionMap4 a b c d t1 t2 t3 t4 with ($0 $1 $2 $3) t5, functionMap2 x y product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5) 0.0 p0
 }
 take x {

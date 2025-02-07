@@ -1,5 +1,7 @@
-elided b31db7756d9bd655dacd813b36cf1a5a943443633176c44fd79177600ad50b04 {
-  prove = functionMap4 a b c d t1 t2 t3 t4 with ($0 $1 $2 $3) t5 functionMap2 x y product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 b31db7756d9bd655dacd813b36cf1a5a943443633176c44fd79177600ad50b04 () (t1, t2, t3, t4, with ($0 $1 $2 $3) t5)
+rewrite {
+  byInference {
+    prove = functionMap4 a b c d t1 t2 t3 t4 with ($0 $1 $2 $3) t5 functionMap2 x y product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 b31db7756d9bd655dacd813b36cf1a5a943443633176c44fd79177600ad50b04 () (t1, t2, t3, t4, with ($0 $1 $2 $3) t5)
+  }
   prove = t0 functionMap2 x y product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (functionMap4 a b c d t1 t2 t3 t4 with ($0 $1 $2 $3) t5, functionMap2 x y product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) t5) 0.0 p0
 }
 prove ∀ x → ∈ $0 product t1 t2 ∀ y → ∈ $0 product t3 t4 = apply t0 orderedPair $$0 $0 with (first $$0 second $$0 first $0 second $0) t5 586963320ed6538e64ac71a84d942a392e9b90d386a164ad1be78e9111f6498e () (t0, product t1 t2, product t3 t4, with (first $0 second $0 first $1 second $1) t5) 0
@@ -15,12 +17,16 @@ elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
             prove = apply t0 orderedPair $$0 $0 with (first $$0 second $$0 first $0 second $0) t5 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 product t3 t4, = apply t0 orderedPair $$0 $0 with (first $$0 second $$0 first $0 second $0) t5) () 2.0.0.0.0.0.2 2.0.0.0.0a
           }
           elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-            elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-              prove = $$0 orderedPair first $$0 second $$0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($$0, t1, t2) 2.0.0a
+            rewrite {
+              byInference {
+                prove = $$0 orderedPair first $$0 second $$0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($$0, t1, t2) 2.0.0a
+              }
               prove = apply t0 orderedPair orderedPair first $$0 second $$0 $0 with (first $$0 second $$0 first $0 second $0) t5 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply t0 orderedPair $$$0 $0 with (first $$0 second $$0 first $0 second $0) t5) ($$0, orderedPair first $$0 second $$0) 2.0.0.0.0.1.0.0 2.0.0.0.0.0
             }
-            elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-              prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t3, t4) 2.0.0.0.0a
+            rewrite {
+              byInference {
+                prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t3, t4) 2.0.0.0.0a
+              }
               prove = apply t0 orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 with (first $$0 second $$0 first $0 second $0) t5 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply t0 orderedPair orderedPair first $$0 second $$0 $$$0 with (first $$0 second $$0 first $0 second $0) t5) ($0, orderedPair first $0 second $0) 2.0.0.0.0.1.1.0 2.0.0.0.0.1.0
             }
           }

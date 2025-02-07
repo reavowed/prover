@@ -1,5 +1,7 @@
-elided 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b {
-  prove = 1ℕ successor 0ℕ 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b () ()
+rewrite {
+  byInference {
+    prove = 1ℕ successor 0ℕ 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b () ()
+  }
   prove = apply ×ℕ orderedPair t0 1ℕ apply ×ℕ orderedPair t0 successor 0ℕ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (1ℕ, successor 0ℕ, apply ×ℕ orderedPair t0 $0) 0.0
 }
 inferenceWithPremiseDerivations {

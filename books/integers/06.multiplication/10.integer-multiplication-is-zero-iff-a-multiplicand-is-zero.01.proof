@@ -21,8 +21,10 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ $$$$$0) (apply ⍳_ℤ 0ℕ, equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) 2.0.0.0.0.0.0.2.0 2.0.0.0.0.0.0.1
               }
             }
-            elided 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 {
-              prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ~_ℤ 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 () ($$$$0, $$$0, $$0, $0) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+            rewrite {
+              byInference {
+                prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ~_ℤ 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 () ($$$$0, $$$0, $$0, $0) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+              }
               prove = equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ~_ℤ equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$$$0 equivalenceClass orderedPair 0ℕ 0ℕ ~_ℤ) (apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ, equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ~_ℤ) 2.0.0.0.0.0.1.0 2.0.0.0.0.0.0
             }
             elided 60fbf61f630f3ef7bff09c889a5e86eb0db4b9eaf6f36b137c93fde53414eb42 {
@@ -98,12 +100,16 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                 }
                 elided c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 {
-                  elided c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 {
-                    prove = apply ×ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 $$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$0 apply ×ℕ orderedPair $0 $$0 c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 () ($$$$$0, $0, $$0) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.5.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  rewrite {
+                    byInference {
+                      prove = apply ×ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 $$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$0 apply ×ℕ orderedPair $0 $$0 c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 () ($$$$$0, $0, $$0) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.5.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                    }
                     prove = apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$0 apply ×ℕ orderedPair $0 $$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$0 apply ×ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 $$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$$0 $$$$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$0 apply ×ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 $$$0) (apply ×ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 $$0, apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$0 apply ×ℕ orderedPair $0 $$0) 2.0.0.0.0.0.5.1.1.0.0 2.0.0.0.0.0.5.1.0
                   }
-                  elided c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 {
-                    prove = apply ×ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$$0 apply ×ℕ orderedPair $0 $$$0 c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 () ($$$$$0, $0, $$$0) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.5.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  rewrite {
+                    byInference {
+                      prove = apply ×ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$$0 apply ×ℕ orderedPair $0 $$$0 c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 () ($$$$$0, $0, $$$0) 2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.5.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                    }
                     prove = apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$0 apply ×ℕ orderedPair $0 $$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$$0 apply ×ℕ orderedPair $0 $$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$0 apply ×ℕ orderedPair $0 $$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$0 $$$$$$0) (apply ×ℕ orderedPair apply +ℕ orderedPair $$$$$0 $0 $$$0, apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 $$$0 apply ×ℕ orderedPair $0 $$$0) 2.0.0.0.0.0.5.1.1.1.0 2.0.0.0.0.0.5.1.1.0
                   }
                 }
@@ -212,12 +218,16 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                 }
                 elided c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 {
-                  elided c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 {
-                    prove = apply ×ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$$0 apply ×ℕ orderedPair $0 $$$0 c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 () ($$$$0, $0, $$$0) 2.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.7.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  rewrite {
+                    byInference {
+                      prove = apply ×ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$$0 apply ×ℕ orderedPair $0 $$$0 c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 () ($$$$0, $0, $$$0) 2.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.7.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                    }
                     prove = apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$$0 apply ×ℕ orderedPair $0 $$$0 apply ×ℕ orderedPair $$$$0 $$0 apply +ℕ orderedPair apply ×ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 $$0 apply ×ℕ orderedPair $$$$0 $$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply +ℕ orderedPair $$$$$$0 apply ×ℕ orderedPair $$$$0 $$0 apply +ℕ orderedPair apply ×ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 $$0 apply ×ℕ orderedPair $$$$0 $$$0) (apply ×ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 $$$0, apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$$0 apply ×ℕ orderedPair $0 $$$0) 2.0.0.0.0.0.7.1.1.0.0 2.0.0.0.0.0.7.1.0
                   }
-                  elided c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 {
-                    prove = apply ×ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 $$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $0 $$0 c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 () ($$$$0, $0, $$0) 2.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.7.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  rewrite {
+                    byInference {
+                      prove = apply ×ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 $$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $0 $$0 c277a03d9e29ac48e606244b96b97cd2c745fd7ee869a84420250dddf4227988 () ($$$$0, $0, $$0) 2.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0.0.0.7.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                    }
                     prove = apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$$0 apply ×ℕ orderedPair $0 $$$0 apply ×ℕ orderedPair $$$$0 $$0 apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $0 $$0 apply ×ℕ orderedPair $$$$0 $$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply +ℕ orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$$0 apply ×ℕ orderedPair $0 $$$0 apply ×ℕ orderedPair $$$$0 $$0 apply +ℕ orderedPair $$$$$$0 apply ×ℕ orderedPair $$$$0 $$$0) (apply ×ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 $$0, apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $0 $$0) 2.0.0.0.0.0.7.1.1.1.0 2.0.0.0.0.0.7.1.1.0
                   }
                 }

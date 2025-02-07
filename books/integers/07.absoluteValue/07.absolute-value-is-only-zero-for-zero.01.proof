@@ -37,8 +37,10 @@ assume = absZ t0 apply ⍳_ℤ 0ℕ {
   assume = absZ t0 negatedZ t0 {
     prove = negatedZ t0 apply ⍳_ℤ 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $0 apply ⍳_ℤ 0ℕ) (absZ t0, negatedZ t0) 2.1a 2a
     elided 780bb169aa5fbcf54489be01508749717565853bd1740e0e7c3cdedd0ea51f2a {
-      elided 780bb169aa5fbcf54489be01508749717565853bd1740e0e7c3cdedd0ea51f2a {
-        prove = apply ⍳_ℤ 0ℕ negatedZ apply ⍳_ℤ 0ℕ 780bb169aa5fbcf54489be01508749717565853bd1740e0e7c3cdedd0ea51f2a () ()
+      rewrite {
+        byInference {
+          prove = apply ⍳_ℤ 0ℕ negatedZ apply ⍳_ℤ 0ℕ 780bb169aa5fbcf54489be01508749717565853bd1740e0e7c3cdedd0ea51f2a () ()
+        }
         prove = negatedZ t0 negatedZ apply ⍳_ℤ 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= negatedZ t0 $0) (apply ⍳_ℤ 0ℕ, negatedZ apply ⍳_ℤ 0ℕ) 2.1.1.0.0 2.1.0
       }
       elided 4f2af95be844c1a6ad26708b2e1bec107b52964c6fbf31ef9d0d94f7097ec1c7 {

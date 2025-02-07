@@ -1,5 +1,7 @@
-elided 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b {
-  prove = 1ℕ successor 0ℕ 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b () ()
+rewrite {
+  byInference {
+    prove = 1ℕ successor 0ℕ 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b () ()
+  }
   prove with (successor 0ℕ) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($0) s0) (1ℕ, successor 0ℕ) 0.0 p0
 }
 take n {

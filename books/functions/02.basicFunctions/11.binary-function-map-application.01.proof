@@ -1,5 +1,7 @@
-elided d2ed19bff982c7a86e3ea5401742137044aaefd69cb8b2fa4fc7e55e934fbfb1 {
-  prove = functionMap2 a b t1 t2 with ($0 $1) t3 functionMap x product t1 t2 with (first $0 second $0) t3 d2ed19bff982c7a86e3ea5401742137044aaefd69cb8b2fa4fc7e55e934fbfb1 () (t1, t2, with ($0 $1) t3)
+rewrite {
+  byInference {
+    prove = functionMap2 a b t1 t2 with ($0 $1) t3 functionMap x product t1 t2 with (first $0 second $0) t3 d2ed19bff982c7a86e3ea5401742137044aaefd69cb8b2fa4fc7e55e934fbfb1 () (t1, t2, with ($0 $1) t3)
+  }
   prove = t0 functionMap x product t1 t2 with (first $0 second $0) t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (functionMap2 a b t1 t2 with ($0 $1) t3, functionMap x product t1 t2 with (first $0 second $0) t3) 0.0 p0
 }
 prove ∀ x → ∈ $0 product t1 t2 = apply t0 $0 with (first $0 second $0) t3 0cff6341cec4474f7589885793b0708a1210f530f5c4f2db2700dbf9a2aeaa00 () (t0, product t1 t2, with (first $0 second $0) t3) 0
@@ -10,8 +12,10 @@ elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
         prove → ∈ $0 product t1 t2 = apply t0 $0 with (first $0 second $0) t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 product t1 t2 = apply t0 $$0 with (first $$0 second $$0) t3) ($0) 1
         prove = apply t0 $0 with (first $0 second $0) t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 product t1 t2, = apply t0 $0 with (first $0 second $0) t3) () 2.0.0.0.0 2.0.0a
       }
-      elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-        prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t1, t2) 2.0.0a
+      rewrite {
+        byInference {
+          prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t1, t2) 2.0.0a
+        }
         prove = apply t0 orderedPair first $0 second $0 with (first $0 second $0) t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply t0 $$0 with (first $0 second $0) t3) ($0, orderedPair first $0 second $0) 2.0.0.1.0 2.0.0.0
       }
     }

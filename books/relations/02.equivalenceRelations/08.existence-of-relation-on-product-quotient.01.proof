@@ -304,12 +304,16 @@ let X = $0 quadrupleComprehension c_1 d_1 c_2 d_2 product product t3 t4 product 
                             }
                             prove = $$$$$$$0 orderedPair equivalenceClass $$$$$$0 t0 equivalenceClass $$$$$0 t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$$$$$$0, orderedPair first $$$$$$$0 second $$$$$$$0, orderedPair equivalenceClass $$$$$$0 t0 equivalenceClass $$$$$0 t0) 0.0.2.0.0.0.0.0.3.1.1.0.1.0.2 0.0.2.0.0.0.0.0.3.1.1.0.1.0.3
                             elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-                              elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-                                prove = $$$$$$0 orderedPair first $$$$$$0 second $$$$$$0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($$$$$$0, t1, t2) 0.0.2.0.0.0.0.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                              rewrite {
+                                byInference {
+                                  prove = $$$$$$0 orderedPair first $$$$$$0 second $$$$$$0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($$$$$$0, t1, t2) 0.0.2.0.0.0.0.0.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                                }
                                 prove = orderedPair equivalenceClass $$$$$$0 t0 equivalenceClass $$$$$0 t0 orderedPair equivalenceClass orderedPair first $$$$$$0 second $$$$$$0 t0 equivalenceClass $$$$$0 t0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$$$$0, orderedPair first $$$$$$0 second $$$$$$0, orderedPair equivalenceClass $$$$$$$$$$$$0 t0 equivalenceClass $$$$$0 t0) 0.0.2.0.0.0.0.0.3.1.1.0.1.0.5.0.0
                               }
-                              elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-                                prove = $$$$$0 orderedPair first $$$$$0 second $$$$$0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($$$$$0, t1, t2) 0.0.2.0.0.0.0.0.3.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                              rewrite {
+                                byInference {
+                                  prove = $$$$$0 orderedPair first $$$$$0 second $$$$$0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($$$$$0, t1, t2) 0.0.2.0.0.0.0.0.3.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                                }
                                 prove = orderedPair equivalenceClass orderedPair first $$$$$$0 second $$$$$$0 t0 equivalenceClass $$$$$0 t0 orderedPair equivalenceClass orderedPair first $$$$$$0 second $$$$$$0 t0 equivalenceClass orderedPair first $$$$$0 second $$$$$0 t0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$$$0, orderedPair first $$$$$0 second $$$$$0, orderedPair equivalenceClass orderedPair first $$$$$$0 second $$$$$$0 t0 equivalenceClass $$$$$$$$$$$$0 t0) 0.0.2.0.0.0.0.0.3.1.1.0.1.0.5.1.0
                               }
                               prove = orderedPair equivalenceClass $$$$$$0 t0 equivalenceClass $$$$$0 t0 orderedPair equivalenceClass orderedPair first $$$$$$0 second $$$$$$0 t0 equivalenceClass orderedPair first $$$$$0 second $$$$$0 t0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (orderedPair equivalenceClass $$$$$$0 t0 equivalenceClass $$$$$0 t0, orderedPair equivalenceClass orderedPair first $$$$$$0 second $$$$$$0 t0 equivalenceClass $$$$$0 t0, orderedPair equivalenceClass orderedPair first $$$$$$0 second $$$$$$0 t0 equivalenceClass orderedPair first $$$$$0 second $$$$$0 t0) 0.0.2.0.0.0.0.0.3.1.1.0.1.0.5.0 0.0.2.0.0.0.0.0.3.1.1.0.1.0.5.1

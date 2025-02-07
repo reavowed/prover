@@ -306,8 +306,10 @@ subproof (Conditions are equivalent) {
         elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
           take x {
             assume ∈ $0 product t1 t2 {
-              elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-                prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t1, t2) 2.0.0.0.0.0.0a
+              rewrite {
+                byInference {
+                  prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t1, t2) 2.0.0.0.0.0.0a
+                }
                 prove ↔ ∀ y → ∈ $0 product t4 t5 = apply $$$0 orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t3 apply t6 orderedPair $$0 $0 ∀ y → ∈ $0 product t4 t5 = apply $$$0 orderedPair equivalenceClass orderedPair first $$0 second $$0 t0 equivalenceClass $0 t3 apply t6 orderedPair $$0 $0 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∀ y → ∈ $0 product t4 t5 = apply $$$0 orderedPair equivalenceClass $$$$0 t0 equivalenceClass $0 t3 apply t6 orderedPair $$0 $0) ($0, orderedPair first $0 second $0) 2.0.0.0.0.0.0.0.0
               }
             }
@@ -320,8 +322,10 @@ subproof (Conditions are equivalent) {
             assume ∈ $0 product t1 t2 {
               take y {
                 assume ∈ $0 product t4 t5 {
-                  elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-                    prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t4, t5) 2.0.0.0.1.0.0.0.0a
+                  rewrite {
+                    byInference {
+                      prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t4, t5) 2.0.0.0.1.0.0.0.0a
+                    }
                     prove ↔ = apply $$$0 orderedPair equivalenceClass orderedPair first $$0 second $$0 t0 equivalenceClass $0 t3 apply t6 orderedPair $$0 $0 = apply $$$0 orderedPair equivalenceClass orderedPair first $$0 second $$0 t0 equivalenceClass orderedPair first $0 second $0 t3 apply t6 orderedPair $$0 $0 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (= apply $$$0 orderedPair equivalenceClass orderedPair first $$0 second $$0 t0 equivalenceClass $$$$0 t3 apply t6 orderedPair $$0 $0) ($0, orderedPair first $0 second $0) 2.0.0.0.1.0.0.0.0.0.0
                   }
                 }
@@ -337,8 +341,10 @@ subproof (Conditions are equivalent) {
         elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
           take x {
             assume ∈ $0 product t1 t2 {
-              elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-                prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t1, t2) 2.0.0.0.3.0.0a
+              rewrite {
+                byInference {
+                  prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t1, t2) 2.0.0.0.3.0.0a
+                }
                 prove ↔ ∀ y → ∈ $0 product t4 t5 = apply $$$0 orderedPair equivalenceClass orderedPair first $$0 second $$0 t0 equivalenceClass orderedPair first $0 second $0 t3 apply t6 orderedPair $$0 $0 ∀ y → ∈ $0 product t4 t5 = apply $$$0 orderedPair equivalenceClass orderedPair first $$0 second $$0 t0 equivalenceClass orderedPair first $0 second $0 t3 apply t6 orderedPair orderedPair first $$0 second $$0 $0 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∀ y → ∈ $0 product t4 t5 = apply $$$0 orderedPair equivalenceClass orderedPair first $$0 second $$0 t0 equivalenceClass orderedPair first $0 second $0 t3 apply t6 orderedPair $$$$0 $0) ($0, orderedPair first $0 second $0) 2.0.0.0.3.0.0.0.0
               }
             }
@@ -352,8 +358,10 @@ subproof (Conditions are equivalent) {
             assume ∈ $0 product t1 t2 {
               take y {
                 assume ∈ $0 product t4 t5 {
-                  elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
-                    prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t4, t5) 2.0.0.0.5.0.0.0.0a
+                  rewrite {
+                    byInference {
+                      prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t4, t5) 2.0.0.0.5.0.0.0.0a
+                    }
                     prove ↔ = apply $$$0 orderedPair equivalenceClass orderedPair first $$0 second $$0 t0 equivalenceClass orderedPair first $0 second $0 t3 apply t6 orderedPair orderedPair first $$0 second $$0 $0 = apply $$$0 orderedPair equivalenceClass orderedPair first $$0 second $$0 t0 equivalenceClass orderedPair first $0 second $0 t3 apply t6 orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (= apply $$$0 orderedPair equivalenceClass orderedPair first $$0 second $$0 t0 equivalenceClass orderedPair first $0 second $0 t3 apply t6 orderedPair orderedPair first $$0 second $$0 $$$$0) ($0, orderedPair first $0 second $0) 2.0.0.0.5.0.0.0.0.0.0
                   }
                 }

@@ -20,8 +20,10 @@ let ~_ℤ = $0 comprehension x product product ℕ ℕ product ℕ ℕ = apply +
                       }
                       elided (Rewritten) {
                         elided (Rewritten) {
-                          elided 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f {
-                            prove = first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$$$0 $$$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () (orderedPair $$$$0 $$$0, orderedPair $$0 $0)
+                          rewrite {
+                            byInference {
+                              prove = first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$$$0 $$$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () (orderedPair $$$$0 $$$0, orderedPair $$0 $0)
+                            }
                             prove = first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first orderedPair $$$$0 $$$0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$$$0 $$$0, first $$$$$$0) 0.2.0.0.0.0.0.0.0.0.0.1.0.0.0
                           }
                           prove = first orderedPair $$$$0 $$$0 $$$$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () ($$$$0, $$$0)
@@ -29,8 +31,10 @@ let ~_ℤ = $0 comprehension x product product ℕ ℕ product ℕ ℕ = apply +
                           prove = apply +ℕ orderedPair $$$$0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 apply +ℕ orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply +ℕ orderedPair $$$$$$0 second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 apply +ℕ orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) (first first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $$$$0) 0.2.0.0.0.0.0.0.0.0.0.1.0.2 0.2.0.0.0.0.0.0.0.0.0.0
                         }
                         elided (Rewritten) {
-                          elided d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b {
-                            prove = second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () (orderedPair $$$$0 $$$0, orderedPair $$0 $0)
+                          rewrite {
+                            byInference {
+                              prove = second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () (orderedPair $$$$0 $$$0, orderedPair $$0 $0)
+                            }
                             prove = second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second orderedPair $$0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$0 $0, second $$$$$$0) 0.2.0.0.0.0.0.0.0.0.0.1.1.0.0
                           }
                           prove = second orderedPair $$0 $0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () ($$0, $0)
@@ -38,8 +42,10 @@ let ~_ℤ = $0 comprehension x product product ℕ ℕ product ℕ ℕ = apply +
                           prove = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply +ℕ orderedPair $$$$0 $$$$$$0 apply +ℕ orderedPair second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) (second second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $0) 0.2.0.0.0.0.0.0.0.0.0.1.1.2 0.2.0.0.0.0.0.0.0.0.0.1.0
                         }
                         elided (Rewritten) {
-                          elided 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f {
-                            prove = first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$$$0 $$$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () (orderedPair $$$$0 $$$0, orderedPair $$0 $0)
+                          rewrite {
+                            byInference {
+                              prove = first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$$$0 $$$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () (orderedPair $$$$0 $$$0, orderedPair $$0 $0)
+                            }
                             prove = second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 second orderedPair $$$$0 $$$0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$$$0 $$$0, second $$$$$$0) 0.2.0.0.0.0.0.0.0.0.0.1.2.0.0
                           }
                           prove = second orderedPair $$$$0 $$$0 $$$0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () ($$$$0, $$$0)
@@ -47,8 +53,10 @@ let ~_ℤ = $0 comprehension x product product ℕ ℕ product ℕ ℕ = apply +
                           prove = apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$$$$0 first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) (second first orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, $$$0) 0.2.0.0.0.0.0.0.0.0.0.1.2.2 0.2.0.0.0.0.0.0.0.0.0.1.1
                         }
                         elided (Rewritten) {
-                          elided d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b {
-                            prove = second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () (orderedPair $$$$0 $$$0, orderedPair $$0 $0)
+                          rewrite {
+                            byInference {
+                              prove = second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 orderedPair $$0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () (orderedPair $$$$0 $$$0, orderedPair $$0 $0)
+                            }
                             prove = first second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 first orderedPair $$0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (second orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0, orderedPair $$0 $0, first $$$$$$0) 0.2.0.0.0.0.0.0.0.0.0.1.3.0.0
                           }
                           prove = first orderedPair $$0 $0 $$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () ($$0, $0)
