@@ -24,9 +24,10 @@ trait SuggestExistingStatementsBase {
         premiseStatement <- Statement.parser.parseFromString(serializedPremiseStatement, "premise statement").recoverWithBadRequest
         premise <- stepWithContext.stepProvingContext.allPremises.find(_.statement == premiseStatement).orBadRequest(s"Could not find premise '$premiseStatement'")
         // First of all, initialise the substitutions with all the existing variables in the theorem
+        depth = stepWithContext.stepContext.externalDepth
         baseSubstitutions = Substitutions.Possible(
-          stepWithContext.stepContext.variableDefinitions.statements.mapWithIndex((variableDefinition, index) => index -> StatementVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap,
-          stepWithContext.stepContext.variableDefinitions.terms.mapWithIndex((variableDefinition, index) => index -> TermVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, 0)))).toMap)
+          stepWithContext.stepContext.variableDefinitions.statements.mapWithIndex((variableDefinition, index) => index -> StatementVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, depth)))).toMap,
+          stepWithContext.stepContext.variableDefinitions.terms.mapWithIndex((variableDefinition, index) => index -> TermVariable(index, (0 until variableDefinition.arity).map(FunctionParameter(_, depth)))).toMap)
         // Then add any premise-specific variables that might be missing
       } yield ExtractionCalculator.getPremiseExtractions(premise.statement).flatMap(getPossibleConclusionWithPremises(_, stepWithContext.step, baseSubstitutions))
     )
