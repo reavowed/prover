@@ -3,6 +3,7 @@ package net.prover.model.proof
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
+import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.proving.extraction
@@ -326,26 +327,34 @@ object Step {
     }
   }
 
-  case class ExistingStatementExtractionStep(extraction: AppliedExtraction) extends Step.PremiseDerivation {
+  case class ExistingStatementExtractionStep(
+    premises: Seq[KnownStatement],
+    extraction: AppliedExtraction
+  ) extends Step.PremiseDerivation {
     override def statement: Statement = extraction.statement
     override def length: Int = extraction.length
-    override def serializedLines: Seq[String] = extraction.serializedLines.indentInLabelledBracesIfPresent(`type`)
+    override def serializedLines: Seq[String] = {
+      (premises :+ extraction).flatMap(_.serializedLines).indentInLabelledBracesIfPresent(`type`)
+    }
   }
   object ExistingStatementExtractionStep {
     def ifNecessary(substeps: Seq[Step.AssertionStep]): Option[Step.PremiseDerivation] = {
-      ifNecessary(AppliedExtraction.fromSimpleExtraction(substeps))
+      ifNecessary(Nil, AppliedExtraction.fromSimpleExtraction(substeps))
     }
-    def ifNecessary(extraction: AppliedExtraction): Option[Step.PremiseDerivation] = {
+    def ifNecessary(premises: Seq[KnownStatement], extraction: AppliedExtraction): Option[Step.PremiseDerivation] = {
+      val nonemptyPremises = premises.filter(_.derivation.nonEmpty)
+      val hasPremiseSteps = nonemptyPremises.nonEmpty
       extraction.extractionSteps match {
-        case Nil => None
-        case Seq(step) => Some(step.toProofStep)
-        case _ => Some(ExistingStatementExtractionStep(extraction))
+        case Nil if !hasPremiseSteps => None
+        case Seq(step) if !hasPremiseSteps => Some(step.toProofStep)
+        case _ => Some(ExistingStatementExtractionStep(nonemptyPremises, extraction))
       }
     }
     def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[ExistingStatementExtractionStep] = {
-      for {
-        extraction <- AppliedExtraction.parser(stepContext.forChild(), implicitly).inBraces
-      } yield ExistingStatementExtractionStep(extraction)
+      (for {
+        premises <- KnownStatement.listParser(stepContext.forChild(), implicitly).map(_._1)
+        extraction <- AppliedExtraction.parser(stepContext.forChild().addSteps(premises.flatMap(_.toProofSteps)), implicitly)
+      } yield ExistingStatementExtractionStep(premises, extraction)).inBraces
     }
   }
 

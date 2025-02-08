@@ -7,11 +7,11 @@ import net.prover.model.TestDefinitions._
 import net.prover.proving.extraction.ExtractionDefinition
 import org.specs2.mutable.Specification
 
-class ProveCurrentTargetSpec extends Specification with BookServiceHelper with StepHelpers {
+class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHelper with StepHelpers {
   implicit val availableEntries = defaultAvailableEntries
   implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Nil)
 
-  "prove current target" should {
+  "prove current target by inference" should {
     "replace target with assertion step" in {
       implicit val service = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)

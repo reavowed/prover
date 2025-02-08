@@ -38,7 +38,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
       _ <- ExtractionCalculator.getPremiseExtractions(mainPremise)(stepWithContext.stepContext, stepWithContext.provingContext)
         .find(_.extractionDetails.allSteps.map(_.inference) == assertionSteps.map(_.inference))
       appliedExtractionSteps = ExtractionApplier.groupStepsByDefinition(assertionSteps)(stepWithContext.provingContext)
-    } yield Step.ExistingStatementExtractionStep(AppliedExtraction(appliedExtractionSteps, Nil))
+    } yield Step.ExistingStatementExtractionStep(Nil, AppliedExtraction(appliedExtractionSteps, Nil))
   }
 
   private def replaceWithRewrite(step: Step.ElidedStep, stepWithContext: StepWithContext): Option[Step.RewriteStep] = {

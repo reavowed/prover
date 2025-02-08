@@ -7,6 +7,7 @@ import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.Step.InferenceWithPremiseDerivationsStep
 import net.prover.model.proof._
 import net.prover.model.unwrapping.Unwrapper
+import net.prover.proving.derivation.SimpleDerivation
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 import net.prover.proving.structure.inferences.SpecificationInference
 import net.prover.proving.structure.statements.BinaryConnectiveStatement
@@ -321,7 +322,8 @@ object ExtractionApplier {
       } else {
         (extractionStep, premises)
       }
-      (premiseDerivation, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(wrappedPremises)
+      (knownStatements, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(wrappedPremises)
+      premiseDerivation = SimpleDerivation(knownStatements.flatMap(_.derivation.steps).distinct)
     } yield (InferenceWithPremiseDerivationsStep.ifNecessary(premiseDerivation.toProofSteps, wrappedStep), targetSteps)
   }
 
@@ -335,10 +337,9 @@ object ExtractionApplier {
   ): Try[(Statement, Option[Step], Seq[Step.TargetStep])] = {
     for {
       extraction <- ExtractionApplier.applyExtractionsForPremise(premise, premiseExtraction.extractionDefinition, substitutions, intendedPremises, intendedConclusion)
-      extractionStep = Step.ExistingStatementExtractionStep.ifNecessary(extraction.finalise)
-      (premiseDerivation, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(extraction.extractionPremises)
-      assertionWithExtractionStep = Step.ElidedStep.ifNecessary(premiseDerivation.toProofSteps ++ extractionStep.toSeq, "Extracted")
-    } yield (extraction.conclusion, assertionWithExtractionStep, targetSteps)
+      (knownStatements, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(extraction.extractionPremises)
+      extractionStep = Step.ExistingStatementExtractionStep.ifNecessary(knownStatements, extraction.finalise)
+    } yield (extraction.conclusion, extractionStep, targetSteps)
   }
 
   def groupStepsByDefinition(steps: Seq[Step.AssertionStep])(implicit provingContext: ProvingContext): Seq[AppliedExtractionStep] = {

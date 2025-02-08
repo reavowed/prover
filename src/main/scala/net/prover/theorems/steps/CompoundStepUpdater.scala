@@ -112,8 +112,12 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
   }
   def updateExistingStatementExtraction(step: Step.ExistingStatementExtractionStep, stepWithContext: StepWithContext): F[Step] = {
     for {
-      newExtraction <- updateAppliedExtraction(step.extraction, stepWithContext.stepContext.forChild(), stepWithContext.proofWithContext)
-    } yield Step.ExistingStatementExtractionStep(newExtraction)
+      newPremises <- updateKnownStatements(step.premises, stepWithContext.stepContext.forChild(), stepWithContext.proofWithContext)
+      newExtraction <- updateAppliedExtraction(
+        step.extraction,
+        stepWithContext.stepContext.forChild().addSteps(newPremises.flatMap(_.toProofSteps)),
+        stepWithContext.proofWithContext)
+    } yield Step.ExistingStatementExtractionStep(newPremises, newExtraction)
   }
   private def updateRewriteStep(step: Step.RewriteStep, stepWithContext: StepWithContext): F[Step] = {
     for {
@@ -169,7 +173,7 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
       case RewritePremise.ByInference(premises, extraction) =>
         for {
           newPremises <- updateKnownStatements(premises, stepContext.forChild(), proofWithContext)
-          newExtraction <- updateAppliedInferenceExtraction(extraction, stepContext.forChild().addSteps(newPremises.flatMap(_.derivation.toProofSteps)), proofWithContext)
+          newExtraction <- updateAppliedInferenceExtraction(extraction, stepContext.forChild().addSteps(newPremises.flatMap(_.toProofSteps)), proofWithContext)
         } yield RewritePremise.ByInference(newPremises, newExtraction)
     }
   }
@@ -178,7 +182,7 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
       knownStatements,
       stepContext,
       updateKnownStatement(_, _, proofWithContext),
-      (sc, ks) => sc.addSteps(ks.derivation.toProofSteps))
+      (sc, ks) => sc.addSteps(ks.toProofSteps))
   }
   def updateKnownStatement(knownStatement: KnownStatement, stepContext: StepContext, proofWithContext: ProofWithContext): F[KnownStatement] = {
     for {

@@ -1,5 +1,6 @@
 package net.prover.proving.premiseFinding
 
+import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepProvingContext}
 import net.prover.model.utils.ExpressionUtils
@@ -9,39 +10,32 @@ object DerivationOrTargetFinder {
   def findDerivationsOrTargets(
     premiseStatements: Seq[Statement])(
     implicit stepProvingContext: StepProvingContext
-  ): (SimpleDerivation, Seq[Step.TargetStep]) = {
+  ): (Seq[KnownStatement], Seq[Step.TargetStep]) = {
     findDerivationsOrTargetsWithSuccessResult(premiseStatements).strip3
   }
 
   private def findDerivationsOrTargetsWithSuccessResult(
     premiseStatements: Seq[Statement])(
     implicit stepProvingContext: StepProvingContext
-  ): (SimpleDerivation, Seq[Step.TargetStep], Boolean) = {
-    val (premiseSteps, targets, wasSuccessful) = premiseStatements.foldLeft((SimpleDerivation.empty, Seq.empty[Step.TargetStep], false)) { case ((premiseStepsSoFar, targetStepsSoFar, wasSuccessfulSoFar), premiseStatement) =>
-      val (stepsForThisPremise, targetsForThisPremise, wasThisStatementSuccessful) = findDerivationsOrTargetsWithSuccessResult(premiseStatement)
-      (premiseStepsSoFar ++ stepsForThisPremise, targetStepsSoFar ++ targetsForThisPremise, wasSuccessfulSoFar || wasThisStatementSuccessful)
+  ): (Seq[KnownStatement], Seq[Step.TargetStep], Boolean) = {
+    premiseStatements.foldLeft((Seq.empty[KnownStatement], Seq.empty[Step.TargetStep], false)) { case ((knownStatementsSoFar, targetStepsSoFar, wasSuccessfulSoFar), premiseStatement) =>
+      val (knownStatement, targetsForThisPremise, wasThisStatementSuccessful) = findDerivationOrTargetsWithSuccessResult(premiseStatement)
+      (knownStatementsSoFar :+ knownStatement, targetStepsSoFar ++ targetsForThisPremise, wasSuccessfulSoFar || wasThisStatementSuccessful)
     }
-    (premiseSteps.distinct, targets, wasSuccessful)
   }
 
-  private def findDerivationsOrTargets(
+  private def findDerivationOrTargetsWithSuccessResult(
     premiseStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): (SimpleDerivation, Seq[Step.TargetStep]) = {
-    findDerivationsOrTargetsWithSuccessResult(premiseStatement).strip3
-  }
-
-  private def findDerivationsOrTargetsWithSuccessResult(
-    premiseStatement: Statement)(
-    implicit stepProvingContext: StepProvingContext
-  ): (SimpleDerivation, Seq[Step.TargetStep], Boolean) = {
+  ): (KnownStatement, Seq[Step.TargetStep], Boolean) = {
     val directly = DerivationFinder.findDerivationForUnwrappedStatement(premiseStatement).map((_, Nil, true))
 
     def byDeconstructing = for {
       (step, deconstructedStatements) <- deconstruct(premiseStatement)
-      (innerSteps, innerTargets, wasSuccessful) = findDerivationsOrTargetsWithSuccessResult(deconstructedStatements)
+      (innerKnown, innerTargets, wasSuccessful) = findDerivationsOrTargetsWithSuccessResult(deconstructedStatements)
       if wasSuccessful
-    } yield (innerSteps :+ step, innerTargets, true)
+      combinedDerivation = SimpleDerivation(innerKnown.flatMap(_.derivation.steps)) :+ step
+    } yield (combinedDerivation, innerTargets, true)
 
     def asTarget = {
       val (rewriteSteps, rewrittenStatement) = DerivationFinder.rewriteWithKnownValues(premiseStatement)
@@ -49,7 +43,7 @@ object DerivationOrTargetFinder {
       (rewriteSteps ++ deconstructionSteps, deconstructedStatements.map(Step.TargetStep(_)), false)
     }
 
-    directly orElse byDeconstructing getOrElse asTarget
+    (directly orElse byDeconstructing getOrElse asTarget).map1(d => KnownStatement(premiseStatement, d))
   }
 
   private def splitTarget(

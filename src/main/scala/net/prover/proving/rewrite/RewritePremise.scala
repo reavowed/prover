@@ -31,7 +31,7 @@ object RewritePremise {
         Parser.requiredWord("byInference").flatMap(_ =>
           (for {
             premises <- KnownStatement.listParser(stepContext.forChild(), implicitly).map(_._1)
-            extraction <- AppliedInferenceExtraction.parser(stepContext.forChild().addSteps(premises.flatMap(_.derivation.toProofSteps)), implicitly)
+            extraction <- AppliedInferenceExtraction.parser(stepContext.forChild().addSteps(premises.flatMap(_.toProofSteps)), implicitly)
           } yield ByInference(premises, extraction)).inBraces
         ))
   }
