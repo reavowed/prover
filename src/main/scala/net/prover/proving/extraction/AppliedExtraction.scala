@@ -7,6 +7,12 @@ import net.prover.proving.derivation.DefinitionDeconstructionBase
 case class AppliedExtraction(extractionSteps: Seq[AppliedExtractionStep], chainedRewriteSteps: Seq[Step.AssertionStep]) extends StepLike.Wrapper {
   override def substeps: Seq[StepLike] = extractionSteps ++ chainedRewriteSteps
   def toProofSteps: Seq[Step.AssertionOrExtraction] = extractionSteps.map(_.toProofStep) ++ chainedRewriteSteps
+  def inferences: Seq[Inference] = {
+    (extractionSteps flatMap {
+      case AppliedExtractionStep.Assertion(step) => Seq(step.inference)
+      case AppliedExtractionStep.DefinitionDeconstruction(step, steps) => (step +: steps).map(_.inference)
+    }) ++ chainedRewriteSteps.map(_.inference)
+  }
 
   override def serializedLines: Seq[String] = {
     extractionSteps.flatMap(_.serializedLines) ++

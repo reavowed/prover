@@ -1,6 +1,6 @@
 package net.prover.proving.extraction
 
-import net.prover.model.ProvingContext
+import net.prover.model.{Inference, ProvingContext}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepLike}
 import net.prover.proving.extraction.PartiallyAppliedExtraction.ChainedRewriteStep
@@ -83,6 +83,7 @@ case class PartiallyAppliedExtraction(
     rightRewrite.map(_.rewriteStep.inference))
 
   def allSteps: Seq[Step.AssertionStep] = extractionSteps ++ reversalStep.toSeq
+  def allInferences: Seq[Inference] = allSteps.map(_.inference)
   def finalise(implicit provingContext: ProvingContext): AppliedExtraction = {
     AppliedExtraction(
       ExtractionApplier.groupStepsByDefinition(extractionSteps ++ reversalStep.toSeq),

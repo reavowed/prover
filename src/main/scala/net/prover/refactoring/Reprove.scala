@@ -4,10 +4,11 @@ import net.prover.books.management.BookStateManager
 import net.prover.entries.{StepWithContext, TypedStepWithContext}
 import net.prover.model._
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.Step
+import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
 import net.prover.model.proof.Step.AssertionStep
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
-import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction, ExtractionApplier, InferenceExtraction}
+import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction, ExtractionApplier, ExtractionCalculator, InferenceExtraction}
+import net.prover.proving.fromExistingStatement.SuggestExistingStatementsBase
 import net.prover.theorems.{CompoundTheoremUpdater, GetReferencedPremises, RecalculateReferences}
 import scalaz.Scalaz
 import scalaz.Scalaz.Id
@@ -40,8 +41,42 @@ object Reprove extends CompoundTheoremUpdater[Id] {
         Step.InferenceExtractionStep(AppliedInferenceExtraction(assertionStep, AppliedExtraction(step.extraction.extractionSteps.tail, step.extraction.chainedRewriteSteps)))
       }
       case _ =>
-        super.updateExistingStatementExtraction(step, stepWithContext)
+        reproveExistingStatementExtraction(
+          GetReferencedPremises(step),
+          step.statement,
+          step.extraction.inferences)(
+          stepWithContext.stepProvingContext
+        ) getOrElse super.updateExistingStatementExtraction(step, stepWithContext)
     }
+  }
+
+  def reproveExistingStatementExtraction(
+    premises: Seq[Premise],
+    conclusion: Statement,
+    extractionInferences: Seq[Inference])(
+    implicit stepProvingContext: StepProvingContext
+  ): Option[Step.ExistingStatementExtractionStep] = {
+    for {
+      (mainPremise, extractionPremises) <- premises.headAndTailOption
+      extraction <- ExtractionCalculator.getPremiseExtractions(mainPremise.statement)
+        .find(_.extractionDetails.allInferences == extractionInferences)
+      baseSubstitutions = SuggestExistingStatementsBase.getBaseSubstitutions(stepProvingContext.stepContext)
+      substitutionsAfterConclusion <- extraction.conclusion.calculateSubstitutions(conclusion, baseSubstitutions)
+      zippedPremises <- extractionPremises.zipStrict(extraction.premises)
+      substitutionsAfterExtractionPremises <- zippedPremises.foldLeft(Option(substitutionsAfterConclusion)) {
+        case (so, (p1, p2)) => so.flatMap(s => p2.calculateSubstitutions(p1.statement, s))
+      }
+      substitutions <- substitutionsAfterExtractionPremises.confirmTotality(extraction.variableDefinitions)
+      (_, stepOption, targets) <- ExtractionApplier.getPremiseExtractionStepWithPremises(
+        mainPremise,
+        extraction,
+        substitutions,
+        Some(extractionPremises.map(_.statement)),
+        Some(conclusion)).toOption
+      if targets.isEmpty
+      step <- stepOption
+      extractionStep <- step.asOptionalInstanceOf[Step.ExistingStatementExtractionStep]
+    } yield extractionStep
   }
 
   def apply(stepWithContext: TypedStepWithContext[Step.WithSubsteps], inference: Inference): Option[Step] = {

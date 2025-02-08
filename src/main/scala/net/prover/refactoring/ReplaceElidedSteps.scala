@@ -8,7 +8,7 @@ import net.prover.model.proof.Step
 import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction, ExtractionApplier, ExtractionCalculator}
 import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.proving.rewrite.RewritePremise
-import net.prover.theorems.CompoundTheoremUpdater
+import net.prover.theorems.{CompoundTheoremUpdater, GetReferencedPremises, RecalculateReferences}
 import scalaz.Scalaz._
 
 object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
@@ -19,6 +19,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
   override def updateElided(step: Step.ElidedStep, stepWithContext: StepWithContext): Step = {
     replaceWithInferenceExtraction(step, stepWithContext) orElse
       replaceWithExistingStatementExtraction(step, stepWithContext) orElse
+      replaceWithInnerExistingStatementExtraction(step, stepWithContext) orElse
       replaceWithRewrite(step, stepWithContext) getOrElse
       super.updateElided(step, stepWithContext)
   }
@@ -30,19 +31,31 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
     } yield reprovedStep
   }
 
-  private def replaceWithExistingStatementExtraction(step: Step.ElidedStep, stepWithContext: StepWithContext): Option[Step.ExistingStatementExtractionStep] = {
+  private def replaceWithExistingStatementExtraction(step: Step.ElidedStep, stepWithContext: StepWithContext): Option[Step] = {
+    val premises = GetReferencedPremises(stepWithContext)
     for {
       assertionSteps <- step.substeps.map(_.asOptionalInstanceOf[Step.AssertionStep]).toList.sequence
-      firstAssertion <- assertionSteps.headOption
-      mainPremise <- firstAssertion.premises.headOption.map(_.statement)
-      _ <- ExtractionCalculator.getPremiseExtractions(mainPremise)(stepWithContext.stepContext, stepWithContext.provingContext)
-        .find(_.extractionDetails.allSteps.map(_.inference) == assertionSteps.map(_.inference))
-      appliedExtractionSteps = ExtractionApplier.groupStepsByDefinition(assertionSteps)(stepWithContext.provingContext)
-    } yield Step.ExistingStatementExtractionStep(Nil, AppliedExtraction(appliedExtractionSteps, Nil))
+      result <- Reprove.reproveExistingStatementExtraction(
+        premises,
+        step.statement,
+        assertionSteps.map(_.inference))(stepWithContext.stepProvingContext)
+      (recalculatedResult, _) <- RecalculateReferences(stepWithContext.withStep(result)).toOption
+    } yield recalculatedResult
   }
-
-  private def replaceWithRewrite(step: Step.ElidedStep, stepWithContext: StepWithContext): Option[Step.RewriteStep] = {
-    import stepWithContext.stepProvingContext
+  private def replaceWithInnerExistingStatementExtraction(step: Step.ElidedStep, stepWithContext: StepWithContext): Option[Step] = {
+    for {
+      lastStepWithContext <- stepWithContext.forSubsteps(step).stepsWithContexts.lastOption
+      lastStep <- lastStepWithContext.step.asOptionalInstanceOf[Step.ElidedStep]
+      premises = GetReferencedPremises(lastStepWithContext)
+      assertionSteps <- lastStep.substeps.map(_.asOptionalInstanceOf[Step.AssertionStep]).toList.sequence
+      result <- Reprove.reproveExistingStatementExtraction(
+        premises,
+        step.statement,
+        assertionSteps.map(_.inference))(stepWithContext.stepProvingContext)
+      (recalculatedResult, _) <- RecalculateReferences(stepWithContext.withStep(result)).toOption
+    } yield recalculatedResult
+  }
+    private def replaceWithRewrite(step: Step.ElidedStep, stepWithContext: StepWithContext): Option[Step.RewriteStep] = {
     for {
       (previousSteps, lastStep) <- step.substeps.initAndLastOption
       lastAssertion <- lastStep.asOptionalInstanceOf[Step.AssertionStep]

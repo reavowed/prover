@@ -6,6 +6,7 @@ import net.prover.model.TestDefinitions._
 import net.prover.model.expressions.DefinedStatement
 import net.prover.model.proof.Step.AssertionStep
 import net.prover.model.proof.{Step, SubstitutionContext}
+import net.prover.theorems.RecalculateReferences
 import org.specs2.mutable.Specification
 
 class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
@@ -121,6 +122,64 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
         )(SubstitutionContext.outsideProof))
 
         ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
+    }
+
+    "replace an existing statement extraction" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      implicit val outerStepContext = createOuterStepContext(Nil)
+
+      val mainPremise = ForAll("x")(Implication(φ($), ψ($)))
+      val subsidiaryPremise = φ(a)
+
+      val initialSteps = recalculateReferences(Seq(
+        target(mainPremise),
+        target(subsidiaryPremise),
+        elided("Extraction", Seq(
+          assertion(specification, Seq(Implication(φ($), ψ($))), Seq(a)),
+          assertion(modusPonens, Seq(φ(a), ψ(a)), Nil)))
+      )(SubstitutionContext.outsideProof))
+      val expectedSteps = recalculateReferences(Seq(
+        target(mainPremise),
+        target(subsidiaryPremise),
+        existingStatementExtraction(Seq(
+          assertion(specification, Seq(Implication(φ($), ψ($))), Seq(a)),
+          assertion(modusPonens, Seq(φ(a), ψ(a)), Nil)))
+        )(SubstitutionContext.outsideProof))
+
+      ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
+    }
+
+    "replace an existing statement extraction with premises" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      implicit val outerStepContext = createOuterStepContext(Nil)
+
+      val mainPremise = ForAll("x")(Implication(Conjunction(φ($), ψ($)), χ($)))
+      val firstSubsidiaryPremise = φ(a)
+      val secondSubsidiaryPremise = ψ(a)
+
+      val initialSteps = recalculateReferences(Seq(
+        target(mainPremise),
+        target(firstSubsidiaryPremise),
+        target(secondSubsidiaryPremise),
+        elided("Extraction", Seq(
+          assertion(combineConjunction, Seq(firstSubsidiaryPremise, secondSubsidiaryPremise), Nil),
+          elided("Extraction", Seq(
+            assertion(specification, Seq(Implication(Conjunction(φ($), ψ($)), χ($))), Seq(a)),
+            assertion(modusPonens, Seq(Conjunction(φ(a), ψ(a)), χ(a)), Nil)))))
+      )(SubstitutionContext.outsideProof))
+      val expectedSteps = recalculateReferences(Seq(
+        target(mainPremise),
+        target(firstSubsidiaryPremise),
+        target(secondSubsidiaryPremise),
+        existingStatementExtraction(
+          Seq(known(Seq(assertion(combineConjunction, Seq(φ(a), ψ(a)), Nil)))),
+          Seq(
+            assertion(specification, Seq(Implication(Conjunction(φ($), ψ($)), χ($))), Seq(a)),
+            assertion(modusPonens, Seq(Conjunction(φ(a), ψ(a)), χ(a)), Nil)))
+      )(SubstitutionContext.outsideProof))
+
+      ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
+
     }
   }
 
