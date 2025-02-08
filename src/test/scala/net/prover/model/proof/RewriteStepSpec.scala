@@ -1,6 +1,7 @@
 package net.prover.model.proof;
 
 import net.prover.model.TestDefinitions._
+import net.prover.model.proof.DisplayStepMatchers.referenceStep
 import net.prover.theorems.{DisplayStep, GetDisplaySteps, RecalculateReferences}
 import net.prover.{StepBuilderHelper, StepHelpers}
 import org.specs2.mutable.Specification
@@ -51,10 +52,8 @@ class RewriteStepSpec extends Specification with StepHelpers with StepBuilderHel
       val firstKnownExtraction = rewritePremiseStep.substeps(0).asInstanceOf[DisplayStep.ElidedInference]
       val firstKnownSubstitution = rewritePremiseStep.substeps(1).asInstanceOf[DisplayStep.Assertion]
       val firstKnownSubstitutionPremise = firstKnownSubstitution.premises.head.asInstanceOf[Premise.Given]
-      val firstKnownSubstitutionPremiseReference = firstKnownSubstitutionPremise.referencedLine.asInstanceOf[StepReference]
 
-      firstKnownSubstitutionPremise.statement mustEqual firstKnownExtraction.statement
-      firstKnownSubstitutionPremiseReference.stepPath mustEqual firstKnownExtraction.path
+      firstKnownSubstitutionPremise must referenceStep(firstKnownExtraction)
     }
   }
 }

@@ -111,13 +111,11 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
     } yield Step.InferenceExtractionStep(newInferenceExtraction)
   }
   def updateExistingStatementExtraction(step: Step.ExistingStatementExtractionStep, stepWithContext: StepWithContext): F[Step] = {
-    for {
-      newPremises <- updateKnownStatements(step.premises, stepWithContext.stepContext.forChild(), stepWithContext.proofWithContext)
-      newExtraction <- updateAppliedExtraction(
-        step.extraction,
-        stepWithContext.stepContext.forChild().addSteps(newPremises.flatMap(_.toProofSteps)),
-        stepWithContext.proofWithContext)
-    } yield Step.ExistingStatementExtractionStep(newPremises, newExtraction)
+    Step.ExistingStatementExtractionStep.builder(
+      sc => updateKnownStatements(step.premises, sc, stepWithContext.proofWithContext),
+      sc => updateAppliedExtraction(step.extraction, sc, stepWithContext.proofWithContext))(
+      implicitly,
+      stepWithContext.stepContext).map(_.asInstanceOf[Step])
   }
   private def updateRewriteStep(step: Step.RewriteStep, stepWithContext: StepWithContext): F[Step] = {
     for {

@@ -8,6 +8,8 @@ import net.prover.model.proof.{Premise, PreviousLineReference, StepReference}
 sealed trait DisplayStep {
   @JsonSerialize
   def `type`: String = getClass.getSimpleName
+  def statement: Statement
+  def path: Seq[Int]
 }
 
 object DisplayStep {

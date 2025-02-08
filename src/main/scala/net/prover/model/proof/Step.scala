@@ -6,10 +6,11 @@ import net.prover.model._
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
-import net.prover.proving.extraction
-import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
+import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
+import scalaz.Monad
+import scalaz.Scalaz._
 
 import scala.annotation.tailrec
 import scala.util.Try
@@ -350,11 +351,24 @@ object Step {
         case _ => Some(ExistingStatementExtractionStep(nonemptyPremises, extraction))
       }
     }
+    def builder[F[_]: Monad](
+      getPremises: StepContext => F[Seq[KnownStatement]],
+      getExtraction: StepContext => F[AppliedExtraction])(
+      implicit stepContext: StepContext
+    ): F[ExistingStatementExtractionStep] = {
+      val innerContext = stepContext.forChild()
+      for {
+        premises <- getPremises(innerContext)
+        contextAfterPremises = if (premises.nonEmpty) innerContext.addSteps(premises.flatMap(_.toProofSteps)).forChild() else innerContext
+        extraction <- getExtraction(contextAfterPremises)
+      } yield ExistingStatementExtractionStep(premises, extraction)
+    }
+
     def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[ExistingStatementExtractionStep] = {
-      (for {
-        premises <- KnownStatement.listParser(stepContext.forChild(), implicitly).map(_._1)
-        extraction <- AppliedExtraction.parser(stepContext.forChild().addSteps(premises.flatMap(_.toProofSteps)), implicitly)
-      } yield ExistingStatementExtractionStep(premises, extraction)).inBraces
+      builder[Parser](
+        sc => KnownStatement.listParser(sc, implicitly).map(_._1),
+        sc => AppliedExtraction.parser(sc, implicitly)
+      ).inBraces
     }
   }
 

@@ -49,11 +49,19 @@ object GetDisplaySteps {
               apply(step.substeps, stepPath))
         }
       case step: Step.ExistingStatementExtractionStep =>
-        DisplayStep.ElidedWithDescription(
-          step.statement,
-          Some("Extraction from previous step"),
-          stepPath,
-          apply(step.extraction.toProofSteps, stepPath))
+        if (step.premises.nonEmpty) {
+          DisplayStep.ElidedWithDescription(
+            step.statement,
+            Some("Extraction from previous step"),
+            stepPath,
+            apply(step.premises.flatMap(_.toProofSteps) :+ step.copy(premises = Nil), stepPath))
+        } else {
+          DisplayStep.ElidedWithDescription(
+            step.statement,
+            Some("Extraction from previous step"),
+            stepPath,
+            apply(step.extraction.toProofSteps, stepPath))
+        }
       case step: Step.InferenceExtractionStep =>
         DisplayStep.ElidedInference(
           step.statement,

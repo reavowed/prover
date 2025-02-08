@@ -1,7 +1,8 @@
 package net.prover.model
 
-import java.nio.file.Path
+import scalaz.Monad
 
+import java.nio.file.Path
 import scala.util.Try
 import scala.util.control.NonFatal
 
@@ -367,5 +368,10 @@ object Parser {
       }
       parseRemaining(initial, Nil, initialTokenStream)
     }
+  }
+
+  implicit val parserMonad: Monad[Parser] = new Monad[Parser] {
+    override def point[A](a: => A): Parser[A] = Parser.constant(a)
+    override def bind[A, B](fa: Parser[A])(f: A => Parser[B]): Parser[B] = fa.flatMap(f)
   }
 }
