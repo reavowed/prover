@@ -285,14 +285,25 @@ object ExtractionApplier {
 
   def applyInferenceExtractionWithoutPremises(
     inferenceExtraction: InferenceExtraction,
-    substitutions: Substitutions)(
+    substitutions: Substitutions,
+    intendedPremises: Option[Seq[Statement]] = None,
+    intendedConclusion: Option[Statement] = None)(
     implicit provingContext: ProvingContext,
     substitutionContext: SubstitutionContext
-  ): Option[AppliedInferenceExtraction] = {
+  ): Option[(AppliedInferenceExtraction, Seq[Statement])] = {
     for {
       assertionStep <- Step.AssertionStep.forInference(inferenceExtraction.inference, substitutions)
-      extraction <- ExtractionApplier.applyExtractionsForInference(assertionStep, inferenceExtraction.extractionDefinition, substitutions, None, None).toOption
-    } yield AppliedInferenceExtraction(assertionStep, extraction.finalise)
+      extraction <- ExtractionApplier.applyExtractionsForInference(
+        assertionStep,
+        inferenceExtraction.extractionDefinition,
+        substitutions,
+        intendedPremises,
+        intendedConclusion
+      ).toOption
+      assertionStepWithCorrectConclusion = assertionStep.copy(statement = extraction.mainPremise) // mainPremise is equivalent to the existing conclusion here, but with the correct bound variable names
+      appliedExtraction = AppliedInferenceExtraction(assertionStepWithCorrectConclusion, extraction.finalise)
+      premises = assertionStepWithCorrectConclusion.premises.map(_.statement) ++ extraction.extractionPremises
+    } yield (appliedExtraction, premises)
   }
 
   def getInferenceExtractionStepWithPremises(
@@ -305,25 +316,22 @@ object ExtractionApplier {
   ): Try[(Step.InferenceApplication, Seq[Step.TargetStep])] = {
     val wrappedStepContext = unwrappers.enhanceStepProvingContext
     for {
-      mainAssertion <- Step.AssertionStep.forInference(inferenceExtraction.inference, substitutions)(wrappedStepContext).orBadRequest("Could not apply substitutions to inference")
-      extraction <- ExtractionApplier.applyExtractionsForInference(
-          mainAssertion,
-          inferenceExtraction.extractionDefinition,
-          substitutions,
-          intendedPremises,
-          intendedConclusion)(
-          implicitly,
-          wrappedStepContext)
-      mainAssertionWithCorrectConclusion = mainAssertion.copy(statement = extraction.mainPremise) // mainPremise is equivalent to the existing conclusion here, but with the correct bound variable names
-      premises = mainAssertion.premises.map(_.statement) ++ extraction.extractionPremises
-      extractionStep = AppliedInferenceExtraction(mainAssertionWithCorrectConclusion, extraction.finalise).toStep
-      (wrappedStep, wrappedPremises) = if (unwrappers.nonEmpty) {
-        unwrappers.addNecessaryExtractions(extractionStep, premises)
+      (appliedExtraction, premises) <- applyInferenceExtractionWithoutPremises(
+        inferenceExtraction,
+        substitutions,
+        intendedPremises,
+        intendedConclusion)(
+        implicitly,
+        wrappedStepContext
+      ).orBadRequest("Could not apply extraction")
+      appliedExtractionStep = appliedExtraction.toStep
+      (wrappedExtractionStep, wrappedPremises) = if (unwrappers.nonEmpty) {
+        unwrappers.addNecessaryExtractions(appliedExtractionStep, premises)
       } else {
-        (extractionStep, premises)
+        (appliedExtractionStep, premises)
       }
       (knownStatements, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(wrappedPremises)
-    } yield (InferenceWithPremiseDerivationsStep.ifNecessary(knownStatements, wrappedStep), targetSteps)
+    } yield (InferenceWithPremiseDerivationsStep.ifNecessary(knownStatements, wrappedExtractionStep), targetSteps)
   }
 
   def getPremiseExtractionStepWithPremises(

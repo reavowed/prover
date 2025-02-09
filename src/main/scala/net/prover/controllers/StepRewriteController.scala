@@ -187,8 +187,8 @@ class StepRewriteController @Autowired() (implicit val bookService: BookService)
       finalSubstitutionsAfterPremises <- inference.premises.zip(removedPremises).foldLeft(Try(finalSubstitutionsAfterSource)) { case (s, (ip, p)) => s.flatMap(ip.calculateSubstitutions(p, _)(removedUnwrappedStepContext).orBadRequest("Could not find substitutions"))}
       finalSubstitutions <- finalSubstitutionsAfterPremises.confirmTotality(inferenceExtraction.variableDefinitions).orBadRequest("Substitutions were not complete")
       rewrittenTerm <- targetTemplate.applySubstitutions(finalSubstitutions).orBadRequest("Could not apply substitutions to target")
-      appliedInferenceExtraction <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
-    } yield RewriteStep(removedSource, rewrittenTerm, RewritePremise.ByInference(knownPremises, appliedInferenceExtraction), removedUnwrappers, removedWrapperExpression)
+      (appliedExtraction, _) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, finalSubstitutions).orBadRequest("Could not apply extraction")
+    } yield RewriteStep(removedSource, rewrittenTerm, RewritePremise.ByInference(knownPremises, appliedExtraction), removedUnwrappers, removedWrapperExpression)
   }
 
   def getRewriteStepForPremise[TExpression <: Expression with TypedExpression[TExpression] : RewriteMethods](

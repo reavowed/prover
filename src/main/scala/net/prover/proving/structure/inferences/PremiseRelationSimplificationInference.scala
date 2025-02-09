@@ -17,7 +17,7 @@ case class PremiseRelationSimplificationInference(inferenceExtraction: Inference
   def getPremiseSimplification(currentStatement: KnownStatement, existingPremises: Seq[KnownStatement])(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[KnownStatement] = {
     for {
       substitutions <- premise.calculateSubstitutions(currentStatement.statement).flatMap(_.confirmTotality(inferenceExtraction.variableDefinitions))
-      appliedSimplification <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
+      (appliedSimplification, _) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
     } yield currentStatement.extend(appliedSimplification)
   }
 }

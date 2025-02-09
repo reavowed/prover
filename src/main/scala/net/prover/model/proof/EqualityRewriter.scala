@@ -31,9 +31,9 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         finalSubstitutions <- possibleFinalSubstitutions.confirmTotality(rewriteInference.variableDefinitions)
         simplifiedTerm <- inferenceResult.applySubstitutions(finalSubstitutions)
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
-        extractionStep <- ExtractionApplier.applyInferenceExtractionWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
+        (appliedExtraction, _) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
-      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation.toProofSteps) :+ extractionStep.toStep) ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
+      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation.toProofSteps) :+ appliedExtraction.toStep) ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
     }
 
     def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {

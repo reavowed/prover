@@ -21,10 +21,10 @@ object DirectDerivationFinder {
     def byRemovingTermDefinition = (for {
       termDefinition <- targetStatement.referencedDefinitions.ofType[TermDefinition].iterator
       inferenceExtraction <- provingContext.termDefinitionRemovals(termDefinition)
-      substitutions <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inferenceExtraction.variableDefinitions))
-      premiseStatements <- inferenceExtraction.premises.map(_.applySubstitutions(substitutions)).traverseOption
-      premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatements(premiseStatements)
-      derivationStep <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
+      substitutions <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement).flatMap(
+        _.confirmTotality(inferenceExtraction.variableDefinitions))
+      (derivationStep, premises) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
+      premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatements(premises)
     } yield premiseSteps :+ derivationStep).headOption
 
     def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>

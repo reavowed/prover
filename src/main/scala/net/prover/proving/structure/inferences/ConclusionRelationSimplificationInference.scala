@@ -20,7 +20,7 @@ case class ConclusionRelationSimplificationInference(inferenceExtraction: Infere
   def getConclusionSimplification(target: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(Seq[Statement], Seq[BinaryRelationStatement], SimpleDerivation)] = {
     for {
       substitutions <- conclusion.calculateSubstitutions(target).flatMap(_.confirmTotality(variableDefinitions))
-      extractionApplication <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
+      (extractionApplication, _) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
       if extractionApplication.statement == target
       substitutedTypeStatement <- typePremiseOption.map(_.baseStatement.applySubstitutions(substitutions)).swap
       (simplifiedTargets, derivationSteps) <- derivedPremises.getSubstitutedPremises(substitutions)
