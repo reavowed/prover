@@ -64,6 +64,11 @@ trait ContextHelper extends CustomMockitoStubs {
     val proofWithContext = mock[ProofWithContext]
     proofWithContext.provingContext returns provingContext
     proofWithContext.availableEntries returns availableEntries
+    proofWithContext.theoremWithContext returns mock[TheoremWithContext]
+    proofWithContext.theoremWithContext.theorem returns mock[Theorem]
+    proofWithContext.theoremWithContext.theorem.title returns "Theorem"
+    proofWithContext.theoremWithContext.chapterWithContext returns createChapterWithContext
+
     StepsWithContext(
       steps,
       outerStepContext,
