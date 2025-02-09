@@ -74,9 +74,12 @@ trait StepHelpers {
     Step.WrappedInferenceApplicationStep(steps(sc))(provingContext)
   }
   def premiseDerivation(
-    steps: SubstitutionContext => Seq[Step]
+    createPremises: SubstitutionContext => Seq[KnownStatement],
+    createAssertion: SubstitutionContext => Step.InferenceApplicationWithoutPremises
   ): SubstitutionContext => Step.InferenceWithPremiseDerivationsStep = { sc =>
-    Step.InferenceWithPremiseDerivationsStep(steps(sc))
+    Step.InferenceWithPremiseDerivationsStep(
+      createPremises(sc),
+      createAssertion(sc))
   }
   def rewriteStep(
     createPremise: SubstitutionContext => KnownStatement,

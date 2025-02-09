@@ -323,8 +323,7 @@ object ExtractionApplier {
         (extractionStep, premises)
       }
       (knownStatements, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(wrappedPremises)
-      premiseDerivation = SimpleDerivation(knownStatements.flatMap(_.derivation.steps).distinct)
-    } yield (InferenceWithPremiseDerivationsStep.ifNecessary(premiseDerivation.toProofSteps, wrappedStep), targetSteps)
+    } yield (InferenceWithPremiseDerivationsStep.ifNecessary(knownStatements, wrappedStep), targetSteps)
   }
 
   def getPremiseExtractionStepWithPremises(

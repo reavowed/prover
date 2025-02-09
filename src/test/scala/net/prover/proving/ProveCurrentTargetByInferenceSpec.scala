@@ -250,15 +250,9 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
           target(Implication(Conjunction(φ, ψ), χ)) :+
           target(φ) :+
           target(ψ) :+
-          premiseDerivation(Seq(
-            assertion(
-              combineConjunction,
-              Seq(φ, ψ),
-              Nil),
-            assertion(
-              modusPonens,
-              Seq(Conjunction(φ, ψ), χ),
-              Nil))))
+          premiseDerivation(
+            Seq(known(Seq(assertion(combineConjunction, Seq(φ, ψ), Nil)))),
+            assertion(modusPonens, Seq(Conjunction(φ, ψ), χ), Nil)))
     }
 
     "add targets that don't exist" in {

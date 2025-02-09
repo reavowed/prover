@@ -1,7 +1,7 @@
 package net.prover.refactoring
 
 import net.prover.books.management.BookStateManager
-import net.prover.entries.StepWithContext
+import net.prover.entries.{StepWithContext, TypedStepWithContext}
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model.proof.{Step, StepReference}
 import net.prover.model.proof.Step.InferenceWithPremiseDerivationsStep
@@ -27,14 +27,17 @@ object RederivePremises extends CompoundTheoremUpdater[Try] {
   }
 
   private def reprove(step: Step.InferenceWithPremiseDerivationsStep, stepWithContext: StepWithContext): Try[Step] = {
-    val assertionStepWithContext = stepWithContext.forSubsteps(step).atIndex(step.premiseSteps.length).get
+    val assertionStepWithContext = TypedStepWithContext(
+      step.assertionStep,
+      stepWithContext.proofWithContext)(
+      implicitly,
+      stepWithContext.stepContext.forChild().addSteps(step.premises.flatMap(_.toProofSteps)))
     val premises = GetReferencedPremises(assertionStepWithContext).map(_.statement)
     val (knownStatements, targets) = DerivationOrTargetFinder.findDerivationsOrTargets(premises) (stepWithContext)
-    val premiseDerivation = SimpleDerivation(knownStatements.flatMap(_.derivation.steps).distinct)
     if (targets.nonEmpty) {
       Failure(InferenceReplacementException("Could not rederive all premises", stepWithContext))
     } else {
-      RecalculateReferences(stepWithContext.withStep(InferenceWithPremiseDerivationsStep(premiseDerivation.toProofSteps, step.assertionStep))).map(_._1)
+      RecalculateReferences(stepWithContext.withStep(InferenceWithPremiseDerivationsStep.ifNecessary(knownStatements, step.assertionStep))).map(_._1)
     }
   }
 }
