@@ -3,6 +3,7 @@ package net.prover.proving.rewrite
 import net.prover.model._
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.proof.{Step, StepContext, StepLike}
+import net.prover.parsing.Parser
 import net.prover.proving.extraction.AppliedInferenceExtraction
 
 sealed trait RewritePremise extends StepLike.Wrapper {

@@ -1,6 +1,6 @@
 package net.prover.model.proof
 
-import net.prover.model.Parser
+import net.prover.parsing.Parser
 
 sealed trait PreviousLineReference {
   def addInternalPath(additionalInternalPath: Seq[Int]): PreviousLineReference

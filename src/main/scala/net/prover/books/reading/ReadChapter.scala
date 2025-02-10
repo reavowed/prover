@@ -3,9 +3,10 @@ package net.prover.books.reading
 import net.prover.books.keys.ListWithKeys
 import net.prover.books.management.BookDirectoryConfig
 import net.prover.books.model.Book
-import net.prover.entries.{BookWithContext, ChapterWithContext, EntryParsingContext, GlobalContext}
+import net.prover.entries.{BookWithContext, EntryParsingContext, GlobalContext}
 import net.prover.model.entries.ChapterEntry
-import net.prover.model.{AvailableEntries, Chapter, Parser}
+import net.prover.model.{AvailableEntries, Chapter}
+import net.prover.parsing.Parser
 
 object ReadChapter {
   def apply(

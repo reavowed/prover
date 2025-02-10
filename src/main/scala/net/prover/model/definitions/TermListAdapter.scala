@@ -1,8 +1,9 @@
 package net.prover.model.definitions
 
-import net.prover.model.expressions.Term
 import net.prover.model._
 import net.prover.model.entries.ChapterEntry
+import net.prover.model.expressions.Term
+import net.prover.parsing.Parser
 
 case class TermListAdapter(variableDefinitions: Seq[SimpleVariableDefinition], templates: Seq[Term]) {
   def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): TermListAdapter = {

@@ -5,6 +5,7 @@ import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.Statement
+import net.prover.parsing.Parser
 
 case class StandalonePropertyDefinition(
     symbol: String,

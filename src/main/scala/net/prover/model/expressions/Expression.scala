@@ -5,7 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.proof.SubstitutionContext
-import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, UsedVariables, VariableDefinitions}
+import net.prover.model.{ExpressionParsingContext, Substitutions, UsedVariables}
+import net.prover.parsing.Parser
 
 @JsonSerialize(using = classOf[ExpressionSerializer])
 trait Expression extends TypedExpression[Expression]

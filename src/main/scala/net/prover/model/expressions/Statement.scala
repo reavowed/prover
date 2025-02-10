@@ -2,6 +2,7 @@ package net.prover.model.expressions
 
 import net.prover.model._
 import net.prover.model.entries.{StandalonePropertyDefinition, TypeDefinition, TypeQualifierDefinition}
+import net.prover.parsing.Parser
 
 trait Statement extends Expression with TypedExpression[Statement]
 

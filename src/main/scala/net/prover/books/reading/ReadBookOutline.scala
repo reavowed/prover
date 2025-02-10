@@ -1,8 +1,8 @@
 package net.prover.books.reading
 
 import net.prover.books.management.BookDirectoryConfig
-import net.prover.books.model.{BookOutline, BookTitle}
-import net.prover.model.Parser
+import net.prover.books.model.BookOutline
+import net.prover.parsing.Parser
 
 object ReadBookOutline {
   def apply(title: String): BookOutline = {

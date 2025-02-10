@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.parsing.Parser
+
 case class VariableDefinition(name: String, arity: Int, attributes: Seq[String]) {
   def serialized: String = (Seq(name, arity.toString) ++ attributes.optionalListInParens(", ").toSeq).mkString(" ")
 }

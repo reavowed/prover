@@ -2,6 +2,7 @@ package net.prover.model
 
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.{Template, Term}
+import net.prover.parsing.Parser
 
 case class DisambiguatorAdder(template: Template, disambiguator: String) {
   def replaceDefinitions(expressionDefinitionReplacements: Map[ExpressionDefinition, ExpressionDefinition]): DisambiguatorAdder = {

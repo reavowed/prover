@@ -1,10 +1,10 @@
 package net.prover.model.entries
 
-import net.prover.books.reading.ProofFileReader
-import net.prover.entries.{ChapterWithContext, EntryParsingContext, EntryWithContext}
+import net.prover.entries.{EntryParsingContext, EntryWithContext}
 import net.prover.model._
-import net.prover.model.definitions.{Definitions, ExpressionDefinition}
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Statement
+import net.prover.parsing.Parser
 
 case class Axiom(
     name: String,

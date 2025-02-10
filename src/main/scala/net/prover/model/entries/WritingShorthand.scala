@@ -1,9 +1,10 @@
 package net.prover.model.entries
 
 import net.prover.entries.{EntryParsingContext, EntryWithContext}
+import net.prover.model.Inference
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.expressions.Template
-import net.prover.model.{Inference, Parser}
+import net.prover.parsing.Parser
 
 case class WritingShorthand(template: Template, symbol: String) extends ChapterEntry {
   override def name: String = symbol

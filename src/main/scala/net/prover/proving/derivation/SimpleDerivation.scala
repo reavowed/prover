@@ -2,6 +2,7 @@ package net.prover.proving.derivation
 
 import net.prover.model._
 import net.prover.model.proof.{Step, StepContext, StepLike}
+import net.prover.parsing.Parser
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 
 case class SimpleDerivation(steps: Seq[SimpleDerivationStep]) extends StepLike.Wrapper {

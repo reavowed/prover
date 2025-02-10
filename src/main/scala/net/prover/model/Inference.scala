@@ -8,6 +8,7 @@ import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.entries.{ChapterEntry, ChapterEntryParser}
 import net.prover.model.expressions._
 import net.prover.model.proof.SubstitutionContext
+import net.prover.parsing.Parser
 
 import java.security.MessageDigest
 

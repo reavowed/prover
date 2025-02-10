@@ -2,6 +2,7 @@ package net.prover.proving.extraction
 
 import net.prover.model._
 import net.prover.model.proof.{Step, StepContext, StepLike}
+import net.prover.parsing.Parser
 import net.prover.proving.derivation.DefinitionDeconstructionBase
 
 case class AppliedExtraction(extractionSteps: Seq[AppliedExtractionStep], chainedRewriteSteps: Seq[Step.AssertionStep]) extends StepLike.Wrapper {

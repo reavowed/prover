@@ -4,6 +4,7 @@ import net.prover.model._
 import net.prover.model.definitions.{KnownStatement, Wrapper}
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.{Step, SubstitutionContext}
+import net.prover.parsing.Parser
 import net.prover.proving.derivation.SimpleDerivationStep
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.inferences.{Reversal, Transitivity}

@@ -2,6 +2,7 @@ package net.prover.model
 
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
+import net.prover.parsing.Parser
 
 case class VariableDefinitions(statements: Seq[VariableDefinition], terms: Seq[VariableDefinition]) {
   def addSimpleTermVariables(newTermVariableDefinitions: Seq[SimpleVariableDefinition]): VariableDefinitions = {

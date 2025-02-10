@@ -1,7 +1,7 @@
 package net.prover.model.entries
 
 import net.prover.books.model.Book
-import net.prover.model.Parser
+import net.prover.parsing.Parser
 
 trait BookEntryParser {
   def name: String

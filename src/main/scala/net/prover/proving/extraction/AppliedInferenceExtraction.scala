@@ -2,7 +2,8 @@ package net.prover.proving.extraction
 
 import net.prover.model.proof.Step.AssertionStep
 import net.prover.model.proof.{Step, StepContext, StepLike}
-import net.prover.model.{Inference, Parser, ProvingContext}
+import net.prover.model.{Inference, ProvingContext}
+import net.prover.parsing.Parser
 
 case class AppliedInferenceExtraction(assertionStep: Step.AssertionStep, extraction: AppliedExtraction) extends StepLike.Wrapper {
   def inference: Inference = assertionStep.inference

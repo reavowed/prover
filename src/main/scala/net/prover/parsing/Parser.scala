@@ -1,5 +1,6 @@
-package net.prover.model
+package net.prover.parsing
 
+import net.prover.model._
 import scalaz.Monad
 
 import java.nio.file.Path

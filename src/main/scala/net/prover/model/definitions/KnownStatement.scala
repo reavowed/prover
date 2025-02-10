@@ -3,6 +3,7 @@ package net.prover.model.definitions
 import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepContext, StepLike}
+import net.prover.parsing.Parser
 import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
 import net.prover.proving.extraction.{AppliedInferenceExtraction, PremiseExtraction}
 

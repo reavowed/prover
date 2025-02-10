@@ -1,5 +1,7 @@
 package net.prover.model
 
+import net.prover.parsing.Parser
+
 object Attributes {
   def parser: Parser[Seq[String]] = {
     Parser.optional("attributes", Parser.wordsInParens, Nil)

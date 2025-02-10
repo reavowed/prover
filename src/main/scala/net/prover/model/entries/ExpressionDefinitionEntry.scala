@@ -3,7 +3,7 @@ package net.prover.model.entries
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.expressions._
+import net.prover.parsing.Parser
 
 trait ExpressionDefinitionEntry extends TypedExpressionDefinitionEntry[ExpressionDefinitionEntry] with ChapterEntry.Standalone
 

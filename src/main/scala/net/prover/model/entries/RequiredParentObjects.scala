@@ -2,6 +2,7 @@ package net.prover.model.entries
 
 import net.prover.model._
 import net.prover.model.expressions.Statement
+import net.prover.parsing.Parser
 import net.prover.proving.structure.definitions.{ConjunctionDefinition, DeductionDefinition, GeneralizationDefinition, UniqueExistenceDefinition}
 
 case class RequiredParentObjects(

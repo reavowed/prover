@@ -1,14 +1,14 @@
 package net.prover.model.entries
 
-import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties, JsonProperty}
-import net.prover.books.reading.ProofFileReader
-import net.prover.entries.{ChapterWithContext, EntryParsingContext, EntryWithContext, TheoremWithContext}
+import com.fasterxml.jackson.annotation.{JsonIgnore, JsonProperty}
+import net.prover.entries.{EntryParsingContext, EntryWithContext, TheoremWithContext}
 import net.prover.model._
-import net.prover.model.definitions.{Definitions, ExpressionDefinition}
+import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.expressions.Statement
 import net.prover.model.proof._
-import net.prover.theorems.{DisplayStep, GetDisplaySteps, GetReferencedDefinitions, IsComplete, ReplaceDefinitions}
+import net.prover.parsing.Parser
+import net.prover.theorems._
 
 case class Theorem(
     name: String,

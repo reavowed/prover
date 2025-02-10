@@ -1,6 +1,7 @@
 package net.prover.model.expressions
 
-import net.prover.model.{ExpressionParsingContext, Parser, Substitutions, TemplateParsingContext}
+import net.prover.model.{ExpressionParsingContext, Substitutions, TemplateParsingContext}
+import net.prover.parsing.Parser
 
 trait Term extends Expression with TypedExpression[Term] {
   override def getTerms(internalDepth: Int, externalDepth: Int): Seq[(Term, Term, Int, Seq[Int])] = Seq((this, FunctionParameter(0, internalDepth + externalDepth), internalDepth, Nil))

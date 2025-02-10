@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
-import net.prover.model.Parser
 import net.prover.model.expressions.Statement
+import net.prover.parsing.Parser
 
 trait StepLike {
   def statement: Statement

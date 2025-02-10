@@ -1,8 +1,9 @@
 package net.prover.controllers.models
 
-import net.prover.model._
 import net.prover.controllers._
+import net.prover.model._
 import net.prover.model.expressions.{Statement, Term}
+import net.prover.parsing.Parser
 
 import scala.util.Try
 

@@ -1,8 +1,6 @@
-package net.prover.model
+package net.prover.parsing
 
 import java.nio.file.{Files, Path}
-
-import scala.collection.mutable
 
 case class Token(text: String, contextDescription: String, lineNumber: Int, columnNumber: Int)
 

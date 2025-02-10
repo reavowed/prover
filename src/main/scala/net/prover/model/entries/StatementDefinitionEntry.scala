@@ -1,11 +1,11 @@
 package net.prover.model.entries
 
-import net.prover.books.reading.ProofFileReader
-import net.prover.entries.{ChapterWithContext, EntryParsingContext, EntryWithContext}
+import net.prover.entries.{EntryParsingContext, EntryWithContext}
 import net.prover.model._
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions._
+import net.prover.parsing.Parser
 
 case class StatementDefinitionEntry(
     baseSymbol: String,

@@ -1,8 +1,9 @@
 package net.prover.model
 
-import java.util.regex.Pattern
-
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
+import net.prover.parsing.Parser
+
+import java.util.regex.Pattern
 
 trait Format {
   def requiresBrackets: Boolean

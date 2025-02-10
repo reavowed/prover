@@ -1,4 +1,4 @@
-package net.prover.model
+package net.prover.parsing
 
 case class ParseException(
     message: String,

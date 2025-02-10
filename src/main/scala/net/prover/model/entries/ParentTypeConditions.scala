@@ -3,7 +3,8 @@ package net.prover.model.entries
 import net.prover.model.definitions.{ExpressionDefinition, TermListAdapter}
 import net.prover.model.expressions.{Statement, TermVariable}
 import net.prover.model.proof.SubstitutionContext
-import net.prover.model.{AvailableEntries, Parser, SimpleVariableDefinition}
+import net.prover.model.{AvailableEntries, SimpleVariableDefinition}
+import net.prover.parsing.Parser
 import net.prover.proving.structure.definitions.ConjunctionDefinition
 
 case class ParentTypeConditions(

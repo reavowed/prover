@@ -1,11 +1,12 @@
 package net.prover.model.expressions
 
 import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
 import net.prover.model._
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition, TermDefinition}
 import net.prover.model.expressions.Template.Match
+import net.prover.parsing.Parser
 
 @JsonSerialize(using = classOf[TemplateSerializer])
 sealed trait Template {

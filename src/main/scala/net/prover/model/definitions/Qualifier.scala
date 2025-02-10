@@ -1,6 +1,7 @@
 package net.prover.model.definitions
 
 import net.prover.model._
+import net.prover.parsing.Parser
 
 case class Qualifier(variableDefinitions: Seq[SimpleVariableDefinition], format: Format.Explicit) {
   def prependFormat(formatToPrepend: Format): Format = Format.Concatenated(formatToPrepend, format)
