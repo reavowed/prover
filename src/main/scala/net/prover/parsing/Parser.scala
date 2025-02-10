@@ -13,29 +13,12 @@ case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
     val (t, nextTokenStream) = attemptParse(tokenStream)
     f(t).parse(nextTokenStream)
   }
-  def flatMapOption[S](f: T => Option[Parser[S]]): Parser[Option[S]] = Parser { tokenStream =>
-    val (t, nextTokenStream) = attemptParse(tokenStream)
-    f(t) match {
-      case Some(otherParser) =>
-        otherParser.parse(nextTokenStream).mapLeft(Some.apply)
-      case None =>
-        (None, tokenStream)
-    }
-  }
-  def onlyIf(f: T => Boolean): Parser[Option[T]] = Parser { tokenStream =>
-    val (t, nextTokenStream) = attemptParse(tokenStream)
-    if (f(t))
-      (Some(t), nextTokenStream)
-    else
-      (None, tokenStream)
-  }
   def tryOrElse[S >: T](otherParser: => Parser[S]): Parser[S] = Parser { tokenStream =>
     Try(attemptParse(tokenStream)).toOption.getOrElse(otherParser.attemptParse(tokenStream))
   }
   def tryOrNone: Parser[Option[T]] = Parser { tokenStream =>
     Try(attemptParse(tokenStream).mapLeft(Some(_))).toOption.getOrElse((None, tokenStream))
   }
-  def withNone(noneWord: String): Parser[Option[T]] = map(Some.apply).tryOrElse(Parser.requiredWord(noneWord).map(_ => None))
 
   private def inBrackets(openBracket: String, closeBracket: String): Parser[T] = {
     for {
@@ -61,7 +44,6 @@ case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
   }
 
   def inBraces: Parser[T] = inBrackets("{", "}")
-  def listInBraces(separatorOption: Option[String]): Parser[Seq[T]] = listInBrackets("{", "}", separatorOption)
 
   def parse(tokenStream: TokenStream): (T, TokenStream) = {
     try {
@@ -216,16 +198,9 @@ object Parser {
 
   implicit class ParserOptionOps[T](parser: Parser[Option[T]]) {
     def mapMap[S](f: T => S): Parser[Option[S]] = parser.map(_.map(f))
-    def mapFlatMap[S](f: T => Option[S]): Parser[Option[S]] = parser.map(_.flatMap(f))
     def flatMapMap[S](f: T => Parser[S]): Parser[Option[S]] = parser.flatMap {
       case Some(t) =>
         f(t).map(Some.apply)
-      case None =>
-        Parser.constant(None)
-    }
-    def flatMapFlatMap[S](f: T => Parser[Option[S]]): Parser[Option[S]] = parser.flatMap {
-      case Some(t) =>
-        f(t)
       case None =>
         Parser.constant(None)
     }
@@ -267,20 +242,6 @@ object Parser {
     }
     def inParens(separatorOption: Option[String]): Parser[Seq[T]] = {
       Parser.inBrackets(parsers.iterator, "(", ")", separatorOption, isInfinite = false)
-    }
-  }
-
-
-  implicit class SeqParserTupleOps[S, T](x: Seq[(S, Parser[T])]) {
-    def traverseParserMap: Parser[Map[S, T]] = {
-      x.foldLeft(Parser.constant(Map.empty[S, T])) { case (mapParser, (s, tParser)) =>
-        for {
-          map <- mapParser
-          t <- tParser
-        } yield {
-          map + (s -> t)
-        }
-      }
     }
   }
 
