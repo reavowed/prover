@@ -6,7 +6,7 @@ import net.prover.entries.{EntryParsingContext, EntryWithContext}
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
 import net.prover.model.expressions.Statement
 import net.prover.model.{AvailableEntries, ExpressionParsingContext, Inference, SimpleVariableDefinition}
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 
 trait ChapterEntry {
   @JsonSerialize
@@ -79,9 +79,7 @@ object ChapterEntry {
     DisplayShorthand,
     WritingShorthand)
 
-  def parser(implicit entryParsingContext: EntryParsingContext): Parser[Option[ChapterEntry]] = {
-    Parser.singleWordIfAny.flatMapFlatMapReverse { entryType =>
-      parsers.find(_.name == entryType).map(_.parser)
-    }
+  def parser(implicit entryParsingContext: EntryParsingContext): KnownWordParser[ChapterEntry] = {
+    KnownWordParser.select(parsers.map(_.knownWordParser(entryParsingContext)))
   }
 }

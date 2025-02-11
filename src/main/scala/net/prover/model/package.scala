@@ -72,6 +72,10 @@ package object model {
       }
     }
 
+    def findFirst[S](f: T => Option[S]): Option[S] = {
+      seq.map(f).collectFirst { case Some(t) => t }
+    }
+
     def mapFoldWithPrevious[R, S](initial: R)(f: (R, Seq[S], T) => (R, S)): (R, Seq[S]) = {
       seq.foldLeft((initial, Seq.empty[S])) { case ((acc, ss), t) =>
         f(acc, ss, t).mapRight(ss :+ _)

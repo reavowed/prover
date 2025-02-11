@@ -6,6 +6,16 @@ case class Token(text: String, contextDescription: String, lineNumber: Int, colu
 
 case class TokenStream(tokens: Vector[Token], endToken: Token, lines: Vector[Vector[Char]], index: Int) {
   def isEmpty: Boolean = index == tokens.length
+  def readNext(): (String, TokenStream) = {
+    (currentToken.text, advance())
+  }
+  def peek(): Option[(String, TokenStream)] = {
+    if (isEmpty)
+      None
+    else
+      Some((tokens(index).text, advance()))
+  }
+
   def currentToken: Token = {
     if (isEmpty) throwParseException("No tokens remaining")
     tokens(index)
@@ -64,9 +74,6 @@ trait Tokenizer {
   def currentColumn: Int
 
   def isEmpty: Boolean
-  def readNext(): (String, Tokenizer)
-  def readUntilEndOfLine(): (String, Tokenizer)
-  def readUntilCloseParen(): (String, Tokenizer)
 
   def throwParseException(message: String, cause: Option[Throwable]): Nothing = {
     throw ParseException(

@@ -7,7 +7,7 @@ import java.nio.file.Path
 import scala.util.Try
 import scala.util.control.NonFatal
 
-case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
+trait Parser[+T] {
   def map[S](f: T => S): Parser[S] = Parser(tokenStream => attemptParse(tokenStream).mapLeft(f))
   def flatMap[S](f: T => Parser[S]): Parser[S] = Parser { tokenStream =>
     val (t, nextTokenStream) = attemptParse(tokenStream)
@@ -45,6 +45,7 @@ case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
 
   def inBraces: Parser[T] = inBrackets("{", "}")
 
+  def attemptParse(tokenStream: TokenStream): (T, TokenStream)
   def parse(tokenStream: TokenStream): (T, TokenStream) = {
     try {
       attemptParse(tokenStream)
@@ -82,6 +83,10 @@ case class Parser[+T](attemptParse: TokenStream => (T, TokenStream)) {
 }
 
 object Parser {
+  def apply[T](attemptParseFn: TokenStream => (T, TokenStream)): Parser[T] = {
+    (tokenStream: TokenStream) => attemptParseFn(tokenStream)
+  }
+
   def constant[T](t: T): Parser[T] = Parser { (t, _) }
 
   def toEndOfLine: Parser[String] = Parser { tokenStream => tokenStream.restOfLine() }

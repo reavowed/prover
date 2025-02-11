@@ -6,7 +6,7 @@ import net.prover.books.model.Book
 import net.prover.entries.{BookWithContext, EntryParsingContext, GlobalContext}
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.{AvailableEntries, Chapter}
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 
 object ReadChapter {
   def apply(
@@ -20,7 +20,7 @@ object ReadChapter {
     val parser = for {
       summary <- Parser.toEndOfLine
       initialChapter = Chapter(chapterTitle, summary, ListWithKeys.empty)
-      chapter <- Parser.foldWhileDefined[Chapter](initialChapter) { chapter: Chapter =>
+      chapter <- KnownWordParser.foldWhileDefined[Chapter](initialChapter) { chapter: Chapter =>
         val updatedBook = bookSoFar.addChapter(chapter)
         val (updatedBooks, updatedBookKey) = previousBooks.addAndGetKey(updatedBook)
         val bookWithContext = BookWithContext(updatedBook, updatedBookKey, GlobalContext(updatedBooks))
@@ -28,7 +28,7 @@ object ReadChapter {
         val availableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
         val proofFileReader = ProofFileReader(chapterDirectoryPath, chapter.entriesWithKeys.keyAccumulator)
         val entryParsingContext = EntryParsingContext(bookWithContext.book.title, chapterTitle, proofFileReader)(availableEntries)
-        ChapterEntry.parser(entryParsingContext).mapMap {chapter.addEntry}
+        ChapterEntry.parser(entryParsingContext).map {chapter.addEntry}
       }
     } yield chapter
 
