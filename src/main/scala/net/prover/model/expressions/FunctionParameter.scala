@@ -1,7 +1,8 @@
 package net.prover.model.expressions
 
-import net.prover.model.{Substitutions, UsedVariables}
+import net.prover.model.{ExpressionParsingContext, Substitutions, UsedVariables}
 import net.prover.model.definitions.ExpressionDefinition
+import net.prover.parsing.{KnownWordParser, Parser}
 
 case class FunctionParameter(index: Int, level: Int) extends Term {
   override def structuralComplexity: Int = 1
@@ -138,4 +139,12 @@ case class FunctionParameter(index: Int, level: Int) extends Term {
   override def toString: String = (0 to level).map(_ => "$").mkString("") + index
   override def serialized: String = toString
   override def serializedForHash: String = toString
+}
+
+object FunctionParameter {
+  def parser(implicit context: ExpressionParsingContext): KnownWordParser[FunctionParameter] = {
+    KnownWordParser(
+      word => context.RecognisedParameter.unapply(word).map(Parser.constant),
+      "function parameter")
+  }
 }

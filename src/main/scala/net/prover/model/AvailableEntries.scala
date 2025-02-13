@@ -6,7 +6,7 @@ import net.prover.model.AvailableEntries.getStatementDefinitionFromEntry
 import net.prover.model.definitions._
 import net.prover.model.entries._
 import net.prover.model.expressions._
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 import net.prover.proving.structure.definitions.{ConjunctionDefinition, DeductionDefinition, GeneralizationDefinition, UniqueExistenceDefinition}
 
 case class AvailableEntries(entriesWithContexts: Seq[EntryWithContext])
@@ -59,6 +59,30 @@ case class AvailableEntries(entriesWithContexts: Seq[EntryWithContext])
     AvailableEntries(entriesWithContexts ++ newEntries)
   }
 
+  def statementDefinitionParser: KnownWordParser[StatementDefinition] = {
+    KnownWordParser(
+      word => statementDefinitionsBySymbol.unapply(word).map(Parser.constant),
+      "statement definition symbol")
+  }
+  def termDefinitionParser: KnownWordParser[TermDefinition] = {
+    KnownWordParser(
+      word => termDefinitionsBySymbol.unapply(word).map(Parser.constant),
+      "term definition symbol")
+  }
+  def statementShorthandParser: KnownWordParser[DefinedStatementTemplate] = {
+    KnownWordParser(
+      word => writingShorthands.find(_.symbol == word)
+        .flatMap(_.template.asOptionalInstanceOf[DefinedStatementTemplate])
+        .map(Parser.constant),
+      "writing shorthand symbol")
+  }
+  def termShorthandParser: KnownWordParser[DefinedTermTemplate] = {
+    KnownWordParser(
+      word => writingShorthands.find(_.symbol == word)
+        .flatMap(_.template.asOptionalInstanceOf[DefinedTermTemplate])
+        .map(Parser.constant),
+      "writing shorthand symbol")
+  }
 
   object RecognisedStatementDefinition {
     def unapply(symbol: String): Option[StatementDefinition] = {
@@ -71,19 +95,7 @@ case class AvailableEntries(entriesWithContexts: Seq[EntryWithContext])
     }
   }
 
-  object RecognisedStatementShorthand {
-    def unapply(string: String): Option[DefinedStatementTemplate] = {
-      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[DefinedStatementTemplate])
-    }
-  }
-  object RecognisedTermShorthand {
-    def unapply(string: String): Option[DefinedTermTemplate] = {
-      writingShorthands.find(_.symbol == string).flatMap(_.template.asOptionalInstanceOf[DefinedTermTemplate])
-    }
-  }
-
   def typeDefinitionParser: Parser[TypeDefinition] = Parser.singleWord.map(typeName => typeDefinitions.getOrElse(typeName, throw new Exception(s"Unrecognised type '$typeName'")))
-
 }
 
 object AvailableEntries {

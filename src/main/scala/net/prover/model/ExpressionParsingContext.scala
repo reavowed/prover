@@ -1,8 +1,9 @@
 package net.prover.model
 
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
-import net.prover.model.expressions.{StatementVariable, Term, TermVariable}
+import net.prover.model.expressions.{ExpressionVariable, Term}
 import net.prover.model.proof.{StepContext, StepProvingContext}
+import net.prover.parsing.{KnownWordParser, ParseException, Parser}
 
 case class ExpressionParsingContext(
     availableEntries: AvailableEntries,
@@ -38,31 +39,56 @@ case class ExpressionParsingContext(
     copy(variableDefinitions = variableDefinitions.addSimpleTermVariableNames(additionalTermVariableNames))
   }
 
-  private def getVariable[T](name: String, arguments: Seq[Term], definitions: Seq[VariableDefinition], prefix: String, description: String, constructor: (Int, Seq[Term]) => T): Option[T] = {
-    val definition = definitions.zipWithIndex.find { case (definition, _) => definition.name == name } orElse
-      s"$prefix(\\d+)".r.unapplySeq(name).flatMap(_.single).map(_.toInt).flatMap(i => definitions.lift(i).map(_ -> i))
-
-    definition.map { case (definition, index) =>
-      if (definition.arity != arguments.length) throw new Exception(s"${description.capitalize} variable $name requires ${definition.arity} parameters")
-      constructor(index, arguments)
-    }
+  private def getVariableDefinition(
+    identifier: String,
+    definitions: Seq[VariableDefinition],
+    prefix: String
+  ): Option[(VariableDefinition, Int)] = {
+    definitions.zipWithIndex.find { case (definition, _) => definition.name == identifier } orElse
+      s"$prefix(\\d+)".r.unapplySeq(identifier).flatMap(_.single).map(_.toInt).flatMap(i => definitions.lift(i).map(_ -> i))
   }
 
-  def getStatementVariable(name: String, arguments: Seq[Term]): Option[StatementVariable] = {
-    getVariable(name, arguments, variableDefinitions.statements, "s", "statement", StatementVariable.apply)
+  private def variableDefinitionParser(
+    definitions: Seq[VariableDefinition],
+    prefix: String,
+    description: String
+  ): KnownWordParser[(VariableDefinition, Int)] = {
+    KnownWordParser(
+      getVariableDefinition(_, definitions, prefix).map(Parser.constant),
+      description)
   }
-  def getTermVariable(name: String, arguments: Seq[Term]): Option[TermVariable] = {
-    getVariable(name, arguments, variableDefinitions.terms, "t", "term", TermVariable.apply)
+  def statementVariableDefinitionParser: KnownWordParser[(VariableDefinition, Int)] = {
+    variableDefinitionParser(variableDefinitions.statements, "s", "statement variable name")
+  }
+  def termVariableDefinitionParser: KnownWordParser[(VariableDefinition, Int)] = {
+    variableDefinitionParser(variableDefinitions.terms, "t", "term variable name")
   }
 
-  object SimpleStatementVariable {
-    def unapply(name: String): Option[StatementVariable] = {
-      getStatementVariable(name, Nil)
-    }
+  def simpleVariableParser[T <: ExpressionVariable[_]](
+    definitionParser: KnownWordParser[(VariableDefinition, Int)],
+    constructor: (Int, Seq[Term]) => T,
+    description: String
+  ): KnownWordParser[T] = {
+    for {
+      definitionAndIndex <- definitionParser
+      (definition, index) = definitionAndIndex
+      _ = if (definition.arity != 0) throw new ParseException(s"Missing arguments for $description variable ${definition.name}")
+    } yield constructor(index, Nil)
   }
-  object SimpleTermVariable {
-    def unapply(name: String): Option[TermVariable] = {
-      getTermVariable(name, Nil)
+  def variableApplicationParser[T <: ExpressionVariable[_]](
+    definitionParser: KnownWordParser[(VariableDefinition, Int)],
+    constructor: (Int, Seq[Term]) => T,
+    description: String
+  ): KnownWordParser[T] = {
+    KnownWordParser("with") {
+      for {
+        arguments <- Term.parser(this).listInParensOrSingle(None)
+        definitionAndIndex <- definitionParser
+        (definition, index) = definitionAndIndex
+        _ = if (arguments.length != definition.arity)
+          throw new ParseException(s"Invalid number of arguments for ${description} variable ${definition.name} - " +
+            "expected " + arguments.length + ", got " + arguments.length)
+      } yield constructor(index, arguments)
     }
   }
 }

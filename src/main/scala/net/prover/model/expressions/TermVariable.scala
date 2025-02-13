@@ -1,6 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model._
+import net.prover.parsing.KnownWordParser
 
 case class TermVariable(index: Int, arguments: Seq[Term]) extends ExpressionVariable[Term] with ExpressionLenses.ForTerms with Term {
   def getMatch(other: Expression): Option[Seq[Expression]] = other match {
@@ -34,4 +35,17 @@ case class TermVariable(index: Int, arguments: Seq[Term]) extends ExpressionVari
 
 object TermVariable {
   def apply(index: Int): TermVariable = TermVariable(index, Nil)
+
+  def simpleParser(implicit context: ExpressionParsingContext): KnownWordParser[TermVariable] = {
+    context.simpleVariableParser(
+      context.termVariableDefinitionParser,
+      TermVariable(_, _),
+      "term")
+  }
+  def applicationParser(implicit context: ExpressionParsingContext): KnownWordParser[TermVariable] = {
+    context.variableApplicationParser(
+      context.termVariableDefinitionParser,
+      TermVariable(_, _),
+      "term")
+  }
 }

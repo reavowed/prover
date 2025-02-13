@@ -1,6 +1,8 @@
 package net.prover.model.expressions
 
+import net.prover.model.ExpressionParsingContext
 import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition}
+import net.prover.parsing.KnownWordParser
 
 case class DefinedStatement(
     components: Seq[Expression],
@@ -25,5 +27,13 @@ case class DefinedStatement(
       components.map(_.replaceDefinitions(expressionDefinitionReplacements)),
       expressionDefinitionReplacements(definition).asInstanceOf[StatementDefinition]
     )(boundVariableNames)
+  }
+}
+object DefinedStatement {
+  def parser(implicit context: ExpressionParsingContext): KnownWordParser[DefinedStatement] = {
+    for {
+      statementDefinition <- context.availableEntries.statementDefinitionParser
+      definedStatement <- statementDefinition.statementParser
+    } yield definedStatement
   }
 }

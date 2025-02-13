@@ -1,40 +1,33 @@
 package net.prover.model.expressions
 
 import net.prover.model._
-import net.prover.model.entries.{StandalonePropertyDefinition, TypeDefinition, TypeQualifierDefinition}
-import net.prover.parsing.Parser
+import net.prover.model.entries.{StandalonePropertyDefinition, TypeDefinition, TypeQualifierDefinition, WritingShorthand}
+import net.prover.parsing.{KnownWordParser, Parser}
 
 trait Statement extends Expression with TypedExpression[Statement]
 
 object Statement {
-  def parser(implicit context: ExpressionParsingContext): Parser[Statement] = {
-    Parser.selectWordParser("statement") {
-      case "with" =>
-        for {
-          arguments <- Term.parser.listInParensOrSingle(None)
-          name <- Parser.singleWord
-        } yield context.getStatementVariable(name, arguments).getOrElse(throw new Exception(s"Unrecognised statement variable $name"))
-      case "is" =>
-        typeOrPropertyStatementParser
-      case context.availableEntries.RecognisedStatementDefinition(statementDefinition) =>
-        statementDefinition.statementParser
-      case context.SimpleStatementVariable(variable) =>
-        Parser.constant(variable)
-      case context.availableEntries.RecognisedStatementShorthand(template) =>
-        template.expressionParser.map(_.asInstanceOf[Statement])
-    }
+  def parser(implicit context: ExpressionParsingContext): KnownWordParser[Statement] = {
+    KnownWordParser.select(Seq(
+      StatementVariable.simpleParser,
+      StatementVariable.applicationParser,
+      DefinedStatement.parser,
+      WritingShorthand.statementParser,
+      typeOrPropertyStatementParser))
   }
 
-  def typeOrPropertyStatementParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
-    for {
-      term <- Term.parser
-      symbol <- Parser.singleWord
-      result <- context.availableEntries.typeDefinitions.get(symbol).map(typeStatementParser(term, _)) orElse
-        context.availableEntries.standalonePropertyDefinitions.find(_.symbol == symbol).map(propertyStatementParser(term, _)) orElse
-        typePropertyStatementParser(term, symbol) orElse
-        typeObjectStatementParser(term, symbol) getOrElse
-        (throw new Exception(s"Unrecognised type or property '$symbol'"))
-    } yield result
+  def typeOrPropertyStatementParser(implicit context: ExpressionParsingContext): KnownWordParser[Statement] = {
+    KnownWordParser("is") {
+      for {
+        term <- Term.parser
+        symbol <- Parser.singleWord
+        result <- context.availableEntries.typeDefinitions.get(symbol).map(typeStatementParser(term, _)) orElse
+          context.availableEntries.standalonePropertyDefinitions.find(_.symbol == symbol).map(propertyStatementParser(term, _)) orElse
+          typePropertyStatementParser(term, symbol) orElse
+          typeObjectStatementParser(term, symbol) getOrElse
+          (throw new Exception(s"Unrecognised type or property '$symbol'"))
+      } yield result
+    }
   }
 
   def typeStatementParser(term: Term, typeDefinition: TypeDefinition)(implicit context: ExpressionParsingContext): Parser[Statement] = {
@@ -134,13 +127,6 @@ object Statement {
   }
 
   def listParser(implicit context: ExpressionParsingContext): Parser[Seq[Statement]] = parser.listInParens(Some(","))
-
-  def variableParser(implicit context: ExpressionParsingContext): Parser[StatementVariable] = parser.map {
-    case variable: StatementVariable =>
-      variable
-    case nonVariable =>
-      throw new Exception(s"Expected statement variable, got $nonVariable")
-  }
 
   def templateParser(implicit templateParsingContext: TemplateParsingContext): Parser[Template] = {
     Parser.selectWordParser("statement template")(templateParserFunction)

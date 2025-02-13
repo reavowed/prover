@@ -6,7 +6,7 @@ import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions._
 import net.prover.model.{DisambiguatedSymbol, ExpressionParsingContext, Format, Inference, ParsingContextWithParameters, TemplateParsingContext, VariableDefinitions}
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 
 trait ExpressionDefinition {
   def baseSymbol: String
@@ -141,12 +141,12 @@ trait StatementDefinition extends ExpressionDefinition {
 
   override val complexity: Int = definingStatement.map(_.definitionalComplexity).getOrElse(1)
 
-  def statementParser(implicit context: ExpressionParsingContext): Parser[Statement] = {
+  def statementParser(implicit context: ExpressionParsingContext): Parser[DefinedStatement] = {
     componentExpressionParser.map { case (newBoundVariableNames, components) =>
       DefinedStatement(components, this)(newBoundVariableNames)
     }
   }
-  def templateParser(implicit templateParsingContext: TemplateParsingContext): Parser[Template] = {
+  def templateParser(implicit templateParsingContext: TemplateParsingContext): Parser[DefinedStatementTemplate] = {
     componentTemplateParser.map { case (newBoundVariableNames, components) =>
       DefinedStatementTemplate(this, newBoundVariableNames, components)
     }
@@ -194,7 +194,7 @@ trait TermDefinition extends ExpressionDefinition {
 
   override val complexity: Int = definitionPredicate.definitionalComplexity
 
-  def termParser(implicit context: ExpressionParsingContext): Parser[Term] = {
+  def termParser(implicit context: ExpressionParsingContext): Parser[DefinedTerm] = {
     componentExpressionParser.map { case (newBoundVariableNames, components) =>
       DefinedTerm(components, this)(newBoundVariableNames)
     }
@@ -224,5 +224,3 @@ trait TermDefinition extends ExpressionDefinition {
 
   override val hashCode: Int = symbol.hashCode
 }
-
-case class DerivedStatementDefinition()

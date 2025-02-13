@@ -12,7 +12,7 @@ class StandalonePropertyDefinitionSpec extends Specification {
   private def testParsingAndSerialization(standalonePropertyDefinition: StandalonePropertyDefinition)(implicit availableEntries: AvailableEntries): MatchResult[Any] = {
     val serializedDefinition = standalonePropertyDefinition.serializedLines.mkString("\n")
     val reparsedDefinition = ChapterEntry.parser.parseAndDiscard(serializedDefinition)
-    reparsedDefinition must beSome(standalonePropertyDefinition)
+    reparsedDefinition mustEqual standalonePropertyDefinition
   }
 
   "type qualifier definition parser" should {

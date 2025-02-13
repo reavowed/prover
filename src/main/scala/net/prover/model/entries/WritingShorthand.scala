@@ -1,10 +1,10 @@
 package net.prover.model.entries
 
 import net.prover.entries.{EntryParsingContext, EntryWithContext}
-import net.prover.model.Inference
+import net.prover.model.{ExpressionParsingContext, Inference}
 import net.prover.model.definitions.ExpressionDefinition
-import net.prover.model.expressions.Template
-import net.prover.parsing.Parser
+import net.prover.model.expressions.{Statement, Template, Term}
+import net.prover.parsing.{KnownWordParser, Parser}
 
 case class WritingShorthand(template: Template, symbol: String) extends ChapterEntry {
   override def name: String = symbol
@@ -25,4 +25,13 @@ object WritingShorthand extends ChapterEntryParser {
       template <- Template.parser
       symbol <- Parser.required("as", Parser.singleWord)
     } yield WritingShorthand(template, symbol)
+
+  def statementParser(implicit context: ExpressionParsingContext): KnownWordParser[Statement] = {
+    context.availableEntries.statementShorthandParser
+      .flatMap(_.expressionParser.map(_.asInstanceOf[Statement]))
+  }
+  def termParser(implicit context: ExpressionParsingContext): KnownWordParser[Term] = {
+    context.availableEntries.termShorthandParser
+      .flatMap(_.expressionParser.map(_.asInstanceOf[Term]))
+  }
 }

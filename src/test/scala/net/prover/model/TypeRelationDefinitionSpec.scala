@@ -12,7 +12,7 @@ class TypeRelationDefinitionSpec extends Specification {
   private def testParsingAndSerialization(typeRelationDefinition: TypeRelationDefinition)(implicit availableEntries: AvailableEntries): MatchResult[Any] = {
     val serializedDefinition = typeRelationDefinition.serializedLines.mkString("\n")
     val reparsedDefinition = ChapterEntry.parser.parseAndDiscard(serializedDefinition)
-    reparsedDefinition must beSome(typeRelationDefinition)
+    reparsedDefinition mustEqual typeRelationDefinition
   }
 
   "type relation definition parser" should {

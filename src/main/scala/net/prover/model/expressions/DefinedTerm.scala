@@ -1,7 +1,8 @@
 package net.prover.model.expressions
 
-import net.prover.model.Substitutions
+import net.prover.model.{ExpressionParsingContext, Substitutions}
 import net.prover.model.definitions.{ExpressionDefinition, TermDefinition}
+import net.prover.parsing.KnownWordParser
 
 case class DefinedTerm(
     components: Seq[Expression],
@@ -48,5 +49,14 @@ case class DefinedTerm(
   ): Iterator[(Term, Substitutions.Possible)] = {
     super[Term].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth) ++
       super[DefinedExpression].calculateApplicatives(baseArguments, substitutions, internalDepth, previousInternalDepth, externalDepth)
+  }
+}
+
+object DefinedTerm {
+  def parser(implicit context: ExpressionParsingContext): KnownWordParser[DefinedTerm] = {
+    for {
+      termDefinition <- context.availableEntries.termDefinitionParser
+      definedTerm <- termDefinition.termParser
+    } yield definedTerm
   }
 }

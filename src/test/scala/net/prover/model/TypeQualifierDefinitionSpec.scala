@@ -12,7 +12,7 @@ class TypeQualifierDefinitionSpec extends Specification {
   private def testParsingAndSerialization(typeQualifierDefinition: TypeQualifierDefinition)(implicit availableEntries: AvailableEntries): MatchResult[Any] = {
     val serializedDefinition = typeQualifierDefinition.serializedLines.mkString("\n")
     val reparsedDefinition = ChapterEntry.parser.parseAndDiscard(serializedDefinition)
-    reparsedDefinition must beSome(typeQualifierDefinition)
+    reparsedDefinition mustEqual typeQualifierDefinition
   }
 
   "type qualifier definition parser" should {

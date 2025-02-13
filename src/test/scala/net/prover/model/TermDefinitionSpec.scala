@@ -12,7 +12,7 @@ class TermDefinitionSpec extends Specification {
     implicit val availableEntries = defaultAvailableEntries
     val serializedDefinition = termDefinition.serializedLines.mkString("\n")
     val reparsedDefinition = ChapterEntry.parser.parseAndDiscard(serializedDefinition)
-    reparsedDefinition must beSome(termDefinition)
+    reparsedDefinition mustEqual termDefinition
   }
 
   "term definition parser" should {
