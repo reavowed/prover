@@ -6,7 +6,7 @@ import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.TermComponent
 import net.prover.model.definitions.{ExpressionDefinition, Qualifier, StatementDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 
 case class TypeDefinition(
     symbol: String,
@@ -67,10 +67,6 @@ case class TypeDefinition(
       defaultQualifier,
       explicitName,
       definingStatement.replaceDefinitions(expressionDefinitionReplacements))
-  }
-
-  def parentQualifierParser(implicit availableEntries: AvailableEntries): Parser[Option[TypeQualifierDefinition]] = {
-    Parser.optional("parentQualifier", Parser.singleWord.map(qualifierSymbol => availableEntries.qualifiersByType(symbol).find(_.symbol == qualifierSymbol).getOrElse(throw new Exception(s"Unrecognised qualifier '$qualifierSymbol'"))))
   }
 }
 

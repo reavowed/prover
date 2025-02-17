@@ -27,7 +27,7 @@ case class KnownWordParser[+T](
       .map(_.parse(tokenStreamAfterWord))
   }
 
-  def required: Parser[T] = Parser(attemptParse)
+  def optional: Parser[Option[T]] = Parser(attemptParseOption)
 
   def whileDefined(): Parser[List[T]] = Parser { tokenStream =>
     def getNext(acc: List[T], tokenStream: TokenStream): (List[T], TokenStream) = {

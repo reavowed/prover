@@ -37,7 +37,7 @@ object Statement {
           qualifier.variableDefinitions.map(_ => Term.parser).traverse.map(None -> _)
         case None =>
           for {
-            qualifierOption <- Parser.optional(qualifierSymbol => context.availableEntries.qualifiersByType.get(typeDefinition.symbol).flatMap(_.find(_.symbol == qualifierSymbol)))
+            qualifierOption <- context.availableEntries.typeQualifierParser(typeDefinition).optional
             qualifierTerms <- qualifierOption match {
               case Some(qualifier) =>
                 qualifier.qualifier.variableDefinitions.map(_ => Term.parser).traverse
@@ -68,25 +68,25 @@ object Statement {
               Seq(mainTerm)
         }
       }
-      def getProperty(w: String): Option[Parser[Statement]] = {
-        context.availableEntries.propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
-          val terms = getTerms(d.parentTypeConditions.requiredParentQualifier, s"property ${d.symbol}")
-          Parser.constant(d.statementDefinition(terms:_*))
-        }
+      def propertyParser: KnownWordParser[Statement] = {
+        context.availableEntries.propertyDefinitionParser(typeDefinition)
+          .flatMap { d =>
+            val terms = getTerms(d.parentTypeConditions.requiredParentQualifier, s"property ${d.symbol}")
+            Parser.constant(d.statementDefinition(terms:_*))
+          }
       }
-      def getObject(w: String): Option[Parser[Statement]] = {
-        context.availableEntries.relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == w).map { d =>
-          for {
-            objectTerm <- Term.parser
-            otherTerms = getTerms(d.parentTypeConditions.requiredParentQualifier, s"object ${d.symbol}")
-          } yield d.statementDefinition(objectTerm +: otherTerms:_*)
-        }
+
+      def relatedObjectParser: KnownWordParser[Statement] = {
+        context.availableEntries.relatedObjectParser(typeDefinition)
+          .flatMap { d =>
+            for {
+              objectTerm <- Term.parser
+              otherTerms = getTerms(d.parentTypeConditions.requiredParentQualifier, s"object ${d.symbol}")
+            } yield d.statementDefinition(objectTerm +: otherTerms: _*)
+          }
       }
-      val parser = for {
-        word <- Parser.singleWord
-        result <- getProperty(word) orElse getObject(word) getOrElse { throw new Exception(s"Unrecognised property or object $word")}
-      } yield result
-      parser.listInParensOrSingle(None)
+      KnownWordParser.select(Seq(propertyParser, relatedObjectParser))
+        .listInParensOrSingle(None)
     }
 
     for {

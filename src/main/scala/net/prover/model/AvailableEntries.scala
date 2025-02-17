@@ -84,6 +84,22 @@ case class AvailableEntries(entriesWithContexts: Seq[EntryWithContext])
       "writing shorthand symbol")
   }
 
+  def propertyDefinitionParser(typeDefinition: TypeDefinition): KnownWordParser[PropertyDefinitionOnType] = {
+    KnownWordParser(
+      word => propertyDefinitionsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == word).map(Parser.constant),
+      "property definition symbol")
+  }
+  def typeQualifierParser(typeDefinition: TypeDefinition): KnownWordParser[TypeQualifierDefinition] = {
+    KnownWordParser(
+      word => qualifiersByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == word).map(Parser.constant),
+      "qualifier symbol")
+  }
+  def relatedObjectParser(typeDefinition: TypeDefinition): KnownWordParser[RelatedObjectDefinition] = {
+    KnownWordParser(
+      word => relatedObjectsByType.getOrElse(typeDefinition.symbol, Nil).find(_.symbol == word).map(Parser.constant),
+      "related object symbol")
+  }
+
   object RecognisedStatementDefinition {
     def unapply(symbol: String): Option[StatementDefinition] = {
       statementDefinitionsBySymbol.get(symbol)

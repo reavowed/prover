@@ -4,7 +4,7 @@ import net.prover.model.definitions.{ExpressionDefinition, TermListAdapter}
 import net.prover.model.expressions.{Statement, TermVariable}
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{AvailableEntries, SimpleVariableDefinition}
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 import net.prover.proving.structure.definitions.ConjunctionDefinition
 
 case class ParentTypeConditions(
@@ -72,7 +72,7 @@ object ParentTypeConditions {
   def parser(implicit context: AvailableEntries): Parser[ParentTypeConditions] = {
     for {
       parentType <- context.typeDefinitionParser
-      requiredParentQualifier <- parentType.parentQualifierParser
+      requiredParentQualifier <- KnownWordParser("parentQualifier")(context.typeQualifierParser(parentType)).optional
       requiredParentObjects <- RequiredParentObjects.parser(parentType)
       termListAdapter <- Parser.optional("termListAdapter", TermListAdapter.parser)
       conjunctionDefinition = context.conjunctionDefinitionOption.getOrElse(throw new Exception("Cannot create parent type condition without conjunction"))
