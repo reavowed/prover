@@ -6,7 +6,7 @@ import net.prover.model._
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
@@ -97,10 +97,12 @@ object Step {
     def serializedLines: Seq[String] = Seq(s"target ${statement.serialized}")
   }
   object TargetStep {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[TargetStep] = {
-      for {
-        statement <- Statement.parser
-      } yield TargetStep(statement)
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[TargetStep] = {
+      KnownWordParser("target") {
+        for {
+          statement <- Statement.parser
+        } yield TargetStep(statement)
+      }
     }
   }
 
@@ -116,24 +118,25 @@ object Step {
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def length: Int = 1
     override def serializedLines: Seq[String] = {
-      Seq(Seq(AssertionStep.label, statement.serialized, inference.id, substitutions.serialize, Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
+      Seq(Seq("prove", statement.serialized, inference.id, substitutions.serialize, Premise.serialize(premises)).filter(_.nonEmpty).mkString(" "))
     }
     def pendingPremises: Map[Seq[Int], Premise.Pending] = {
       premises.flatMapWithIndex((p, i) => p.getPendingPremises(Seq(i)).toSeq).toMap
     }
   }
   object AssertionStep {
-    val label: String = "prove"
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[AssertionStep] = {
-      for {
-        statement <- Statement.parser
-        inference <- Inference.parser
-        substitutions <- inference.substitutionsParser
-        premiseStatements = inference.substitutePremises(substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
-        premises <- premiseStatements.map(Premise.parser).traverse
-        _ = inference.validatePremisesAndConclusion(premises.map(_.statement), statement, substitutions).getOrElse(throw new Exception("Could not validate premises and conclusion"))
-      } yield {
-        AssertionStep(statement, inference, premises, substitutions)
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[AssertionStep] = {
+      KnownWordParser("prove") {
+        for {
+          statement <- Statement.parser
+          inference <- Inference.parser
+          substitutions <- inference.substitutionsParser
+          premiseStatements = inference.substitutePremises(substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
+          premises <- premiseStatements.map(Premise.parser).traverse
+          _ = inference.validatePremisesAndConclusion(premises.map(_.statement), statement, substitutions).getOrElse(throw new Exception("Could not validate premises and conclusion"))
+        } yield {
+          AssertionStep(statement, inference, premises, substitutions)
+        }
       }
     }
     def forInference(inference: Inference, substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[AssertionStep] = {
@@ -163,13 +166,15 @@ object Step {
     }
   }
   object DeductionStep {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[DeductionStep] = {
-      val deductionDefinition = provingContext.deductionDefinitionOption
-        .getOrElse(throw new Exception("Cannot prove a deduction without an appropriate statement definition"))
-      for {
-        assumption <- Statement.parser
-        substeps <- childStepsParser(stepContext.addAssumption(assumption), provingContext).inBraces
-      } yield DeductionStep(assumption, substeps, deductionDefinition)
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[DeductionStep] = {
+      KnownWordParser("assume") {
+        val deductionDefinition = provingContext.deductionDefinitionOption
+          .getOrElse(throw new Exception("Cannot prove a deduction without an appropriate statement definition"))
+        for {
+          assumption <- Statement.parser
+          substeps <- childStepsParser(stepContext.addAssumption(assumption), provingContext).inBraces
+        } yield DeductionStep(assumption, substeps, deductionDefinition)
+      }
     }
   }
 
@@ -190,13 +195,15 @@ object Step {
     }
   }
   object GeneralizationStep {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[GeneralizationStep] = {
-      val generalizationDefinition = provingContext.generalizationDefinitionOption
-        .getOrElse(throw new Exception("Generalization step could not find generalization statement"))
-      for {
-        variableName <- Parser.singleWord
-        substeps <- childStepsParser(stepContext.addBoundVariable(variableName), provingContext).inBraces
-      } yield GeneralizationStep(variableName, substeps, generalizationDefinition)
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[GeneralizationStep] = {
+      KnownWordParser("take") {
+        val generalizationDefinition = provingContext.generalizationDefinitionOption
+          .getOrElse(throw new Exception("Generalization step could not find generalization statement"))
+        for {
+          variableName <- Parser.singleWord
+          substeps <- childStepsParser(stepContext.addBoundVariable(variableName), provingContext).inBraces
+        } yield GeneralizationStep(variableName, substeps, generalizationDefinition)
+      }
     }
   }
 
@@ -247,24 +254,26 @@ object Step {
     }
   }
   object NamingStep {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[NamingStep] = {
-      for {
-        variableName <- Parser.singleWord
-        assumption <- Statement.parser(ExpressionParsingContext.atStep(stepContext.addBoundVariable(variableName), provingContext))
-        innerStepContext = stepContext.addBoundVariable(variableName).addAssumption(assumption)
-        inference <- Inference.parser
-        substitutions <- inference.substitutionsParser
-        premiseStatements = inference.substitutePremises(substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
-        premises <- premiseStatements.init.map(Premise.parser).traverse
-        substeps <- childStepsParser(innerStepContext, provingContext).inBraces
-        internalConclusion = substeps.lastOption.map(_.statement).getOrElse(throw new Exception("No conclusion for naming step"))
-        extractedConclusion = internalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
-        generalizationDefinition = provingContext.generalizationDefinitionOption.getOrElse(throw new Exception("Naming step requires a generalization statement"))
-        deductionDefinition = provingContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
-        internalPremise = generalizationDefinition(variableName, deductionDefinition(assumption, internalConclusion))
-        _ = inference.validatePremisesAndConclusion(premises.map(_.statement) :+ internalPremise, extractedConclusion, substitutions).getOrElse(throw new Exception("Could not validate premises and conclusion"))
-      } yield {
-        NamingStep(variableName, assumption, extractedConclusion, substeps, inference, premises, substitutions, generalizationDefinition, deductionDefinition)
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[NamingStep] = {
+      KnownWordParser("let") {
+        for {
+          variableName <- Parser.singleWord
+          assumption <- Statement.parser(ExpressionParsingContext.atStep(stepContext.addBoundVariable(variableName), provingContext))
+          innerStepContext = stepContext.addBoundVariable(variableName).addAssumption(assumption)
+          inference <- Inference.parser
+          substitutions <- inference.substitutionsParser
+          premiseStatements = inference.substitutePremises(substitutions).getOrElse(throw new Exception("Could not apply substitutions"))
+          premises <- premiseStatements.init.map(Premise.parser).traverse
+          substeps <- childStepsParser(innerStepContext, provingContext).inBraces
+          internalConclusion = substeps.lastOption.map(_.statement).getOrElse(throw new Exception("No conclusion for naming step"))
+          extractedConclusion = internalConclusion.removeExternalParameters(1).getOrElse(throw new Exception("Naming step conclusion could not be extracted"))
+          generalizationDefinition = provingContext.generalizationDefinitionOption.getOrElse(throw new Exception("Naming step requires a generalization statement"))
+          deductionDefinition = provingContext.deductionDefinitionOption.getOrElse(throw new Exception("Naming step requires a deduction statement"))
+          internalPremise = generalizationDefinition(variableName, deductionDefinition(assumption, internalConclusion))
+          _ = inference.validatePremisesAndConclusion(premises.map(_.statement) :+ internalPremise, extractedConclusion, substitutions).getOrElse(throw new Exception("Could not validate premises and conclusion"))
+        } yield {
+          NamingStep(variableName, assumption, extractedConclusion, substeps, inference, premises, substitutions, generalizationDefinition, deductionDefinition)
+        }
       }
     }
   }
@@ -280,12 +289,14 @@ object Step {
     }
   }
   object ElidedStep {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[ElidedStep] = {
-      for {
-        highlightedInference <- Inference.parser.tryOrNone
-        description <- Parser.allInParens.tryOrNone
-        substeps <- childStepsParser.inBraces
-      } yield ElidedStep(substeps, highlightedInference, description)
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[ElidedStep] = {
+      KnownWordParser("elided") {
+        for {
+          highlightedInference <- Inference.parser.tryOrNone
+          description <- Parser.allInParens.tryOrNone
+          substeps <- childStepsParser.inBraces
+        } yield ElidedStep(substeps, highlightedInference, description)
+      }
     }
     def ifNecessary(substeps: Seq[Step], elider: Seq[Step] => Step): Option[Step] = {
       substeps match {
@@ -321,11 +332,13 @@ object Step {
     }
   }
   object SubproofStep {
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[SubproofStep] = {
-      for {
-        name <- Parser.allInParens
-        substeps <- childStepsParser.inBraces
-      } yield SubproofStep(name, substeps)
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[SubproofStep] = {
+      KnownWordParser("subproof") {
+        for {
+          name <- Parser.allInParens
+          substeps <- childStepsParser.inBraces
+        } yield SubproofStep(name, substeps)
+      }
     }
   }
 
@@ -365,11 +378,13 @@ object Step {
       } yield ExistingStatementExtractionStep(premises, extraction)
     }
 
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[ExistingStatementExtractionStep] = {
-      builder[Parser](
-        sc => KnownStatement.listParser(sc, implicitly).map(_._1),
-        sc => AppliedExtraction.parser(sc, implicitly)
-      ).inBraces
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[ExistingStatementExtractionStep] = {
+      KnownWordParser("existingStatementExtraction") {
+        builder[Parser](
+          sc => KnownStatement.listParser(sc, implicitly).map(_._1),
+          sc => AppliedExtraction.parser(sc, implicitly)
+        ).inBraces
+      }
     }
   }
 
@@ -387,8 +402,10 @@ object Step {
         InferenceExtractionStep(appliedInferenceExtraction)
       }
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[InferenceExtractionStep] = {
-      AppliedInferenceExtraction.parser.inBraces.map(InferenceExtractionStep(_))
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[InferenceExtractionStep] = {
+      KnownWordParser("inferenceExtraction") {
+        AppliedInferenceExtraction.parser.inBraces.map(InferenceExtractionStep(_))
+      }
     }
   }
 
@@ -414,10 +431,12 @@ object Step {
           steps.last.asInstanceOf[Step.AssertionOrExtraction])
       }
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[WrappedInferenceApplicationStep] = {
-      for {
-        substeps <- childStepsParser.inBraces
-      } yield WrappedInferenceApplicationStep(substeps)
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[WrappedInferenceApplicationStep] = {
+      KnownWordParser("wrappedInferenceApplication") {
+        for {
+          substeps <- childStepsParser.inBraces
+        } yield WrappedInferenceApplicationStep(substeps)
+      }
     }
   }
 
@@ -437,10 +456,12 @@ object Step {
         WrappedPremiseDerivationStep(unwrappers, steps.map(_.asInstanceOf[Step.PremiseDerivation]))
       }
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[WrappedPremiseDerivationStep] = {
-      for {
-        substeps <- childStepsParser.inBraces
-      } yield WrappedPremiseDerivationStep(substeps)
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[WrappedPremiseDerivationStep] = {
+      KnownWordParser("wrappedPremiseDerivation") {
+        for {
+          substeps <- childStepsParser.inBraces
+        } yield WrappedPremiseDerivationStep(substeps)
+      }
     }
   }
 
@@ -471,10 +492,12 @@ object Step {
         steps.init.map(_.asInstanceOf[Step.InferenceApplicationWithoutPremises]),
         steps.last.asInstanceOf[Step.InferenceApplicationWithoutPremises])
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[InferenceWithPremiseDerivationsStep] = {
-      for {
-        substeps <- childStepsParser.inBraces
-      } yield InferenceWithPremiseDerivationsStep(substeps)
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[InferenceWithPremiseDerivationsStep] = {
+      KnownWordParser("inferenceWithPremiseDerivations") {
+        for {
+          substeps <- childStepsParser.inBraces
+        } yield InferenceWithPremiseDerivationsStep(substeps)
+      }
     }
   }
 
@@ -496,31 +519,31 @@ object Step {
           RewriteStep(premise, substitutionStep)
       }
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[RewriteStep] = {
-      (for {
-        premise <- RewritePremise.parser(stepContext.forChild(), implicitly)
-        _ <- Parser.requiredWord(AssertionStep.label)
-        substitutionStep <- AssertionStep.parser(stepContext.forChild().addSteps(premise.toProofSteps), implicitly)
-      } yield RewriteStep(premise, substitutionStep)).inBraces
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[RewriteStep] = {
+      KnownWordParser("rewrite") {
+        (for {
+          premise <- RewritePremise.parser(stepContext.forChild(), implicitly)
+          substitutionStep <- AssertionStep.parser(stepContext.forChild().addSteps(premise.toProofSteps), implicitly)
+        } yield RewriteStep(premise, substitutionStep)).inBraces
+      }
     }
   }
 
-  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Option[Step]] = {
-    Parser.selectOptionalWordParser {
-      case "target" => TargetStep.parser
-      case "prove" => AssertionStep.parser
-      case "assume" => DeductionStep.parser
-      case "take" => GeneralizationStep.parser
-      case "let" => NamingStep.parser
-      case "elided" => ElidedStep.parser
-      case "subproof" => SubproofStep.parser
-      case "existingStatementExtraction" => ExistingStatementExtractionStep.parser
-      case "inferenceExtraction" => InferenceExtractionStep.parser
-      case "wrappedInferenceApplication" => WrappedInferenceApplicationStep.parser
-      case "wrappedPremiseDerivation" => WrappedPremiseDerivationStep.parser
-      case "inferenceWithPremiseDerivations" => InferenceWithPremiseDerivationsStep.parser
-      case "rewrite" => RewriteStep.parser
-    }
+  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[Step] = {
+    KnownWordParser.select(Seq(
+      TargetStep.parser,
+      AssertionStep.parser,
+      DeductionStep.parser,
+      GeneralizationStep.parser,
+      NamingStep.parser,
+      ElidedStep.parser,
+      SubproofStep.parser,
+      ExistingStatementExtractionStep.parser,
+      InferenceExtractionStep.parser,
+      WrappedInferenceApplicationStep.parser,
+      WrappedPremiseDerivationStep.parser,
+      InferenceWithPremiseDerivationsStep.parser,
+      RewriteStep.parser))
   }
   def childStepsParser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Seq[Step]] = {
     listParser(stepContext.forChild(), provingContext)
@@ -528,7 +551,7 @@ object Step {
   def listParser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Seq[Step]] = {
     listParser(parser(_, implicitly)).map(_._1)
   }
-  def listParser[T <: Step](getStepParser: StepContext => Parser[Option[T]])(implicit stepContext: StepContext): Parser[(Seq[T], StepContext)] = {
+  def listParser[T <: Step](getStepParser: StepContext => KnownWordParser[T])(implicit stepContext: StepContext): Parser[(Seq[T], StepContext)] = {
     StepLike.listParser[T](getStepParser(_), _.addStep(_))
   }
 }

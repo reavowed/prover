@@ -3,7 +3,7 @@ package net.prover.proving.rewrite
 import net.prover.model._
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.proof.{Step, StepContext, StepLike}
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 import net.prover.proving.extraction.AppliedInferenceExtraction
 
 sealed trait RewritePremise extends StepLike.Wrapper {
@@ -27,13 +27,13 @@ object RewritePremise {
   }
 
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[RewritePremise] = {
-    KnownStatement.parser.mapMap(Known(_))
-      .orElse(
-        Parser.requiredWord("byInference").flatMap(_ =>
-          (for {
-            premises <- KnownStatement.listParser(stepContext.forChild(), implicitly).map(_._1)
-            extraction <- AppliedInferenceExtraction.parser(stepContext.forChild().addSteps(premises.flatMap(_.toProofSteps)), implicitly)
-          } yield ByInference(premises, extraction)).inBraces
-        ))
+    val knownParser = KnownStatement.parser.map(Known(_))
+    val inferenceParser = KnownWordParser("byInference") {
+      (for {
+        premises <- KnownStatement.listParser(stepContext.forChild(), implicitly).map(_._1)
+        extraction <- AppliedInferenceExtraction.parser(stepContext.forChild().addSteps(premises.flatMap(_.toProofSteps)), implicitly)
+      } yield ByInference(premises, extraction)).inBraces
+    }
+    KnownWordParser.select(Seq(knownParser, inferenceParser))
   }
 }

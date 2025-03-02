@@ -2,7 +2,7 @@ package net.prover.proving.extraction
 
 import net.prover.model._
 import net.prover.model.proof.{Step, StepContext, StepLike}
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 import net.prover.proving.derivation.DefinitionDeconstructionBase
 
 case class AppliedExtraction(extractionSteps: Seq[AppliedExtractionStep], chainedRewriteSteps: Seq[Step.AssertionStep]) extends StepLike.Wrapper {
@@ -28,20 +28,16 @@ object AppliedExtraction {
   }
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[AppliedExtraction] = {
     for {
-      extractionStepsAndContext <- Parser.mapFoldWhileDefined[AppliedExtractionStep, StepContext](stepContext) { (_, currentStepContext) =>
-        AppliedExtractionStep.parser(currentStepContext, implicitly)
-          .mapMap(step => step -> currentStepContext.addStep(step.toProofStep))
+      extractionStepsAndContext <- KnownWordParser.mapFoldWhileDefined(stepContext) { stepContext =>
+        AppliedExtractionStep.parser(stepContext, implicitly)
+          .map(step => step -> stepContext.addStep(step.toProofStep))
       }
       (extractionSteps, stepContext) = extractionStepsAndContext
-      rewriteSteps <- Parser.optional(
-        "chainedRewrite",
+      rewriteSteps <- KnownWordParser("chainedRewrite") {
         Parser.mapFoldWhileDefined[Step.AssertionStep, StepContext](stepContext) { (_, stepContext) =>
-          Parser.optionalWord(Step.AssertionStep.label)
-            .flatMapMap(_ => Step.AssertionStep.parser(stepContext, implicitly)
-              .map(step => step -> stepContext.addStep(step))
-            )
-        }.inBraces.map(_._1),
-        Nil)
+          Step.AssertionStep.parser(stepContext, implicitly).optional.mapMap(step => step -> stepContext.addStep(step))
+        }.inBraces.map(_._1)
+      }.optional.map(_.getOrElse(Nil))
     } yield AppliedExtraction(extractionSteps, rewriteSteps)
   }
 }
@@ -67,20 +63,18 @@ object AppliedExtractionStep {
       step.inferenceExtraction.extraction.extractionSteps.collect { case AppliedExtractionStep.Assertion(step) => step })
   }
 
-  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Option[AppliedExtractionStep]] = {
-    Parser.selectOptionalWordParser {
-      case Step.AssertionStep.label => Step.AssertionStep.parser.map(Assertion)
-      case DefinitionDeconstructionBase.label => {
-        val innerContext = stepContext.forChild()
-        for {
-          deconstructionStep <- Parser.requiredWord(Step.AssertionStep.label).flatMap(_ => Step.AssertionStep.parser(innerContext, implicitly))
-          stepContextAfterDeconstructionStep = innerContext.addStep(deconstructionStep)
-          additionalSteps <- Step.listParser(stepContext =>
-            Parser.optionalWord(Step.AssertionStep.label)
-              .flatMapMap(_ => Step.AssertionStep.parser(stepContext, implicitly))
-          )(stepContextAfterDeconstructionStep).map(_._1)
-        } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)
-      }.inBraces
+  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[AppliedExtractionStep] = {
+    val assertionParser = Step.AssertionStep.parser.map(Assertion(_))
+    val definitionParser = KnownWordParser("deconstruction") {
+      val innerContext = stepContext.forChild()
+      (for {
+        deconstructionStep <- Step.AssertionStep.parser(innerContext, implicitly)
+        stepContextAfterDeconstructionStep = innerContext.addStep(deconstructionStep)
+        additionalSteps <- Step.listParser(stepContext =>
+          Step.AssertionStep.parser(stepContext, implicitly)
+        )(stepContextAfterDeconstructionStep).map(_._1)
+      } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)).inBraces
     }
+    KnownWordParser.select(Seq(assertionParser, definitionParser))
   }
 }

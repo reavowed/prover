@@ -2,7 +2,7 @@ package net.prover.proving.derivation
 
 import net.prover.model._
 import net.prover.model.proof.{Step, StepContext, StepLike}
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 
 case class SimpleDerivation(steps: Seq[SimpleDerivationStep]) extends StepLike.Wrapper {
@@ -83,19 +83,18 @@ object SimpleDerivationStep {
     override def serializedLines: Seq[String] = super.serializedLines.indentInLabelledBracesIfPresent("extraction")
   }
 
-  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[Option[SimpleDerivationStep]] = {
-    Parser.selectOptionalWordParser {
-      case Step.AssertionStep.label =>
-        Step.AssertionStep.parser.map(Assertion(_))
-      case "definition" =>
-        (for {
-          _ <- Parser.requiredWord(Step.AssertionStep.label)
-          deconstructionStep <- Step.AssertionStep.parser
-          additionalSteps <- Parser.optionalWord(Step.AssertionStep.label).flatMapMap(_ => Step.AssertionStep.parser).whileDefined
-        } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)).inBraces
-      case "extraction" =>
-        AppliedInferenceExtraction.parser.inBraces.map(InferenceExtraction(_))
+  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[SimpleDerivationStep] = {
+    val assertionParser = Step.AssertionStep.parser.map(Assertion(_))
+    val definitionParser = KnownWordParser("definition") {
+      (for {
+        deconstructionStep <- Step.AssertionStep.parser
+        additionalSteps <- Step.AssertionStep.parser.whileDefined()
+      } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)).inBraces
     }
+    val extractionParser = KnownWordParser("extraction") {
+      AppliedInferenceExtraction.parser.inBraces.map(InferenceExtraction(_))
+    }
+    KnownWordParser.select(Seq(assertionParser, definitionParser, extractionParser))
   }
 
   implicit def fromSeq[T](seq: Seq[T])(implicit f: T => SimpleDerivationStep): Seq[SimpleDerivationStep] = seq.map(f)

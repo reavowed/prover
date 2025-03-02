@@ -60,4 +60,15 @@ object KnownWordParser {
     }
     getNext(acc, tokenStream)
   }
+  def mapFoldWhileDefined[A, T](acc: A)(f: A => KnownWordParser[(T, A)]): Parser[(Seq[T], A)] = Parser { tokenStream =>
+    def getNext(acc: A, valuesSoFar: Seq[T], tokenStream: TokenStream): ((Seq[T], A), TokenStream) = {
+      f(acc).attemptParseOption(tokenStream) match {
+        case (Some((value, acc)), tokenStream) =>
+          getNext(acc, valuesSoFar :+ value, tokenStream)
+        case (None, tokenStream) =>
+          ((valuesSoFar, acc), tokenStream)
+      }
+    }
+    getNext(acc, Nil, tokenStream)
+  }
 }

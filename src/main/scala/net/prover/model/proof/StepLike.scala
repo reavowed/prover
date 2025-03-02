@@ -1,7 +1,7 @@
 package net.prover.model.proof
 
 import net.prover.model.expressions.Statement
-import net.prover.parsing.Parser
+import net.prover.parsing.{KnownWordParser, Parser}
 
 trait StepLike {
   def statement: Statement
@@ -18,12 +18,12 @@ object StepLike {
   }
 
   def listParser[T](
-    getParser: StepContext => Parser[Option[T]],
+    getParser: StepContext => KnownWordParser[T],
     addToContext: (StepContext, T) => StepContext)(
     implicit stepContext: StepContext
   ): Parser[(Seq[T], StepContext)] = {
     Parser.mapFoldWhileDefined[T, StepContext](stepContext) { (_, stepContext) =>
-      getParser(stepContext)
+      getParser(stepContext).optional
         .mapMap(step => step -> addToContext(stepContext, step))
     }
   }

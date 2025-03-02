@@ -15,7 +15,6 @@ object AppliedInferenceExtraction {
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[AppliedInferenceExtraction] = {
     val innerStepContext = stepContext.forChild()
     (for {
-      _ <- Parser.requiredWord(AssertionStep.label)
       assertionStep <- AssertionStep.parser(innerStepContext, implicitly)
       extraction <- AppliedExtraction.parser(innerStepContext.addStep(assertionStep), implicitly)
     } yield AppliedInferenceExtraction(assertionStep, extraction))
