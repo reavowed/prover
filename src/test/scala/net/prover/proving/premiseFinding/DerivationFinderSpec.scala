@@ -72,9 +72,10 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
     }
 
     "find premise using relation simplification in structural simplification" in {
-      checkFindPremise(
+      checkFindPremiseSteps(
         ElementOf(First(a), b),
-        Seq(Conjunction(ElementOf(a, Product(b, c)), φ)))
+        Seq(Conjunction(ElementOf(a, Product(b, c)), φ)),
+        Seq(assertion(firstCoordinateOfElementOfCartesianProduct, Nil, Seq(a, b, c))))
     }
 
     "find premise by simplifying target" in {

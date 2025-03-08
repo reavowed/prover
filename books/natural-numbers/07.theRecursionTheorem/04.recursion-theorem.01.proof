@@ -22,7 +22,9 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
           prove = $0 ∪ ∅ singleton orderedPair 0ℕ t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $0 $$$0) (singleton orderedPair 0ℕ t2, ∪ ∅ singleton orderedPair 0ℕ t2) 0.2.0.1.0.0 0.2.0a
         }
         inferenceWithPremiseDerivations {
-          prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+          knownDerived ∈ 0ℕ ℕ {
+            prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+          }
           prove ∧ function $0 functionFrom $0 successor 0ℕ t1 b50f4a916623dd6f1ede5f7f93b9673b0c71a77db9ee048be908295e103d6aa8 () (0ℕ, ∅, t1, t2, $0) 0.2.0.1.1.0 0.2.0.0 p1 0.2.0.1.0
         }
         elided 139fa11cae333b2420e0f05cef157dd38bdc1c2089756d462b1a2681f2e2945b {
@@ -34,7 +36,9 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
         }
       }
       inferenceWithPremiseDerivations {
-        prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+        knownDerived ∈ 1ℕ ℕ {
+          prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+        }
         prove ∈ $0 powerSet product ℕ t1 72e36bcfc0936a3dca97d8f727a8f5e0d98a83f29ecde443cfab217d826c7c18 () (1ℕ, $0, t1) 0.2.0.2.0 0.2.0.1
       }
       elided a0bad9956e6b2f9007fb684c8e27101690c71803f9e2bc8b777f2486d3992f88 {
@@ -62,9 +66,11 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
         }
       }
       inferenceWithPremiseDerivations {
-        prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
-        prove ∧ ∧ function $0 functionFrom $0 1ℕ t1 ∀ a → ∈ $0 1ℕ ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function $0 functionFrom $0 1ℕ t1, ∀ a → ∈ $0 1ℕ ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.2.0.1 0.2.0.5
-        prove ∧ ∈ 1ℕ ℕ ∧ ∧ function $0 functionFrom $0 1ℕ t1 ∀ a → ∈ $0 1ℕ ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 1ℕ ℕ, ∧ ∧ function $0 functionFrom $0 1ℕ t1 ∀ a → ∈ $0 1ℕ ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.2.0.6.0 0.2.0.6.1
+        knownDerived ∧ ∈ 1ℕ ℕ ∧ ∧ function $0 functionFrom $0 1ℕ t1 ∀ a → ∈ $0 1ℕ ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 {
+          prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+          prove ∧ ∧ function $0 functionFrom $0 1ℕ t1 ∀ a → ∈ $0 1ℕ ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function $0 functionFrom $0 1ℕ t1, ∀ a → ∈ $0 1ℕ ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.2.0.1 0.2.0.5
+          prove ∧ ∈ 1ℕ ℕ ∧ ∧ function $0 functionFrom $0 1ℕ t1 ∀ a → ∈ $0 1ℕ ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 1ℕ ℕ, ∧ ∧ function $0 functionFrom $0 1ℕ t1 ∀ a → ∈ $0 1ℕ ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.2.0.6.0 0.2.0.6.1
+        }
         prove ∃ n ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 t1 ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply t0 apply $$$$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 ℕ ∧ ∧ function $0 functionFrom $0 $$$0 t1 ∀ a → ∈ $0 $$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) (1ℕ) 0.2.0.6.2
       }
       elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
@@ -220,7 +226,9 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                         elided 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 {
                           prove ∈ apply $$$0 $$$$$0 t1 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () ($$$0, $$0, t1, $$$$$0) 0.5.0.0.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.5.0.0.0.0.1.1.0.0
                           inferenceWithPremiseDerivations {
-                            prove = apply $$$0 $$$$$0 $$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$0, apply $$$0 $$$$$0) 0.5.0.0.0.0.1.1.0.1
+                            knownDerived = apply $$$0 $$$$$0 $$$$0 {
+                              prove = apply $$$0 $$$$$0 $$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$0, apply $$$0 $$$$$0) 0.5.0.0.0.0.1.1.0.1
+                            }
                             prove ∈ $$$$0 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$$$$$0 t1) (apply $$$0 $$$$$0, $$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.1.1.0 0.5.0.0.0.0.1.1.0.4.0.0.1.0
                           }
                           prove ∈ apply t0 $$$$0 t1 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (t0, t1, t1, $$$$0) p0 0.5.0.0.0.0.1.1.0.4.0.0.1.1
@@ -232,14 +240,18 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                           prove ∧ function $0 functionFrom $0 successor successor $$$$$0 t1 b50f4a916623dd6f1ede5f7f93b9673b0c71a77db9ee048be908295e103d6aa8 () (successor $$$$$0, $$$0, t1, apply t0 $$$$0, $0) 0.5.0.0.0.0.1.1.0.4.0.0.2.1 0.5.0.0.0.0.1.1.0.4.0.0.2.2 0.5.0.0.0.0.1.1.0.4.0.0.1 0.5.0.0.0.0.1.1.0.4.0.0a
                         }
                         inferenceWithPremiseDerivations {
-                          prove ∈ successor $$$$$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$$$$0) 0.5.0.0a
-                          prove ∈ successor successor $$$$$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () (successor $$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.3.0
+                          knownDerived ∈ successor successor $$$$$0 ℕ {
+                            prove ∈ successor $$$$$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$$$$0) 0.5.0.0a
+                            prove ∈ successor successor $$$$$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () (successor $$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.3.0
+                          }
                           prove ∈ $0 powerSet product ℕ t1 72e36bcfc0936a3dca97d8f727a8f5e0d98a83f29ecde443cfab217d826c7c18 () (successor successor $$$$$0, $0, t1) 0.5.0.0.0.0.1.1.0.4.0.0.3.1 0.5.0.0.0.0.1.1.0.4.0.0.2
                         }
                         elided 5d15ac68ec4378d33cf569e2f916e81f2eaf9109d32a27752fa4a908c9befab1 {
                           prove ⊆ $$$0 ∪ $$$0 singleton orderedPair successor $$$$$0 apply t0 $$$$0 051ab2a94bcffef8bd5f48a2a098876bd8eb86b4ecdd3e844696b47146f918df () ($$$0, singleton orderedPair successor $$$$$0 apply t0 $$$$0)
                           inferenceWithPremiseDerivations {
-                            prove = ∪ $$$0 singleton orderedPair successor $$$$$0 apply t0 $$$$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, ∪ $$$0 singleton orderedPair successor $$$$$0 apply t0 $$$$0) 0.5.0.0.0.0.1.1.0.4.0.0a
+                            knownDerived = ∪ $$$0 singleton orderedPair successor $$$$$0 apply t0 $$$$0 $0 {
+                              prove = ∪ $$$0 singleton orderedPair successor $$$$$0 apply t0 $$$$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, ∪ $$$0 singleton orderedPair successor $$$$$0 apply t0 $$$$0) 0.5.0.0.0.0.1.1.0.4.0.0a
+                            }
                             prove ⊆ $$$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (⊆ $$$0 $$$$$$$0) (∪ $$$0 singleton orderedPair successor $$$$$0 apply t0 $$$$0, $0) 0.5.0.0.0.0.1.1.0.4.0.0.4.1.0 0.5.0.0.0.0.1.1.0.4.0.0.4.0
                           }
                           prove ∀ y → ∈ $0 $$$0 = apply $$$$0 $0 apply $$0 $0 5d15ac68ec4378d33cf569e2f916e81f2eaf9109d32a27752fa4a908c9befab1 () ($$$0, $$0, t1, $0, successor successor $$$$$0, t1) 0.5.0.0.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.5.0.0.0.0.1.1.0.4.0.0.2 0.5.0.0.0.0.1.1.0.4.0.0.4.1
@@ -307,7 +319,9 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                                       prove ∈ $0 $$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$$$$$$$0) (successor $$$$$$0, $$$0) 0.5.0.0.0.0.1.1.0.4.0a 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0a
                                       prove ∨ ∧ = $0 0ℕ = apply $$$$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply t0 apply $$$$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 $$$0, ∨ ∧ = $0 0ℕ = apply $$$$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply t0 apply $$$$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.0.0 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.0.1
                                       inferenceWithPremiseDerivations {
-                                        prove ¬ ∧ = $0 0ℕ = apply $$$$0 $0 t2 88815358100d8160cba944a54dfdc44dde0c326c3d75787a50a0d326e089f119 (= $0 0ℕ, = apply $$$$0 $0 t2) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0a
+                                        knownDerived ¬ ∧ = $0 0ℕ = apply $$$$0 $0 t2 {
+                                          prove ¬ ∧ = $0 0ℕ = apply $$$$0 $0 t2 88815358100d8160cba944a54dfdc44dde0c326c3d75787a50a0d326e089f119 (= $0 0ℕ, = apply $$$$0 $0 t2) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0a
+                                        }
                                         prove ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply t0 apply $$$$$0 $0 f92eba0b4da7ff0436638902240b7bc3ba5459badb09aa6d58149ba518ffd23d (∧ = $0 0ℕ = apply $$$$0 $0 t2, ∃ b ∧ = $$0 successor $0 = apply $$$$$0 $$0 apply t0 apply $$$$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.0.2 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.0.3.0
                                       }
                                     }
@@ -317,7 +331,9 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                                         elided c0287415c569731e330b195d8350651cdcc0dfb1bfbc133cd897f99767715b2c {
                                           prove ∈ successor $0 successor $$$$$$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$$$$$$$0 successor $$$$$$$0) ($$0, successor $0) 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0a
                                           inferenceWithPremiseDerivations {
-                                            prove ∈ successor $$$$$$$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$$$$$$0) 0.5.0.0a
+                                            knownDerived ∈ successor $$$$$$$0 ℕ {
+                                              prove ∈ successor $$$$$$$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$$$$$$0) 0.5.0.0a
+                                            }
                                             prove ∈ $0 successor $$$$$$$0 c0287415c569731e330b195d8350651cdcc0dfb1bfbc133cd897f99767715b2c () (successor $$$$$$$0, $0) 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1.0.1.1.0 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1.0.1.0
                                           }
                                           prove ∈ $0 $$$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$$$$$$$$0) (successor $$$$$$$0, $$$$0) 0.5.0.0.0.0.1.1.0.4.0a 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1.0.1.1
@@ -334,7 +350,9 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                                       prove = apply t0 apply $$$$$0 $0 apply t0 apply $$$0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply $$$$$0 $0, apply $$$0 $0, apply t0 $$$$$$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1.0
                                       prove = apply $$$0 $$0 apply t0 apply $$$0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply $$$0 $$0, apply t0 apply $$$$$0 $0, apply t0 apply $$$0 $0) 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1.2 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1.3
                                       inferenceWithPremiseDerivations {
-                                        prove ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= $$0 successor $0, = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1.4
+                                        knownDerived ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 {
+                                          prove ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= $$0 successor $0, = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1.4
+                                        }
                                         prove ∃ x ∧ = $$$0 successor $0 = apply $$$$0 $$$0 apply t0 apply $$$$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ = $$0 successor $$$$$$$$$0 = apply $$$0 $$0 apply t0 apply $$$0 $$$$$$$$$0) ($0) 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.1.0.1.5.0
                                       }
                                     }
@@ -357,7 +375,9 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                                     prove = apply $$0 successor $$$$$$0 apply t0 apply $$0 $$$$$$0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (= apply $$0 successor $$$$$$0 apply t0 $$$$$$$$0) (apply $$0 $$$$$$0, $$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2.0.1 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2.0.2
                                     prove = apply $$0 $0 apply t0 apply $$0 $$$$$$0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (= apply $$0 $$$$$$$$0 apply t0 apply $$0 $$$$$$0) ($0, successor $$$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2.0a 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2.0.3
                                     inferenceWithPremiseDerivations {
-                                      prove ∧ = $0 successor $$$$$$0 = apply $$0 $0 apply t0 apply $$0 $$$$$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= $0 successor $$$$$$0, = apply $$0 $0 apply t0 apply $$0 $$$$$$0) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2.0a 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2.0.4
+                                      knownDerived ∧ = $0 successor $$$$$$0 = apply $$0 $0 apply t0 apply $$0 $$$$$$0 {
+                                        prove ∧ = $0 successor $$$$$$0 = apply $$0 $0 apply t0 apply $$0 $$$$$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= $0 successor $$$$$$0, = apply $$0 $0 apply t0 apply $$0 $$$$$$0) () 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2.0a 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2.0.4
+                                      }
                                       prove ∃ x ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ = $0 successor $$$$$$$$0 = apply $$0 $0 apply t0 apply $$0 $$$$$$$$0) ($$$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.5.0.1.0.2.0.5.0
                                     }
                                   }
@@ -369,10 +389,12 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                           }
                         }
                         inferenceWithPremiseDerivations {
-                          prove ∈ successor $$$$$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$$$$0) 0.5.0.0a
-                          prove ∈ successor successor $$$$$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () (successor $$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.6.0
-                          prove ∧ ∧ function $0 functionFrom $0 successor successor $$$$$0 t1 ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function $0 functionFrom $0 successor successor $$$$$0 t1, ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.2 0.5.0.0.0.0.1.1.0.4.0.0.5
-                          prove ∧ ∈ successor successor $$$$$0 ℕ ∧ ∧ function $0 functionFrom $0 successor successor $$$$$0 t1 ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ successor successor $$$$$0 ℕ, ∧ ∧ function $0 functionFrom $0 successor successor $$$$$0 t1 ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.6.1 0.5.0.0.0.0.1.1.0.4.0.0.6.2
+                          knownDerived ∧ ∈ successor successor $$$$$0 ℕ ∧ ∧ function $0 functionFrom $0 successor successor $$$$$0 t1 ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 {
+                            prove ∈ successor $$$$$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$$$$0) 0.5.0.0a
+                            prove ∈ successor successor $$$$$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () (successor $$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.6.0
+                            prove ∧ ∧ function $0 functionFrom $0 successor successor $$$$$0 t1 ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function $0 functionFrom $0 successor successor $$$$$0 t1, ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.2 0.5.0.0.0.0.1.1.0.4.0.0.5
+                            prove ∧ ∈ successor successor $$$$$0 ℕ ∧ ∧ function $0 functionFrom $0 successor successor $$$$$0 t1 ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ successor successor $$$$$0 ℕ, ∧ ∧ function $0 functionFrom $0 successor successor $$$$$0 t1 ∀ a → ∈ $0 successor successor $$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) () 0.5.0.0.0.0.1.1.0.4.0.0.6.1 0.5.0.0.0.0.1.1.0.4.0.0.6.2
+                          }
                           prove ∃ x ∧ ∈ $0 ℕ ∧ ∧ function $$0 functionFrom $$0 $0 t1 ∀ a → ∈ $0 $$0 ∨ ∧ = $0 0ℕ = apply $$$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$$0 $$0 apply t0 apply $$$$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$$$$0 ℕ ∧ ∧ function $0 functionFrom $0 $$$$$$$0 t1 ∀ a → ∈ $0 $$$$$$$$0 ∨ ∧ = $0 0ℕ = apply $$0 $0 t2 ∃ b ∧ = $$0 successor $0 = apply $$$0 $$0 apply t0 apply $$$0 $0) (successor successor $$$$$0) 0.5.0.0.0.0.1.1.0.4.0.0.6.3
                         }
                         elided 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 {
@@ -447,7 +469,9 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                                 prove = $$$$$$$$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= successor $$$$$$$$0 successor $0, = $$$$$$$$0 $0) () 0.5.0.0.0.0.1.1.1.0.0.1.1.5.3.0.3 0.5.0.0.0.0.1.1.1.0.0.1.1.5.3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                               }
                               inferenceWithPremiseDerivations {
-                                prove = $0 $$$$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$$$0, $0) 0.5.0.0.0.0.1.1.1.0.0.1.1.5.3.0
+                                knownDerived = $0 $$$$$$$$0 {
+                                  prove = $0 $$$$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$$$0, $0) 0.5.0.0.0.0.1.1.1.0.0.1.1.5.3.0
+                                }
                                 prove = apply $$$0 successor $$$$$$$$0 apply t0 apply $$$0 $$$$$$$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply $$$0 successor $$$$$$$$0 apply t0 apply $$$0 $$$$$$$$$$0) ($0, $$$$$$$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1.5.3.1.0 0.5.0.0.0.0.1.1.1.0.0.1.1.5.3a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                               }
                             }
@@ -568,8 +592,10 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
     }
   }
   inferenceWithPremiseDerivations {
-    prove ∧ = apply union $0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply t0 apply union $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= apply union $0 0ℕ t2, ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply t0 apply union $$0 $0) () 0.8 0.9
-    prove ∧ ∧ function union $0 functionFrom union $0 ℕ t1 ∧ = apply union $0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply t0 apply union $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function union $0 functionFrom union $0 ℕ t1, ∧ = apply union $0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply t0 apply union $$0 $0) () 0.7 0.10.0
+    knownDerived ∧ ∧ function union $0 functionFrom union $0 ℕ t1 ∧ = apply union $0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply t0 apply union $$0 $0 {
+      prove ∧ = apply union $0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply t0 apply union $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= apply union $0 0ℕ t2, ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply t0 apply union $$0 $0) () 0.8 0.9
+      prove ∧ ∧ function union $0 functionFrom union $0 ℕ t1 ∧ = apply union $0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply t0 apply union $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function union $0 functionFrom union $0 ℕ t1, ∧ = apply union $0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply union $$0 successor $0 apply t0 apply union $$0 $0) () 0.7 0.10.0
+    }
     prove ∃ x ∧ ∧ function $0 functionFrom $0 ℕ t1 ∧ = apply $0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply t0 apply $$0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∧ function $$0 functionFrom $$0 ℕ t1 ∧ = apply $$0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply $$$0 successor $0 apply t0 apply $$$0 $0) (union $0) 0.10.1
   }
 }

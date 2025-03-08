@@ -1,7 +1,13 @@
 inferenceWithPremiseDerivations {
-  prove equivalenceRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ c0bc32c877360e5315af8a448d415d129cf44fa28fa06e859a1fdc3b5663fd66 () ()
-  prove ∈ orderedPair t0 t1 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℤ, t1, diff ℤ singleton apply ⍳_ℤ 0ℕ) p0 p1
-  prove ∈ orderedPair t2 t3 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t2, ℤ, t3, diff ℤ singleton apply ⍳_ℤ 0ℕ) p2 p3
+  knownDerived equivalenceRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ {
+    prove equivalenceRelation ~_ℚ product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ c0bc32c877360e5315af8a448d415d129cf44fa28fa06e859a1fdc3b5663fd66 () ()
+  }
+  knownDerived ∈ orderedPair t0 t1 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ {
+    prove ∈ orderedPair t0 t1 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℤ, t1, diff ℤ singleton apply ⍳_ℤ 0ℕ) p0 p1
+  }
+  knownDerived ∈ orderedPair t2 t3 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ {
+    prove ∈ orderedPair t2 t3 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t2, ℤ, t3, diff ℤ singleton apply ⍳_ℤ 0ℕ) p2 p3
+  }
   prove ↔ = equivalenceClass orderedPair t0 t1 ~_ℚ equivalenceClass orderedPair t2 t3 ~_ℚ ∈ orderedPair orderedPair t0 t1 orderedPair t2 t3 ~_ℚ 43ca65f36945db6667cd2ba0477801e15966d0c546ccec991169d98b809a3949 () (~_ℚ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, orderedPair t0 t1, orderedPair t2 t3) 0.0 0.1 0.2
 }
 inferenceExtraction {

@@ -1,6 +1,8 @@
 prove = apply t0 t4 apply t0 t4 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (apply t0 t4)
 inferenceWithPremiseDerivations {
-  prove ∧ ∈ t4 t3 = apply t0 t4 apply t0 t4 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t4 t3, = apply t0 t4 apply t0 t4) () p2 0
+  knownDerived ∧ ∈ t4 t3 = apply t0 t4 apply t0 t4 {
+    prove ∧ ∈ t4 t3 = apply t0 t4 apply t0 t4 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t4 t3, = apply t0 t4 apply t0 t4) () p2 0
+  }
   prove ∃ x ∧ ∈ $0 t3 = apply t0 t4 apply t0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 t3 = apply t0 t4 apply t0 $0) (t4) 1.0
 }
 inferenceExtraction {

@@ -1,6 +1,8 @@
 prove = with (t3) t2 with (t3) t2 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (with (t3) t2)
 inferenceWithPremiseDerivations {
-  prove ∧ ∈ t3 t1 = with (t3) t2 with (t3) t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t3 t1, = with (t3) t2 with (t3) t2) () p1 0
+  knownDerived ∧ ∈ t3 t1 = with (t3) t2 with (t3) t2 {
+    prove ∧ ∈ t3 t1 = with (t3) t2 with (t3) t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t3 t1, = with (t3) t2 with (t3) t2) () p1 0
+  }
   prove ∃ x ∧ ∈ $0 t1 = with (t3) t2 with ($0) t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 t1 = with (t3) t2 with ($0) t2) (t3) 1.0
 }
 inferenceExtraction {

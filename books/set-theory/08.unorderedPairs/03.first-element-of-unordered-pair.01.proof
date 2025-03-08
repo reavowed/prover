@@ -1,7 +1,9 @@
 prove ∀ x ↔ ∈ $0 pair t0 t1 ∨ = $0 t0 = $0 t1 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 () (t0, t1)
 prove = t0 t0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (t0)
 inferenceWithPremiseDerivations {
-  prove ∨ = t0 t0 = t0 t1 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (= t0 t0, = t0 t1) () 1
+  knownDerived ∨ = t0 t0 = t0 t1 {
+    prove ∨ = t0 t0 = t0 t1 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (= t0 t0, = t0 t1) () 1
+  }
   inferenceExtraction {
     prove ∀ x ↔ ∈ $0 pair t0 t1 ∨ = $0 t0 = $0 t1 7aa2deba073e41c723b03cc00f388e1badf69f80e0e72495a2643deb4c47e252 () (t0, t1)
     prove ↔ ∈ t0 pair t0 t1 ∨ = t0 t0 = t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 pair t0 t1 ∨ = $0 t0 = $0 t1) (t0) 2.1.0

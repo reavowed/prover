@@ -1,7 +1,13 @@
 inferenceWithPremiseDerivations {
-  prove equivalenceRelation ~_ℤ product ℕ ℕ 459d141ac7e7021353f809dbe31e38d1a6638a074975a411a362a7e5f9d91017 () ()
-  prove ∈ orderedPair t0 t1 product ℕ ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℕ, t1, ℕ) p0 p1
-  prove ∈ orderedPair t2 t3 product ℕ ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t2, ℕ, t3, ℕ) p2 p3
+  knownDerived equivalenceRelation ~_ℤ product ℕ ℕ {
+    prove equivalenceRelation ~_ℤ product ℕ ℕ 459d141ac7e7021353f809dbe31e38d1a6638a074975a411a362a7e5f9d91017 () ()
+  }
+  knownDerived ∈ orderedPair t0 t1 product ℕ ℕ {
+    prove ∈ orderedPair t0 t1 product ℕ ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℕ, t1, ℕ) p0 p1
+  }
+  knownDerived ∈ orderedPair t2 t3 product ℕ ℕ {
+    prove ∈ orderedPair t2 t3 product ℕ ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t2, ℕ, t3, ℕ) p2 p3
+  }
   prove ↔ = equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceClass orderedPair t2 t3 ~_ℤ ∈ orderedPair orderedPair t0 t1 orderedPair t2 t3 ~_ℤ 43ca65f36945db6667cd2ba0477801e15966d0c546ccec991169d98b809a3949 () (~_ℤ, product ℕ ℕ, orderedPair t0 t1, orderedPair t2 t3) 0.0 0.1 0.2
 }
 inferenceExtraction {

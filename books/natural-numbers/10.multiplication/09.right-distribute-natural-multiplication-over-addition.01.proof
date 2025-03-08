@@ -1,5 +1,7 @@
 inferenceWithPremiseDerivations {
-  prove ∈ apply +ℕ orderedPair t0 t1 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (t0, t1) p0 p1
+  knownDerived ∈ apply +ℕ orderedPair t0 t1 ℕ {
+    prove ∈ apply +ℕ orderedPair t0 t1 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (t0, t1) p0 p1
+  }
   prove = apply ×ℕ orderedPair apply +ℕ orderedPair t0 t1 t2 apply ×ℕ orderedPair t2 apply +ℕ orderedPair t0 t1 1a12549db99629d6ee61158ff379e7a177b096acfa26cc6a279fb2b7437c5af9 () (apply +ℕ orderedPair t0 t1, t2) 0.0 p2
 }
 prove = apply ×ℕ orderedPair t2 apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair apply ×ℕ orderedPair t2 t0 apply ×ℕ orderedPair t2 t1 874d0c7352d18be1fc42553eaf016003ea2edfe0e0107be2e6b5488f6796e791 () (t2, t0, t1) p2 p0 p1

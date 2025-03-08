@@ -102,7 +102,9 @@ let f_≈ = $0 replacementSet a t1 orderedPair equivalenceClass $0 t0 apply t2 $
     }
   }
   inferenceWithPremiseDerivations {
-    prove ∧ ∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3 ∀ a → ∈ $0 t1 = apply $$0 equivalenceClass $0 t0 apply t2 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3, ∀ a → ∈ $0 t1 = apply $$0 equivalenceClass $0 t0 apply t2 $0) () 0.0 0.1
+    knownDerived ∧ ∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3 ∀ a → ∈ $0 t1 = apply $$0 equivalenceClass $0 t0 apply t2 $0 {
+      prove ∧ ∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3 ∀ a → ∈ $0 t1 = apply $$0 equivalenceClass $0 t0 apply t2 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3, ∀ a → ∈ $0 t1 = apply $$0 equivalenceClass $0 t0 apply t2 $0) () 0.0 0.1
+    }
     prove ∃! g ∧ ∧ function $0 functionFrom $0 equivalenceQuotient t1 t0 t3 ∀ a → ∈ $0 t1 = apply $$0 equivalenceClass $0 t0 apply t2 $0 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ ∧ function $$0 functionFrom $$0 equivalenceQuotient t1 t0 t3 ∀ a → ∈ $0 t1 = apply $$$0 equivalenceClass $0 t0 apply t2 $0) ($0) 0.3.0 0.2
   }
 }

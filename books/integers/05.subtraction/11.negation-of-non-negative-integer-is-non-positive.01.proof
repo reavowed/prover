@@ -1,6 +1,8 @@
 inferenceWithPremiseDerivations {
-  prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-  prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0
+  knownDerived ∈ apply ⍳_ℤ 0ℕ ℤ {
+    prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+    prove ∈ apply ⍳_ℤ 0ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (0ℕ) 0.0
+  }
   prove ↔ ∈ orderedPair apply ⍳_ℤ 0ℕ t0 ≤ℤ ∈ orderedPair negatedZ t0 negatedZ apply ⍳_ℤ 0ℕ ≤ℤ e9cba88319c97cee2cf101df1c74e1c466acc093f2a71f0d1149afac3211be7e () (apply ⍳_ℤ 0ℕ, t0) 0.1 p0
 }
 elided 780bb169aa5fbcf54489be01508749717565853bd1740e0e7c3cdedd0ea51f2a {

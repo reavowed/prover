@@ -50,7 +50,8 @@ trait Parser[+T] {
     try {
       attemptParse(tokenStream)
     } catch {
-      case e @ (_:ParseException | _:ParseException.NoWrap) => throw e
+      case e: ParseException if e.token.nonEmpty => throw e
+      case e: ParseException => throw e.copy(token = Some(tokenStream.tokenForException))
       case NonFatal(e) => tokenStream.throwParseException(e.getMessage, Some(e))
     }
   }

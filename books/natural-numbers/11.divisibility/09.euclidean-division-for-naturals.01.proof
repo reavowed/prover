@@ -4,8 +4,10 @@ subproof (Base case) {
     prove = 0ℕ apply ×ℕ orderedPair 0ℕ t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair 0ℕ t1, 0ℕ) 0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
   }
   inferenceWithPremiseDerivations {
-    prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-    prove ∈ apply ×ℕ orderedPair 0ℕ t1 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (0ℕ, t1) 0.1.0 p1
+    knownDerived ∈ apply ×ℕ orderedPair 0ℕ t1 ℕ {
+      prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+      prove ∈ apply ×ℕ orderedPair 0ℕ t1 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (0ℕ, t1) 0.1.0 p1
+    }
     inferenceExtraction {
       prove ∧ = apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ apply ×ℕ orderedPair 0ℕ t1 = apply +ℕ orderedPair 0ℕ apply ×ℕ orderedPair 0ℕ t1 apply ×ℕ orderedPair 0ℕ t1 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (apply ×ℕ orderedPair 0ℕ t1) 0.1.1
       prove = apply ×ℕ orderedPair 0ℕ t1 apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ, apply ×ℕ orderedPair 0ℕ t1) 0.1.2.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -13,14 +15,18 @@ subproof (Base case) {
   }
   prove = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (0ℕ, apply ×ℕ orderedPair 0ℕ t1, apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ) 0.0 0.1
   inferenceWithPremiseDerivations {
-    prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-    prove ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 0.2 p2
-    prove ∧ ∈ 0ℕ ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ) () 0.3.0 0.3.1
+    knownDerived ∧ ∈ 0ℕ ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ {
+      prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+      prove ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 0.2 p2
+      prove ∧ ∈ 0ℕ ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ) () 0.3.0 0.3.1
+    }
     prove ∃ r ∧ ∈ $0 ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 $0 ∈ orderedPair $0 t1 <ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 $0 ∈ orderedPair $0 t1 <ℕ) (0ℕ) 0.3.2
   }
   inferenceWithPremiseDerivations {
-    prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-    prove ∧ ∈ 0ℕ ℕ ∃ r ∧ ∈ $0 ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 $0 ∈ orderedPair $0 t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, ∃ r ∧ ∈ $0 ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 $0 ∈ orderedPair $0 t1 <ℕ) () 0.4.0 0.3
+    knownDerived ∧ ∈ 0ℕ ℕ ∃ r ∧ ∈ $0 ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 $0 ∈ orderedPair $0 t1 <ℕ {
+      prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+      prove ∧ ∈ 0ℕ ℕ ∃ r ∧ ∈ $0 ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 $0 ∈ orderedPair $0 t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, ∃ r ∧ ∈ $0 ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair 0ℕ t1 $0 ∈ orderedPair $0 t1 <ℕ) () 0.4.0 0.3
+    }
     prove ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0 ∈ orderedPair $0 t1 <ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = 0ℕ apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0 ∈ orderedPair $0 t1 <ℕ) (0ℕ) 0.4.1
   }
 }
@@ -36,7 +42,9 @@ subproof (Inductive case) {
               prove ∈ orderedPair successor $0 t1 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 t1 <ℕ, ∈ orderedPair successor $0 t1 ≤ℕ) () 1.0.0.0.0.0.0.1 1.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             }
             inferenceWithPremiseDerivations {
-              prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 1.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+              knownDerived ∈ successor $0 ℕ {
+                prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 1.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+              }
               inferenceExtraction {
                 prove ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$0 $0 ≤ℕ ∨ ∈ orderedPair $$0 $0 <ℕ = $$0 $0 5e930dd98313650c98a01a284ad06d0898706015734a241fbdd9dff2b7abc9c6 () ()
                 prove → ∈ successor $0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair successor $$0 $0 ≤ℕ ∨ ∈ orderedPair successor $$0 $0 <ℕ = successor $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℕ ∀ b → ∈ $0 ℕ ↔ ∈ orderedPair $$$$$0 $0 ≤ℕ ∨ ∈ orderedPair $$$$$0 $0 <ℕ = $$$$$0 $0) (successor $0) 1.0.0.0.0.0.1.1.0
@@ -49,7 +57,9 @@ subproof (Inductive case) {
             }
             prove = successor $$$0 successor apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$0, apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0, successor $$$$0) 1.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             inferenceWithPremiseDerivations {
-              prove ∈ apply ×ℕ orderedPair $$0 t1 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$0, t1) 1.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p1
+              knownDerived ∈ apply ×ℕ orderedPair $$0 t1 ℕ {
+                prove ∈ apply ×ℕ orderedPair $$0 t1 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$0, t1) 1.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p1
+              }
               inferenceExtraction {
                 prove = apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0 successor apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0 19af20346e55e7be0bee3e2b54ee8b8bfb6732f353116541ad85779abf763904 () (apply ×ℕ orderedPair $$0 t1, $0) 1.0.0.0.0.0.3.0 1.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                 prove = successor apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0, successor apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0) 1.0.0.0.0.0.3.1.0
@@ -58,13 +68,17 @@ subproof (Inductive case) {
             prove = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (successor $$$0, successor apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0, apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0) 1.0.0.0.0.0.2 1.0.0.0.0.0.3
             assume ∈ orderedPair successor $0 t1 <ℕ {
               inferenceWithPremiseDerivations {
-                prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 1.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                prove ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0 ∈ orderedPair successor $0 t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0, ∈ orderedPair successor $0 t1 <ℕ) () 1.0.0.0.0.0.4 1.0.0.0.0.0.5a
-                prove ∧ ∈ successor $0 ℕ ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0 ∈ orderedPair successor $0 t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ successor $0 ℕ, ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0 ∈ orderedPair successor $0 t1 <ℕ) () 1.0.0.0.0.0.5.0.0 1.0.0.0.0.0.5.0.1
+                knownDerived ∧ ∈ successor $0 ℕ ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0 ∈ orderedPair successor $0 t1 <ℕ {
+                  prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 1.0.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  prove ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0 ∈ orderedPair successor $0 t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0, ∈ orderedPair successor $0 t1 <ℕ) () 1.0.0.0.0.0.4 1.0.0.0.0.0.5a
+                  prove ∧ ∈ successor $0 ℕ ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0 ∈ orderedPair successor $0 t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ successor $0 ℕ, ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 successor $0 ∈ orderedPair successor $0 t1 <ℕ) () 1.0.0.0.0.0.5.0.0 1.0.0.0.0.0.5.0.1
+                }
                 prove ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$0 ℕ ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $$$$0 ∈ orderedPair $$$$0 t1 <ℕ) (successor $0) 1.0.0.0.0.0.5.0.2
               }
               inferenceWithPremiseDerivations {
-                prove ∧ ∈ $$0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 ℕ, ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ) () 1.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0.0.0.0.5.0
+                knownDerived ∧ ∈ $$0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ {
+                  prove ∧ ∈ $$0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $$0 ℕ, ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ) () 1.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0.0.0.0.5.0
+                }
                 prove ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0 ∈ orderedPair $0 t1 <ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ) ($$0) 1.0.0.0.0.0.5.1.0
               }
             }
@@ -76,8 +90,10 @@ subproof (Inductive case) {
               }
               prove = successor $$$0 apply ×ℕ orderedPair successor $$0 t1 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (successor $$$0, apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 t1, apply ×ℕ orderedPair successor $$0 t1) 1.0.0.0.0.0.6.0 1.0.0.0.0.0.6.1
               inferenceWithPremiseDerivations {
-                prove ∈ successor $$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$0) 1.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                prove ∈ apply ×ℕ orderedPair successor $$0 t1 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (successor $$0, t1) 1.0.0.0.0.0.6.3.0 p1
+                knownDerived ∈ apply ×ℕ orderedPair successor $$0 t1 ℕ {
+                  prove ∈ successor $$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$0) 1.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  prove ∈ apply ×ℕ orderedPair successor $$0 t1 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (successor $$0, t1) 1.0.0.0.0.0.6.3.0 p1
+                }
                 inferenceExtraction {
                   prove ∧ = apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ apply ×ℕ orderedPair successor $$0 t1 = apply +ℕ orderedPair 0ℕ apply ×ℕ orderedPair successor $$0 t1 apply ×ℕ orderedPair successor $$0 t1 ecccf1f0d20ae05007cadb6977d0e60a075e9ab584049e623a06cbd43ca194ef () (apply ×ℕ orderedPair successor $$0 t1) 1.0.0.0.0.0.6.3.1
                   prove = apply ×ℕ orderedPair successor $$0 t1 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ, apply ×ℕ orderedPair successor $$0 t1) 1.0.0.0.0.0.6.3.2.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -85,14 +101,18 @@ subproof (Inductive case) {
               }
               prove = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (successor $$$0, apply ×ℕ orderedPair successor $$0 t1, apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ) 1.0.0.0.0.0.6.2 1.0.0.0.0.0.6.3
               inferenceWithPremiseDerivations {
-                prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
-                prove ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 1.0.0.0.0.0.6.4 p2
-                prove ∧ ∈ 0ℕ ℕ ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ) () 1.0.0.0.0.0.6.5.0 1.0.0.0.0.0.6.5.1
+                knownDerived ∧ ∈ 0ℕ ℕ ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ {
+                  prove ∈ 0ℕ ℕ f56991e51255376ac081a0af39f0f270d768d6be56bb97a0d11cbeb56d7ce753 () ()
+                  prove ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ, ∈ orderedPair 0ℕ t1 <ℕ) () 1.0.0.0.0.0.6.4 p2
+                  prove ∧ ∈ 0ℕ ℕ ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ 0ℕ ℕ, ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 0ℕ ∈ orderedPair 0ℕ t1 <ℕ) () 1.0.0.0.0.0.6.5.0 1.0.0.0.0.0.6.5.1
+                }
                 prove ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$0 ℕ ∧ = successor $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$0 t1 $$$$0 ∈ orderedPair $$$$0 t1 <ℕ) (0ℕ) 1.0.0.0.0.0.6.5.2
               }
               inferenceWithPremiseDerivations {
-                prove ∈ successor $$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$0) 1.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                prove ∧ ∈ successor $$0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ successor $$0 ℕ, ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ) () 1.0.0.0.0.0.6.6.0 1.0.0.0.0.0.6.5
+                knownDerived ∧ ∈ successor $$0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ {
+                  prove ∈ successor $$0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($$0) 1.0.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  prove ∧ ∈ successor $$0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ successor $$0 ℕ, ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair successor $$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ) () 1.0.0.0.0.0.6.6.0 1.0.0.0.0.0.6.5
+                }
                 prove ∃ q ∧ ∈ $0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 t1 $0 ∈ orderedPair $0 t1 <ℕ 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$$0 ℕ ∃ r ∧ ∈ $0 ℕ ∧ = successor $$$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$0 t1 $0 ∈ orderedPair $0 t1 <ℕ) (successor $$0) 1.0.0.0.0.0.6.6.1
               }
             }

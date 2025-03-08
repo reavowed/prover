@@ -15,14 +15,18 @@ take b {
         prove = $$0 apply t0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 domain t0, = $$0 apply t0 $0) () 1.0.1.0.2
       }
       inferenceWithPremiseDerivations {
-        prove ∧ ∈ $0 domain t0 = $$0 apply t0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 domain t0, = $$0 apply t0 $0) () 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0
+        knownDerived ∧ ∈ $0 domain t0 = $$0 apply t0 $0 {
+          prove ∧ ∈ $0 domain t0 = $$0 apply t0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 domain t0, = $$0 apply t0 $0) () 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0
+        }
         prove ∃ x ∧ ∈ $0 domain t0 = $$$0 apply t0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 domain t0 = $$0 apply t0 $$$0) ($0) 1.0.1.1.0
       }
     }
   }
 }
 inferenceWithPremiseDerivations {
-  prove ∧ ∧ function t0 functionFrom t0 domain t0 codomain t0 ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function t0 functionFrom t0 domain t0 codomain t0, ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0) () 0 1
+  knownDerived ∧ ∧ function t0 functionFrom t0 domain t0 codomain t0 ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0 {
+    prove ∧ ∧ function t0 functionFrom t0 domain t0 codomain t0 ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function t0 functionFrom t0 domain t0 codomain t0, ∀ b → ∈ $0 codomain t0 ∃ a ∧ ∈ $0 domain t0 = $$0 apply t0 $0) () 0 1
+  }
   prove surjectiveFunction t0 domain t0 codomain t0 bac8c901516d40360774d8b3ef613907a74da0900ab7c4637a6fee3fc7f8b537 () (t0, domain t0, codomain t0) 2.0
 }
 prove ∧ ∧ function t0 functionFrom t0 domain t0 codomain t0 surjectiveFunction t0 domain t0 codomain t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function t0 functionFrom t0 domain t0 codomain t0, surjectiveFunction t0 domain t0 codomain t0) () 0 2

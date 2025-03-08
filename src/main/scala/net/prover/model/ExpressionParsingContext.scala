@@ -72,7 +72,7 @@ case class ExpressionParsingContext(
     for {
       definitionAndIndex <- definitionParser
       (definition, index) = definitionAndIndex
-      _ = if (definition.arity != 0) throw new ParseException(s"Missing arguments for $description variable ${definition.name}")
+      _ = if (definition.arity != 0) throw ParseException(s"Missing arguments for $description variable ${definition.name}")
     } yield constructor(index, Nil)
   }
   def variableApplicationParser[T <: ExpressionVariable[_]](
@@ -86,7 +86,7 @@ case class ExpressionParsingContext(
         definitionAndIndex <- definitionParser
         (definition, index) = definitionAndIndex
         _ = if (arguments.length != definition.arity)
-          throw new ParseException(s"Invalid number of arguments for ${description} variable ${definition.name} - " +
+          throw ParseException(s"Invalid number of arguments for ${description} variable ${definition.name} - " +
             "expected " + arguments.length + ", got " + arguments.length)
       } yield constructor(index, arguments)
     }

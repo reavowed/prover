@@ -26,6 +26,6 @@ case class Fact(inferenceExtraction: InferenceExtraction) {
   }
 
   def toKnownStatement(implicit provingContext: ProvingContext): KnownStatement = {
-    KnownStatement.fromSingleStep(SimpleDerivationStep.InferenceExtraction(toExtraction))
+    KnownStatement.fromSingleStep(SimpleDerivationStep(toExtraction))
   }
 }

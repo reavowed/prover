@@ -5,9 +5,11 @@ elided 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 {
       take b {
         assume ∈ $0 ℤ {
           inferenceWithPremiseDerivations {
-            inferenceExtraction {
-              prove ∧ ∈ negatedZ $0 ℤ ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () ($0) 1.0.0.0.0a
-              prove ∈ negatedZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $0 ℤ, ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.0.0.0
+            knownDerived ∈ negatedZ $0 ℤ {
+              extraction {
+                prove ∧ ∈ negatedZ $0 ℤ ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () ($0) 1.0.0.0.0a
+                prove ∈ negatedZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $0 ℤ, ∧ = apply +ℤ orderedPair $0 negatedZ $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $0 $0 apply ⍳_ℤ 0ℕ) () 1.0.0.0.0.0.0.0
+              }
             }
             prove ∈ apply +ℤ orderedPair $$0 negatedZ $0 ℤ 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 () ($$0, negatedZ $0) 1.0.0a 1.0.0.0.0.0.0
           }
@@ -18,6 +20,8 @@ elided 1faaa0acb059e2369a770c7f110bd989b4ffe81e3c4b42f7b8a012bf251f2db8 {
 }
 prove ∧ function -ℤ functionFrom -ℤ product ℤ ℤ ℤ 723f4ecbdb9794317f2b63eb8b47a852f49f47ddfb89fe5c3484a35766b96a5b () (-ℤ, ℤ, ℤ, apply +ℤ orderedPair $0 negatedZ $1, ℤ) 0 1
 inferenceWithPremiseDerivations {
-  prove ∈ orderedPair t0 t1 product ℤ ℤ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℤ, t1, ℤ) p0 p1
+  knownDerived ∈ orderedPair t0 t1 product ℤ ℤ {
+    prove ∈ orderedPair t0 t1 product ℤ ℤ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℤ, t1, ℤ) p0 p1
+  }
   prove ∈ apply -ℤ orderedPair t0 t1 ℤ 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (-ℤ, product ℤ ℤ, ℤ, orderedPair t0 t1) 2 3.0
 }

@@ -1,7 +1,9 @@
 let f = $0 functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (= apply ×ℤ orderedPair equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceClass orderedPair t2 t3 ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t3 apply +ℕ orderedPair apply ×ℕ orderedPair t0 t3 apply ×ℕ orderedPair t1 t2 ~_ℤ) (functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ) {
   prove = ×ℤ quadrupleQuotientFunction functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ 2f34d417831bd88251666bab3692f3b65154ecd179c5209c3abc7741796f8042 () ()
   inferenceWithPremiseDerivations {
-    prove = functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ) 0a
+    knownDerived = functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ $0 {
+      prove = functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ) 0a
+    }
     prove = ×ℤ quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= ×ℤ quadrupleQuotientFunction $$0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ) (functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $0 $2 apply ×ℕ orderedPair $1 $3 apply +ℕ orderedPair apply ×ℕ orderedPair $0 $3 apply ×ℕ orderedPair $1 $2 ~_ℤ, $0) 0.1.0 0.0
   }
   prove ∀ a_1 → ∈ $0 ℕ ∀ b_1 → ∈ $0 ℕ ∀ a_2 → ∈ $0 ℕ ∀ b_2 → ∈ $0 ℕ ∀ c_1 → ∈ $0 ℕ ∀ d_1 → ∈ $0 ℕ ∀ c_2 → ∈ $0 ℕ ∀ d_2 → ∈ $0 ℕ → ∧ ∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$$$0 $$$$$0 ~_ℤ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply $$$$$$$$$0 orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 apply $$$$$$$$$0 orderedPair orderedPair $$$$$$0 $$$$$0 orderedPair $$0 $0 37c5497cf07720c1eb39b4a97a19b886797fbd22755618b9b47ff3422cb34ad6 () ($0) 0a
@@ -16,12 +18,16 @@ let f = $0 functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair app
                   take d {
                     assume ∈ $0 ℕ {
                       inferenceWithPremiseDerivations {
-                        prove ∈ apply ×ℕ orderedPair $$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $$0) 0.3.0.0.0a 0.3.0.0.0.0.0.0.0a
-                        prove ∈ apply ×ℕ orderedPair $$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $0) 0.3.0.0.0.0.0a 0.3.0.0.0.0.0.0.0.0.0a
-                        prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair $$$$0 $$0, apply ×ℕ orderedPair $$$0 $0) 0.3.0.0.0.0.0.0.0.0.0.0.0 0.3.0.0.0.0.0.0.0.0.0.0.1
-                        prove ∈ apply ×ℕ orderedPair $$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $0) 0.3.0.0.0a 0.3.0.0.0.0.0.0.0.0.0a
-                        prove ∈ apply ×ℕ orderedPair $$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $$0) 0.3.0.0.0.0.0a 0.3.0.0.0.0.0.0.0a
-                        prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair $$$$0 $0, apply ×ℕ orderedPair $$$0 $$0) 0.3.0.0.0.0.0.0.0.0.0.0.3 0.3.0.0.0.0.0.0.0.0.0.0.4
+                        knownDerived ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 ℕ {
+                          prove ∈ apply ×ℕ orderedPair $$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $$0) 0.3.0.0.0a 0.3.0.0.0.0.0.0.0a
+                          prove ∈ apply ×ℕ orderedPair $$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $0) 0.3.0.0.0.0.0a 0.3.0.0.0.0.0.0.0.0.0a
+                          prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair $$$$0 $$0, apply ×ℕ orderedPair $$$0 $0) 0.3.0.0.0.0.0.0.0.0.0.0.0 0.3.0.0.0.0.0.0.0.0.0.0.1
+                        }
+                        knownDerived ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ℕ {
+                          prove ∈ apply ×ℕ orderedPair $$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $0) 0.3.0.0.0a 0.3.0.0.0.0.0.0.0.0.0a
+                          prove ∈ apply ×ℕ orderedPair $$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $$0) 0.3.0.0.0.0.0a 0.3.0.0.0.0.0.0.0a
+                          prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair $$$$0 $0, apply ×ℕ orderedPair $$$0 $$0) 0.3.0.0.0.0.0.0.0.0.0.0.3 0.3.0.0.0.0.0.0.0.0.0.0.4
+                        }
                         prove ∈ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ~_ℤ ℤ 2828eb31e21168a6591aab7944684f81081c3903544879d9877bb3aec1a48047 () (apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0, apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0) 0.3.0.0.0.0.0.0.0.0.0.0.2 0.3.0.0.0.0.0.0.0.0.0.0.5
                       }
                     }
@@ -53,7 +59,9 @@ let f = $0 functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair app
     prove = apply quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ orderedPair equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceClass orderedPair t2 t3 ~_ℤ apply $0 orderedPair orderedPair t0 t1 orderedPair t2 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t3 ℕ, = apply quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ orderedPair equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceClass orderedPair t2 t3 ~_ℤ apply $0 orderedPair orderedPair t0 t1 orderedPair t2 t3) () 0.5.6 p3
   }
   inferenceWithPremiseDerivations {
-    prove = quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ ×ℤ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (×ℤ, quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ) 0.1
+    knownDerived = quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ ×ℤ {
+      prove = quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ ×ℤ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (×ℤ, quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ) 0.1
+    }
     prove = apply ×ℤ orderedPair equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceClass orderedPair t2 t3 ~_ℤ apply $0 orderedPair orderedPair t0 t1 orderedPair t2 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply $$0 orderedPair equivalenceClass orderedPair t0 t1 ~_ℤ equivalenceClass orderedPair t2 t3 ~_ℤ apply $0 orderedPair orderedPair t0 t1 orderedPair t2 t3) (quadrupleQuotientFunction $0 ℕ ℕ ℕ ℕ ℤ ~_ℤ ~_ℤ, ×ℤ) 0.6.0 0.5
   }
   inferenceExtraction {

@@ -29,18 +29,22 @@ elided 229a3650f9ab94f513f48aa6f25b5c48093bc2a10b90a214ab1b1f0134ec5ae3 {
   }
   elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
     inferenceWithPremiseDerivations {
-      inferenceExtraction {
-        prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℤ, ℕ, ℤ^≥0) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        prove ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function ⍳_ℤ, ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0) () 1.2.0.0.0
-        prove = domain ⍳_ℤ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain ⍳_ℤ ℕ, ⊆ codomain ⍳_ℤ ℤ^≥0) () 1.2.0.0.1
+      knownDerived = domain ⍳_ℤ ℕ {
+        deconstruction {
+          prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℤ, ℕ, ℤ^≥0) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function ⍳_ℤ, ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0) () 1.2.0.0.0
+          prove = domain ⍳_ℤ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain ⍳_ℤ ℕ, ⊆ codomain ⍳_ℤ ℤ^≥0) () 1.2.0.0.1
+        }
       }
       prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 domain ⍳_ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 $0 bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 domain ⍳_ℤ) (domain ⍳_ℤ, ℕ) 1.2.0.0 1.1
     }
     inferenceWithPremiseDerivations {
-      inferenceExtraction {
-        prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℤ, ℕ, ℤ^≥0) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        prove ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function ⍳_ℤ, ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0) () 1.2.1.0.0
-        prove = domain ⍳_ℤ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain ⍳_ℤ ℕ, ⊆ codomain ⍳_ℤ ℤ^≥0) () 1.2.1.0.1
+      knownDerived = domain ⍳_ℤ ℕ {
+        deconstruction {
+          prove ∧ function ⍳_ℤ ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (⍳_ℤ, ℕ, ℤ^≥0) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function ⍳_ℤ, ∧ = domain ⍳_ℤ ℕ ⊆ codomain ⍳_ℤ ℤ^≥0) () 1.2.1.0.0
+          prove = domain ⍳_ℤ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain ⍳_ℤ ℕ, ⊆ codomain ⍳_ℤ ℤ^≥0) () 1.2.1.0.1
+        }
       }
       prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 $0) (domain ⍳_ℤ, ℕ) 1.2.1.0 1.2.0
     }
@@ -75,7 +79,9 @@ elided 80caebb81b56ae485470657bb18dfc522b3f2cd5dc427099905fae9d47526627 {
   }
 }
 inferenceWithPremiseDerivations {
-  prove ∧ ∈ apply inverseFunction ⍳_ℤ t0 ℕ = t0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply inverseFunction ⍳_ℤ t0 ℕ, = t0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ t0) () 3 4
+  knownDerived ∧ ∈ apply inverseFunction ⍳_ℤ t0 ℕ = t0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ t0 {
+    prove ∧ ∈ apply inverseFunction ⍳_ℤ t0 ℕ = t0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply inverseFunction ⍳_ℤ t0 ℕ, = t0 apply ⍳_ℤ apply inverseFunction ⍳_ℤ t0) () 3 4
+  }
   prove ∃ x ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0) (apply inverseFunction ⍳_ℤ t0) 5.0
 }
 take n {
@@ -91,6 +97,8 @@ take n {
   }
 }
 inferenceWithPremiseDerivations {
-  prove ∧ ∃ n ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0 ∀ n ∀ m → ∧ ∧ ∈ $$0 ℕ = t0 apply ⍳_ℤ $$0 ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ n ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0, ∀ n ∀ m → ∧ ∧ ∈ $$0 ℕ = t0 apply ⍳_ℤ $$0 ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0 = $$0 $0) () 5 6
+  knownDerived ∧ ∃ n ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0 ∀ n ∀ m → ∧ ∧ ∈ $$0 ℕ = t0 apply ⍳_ℤ $$0 ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0 = $$0 $0 {
+    prove ∧ ∃ n ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0 ∀ n ∀ m → ∧ ∧ ∈ $$0 ℕ = t0 apply ⍳_ℤ $$0 ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ n ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0, ∀ n ∀ m → ∧ ∧ ∈ $$0 ℕ = t0 apply ⍳_ℤ $$0 ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0 = $$0 $0) () 5 6
+  }
   prove ∃! n ∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∧ ∈ $0 ℕ = t0 apply ⍳_ℤ $0) () 7.0
 }

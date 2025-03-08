@@ -9,7 +9,9 @@ wrappedInferenceApplication {
   }
 }
 inferenceWithPremiseDerivations {
-  prove ∧ ∃ x identityBinaryOperation $0 t0 ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x identityBinaryOperation $0 t0, ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 = $$0 $0) () 0 1
+  knownDerived ∧ ∃ x identityBinaryOperation $0 t0 ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 = $$0 $0 {
+    prove ∧ ∃ x identityBinaryOperation $0 t0 ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x identityBinaryOperation $0 t0, ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 = $$0 $0) () 0 1
+  }
   prove ∃! x identityBinaryOperation $0 t0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (identityBinaryOperation $0 t0) () 2.0
 }
 take e' {
@@ -19,7 +21,9 @@ take e' {
   }
 }
 inferenceWithPremiseDerivations {
-  prove ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃! e identityBinaryOperation $0 t0, ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () 2 3
-  prove ∧ binaryOperation t0 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 4.0
+  knownDerived ∧ binaryOperation t0 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 {
+    prove ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃! e identityBinaryOperation $0 t0, ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () 2 3
+    prove ∧ binaryOperation t0 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 4.0
+  }
   prove invertibleBinaryOperation t0 d245bfc920e28fd63b7cb18c90d5a0024346bfbb2428277ce29ff0abd379e7d6 () (t0) 4.1
 }

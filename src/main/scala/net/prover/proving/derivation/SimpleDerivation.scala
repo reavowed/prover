@@ -7,7 +7,7 @@ import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, 
 
 case class SimpleDerivation(steps: Seq[SimpleDerivationStep]) extends StepLike.Wrapper {
   def :+(inferenceExtraction: AppliedInferenceExtraction): SimpleDerivation = {
-    this :+ SimpleDerivationStep.InferenceExtraction(inferenceExtraction)
+    this :+ SimpleDerivationStep(inferenceExtraction)
   }
   def :+(assertionStep: Step.AssertionStep): SimpleDerivation = {
     this :+ SimpleDerivationStep.Assertion(assertionStep)
@@ -71,9 +71,8 @@ object SimpleDerivationStep {
   case class DefinitionDeconstruction(
     deconstructionStep: Step.AssertionStep,
     additionalSteps: Seq[Step.AssertionStep]
-  ) extends SimpleDerivationStep with DefinitionDeconstructionBase {
-    override def serializedLines: Seq[String] = super.serializedLines.indentInLabelledBracesIfPresent("definition")
-  }
+  ) extends SimpleDerivationStep with DefinitionDeconstructionBase
+
   case class InferenceExtraction(appliedInferenceExtraction: AppliedInferenceExtraction) extends SimpleDerivationStep {
     override def inference: Inference = appliedInferenceExtraction.assertionStep.inference
     override def substeps: Seq[StepLike] = Seq(appliedInferenceExtraction)
@@ -83,12 +82,22 @@ object SimpleDerivationStep {
     override def serializedLines: Seq[String] = super.serializedLines.indentInLabelledBracesIfPresent("extraction")
   }
 
+  def apply(appliedInferenceExtraction: AppliedInferenceExtraction): SimpleDerivationStep = {
+    if (appliedInferenceExtraction.extraction.nonEmpty) {
+      InferenceExtraction(appliedInferenceExtraction)
+    } else {
+      Assertion(appliedInferenceExtraction.assertionStep)
+    }
+  }
+
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[SimpleDerivationStep] = {
     val assertionParser = Step.AssertionStep.parser.map(Assertion(_))
-    val definitionParser = KnownWordParser("definition") {
+    val definitionParser = KnownWordParser(DefinitionDeconstructionBase.label) {
       (for {
-        deconstructionStep <- Step.AssertionStep.parser
-        additionalSteps <- Step.AssertionStep.parser.whileDefined()
+        deconstructionStep <- Step.AssertionStep.parser(stepContext.forChild(), implicitly)
+        additionalSteps <- Step.listParser(stepContext =>
+          Step.AssertionStep.parser(stepContext, implicitly)
+        )(stepContext.forChild().addStep(deconstructionStep)).map(_._1)
       } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)).inBraces
     }
     val extractionParser = KnownWordParser("extraction") {

@@ -3,7 +3,9 @@ inferenceExtraction {
   prove = apply ×ℕ orderedPair 1ℕ t0 t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= apply ×ℕ orderedPair t0 1ℕ t0, = apply ×ℕ orderedPair 1ℕ t0 t0) () 0.0
 }
 inferenceWithPremiseDerivations {
-  prove ∧ ∈ t0 ℕ = apply ×ℕ orderedPair 1ℕ t0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 ℕ, = apply ×ℕ orderedPair 1ℕ t0 t0) () p0 0
+  knownDerived ∧ ∈ t0 ℕ = apply ×ℕ orderedPair 1ℕ t0 t0 {
+    prove ∧ ∈ t0 ℕ = apply ×ℕ orderedPair 1ℕ t0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t0 ℕ, = apply ×ℕ orderedPair 1ℕ t0 t0) () p0 0
+  }
   prove ∃ x ∧ ∈ $0 ℕ = apply ×ℕ orderedPair 1ℕ $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 ℕ = apply ×ℕ orderedPair 1ℕ $0 t0) (t0) 1.0
 }
 elided 85610f95d8025a79147939840f4ee93a9455b91e71ac4febd7ffe20fcee30cc9 {

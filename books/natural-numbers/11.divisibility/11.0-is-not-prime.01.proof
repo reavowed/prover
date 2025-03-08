@@ -1,5 +1,7 @@
 inferenceWithPremiseDerivations {
-  prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+  knownDerived ∈ 1ℕ ℕ {
+    prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+  }
   prove ¬ ∈ orderedPair 1ℕ 0ℕ <ℕ 1daa3a1fca480885455560f01c40a550254c8546e81f81bdb8f0e31d8c000c7a () (1ℕ) 0.0
 }
 elided 364bbd79cbb397680f370a451f83ed23bcc45deb7d5d0295f038decaaa51657d {
@@ -7,8 +9,10 @@ elided 364bbd79cbb397680f370a451f83ed23bcc45deb7d5d0295f038decaaa51657d {
     prove ∧ ∈ 0ℕ ℕ ∧ ∈ orderedPair 1ℕ 0ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ 364bbd79cbb397680f370a451f83ed23bcc45deb7d5d0295f038decaaa51657d () (0ℕ) 1.0a
   }
   inferenceWithPremiseDerivations {
-    prove ¬ ∧ ∈ orderedPair 1ℕ 0ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ 88815358100d8160cba944a54dfdc44dde0c326c3d75787a50a0d326e089f119 (∈ orderedPair 1ℕ 0ℕ <ℕ, ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ) () 0
-    prove ¬ ∧ ∈ 0ℕ ℕ ∧ ∈ orderedPair 1ℕ 0ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ fb0d51aff7d24130593e44be859ec813ffe65d04fe9f7e21ada002fe33e686c7 (∧ ∈ orderedPair 1ℕ 0ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ, ∈ 0ℕ ℕ) () 1.1.0
+    knownDerived ¬ ∧ ∈ 0ℕ ℕ ∧ ∈ orderedPair 1ℕ 0ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ {
+      prove ¬ ∧ ∈ orderedPair 1ℕ 0ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ 88815358100d8160cba944a54dfdc44dde0c326c3d75787a50a0d326e089f119 (∈ orderedPair 1ℕ 0ℕ <ℕ, ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ) () 0
+      prove ¬ ∧ ∈ 0ℕ ℕ ∧ ∈ orderedPair 1ℕ 0ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ fb0d51aff7d24130593e44be859ec813ffe65d04fe9f7e21ada002fe33e686c7 (∧ ∈ orderedPair 1ℕ 0ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ, ∈ 0ℕ ℕ) () 1.1.0
+    }
     prove ¬ prime 0ℕ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (prime 0ℕ, ∧ ∈ 0ℕ ℕ ∧ ∈ orderedPair 1ℕ 0ℕ <ℕ ∀ b → ∈ $0 ℕ → ∈ orderedPair $0 0ℕ |ℕ ∨ = $0 1ℕ = $0 0ℕ) () 1.0 1.1.1
   }
 }

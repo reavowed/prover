@@ -4,9 +4,11 @@ inferenceExtraction {
 }
 elided 415764b3df7bee3d11b98bf927dd95099c86c0995c62c46812885549786deb21 {
   inferenceWithPremiseDerivations {
-    prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
-    prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 1.0.0
-    prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ = apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 1ℕ ℤ, = apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t0) () 1.0.1 0
+    knownDerived ∧ ∈ apply ⍳_ℤ 1ℕ ℤ = apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t0 {
+      prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+      prove ∈ apply ⍳_ℤ 1ℕ ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (1ℕ) 1.0.0
+      prove ∧ ∈ apply ⍳_ℤ 1ℕ ℤ = apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply ⍳_ℤ 1ℕ ℤ, = apply ×ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t0) () 1.0.1 0
+    }
     prove ∃ x ∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 ℤ = apply ×ℤ orderedPair t0 $0 t0) (apply ⍳_ℤ 1ℕ) 1.0.2
   }
   inferenceExtraction {

@@ -48,10 +48,12 @@ object Premise {
     val singleLinePremiseParser = for {
       ref <- PreviousLineReference.parser
       baseRef = ref.withoutInternalPath
-      givenPremise = stepContext.premises.find(_.referencedLine == baseRef).getOrElse(throw new Exception(s"Could not find reference ${baseRef.serialize}"))
+      givenPremise = stepContext.premises.find(_.referencedLine == baseRef)
+        .getOrElse(throw new Exception(s"Could not find reference ${baseRef.serialize}"))
       inferences <- Inference.parser.tryOrNone.whileDefined
       result = applyPremiseSimplifications(inferences, givenPremise)
-      _ = if (result.statement != statement) throw new Exception(s"Given premise ${result.statement} did not match expected premise $statement")
+      _ = if (result.statement != statement)
+        throw new Exception(s"Given premise ${result.statement} did not match expected premise $statement")
     } yield result
     pendingParser orElse singleLinePremiseParser
   }

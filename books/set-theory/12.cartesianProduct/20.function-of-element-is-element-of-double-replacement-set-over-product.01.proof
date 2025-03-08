@@ -6,11 +6,15 @@ rewrite {
 }
 prove = with (t4 t5) t3 with (t4 t5) t3 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (with (t4 t5) t3)
 inferenceWithPremiseDerivations {
-  prove ∧ ∈ t5 t2 = with (t4 t5) t3 with (t4 t5) t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t5 t2, = with (t4 t5) t3 with (t4 t5) t3) () p2 1
+  knownDerived ∧ ∈ t5 t2 = with (t4 t5) t3 with (t4 t5) t3 {
+    prove ∧ ∈ t5 t2 = with (t4 t5) t3 with (t4 t5) t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t5 t2, = with (t4 t5) t3 with (t4 t5) t3) () p2 1
+  }
   prove ∃ x ∧ ∈ $0 t2 = with (t4 t5) t3 with (t4 $0) t3 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 t2 = with (t4 t5) t3 with (t4 $0) t3) (t5) 2.0
 }
 inferenceWithPremiseDerivations {
-  prove ∧ ∈ t4 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with (t4 $0) t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t4 t1, ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with (t4 $0) t3) () p1 2
+  knownDerived ∧ ∈ t4 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with (t4 $0) t3 {
+    prove ∧ ∈ t4 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with (t4 $0) t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t4 t1, ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with (t4 $0) t3) () p1 2
+  }
   prove ∃ x ∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with ($$0 $0) t3 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $0 t1 ∃ b ∧ ∈ $0 t2 = with (t4 t5) t3 with ($$0 $0) t3) (t4) 3.0
 }
 inferenceExtraction {

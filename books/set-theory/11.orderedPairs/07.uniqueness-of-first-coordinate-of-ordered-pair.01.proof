@@ -11,6 +11,8 @@ take a_1 {
   }
 }
 inferenceWithPremiseDerivations {
-  prove ∧ ∃ a ∃ b = t0 orderedPair $$0 $0 ∀ a_1 ∀ a_2 → ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ a ∃ b = t0 orderedPair $$0 $0, ∀ a_1 ∀ a_2 → ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 = $$0 $0) () p0 0
+  knownDerived ∧ ∃ a ∃ b = t0 orderedPair $$0 $0 ∀ a_1 ∀ a_2 → ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 = $$0 $0 {
+    prove ∧ ∃ a ∃ b = t0 orderedPair $$0 $0 ∀ a_1 ∀ a_2 → ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ a ∃ b = t0 orderedPair $$0 $0, ∀ a_1 ∀ a_2 → ∧ ∃ b = t0 orderedPair $$$0 $0 ∃ b = t0 orderedPair $$0 $0 = $$0 $0) () p0 0
+  }
   prove ∃! a ∃ b = t0 orderedPair $$0 $0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (∃ b = t0 orderedPair $$0 $0) () 1.0
 }

@@ -51,8 +51,10 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
       }
     }
     inferenceWithPremiseDerivations {
-      prove ∧ = apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ, = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ) () 1.0.8 1.0.9
-      prove ∧ ∈ equivalenceClass orderedPair $0 $$0 ~_ℤ ℤ ∧ = apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ equivalenceClass orderedPair $0 $$0 ~_ℤ ℤ, ∧ = apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ) () 1.0.0 1.0.11.0
+      knownDerived ∧ ∈ equivalenceClass orderedPair $0 $$0 ~_ℤ ℤ ∧ = apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ {
+        prove ∧ = apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ, = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ) () 1.0.8 1.0.9
+        prove ∧ ∈ equivalenceClass orderedPair $0 $$0 ~_ℤ ℤ ∧ = apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ equivalenceClass orderedPair $0 $$0 ~_ℤ ℤ, ∧ = apply +ℤ orderedPair t0 equivalenceClass orderedPair $0 $$0 ~_ℤ apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ t0 apply ⍳_ℤ 0ℕ) () 1.0.0 1.0.11.0
+      }
       prove ∃! x ∧ ∈ $0 ℤ ∧ = apply +ℤ orderedPair t0 $0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $0 t0 apply ⍳_ℤ 0ℕ f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ ∈ $$$0 ℤ ∧ = apply +ℤ orderedPair t0 $$$0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair $$$0 t0 apply ⍳_ℤ 0ℕ) (equivalenceClass orderedPair $0 $$0 ~_ℤ) 1.0.11.1 1.0.10
     }
   }

@@ -31,7 +31,9 @@ subproof (Reverse implication (generalised)) {
                     prove ∈ orderedPair apply ×ℕ orderedPair $$0 t2 apply ×ℕ orderedPair $0 t2 <ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ orderedPair $$0 $0 <ℕ ¬ = t2 0ℕ, ∈ orderedPair apply ×ℕ orderedPair $$0 t2 apply ×ℕ orderedPair $0 t2 <ℕ) () 0.0.0.1.0.0.0a 0.0.0.1.0.0.0.0.2.0.0
                   }
                   inferenceWithPremiseDerivations {
-                    prove ∈ apply ×ℕ orderedPair $0 t2 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($0, t2) 0.0.0.1.0.0a p2
+                    knownDerived ∈ apply ×ℕ orderedPair $0 t2 ℕ {
+                      prove ∈ apply ×ℕ orderedPair $0 t2 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($0, t2) 0.0.0.1.0.0a p2
+                    }
                     prove ∈ orderedPair apply ×ℕ orderedPair $0 t2 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 <ℕ 3743dc4334ea19e955601fd268e43943ea46dab11b5db7c8955a34a20dccfa30 () (apply ×ℕ orderedPair $0 t2, t2) 0.0.0.1.0.0.0.0.2.1.0 p2 0.0.0.1.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   }
                   prove ∈ orderedPair apply ×ℕ orderedPair $$0 t2 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 <ℕ 1f7bb894b49d0cb9296bcce3d3321d832f8c11b832e53955c1976ca28a712ac7 () (apply ×ℕ orderedPair $$0 t2, apply ×ℕ orderedPair $0 t2, apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2) 0.0.0.1.0.0.0.0.2.0 0.0.0.1.0.0.0.0.2.1
@@ -44,11 +46,15 @@ subproof (Reverse implication (generalised)) {
                 assume = $$0 $0 {
                   prove = apply ×ℕ orderedPair $$0 t2 apply ×ℕ orderedPair $0 t2 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$0, $0, apply ×ℕ orderedPair $$$0 t2) 0.0.0.1.0.0.0.0.3a
                   inferenceWithPremiseDerivations {
-                    prove ∈ apply ×ℕ orderedPair $0 t2 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($0, t2) 0.0.0.1.0.0a p2
+                    knownDerived ∈ apply ×ℕ orderedPair $0 t2 ℕ {
+                      prove ∈ apply ×ℕ orderedPair $0 t2 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($0, t2) 0.0.0.1.0.0a p2
+                    }
                     prove ∈ orderedPair apply ×ℕ orderedPair $0 t2 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 <ℕ 3743dc4334ea19e955601fd268e43943ea46dab11b5db7c8955a34a20dccfa30 () (apply ×ℕ orderedPair $0 t2, t2) 0.0.0.1.0.0.0.0.3.1.0 p2 0.0.0.1.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   }
                   inferenceWithPremiseDerivations {
-                    prove = apply ×ℕ orderedPair $0 t2 apply ×ℕ orderedPair $$0 t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair $$0 t2, apply ×ℕ orderedPair $0 t2) 0.0.0.1.0.0.0.0.3.0
+                    knownDerived = apply ×ℕ orderedPair $0 t2 apply ×ℕ orderedPair $$0 t2 {
+                      prove = apply ×ℕ orderedPair $0 t2 apply ×ℕ orderedPair $$0 t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℕ orderedPair $$0 t2, apply ×ℕ orderedPair $0 t2) 0.0.0.1.0.0.0.0.3.0
+                    }
                     prove ∈ orderedPair apply ×ℕ orderedPair $$0 t2 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 <ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$0 apply +ℕ orderedPair apply ×ℕ orderedPair $0 t2 t2 <ℕ) (apply ×ℕ orderedPair $0 t2, apply ×ℕ orderedPair $$0 t2) 0.0.0.1.0.0.0.0.3.2.0 0.0.0.1.0.0.0.0.3.1
                   }
                   inferenceExtraction {
@@ -99,11 +105,15 @@ subproof (Forward Implication) {
       }
       elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
         inferenceWithPremiseDerivations {
-          prove = 0ℕ t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t2, 0ℕ) 1.0.0a
+          knownDerived = 0ℕ t2 {
+            prove = 0ℕ t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t2, 0ℕ) 1.0.0a
+          }
           prove ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 0ℕ <ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ orderedPair apply ×ℕ orderedPair t0 $0 apply ×ℕ orderedPair t1 0ℕ <ℕ) (0ℕ, t2) 1.0.0.2.0.0 1.0.0.1
         }
         inferenceWithPremiseDerivations {
-          prove = 0ℕ t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t2, 0ℕ) 1.0.0a
+          knownDerived = 0ℕ t2 {
+            prove = 0ℕ t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t2, 0ℕ) 1.0.0a
+          }
           prove ¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 t2 <ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ orderedPair apply ×ℕ orderedPair t0 t2 apply ×ℕ orderedPair t1 $0 <ℕ) (0ℕ, t2) 1.0.0.2.1.0 1.0.0.2.0
         }
       }
@@ -176,7 +186,9 @@ subproof (Forward Implication) {
     }
     prove ¬ ∈ orderedPair t1 t0 <ℕ f5221350de9f92925efd2d3771281255e8fa0680a108fcb635a9e1c9dc7b9369 (∈ orderedPair t1 t0 <ℕ) () 1.0.5
     inferenceWithPremiseDerivations {
-      prove ¬ ∨ = t0 t1 ∈ orderedPair t1 t0 <ℕ 403c99556d1d944b1441d404e264b68e20dc4c3e62bd7024cccd76ca6bd875bc (= t0 t1, ∈ orderedPair t1 t0 <ℕ) () 1.0.4 1.0.6
+      knownDerived ¬ ∨ = t0 t1 ∈ orderedPair t1 t0 <ℕ {
+        prove ¬ ∨ = t0 t1 ∈ orderedPair t1 t0 <ℕ 403c99556d1d944b1441d404e264b68e20dc4c3e62bd7024cccd76ca6bd875bc (= t0 t1, ∈ orderedPair t1 t0 <ℕ) () 1.0.4 1.0.6
+      }
       prove ∈ orderedPair t0 t1 <ℕ ff2f6dbf1f9d72bed232823eeca33745970df4eadd4712ff5dcc9db8d7b5ad1f (∈ orderedPair t0 t1 <ℕ, ∨ = t0 t1 ∈ orderedPair t1 t0 <ℕ) () 1.0.2 1.0.7.0
     }
     prove ∧ ∈ orderedPair t0 t1 <ℕ ¬ = t2 0ℕ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair t0 t1 <ℕ, ¬ = t2 0ℕ) () 1.0.7 1.0.1

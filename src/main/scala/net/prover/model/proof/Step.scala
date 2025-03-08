@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model._
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.Step.ExistingStatementExtractionStep.builder
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.parsing.{KnownWordParser, Parser}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction}
@@ -491,7 +490,8 @@ object Step {
         assertion
       }
     }
-    def builder[F[_]: Monad](
+
+    def builder[F[_] : Monad](
       getPremises: StepContext => F[Seq[KnownStatement]],
       getAssertion: StepContext => F[InferenceApplicationWithoutPremises])(
       implicit stepContext: StepContext
@@ -499,11 +499,12 @@ object Step {
       val innerContext = stepContext.forChild()
       for {
         premises <- getPremises(innerContext)
-        contextAfterPremises = if (premises.nonEmpty) innerContext.addSteps(premises.flatMap(_.toProofSteps)).forChild() else innerContext
+        contextAfterPremises = if (premises.nonEmpty) innerContext.addSteps(premises.flatMap(_.toProofSteps)) else innerContext
         assertion <- getAssertion(contextAfterPremises)
       } yield InferenceWithPremiseDerivationsStep(premises, assertion)
     }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[InferenceWithPremiseDerivationsStep] = {
+
+    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[Step] = {
       KnownWordParser("inferenceWithPremiseDerivations") {
         builder[Parser](
           sc => KnownStatement.listParser(sc, implicitly).map(_._1),

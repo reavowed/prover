@@ -21,7 +21,9 @@ take r {
     assume ¬ = $0 0ℕ {
       assume ∈ orderedPair t0 apply ×ℕ orderedPair t0 $0 ≤ℕ {
         inferenceWithPremiseDerivations {
-          prove ∈ apply ×ℕ orderedPair t0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (t0, $0) p0 2.0a
+          knownDerived ∈ apply ×ℕ orderedPair t0 $0 ℕ {
+            prove ∈ apply ×ℕ orderedPair t0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () (t0, $0) p0 2.0a
+          }
           prove ∈ orderedPair apply ×ℕ orderedPair t0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 t0 ≤ℕ 7314876030171ae0ba4fbb2f095f49f29fb107d6bc2642c5defc34c8840d3065 () (apply ×ℕ orderedPair t0 $0, t0) 2.0.0.0.0.0 p0
         }
         prove ∈ orderedPair t0 apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 t0 ≤ℕ d9705d69934a959760a25f2568464b6a3e30b3ddbfd08fb712ae65983782c7ac () (t0, apply ×ℕ orderedPair t0 $0, apply +ℕ orderedPair apply ×ℕ orderedPair t0 $0 t0) 2.0.0.0a 2.0.0.0.0

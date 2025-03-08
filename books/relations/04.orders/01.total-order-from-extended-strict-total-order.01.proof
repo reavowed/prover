@@ -24,8 +24,10 @@ elided 083ed663db0b048c46f2a7b9cd6a0da7ba5df33acb163f1a4d82ddfff73d8008 {
   }
 }
 inferenceWithPremiseDerivations {
-  prove ∧ relation t2 t1 antisymmetricRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, antisymmetricRelation t2 t1) () 2 3
-  prove ∧ ∧ relation t2 t1 antisymmetricRelation t2 t1 transitiveRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ relation t2 t1 antisymmetricRelation t2 t1, transitiveRelation t2 t1) () 6.0 4
-  prove ∧ ∧ ∧ relation t2 t1 antisymmetricRelation t2 t1 transitiveRelation t2 t1 completeRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ ∧ relation t2 t1 antisymmetricRelation t2 t1 transitiveRelation t2 t1, completeRelation t2 t1) () 6.1 5
+  knownDerived ∧ ∧ ∧ relation t2 t1 antisymmetricRelation t2 t1 transitiveRelation t2 t1 completeRelation t2 t1 {
+    prove ∧ relation t2 t1 antisymmetricRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation t2 t1, antisymmetricRelation t2 t1) () 2 3
+    prove ∧ ∧ relation t2 t1 antisymmetricRelation t2 t1 transitiveRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ relation t2 t1 antisymmetricRelation t2 t1, transitiveRelation t2 t1) () 6.0 4
+    prove ∧ ∧ ∧ relation t2 t1 antisymmetricRelation t2 t1 transitiveRelation t2 t1 completeRelation t2 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ ∧ relation t2 t1 antisymmetricRelation t2 t1 transitiveRelation t2 t1, completeRelation t2 t1) () 6.1 5
+  }
   prove totalOrder t2 t1 c50cf7c7bef655b9875977b4f21d4e01014eba560ce91428ae39dcb6691118d1 () (t2, t1) 6.2
 }

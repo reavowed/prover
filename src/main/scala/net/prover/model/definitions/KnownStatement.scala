@@ -10,7 +10,7 @@ import net.prover.proving.extraction.{AppliedInferenceExtraction, PremiseExtract
 case class KnownStatement(override val statement: Statement, derivation: SimpleDerivation) extends StepLike.Wrapper {
   override def substeps: Seq[StepLike] = Seq(derivation)
   def extend(appliedInferenceExtraction: AppliedInferenceExtraction): KnownStatement = {
-    extend(Seq(SimpleDerivationStep.InferenceExtraction(appliedInferenceExtraction)))
+    extend(Seq(SimpleDerivationStep(appliedInferenceExtraction)))
   }
   def extend(newDerivation: SimpleDerivation): KnownStatement = {
     extend(newDerivation.steps)
@@ -48,7 +48,7 @@ object KnownStatement {
     val directParser = KnownWordParser("knownDirect") {
       Statement.parser.map(KnownStatement(_, SimpleDerivation.empty))
     }
-    var derivedParser = KnownWordParser("knownDerived") {
+    val derivedParser = KnownWordParser("knownDerived") {
       for {
         statement <- Statement.parser
         derivation <- SimpleDerivation.parser.inBraces

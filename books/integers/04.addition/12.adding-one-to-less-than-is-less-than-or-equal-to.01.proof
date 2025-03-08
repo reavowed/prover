@@ -32,7 +32,9 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
         prove ↔ ∈ orderedPair t0 t1 <ℤ ∈ orderedPair successor apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair t0 t1 <ℤ, ∈ orderedPair apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 <ℕ, ∈ orderedPair successor apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ) () 1.0.1.0.2 1.0.1.0.3
         elided 0d51a3bb6f56acfd73312d7c6fc6c5a9fe660988bf46a6ad90b362d4b2ac539f {
           inferenceWithPremiseDerivations {
-            prove ∈ apply +ℕ orderedPair $$$$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+            knownDerived ∈ apply +ℕ orderedPair $$$$0 $0 ℕ {
+              prove ∈ apply +ℕ orderedPair $$$$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () ($$$$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+            }
             prove = successor apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 1ℕ 0d51a3bb6f56acfd73312d7c6fc6c5a9fe660988bf46a6ad90b362d4b2ac539f () (apply +ℕ orderedPair $$$$0 $0) 1.0.1.0.5.0.0
           }
           prove ↔ ∈ orderedPair successor apply +ℕ orderedPair $$$$0 $0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ ∈ orderedPair apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 1ℕ apply +ℕ orderedPair $$$0 $$0 ≤ℕ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $$$$$0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ) (successor apply +ℕ orderedPair $$$$0 $0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 1ℕ) 1.0.1.0.5.0
@@ -41,7 +43,9 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
         elided (Rearranged) {
           elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
             inferenceWithPremiseDerivations {
-              prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+              knownDerived ∈ 1ℕ ℕ {
+                prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+              }
               prove = apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $0 1ℕ apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 1ℕ db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () ($$$$0, $0, 1ℕ) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.7.0.0.0
             }
             prove ↔ ∈ orderedPair apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $0 1ℕ apply +ℕ orderedPair $$$0 $$0 ≤ℕ ∈ orderedPair apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 1ℕ apply +ℕ orderedPair $$$0 $$0 ≤ℕ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $$$$$0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ) (apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $0 1ℕ, apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 1ℕ) 1.0.1.0.7.0.0
@@ -49,7 +53,9 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
           }
           elided dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 {
             inferenceWithPremiseDerivations {
-              prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+              knownDerived ∈ 1ℕ ℕ {
+                prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+              }
               prove = apply +ℕ orderedPair $0 1ℕ apply +ℕ orderedPair 1ℕ $0 dd59ae58b9532dbc68f5ec30442c87951fc2401dc7c587422b190cb729882b88 () ($0, 1ℕ) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.7.1.0.0
             }
             prove ↔ ∈ orderedPair apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $0 1ℕ apply +ℕ orderedPair $$$0 $$0 ≤ℕ ∈ orderedPair apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair 1ℕ $0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair apply +ℕ orderedPair $$$$0 $$$$$0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ) (apply +ℕ orderedPair $0 1ℕ, apply +ℕ orderedPair 1ℕ $0) 1.0.1.0.7.1.0
@@ -57,7 +63,9 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
           prove ↔ ∈ orderedPair apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 1ℕ apply +ℕ orderedPair $$$0 $$0 ≤ℕ ∈ orderedPair apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair 1ℕ $0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $0 1ℕ apply +ℕ orderedPair $$$0 $$0 ≤ℕ, ∈ orderedPair apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $0 1ℕ apply +ℕ orderedPair $$$0 $$0 ≤ℕ, ∈ orderedPair apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair 1ℕ $0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ) () 1.0.1.0.7.0 1.0.1.0.7.1
           elided db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 {
             inferenceWithPremiseDerivations {
-              prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+              knownDerived ∈ 1ℕ ℕ {
+                prove ∈ 1ℕ ℕ 39ef0412c9ccbdc46255baaa2cfcea99be39e4227b3bcaa662c767e76316d7ff () ()
+              }
               prove = apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair 1ℕ $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 1ℕ $0 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () ($$$$0, 1ℕ, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.7.3.0.0 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             }
             prove ↔ ∈ orderedPair apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair 1ℕ $0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ ∈ orderedPair apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 1ℕ $0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $$$$$0 apply +ℕ orderedPair $$$0 $$0 ≤ℕ) (apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair 1ℕ $0, apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 1ℕ $0) 1.0.1.0.7.3.0
@@ -117,11 +125,15 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
         prove ↔ ∈ orderedPair t0 t1 <ℤ ∈ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ apply ⍳_ℤ 1ℕ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair t0 t1 <ℤ, ∈ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair 1ℕ 0ℕ ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ, ∈ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ apply ⍳_ℤ 1ℕ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ) () 1.0.1.0.14 1.0.1.0.15
         elided 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 {
           inferenceWithPremiseDerivations {
-            prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            knownDerived = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ t0 {
+              prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            }
             prove ↔ ∈ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ apply ⍳_ℤ 1ℕ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ ∈ orderedPair apply +ℤ orderedPair t0 apply ⍳_ℤ 1ℕ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair apply +ℤ orderedPair $$$$$0 apply ⍳_ℤ 1ℕ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, t0) 1.0.1.0.17.0.0
           }
           inferenceWithPremiseDerivations {
-            prove = equivalenceClass orderedPair $$0 $0 ~_ℤ t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            knownDerived = equivalenceClass orderedPair $$0 $0 ~_ℤ t1 {
+              prove = equivalenceClass orderedPair $$0 $0 ~_ℤ t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            }
             prove ↔ ∈ orderedPair apply +ℤ orderedPair t0 apply ⍳_ℤ 1ℕ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ ∈ orderedPair apply +ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t1 ≤ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair apply +ℤ orderedPair t0 apply ⍳_ℤ 1ℕ $$$$$0 ≤ℤ) (equivalenceClass orderedPair $$0 $0 ~_ℤ, t1) 1.0.1.0.17.1.0
           }
           prove ↔ ∈ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ apply ⍳_ℤ 1ℕ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ ∈ orderedPair apply +ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t1 ≤ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ apply ⍳_ℤ 1ℕ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ, ∈ orderedPair apply +ℤ orderedPair t0 apply ⍳_ℤ 1ℕ equivalenceClass orderedPair $$0 $0 ~_ℤ ≤ℤ, ∈ orderedPair apply +ℤ orderedPair t0 apply ⍳_ℤ 1ℕ t1 ≤ℤ) () 1.0.1.0.17.0 1.0.1.0.17.1

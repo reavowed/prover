@@ -13,7 +13,7 @@ case class KnownWordParser[+T](
   }
   private def attemptParseWordRequired(word: String, tokenStreamAfterWord: TokenStream): (T, TokenStream) = {
     matchWord(word)
-      .getOrElse(throw new ParseException(s"Expected $expectedValueDescription, got $word"))
+      .getOrElse(throw ParseException(s"Expected $expectedValueDescription, got $word"))
       .parse(tokenStreamAfterWord)
   }
   def attemptParseOption(tokenStream: TokenStream): (Option[T], TokenStream) = {

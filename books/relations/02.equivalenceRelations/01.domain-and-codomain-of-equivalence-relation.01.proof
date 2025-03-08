@@ -34,7 +34,9 @@ take a {
     }
   }
   inferenceWithPremiseDerivations {
-    prove ∧ → ∈ $0 domain t0 ∈ $0 t1 → ∈ $0 t1 ∈ $0 domain t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∈ $0 domain t0 ∈ $0 t1, → ∈ $0 t1 ∈ $0 domain t0) () 1.0 1.1
+    knownDerived ∧ → ∈ $0 domain t0 ∈ $0 t1 → ∈ $0 t1 ∈ $0 domain t0 {
+      prove ∧ → ∈ $0 domain t0 ∈ $0 t1 → ∈ $0 t1 ∈ $0 domain t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∈ $0 domain t0 ∈ $0 t1, → ∈ $0 t1 ∈ $0 domain t0) () 1.0 1.1
+    }
     prove ↔ ∈ $0 domain t0 ∈ $0 t1 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (∈ $0 domain t0, ∈ $0 t1) () 1.2.0
   }
 }
@@ -71,7 +73,9 @@ take b {
     }
   }
   inferenceWithPremiseDerivations {
-    prove ∧ → ∈ $0 codomain t0 ∈ $0 t1 → ∈ $0 t1 ∈ $0 codomain t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∈ $0 codomain t0 ∈ $0 t1, → ∈ $0 t1 ∈ $0 codomain t0) () 3.0 3.1
+    knownDerived ∧ → ∈ $0 codomain t0 ∈ $0 t1 → ∈ $0 t1 ∈ $0 codomain t0 {
+      prove ∧ → ∈ $0 codomain t0 ∈ $0 t1 → ∈ $0 t1 ∈ $0 codomain t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∈ $0 codomain t0 ∈ $0 t1, → ∈ $0 t1 ∈ $0 codomain t0) () 3.0 3.1
+    }
     prove ↔ ∈ $0 codomain t0 ∈ $0 t1 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (∈ $0 codomain t0, ∈ $0 t1) () 3.2.0
   }
 }

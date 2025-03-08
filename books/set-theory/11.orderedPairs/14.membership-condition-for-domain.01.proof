@@ -14,7 +14,9 @@ take a {
         prove ∈ $0 codomain t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$0 domain t0, ∈ $0 codomain t0) () 1.0.1.0.0
       }
       inferenceWithPremiseDerivations {
-        prove ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 codomain t0, ∈ orderedPair $$0 $0 t0) () 1.0.1.0 1.0.1a
+        knownDerived ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 {
+          prove ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 codomain t0, ∈ orderedPair $$0 $0 t0) () 1.0.1.0 1.0.1a
+        }
         prove ∃ x ∧ ∈ $0 codomain t0 ∈ orderedPair $$$0 $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 codomain t0 ∈ orderedPair $$0 $$$0 t0) ($0) 1.0.1.1.0
       }
     }

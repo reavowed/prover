@@ -73,11 +73,13 @@ take x {
       }
     }
     inferenceWithPremiseDerivations {
-      inferenceExtraction {
-        prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        prove = t1 domain t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain t0, t1) 11.0.1.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      knownDerived ∈ $0 domain t0 {
+        deconstruction {
+          prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove = t1 domain t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain t0, t1) 11.0.1.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        }
+        prove ∈ $0 domain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (t1, domain t0) 11.0.1.0 11.0a
       }
-      prove ∈ $0 domain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (t1, domain t0) 11.0.1.0 11.0a
       prove ∈ orderedPair $0 apply t0 $0 t0 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb () (t0, $0) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 11.0.1.1
     }
     prove ∈ orderedPair $0 apply t0 $0 ∪ t0 t3 33f2017abf1119244d3e5afed3c492684b656c592fb65d4f2afa6ca2ff732db8 () (orderedPair $0 apply t0 $0, t0, t3) 11.0.1
@@ -123,11 +125,13 @@ take x {
       }
     }
     inferenceWithPremiseDerivations {
-      inferenceExtraction {
-        prove ∧ function t3 ∧ = domain t3 t4 ⊆ codomain t3 t5 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t3, t4, t5) p1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        prove = t4 domain t3 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain t3, t4) 11.1.1.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      knownDerived ∈ $0 domain t3 {
+        deconstruction {
+          prove ∧ function t3 ∧ = domain t3 t4 ⊆ codomain t3 t5 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t3, t4, t5) p1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove = t4 domain t3 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain t3, t4) 11.1.1.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        }
+        prove ∈ $0 domain t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (t4, domain t3) 11.1.1.0 11.1a
       }
-      prove ∈ $0 domain t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (t4, domain t3) 11.1.1.0 11.1a
       prove ∈ orderedPair $0 apply t3 $0 t3 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb () (t3, $0) p1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 11.1.1.1
     }
     prove ∈ orderedPair $0 apply t3 $0 ∪ t0 t3 575ab7217e272c44f21400641b5fa55080fbd1412a6ab09aac691f4d4611e10e () (orderedPair $0 apply t3 $0, t3, t0) 11.1.1

@@ -136,9 +136,11 @@ assume leftDistributes t0 t1 {
     prove rightDistributes t0 t1 ab7ec1f4b7d83dfc67baf261ae06108d577e17459dcbaa7927b387082d273222 () (t0, t1) 0.1.5
   }
   inferenceWithPremiseDerivations {
-    prove ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (leftDistributes t0 t1, rightDistributes t0 t1) () 0a 0.1
-    prove ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t1, ∧ leftDistributes t0 t1 rightDistributes t0 t1) () p1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.2.0
-    prove ∧ binaryOperation t0 ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.2.1
+    knownDerived ∧ binaryOperation t0 ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1 {
+      prove ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (leftDistributes t0 t1, rightDistributes t0 t1) () 0a 0.1
+      prove ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t1, ∧ leftDistributes t0 t1 rightDistributes t0 t1) () p1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.2.0
+      prove ∧ binaryOperation t0 ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.2.1
+    }
     prove distributes t0 t1 9d1a012a872edb520164a9d9efa70758ae82f8b62b8dceb55591b1d035881a22 () (t0, t1) 0.2.2
   }
 }
@@ -280,9 +282,11 @@ assume rightDistributes t0 t1 {
     prove leftDistributes t0 t1 bfdbc6cd986842ec1146524948d2ae768e832cae11c60a8f0b3507111ec7f64a () (t0, t1) 1.1.5
   }
   inferenceWithPremiseDerivations {
-    prove ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (leftDistributes t0 t1, rightDistributes t0 t1) () 1.1 1a
-    prove ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t1, ∧ leftDistributes t0 t1 rightDistributes t0 t1) () p1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.2.0
-    prove ∧ binaryOperation t0 ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.2.1
+    knownDerived ∧ binaryOperation t0 ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1 {
+      prove ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (leftDistributes t0 t1, rightDistributes t0 t1) () 1.1 1a
+      prove ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t1, ∧ leftDistributes t0 t1 rightDistributes t0 t1) () p1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.2.0
+      prove ∧ binaryOperation t0 ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∧ binaryOperation t1 ∧ leftDistributes t0 t1 rightDistributes t0 t1) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.2.1
+    }
     prove distributes t0 t1 9d1a012a872edb520164a9d9efa70758ae82f8b62b8dceb55591b1d035881a22 () (t0, t1) 1.2.2
   }
 }

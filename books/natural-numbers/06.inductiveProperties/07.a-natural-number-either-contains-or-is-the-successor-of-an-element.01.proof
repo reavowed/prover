@@ -27,7 +27,9 @@ take m {
   }
   prove ¬ = successor $0 0ℕ 680871c216b3ec6767ce74e9d781392911f72cdcb40b15d7b4f9071ed1491366 () ($0)
   inferenceWithPremiseDerivations {
-    prove ¬ ∨ ∈ successor $0 0ℕ = successor $0 0ℕ 403c99556d1d944b1441d404e264b68e20dc4c3e62bd7024cccd76ca6bd875bc (∈ successor $0 0ℕ, = successor $0 0ℕ) () 0.1 0.2
+    knownDerived ¬ ∨ ∈ successor $0 0ℕ = successor $0 0ℕ {
+      prove ¬ ∨ ∈ successor $0 0ℕ = successor $0 0ℕ 403c99556d1d944b1441d404e264b68e20dc4c3e62bd7024cccd76ca6bd875bc (∈ successor $0 0ℕ, = successor $0 0ℕ) () 0.1 0.2
+    }
     prove ↔ ∈ $0 0ℕ ∨ ∈ successor $0 0ℕ = successor $0 0ℕ 969fe999e4d5d620af12493d29f784dc121d217aee403848a602e7dbae723076 (∈ $0 0ℕ, ∨ ∈ successor $0 0ℕ = successor $0 0ℕ) () 0.0 0.3.0
   }
 }

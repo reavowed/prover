@@ -136,7 +136,9 @@ let ~_ℚ = $0 comprehension x product product ℤ diff ℤ singleton apply ⍳_
                       }
                     }
                     inferenceWithPremiseDerivations {
-                      prove ∧ → ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 → = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0, → = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0) () 0.2.0.0.0.0.0.0.0.0.0 0.2.0.0.0.0.0.0.0.0.1
+                      knownDerived ∧ → ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 → = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 {
+                        prove ∧ → ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 → = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0, → = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0) () 0.2.0.0.0.0.0.0.0.0.0 0.2.0.0.0.0.0.0.0.0.1
+                      }
                       prove ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0, = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 0.2.0.0.0.0.0.0.0.0.2.0
                     }
                   }
@@ -174,26 +176,34 @@ let ~_ℚ = $0 comprehension x product product ℤ diff ℤ singleton apply ⍳_
             elided (Extracted) {
               prove → ∈ first first $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair first first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) (first first $0) 0.3.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               inferenceWithPremiseDerivations {
-                prove ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.1
-                prove ∈ first first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () (first $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.3.1.0
+                knownDerived ∈ first first $0 ℤ {
+                  prove ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.1
+                  prove ∈ first first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () (first $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.3.1.0
+                }
                 prove ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair first first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first first $0 ℤ, ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair first first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 0.3.0.0.0.0.3.0 0.3.0.0.0.0.3.1.1
               }
               prove → ∈ second first $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$0 second first $$$0 orderedPair $$0 $0 $$$$0 = apply ×ℤ orderedPair first first $$$0 $0 apply ×ℤ orderedPair second first $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$0 $$$$$$0 orderedPair $$0 $0 $$$$0 = apply ×ℤ orderedPair first first $$$0 $0 apply ×ℤ orderedPair $$$$$$0 $$0) (second first $0) 0.3.0.0.0.0.3.1
               inferenceWithPremiseDerivations {
-                prove ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.1
-                prove ∈ second first $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (first $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.3.3.0
+                knownDerived ∈ second first $0 diff ℤ singleton apply ⍳_ℤ 0ℕ {
+                  prove ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.1
+                  prove ∈ second first $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (first $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.3.3.0
+                }
                 prove ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$0 second first $$$0 orderedPair $$0 $0 $$$$0 = apply ×ℤ orderedPair first first $$$0 $0 apply ×ℤ orderedPair second first $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second first $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$0 second first $$$0 orderedPair $$0 $0 $$$$0 = apply ×ℤ orderedPair first first $$$0 $0 apply ×ℤ orderedPair second first $$$0 $$0) () 0.3.0.0.0.0.3.2 0.3.0.0.0.0.3.3.1
               }
               prove → ∈ first second $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$0 second first $$0 orderedPair first second $$0 $0 $$$0 = apply ×ℤ orderedPair first first $$0 $0 apply ×ℤ orderedPair second first $$0 first second $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$0 second first $$0 orderedPair $$$$$0 $0 $$$0 = apply ×ℤ orderedPair first first $$0 $0 apply ×ℤ orderedPair second first $$0 $$$$$0) (first second $0) 0.3.0.0.0.0.3.3
               inferenceWithPremiseDerivations {
-                prove ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.1
-                prove ∈ first second $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () (second $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.3.5.0
+                knownDerived ∈ first second $0 ℤ {
+                  prove ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.1
+                  prove ∈ first second $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () (second $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.3.5.0
+                }
                 prove ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$0 second first $$0 orderedPair first second $$0 $0 $$$0 = apply ×ℤ orderedPair first first $$0 $0 apply ×ℤ orderedPair second first $$0 first second $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first second $0 ℤ, ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$0 second first $$0 orderedPair first second $$0 $0 $$$0 = apply ×ℤ orderedPair first first $$0 $0 apply ×ℤ orderedPair second first $$0 first second $$0) () 0.3.0.0.0.0.3.4 0.3.0.0.0.0.3.5.1
               }
               prove → ∈ second second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 $$0 = apply ×ℤ orderedPair first first $0 second second $0 apply ×ℤ orderedPair second first $0 first second $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 $$$$0 $$0 = apply ×ℤ orderedPair first first $0 $$$$0 apply ×ℤ orderedPair second first $0 first second $0) (second second $0) 0.3.0.0.0.0.3.5
               inferenceWithPremiseDerivations {
-                prove ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.1
-                prove ∈ second second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (second $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.3.7.0
+                knownDerived ∈ second second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ {
+                  prove ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.1
+                  prove ∈ second second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (second $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.0.3.7.0
+                }
                 prove ↔ ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 $$0 = apply ×ℤ orderedPair first first $0 second second $0 apply ×ℤ orderedPair second first $0 first second $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ↔ ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 $$0 = apply ×ℤ orderedPair first first $0 second second $0 apply ×ℤ orderedPair second first $0 first second $0) () 0.3.0.0.0.0.3.6 0.3.0.0.0.0.3.7.1
               }
               prove → ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 $$0 = apply ×ℤ orderedPair first first $0 second second $0 apply ×ℤ orderedPair second first $0 first second $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 $$0, = apply ×ℤ orderedPair first first $0 second second $0 apply ×ℤ orderedPair second first $0 first second $0) () 0.3.0.0.0.0.3.7
@@ -221,26 +231,34 @@ let ~_ℚ = $0 comprehension x product product ℤ diff ℤ singleton apply ⍳_
             elided (Extracted) {
               prove → ∈ first first $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair first first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) (first first $0) 0.3.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               inferenceWithPremiseDerivations {
-                prove ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
-                prove ∈ first first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () (first $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.2.1.0
+                knownDerived ∈ first first $0 ℤ {
+                  prove ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
+                  prove ∈ first first $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () (first $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.2.1.0
+                }
                 prove ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair first first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first first $0 ℤ, ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair first first $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 0.3.0.0.0.1.2.0 0.3.0.0.0.1.2.1.1
               }
               prove → ∈ second first $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$0 second first $$$0 orderedPair $$0 $0 $$$$0 = apply ×ℤ orderedPair first first $$$0 $0 apply ×ℤ orderedPair second first $$$0 $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$0 $$$$$$0 orderedPair $$0 $0 $$$$0 = apply ×ℤ orderedPair first first $$$0 $0 apply ×ℤ orderedPair $$$$$$0 $$0) (second first $0) 0.3.0.0.0.1.2.1
               inferenceWithPremiseDerivations {
-                prove ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
-                prove ∈ second first $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (first $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.2.3.0
+                knownDerived ∈ second first $0 diff ℤ singleton apply ⍳_ℤ 0ℕ {
+                  prove ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
+                  prove ∈ second first $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (first $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.2.3.0
+                }
                 prove ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$0 second first $$$0 orderedPair $$0 $0 $$$$0 = apply ×ℤ orderedPair first first $$$0 $0 apply ×ℤ orderedPair second first $$$0 $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second first $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$$0 second first $$$0 orderedPair $$0 $0 $$$$0 = apply ×ℤ orderedPair first first $$$0 $0 apply ×ℤ orderedPair second first $$$0 $$0) () 0.3.0.0.0.1.2.2 0.3.0.0.0.1.2.3.1
               }
               prove → ∈ first second $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$0 second first $$0 orderedPair first second $$0 $0 $$$0 = apply ×ℤ orderedPair first first $$0 $0 apply ×ℤ orderedPair second first $$0 first second $$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$0 second first $$0 orderedPair $$$$$0 $0 $$$0 = apply ×ℤ orderedPair first first $$0 $0 apply ×ℤ orderedPair second first $$0 $$$$$0) (first second $0) 0.3.0.0.0.1.2.3
               inferenceWithPremiseDerivations {
-                prove ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
-                prove ∈ first second $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () (second $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.2.5.0
+                knownDerived ∈ first second $0 ℤ {
+                  prove ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
+                  prove ∈ first second $0 ℤ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () (second $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.2.5.0
+                }
                 prove ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$0 second first $$0 orderedPair first second $$0 $0 $$$0 = apply ×ℤ orderedPair first first $$0 $0 apply ×ℤ orderedPair second first $$0 first second $$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ first second $0 ℤ, ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $$0 second first $$0 orderedPair first second $$0 $0 $$$0 = apply ×ℤ orderedPair first first $$0 $0 apply ×ℤ orderedPair second first $$0 first second $$0) () 0.3.0.0.0.1.2.4 0.3.0.0.0.1.2.5.1
               }
               prove → ∈ second second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 $$0 = apply ×ℤ orderedPair first first $0 second second $0 apply ×ℤ orderedPair second first $0 first second $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 $$$$0 $$0 = apply ×ℤ orderedPair first first $0 $$$$0 apply ×ℤ orderedPair second first $0 first second $0) (second second $0) 0.3.0.0.0.1.2.5
               inferenceWithPremiseDerivations {
-                prove ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
-                prove ∈ second second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (second $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.2.7.0
+                knownDerived ∈ second second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ {
+                  prove ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
+                  prove ∈ second second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () (second $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.2.7.0
+                }
                 prove ↔ ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 $$0 = apply ×ℤ orderedPair first first $0 second second $0 apply ×ℤ orderedPair second first $0 first second $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ second second $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ↔ ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 $$0 = apply ×ℤ orderedPair first first $0 second second $0 apply ×ℤ orderedPair second first $0 first second $0) () 0.3.0.0.0.1.2.6 0.3.0.0.0.1.2.7.1
               }
               prove → = apply ×ℤ orderedPair first first $0 second second $0 apply ×ℤ orderedPair second first $0 first second $0 ∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 $$0 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair orderedPair first first $0 second first $0 orderedPair first second $0 second second $0 $$0, = apply ×ℤ orderedPair first first $0 second second $0 apply ×ℤ orderedPair second first $0 first second $0) () 0.3.0.0.0.1.2.7
@@ -250,7 +268,9 @@ let ~_ℚ = $0 comprehension x product product ℤ diff ℤ singleton apply ⍳_
               elided (Rewritten) {
                 elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
                   inferenceWithPremiseDerivations {
-                    prove ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
+                    knownDerived ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ {
+                      prove ∈ first $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
+                    }
                     prove = first $0 orderedPair first first $0 second first $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () (first $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.3.0.0.0.0
                   }
                   prove = orderedPair first first $0 second first $0 first $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (first $0, orderedPair first first $0 second first $0) 0.3.0.0.0.1.3.0.0.0
@@ -258,7 +278,9 @@ let ~_ℚ = $0 comprehension x product product ℤ diff ℤ singleton apply ⍳_
                 }
                 elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
                   inferenceWithPremiseDerivations {
-                    prove ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
+                    knownDerived ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ {
+                      prove ∈ second $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.0
+                    }
                     prove = second $0 orderedPair first second $0 second second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () (second $0, ℤ, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.3.0.0.0.1.3.0.1.0.0
                   }
                   prove = orderedPair first second $0 second second $0 second $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (second $0, orderedPair first second $0 second second $0) 0.3.0.0.0.1.3.0.1.0
@@ -273,7 +295,9 @@ let ~_ℚ = $0 comprehension x product product ℤ diff ℤ singleton apply ⍳_
             }
           }
           inferenceWithPremiseDerivations {
-            prove ∧ → ∈ $0 $$0 ∈ $0 $$$0 → ∈ $0 $$$0 ∈ $0 $$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∈ $0 $$0 ∈ $0 $$$0, → ∈ $0 $$$0 ∈ $0 $$0) () 0.3.0.0.0.0 0.3.0.0.0.1
+            knownDerived ∧ → ∈ $0 $$0 ∈ $0 $$$0 → ∈ $0 $$$0 ∈ $0 $$0 {
+              prove ∧ → ∈ $0 $$0 ∈ $0 $$$0 → ∈ $0 $$$0 ∈ $0 $$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∈ $0 $$0 ∈ $0 $$$0, → ∈ $0 $$$0 ∈ $0 $$0) () 0.3.0.0.0.0 0.3.0.0.0.1
+            }
             prove ↔ ∈ $0 $$0 ∈ $0 $$$0 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (∈ $0 $$0, ∈ $0 $$$0) () 0.3.0.0.0.2.0
           }
         }
@@ -282,7 +306,9 @@ let ~_ℚ = $0 comprehension x product product ℤ diff ℤ singleton apply ⍳_
     }
   }
   inferenceWithPremiseDerivations {
-    prove ∧ relation $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 0.1 0.2
+    knownDerived ∧ relation $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 {
+      prove ∧ relation $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (relation $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) () 0.1 0.2
+    }
     prove ∃! ~ ∧ relation $0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ relation $$0 product ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ↔ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 $$$$$$0 = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0) ($0) 0.4.0 0.3
   }
 }

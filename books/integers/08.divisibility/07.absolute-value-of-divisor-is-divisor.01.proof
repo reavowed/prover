@@ -5,14 +5,18 @@ inferenceExtraction {
 }
 assume = absZ t0 t0 {
   inferenceWithPremiseDerivations {
-    prove = t0 absZ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (absZ t0, t0) 1a
+    knownDerived = t0 absZ t0 {
+      prove = t0 absZ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (absZ t0, t0) 1a
+    }
     prove ↔ ∈ orderedPair t0 t1 |ℤ ∈ orderedPair absZ t0 t1 |ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $0 t1 |ℤ) (t0, absZ t0) 1.0.0
   }
 }
 assume = absZ t0 negatedZ t0 {
   prove ↔ ∈ orderedPair t0 t1 |ℤ ∈ orderedPair negatedZ t0 t1 |ℤ 57ab63ec1f41caa6cda17b77653a868d39c3269f1f69d88177089c2ca354737a () (t0, t1) p0 p1
   inferenceWithPremiseDerivations {
-    prove = negatedZ t0 absZ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (absZ t0, negatedZ t0) 2a
+    knownDerived = negatedZ t0 absZ t0 {
+      prove = negatedZ t0 absZ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (absZ t0, negatedZ t0) 2a
+    }
     prove ↔ ∈ orderedPair negatedZ t0 t1 |ℤ ∈ orderedPair absZ t0 t1 |ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $0 t1 |ℤ) (negatedZ t0, absZ t0) 2.1.0
   }
   prove ↔ ∈ orderedPair t0 t1 |ℤ ∈ orderedPair absZ t0 t1 |ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair t0 t1 |ℤ, ∈ orderedPair negatedZ t0 t1 |ℤ, ∈ orderedPair absZ t0 t1 |ℤ) () 2.0 2.1

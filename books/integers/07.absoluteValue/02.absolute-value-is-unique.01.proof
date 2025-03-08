@@ -1,7 +1,9 @@
 prove ∃! b ∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0 00897ead9d4d41c5f3785b86e5661f275e1ff444aca3b2dd9bd8645266085a09 () (t0) p0
 prove ∧ ∈ absZ t0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t0) p0
 inferenceWithPremiseDerivations {
-  prove ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ t1 ≤ℤ ∨ = t1 t0 = t1 negatedZ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair apply ⍳_ℤ 0ℕ t1 ≤ℤ, ∨ = t1 t0 = t1 negatedZ t0) () p2 p3
-  prove ∧ ∈ t1 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ t1 ≤ℤ ∨ = t1 t0 = t1 negatedZ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t1 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ t1 ≤ℤ ∨ = t1 t0 = t1 negatedZ t0) () p1 2.0
+  knownDerived ∧ ∈ t1 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ t1 ≤ℤ ∨ = t1 t0 = t1 negatedZ t0 {
+    prove ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ t1 ≤ℤ ∨ = t1 t0 = t1 negatedZ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair apply ⍳_ℤ 0ℕ t1 ≤ℤ, ∨ = t1 t0 = t1 negatedZ t0) () p2 p3
+    prove ∧ ∈ t1 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ t1 ≤ℤ ∨ = t1 t0 = t1 negatedZ t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ t1 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ t1 ≤ℤ ∨ = t1 t0 = t1 negatedZ t0) () p1 2.0
+  }
   prove = t1 absZ t0 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∧ ∈ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 ≤ℤ ∨ = $0 t0 = $0 negatedZ t0) (t1, absZ t0) 0 2.1 1
 }

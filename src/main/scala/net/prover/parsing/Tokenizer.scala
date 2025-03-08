@@ -61,11 +61,13 @@ case class TokenStream(tokens: Vector[Token], endToken: Token, lines: Vector[Vec
   }
 
   def throwParseException(message: String, cause: Option[Throwable] = None): Nothing = {
-    val token = if (isEmpty) endToken else tokens(index)
     throw ParseException(
-      s"Error in ${token.contextDescription}, line ${token.lineNumber} col ${token.columnNumber}: $message",
+      message,
+      Some(tokenForException),
       cause)
   }
+
+  def tokenForException: Token = if (isEmpty) endToken else tokens(index)
 }
 
 trait Tokenizer {
@@ -74,12 +76,6 @@ trait Tokenizer {
   def currentColumn: Int
 
   def isEmpty: Boolean
-
-  def throwParseException(message: String, cause: Option[Throwable]): Nothing = {
-    throw ParseException(
-      s"Error in $contextDescription, line $currentLine col $currentColumn: $message",
-      cause)
-  }
 }
 
 object Tokenizer {

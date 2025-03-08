@@ -10,13 +10,17 @@ elided c38019fd058116641cd01fb73f1fc71c08f799ae2bd6e86816c2c53c9c2bd069 {
     prove ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ, ∨ = absZ t1 t1 = absZ t1 negatedZ t1) () 0.1.1
   }
   inferenceWithPremiseDerivations {
-    inferenceExtraction {
-      prove ∧ ∈ absZ t0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t0) p0
-      prove ∈ absZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ t0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0) () 0.2.0.0
+    knownDerived ∈ absZ t0 ℤ {
+      extraction {
+        prove ∧ ∈ absZ t0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t0) p0
+        prove ∈ absZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ t0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t0 ≤ℤ ∨ = absZ t0 t0 = absZ t0 negatedZ t0) () 0.2.0.0
+      }
     }
-    inferenceExtraction {
-      prove ∧ ∈ absZ t1 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ ∨ = absZ t1 t1 = absZ t1 negatedZ t1 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t1) p1
-      prove ∈ absZ t1 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ t1 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ ∨ = absZ t1 t1 = absZ t1 negatedZ t1) () 0.2.1.0
+    knownDerived ∈ absZ t1 ℤ {
+      extraction {
+        prove ∧ ∈ absZ t1 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ ∨ = absZ t1 t1 = absZ t1 negatedZ t1 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t1) p1
+        prove ∈ absZ t1 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ t1 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ ∨ = absZ t1 t1 = absZ t1 negatedZ t1) () 0.2.1.0
+      }
     }
     prove ∈ orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair absZ t0 absZ t1 ≤ℤ c38019fd058116641cd01fb73f1fc71c08f799ae2bd6e86816c2c53c9c2bd069 () (absZ t0, absZ t1) 0.2.0 0.2.1 0.0 0.1
   }

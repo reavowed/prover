@@ -1,7 +1,7 @@
 package net.prover.model.expressions
 
 import net.prover.model._
-import net.prover.parsing.{KnownWordParser, ParseException}
+import net.prover.parsing.KnownWordParser
 
 case class StatementVariable(index: Int, arguments: Seq[Term]) extends ExpressionVariable[Statement] with ExpressionLenses.ForStatements with Statement {
   def getMatch(other: Expression): Option[Seq[Expression]] = other match {

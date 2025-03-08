@@ -7,7 +7,9 @@ take x {
       assume ∈ orderedPair t0 apply +ℕ orderedPair t0 $0 <ℕ {
         elided 1db20ca3deb41aeb2f93f122193bd3737a92628fa8660675a82a52ac1b7e5ce9 {
           inferenceWithPremiseDerivations {
-            prove ∈ apply +ℕ orderedPair t0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (t0, $0) p0 3.0a
+            knownDerived ∈ apply +ℕ orderedPair t0 $0 ℕ {
+              prove ∈ apply +ℕ orderedPair t0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (t0, $0) p0 3.0a
+            }
             prove ∈ orderedPair apply +ℕ orderedPair t0 $0 successor apply +ℕ orderedPair t0 $0 <ℕ 1db20ca3deb41aeb2f93f122193bd3737a92628fa8660675a82a52ac1b7e5ce9 () (apply +ℕ orderedPair t0 $0) 3.0.0.0.0.0.0
           }
           prove ∈ orderedPair t0 successor apply +ℕ orderedPair t0 $0 <ℕ 1f7bb894b49d0cb9296bcce3d3321d832f8c11b832e53955c1976ca28a712ac7 () (t0, apply +ℕ orderedPair t0 $0, successor apply +ℕ orderedPair t0 $0) 3.0.0.0a 3.0.0.0.0.0

@@ -2,6 +2,8 @@ prove ∧ ∃ x with ($0) s0 ∀ x ∀ y → ∧ with ($$0) s0 with ($0) s0 = $$
 prove ∀ y → ∧ with (t0) s0 with ($0) s0 = t0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ y → ∧ with ($$0) s0 with ($0) s0 = $$0 $0) (t0) 0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
 prove → ∧ with (t0) s0 with (t1) s0 = t0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∧ with (t0) s0 with ($0) s0 = t0 $0) (t1) 1
 inferenceWithPremiseDerivations {
-  prove ∧ with (t0) s0 with (t1) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with (t0) s0, with (t1) s0) () p1 p2
+  knownDerived ∧ with (t0) s0 with (t1) s0 {
+    prove ∧ with (t0) s0 with (t1) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with (t0) s0, with (t1) s0) () p1 p2
+  }
   prove = t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ with (t0) s0 with (t1) s0, = t0 t1) () 2 3.0
 }

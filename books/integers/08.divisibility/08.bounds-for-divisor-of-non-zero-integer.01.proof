@@ -24,7 +24,9 @@ take z {
               prove ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ, ∨ = absZ $0 $0 = absZ $0 negatedZ $0) () 0.0.0.0.0.1.1.1
             }
             inferenceWithPremiseDerivations {
-              prove = $$0 apply ×ℤ orderedPair $$$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair $$$0 $0, $$0) 0.0.0.0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              knownDerived = $$0 apply ×ℤ orderedPair $$$0 $0 {
+                prove = $$0 apply ×ℤ orderedPair $$$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair $$$0 $0, $$0) 0.0.0.0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              }
               prove = absZ $$0 absZ apply ×ℤ orderedPair $$$0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$0, apply ×ℤ orderedPair $$$0 $0, absZ $$$$0) 0.0.0.0.0.1.2.0
             }
             prove = absZ apply ×ℤ orderedPair $$$0 $0 apply ×ℤ orderedPair absZ $$$0 absZ $0 3f56449522b3164ed858df6867f5ca3137367dff7da1691df3087395f0f392bd () ($$$0, $0) 0.0a 0.0.0.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
@@ -36,13 +38,17 @@ take z {
             }
             prove ¬ = apply ×ℤ orderedPair absZ $$$0 absZ $0 apply ⍳_ℤ 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ = $$$$0 apply ⍳_ℤ 0ℕ) (absZ $$0, apply ×ℤ orderedPair absZ $$$0 absZ $0) 0.0.0.0.0.1.4 0.0.0.0.0.1.5
             inferenceWithPremiseDerivations {
-              inferenceExtraction {
-                prove ∧ ∈ absZ $$$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($$$0) 0.0a
-                prove ∈ absZ $$$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ $$$0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0) () 0.0.0.0.0.1.7.0.0
+              knownDerived ∈ absZ $$$0 ℤ {
+                extraction {
+                  prove ∧ ∈ absZ $$$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($$$0) 0.0a
+                  prove ∈ absZ $$$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ $$$0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0) () 0.0.0.0.0.1.7.0.0
+                }
               }
-              inferenceExtraction {
-                prove ∧ ∈ absZ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($0) 0.0.0.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                prove ∈ absZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ $0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0) () 0.0.0.0.0.1.7.1.0
+              knownDerived ∈ absZ $0 ℤ {
+                extraction {
+                  prove ∧ ∈ absZ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($0) 0.0.0.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  prove ∈ absZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ $0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0) () 0.0.0.0.0.1.7.1.0
+                }
               }
               inferenceExtraction {
                 prove ↔ = apply ×ℤ orderedPair absZ $$$0 absZ $0 apply ⍳_ℤ 0ℕ ∨ = absZ $$$0 apply ⍳_ℤ 0ℕ = absZ $0 apply ⍳_ℤ 0ℕ 07d426b42b42809acbff0ae40cf7a8280c197462baa6259d18f62b04343d7174 () (absZ $$$0, absZ $0) 0.0.0.0.0.1.7.0 0.0.0.0.0.1.7.1
@@ -72,13 +78,17 @@ take z {
             }
             prove ∈ orderedPair $$$0 absZ $$$0 ≤ℤ b0754bdfca16d2b10acf390963456ec309cbb0012f2ef2a33454c90861eddd19 () ($$$0) 0.0a
             inferenceWithPremiseDerivations {
-              inferenceExtraction {
-                prove ∧ ∈ absZ $$$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($$$0) 0.0a
-                prove ∈ absZ $$$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ $$$0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0) () 0.0.0.0.0.1.10.0.0
+              knownDerived ∈ absZ $$$0 ℤ {
+                extraction {
+                  prove ∧ ∈ absZ $$$0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($$$0) 0.0a
+                  prove ∈ absZ $$$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ $$$0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $$$0 ≤ℤ ∨ = absZ $$$0 $$$0 = absZ $$$0 negatedZ $$$0) () 0.0.0.0.0.1.10.0.0
+                }
               }
-              inferenceExtraction {
-                prove ∧ ∈ absZ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($0) 0.0.0.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                prove ∈ absZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ $0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0) () 0.0.0.0.0.1.10.1.0
+              knownDerived ∈ absZ $0 ℤ {
+                extraction {
+                  prove ∧ ∈ absZ $0 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () ($0) 0.0.0.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  prove ∈ absZ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ $0 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ $0 ≤ℤ ∨ = absZ $0 $0 = absZ $0 negatedZ $0) () 0.0.0.0.0.1.10.1.0
+                }
               }
               prove ∈ orderedPair absZ $$$0 apply ×ℤ orderedPair absZ $$$0 absZ $0 ≤ℤ 062e8226f1c96152998960dcb8caf5e20fc627996daa80a383190107d3f7acb1 () (absZ $$$0, absZ $0) 0.0.0.0.0.1.10.0 0.0.0.0.0.1.10.1 0.0.0.0.0.1.0 0.0.0.0.0.1.8
             }
@@ -127,13 +137,17 @@ elided (Extracted) {
 }
 elided e9cba88319c97cee2cf101df1c74e1c466acc093f2a71f0d1149afac3211be7e {
   inferenceWithPremiseDerivations {
-    inferenceExtraction {
-      prove ∧ ∈ negatedZ t0 ℤ ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t0) p0
-      prove ∈ negatedZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t0 ℤ, ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ) () 4.0.0.0
+    knownDerived ∈ negatedZ t0 ℤ {
+      extraction {
+        prove ∧ ∈ negatedZ t0 ℤ ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t0) p0
+        prove ∈ negatedZ t0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t0 ℤ, ∧ = apply +ℤ orderedPair t0 negatedZ t0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t0 t0 apply ⍳_ℤ 0ℕ) () 4.0.0.0
+      }
     }
-    inferenceExtraction {
-      prove ∧ ∈ absZ t1 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ ∨ = absZ t1 t1 = absZ t1 negatedZ t1 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t1) p1
-      prove ∈ absZ t1 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ t1 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ ∨ = absZ t1 t1 = absZ t1 negatedZ t1) () 4.0.1.0
+    knownDerived ∈ absZ t1 ℤ {
+      extraction {
+        prove ∧ ∈ absZ t1 ℤ ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ ∨ = absZ t1 t1 = absZ t1 negatedZ t1 d53ef4699e0989a437e85a80b6fce3cb511c37741cc2aeb641e9a7258f58366d () (t1) p1
+        prove ∈ absZ t1 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ absZ t1 ℤ, ∧ ∈ orderedPair apply ⍳_ℤ 0ℕ absZ t1 ≤ℤ ∨ = absZ t1 t1 = absZ t1 negatedZ t1) () 4.0.1.0
+      }
     }
     inferenceExtraction {
       prove ↔ ∈ orderedPair negatedZ t0 absZ t1 ≤ℤ ∈ orderedPair negatedZ absZ t1 negatedZ negatedZ t0 ≤ℤ e9cba88319c97cee2cf101df1c74e1c466acc093f2a71f0d1149afac3211be7e () (negatedZ t0, absZ t1) 4.0.0 4.0.1

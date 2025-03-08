@@ -15,8 +15,10 @@ take a {
         }
       }
       inferenceWithPremiseDerivations {
-        prove ∈ orderedPair $$0 $0 product t1 t0 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t1, $0, t0) 0.1a 0.1.1a
-        prove ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 codomain product t1 t0, ∈ orderedPair $$0 $0 product t1 t0) () 0.1.1.0 0.1.1.1.0
+        knownDerived ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 {
+          prove ∈ orderedPair $$0 $0 product t1 t0 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t1, $0, t0) 0.1a 0.1.1a
+          prove ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$0 $0 product t1 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 codomain product t1 t0, ∈ orderedPair $$0 $0 product t1 t0) () 0.1.1.0 0.1.1.1.0
+        }
         prove ∃ x ∧ ∈ $0 codomain product t1 t0 ∈ orderedPair $$$0 $0 product t1 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 codomain product t1 t0 ∈ orderedPair $$0 $$$0 product t1 t0) ($0) 0.1.1.1.1
       }
     }
