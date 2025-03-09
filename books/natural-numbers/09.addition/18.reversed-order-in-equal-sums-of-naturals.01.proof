@@ -11,9 +11,50 @@ assume ∈ orderedPair t0 t2 <ℕ {
       }
       prove = apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair $$0 t3) (t2, apply +ℕ orderedPair t0 $0) 0.1.0.0 p4
     }
-    inferenceExtraction {
-      prove = apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () (t0, $0, t3) p0 0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p3
-      prove = apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3, apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3) 0.1.1.0
+    inferenceWithPremiseDerivations {
+      knownDerived ∈ t0 baseSet +ℕ {
+        extraction {
+          prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
+          deconstruction {
+            prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 0.1.1.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            prove = ℕ baseSet +ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet +ℕ, ℕ) 0.1.1.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          }
+        }
+        prove ∈ t0 baseSet +ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ t0 $$0) (ℕ, baseSet +ℕ) 0.1.1.0 p0
+      }
+      knownDerived ∈ $0 baseSet +ℕ {
+        extraction {
+          prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
+          deconstruction {
+            prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 0.1.1.2.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            prove = ℕ baseSet +ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet +ℕ, ℕ) 0.1.1.2.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          }
+        }
+        prove ∈ $0 baseSet +ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (ℕ, baseSet +ℕ) 0.1.1.2 0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      }
+      knownDerived ∈ t3 baseSet +ℕ {
+        extraction {
+          prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
+          deconstruction {
+            prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 0.1.1.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            prove = ℕ baseSet +ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet +ℕ, ℕ) 0.1.1.4.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          }
+        }
+        prove ∈ t3 baseSet +ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ t3 $$0) (ℕ, baseSet +ℕ) 0.1.1.4 p3
+      }
+      inferenceExtraction {
+        prove associativeBinaryOperation +ℕ 15bdf17cd8c570793313503aaf73be50597a8a5d1b37ed95cee16c2dc5c3403f () ()
+        deconstruction {
+          prove ∧ binaryOperation +ℕ ∀ a → ∈ $0 baseSet +ℕ ∀ b → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$0 $$0 $0 90e46944e122122962891880cf53e6d74cc8c024a01f64fa70528b4ed52cc6cb () (+ℕ) 0.1.1.6.0
+          prove → ∈ t0 baseSet +ℕ ∀ b → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 baseSet +ℕ ∀ b → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $$0 $0) (t0) 0.1.1.6.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove ∀ b → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 baseSet +ℕ, ∀ b → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0) () 0.1.1.6.1.1 0.1.1.1
+          prove → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$$0 $0) ($0) 0.1.1.6.1.2
+          prove ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 baseSet +ℕ, ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0) () 0.1.1.6.1.3 0.1.1.3
+          prove → ∈ t3 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 $$0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 $$0) (t3) 0.1.1.6.1.4
+          prove = apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t3 baseSet +ℕ, = apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3) () 0.1.1.6.1.5 0.1.1.5
+          prove = apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3, apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3) 0.1.1.6.1.6
+        }
+      }
     }
     prove = apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℕ orderedPair t0 t1, apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3, apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3) 0.1.0 0.1.1
     elided 6a4bc62611bd11b897e63b4c298ccebb33aaf15a720a51c337811c1fbbb36447 {
@@ -74,9 +115,50 @@ assume ∈ orderedPair t3 t1 <ℕ {
   }
   let e ∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t3 $0 t1 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $0 ℕ ∧ ¬ = $0 0ℕ = apply +ℕ orderedPair t3 $0 t1, ∈ orderedPair t0 t2 <ℕ) () 1.0 {
     elided (Rearranged) {
-      inferenceExtraction {
-        prove = apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 db0b6a831269e72271427610ac5467ddf8035df18b450c57bb19a0c2de7aeef2 () (t0, $0, t3) p0 1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p3
-        prove = apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3, apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3) 1.1.0.0.0
+      inferenceWithPremiseDerivations {
+        knownDerived ∈ t0 baseSet +ℕ {
+          extraction {
+            prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
+            deconstruction {
+              prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.1.0.0.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              prove = ℕ baseSet +ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet +ℕ, ℕ) 1.1.0.0.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            }
+          }
+          prove ∈ t0 baseSet +ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ t0 $$0) (ℕ, baseSet +ℕ) 1.1.0.0.0 p0
+        }
+        knownDerived ∈ $0 baseSet +ℕ {
+          extraction {
+            prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
+            deconstruction {
+              prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.1.0.0.2.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              prove = ℕ baseSet +ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet +ℕ, ℕ) 1.1.0.0.2.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            }
+          }
+          prove ∈ $0 baseSet +ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (ℕ, baseSet +ℕ) 1.1.0.0.2 1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        }
+        knownDerived ∈ t3 baseSet +ℕ {
+          extraction {
+            prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
+            deconstruction {
+              prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.1.0.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+              prove = ℕ baseSet +ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet +ℕ, ℕ) 1.1.0.0.4.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            }
+          }
+          prove ∈ t3 baseSet +ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ t3 $$0) (ℕ, baseSet +ℕ) 1.1.0.0.4 p3
+        }
+        inferenceExtraction {
+          prove associativeBinaryOperation +ℕ 15bdf17cd8c570793313503aaf73be50597a8a5d1b37ed95cee16c2dc5c3403f () ()
+          deconstruction {
+            prove ∧ binaryOperation +ℕ ∀ a → ∈ $0 baseSet +ℕ ∀ b → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair $$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$0 $$0 $0 90e46944e122122962891880cf53e6d74cc8c024a01f64fa70528b4ed52cc6cb () (+ℕ) 1.1.0.0.6.0
+            prove → ∈ t0 baseSet +ℕ ∀ b → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 baseSet +ℕ ∀ b → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair $$$$0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair $$$$0 $$0 $0) (t0) 1.1.0.0.6.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+            prove ∀ b → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t0 baseSet +ℕ, ∀ b → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0) () 1.1.0.0.6.1.1 1.1.0.0.1
+            prove → ∈ $0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 baseSet +ℕ ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$$0 $0) ($0) 1.1.0.0.6.1.2
+            prove ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 baseSet +ℕ, ∀ c → ∈ $0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $$0 $0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $$0 $0) () 1.1.0.0.6.1.3 1.1.0.0.3
+            prove → ∈ t3 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 baseSet +ℕ = apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 $$0 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 $$0) (t3) 1.1.0.0.6.1.4
+            prove = apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ t3 baseSet +ℕ, = apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3) () 1.1.0.0.6.1.5 1.1.0.0.5
+            prove = apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3 apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply +ℕ orderedPair t0 apply +ℕ orderedPair $0 t3, apply +ℕ orderedPair apply +ℕ orderedPair t0 $0 t3) 1.1.0.0.6.1.6
+          }
+        }
       }
       rewrite {
         byInference {

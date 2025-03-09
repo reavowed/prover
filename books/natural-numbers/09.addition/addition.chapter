@@ -6,6 +6,7 @@ conclusion ∃! f ∧ ∧ function $0 functionFrom $0 product ℕ ℕ ℕ ∧ �
 term + ()
   disambiguator ℕ
   (∧ ∧ binaryOperation $0 binaryOperationOn $0 ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0)
+  shorthand (+N)
   attributes (infix-function)
 
 write apply +ℕ orderedPair a b as addN
@@ -42,11 +43,7 @@ theorem Natural Addition is Commutative
 conclusion commutativeBinaryOperation +ℕ
 
 theorem Natural Addition is Associative
-termVariables(n 0, m 0, r 0)
-premise ∈ t0 ℕ
-premise ∈ t1 ℕ
-premise ∈ t2 ℕ
-conclusion = apply +ℕ orderedPair t0 apply +ℕ orderedPair t1 t2 apply +ℕ orderedPair apply +ℕ orderedPair t0 t1 t2
+conclusion associativeBinaryOperation +ℕ
 
 theorem Natural Addition is Right-Cancellable
 termVariables(n 0, m 0, r 0)
