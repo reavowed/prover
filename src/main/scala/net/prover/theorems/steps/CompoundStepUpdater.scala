@@ -117,14 +117,16 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
       sc => apply(TypedStepWithContext(step.assertionStep, stepWithContext.proofWithContext)(implicitly, sc))
         .map(_.asInstanceOf[Step.InferenceApplicationWithoutPremises]))(
       implicitly,
-      stepWithContext.stepContext).map(_.asInstanceOf[Step])
+      stepWithContext.stepContext
+    ).map(_.asInstanceOf[Step])
   }
   def updateExistingStatementExtraction(step: Step.ExistingStatementExtractionStep, stepWithContext: StepWithContext): F[Step] = {
     Step.ExistingStatementExtractionStep.builder(
       sc => updateKnownStatements(step.premises, sc, stepWithContext.proofWithContext),
       sc => updateAppliedExtraction(step.extraction, sc, stepWithContext.proofWithContext))(
       implicitly,
-      stepWithContext.stepContext).map(_.asInstanceOf[Step])
+      stepWithContext.stepContext
+    ).map(_.asInstanceOf[Step])
   }
   private def updateRewriteStep(step: Step.RewriteStep, stepWithContext: StepWithContext): F[Step] = {
     for {

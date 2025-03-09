@@ -41,12 +41,6 @@ conclusion = successor t0 apply +ℕ orderedPair t0 1ℕ
 theorem Natural Addition is Commutative
 conclusion commutativeBinaryOperation +ℕ
 
-theorem Natural Addition is Commutative (old)
-termVariables(n 0, m 0)
-premise ∈ t0 ℕ
-premise ∈ t1 ℕ
-conclusion = apply +ℕ orderedPair t0 t1 apply +ℕ orderedPair t1 t0
-
 theorem Natural Addition is Associative
 termVariables(n 0, m 0, r 0)
 premise ∈ t0 ℕ

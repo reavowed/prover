@@ -360,6 +360,14 @@ package object model {
     }
   }
 
+  implicit class BooleanOps(x: Boolean) {
+    def orFail(e: => Exception): Try[Unit] = if (x) {
+      Success(())
+    } else {
+      Failure(e)
+    }
+  }
+
   implicit class OptionOps[T](x: Option[T]) {
     def ifDefined(action: => Unit): Option[T] = {
       if (x.nonEmpty) action
