@@ -114,13 +114,13 @@ subproof (Asymmetric) {
                       prove ¬ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ f36226654b6b46ac4986a49ee331902c04b71fa6d0a0de791e9c95e5f618431b (∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ, ∈ orderedPair apply ×ℤ orderedPair $$0 $$$0 apply ×ℤ orderedPair $0 $$$$0 <ℤ) () 1.0.0.0.0.0.1.0.1.0.4.9 1.0.0.0.0.0.1.0.1.0.3
                     }
                     elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                      inferenceWithPremiseDerivations {
+                      rewrite {
                         knownDerived = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 {
                           prove = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ) 1.0.0.0.0.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         }
                         prove ¬ ∈ orderedPair $$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (¬ ∈ orderedPair $$$$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ) (equivalenceClass orderedPair $$0 $0 ~_ℚ, $$$$$0) 1.0.0.0.0.0.1.0.1.0.5.0.0 1.0.0.0.0.0.1.0.1.0.4
                       }
-                      inferenceWithPremiseDerivations {
+                      rewrite {
                         knownDerived = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$0 {
                           prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 1.0.0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                         }
@@ -308,7 +308,7 @@ subproof (Transitive) {
                                 prove ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$$$0 $0 <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 apply ×ℤ orderedPair $$$$$0 $$$$0 <ℤ, ∈ orderedPair apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $$$$0 $0 <ℤ) () 2.0.0.0.0.0.0.0.1.0.1.0.1.0.5.6.1 2.0.0.0.0.0.0.0.1.0.1.0.1.0.2
                               }
                             }
-                            inferenceWithPremiseDerivations {
+                            rewrite {
                               knownDerived = apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $0 $$$0 {
                                 prove = apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $0 apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $0 $$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $0 $$$0, apply ×ℤ orderedPair apply ×ℤ orderedPair $$$$$$0 $$$0 $0) 2.0.0.0.0.0.0.0.1.0.1.0.1.0.4
                               }
@@ -468,13 +468,13 @@ subproof (Transitive) {
                               prove ∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair apply ×ℤ orderedPair $$$$$$0 $0 apply ×ℤ orderedPair $$$$$0 $$0 <ℤ, ∈ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ) () 2.0.0.0.0.0.0.0.1.0.1.0.1.0.14.9 2.0.0.0.0.0.0.0.1.0.1.0.1.0.13
                             }
                             elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                              inferenceWithPremiseDerivations {
+                              rewrite {
                                 knownDerived = equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ $$$$$$$$$0 {
                                   prove = equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ $$$$$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$$$$0, equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ) 2.0.0.0.0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                                 }
                                 prove ∈ orderedPair $$$$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair $$$$$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ) (equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℚ, $$$$$$$$$0) 2.0.0.0.0.0.0.0.1.0.1.0.1.0.15.0.0 2.0.0.0.0.0.0.0.1.0.1.0.1.0.14
                               }
-                              inferenceWithPremiseDerivations {
+                              rewrite {
                                 knownDerived = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$$$0 {
                                   prove = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ) 2.0.0.0.0.0.0.0.1.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                                 }
@@ -636,37 +636,37 @@ subproof (Semi-complete) {
                     prove ∨ ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ ∨ = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ 97bcdeccabac333a7f0a76ed5289689ef828c3dbae011352606d9bc0dcd93c75 (∈ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 <ℤ, ∨ = apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 ∈ orderedPair apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$$0 $0 <ℤ, ∈ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ, ∨ = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ) () 3.0.0.0.0.1.0.1.0.0 3.0.0.0.0.1.0.1.0.1 3.0.0.0.0.1.0.1.0.4.0
                   }
                   elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                    inferenceWithPremiseDerivations {
+                    rewrite {
                       knownDerived = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$0 {
                         prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 3.0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                       }
                       prove ∨ ∈ orderedPair $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ ∨ = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∨ ∈ orderedPair $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ ∨ = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ, $$$$$$0) 3.0.0.0.0.1.0.1.0.5.0.0 3.0.0.0.0.1.0.1.0.4
                     }
-                    inferenceWithPremiseDerivations {
+                    rewrite {
                       knownDerived = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$0 {
                         prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 3.0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                       }
                       prove ∨ ∈ orderedPair $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ ∨ = $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∨ ∈ orderedPair $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ ∨ = $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ <ℚ) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ, $$$$$$0) 3.0.0.0.0.1.0.1.0.5.1.0 3.0.0.0.0.1.0.1.0.5.0
                     }
-                    inferenceWithPremiseDerivations {
+                    rewrite {
                       knownDerived = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$0 {
                         prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ $$$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$$0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ) 3.0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                       }
                       prove ∨ ∈ orderedPair $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ ∨ = $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$$0 <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∨ ∈ orderedPair $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ <ℚ ∨ = $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$$$0 <ℚ) (equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ, $$$$$$0) 3.0.0.0.0.1.0.1.0.5.2.0 3.0.0.0.0.1.0.1.0.5.1
                     }
-                    inferenceWithPremiseDerivations {
+                    rewrite {
                       knownDerived = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 {
                         prove = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ) 3.0.0.0.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                       }
                       prove ∨ ∈ orderedPair $$$$$$0 $$$$$0 <ℚ ∨ = $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$$0 <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∨ ∈ orderedPair $$$$$$0 $$$$$$$0 <ℚ ∨ = $$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$$0 <ℚ) (equivalenceClass orderedPair $$0 $0 ~_ℚ, $$$$$0) 3.0.0.0.0.1.0.1.0.5.3.0 3.0.0.0.0.1.0.1.0.5.2
                     }
-                    inferenceWithPremiseDerivations {
+                    rewrite {
                       knownDerived = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 {
                         prove = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ) 3.0.0.0.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                       }
                       prove ∨ ∈ orderedPair $$$$$$0 $$$$$0 <ℚ ∨ = $$$$$$0 $$$$$0 ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$$0 <ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∨ ∈ orderedPair $$$$$$0 $$$$$0 <ℚ ∨ = $$$$$$0 $$$$$$$0 ∈ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$$0 <ℚ) (equivalenceClass orderedPair $$0 $0 ~_ℚ, $$$$$0) 3.0.0.0.0.1.0.1.0.5.4.0 3.0.0.0.0.1.0.1.0.5.3
                     }
-                    inferenceWithPremiseDerivations {
+                    rewrite {
                       knownDerived = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 {
                         prove = equivalenceClass orderedPair $$0 $0 ~_ℚ $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ) 3.0.0.0.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                       }

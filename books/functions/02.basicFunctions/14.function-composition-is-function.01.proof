@@ -1,6 +1,6 @@
 elided ece00383af090dc62ff992ffc66e68b761085eab964fd9ca5c2f5f0124c89ac7 {
   prove = compose t3 t0 functionMap a domain t0 apply t3 apply t0 $0 ece00383af090dc62ff992ffc66e68b761085eab964fd9ca5c2f5f0124c89ac7 () (t3, t0)
-  inferenceWithPremiseDerivations {
+  rewrite {
     knownDerived = domain t0 t1 {
       deconstruction {
         prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29

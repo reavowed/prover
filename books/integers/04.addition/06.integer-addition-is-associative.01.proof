@@ -139,20 +139,20 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
             }
             prove = apply +ℤ orderedPair t0 apply +ℤ orderedPair t1 t2 apply +ℤ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℤ orderedPair t0 apply +ℤ orderedPair t1 t2, apply +ℤ orderedPair equivalenceClass orderedPair apply +ℕ orderedPair $$$$$$0 $$$$0 apply +ℕ orderedPair $$$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ, apply +ℤ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.1.0.1.0.8 1.0.1.0.1.0.9
             elided (Rewritten) {
-              inferenceWithPremiseDerivations {
+              rewrite {
                 knownDerived = equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ t0 {
                   prove = equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ) 1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                 }
                 prove = apply +ℤ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ apply +ℤ orderedPair apply +ℤ orderedPair t0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ, t0, apply +ℤ orderedPair apply +ℤ orderedPair $$$$$$$0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.1.0.1.0.11.0.0
               }
-              inferenceWithPremiseDerivations {
+              rewrite {
                 knownDerived = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ t1 {
                   prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                 }
                 prove = apply +ℤ orderedPair apply +ℤ orderedPair t0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ apply +ℤ orderedPair apply +ℤ orderedPair t0 t1 equivalenceClass orderedPair $$0 $0 ~_ℤ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ, t1, apply +ℤ orderedPair apply +ℤ orderedPair t0 $$$$$$$0 equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.1.0.1.0.11.1.0
               }
               prove = apply +ℤ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ apply +ℤ orderedPair apply +ℤ orderedPair t0 t1 equivalenceClass orderedPair $$0 $0 ~_ℤ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℤ orderedPair apply +ℤ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ, apply +ℤ orderedPair apply +ℤ orderedPair t0 equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ, apply +ℤ orderedPair apply +ℤ orderedPair t0 t1 equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.1.0.1.0.11.0 1.0.1.0.1.0.11.1
-              inferenceWithPremiseDerivations {
+              rewrite {
                 knownDerived = equivalenceClass orderedPair $$0 $0 ~_ℤ t2 {
                   prove = equivalenceClass orderedPair $$0 $0 ~_ℤ t2 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t2, equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                 }

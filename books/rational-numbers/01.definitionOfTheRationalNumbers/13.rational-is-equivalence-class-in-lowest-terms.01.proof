@@ -105,7 +105,7 @@ let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$
             prove ∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 <ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $$$0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ $$$0 <ℤ) () 1.0.1.1.0.0.3
           }
           elided 41a6908f80ecb0cf7c0e2f6d71ea118d3c0a32e47aec0064b3436af7229b38cf {
-            inferenceWithPremiseDerivations {
+            rewrite {
               knownDerived = $$$0 apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $0 {
                 prove = $$$0 apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $0, $$$0) 1.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               }
@@ -849,7 +849,7 @@ let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$
           }
         }
         subproof (Representations are equivalent) {
-          inferenceWithPremiseDerivations {
+          rewrite {
             knownDerived = $$$$0 apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $$0 {
               prove = $$$$0 apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $$0, $$$$0) 1.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             }

@@ -123,13 +123,13 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
         }
         prove ↔ ∈ orderedPair t0 t1 <ℤ ∈ orderedPair negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ negatedZ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∈ orderedPair t0 t1 <ℤ, ∈ orderedPair equivalenceClass orderedPair $0 $$0 ~_ℤ equivalenceClass orderedPair $$$0 $$$$0 ~_ℤ <ℤ, ∈ orderedPair negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ negatedZ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ) () 1.0.1.0.6 1.0.1.0.7
         elided 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 {
-          inferenceWithPremiseDerivations {
+          rewrite {
             knownDerived = equivalenceClass orderedPair $$0 $0 ~_ℤ t1 {
               prove = equivalenceClass orderedPair $$0 $0 ~_ℤ t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t1, equivalenceClass orderedPair $$0 $0 ~_ℤ) 1.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             }
             prove ↔ ∈ orderedPair negatedZ equivalenceClass orderedPair $$0 $0 ~_ℤ negatedZ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ ∈ orderedPair negatedZ t1 negatedZ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair negatedZ $$$$$0 negatedZ equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ <ℤ) (equivalenceClass orderedPair $$0 $0 ~_ℤ, t1) 1.0.1.0.9.0.0
           }
-          inferenceWithPremiseDerivations {
+          rewrite {
             knownDerived = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ t0 {
               prove = equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (t0, equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ) 1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             }

@@ -386,7 +386,7 @@ subproof (Transitive) {
                     }
                   }
                   prove = apply ×ℤ orderedPair first $$$0 second $0 apply ×ℤ orderedPair second $$$0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair first $$$0 second $0, apply ⍳_ℤ 0ℕ, apply ×ℤ orderedPair second $$$0 apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0.0.4.13 3.0.0.0.0.0.0.0.4.14
-                  inferenceWithPremiseDerivations {
+                  rewrite {
                     knownDerived = apply ⍳_ℤ 0ℕ first $0 {
                       prove = apply ⍳_ℤ 0ℕ first $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (first $0, apply ⍳_ℤ 0ℕ) 3.0.0.0.0.0.0.0.4.10
                     }

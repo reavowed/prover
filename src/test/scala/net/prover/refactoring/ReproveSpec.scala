@@ -33,6 +33,26 @@ class ReproveSpec extends Specification with StepBuilderHelper {
 
       Reprove(createStepsWithContext(initialSteps)) mustEqual expectedSteps
     }
+
+    "replace an assertion for Substitution of Equals that has a single premise with a rewrite" in {
+      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0))
+      implicit val outerStepContext = createOuterStepContext(Nil)
+
+      val initialSteps = recalculateReferences(Seq(
+        target(φ(a)),
+        premiseDerivation(
+          Seq(known(Seq(assertion(zeroIsLeftIdentityForAddition, Nil, Seq(a))))),
+          assertion(substitutionOfEquals, Seq(φ($)), Seq(a, add(Zero, a))))
+      )(outerStepContext))
+      val expectedSteps = recalculateReferences(Seq(
+        target(φ(a)),
+        rewriteStep(
+          known(Seq(assertion(zeroIsLeftIdentityForAddition, Nil, Seq(a)))),
+          assertion(substitutionOfEquals, Seq(φ($)), Seq(a, add(Zero, a))))
+      )(outerStepContext))
+
+      Reprove(createStepsWithContext(initialSteps)) mustEqual expectedSteps
+    }
   }
 
 }

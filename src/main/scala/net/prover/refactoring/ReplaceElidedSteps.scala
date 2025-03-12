@@ -55,7 +55,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
       (recalculatedResult, _) <- RecalculateReferences(stepWithContext.withStep(result)).toOption
     } yield recalculatedResult
   }
-    private def replaceWithRewrite(step: Step.ElidedStep, stepWithContext: StepWithContext): Option[Step.RewriteStep] = {
+  private def replaceWithRewrite(step: Step.ElidedStep, stepWithContext: StepWithContext): Option[Step.RewriteStep] = {
     for {
       (previousSteps, lastStep) <- step.substeps.initAndLastOption
       lastAssertion <- lastStep.asOptionalInstanceOf[Step.AssertionStep]

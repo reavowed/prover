@@ -207,7 +207,7 @@ take z {
                     prove → ∈ orderedPair $$$$0 $$0 <ℤ ∈ orderedPair apply -ℤ orderedPair $$$$0 $$0 apply -ℤ orderedPair $$0 $$0 <ℤ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∈ orderedPair apply -ℤ orderedPair $$$$0 $$0 apply -ℤ orderedPair $$0 $$0 <ℤ, ∈ orderedPair $$$$0 $$0 <ℤ) () 0.0.0.0.0.0.0.0.0.17.0
                     prove ∈ orderedPair apply -ℤ orderedPair $$$$0 $$0 apply -ℤ orderedPair $$0 $$0 <ℤ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $$$$0 $$0 <ℤ, ∈ orderedPair apply -ℤ orderedPair $$$$0 $$0 apply -ℤ orderedPair $$0 $$0 <ℤ) () 0.0.0.0.0.0.0.0.0.17.1 0.0.0.0.0.0.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                   }
-                  inferenceWithPremiseDerivations {
+                  rewrite {
                     knownDerived = apply -ℤ orderedPair $$$$0 $$0 apply -ℤ orderedPair $0 $$$0 {
                       prove = apply -ℤ orderedPair $$$$0 $$0 apply -ℤ orderedPair $0 $$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply -ℤ orderedPair $0 $$$0, apply -ℤ orderedPair $$$$0 $$0) 0.0.0.0.0.0.0.0.0.16
                     }

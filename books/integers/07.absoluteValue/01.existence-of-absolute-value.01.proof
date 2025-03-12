@@ -87,7 +87,7 @@ subproof (Uniqueness) {
             prove = negatedZ apply ⍳_ℤ 0ℕ apply ⍳_ℤ 0ℕ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply ⍳_ℤ 0ℕ, negatedZ apply ⍳_ℤ 0ℕ) 1.0.0.0.0.4.0
           }
           prove = $$0 apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$0, negatedZ apply ⍳_ℤ 0ℕ, apply ⍳_ℤ 0ℕ) 1.0.0.0.0.3 1.0.0.0.0.4
-          inferenceWithPremiseDerivations {
+          rewrite {
             knownDerived = apply ⍳_ℤ 0ℕ $0 {
               prove = apply ⍳_ℤ 0ℕ $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, apply ⍳_ℤ 0ℕ) 1.0.0.0.0.2
             }
@@ -96,7 +96,7 @@ subproof (Uniqueness) {
         }
         assume = $$0 t0 {
           assume = $0 t0 {
-            inferenceWithPremiseDerivations {
+            rewrite {
               knownDerived = t0 $0 {
                 prove = t0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, t0) 1.0.0.0.1.0a
               }
@@ -110,7 +110,7 @@ subproof (Uniqueness) {
               }
               prove = $$0 negatedZ negatedZ t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 $$$0) (t0, negatedZ negatedZ t0) 1.0.0.0.1.1.0.0 1.0.0.0.1a
             }
-            inferenceWithPremiseDerivations {
+            rewrite {
               knownDerived = negatedZ t0 $0 {
                 prove = negatedZ t0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, negatedZ t0) 1.0.0.0.1.1a
               }
@@ -123,7 +123,7 @@ subproof (Uniqueness) {
         }
         assume = $$0 negatedZ t0 {
           assume = $0 t0 {
-            inferenceWithPremiseDerivations {
+            rewrite {
               knownDerived = t0 $0 {
                 prove = t0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, t0) 1.0.0.0.2.0a
               }
@@ -132,7 +132,7 @@ subproof (Uniqueness) {
             prove = $$0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (= $$0 negatedZ $0, = $$0 $0) () 1.0.0.0.0 1.0.0.0.2.0.0
           }
           assume = $0 negatedZ t0 {
-            inferenceWithPremiseDerivations {
+            rewrite {
               knownDerived = negatedZ t0 $0 {
                 prove = negatedZ t0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, negatedZ t0) 1.0.0.0.2.1a
               }

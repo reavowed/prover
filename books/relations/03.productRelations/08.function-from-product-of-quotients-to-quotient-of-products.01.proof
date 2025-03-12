@@ -23,7 +23,7 @@ subproof (Function) {
               prove ∈ equivalenceClass orderedPair $$0 $0 productRelation t0 t2 equivalenceQuotient product t1 t3 productRelation t0 t2 e7d68f420abd8f15886367a46ab0a267ff50b41eea7e3fc6b6d64e440f291aee () (productRelation t0 t2, product t1 t3, orderedPair $$0 $0) 0.0.0.0.1.0.3.0 0.0.0.0.1.0.3.1
             }
             prove ∈ orderedPair orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 equivalenceClass orderedPair $$0 $0 productRelation t0 t2 product product equivalenceQuotient t1 t0 equivalenceQuotient t3 t2 equivalenceQuotient product t1 t3 productRelation t0 t2 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2, product equivalenceQuotient t1 t0 equivalenceQuotient t3 t2, equivalenceClass orderedPair $$0 $0 productRelation t0 t2, equivalenceQuotient product t1 t3 productRelation t0 t2) 0.0.0.0.1.0.2 0.0.0.0.1.0.3
-            inferenceWithPremiseDerivations {
+            rewrite {
               knownDerived = orderedPair orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 equivalenceClass orderedPair $$0 $0 productRelation t0 t2 $$$0 {
                 prove = orderedPair orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 equivalenceClass orderedPair $$0 $0 productRelation t0 t2 $$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$0, orderedPair orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 equivalenceClass orderedPair $$0 $0 productRelation t0 t2) 0.0.0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               }
@@ -58,7 +58,7 @@ subproof (Function) {
                 }
                 subproof (Existence) {
                   prove ∈ orderedPair orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 equivalenceClass orderedPair $$0 $0 productRelation t0 t2 t4 16fbfec499e41d74d0afb46e797646fdf6f586ba54d151438a7ef9cf4c4d14cd () (t4, t1, t3, orderedPair orderedPair equivalenceClass $$$$$$0 t0 equivalenceClass $$$$$$1 t2 equivalenceClass orderedPair $$$$$$0 $$$$$$1 productRelation t0 t2, $$0, $0) p2 0.1.0.0.1.0.2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.1.0.0.1.0.2.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                  inferenceWithPremiseDerivations {
+                  rewrite {
                     knownDerived = orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 $$$$$0 {
                       prove = orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2 $$$$$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($$$$$0, orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t2) 0.1.0.0.1.0.2.0.0
                     }

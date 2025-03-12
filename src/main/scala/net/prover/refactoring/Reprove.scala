@@ -9,6 +9,7 @@ import net.prover.model.proof.Step.AssertionStep
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction, ExtractionApplier, ExtractionCalculator, InferenceExtraction}
 import net.prover.proving.fromExistingStatement.SuggestExistingStatementsBase
+import net.prover.proving.rewrite.RewritePremise
 import net.prover.theorems.{CompoundTheoremUpdater, GetReferencedPremises, RecalculateReferences}
 import scalaz.Scalaz
 import scalaz.Scalaz.Id
@@ -77,6 +78,21 @@ object Reprove extends CompoundTheoremUpdater[Id] {
       step <- stepOption
       extractionStep <- step.asOptionalInstanceOf[Step.ExistingStatementExtractionStep]
     } yield extractionStep
+  }
+
+  override def updateInferenceWithPremiseDerivations(
+    step: Step.InferenceWithPremiseDerivationsStep,
+    stepWithContext: StepWithContext
+  ): Step = {
+    import stepWithContext.provingContext
+    (
+      for {
+        premise <- step.premises.single
+        if provingContext.substitutions.exists(_.inference == step.inference) ||
+          provingContext.expansions.exists(_.inference == step.inference)
+        assertion <- step.assertionStep.asOptionalInstanceOf[Step.AssertionStep]
+      } yield Step.RewriteStep(RewritePremise.Known(premise), assertion)
+    ) getOrElse super.updateInferenceWithPremiseDerivations(step, stepWithContext)
   }
 
   def apply(stepWithContext: TypedStepWithContext[Step.WithSubsteps], inference: Inference): Option[Step] = {
