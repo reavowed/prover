@@ -19,12 +19,12 @@ class ReplaceInferenceSpec extends Specification with StepBuilderHelper {
         ElementOf(a, Integers),
         ElementOf(b, Integers)))
 
-      val initialStep = rewriteStep(
+      val initialStep = recalculateReferences(rewriteStep(
         known(Seq(assertion(simpleIntegerAdditionIsCommutative, Nil, Seq(a, b)))),
         assertion(equivalenceOfSubstitutedEquals, Seq(φ($)), Seq(addZ(a, b), addZ(b, a)))
-      )(SubstitutionContext.outsideProof)
+      )(SubstitutionContext.outsideProof))
 
-      val expectedStep = rewriteStep(
+      val expectedStep = recalculateReferences(rewriteStep(
         Seq(
           known(Seq(
             inferenceExtraction(
@@ -51,7 +51,7 @@ class ReplaceInferenceSpec extends Specification with StepBuilderHelper {
                 assertion(specification, Seq(Implication(ElementOf($, BaseSet(IntegerAddition)), Equals(addZ(a, $), addZ($, a)))), Seq(b)),
                 assertion(modusPonens, Seq(ElementOf(b, BaseSet(IntegerAddition)), Equals(addZ(a, b), addZ(b, a))), Nil))))),
         assertion(equivalenceOfSubstitutedEquals, Seq(φ($)), Seq(addZ(a, b), addZ(b, a)))
-      )(SubstitutionContext.outsideProof)
+      )(SubstitutionContext.outsideProof))
 
       ReplaceInference(
         simpleIntegerAdditionIsCommutative,

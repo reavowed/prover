@@ -43,6 +43,10 @@ trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with C
     recalculateReferences(steps)
   }
 
+  def recalculateReferences(step: Step)(implicit outerStepContext: StepContext, availableEntries: AvailableEntries): Step = {
+    RecalculateReferences(createStepWithContext(step)).get._1
+  }
+
   def recalculateReferences(steps: Seq[Step])(implicit outerStepContext: StepContext, availableEntries: AvailableEntries): Seq[Step] = {
     RecalculateReferences(createStepsWithContext(steps)).get._1
   }
