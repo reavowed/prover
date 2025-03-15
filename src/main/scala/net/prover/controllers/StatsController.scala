@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 
 import java.util.regex.Pattern
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping(Array("/stats"))

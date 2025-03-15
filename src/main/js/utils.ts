@@ -24,10 +24,12 @@ export type JsonRequestInit = Omit<RequestInit, "body"> & {
 }
 
 export function fetchJson(input: RequestInfo | URL, init: JsonRequestInit | undefined): Promise<any> {
-  const {body, headers, ...otherInit} = init || {};
+  const {body: rawBody, headers, ...otherInit} = init || {};
+  const body = (_.isArray(rawBody) || _.isObject(rawBody)) ? JSON.stringify(rawBody) :
+      rawBody?.toString();
   return window.fetch(input, {
     ...otherInit,
-    body: !_.isUndefined(body) ? JSON.stringify(body) : null,
+    body,
     headers: {"Content-Type": "application/json", ...(headers || {})}
   })
     .then(response => new Promise<any>(((resolve, reject) => {

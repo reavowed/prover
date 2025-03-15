@@ -1,8 +1,7 @@
 package net.prover.controllers
 
+import jakarta.servlet.http.HttpServletResponse
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RestController}
-
-import javax.servlet.http.HttpServletResponse
 
 @RestController
 @RequestMapping(Array("/"))
