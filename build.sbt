@@ -6,8 +6,6 @@ scalaVersion := "2.13.16"
 
 val monocleVersion = "2.1.0"
 
-addCompilerPlugin("org.scalameta" % "semanticdb-scalac" % "4.13.4" cross CrossVersion.full)
-
 libraryDependencies ++= Seq(
   ("com.chuusai" %% "shapeless" % "2.3.13").cross(CrossVersion.for3Use2_13),
   "org.springframework.boot" % "spring-boot-starter-web" % "3.4.3",
