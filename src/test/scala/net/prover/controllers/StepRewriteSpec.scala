@@ -2,9 +2,9 @@ package net.prover.controllers
 
 import net.prover.controllers.StepRewriteController.{InferenceRewriteSuggestion, PremiseRewritePath, PremiseSuggestion}
 import net.prover.controllers.models.{PathData, PremiseRewrite}
-import net.prover.model.TestDefinitions._
-import net.prover.model.proof.{Step, StepReference}
-import net.prover.model.{TermVariablePlaceholder, TestDefinitions}
+import net.prover.model.TestDefinitions.*
+import net.prover.model.proof.{Step, StepContext, StepReference}
+import net.prover.model.{AvailableEntries, TermVariablePlaceholder, TestDefinitions, VariableDefinitions}
 import net.prover.proving.extraction.ExtractionDefinition
 import org.springframework.http.ResponseEntity
 
@@ -12,14 +12,14 @@ import scala.util.Success
 
 class StepRewriteSpec extends ControllerSpec {
 
-  val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
+  val lessThan = TestDefinitions.lessThan // prevent clash between this definition and the specs2 matcher of the same name
 
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "proving a step" should {
     "rewrite target using a direct premise" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
       val controller = new StepRewriteController
 
@@ -44,7 +44,7 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "rewrite target using a reversed premise" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
       val controller = new StepRewriteController
 
@@ -67,7 +67,7 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "rewrite premise using a direct premise" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertion(service)
       val controller = new StepRewriteController
 
@@ -93,7 +93,7 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "rewrite premise using a reversed premise" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertion(service)
       val controller = new StepRewriteController
 
@@ -121,7 +121,7 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "rewrite left using a direct premise" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -150,7 +150,7 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "rewrite left using a reversed premise" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -181,7 +181,7 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "rewrite right using a direct premise" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -210,7 +210,7 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "rewrite right using a reversed premise" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -239,13 +239,13 @@ class StepRewriteSpec extends ControllerSpec {
     "get rewrite suggestions using a generalized deduction premise" in {
       val A = TermVariablePlaceholder("A", 0)
       val B = TermVariablePlaceholder("B", 1)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, B -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, B -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       val controller = new StepRewriteController
 
       val statement = ForAll("x")(Implication(ElementOf($, Product(A, B)), Equals($, Zero)))
-      implicit val stepContext = createOuterStepContext(Nil)
+      given stepContext: StepContext = createOuterStepContext(Nil)
 
       service.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
        Success(createTargetStepWithContext(statement))
@@ -264,7 +264,7 @@ class StepRewriteSpec extends ControllerSpec {
       responseEntity.getBody must beAnInstanceOf[Seq[InferenceRewriteSuggestion]]
 
       responseEntity.getBody must contain { (inferenceSuggestion: InferenceRewriteSuggestion) =>
-        inferenceSuggestion.inference mustEqual elementOfCartesianProductFromCoordinates
+        inferenceSuggestion.inference must beEqualTo(elementOfCartesianProductFromCoordinates)
         inferenceSuggestion.paths must contain(Seq(0, 1, 0))
       }
     }
@@ -272,9 +272,9 @@ class StepRewriteSpec extends ControllerSpec {
     "apply rewrite using a generalized deduction premise" in {
       val A = TermVariablePlaceholder("A", 0)
       val B = TermVariablePlaceholder("B", 1)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, B -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, B -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
       val controller = new StepRewriteController
 
@@ -313,9 +313,9 @@ class StepRewriteSpec extends ControllerSpec {
       val B = TermVariablePlaceholder("B", 1)
       val C = TermVariablePlaceholder("C", 2)
       val D = TermVariablePlaceholder("D", 3)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, B -> 0, C -> 0, D -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, B -> 0, C -> 0, D -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
       val controller = new StepRewriteController
 
@@ -371,9 +371,9 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "apply rewrite to chained statement using a generalized deduction premise" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0), Seq(a -> 0, b -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0), Seq(a -> 0, b -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -411,9 +411,9 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "apply multiple rewrites to chained statement using a generalized deduction premise at depth" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -508,9 +508,9 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "rewrite in a deduction antecedent" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0), Seq(a -> 0, b -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0), Seq(a -> 0, b -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
       val controller = new StepRewriteController
 
@@ -546,15 +546,15 @@ class StepRewriteSpec extends ControllerSpec {
     }
 
     "correctly increase depth of bound variables when getting rewrite premise suggestions inside a generalization" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 2), Seq(a -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 2), Seq(a -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       val controller = new StepRewriteController
 
       val premise = Equals($, $.^)
       val premiseReference = StepReference(outerStepPath :+ (stepIndex - 1))
       val target = ForAllIn("x", a)(φ($, $.^))
-      implicit val stepContext = createOuterStepContext(Seq("a", "b")).addPremise(premise, premiseReference)
+      given stepContext: StepContext = createOuterStepContext(Seq("a", "b")).addPremise(premise, premiseReference)
 
       service.findStep[Step](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
         Success(createTargetStepWithContext(target))
@@ -571,16 +571,16 @@ class StepRewriteSpec extends ControllerSpec {
 
       responseEntity.getBody must beAnInstanceOf[Seq[PremiseSuggestion]]
 
-      responseEntity.getBody mustEqual Seq(PremiseSuggestion(
+      responseEntity.getBody must beEqualTo(Seq(PremiseSuggestion(
         premise,
         Some(premiseReference),
-        Seq(PremiseRewritePath(Seq(0, 1, 1), $.^))))
+        Seq(PremiseRewritePath(Seq(0, 1, 1), $.^)))))
     }
 
     "correctly increase depth of bound variables when applying rewrite inside a generalization" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 2), Seq(a -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 2), Seq(a -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
       val controller = new StepRewriteController
 
@@ -610,9 +610,9 @@ class StepRewriteSpec extends ControllerSpec {
     "rewrite using an inference extraction with new variables" in {
       val e = TermVariablePlaceholder("e", 4)
       val F = TermVariablePlaceholder("F", 5)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, e -> 0, F -> 2))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, e -> 0, F -> 2))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 

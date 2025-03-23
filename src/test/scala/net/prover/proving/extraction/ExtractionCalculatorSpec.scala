@@ -1,7 +1,8 @@
 package net.prover.proving.extraction
 
+import net.prover.model.TestDefinitions.{*, given}
+import net.prover.model.{AvailableEntries, VariableDefinitions}
 import org.specs2.mutable.Specification
-import net.prover.model.TestDefinitions._
 
 class ExtractionCalculatorSpec extends Specification {
   "extraction calculator" should {
@@ -14,11 +15,11 @@ class ExtractionCalculatorSpec extends Specification {
         "Or Is Symmetric",
         Nil,
         Equivalence(Disjunction(φ, ψ), Disjunction(ψ, φ)))
-      implicit val availableEntries = defaultAvailableEntries.addEntry(disjoinedConjunctEquivalence).addEntry(orIsSymmetric)
+      given availableEntries: AvailableEntries = defaultAvailableEntries.addEntry(disjoinedConjunctEquivalence).addEntry(orIsSymmetric)
 
       val extractions = ExtractionCalculator.getInferenceExtractions(disjoinedConjunctEquivalence)
 
-      extractions must contain (beEqualTo(Equivalence(Disjunction(Conjunction(χ, ω), Conjunction(φ, ψ)), φ)) ^^ { e: InferenceExtraction => e.conclusion })
+      extractions must contain (((e: InferenceExtraction) => e.conclusion) ^^ beEqualTo(Equivalence(Disjunction(Conjunction(χ, ω), Conjunction(φ, ψ)), φ)))
     }
     "find an extraction with a right rewrite" in {
       val disjoinedConjunctEquivalence = createInference(
@@ -29,15 +30,15 @@ class ExtractionCalculatorSpec extends Specification {
         "Or Is Symmetric",
         Nil,
         Equivalence(Disjunction(φ, ψ), Disjunction(ψ, φ)))
-      implicit val availableEntries = defaultAvailableEntries.addEntry(disjoinedConjunctEquivalence).addEntry(orIsSymmetric)
+      given availableEntries: AvailableEntries = defaultAvailableEntries.addEntry(disjoinedConjunctEquivalence).addEntry(orIsSymmetric)
 
       val extractions = ExtractionCalculator.getInferenceExtractions(disjoinedConjunctEquivalence)
 
-      extractions must contain (beEqualTo(Equivalence(φ, Disjunction(Conjunction(χ, ω), Conjunction(φ, ψ)))) ^^ { e: InferenceExtraction => e.conclusion })
+      extractions must contain (((e: InferenceExtraction) => e.conclusion) ^^ beEqualTo(Equivalence(φ, Disjunction(Conjunction(χ, ω), Conjunction(φ, ψ)))))
     }
 
     "not use deconstruction inference in extraction of a construction inference" in {
-      implicit val availableEntries = defaultAvailableEntries
+      given availableEntries: AvailableEntries = defaultAvailableEntries
       val extractions = ExtractionCalculator.getInferenceExtractions(Commutative.statementDefinition.constructionInference.get)
       extractions.find(e => e.extractionDefinition.extractionInferences.contains(Commutative.statementDefinition.deconstructionInference.get)) must beEmpty
     }

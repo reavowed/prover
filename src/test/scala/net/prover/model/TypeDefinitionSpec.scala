@@ -1,19 +1,22 @@
 package net.prover.model
 
 import net.prover.books.reading.ProofFileReader
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.{*, given}
 import net.prover.model.entries.{ChapterEntry, TypeDefinition}
-import org.specs2.matcher.MatchResult
+import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
 class TypeDefinitionSpec extends Specification {
 
-  implicit val availableEntries = defaultAvailableEntries
+  given availableEntries: AvailableEntries = defaultAvailableEntries
 
-  private def testParsingAndSerialization(typeDefinition: TypeDefinition)(implicit availableEntries: AvailableEntries): MatchResult[Any] = {
+  private def testParsingAndSerialization(
+    typeDefinition: TypeDefinition)(
+    using availableEntries: AvailableEntries
+  ): Result = {
     val serializedDefinition = typeDefinition.serializedLines.mkString("\n")
     val reparsedDefinition = ChapterEntry.parser.parseAndDiscard(serializedDefinition)
-    reparsedDefinition mustEqual typeDefinition
+    reparsedDefinition must beEqualTo(typeDefinition)
   }
 
   "type qualifier definition parser" should {

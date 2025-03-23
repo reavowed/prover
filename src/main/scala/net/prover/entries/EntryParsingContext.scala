@@ -8,7 +8,7 @@ case class EntryParsingContext(
   bookTitle: String,
   chapterTitle: String,
   proofFileReader: ProofFileReader)(
-  implicit val availableEntries: AvailableEntries)
+  using val availableEntries: AvailableEntries)
 {
   implicit lazy val provingContext: ProvingContext = ProvingContext(availableEntries, Definitions(availableEntries))
 }

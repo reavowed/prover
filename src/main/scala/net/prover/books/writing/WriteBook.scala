@@ -3,7 +3,7 @@ package net.prover.books.writing
 import net.prover.books.management.BookDirectoryConfig
 import net.prover.books.model.Book
 import net.prover.entries.{BookWithContext, ChapterWithContext, TheoremWithContext}
-import net.prover.model.{Chapter, SeqOps}
+import net.prover.model._
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.filefilter.TrueFileFilter
 

@@ -54,6 +54,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
       }
     } yield {
       import entryWithContext._
+      import entryWithContext.given
       val index = chapterWithContext.entriesWithContexts.findIndexWhere(_.entry == entry).getOrElse(throw new Exception("Entry somehow didn't exist"))
       val previous = chapterWithContext.entriesWithContexts.lift(index - 1).map(LinkSummary(_))
       val next = chapterWithContext.entriesWithContexts.lift(index + 1).map(LinkSummary(_))

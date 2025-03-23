@@ -1,16 +1,17 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.PathData
-import net.prover.model.TestDefinitions._
+import net.prover.model.{AvailableEntries, VariableDefinitions}
+import net.prover.model.TestDefinitions.*
 
 class StepCreationSpec extends ControllerSpec {
 
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Nil)
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Nil)
 
   "adding a target" should {
     "insert the new step before any transitivity" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertion(service)
 
       val controller = new StepCreationController

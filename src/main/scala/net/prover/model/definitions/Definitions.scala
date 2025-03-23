@@ -154,7 +154,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       generalizationDefinition <- allAvailableEntries.generalizationDefinitionOption.toSeq
       inference <- inferenceEntries
       connective <- definedBinaryConnectives
-      (generalizationDefinition(_, StatementVariable(a, Seq(FunctionParameter(0, 0)))), generalizationDefinition(_, StatementVariable(b, Seq(FunctionParameter(0, 0))))) <- connective.unapply(inference.conclusion)
+      case (generalizationDefinition(_, StatementVariable(a, Seq(FunctionParameter(0, 0)))), generalizationDefinition(_, StatementVariable(b, Seq(FunctionParameter(0, 0))))) <- connective.unapply(inference.conclusion)
       if inference.premises == Seq(generalizationDefinition("", connective(StatementVariable(a, Seq(FunctionParameter(0, 0))), StatementVariable(b, Seq(FunctionParameter(0, 0))))(SubstitutionContext.withExtraParameters(1))))
     } yield connective -> inference).toMap
   }
@@ -164,7 +164,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       deductionDefinition <- allAvailableEntries.deductionDefinitionOption.toSeq
       inference <- inferenceEntries
       connective <- definedBinaryConnectives
-      (deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), deductionDefinition(StatementVariable(c, Nil), StatementVariable(d, Nil))) <- connective.unapply(inference.conclusion)
+      case (deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), deductionDefinition(StatementVariable(c, Nil), StatementVariable(d, Nil))) <- connective.unapply(inference.conclusion)
       if a == c
       if inference.premises == Seq(deductionDefinition(StatementVariable(a, Nil), connective(StatementVariable(b, Nil), StatementVariable(d, Nil))))
     } yield connective -> inference).toMap
@@ -198,20 +198,20 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       rearrangementInferences
         .mapFind { inferenceExtraction =>
           for {
-            (operator(TermVariable(0, Nil), operator(TermVariable(1, Nil), TermVariable(2, Nil))), operator(operator(TermVariable(0, Nil), TermVariable(1, Nil)), TermVariable(2, Nil))) <- equality.unapply(inferenceExtraction.conclusion)
+            case (operator(TermVariable(0, Nil), operator(TermVariable(1, Nil), TermVariable(2, Nil))), operator(operator(TermVariable(0, Nil), TermVariable(1, Nil)), TermVariable(2, Nil))) <- equality.unapply(inferenceExtraction.conclusion)
           } yield Associativity(operator, inferenceExtraction)
         }
     }
     def getOperator(operator: BinaryOperator, commutativity: Commutativity, associativity: Associativity, equality: Equality): RearrangeableOperator = {
       val leftIdentities = rearrangementInferences.mapCollect { inferenceExtraction =>
         for {
-          (operator(identityConstant, TermVariable(0, Nil)), TermVariable(0, Nil)) <- equality.unapply(inferenceExtraction.conclusion)
+          case (operator(identityConstant, TermVariable(0, Nil)), TermVariable(0, Nil)) <- equality.unapply(inferenceExtraction.conclusion)
           if ExpressionUtils.isCombinationOfTermConstants(identityConstant)
         } yield LeftIdentity(operator, identityConstant, inferenceExtraction)
       }
       val rightIdentities = rearrangementInferences.mapCollect { inferenceExtraction =>
         for {
-          (operator(TermVariable(0, Nil), identityConstant), TermVariable(0, Nil)) <- equality.unapply(inferenceExtraction.conclusion)
+          case (operator(TermVariable(0, Nil), identityConstant), TermVariable(0, Nil)) <- equality.unapply(inferenceExtraction.conclusion)
           if ExpressionUtils.isCombinationOfTermConstants(identityConstant)
         } yield RightIdentity(operator, identityConstant, inferenceExtraction)
       }
@@ -222,13 +222,13 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       } yield DoubleSidedIdentity(operator, leftIdentity.identityTerm, leftIdentity, rightIdentity)
       val leftAbsorbers = rearrangementInferences.mapCollect { inferenceExtraction =>
         for {
-          (operator(absorberConstant, TermVariable(0, Nil)), rhs) <- equality.unapply(inferenceExtraction.conclusion)
+          case (operator(absorberConstant, TermVariable(0, Nil)), rhs) <- equality.unapply(inferenceExtraction.conclusion)
           if rhs == absorberConstant && ExpressionUtils.isCombinationOfTermConstants(absorberConstant)
         } yield LeftAbsorber(operator, absorberConstant, inferenceExtraction)
       }
       val rightAbsorbers = rearrangementInferences.mapCollect { inferenceExtraction =>
         for {
-          (operator(TermVariable(0, Nil), absorberConstant), rhs) <- equality.unapply(inferenceExtraction.conclusion)
+          case (operator(TermVariable(0, Nil), absorberConstant), rhs) <- equality.unapply(inferenceExtraction.conclusion)
           if rhs == absorberConstant && ExpressionUtils.isCombinationOfTermConstants(absorberConstant)
         } yield RightAbsorber(operator, absorberConstant, inferenceExtraction)
       }
@@ -236,7 +236,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
         doubleSidedIdentity <- doubleSidedIdentity.toSeq
         identityTerm = doubleSidedIdentity.identityTerm
         rightInverseInferenceExtraction <- rearrangementInferences
-        (operator(TermVariable(0, Nil), inverseTerm), `identityTerm`) <- equality.unapply(rightInverseInferenceExtraction.conclusion).toSeq
+        case (operator(TermVariable(0, Nil), inverseTerm), `identityTerm`) <- equality.unapply(rightInverseInferenceExtraction.conclusion).toSeq
         if ExpressionUtils.getSingleSimpleTermVariable(inverseTerm).contains(0)
         leftInverseInferenceExtraction <- rearrangementInferences
         if leftInverseInferenceExtraction.conclusion == equality(operator(inverseTerm, TermVariable(0, Nil)), identityTerm)
@@ -262,7 +262,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       inferenceExtraction <- rearrangementInferences
       distributor <- rearrangeableOperators
       distributee <- rearrangeableOperators
-      (
+      case (
         distributor(TermVariable(0, Nil), distributee(TermVariable(1, Nil), TermVariable(2, Nil))),
         distributee(distributor(TermVariable(0, Nil), TermVariable(1, Nil)), distributor(TermVariable(0, Nil), TermVariable(2, Nil)))
       ) <- equality.unapply(inferenceExtraction.conclusion).toSeq
@@ -275,7 +275,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       inferenceExtraction <- rearrangementInferences
       distributor <- rearrangeableOperators
       distributee <- rearrangeableOperators
-      (
+      case (
         distributor(distributee(TermVariable(0, Nil), TermVariable(1, Nil)), TermVariable(2, Nil)),
         distributee(distributor(TermVariable(0, Nil), TermVariable(2, Nil)), distributor(TermVariable(1, Nil), TermVariable(2, Nil)))
       ) <- equality.unapply(inferenceExtraction.conclusion).toSeq
@@ -291,7 +291,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       rearrangeableOperator <- rearrangeableOperators
       binaryOperator = rearrangeableOperator.operator
       inferenceExtraction <- rearrangementInferences
-      (
+      case (
         binaryOperator(unaryOperator(TermVariable(0, Nil)), TermVariable(1, Nil)),
         unaryOperator(binaryOperator(TermVariable(0, Nil), TermVariable(1, Nil)))
       ) <- equality.unapply(inferenceExtraction.conclusion)
@@ -305,7 +305,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       rearrangeableOperator <- rearrangeableOperators
       binaryOperator = rearrangeableOperator.operator
       inferenceExtraction <- rearrangementInferences
-      (
+      case (
         binaryOperator(TermVariable(0, Nil), unaryOperator(TermVariable(1, Nil))),
         unaryOperator(binaryOperator(TermVariable(0, Nil), TermVariable(1, Nil)))
       ) <- equality.unapply(inferenceExtraction.conclusion)
@@ -439,7 +439,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       deductionDefinition <- allAvailableEntries.deductionDefinitionOption.toSeq
       result <- for {
         inference <- allInferences
-        Seq(firstPremise @ deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq(inference.premises)
+        case Seq(firstPremise @ deductionDefinition(StatementVariable(a, Nil), StatementVariable(b, Nil)), otherPremise: DefinedStatement) <- Seq(inference.premises)
         swapper <- Seq(Direction.Forward, Direction.Reverse)
         (premiseIndex, conclusionIndex) = swapper.swapSourceAndResult(a, b)
         if inference.variableDefinitions.terms.isEmpty && inference.variableDefinitions.hasNoApplications

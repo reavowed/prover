@@ -8,9 +8,10 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step}
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.theorems.steps.RecursiveStepFinder
-import scalaz.Scalaz._
+import scalaz.Monoid
+import scalaz.Scalaz.*
 
-class IsComplete(implicit definitions: Definitions) extends RecursiveStepFinder[Boolean]()(booleanInstance.conjunction) {
+class IsComplete(implicit definitions: Definitions) extends RecursiveStepFinder[Boolean](using booleanInstance.conjunction) {
   override def apply(theorem: Theorem): Boolean = theorem.proofs.exists(apply)
 
   override def apply(step: Step.TargetStep): Boolean = false

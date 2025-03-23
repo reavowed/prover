@@ -196,7 +196,7 @@ case class TermRearranger[T <: Expression](
   ): Option[(OperatorTree, Seq[RearrangementStep[T]])] = {
     def withoutSplitting = pullTargetInBaseWithoutSplitting(base, deconstruction, target, operator, stepDirection, pullDirection)
     def bySplittingTarget = for {
-      BinaryOperatorTree(`operator`, targetLeft, targetRight) <- target.asOptionalInstanceOf[BinaryOperatorTree]
+      case BinaryOperatorTree(`operator`, targetLeft, targetRight) <- target.asOptionalInstanceOf[BinaryOperatorTree]
       (baseAfterTargetLeft, leftSteps) <- pullTargetInBase(base, targetLeft, deconstruction, operator, stepDirection, pullDirection)
       (baseAfterTarget, rightSteps) <- pullTargetInBase(baseAfterTargetLeft, targetRight, deconstruction :+ LeftBinaryDeconstructionStep(operator, targetLeft), operator, stepDirection, pullDirection)
       associativityStep <- operator.associativity.rearrangementStep(targetLeft, targetRight, baseAfterTarget, stepDirection, getWrapper(deconstruction), expansion, reversal)

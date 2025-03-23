@@ -2,10 +2,10 @@ package net.prover.model.definitions
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import net.prover.model.*
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.entries.ChapterEntry
-import net.prover.model.expressions._
-import net.prover.model.{DisambiguatedSymbol, ExpressionParsingContext, Format, Inference, ParsingContextWithParameters, TemplateParsingContext, VariableDefinitions}
+import net.prover.model.expressions.*
 import net.prover.parsing.{KnownWordParser, Parser}
 
 trait ExpressionDefinition {

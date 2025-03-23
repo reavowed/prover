@@ -1,8 +1,8 @@
 package net.prover.proving.fromExistingStatement
 
-import net.prover.controllers._
+import net.prover.controllers.*
 import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises}
-import net.prover.model.Substitutions
+import net.prover.model.*
 import net.prover.model.expressions.{FunctionParameter, Statement, StatementVariable, TermVariable}
 import net.prover.model.proof.{Step, StepContext, StepProvingContext}
 import net.prover.proving.extraction.{ExtractionCalculator, PremiseExtraction}

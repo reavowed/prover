@@ -48,7 +48,7 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
     } yield Step.AssertionStep(newStatement, newInference, newPremises, newSubstitutions)
   }
   private def updateAssertion(step: Step.AssertionStep, stepContext: StepContext, proofWithContext: ProofWithContext): F[Step.AssertionStep] = {
-    updateAssertion(step, TypedStepWithContext(step, proofWithContext)(implicitly, stepContext))
+    updateAssertion(step, TypedStepWithContext(step, proofWithContext)(using summon, stepContext))
       .map(_.asInstanceOf[Step.AssertionStep])
   }
   private def updateAssertions(steps: Seq[Step.AssertionStep], stepContext: StepContext, proofWithContext: ProofWithContext): F[Seq[Step.AssertionStep]] = {
@@ -114,9 +114,9 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
   def updateInferenceWithPremiseDerivations(step: Step.InferenceWithPremiseDerivationsStep, stepWithContext: StepWithContext): F[Step] = {
     Step.InferenceWithPremiseDerivationsStep.builder(
       sc => updateKnownStatements(step.premises, sc, stepWithContext.proofWithContext),
-      sc => apply(TypedStepWithContext(step.assertionStep, stepWithContext.proofWithContext)(implicitly, sc))
+      sc => apply(TypedStepWithContext(step.assertionStep, stepWithContext.proofWithContext)(using summon, sc))
         .map(_.asInstanceOf[Step.InferenceApplicationWithoutPremises]))(
-      implicitly,
+      using summon,
       stepWithContext.stepContext
     ).map(_.asInstanceOf[Step])
   }
@@ -124,7 +124,7 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
     Step.ExistingStatementExtractionStep.builder(
       sc => updateKnownStatements(step.premises, sc, stepWithContext.proofWithContext),
       sc => updateAppliedExtraction(step.extraction, sc, stepWithContext.proofWithContext))(
-      implicitly,
+      using summon,
       stepWithContext.stepContext
     ).map(_.asInstanceOf[Step])
   }

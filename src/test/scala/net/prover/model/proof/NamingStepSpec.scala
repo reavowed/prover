@@ -24,8 +24,8 @@ class NamingStepSpec extends Specification {
       val innerStepContext = step.specifyStepContext(outerStepContext)
 
       innerStepContext.premises must contain(exactly(
-        beEqualTo(χ($.^)) ^^ { (_: Premise).statement },
-        beEqualTo(φ($)) ^^ { (_: Premise).statement }))
+        ((_: Premise).statement) ^^ beEqualTo(χ($.^)),
+        ((_: Premise).statement) ^^ beEqualTo(φ($))))
     }
   }
 }

@@ -1,17 +1,21 @@
 package net.prover.model
 
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.*
+import net.prover.model.TestDefinitions.given
 import net.prover.model.definitions.Qualifier
 import net.prover.model.entries.{ChapterEntry, ParentTypeConditions, RelatedObjectDefinition, TypeDefinition}
-import org.specs2.matcher.MatchResult
+import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
 class RelatedObjectDefinitionSpec extends Specification {
 
-  private def testParsingAndSerialization(relatedObjectDefinition: RelatedObjectDefinition)(implicit availableEntries: AvailableEntries): MatchResult[Any] = {
+  private def testParsingAndSerialization(
+    relatedObjectDefinition: RelatedObjectDefinition)(
+    using availableEntries: AvailableEntries
+  ): Result = {
     val serializedDefinition = relatedObjectDefinition.serializedLines.mkString("\n")
     val reparsedDefinition = ChapterEntry.parser.parseAndDiscard(serializedDefinition)
-    reparsedDefinition mustEqual relatedObjectDefinition
+    reparsedDefinition must beEqualTo(relatedObjectDefinition)
   }
 
   val e = TermVariablePlaceholder("e", 0)
@@ -33,7 +37,7 @@ class RelatedObjectDefinitionSpec extends Specification {
           ConjunctionDefinition),
         None,
         ForAllIn("a", A)(Conjunction(Equals(Apply(f, Pair($, e)), $), Equals(Apply(f, Pair(e, $)), $))))
-      testParsingAndSerialization(definition)(defaultAvailableEntriesPlus(binaryOperationDefinition))
+      testParsingAndSerialization(definition)(using defaultAvailableEntriesPlus(binaryOperationDefinition))
     }
   }
 }

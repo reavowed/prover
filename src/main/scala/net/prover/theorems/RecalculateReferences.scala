@@ -1,16 +1,17 @@
 package net.prover.theorems
 
 import net.prover.books.management.BookStateManager
-import net.prover.controllers._
+import net.prover.controllers.*
 import net.prover.controllers.models.StepWithReferenceChange
 import net.prover.entries.{ProofWithContext, StepWithContext, TheoremWithContext}
+import net.prover.model.*
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof.{Premise, Step}
 import net.prover.refactoring.UpdateTheorems
 import net.prover.theorems.steps.CompoundStepUpdater
-import net.prover.util.FunctorTypes._
-import scalaz.Scalaz._
+import net.prover.util.FunctorTypes.*
+import scalaz.Scalaz.*
 
 import scala.util.Try
 

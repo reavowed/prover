@@ -70,6 +70,7 @@ object Theorem extends Inference.EntryParser {
 
   override def parser(implicit entryParsingContext: EntryParsingContext): Parser[Theorem] = {
     import entryParsingContext._
+    import entryParsingContext.given
     for {
       name <- Parser.toEndOfLine
       variableDefinitions <- VariableDefinitions.parser

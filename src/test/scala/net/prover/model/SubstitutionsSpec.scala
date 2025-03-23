@@ -25,7 +25,7 @@ class SubstitutionsSpec extends Specification {
 
   "calculating substitutions" should {
     "match the target statement for a statement variable" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0), Nil)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0), Nil)
       testSuccessfulMatch(
         0,
         Substitutions(Seq(Equals(a, b)), Nil),
@@ -33,7 +33,7 @@ class SubstitutionsSpec extends Specification {
     }
 
     "match components for a defined statement" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Nil)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Nil)
       testSuccessfulMatch(
         0,
         Substitutions(Seq(Equals(a, b), Negation(χ)), Nil),
@@ -344,8 +344,8 @@ class SubstitutionsSpec extends Specification {
             Seq(Equals(b, $.^)),
             Seq(EmptySet, $)),
           0,
-          1)
-        .mustEqual(Some(ForAll("x")(Equals(b, $.^))))
+          1
+        ) must beSome(ForAll("x")(Equals(b, $.^)))
     }
 
     "match a variable to a parameter at different internal depths" in {

@@ -1,10 +1,10 @@
 package net.prover.proving.structure.inferences
 
+import net.prover.model.*
 import net.prover.model.definitions.{Definitions, KnownStatement}
 import net.prover.model.expressions.{Statement, Term, TermVariable}
 import net.prover.model.proof.{StepProvingContext, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils
-import net.prover.model.{ProvingContext, Substitutions}
 import net.prover.proving.derivation.SimpleDerivation
 import net.prover.proving.extraction.{ExtractionApplier, InferenceExtraction}
 import net.prover.proving.premiseFinding.DerivationFinder

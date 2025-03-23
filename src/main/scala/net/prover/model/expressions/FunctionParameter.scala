@@ -1,6 +1,6 @@
 package net.prover.model.expressions
 
-import net.prover.model.{ExpressionParsingContext, Substitutions, UsedVariables}
+import net.prover.model.*
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.parsing.{KnownWordParser, Parser}
 

@@ -8,7 +8,7 @@ import org.specs2.mutable.SpecificationLike
 trait PossibleConclusionMatchers extends SpecificationLike {
   def bePossibleConclusionWithPremises(conclusion: Statement, premises: Seq[Statement]): Matcher[PossibleConclusionWithPremises] = {
     (beEqualTo(conclusion) ^^ ((_: PossibleConclusionWithPremises).conclusion)) and
-      (contain[Statement](exactly(premises: _*)) ^^ ((_: PossibleConclusionWithPremises).possiblePremises.map(_.premise)))
+      (contain(exactly[Statement](premises*)) ^^ ((_: PossibleConclusionWithPremises).possiblePremises.map(_.premise)))
   }
   def bePossibleConclusionWithSubstitutions(substitutions: SuggestedSubstitutions): Matcher[PossibleConclusionWithPremises] = {
     beSome(beEqualTo(substitutions)) ^^ ((_: PossibleConclusionWithPremises).substitutions)

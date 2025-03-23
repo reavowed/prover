@@ -1,21 +1,21 @@
 package net.prover.model
 
-import net.prover.{StepBuilderHelper, ContextHelper}
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.*
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.DefinitionRewriter
-import org.specs2.matcher.MatchResult
+import net.prover.model.proof.{DefinitionRewriter, StepContext}
+import net.prover.{ContextHelper, StepBuilderHelper}
+import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
 class DefinitionRewriterSpec extends Specification with StepBuilderHelper {
 
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Nil)
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1), Nil)
 
   "rewriting definitions" should {
 
-    def testRewrite(source: Statement, target: Statement, depth: Int = 0)(implicit variableDefinitions: VariableDefinitions): MatchResult[Any] = {
-      implicit val stepContext = (1 to depth).foldLeft(createBaseStepContext(Seq(source))) {(c, i) => c.addBoundVariable(s"x_$i") }
+    def testRewrite(source: Statement, target: Statement, depth: Int = 0)(implicit variableDefinitions: VariableDefinitions): Result = {
+      given stepContext: StepContext = (1 to depth).foldLeft(createBaseStepContext(Seq(source))) {(c, i) => c.addBoundVariable(s"x_$i") }
       DefinitionRewriter.rewriteDefinitions(source, target) must beSome(beStepThatMakesValidAndCompleteTheorem(Seq(source), target, depth))
     }
 
@@ -56,14 +56,14 @@ class DefinitionRewriterSpec extends Specification with StepBuilderHelper {
       }
 
       "complex rewrite" in {
-        implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Nil)
+        given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Nil)
         testRewrite(
           Exists("x")(Conjunction(φ($), Negation(ψ($)))),
           Negation(ForAll("x")(Implication(φ($), ψ($)))))
       }
 
       "complex rewrite at depth" in {
-        implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 2, ψ -> 2), Nil)
+        given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 2, ψ -> 2), Nil)
         testRewrite(
           Exists("x")(Conjunction(φ($, $.^), Negation(ψ($, $.^^)))),
           Negation(ForAll("x")(Implication(φ($, $.^), ψ($, $.^^)))),

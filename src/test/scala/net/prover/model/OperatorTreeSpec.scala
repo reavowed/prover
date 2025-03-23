@@ -1,22 +1,22 @@
 package net.prover.model
 
 import net.prover.ContextHelper
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.*
 import net.prover.model.definitions.OperatorTree
 import net.prover.model.expressions.Term
 import net.prover.model.proof.SubstitutionContext
-import org.specs2.matcher.MatchResult
+import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
 class OperatorTreeSpec extends Specification with ContextHelper {
-  implicit val availableEntries = defaultAvailableEntries
+  given availableEntries: AvailableEntries = defaultAvailableEntries
   val e = TermVariablePlaceholder("e", 4)
   val f = TermVariablePlaceholder("f", 5)
 
   "canonical form" should {
     implicit val substitutionContext = SubstitutionContext.outsideProof
-    def testCanonicalForm(base: Term, expected: Term): MatchResult[Any] = {
-      OperatorTree.parse(base).canonicalForm.term mustEqual expected
+    def testCanonicalForm(base: Term, expected: Term): Result = {
+      OperatorTree.parse(base).canonicalForm.term must beEqualTo(expected)
     }
 
     "sort and stack terms" in {

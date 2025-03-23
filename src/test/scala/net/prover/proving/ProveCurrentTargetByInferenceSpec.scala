@@ -1,19 +1,20 @@
 package net.prover.proving
 
-import net.prover.{BookServiceHelper, StepHelpers}
 import net.prover.controllers.BookService
 import net.prover.controllers.models.{PathData, SerializedSubstitutions, StepDefinition}
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.*
+import net.prover.model.{AvailableEntries, VariableDefinitions}
 import net.prover.proving.extraction.ExtractionDefinition
+import net.prover.{BookServiceHelper, StepHelpers}
 import org.specs2.mutable.Specification
 
 class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHelper with StepHelpers {
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Nil)
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Nil)
 
   "prove current target by inference" should {
     "replace target with assertion step" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       ProveCurrentTarget(
@@ -48,9 +49,9 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
     }
 
     "replace target with an inference extraction containing a deconstruction" in {
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       ProveCurrentTarget(
@@ -112,10 +113,10 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
     }
 
     "replace target with an inference extraction with a left rewrite" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Nil)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Nil)
 
       val disjoinedConjunctEquivalence = createInference(
         "Disjoined Conjunct Equivalence",
@@ -125,7 +126,7 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
         "Or Is Symmetric",
         Nil,
         Equivalence(Disjunction(φ, ψ), Disjunction(ψ, φ)))
-      implicit val availableEntries = defaultAvailableEntries.addEntry(disjoinedConjunctEquivalence).addEntry(orIsSymmetric)
+      given availableEntries: AvailableEntries = defaultAvailableEntries.addEntry(disjoinedConjunctEquivalence).addEntry(orIsSymmetric)
 
       ProveCurrentTarget(
         bookKey,
@@ -166,10 +167,10 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
     }
 
     "replace target with an inference extraction with a right rewrite" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Nil)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Nil)
 
       val disjoinedConjunctEquivalence = createInference(
         "Disjoined Conjunct Equivalence",
@@ -179,7 +180,7 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
         "Or Is Symmetric",
         Nil,
         Equivalence(Disjunction(φ, ψ), Disjunction(ψ, φ)))
-      implicit val availableEntries = defaultAvailableEntries.addEntry(disjoinedConjunctEquivalence).addEntry(orIsSymmetric)
+      given availableEntries: AvailableEntries = defaultAvailableEntries.addEntry(disjoinedConjunctEquivalence).addEntry(orIsSymmetric)
 
       ProveCurrentTarget(
         bookKey,
@@ -220,7 +221,7 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
     }
 
     "add premise finding steps" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       ProveCurrentTarget(
@@ -256,7 +257,7 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
     }
 
     "add targets that don't exist" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       ProveCurrentTarget(
@@ -291,7 +292,7 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
     }
 
     "add targets before chain" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       ProveCurrentTarget(
@@ -326,9 +327,9 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
     }
 
     "find a wrapped premise for a wrapped inference" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       ProveCurrentTarget(
@@ -373,9 +374,9 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
     }
 
     "find a wrapped premise for a wrapped inference that references a bound variable" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       ProveCurrentTarget(
@@ -425,9 +426,9 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
         "Two Empty Sets Are Equal",
         Seq(ForAll("x")(Negation(ElementOf($, a))), ForAll("x")(Negation(ElementOf($, b)))),
         Equals(a, b))
-      implicit val availableEntries = defaultAvailableEntries.addEntry(axiom)
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
-      implicit val service = mock[BookService]
+      given availableEntries: AvailableEntries = defaultAvailableEntries.addEntry(axiom)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       ProveCurrentTarget(

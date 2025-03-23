@@ -1,18 +1,19 @@
 package net.prover.theorems
 
-import net.prover.{BookServiceHelper, StepHelpers}
 import net.prover.controllers.BookService
 import net.prover.controllers.models.StepMoveRequest
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.*
+import net.prover.model.{AvailableEntries, VariableDefinitions}
+import net.prover.{BookServiceHelper, StepHelpers}
 import org.specs2.mutable.Specification
 
 class MoveStepsSpec extends Specification with BookServiceHelper with StepHelpers {
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Seq(a -> 0))
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Seq(a -> 0))
 
   "move steps" should {
     "correctly move a step referencing a bound variable inside a generalization" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       MoveSteps(
@@ -36,7 +37,7 @@ class MoveStepsSpec extends Specification with BookServiceHelper with StepHelper
     }
 
     "correctly move a step referencing a bound variable out of a generalization" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       MoveSteps(

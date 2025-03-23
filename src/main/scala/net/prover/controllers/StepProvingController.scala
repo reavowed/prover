@@ -23,7 +23,7 @@ class StepProvingController @Autowired() (implicit val bookService: BookService)
     @PathVariable("proofIndex") proofIndex: Int,
     @PathVariable("stepPath") stepPath: PathData,
     @RequestParam("searchText") searchText: String
-  ): ResponseEntity[_] = {
+  ): ResponseEntity[?] = {
     SuggestInferencesForExistingTarget(bookKey, chapterKey, theoremKey, proofIndex, stepPath, searchText)
       .toResponseEntity
   }

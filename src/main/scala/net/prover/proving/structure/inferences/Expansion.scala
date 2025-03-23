@@ -1,9 +1,9 @@
 package net.prover.proving.structure.inferences
 
+import net.prover.model.*
 import net.prover.model.definitions.{Definitions, Wrapper, WrapperIdentity}
-import net.prover.model.expressions._
+import net.prover.model.expressions.*
 import net.prover.model.proof.{Premise, Step, SubstitutionContext}
-import net.prover.model.{Inference, Substitutions}
 import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation}
 
 // An inference that expands a simple binary joiner into a more complex one.
@@ -76,4 +76,3 @@ object RelationExpansion {
     } yield RelationExpansion(sourceJoiner, resultJoiner, inference.summary)
   }
 }
-

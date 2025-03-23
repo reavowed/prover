@@ -1,21 +1,22 @@
 package net.prover.refactoring
 
 import net.prover.StepBuilderHelper
-import net.prover.model.TestDefinitions._
-import net.prover.model.proof.SubstitutionContext
+import net.prover.model.TestDefinitions.*
+import net.prover.model.proof.{StepContext, SubstitutionContext}
+import net.prover.model.{AvailableEntries, VariableDefinitions}
 import org.specs2.mutable.Specification
 
 class ReplaceInferenceSpec extends Specification with StepBuilderHelper {
   "replace inference" should {
     "replace a simple assertion in a rewrite with an extraction" in {
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0))
 
       val simpleIntegerAdditionIsCommutative = createInference(
         "Integer Addition is Commutative",
         Seq(ElementOf(a, Integers), ElementOf(b, Integers)),
         Equals(addZ(a, b), addZ(b, a)))
-      implicit val availableEntries = defaultAvailableEntries.addEntry(simpleIntegerAdditionIsCommutative)
-      implicit val stepContext = createBaseStepContext(Seq(
+      given availableEntries: AvailableEntries = defaultAvailableEntries.addEntry(simpleIntegerAdditionIsCommutative)
+      given stepContext: StepContext = createBaseStepContext(Seq(
         ElementOf(a, Integers),
         ElementOf(b, Integers)))
 

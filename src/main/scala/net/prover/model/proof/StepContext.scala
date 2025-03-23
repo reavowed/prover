@@ -4,7 +4,7 @@ import net.prover.entries.StepWithContext
 import net.prover.model.VariableDefinitions
 import net.prover.model.expressions.Statement
 
-case class StepContext private(
+case class StepContext(
     parentReference: StepReference,
     index: Int,
     variableDefinitions: VariableDefinitions,
@@ -55,4 +55,3 @@ object StepContext extends LowPriorityStepContextImplicits {
   implicit def fromStepWithContext(stepWithContext: StepWithContext): StepContext = stepWithContext.stepContext
   implicit def implicitlyFromStepWithContext(implicit stepWithContext: StepWithContext): StepContext = fromStepWithContext(stepWithContext)
 }
-

@@ -1,13 +1,14 @@
 package net.prover.theorems
 
 import net.prover.StepBuilderHelper
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.*
 import net.prover.model.proof.SubstitutionContext
+import net.prover.model.{AvailableEntries, VariableDefinitions}
 import org.specs2.mutable.Specification
 
 class FindStepsSpec extends Specification with StepBuilderHelper {
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Nil)
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Nil)
 
   "find steps" should {
     "find a target step" in {

@@ -25,7 +25,7 @@ object ChainableRewriteInference {
       inference <- definitions.inferenceEntries
       if inference.premises.isEmpty
       BinaryConnectiveStatement(connective, lhs, rhs) <- definitions.asBinaryConnectiveStatement(inference.conclusion)
-      BinaryStatement(joiner, _, _) <- definitions.asBinaryStatement(lhs)
+      case BinaryStatement(joiner, _, _) <- definitions.asBinaryStatement(lhs)
       if lhs == joiner.withVariables(0, 1) && rhs == joiner.withVariables(1, 0)
     } yield ChainableRewriteInference(inference.summary, connective, lhs, rhs)
   }

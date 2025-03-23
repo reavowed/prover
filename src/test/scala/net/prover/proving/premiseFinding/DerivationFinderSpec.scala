@@ -1,35 +1,42 @@
 package net.prover.proving.premiseFinding
 
 import net.prover.StepBuilderHelper
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.*
 import net.prover.model.definitions.ExpressionDefinition.ComponentType
 import net.prover.model.definitions.Qualifier
 import net.prover.model.entries.{ParentTypeConditions, PropertyDefinitionOnType, TermDefinitionEntry, TypeDefinition}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof._
+import net.prover.model.proof.*
 import net.prover.model.{AvailableEntries, Format, TermVariablePlaceholder, TestDefinitions, VariableDefinitions}
-import org.specs2.matcher.MatchResult
+import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
 class DerivationFinderSpec extends Specification with StepBuilderHelper {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "premise finder" should {
 
-    def checkFindPremiseSteps(target: Statement, premises: Seq[Statement], steps: SubstitutionContext => Seq[Step], depth: Int = 0)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
+    def checkFindPremiseSteps(
+      target: Statement,
+      premises: Seq[Statement],
+      steps: SubstitutionContext => Seq[Step],
+      depth: Int = 0)(
+      using availableEntries: AvailableEntries,
+      variableDefinitions: VariableDefinitions
+    ): Result = {
       findPremise(target, premises, depth)(availableEntries) must beSome(
         beEmptyOrStepsThatMakeValidAndCompleteTheorem(premises, target, depth) and beEqualTo(steps(SubstitutionContext.withDepth(depth)))
       )
     }
 
-    def checkFindPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
+    def checkFindPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Result = {
       findPremise(target, premises, depth)(availableEntries) must beSome(beStepsThatMakeValidAndCompleteTheorem(premises, target, depth))
     }
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries): Option[Seq[Step]] = {
-      implicit val stepContext = createBaseStepContext(premises, depth)
+      given stepContext: StepContext = createBaseStepContext(premises, depth)
       DerivationFinder.findDerivationForStatement(target).map(_.toProofSteps)
     }
 
@@ -95,7 +102,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val B = TermVariablePlaceholder("B", 5)
       val C = TermVariablePlaceholder("C", 6)
       val D = TermVariablePlaceholder("D", 7)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, A -> 0, B -> 0, C -> 0, D -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, A -> 0, B -> 0, C -> 0, D -> 0))
 
       checkFindPremise(
         ElementOf(a, A),
@@ -115,7 +122,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
         None,
         Nil,
         Nil)
-      implicit val availableEntries = defaultAvailableEntriesPlus(Negated)
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(Negated)
 
       checkFindPremise(
         ElementOf(Negated(a), Naturals),
@@ -124,7 +131,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
 
     "find a premise by a conclusion simplification from extracting a term definition with multiple premises" in {
       val PairIsInteger = createInference("Pair Is Integer", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), ElementOf(Pair(a, b), Integers))
-      implicit val availableEntries = defaultAvailableEntriesPlus(PairIsInteger)
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(PairIsInteger)
 
       checkFindPremise(
         ElementOf(Pair(a, b), Integers),
@@ -135,7 +142,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val A = TermVariablePlaceholder("A", 2)
       val B = TermVariablePlaceholder("B", 3)
       val C = TermVariablePlaceholder("C", 4)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, A -> 0, B -> 0, C -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, A -> 0, B -> 0, C -> 0))
       checkFindPremise(
         ElementOf(Pair(a, b), Product(A, B)),
         Seq(ElementOf(a, A), ElementOf(b, C), Subset(C, B)))
@@ -145,7 +152,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val A = TermVariablePlaceholder("A", 1)
       val B = TermVariablePlaceholder("B", 2)
       val C = TermVariablePlaceholder("C", 3)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, A -> 0, B -> 0, C -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, A -> 0, B -> 0, C -> 0))
       checkFindPremise(
         ElementOf(First(a), C),
         Seq(Subset(A, C), ElementOf(a, Product(A, B))))
@@ -153,14 +160,14 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
 
     "avoid infinite loop with complexity increases" in {
       val ElementOfSuccessorIsElementOfSet = createInference("Element of Successor Is Element of Set", Seq(ElementOf(a, Successor(b))), ElementOf(a, b))
-      implicit val availableEntries = defaultAvailableEntriesPlus(ElementOfSuccessorIsElementOfSet)
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(ElementOfSuccessorIsElementOfSet)
 
       findPremise(ElementOf(a, b), Nil) must beNone
     }
 
     "avoid infinite loop by passing from complex relation to simpler one" in {
       val LessThanIsElementRelation = createInference("Less Than Is Element Relation", Seq(lessThan(a, b)), ElementOf(a, b)) // if naively implemented, the premise finder will treat "a < b" as "(a, b) ∈ <" and recurse
-      implicit val availableEntries = defaultAvailableEntriesPlus(LessThanIsElementRelation)
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(LessThanIsElementRelation)
 
       findPremise(ElementOf(a, b), Nil) must beNone
     }
@@ -170,7 +177,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val PositiveNaturals = PositiveNaturalsDefinition()
       val DefinitionOfPositiveNatural = createInference("Definition of Positive Natural", Nil, ForAll("n")(Equivalence(ElementOf($, PositiveNaturals), Conjunction(ElementOf($, Naturals), lessThan(Zero, $)))))
 
-      implicit val availableEntries = defaultAvailableEntriesPlus(PositiveNaturalsDefinition, DefinitionOfPositiveNatural)
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(PositiveNaturalsDefinition, DefinitionOfPositiveNatural)
 
       checkFindPremise(
         ElementOf(add(a, b), Naturals),
@@ -182,7 +189,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val PositiveNaturals = PositiveNaturalsDefinition()
       val PositiveNaturalsAreASubsetOfTheNaturals = createInference("Positive Naturals Are a Subset of the Naturals", Nil, Subset(PositiveNaturals, Naturals))
 
-      implicit val availableEntries = defaultAvailableEntriesPlus(PositiveNaturalsDefinition, PositiveNaturalsAreASubsetOfTheNaturals)
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(PositiveNaturalsDefinition, PositiveNaturalsAreASubsetOfTheNaturals)
 
       checkFindPremise(
         ElementOf(Pair(a, b), Product(Naturals, Naturals)),
@@ -208,7 +215,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val EmbeddedNaturalIsInteger = createInference("Embedded Natural Is Integer", Seq(ElementOf(a, Naturals)), ElementOf(ToInteger(a), Integers))
       val OneIsNotZero = createInference("One Is Not Zero", Nil, Negation(Equals(Zero, One)))
 
-      implicit val availableEntries = defaultAvailableEntriesPlus(SetDifference, ToInteger, EqualityConditionForEmbeddedNaturals, EmbeddedNaturalIsInteger, OneIsNotZero)
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(SetDifference, ToInteger, EqualityConditionForEmbeddedNaturals, EmbeddedNaturalIsInteger, OneIsNotZero)
 
       checkFindPremise(
         ElementOf(ToInteger(One), SetDifference(Integers, Singleton(ToInteger(Zero)))),
@@ -229,7 +236,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val lessThanIsIrreflexive = createInference("< Is Irreflexive", Nil, Irreflexive(LessThan, Naturals))
       val injectedNaturalIsNatural = createInference("Injected Natural Is Natural", Seq(ElementOf(a, Naturals)), ElementOf(Inject(a), Naturals))
 
-      implicit val availableEntries = defaultAvailableEntriesPlus(PositiveNaturalsDefinition, Inject, DefinitionOfPositiveNatural, Relation, Irreflexive, elementsRelatedByIrreflexiveNotEqual, lessThanIsIrreflexive, injectedNaturalIsNatural)
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(PositiveNaturalsDefinition, Inject, DefinitionOfPositiveNatural, Relation, Irreflexive, elementsRelatedByIrreflexiveNotEqual, lessThanIsIrreflexive, injectedNaturalIsNatural)
 
       checkFindPremise(
         Negation(Equals(a, Inject(Zero))),
@@ -268,7 +275,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val A = TermVariablePlaceholder("A", 1)
       val B = TermVariablePlaceholder("B", 2)
       val a = TermVariablePlaceholder("a", 3)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(f -> 0, A -> 0, B -> 0, a -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(f -> 0, A -> 0, B -> 0, a -> 0))
 
       checkFindPremise(
         ElementOf(Apply(f, a), B),
@@ -290,7 +297,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
 
     "find a premise using double simplification of a function application" in {
       val IntegerEmbeddingIsUnique = createInference("Integer Embedding Is Unique", Seq(ElementOf(a, Naturals), ElementOf(b, Naturals)), Equivalence(Equals(toZ(a), toZ(b)), Equals(a, b)))
-      implicit val availableEntries = defaultAvailableEntriesPlus(IntegerEmbeddingIsUnique)
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(IntegerEmbeddingIsUnique)
       checkFindPremise(
         Negation(Equals(toZ(Zero), toZ(a))),
         Seq(Negation(Equals(a, Zero)), ElementOf(a, Naturals)))
@@ -307,7 +314,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val A = TermVariablePlaceholder("A", 1)
       val a = TermVariablePlaceholder("a", 2)
       val b = TermVariablePlaceholder("b", 3)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(∗ -> 0, A -> 0, a -> 0, b -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(∗ -> 0, A -> 0, a -> 0, b -> 0))
 
       // a ∈ A / b ∈ A
       // a ∈ baseSet(∗) / b ∈ baseSet(∗)
@@ -362,7 +369,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val ∗ = TermVariablePlaceholder("∗", 0)
       val ∘ = TermVariablePlaceholder("∘", 1)
       val a = TermVariablePlaceholder("a", 2)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(∗ -> 0, ∘ -> 0, a -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(∗ -> 0, ∘ -> 0, a -> 0))
 
       checkFindPremiseSteps(
         ElementOf(a, BaseSet(∗)),
@@ -381,7 +388,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val A = TermVariablePlaceholder("A", 2)
       val a = TermVariablePlaceholder("a", 3)
       val b = TermVariablePlaceholder("b", 4)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(∘ -> 0, f -> 0, A -> 0, a -> 0, b -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(∘ -> 0, f -> 0, A -> 0, a -> 0, b -> 0))
 
       // b ∈ A
       // b ∈ domain(f)
@@ -402,7 +409,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
     "find a premise inside a generalized deduction" in {
       val A = TermVariablePlaceholder("A", 0)
       val b = TermVariablePlaceholder("b", 1)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, b -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(A -> 0, b -> 0))
       checkFindPremise(
         ForAllIn("a", A)(ElementOf(Pair($, b), Product(A, A))),
         Seq(ElementOf(b, A)))
@@ -412,7 +419,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val ∘ = TermVariablePlaceholder("∘", 0)
       val f = TermVariablePlaceholder("f", 1)
       val A = TermVariablePlaceholder("A", 2)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(∘ -> 0, f -> 0, A -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(∘ -> 0, f -> 0, A -> 0))
 
       checkFindPremise(
         ForAllIn("a", A)(ForAllIn("b", A)(ElementOf(Apply2(∘, $.^, Apply(f, $)), A))),
@@ -440,7 +447,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
       val StrictOrder = StrictOrderDefinition()
       val StrictOrderIsATotalOrder = createInference("< is a total order on N", Nil, TotalOrder(StrictOrder, Naturals))
 
-      implicit val availableEntries = defaultAvailableEntries
+      given availableEntries: AvailableEntries = defaultAvailableEntries
         .addEntry(Relation)
         .addEntry(Antisymmetric)
         .addEntry(Transitive)
@@ -473,7 +480,7 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
 
     "find a premise that has been rewritten with known values" in {
       val f = TermVariablePlaceholder("f", 1)
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(f -> 0, a -> 0, b -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(f -> 0, a -> 0, b -> 0))
       checkFindPremise(
         ForAll("x")(Implication(ElementOf($, Domain(f)), φ($))),
         Seq(ForAll("x")(Implication(ElementOf($, a), φ($))), Conjunction(Function(f), FunctionFrom(f, a, b))))

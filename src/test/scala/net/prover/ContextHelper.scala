@@ -12,7 +12,7 @@ import org.mockito.Mockito.when
 
 import scala.reflect.ClassTag
 
-trait ContextHelper extends CustomMockitoStubs {
+trait ContextHelper extends MockitoHelpers {
 
   val bookKey = "test-book-key"
   val chapterKey = "test-chapter-key"
@@ -22,26 +22,30 @@ trait ContextHelper extends CustomMockitoStubs {
   val stepIndex = 5
   val stepPath = outerStepPath :+ stepIndex
 
-  def createBaseStepContext(premises: Seq[Statement])(implicit variableDefinitions: VariableDefinitions, availableEntries: AvailableEntries): StepContext = {
+  def createBaseStepContext(premises: Seq[Statement])(using variableDefinitions: VariableDefinitions, availableEntries: AvailableEntries): StepContext = {
     StepContext.withPremisesAndVariables(premises, variableDefinitions)
   }
 
-  def createBaseStepContext(premises: Seq[Statement], boundVariables: Seq[String])(implicit variableDefinitions: VariableDefinitions, availableEntries: AvailableEntries): StepContext = {
+  def createBaseStepContext(premises: Seq[Statement], boundVariables: Seq[String])(using variableDefinitions: VariableDefinitions, availableEntries: AvailableEntries): StepContext = {
     val baseContext = createBaseStepContext(premises)
     boundVariables.foldLeft(baseContext) { case (context, variable) => context.addBoundVariable(variable) }
   }
 
-  def createBaseStepContext(premises: Seq[Statement], depth: Int)(implicit variableDefinitions: VariableDefinitions, availableEntries: AvailableEntries): StepContext = {
+  def createBaseStepContext(premises: Seq[Statement], depth: Int)(using variableDefinitions: VariableDefinitions, availableEntries: AvailableEntries): StepContext = {
     createBaseStepContext(premises, (0 until depth).map(i => s"x_$i"))
   }
 
-  def createOuterStepContext(boundVariables: Seq[String])(implicit variableDefinitions: VariableDefinitions, availableEntries: AvailableEntries): StepContext = {
+  def createOuterStepContext(
+    boundVariables: Seq[String])(
+    using variableDefinitions: VariableDefinitions,
+    availableEntries: AvailableEntries
+  ): StepContext = {
     createBaseStepContext(Nil, boundVariables).copy(parentReference = StepReference(outerStepPath))
   }
 
   def createTargetStepWithContext(
     statement: Statement)(
-    implicit outerStepContext: StepContext,
+    using outerStepContext: StepContext,
     availableEntries: AvailableEntries
   ): TypedStepWithContext[Step.TargetStep] = {
     createStepWithContext(Step.TargetStep(statement))
@@ -49,7 +53,7 @@ trait ContextHelper extends CustomMockitoStubs {
 
   def createStepWithContext[T <: Step : ClassTag](
     step: T)(
-    implicit outerStepContext: StepContext,
+    using outerStepContext: StepContext,
     availableEntries: AvailableEntries
   ): TypedStepWithContext[T] = {
     createStepsWithContext(Seq(step)).atChild(Nil, step)
@@ -57,10 +61,10 @@ trait ContextHelper extends CustomMockitoStubs {
 
   def createStepsWithContext(
     steps: Seq[Step])(
-    implicit outerStepContext: StepContext,
+    using outerStepContext: StepContext,
     availableEntries: AvailableEntries
   ): StepsWithContext = {
-    val provingContext = availableEntriesToProvingContext(availableEntries)
+    val provingContext = availableEntriesToProvingContext
     val proofWithContext = mock[ProofWithContext]
     proofWithContext.provingContext returns provingContext
     proofWithContext.availableEntries returns availableEntries
@@ -75,26 +79,26 @@ trait ContextHelper extends CustomMockitoStubs {
       proofWithContext)
   }
 
-  implicit def availableEntriesToProvingContext(implicit availableEntries: AvailableEntries): ProvingContext = ProvingContext(availableEntries, new Definitions(availableEntries))
-  implicit def availableEntriesToStepProvingContext(implicit availableEntries: AvailableEntries, stepContext: StepContext): StepProvingContext = new StepProvingContext()
+  given availableEntriesToProvingContext(using availableEntries: AvailableEntries): ProvingContext = ProvingContext(availableEntries, new Definitions(availableEntries))
+  given availableEntriesToStepProvingContext(using availableEntries: AvailableEntries, stepContext: StepContext): StepProvingContext = new StepProvingContext()
 
   def createAvailableEntries(entries: Seq[ChapterEntry]): AvailableEntries = {
-    val entriesWithContext = entries.map(createEntryWithContext(_)(null))
+    val entriesWithContext = entries.map(createEntryWithContext(_)(using null))
     val availableEntries = AvailableEntries(entriesWithContext)
     entriesWithContext.foreach(e => {
       e.availableEntries returns availableEntries
-      e.provingContext returns availableEntriesToProvingContext(availableEntries)
+      e.provingContext returns availableEntriesToProvingContext(using availableEntries)
     })
     availableEntries
   }
 
-  def createGlobalContext(implicit availableEntries: AvailableEntries): GlobalContext = {
+  def createGlobalContext(using availableEntries: AvailableEntries): GlobalContext = {
     val globalContext = mock[GlobalContext]
     globalContext.definitions returns Definitions(availableEntries)
     globalContext
   }
 
-  def createEntryWithContext[T <: ChapterEntry](entry: T)(implicit availableEntries: AvailableEntries): TypedEntryWithContext[T] = {
+  def createEntryWithContext[T <: ChapterEntry](entry: T)(using availableEntries: AvailableEntries): TypedEntryWithContext[T] = {
     val entryWithContext = mock[TypedEntryWithContext[T]]
     entryWithContext.entry returns entry
     entryWithContext.availableEntries returns availableEntries
@@ -103,14 +107,14 @@ trait ContextHelper extends CustomMockitoStubs {
     entryWithContext
   }
 
-  def createTheoremWithContext(theorem: Theorem)(implicit availableEntries: AvailableEntries): TheoremWithContext = {
+  def createTheoremWithContext(theorem: Theorem)(using availableEntries: AvailableEntries): TheoremWithContext = {
     val theoremWithContext = createEntryWithContext(theorem)
     theoremWithContext.theorem returns theorem
     when(theoremWithContext.proofsWithContext).thenCallRealMethod()
     theoremWithContext
   }
 
-  implicit def createChapterWithContext(implicit availableEntries: AvailableEntries): ChapterWithContext = {
+  given createChapterWithContext(using availableEntries: AvailableEntries): ChapterWithContext = {
     val chapterWithContext = mock[ChapterWithContext]
     chapterWithContext.chapter returns mock[Chapter]
     chapterWithContext.chapter.title returns "Test Chapter"
@@ -124,11 +128,11 @@ trait ContextHelper extends CustomMockitoStubs {
     chapterWithContext
   }
 
-  implicit def createEntryParsingContext(implicit availableEntries: AvailableEntries): EntryParsingContext = {
+  given createEntryParsingContext(using availableEntries: AvailableEntries): EntryParsingContext = {
     EntryParsingContext(
       "Book",
       "Chapter",
       mock[ProofFileReader])(
-      availableEntries)
+      using availableEntries)
   }
 }

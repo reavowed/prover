@@ -3,13 +3,13 @@ package net.prover
 import net.prover.util.PossibleSingleMatch
 import net.prover.util.PossibleSingleMatch.{MultipleMatches, NoMatches, SingleMatch}
 
-import scala.annotation.tailrec
-import scala.collection.{View, mutable, immutable}
+import scala.annotation.{tailrec, targetName}
+import scala.collection.{View, immutable, mutable}
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
 package object model {
-  implicit class AnyOps[T](t: T) {
+  extension [T] (t: T) {
     def asOptionalInstanceOf[S : ClassTag]: Option[S] = {
       if (isRuntimeInstance[S]) {
         Some(t.asInstanceOf[S])
@@ -22,7 +22,7 @@ package object model {
     }
   }
 
-  implicit class StringOps(s: String) {
+  extension (s: String) {
     def splitByWhitespace(max: Int = 0): Seq[String] = {
       s.trim.split("\\s+", max).toSeq.filter(_.nonEmpty)
     }
@@ -39,7 +39,7 @@ package object model {
     def decapitalize: String = s(0).toLower +: s.drop(1)
   }
 
-  implicit class Tuple2Ops[S,T](tuple: (S, T)) {
+  extension [S, T] (tuple: (S, T)) {
     def mapLeft[R](f: S => R): (R, T) = (f(tuple._1), tuple._2)
     def mapRight[R](f: T => R): (S, R) = (tuple._1, f(tuple._2))
     def optionMapLeft[R](f: S => Option[R]): Option[(R, T)] = f(tuple._1).map((_, tuple._2))
@@ -47,18 +47,19 @@ package object model {
     def toSet(implicit f: S =:= T): Set[T] = Set(f(tuple._1), tuple._2)
   }
 
-  implicit class Tuple3Ops[S,T,U](tuple: (S, T, U)) {
+  extension [S, T, U] (tuple: (S, T, U)) {
     def map1[R](f: S => R): (R, T, U) = (f(tuple._1), tuple._2, tuple._3)
     def map2[R](f: T => R): (S, R, U) = (tuple._1, f(tuple._2), tuple._3)
     def map3[R](f: U => R): (S, T, R) = (tuple._1, tuple._2, f(tuple._3))
     def optionMap2[R](f: T => Option[R]): Option[(S, R, U)] = f(tuple._2).map((tuple._1, _, tuple._3))
     def strip3: (S, T) = (tuple._1, tuple._2)
   }
-  implicit class Tuple4Ops[T1, T2, T3, T4](tuple: (T1, T2, T3, T4)) {
+
+  extension [T1, T2, T3, T4] (tuple: (T1, T2, T3, T4)) {
     def optionMap1[S](f: T1 => Option[S]): Option[(S, T2, T3, T4)] = f(tuple._1).map((_, tuple._2, tuple._3, tuple._4))
   }
 
-  implicit class SeqOps[T](seq: Seq[T]) {
+  extension [T] (seq: Seq[T]) {
     def headAndTailOption: Option[(T, Seq[T])] = +:.unapply(seq)
     def initAndLastOption: Option[(Seq[T], T)] = :+.unapply(seq)
     def flatMapFold[R, S](initial: R)(f: (R, T) => (R, Seq[S])): (R, Seq[S]) = {
@@ -219,14 +220,14 @@ package object model {
     }
   }
 
-  implicit class SeqSeqOps[T](seq: Seq[Seq[T]]) {
+  extension [T] (seq: Seq[Seq[T]]) {
     def minByLength: Option[Seq[T]] = seq match {
       case Nil => None
       case seq => Some(seq.minBy(_.length))
     }
   }
 
-  implicit class IterableOps[T, CC[_], C](iterable: scala.collection.IterableOps[T, CC, C]) {
+  extension [T, CC[_], C] (iterable: scala.collection.IterableOps[T, CC, C]) {
     def mapFold[R, S](initial: R)(f: (R, T) => (R, S)): (R, CC[S]) = {
       iterable.foldLeft((initial, iterable.iterableFactory.newBuilder[S])) { case ((accumulator, builder), t) =>
         f(accumulator, t).mapRight(builder += _)
@@ -250,7 +251,7 @@ package object model {
     }
   }
 
-  implicit class IterableOptionOps[T, CC[_], C](iterable: scala.collection.IterableOps[Option[T], CC, C]) {
+  extension [T, CC[_], C] (iterable: scala.collection.IterableOps[Option[T], CC, C]) {
     def collectDefined: CC[T] = {
       iterable.collect {
         case Some(t) => t
@@ -267,25 +268,25 @@ package object model {
     }.map(_.result())
   }
 
-  implicit class Seq2TupleOps[S, T](seq: Seq[(S, T)]) {
+  extension [S, T] (seq: Seq[(S, T)]) {
     def split: (Seq[S], Seq[T]) = {
       (seq.map(_._1), seq.map(_._2))
     }
   }
 
-  implicit class Seq2TupleSeqOps[S, T](seq: Seq[(Seq[S], Seq[T])]) {
+  extension [S, T] (seq: Seq[(Seq[S], Seq[T])]) {
     def splitFlatten: (Seq[S], Seq[T]) = {
       (seq.flatMap(_._1), seq.flatMap(_._2))
     }
   }
 
-  implicit class Seq3TupleOps[S, T, R](seq: Seq[(S, T, R)]) {
+  extension [S, T, R] (seq: Seq[(S, T, R)]) {
     def split: (Seq[S], Seq[T], Seq[R]) = {
       (seq.map(_._1), seq.map(_._2), seq.map(_._3))
     }
   }
 
-  implicit class SetOps[T](set: Set[T]) {
+  extension [T] (set: Set[T]) {
     def ofType[S : ClassTag]: Set[S] = {
       set
         .collect {
@@ -307,7 +308,7 @@ package object model {
     }
   }
 
-  implicit class IterableTryOps[T, CC[_], C](traversable: scala.collection.IterableOps[Try[T], CC, C]) {
+  extension [T, CC[_], C] (traversable: scala.collection.IterableOps[Try[T], CC, C]) {
     def traverseTry: Try[CC[T]] = {
       traversable.foldLeft(Try(traversable.iterableFactory.newBuilder[T])) { case (builderTry, valueTry) =>
         for {
@@ -318,7 +319,7 @@ package object model {
     }.map(_.result())
   }
 
-  implicit class IteratorOps[T](iterator: Iterator[T]) {
+  extension [T] (iterator: Iterator[T]) {
     def headOption: Option[T] = {
       if (iterator.hasNext)
         Some(iterator.next())
@@ -360,7 +361,7 @@ package object model {
     }
   }
 
-  implicit class BooleanOps(x: Boolean) {
+  extension (x: Boolean) {
     def orFail(e: => Exception): Try[Unit] = if (x) {
       Success(())
     } else {
@@ -368,7 +369,7 @@ package object model {
     }
   }
 
-  implicit class OptionOps[T](x: Option[T]) {
+  extension [T] (x: Option[T]) {
     def ifDefined(action: => Unit): Option[T] = {
       if (x.nonEmpty) action
       x
@@ -383,7 +384,7 @@ package object model {
     }
   }
 
-  implicit class OptionOptionOps[T](x: Option[Option[T]]) {
+  extension [T] (x: Option[Option[T]]) {
     def swap: Option[Option[T]] = x match {
       case Some(None) => None
       case None => Some(None)
@@ -391,7 +392,7 @@ package object model {
     }
   }
 
-  implicit class OptionTryOps[T](x: Option[Try[T]]) {
+  extension [T] (x: Option[Try[T]]) {
     def orException(exception: Exception): Try[T] = x match {
       case Some(t) => t
       case None => Failure(exception)
@@ -403,7 +404,7 @@ package object model {
     }
   }
 
-  implicit class SeqStringOps(seq: Seq[String]) {
+  extension (seq: Seq[String]) {
     def indent: Seq[String] = seq.map("  " + _)
     def indentInLabelledBracesIfPresent(label: String): Seq[String] = {
       if (seq.nonEmpty) {
@@ -417,7 +418,7 @@ package object model {
     }
   }
 
-  implicit class MapOps[S, T](map: Map[S, T]) {
+  extension [S, T] (map: Map[S, T]) {
     def tryAdd(key: S, value: T): Option[Map[S, T]] = {
       map.get(key) match {
         case Some(`value`) =>
@@ -433,7 +434,7 @@ package object model {
     }
   }
 
-  implicit class MapOptionOps[S, T](map: Map[S, Option[T]]) {
+  extension [S, T] (map: Map[S, Option[T]]) {
     def traverseOption: Option[Map[S, T]] = {
       map.map { case (s, tOption) => tOption.map(s -> _) }
         .traverseOption
@@ -441,7 +442,8 @@ package object model {
     }
   }
 
-  implicit class SeqEitherOps[A, B](seq: Seq[Either[A, B]]) {
+  extension [A, B] (seq: Seq[Either[A, B]]) {
+    @targetName("splitEither")
     def split: (Seq[A], Seq[B]) = {
       val aBuilder = Seq.newBuilder[A]
       val bBuilder = Seq.newBuilder[B]

@@ -32,21 +32,21 @@ object ExpressionUtils {
     for {
       definedStatement <- statement.asOptionalInstanceOf[DefinedStatement]
       typeDefinition <- availableEntries.typeDefinitions.values.find(_.statementDefinition == definedStatement.definition)
-      mainTerm +: qualifierTerms <- definedStatement.components.map(_.asOptionalInstanceOf[Term]).traverseOption
+      case mainTerm +: qualifierTerms <- definedStatement.components.map(_.asOptionalInstanceOf[Term]).traverseOption
     } yield TypeStatement(typeDefinition, mainTerm, qualifierTerms, None, Nil, statement)
   }
   def getTypeQualifierStatement(statement: Statement)(implicit availableEntries: AvailableEntries): Option[TypeQualifierStatement] = {
     for {
       definedStatement <- statement.asOptionalInstanceOf[DefinedStatement]
       typeQualifierDefinition <- availableEntries.qualifiersByType.values.flatten.find(_.statementDefinition == definedStatement.definition)
-      mainTerm +: qualifierTerms <- definedStatement.components.map(_.asOptionalInstanceOf[Term]).traverseOption
+      case mainTerm +: qualifierTerms <- definedStatement.components.map(_.asOptionalInstanceOf[Term]).traverseOption
     } yield TypeQualifierStatement(typeQualifierDefinition, mainTerm, qualifierTerms, statement)
   }
   def getTypePropertyStatement(statement: Statement)(implicit availableEntries: AvailableEntries): Option[TypePropertyStatement] = {
     for {
       definedStatement <- statement.asOptionalInstanceOf[DefinedStatement]
       propertyDefinitionOnType <- availableEntries.propertyDefinitionsByType.values.flatten.find(_.statementDefinition == definedStatement.definition)
-      mainTerm +: qualifierTerms <- definedStatement.components.map(_.asOptionalInstanceOf[Term]).traverseOption
+      case mainTerm +: qualifierTerms <- definedStatement.components.map(_.asOptionalInstanceOf[Term]).traverseOption
     } yield TypePropertyStatement(propertyDefinitionOnType, mainTerm, qualifierTerms, statement)
   }
   private def getTypeStatementWithOptionalQualifier(statement: Statement)(implicit availableEntries: AvailableEntries): Option[TypeStatement] = {

@@ -20,14 +20,14 @@ object ReadChapter {
     val parser = for {
       summary <- Parser.toEndOfLine
       initialChapter = Chapter(chapterTitle, summary, ListWithKeys.empty)
-      chapter <- KnownWordParser.foldWhileDefined[Chapter](initialChapter) { chapter: Chapter =>
+      chapter <- KnownWordParser.foldWhileDefined[Chapter](initialChapter) { (chapter: Chapter) =>
         val updatedBook = bookSoFar.addChapter(chapter)
         val (updatedBooks, updatedBookKey) = previousBooks.addAndGetKey(updatedBook)
         val bookWithContext = BookWithContext(updatedBook, updatedBookKey, GlobalContext(updatedBooks))
         val chapterWithContext = bookWithContext.getChapter(chapter)
         val availableEntries = AvailableEntries.forChapterInclusive(chapterWithContext)
         val proofFileReader = ProofFileReader(chapterDirectoryPath, chapter.entriesWithKeys.keyAccumulator)
-        val entryParsingContext = EntryParsingContext(bookWithContext.book.title, chapterTitle, proofFileReader)(availableEntries)
+        val entryParsingContext = EntryParsingContext(bookWithContext.book.title, chapterTitle, proofFileReader)(using availableEntries)
         ChapterEntry.parser(entryParsingContext).map {chapter.addEntry}
       }
     } yield chapter

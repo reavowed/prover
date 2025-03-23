@@ -1,12 +1,12 @@
 package net.prover.theorems
 
-import net.prover.controllers.models._
-import net.prover.controllers.{BookService, BooleanWithResponseExceptionOps, OptionWithResponseExceptionOps}
+import net.prover.controllers.*
+import net.prover.controllers.models.*
 import net.prover.entries.StepsWithContext
-import net.prover.model._
+import net.prover.model.*
 import net.prover.model.proof.Step
 import net.prover.theorems.steps.{InsertExternalBoundVariables, RemoveExternalBoundVariables}
-import net.prover.util.FunctorTypes._
+import net.prover.util.FunctorTypes.*
 
 import scala.annotation.tailrec
 import scala.util.{Success, Try}
@@ -20,7 +20,7 @@ object MoveSteps {
     stepMoveRequest: StepMoveRequest)(
     implicit bookService: BookService
   ): Try[ProofUpdateProps[InsertionAndDeletionProps]] = {
-    import stepMoveRequest._
+    import stepMoveRequest.*
     @tailrec def commonPrefix[T](a: Seq[T], b: Seq[T], acc: Seq[T] = Nil): (Seq[T], Seq[T], Seq[T]) = {
       (a, b) match {
         case (headA +: tailA, headB +: tailB) if headA == headB =>

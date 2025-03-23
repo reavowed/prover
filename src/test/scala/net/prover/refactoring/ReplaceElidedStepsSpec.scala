@@ -1,21 +1,21 @@
 package net.prover.refactoring
 
 import net.prover.StepBuilderHelper
-import net.prover.model.TermVariablePlaceholder
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.*
 import net.prover.model.expressions.DefinedStatement
 import net.prover.model.proof.Step.AssertionStep
-import net.prover.model.proof.{Step, SubstitutionContext}
+import net.prover.model.proof.{Step, StepContext, SubstitutionContext}
+import net.prover.model.{AvailableEntries, TermVariablePlaceholder, VariableDefinitions}
 import net.prover.theorems.RecalculateReferences
 import org.specs2.mutable.Specification
 
 class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
-  implicit val availableEntries = defaultAvailableEntries
+  given availableEntries: AvailableEntries = defaultAvailableEntries
 
   "replace elided steps" should {
     "replace a wrapped assertion" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 0), Nil)
-      implicit val outerStepContext = createOuterStepContext(Nil)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 0), Nil)
+      given outerStepContext: StepContext = createOuterStepContext(Nil)
 
       val initialSteps = recalculateReferences(Seq(
         target(ForAll("x")(Implication(φ($), ψ))),
@@ -34,12 +34,12 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
             assertion(modusTollens, Seq(φ($), ψ), Nil)))))
       )(SubstitutionContext.outsideProof))
 
-      ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
+      ReplaceElidedSteps(createStepsWithContext(initialSteps)) must beEqualTo(expectedSteps)
     }
 
     "replace an extraction" in {
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0))
-      implicit val outerStepContext = createOuterStepContext(Nil)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0))
+      given outerStepContext: StepContext = createOuterStepContext(Nil)
 
       val initialSteps = recalculateReferences(Seq(
         target(Equals(a, b)),
@@ -59,14 +59,14 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
             assertion(modusPonens, Seq(Equals(a, b), ElementOf(a, Singleton(b))), Nil)))
       )(SubstitutionContext.outsideProof))
 
-      ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
+      ReplaceElidedSteps(createStepsWithContext(initialSteps)) must beEqualTo(expectedSteps)
     }
 
     "retain bound variable names when replacing an extraction" in {
       val f = TermVariablePlaceholder("f", 0)
       val x = TermVariablePlaceholder("x", 0)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(f -> 0, x-> 0))
-      implicit val outerStepContext = createOuterStepContext(Nil)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(f -> 0, x-> 0))
+      given outerStepContext: StepContext = createOuterStepContext(Nil)
 
       val initialSteps = recalculateReferences(Seq(
         target(Function(f)),
@@ -88,23 +88,23 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
 
       val actualSteps = ReplaceElidedSteps(createStepsWithContext(initialSteps))
 
-      actualSteps mustEqual expectedSteps
+      actualSteps must beEqualTo(expectedSteps)
       actualSteps.last.asInstanceOf[Step.InferenceExtractionStep]
         .inferenceExtraction.extraction.extractionSteps.last.statement.asInstanceOf[DefinedStatement]
-        .boundVariableNames mustEqual Seq("y")
+        .boundVariableNames must beEqualTo(Seq("y"))
       actualSteps.last.asInstanceOf[Step.InferenceExtractionStep]
         .inferenceExtraction.extraction.extractionSteps.last.toProofStep.asInstanceOf[AssertionStep]
         .substitutions.statements.last.asInstanceOf[DefinedStatement]
-        .boundVariableNames mustEqual Seq("y")
+        .boundVariableNames must beEqualTo(Seq("y"))
       actualSteps.last.asInstanceOf[Step.InferenceExtractionStep]
         .inferenceExtraction.extraction.extractionSteps.init.last.statement.asInstanceOf[DefinedStatement]
         .components.last.asInstanceOf[DefinedStatement]
-        .boundVariableNames mustEqual Seq("y")
+        .boundVariableNames must beEqualTo(Seq("y"))
     }
 
     "replace a rewrite" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0, b -> 0))
-      implicit val outerStepContext = createOuterStepContext(Nil)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0, b -> 0))
+      given outerStepContext: StepContext = createOuterStepContext(Nil)
         val initialSteps = recalculateReferences(Seq(
           target(ElementOf(a, Naturals)),
           target(ElementOf(b, Naturals)),
@@ -121,12 +121,12 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
             assertion(equivalenceOfSubstitutedEquals, Seq(φ($)), Seq(add(a, b), add(b, a))))
         )(SubstitutionContext.outsideProof))
 
-        ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
+        ReplaceElidedSteps(createStepsWithContext(initialSteps)) must beEqualTo(expectedSteps)
     }
 
     "replace an existing statement extraction" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
-      implicit val outerStepContext = createOuterStepContext(Nil)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      given outerStepContext: StepContext = createOuterStepContext(Nil)
 
       val mainPremise = ForAll("x")(Implication(φ($), ψ($)))
       val subsidiaryPremise = φ(a)
@@ -146,12 +146,12 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
           assertion(modusPonens, Seq(φ(a), ψ(a)), Nil)))
         )(SubstitutionContext.outsideProof))
 
-      ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
+      ReplaceElidedSteps(createStepsWithContext(initialSteps)) must beEqualTo(expectedSteps)
     }
 
     "replace an existing statement extraction with premises" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
-      implicit val outerStepContext = createOuterStepContext(Nil)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      given outerStepContext: StepContext = createOuterStepContext(Nil)
 
       val mainPremise = ForAll("x")(Implication(Conjunction(φ($), ψ($)), χ($)))
       val firstSubsidiaryPremise = φ(a)
@@ -178,7 +178,7 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
             assertion(modusPonens, Seq(Conjunction(φ(a), ψ(a)), χ(a)), Nil)))
       )(SubstitutionContext.outsideProof))
 
-      ReplaceElidedSteps(createStepsWithContext(initialSteps)) mustEqual expectedSteps
+      ReplaceElidedSteps(createStepsWithContext(initialSteps)) must beEqualTo(expectedSteps)
 
     }
   }

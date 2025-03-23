@@ -1,8 +1,8 @@
 package net.prover.model.definitions
 
+import net.prover.model.*
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, SubstitutionContext}
-import net.prover.model.{Inference, Substitutions}
 
 sealed trait DerivedPremise {
   def getRootPremises: Seq[Statement]

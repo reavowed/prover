@@ -1,5 +1,6 @@
 package net.prover.theorems
 
+import net.prover.model.*
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof.Step
 

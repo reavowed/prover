@@ -1,18 +1,18 @@
 package net.prover.model
 
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.{*, given}
 import net.prover.model.entries.{ChapterEntry, TermDefinitionEntry}
 import net.prover.model.expressions.FunctionParameter
-import org.specs2.matcher.MatchResult
+import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
 class TermDefinitionSpec extends Specification {
 
-  private def testParsingAndSerialization(termDefinition: TermDefinitionEntry): MatchResult[Any] = {
-    implicit val availableEntries = defaultAvailableEntries
+  private def testParsingAndSerialization(termDefinition: TermDefinitionEntry): Result = {
+    given availableEntries: AvailableEntries = defaultAvailableEntries
     val serializedDefinition = termDefinition.serializedLines.mkString("\n")
     val reparsedDefinition = ChapterEntry.parser.parseAndDiscard(serializedDefinition)
-    reparsedDefinition mustEqual termDefinition
+    reparsedDefinition must beEqualTo(termDefinition)
   }
 
   "term definition parser" should {

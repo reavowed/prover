@@ -3,22 +3,23 @@ package net.prover.proving.fromExistingStatement
 import net.prover.ContextHelper
 import net.prover.controllers.BookService
 import net.prover.controllers.models.{PathData, PossibleConclusionWithPremises, SuggestedSubstitutions}
-import net.prover.model.TestDefinitions._
-import net.prover.model.proof.Step
+import net.prover.model.TestDefinitions.*
+import net.prover.model.{AvailableEntries, VariableDefinitions}
+import net.prover.model.proof.{Step, StepContext}
 import org.specs2.mutable.Specification
 
 import scala.util.Success
 
 class SuggestExistingStatementsForCurrentTargetSpec extends Specification with ContextHelper with PossibleConclusionMatchers {
-  implicit val availableEntries = defaultAvailableEntries
+  given availableEntries: AvailableEntries = defaultAvailableEntries
 
   "SuggestExistingStatementsForCurrentTarget" should {
     "suggest all extractions from an existing statement" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
       val premise = ForAll("x")(Implication(φ($), ψ($)))
       val target = Negation(φ(a))
-      implicit val service = mock[BookService]
-      implicit val stepContext = createBaseStepContext(Seq(premise))
+      given service: BookService = mock[BookService]
+      given stepContext: StepContext = createBaseStepContext(Seq(premise))
       service.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
         Success(createTargetStepWithContext(target))
 
@@ -30,11 +31,11 @@ class SuggestExistingStatementsForCurrentTargetSpec extends Specification with C
     }
 
     "suggest substitutions at correct depth" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
       val premise = ForAll("y")(Implication(φ($), ψ($)))
       val target = ψ(a)
-      implicit val service = mock[BookService]
-      implicit val stepContext = createBaseStepContext(Seq(premise), Seq("x"))
+      given service: BookService = mock[BookService]
+      given stepContext: StepContext = createBaseStepContext(Seq(premise), Seq("x"))
       service.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns
         Success(createTargetStepWithContext(target))
 

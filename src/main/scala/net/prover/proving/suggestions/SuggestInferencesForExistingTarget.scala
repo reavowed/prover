@@ -1,8 +1,8 @@
 package net.prover.proving.suggestions
 
 import net.prover.controllers.BookService
-import net.prover.controllers.models._
-import net.prover.model.Inference
+import net.prover.controllers.models.*
+import net.prover.model.*
 import net.prover.model.proof.Step
 import net.prover.model.unwrapping.{GeneralizationUnwrapper, UnwrappedStatement}
 

@@ -2,7 +2,7 @@ package net.prover.controllers
 
 import net.prover.JsonMapping
 import net.prover.controllers.models.{DefinitionSummary, StandalonePropertyDefinitionSummary, TypeDefinitionSummary, TypeRelationDefinitionSummary}
-import net.prover.model.AvailableEntries
+import net.prover.model.*
 import net.prover.model.entries.DisplayShorthand
 
 import scala.xml.Unparsed

@@ -1,5 +1,6 @@
 package net.prover.proving.premiseFinding
 
+import net.prover.model.*
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepProvingContext}

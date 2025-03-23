@@ -1,12 +1,12 @@
 package net.prover.controllers
 
 import net.prover.controllers.StepChainingController.ChainedTargetDefinition
-import net.prover.controllers.models._
+import net.prover.controllers.models.*
 import net.prover.entries.StepWithContext
-import net.prover.model.definitions._
+import net.prover.model.definitions.*
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof._
-import net.prover.model.{ExpressionParsingContext, Inference, ProvingContext, SeqOps, Substitutions}
+import net.prover.model.proof.*
+import net.prover.model.*
 import net.prover.proving.FindInference
 import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
 import net.prover.proving.structure.inferences.RelationExpansion
@@ -15,7 +15,7 @@ import net.prover.proving.suggestions.SuggestInferences
 import net.prover.util.Direction
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation._
+import org.springframework.web.bind.annotation.*
 
 import scala.reflect.ClassTag
 import scala.util.{Success, Try}

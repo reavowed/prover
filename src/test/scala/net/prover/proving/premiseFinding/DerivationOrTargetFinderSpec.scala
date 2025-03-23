@@ -1,21 +1,21 @@
 package net.prover.proving.premiseFinding
 
-import net.prover.{ContextHelper, StepHelpers}
-import net.prover.model.TestDefinitions.{a, b, _}
+import net.prover.model.*
+import net.prover.model.TestDefinitions.{a, b, *}
 import net.prover.model.expressions.Statement
-import net.prover.model.proof._
-import net.prover.model.{AvailableEntries, TestDefinitions}
+import net.prover.model.proof.*
+import net.prover.{ContextHelper, StepHelpers}
 import org.specs2.mutable.Specification
 
 class DerivationOrTargetFinderSpec extends Specification with ContextHelper with StepHelpers {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0), Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "premise finder" should {
 
     def findPremiseOrTarget(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries): (Seq[Step], Seq[Statement]) = {
-      implicit val stepContext = createBaseStepContext(premises, depth)
+      given stepContext: StepContext = createBaseStepContext(premises, depth)
       DerivationOrTargetFinder.findDerivationsOrTargets(Seq(target))
         .mapLeft(ks => ks.flatMap(_.derivation.steps).distinct.map(_.toProofStep))
         .mapRight(_.map(_.statement))
@@ -25,10 +25,10 @@ class DerivationOrTargetFinderSpec extends Specification with ContextHelper with
       findPremiseOrTarget(
         Conjunction(φ, ψ),
         Seq(φ)
-      ) mustEqual (
+      ) must beEqualTo((
         Seq(assertion(combineConjunction, Seq(φ, ψ), Nil)(SubstitutionContext.outsideProof)),
         Seq(ψ.toVariable)
-      )
+      ))
     }
 
     "replace terms in a target using a fact" in {
@@ -43,7 +43,7 @@ class DerivationOrTargetFinderSpec extends Specification with ContextHelper with
         ForAllIn("x", Domain(Addition))(ForAllIn("y", Domain(Addition))(φ($.^, $))),
         Nil)(
         defaultAvailableEntriesPlus(axiom)
-      ) mustEqual (
+      ) must beEqualTo((
         Seq(
           inferenceExtraction(
             assertion(axiom, Nil, Nil),
@@ -54,17 +54,18 @@ class DerivationOrTargetFinderSpec extends Specification with ContextHelper with
                   assertion(reverseEquality, Nil, Seq(Domain(Addition), Product(Naturals, Naturals))))))),
           assertion(substitutionOfEquals, Seq(ForAllIn("x", $.^)(ForAllIn("y", $.^^)(φ($.^, $)))), Seq(Product(Naturals, Naturals), Domain(Addition))))(SubstitutionContext.outsideProof),
         Seq(ForAllIn("x", Product(Naturals, Naturals))(ForAllIn("y", Product(Naturals, Naturals))(φ($.^, $)))))
-    }
-
-    "deconstruct a non-type-statement target" in {
-      findPremiseOrTarget(Conjunction(φ, ψ), Nil) mustEqual (
-        Seq(assertion(combineConjunction, Seq(φ, ψ), Nil)(SubstitutionContext.outsideProof)),
-        Seq(φ.toVariable, ψ.toVariable)
       )
     }
 
+    "deconstruct a non-type-statement target" in {
+      findPremiseOrTarget(Conjunction(φ, ψ), Nil) must beEqualTo((
+        Seq(assertion(combineConjunction, Seq(φ, ψ), Nil)(SubstitutionContext.outsideProof)),
+        Seq(φ.toVariable, ψ.toVariable)
+      ))
+    }
+
     "not deconstruct a type-statement target" in {
-      findPremiseOrTarget(Conjunction(Function(a), FunctionFrom(a, b, c)), Nil) mustEqual (Nil, Seq(Conjunction(Function(a), FunctionFrom(a, b, c))))
+      findPremiseOrTarget(Conjunction(Function(a), FunctionFrom(a, b, c)), Nil) must beEqualTo((Nil, Seq(Conjunction(Function(a), FunctionFrom(a, b, c)))))
     }
   }
 }

@@ -9,10 +9,9 @@ import net.prover.model.proof.{Premise, Step, StepContext, SubstitutionContext}
 import net.prover.model.{AvailableEntries, Substitutions, VariableDefinitions}
 import net.prover.theorems.RecalculateReferences
 import org.specs2.matcher.Matcher
-import org.specs2.mock.mockito.MockitoStubs
 import org.specs2.mutable.SpecificationLike
 
-trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with ContextHelper with StepHelpers {
+trait StepBuilderHelper extends SpecificationLike with MockitoHelpers with ContextHelper with StepHelpers {
 
   def createTheorem(premises: Seq[Statement], steps: Seq[Step])(implicit variableDefinitions: VariableDefinitions): Theorem = {
     createTheorem(premises, steps.last.statement, steps)
@@ -39,7 +38,7 @@ trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with C
     variableDefinitions: VariableDefinitions
   ): Seq[Step] = {
     val steps = stepsConstructor(SubstitutionContext.withExtraParameters(boundVariables.length)(SubstitutionContext.outsideProof))
-    implicit val outerStepContext = createOuterStepContext(boundVariables)
+    given outerStepContext: StepContext = createOuterStepContext(boundVariables)
     recalculateReferences(steps)
   }
 
@@ -55,10 +54,10 @@ trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with C
     val recalculatedTheorem = RecalculateReferences(createTheoremWithContext(theorem)).get._1
     val serializedTheorem = recalculatedTheorem.serializedLines.mkString("\n").stripPrefix("theorem ")
     val serializedProofs = recalculatedTheorem.proofs.map(_.serialized)
-    implicit val entryParsingContext = implicitly[EntryParsingContext]
+    given entryParsingContext: EntryParsingContext = summon
     entryParsingContext.proofFileReader.getSerializedProofs(recalculatedTheorem.title) returns serializedProofs
-    val parsedTheorem = Theorem.parser(entryParsingContext).parseFromString(serializedTheorem, "Theorem")
-    parsedTheorem must beTypedEqualTo(theorem)
+    val parsedTheorem = Theorem.parser.parseFromString(serializedTheorem, "Theorem")
+    parsedTheorem must beEqualTo(theorem)
   }
 
   def beValidAndCompleteTheorem(implicit availableEntries: AvailableEntries): Matcher[Theorem] = {
@@ -76,7 +75,7 @@ trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with C
   }
 
   def beStepThatMakesValidAndCompleteTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int = 0)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Step] = {
-    beStepsThatMakeValidAndCompleteTheorem(premises, conclusion, depth) ^^ { step: Step => Seq(step) }
+    beStepsThatMakeValidAndCompleteTheorem(premises, conclusion, depth) ^^ { (step: Step) => Seq(step) }
   }
 
   def beStepsThatMakeValidAndCompleteTheorem(premises: Seq[Statement], conclusion: Statement, depth: Int)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
@@ -95,8 +94,13 @@ trait StepBuilderHelper extends SpecificationLike with CustomMockitoStubs with C
           Substitutions(Seq(statement.specify(Seq(FunctionParameter(0, depth - parameterDepth)), 0, 0).get), Seq($)))
       }
 
-      beStepsThatMakeValidAndCompleteTheorem(premises.map(generalizeToDepth(_, depth)), generalizeToDepth(conclusion, depth)) ^^ { steps: Seq[Step] =>
-        (0 until depth).foldLeft(steps) { case (steps, i) => Seq(Step.GeneralizationStep(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, GeneralizationDefinition)) }
+      beStepsThatMakeValidAndCompleteTheorem(
+        premises.map(generalizeToDepth(_, depth)),
+        generalizeToDepth(conclusion, depth)
+      ) ^^ { (steps: Seq[Step]) =>
+        (0 until depth).foldLeft(steps) { case (steps, i) =>
+          Seq(Step.GeneralizationStep(s"x_$i", premises.map(p => specificationStep(generalizeToDepth(p, i), i)) ++ steps, GeneralizationDefinition))
+        }
       }
     }
   }

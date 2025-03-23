@@ -1,6 +1,6 @@
 package net.prover.proving.structure.inferences
 
-import net.prover.model.ProvingContext
+import net.prover.model.*
 import net.prover.model.definitions.{Definitions, KnownStatement}
 import net.prover.model.expressions.{Statement, Term}
 import net.prover.model.proof.SubstitutionContext
@@ -8,7 +8,7 @@ import net.prover.model.utils.ExpressionUtils
 import net.prover.proving.extraction.{ExtractionApplier, InferenceExtraction}
 import net.prover.proving.structure.statements.{BinaryRelation, BinaryRelationStatement}
 
-import scala.Ordering.Implicits._
+import scala.Ordering.Implicits.*
 
 /**
   * An inference that takes a binary relation premise to one with a simpler right-hand side.

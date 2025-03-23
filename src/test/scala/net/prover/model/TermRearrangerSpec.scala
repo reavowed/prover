@@ -1,30 +1,35 @@
 package net.prover.model
 
-import net.prover.{StepBuilderHelper, ContextHelper}
-import net.prover.model.TestDefinitions._
+import net.prover.{ContextHelper, StepBuilderHelper}
+import net.prover.model.TestDefinitions.*
 import net.prover.model.expressions.{Statement, Term}
-import net.prover.model.proof.{Step, TermRearranger}
+import net.prover.model.proof.{Step, StepContext, TermRearranger}
 import net.prover.theorems.RecalculateReferences
 import net.prover.util.Direction
-import org.specs2.matcher.MatchResult
+import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 import org.specs2.specification.core.Fragments
 
 class TermRearrangerSpec extends Specification with StepBuilderHelper {
 
-  implicit val availableEntries = defaultAvailableEntries
+  given availableEntries: AvailableEntries = defaultAvailableEntries
   val e = TermVariablePlaceholder("e", 4)
   val f = TermVariablePlaceholder("f", 5)
-  implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, e -> 0, f -> 0))
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, e -> 0, f -> 0))
 
   "rearranging a statement" should {
     def rearrange(targetStatement: Statement, premises: Seq[Statement])(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Option[Step] = {
-      implicit val stepContext = createBaseStepContext(premises)
+      given stepContext: StepContext = createBaseStepContext(premises)
       TermRearranger.rearrange(targetStatement)
         .map(step => recalculateReferences(Seq(step)).head)
     }
 
-    def testRearranging(targetStatement: Statement, premises: Seq[Statement])(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): MatchResult[Any] = {
+    def testRearranging(
+      targetStatement: Statement,
+      premises: Seq[Statement])(
+      implicit availableEntries: AvailableEntries,
+      variableDefinitions: VariableDefinitions
+    ): Result = {
       val step = rearrange(targetStatement, premises)
       step must beSome(beStepThatMakesValidAndCompleteTheorem(premises, targetStatement))
     }
@@ -50,7 +55,7 @@ class TermRearrangerSpec extends Specification with StepBuilderHelper {
 
     "rearrange inside a function" in {
       val F = TermVariablePlaceholder("F", 4)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, F -> 2))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0, F -> 2))
       val conclusion = Equals(F(add(add(a, b), add(c, d)), add(c, d)), F(add(add(a, c), add(b, d)), add(d, c)))
       testRearranging(conclusion, Nil)
     }
@@ -66,15 +71,22 @@ class TermRearrangerSpec extends Specification with StepBuilderHelper {
       testRearranging(conclusion, Nil)
     }
 
-    def testReversableOperationMultipleWays(description: String, f: (Term, Term) => Term, a: Term, b: Term, result: Term, premises: Seq[Statement] = Nil): Fragments = {
+    def testReversableOperationMultipleWays(
+      description: String,
+      f: (Term, Term) => Term,
+      a: Term,
+      b: Term,
+      result: Term,
+      premises: Seq[Statement] = Nil
+    ): Fragments = {
       Fragments.foreach(Seq((Direction.Forward, "left"), (Direction.Reverse, "right"))) { case (interiorDirection, directionDescription) =>
         Fragments.foreach(Seq((Direction.Forward, "LHS"), (Direction.Reverse, "RHS"))) { case (sideDirection, sideDescription) =>
           Fragments.foreach(Seq[(Term => Term, Term => Term, String)]((identity[Term], identity[Term], "main"), (add(_, multiply(d, e)), add(multiply(e, d), _), "inner"))) { case (sourceWrapper, resultWrapper, wrapperDescription) =>
-            s"rearrange using $directionDescription $description on $wrapperDescription $sideDescription" >> {
+            fragmentFactory.example(s"rearrange using $directionDescription $description on $wrapperDescription $sideDescription", {
               val source = f.tupled(interiorDirection.swapSourceAndResult(a, b))
               val statement = (Equals.apply(_: Term, _: Term)).tupled(sideDirection.swapSourceAndResult(sourceWrapper(source), resultWrapper(result)))
               testRearranging(statement, premises)
-            }
+            })
           }
         }
       }

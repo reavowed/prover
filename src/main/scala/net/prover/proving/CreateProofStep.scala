@@ -2,10 +2,10 @@ package net.prover.proving
 
 import net.prover.controllers.models.StepDefinition
 import net.prover.controllers.{AnyWithResponseExceptionOps, OptionWithResponseExceptionOps}
+import net.prover.model.*
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepProvingContext}
 import net.prover.model.unwrapping.Unwrapper
-import net.prover.model.{ExpressionParsingContext, Substitutions}
 import net.prover.proving.extraction.{ExtractionApplier, ExtractionCalculator}
 
 import scala.util.Try

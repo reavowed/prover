@@ -32,9 +32,9 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
   }
 
   private lazy val allPremiseExtractions: Seq[KnownStatement] = {
-    val given = premisesAndSimplifications.map(_._1).map(p => KnownStatement(p.statement, SimpleDerivation.empty))
+    val `given` = premisesAndSimplifications.map(_._1).map(p => KnownStatement(p.statement, SimpleDerivation.empty))
     val simplified = premisesAndSimplifications.flatMap(_._2).map(p => KnownStatement(p.statement, SimpleDerivation.empty))
-    val givenAndSimplified = given ++ simplified
+    val givenAndSimplified = `given` ++ simplified
     val extracted = for {
       premise <- allPremises
       extraction <- ExtractionCalculator.getPremiseExtractions(premise.statement)
@@ -98,4 +98,3 @@ object StepProvingContext {
   implicit def fromStepWithContext(stepWithContext: StepWithContext): StepProvingContext = stepWithContext.stepProvingContext
   implicit def implicitlyFromStepWithContext(implicit stepWithContext: StepWithContext): StepProvingContext = fromStepWithContext(stepWithContext)
 }
-

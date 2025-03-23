@@ -7,7 +7,6 @@ import net.prover.parsing.{KnownWordParser, Parser}
 import net.prover.proving.extraction.AppliedInferenceExtraction
 
 sealed trait RewritePremise extends StepLike.Wrapper {
-  def length: Int
   def toProofSteps: Seq[Step]
   def explicitInference: Option[Inference.Summary] = None
   def fallbackInference: Option[Inference.Summary] = None

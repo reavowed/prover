@@ -1,18 +1,19 @@
 package net.prover.model.proof;
 
-import net.prover.model.TestDefinitions._
+import net.prover.model.AvailableEntries
+import net.prover.model.TestDefinitions.*
 import net.prover.model.proof.DisplayStepMatchers.referenceStep
 import net.prover.theorems.{DisplayStep, GetDisplaySteps, RecalculateReferences}
 import net.prover.{StepBuilderHelper, StepHelpers}
 import org.specs2.mutable.Specification
 
 class RewriteStepSpec extends Specification with StepHelpers with StepBuilderHelper {
-  implicit val availableEntries = defaultAvailableEntries
+  given availableEntries: AvailableEntries = defaultAvailableEntries
   "rewrite step" should {
     "match references to steps" in {
       // Regression test for a bug where the structure of RewritePremise.ByInference.toProofSteps
       // did not line up with the step structure implied when parsing, leading to a ref mismatch
-      implicit val outerStepContext = StepContext.withPremisesAndVariables(
+      given outerStepContext: StepContext = StepContext.withPremisesAndVariables(
         Seq(ElementOf(a, Integers), ElementOf(b, Integers)),
         getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0, b -> 0)))
       val step = RecalculateReferences(

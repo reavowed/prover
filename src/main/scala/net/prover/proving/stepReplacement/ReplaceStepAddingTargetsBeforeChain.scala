@@ -4,8 +4,9 @@ import net.prover.controllers.models.{InsertionAndReplacementProps, PathData, Pr
 import net.prover.controllers.{BookService, OptionWithResponseExceptionOps}
 import net.prover.entries.TypedStepWithContext
 import net.prover.exceptions.NotFoundException
+import net.prover.model.*
 import net.prover.model.proof.Step
-import net.prover.util.FunctorTypes._
+import net.prover.util.FunctorTypes.*
 
 import scala.reflect.{ClassTag, classTag}
 import scala.util.{Failure, Try}

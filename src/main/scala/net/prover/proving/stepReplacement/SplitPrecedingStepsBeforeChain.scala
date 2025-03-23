@@ -2,6 +2,7 @@ package net.prover.proving.stepReplacement
 
 import net.prover.controllers.ChainingMethods
 import net.prover.entries.StepsWithContext
+import net.prover.model.*
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.{Step, StepReference}
 import net.prover.theorems.GetReferencedLines

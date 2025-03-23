@@ -3,9 +3,9 @@ package net.prover.model.expressions
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.{JsonSerializer, SerializerProvider}
+import net.prover.model.*
 import net.prover.model.definitions.ExpressionDefinition
 import net.prover.model.proof.SubstitutionContext
-import net.prover.model.{ExpressionParsingContext, Substitutions, UsedVariables}
 import net.prover.parsing.Parser
 
 @JsonSerialize(`using` = classOf[ExpressionSerializer])

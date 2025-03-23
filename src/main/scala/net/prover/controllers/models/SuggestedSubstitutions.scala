@@ -1,9 +1,9 @@
 package net.prover.controllers.models
 
 import monocle.Lens
+import net.prover.model.*
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.SubstitutionContext
-import net.prover.model.{Substitutions, VariableDefinition, VariableDefinitions}
 
 case class SuggestedSubstitutions(
   statements: Seq[Option[Statement]],

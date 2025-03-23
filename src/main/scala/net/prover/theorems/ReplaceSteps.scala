@@ -1,12 +1,12 @@
 package net.prover.theorems
 
 import net.prover.entries.{StepWithContext, StepsWithContext, TheoremWithContext}
-import net.prover.model.SeqOps
+import net.prover.model.*
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.proof.Step
 import scalaz.Functor
-import scalaz.syntax.functor._
+import scalaz.syntax.functor.*
 
 object ReplaceSteps {
   def apply[F[_] : Functor](theoremWithContext: TheoremWithContext, proofIndex: Int, stepIndexes: Seq[Int])(f: StepsWithContext => Option[F[Seq[Step]]]): Option[F[Theorem]] = {

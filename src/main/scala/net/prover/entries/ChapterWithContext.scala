@@ -1,8 +1,8 @@
 package net.prover.entries
 
 import net.prover.controllers.OptionWithResponseExceptionOps
+import net.prover.model.*
 import net.prover.model.entries.{ChapterEntry, Theorem}
-import net.prover.model.{Chapter, Inference}
 
 import scala.reflect.{ClassTag, classTag}
 import scala.util.Try

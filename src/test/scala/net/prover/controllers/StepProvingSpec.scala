@@ -1,8 +1,8 @@
 package net.prover.controllers
 
 import net.prover.controllers.models.PathData
-import net.prover.model.Substitutions
-import net.prover.model.TestDefinitions._
+import net.prover.model.{AvailableEntries, Substitutions, VariableDefinitions}
+import net.prover.model.TestDefinitions.*
 import net.prover.model.expressions.{DefinedStatement, TermVariable}
 import net.prover.model.proof.{Step, StepLike, SubstitutionContext}
 import net.prover.proving.extraction.ExtractionDefinition
@@ -20,20 +20,20 @@ class StepProvingSpec extends ControllerSpec {
 
   def beResponseEntity[T](matcher: Matcher[T]): Matcher[ResponseEntity[_]] = matcher ^^ { (responseEntity: ResponseEntity[_]) => responseEntity.getBody.asInstanceOf[T] }
 
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Seq(a -> 0, b -> 0))
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Seq(a -> 0, b -> 0))
 
   "proving a step" should {
 
     "suggest an extraction using modus tollens" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       val controller = new StepProvingController
 
       service.findStep[Step.TargetStep](bookKey, chapterKey, theoremKey, proofIndex, PathData(stepPath)) returns Success(
         createTargetStepWithContext(
           Negation(Equals(a, b)))(
-          createOuterStepContext(Nil),
-          implicitly))
+          using createOuterStepContext(Nil),
+          summon))
 
       controller.suggestInferencesForExistingTarget(
         bookKey,
@@ -42,11 +42,11 @@ class StepProvingSpec extends ControllerSpec {
         proofIndex,
         PathData(stepPath),
         "Singleton"
-      ) should beResponseEntity(not(empty))
+      ) should beResponseEntity[Seq[?]](not(beEmpty))
     }
 
     "remove unnecessary structural simplifications" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController
 
@@ -67,7 +67,7 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "not remove necessary structural simplifications" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController
 
@@ -95,7 +95,7 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "retain conclusion bound variable names when proving target by inference" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController
 
@@ -114,15 +114,15 @@ class StepProvingSpec extends ControllerSpec {
         service,
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(statementToProve),
         matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(specification, Seq(Exists("z")(Equals($, $.^))), Seq(a))) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last, Nil)})
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps.last, Nil)})
     }
 
     "retain conclusion bound variable names when proving target by inference inside extraction" in {
       val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
-      implicit val availableEntries = defaultAvailableEntriesPlus(axiom)
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(axiom)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController
 
@@ -147,16 +147,15 @@ class StepProvingSpec extends ControllerSpec {
             assertion(forwardImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
             assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil)))
         ) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.assertionStep, Seq(0, 1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(0), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(1), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(2), Nil)})
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.assertionStep, Seq(0, 1))} and
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(0), Seq(1))} and
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(1), Seq(1))} and
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(2), Nil)})
     }
 
     "retain conclusion bound variable names when adding target by inference" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 0), Seq(a -> 0, b -> 0))
-
-      implicit val service = mock[BookService]
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 0), Seq(a -> 0, b -> 0))
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertion(service)
       val controller = new StepProvingController
 
@@ -174,14 +173,14 @@ class StepProvingSpec extends ControllerSpec {
         service,
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(ψ),
         matchSteps(fillerSteps(stepIndex - 1) :+ target(premise) :+ assertion(valueForExistence, Seq(φ($)), Seq(b)) :+ target(ψ)) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)})
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps(stepIndex), Nil)})
     }
 
     "retain conclusion bound variable names when adding target by premise" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2, χ -> 1), Seq(a -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2, χ -> 1), Seq(a -> 0))
       val x = TermVariable(1, Nil)
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertion(service)
       val controller = new StepProvingController
 
@@ -204,13 +203,13 @@ class StepProvingSpec extends ControllerSpec {
             assertion(modusPonens, Seq(φ(a), Exists("z")(ψ(a, $))), Nil))) :+
           target(χ(a))
         ) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtractionStep].extraction.toProofSteps(0), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtractionStep].extraction.toProofSteps(1), Nil)})
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtractionStep].extraction.toProofSteps(0), Seq(1))} and
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps(stepIndex).asInstanceOf[Step.ExistingStatementExtractionStep].extraction.toProofSteps(1), Nil)})
     }
 
     "retain premise bound variable names when proving target by inference" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0))
-      implicit val service = mock[BookService]
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1), Seq(a -> 0))
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController
 
@@ -228,16 +227,16 @@ class StepProvingSpec extends ControllerSpec {
         service,
         fillerSteps(stepIndex) :+ target(statementToProve),
         matchSteps(fillerSteps(stepIndex) :+ target(ForAll("z")(Exists("y")(Equals($, $.^)))) :+ assertion(specification, Seq(Exists("z")(Equals($, $.^))), Seq(a))) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)})
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps(stepIndex), Nil)})
     }
 
     "retain bound variable names in extraction premise when proving target by inference" in {
       val axiom = createInference("Test Axiom", Nil, ForAll("x")(Equivalence(φ($), Exists("y")(ψ($.^, $)))))
-      implicit val availableEntries = defaultAvailableEntriesPlus(axiom)
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0, b -> 0, c -> 0))
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(axiom)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 2), Seq(a -> 0, b -> 0, c -> 0))
       val x = TermVariable(0, Nil) // variable that will be generated when specifying the axiom
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController
 
@@ -262,14 +261,14 @@ class StepProvingSpec extends ControllerSpec {
             assertion(reverseImplicationFromEquivalence, Seq(φ(a), Exists("z")(ψ(a, $))), Nil),
             assertion(modusPonens, Seq(Exists("z")(ψ(a, $)), φ(a)), Nil)))
         ) and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps(stepIndex), Nil)} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.assertionStep, Seq(0, 1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(0), Seq(1))} and
-          beEqualTo("z") ^^ {steps: Seq[Step] => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(1), Seq(0))})
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps(stepIndex), Nil)} and
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.assertionStep, Seq(0, 1))} and
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(0), Seq(1))} and
+          beEqualTo("z") ^^ {(steps: Seq[Step]) => getBoundVariable(steps.last.asInstanceOf[Step.InferenceExtractionStep].inferenceExtraction.extraction.extractionSteps(1), Seq(0))})
     }
 
     "prove a target inside a scoped deduction" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController
 
@@ -312,9 +311,9 @@ class StepProvingSpec extends ControllerSpec {
             Function(Addition),
             FunctionFrom(Addition, Product(Naturals, Naturals), Naturals)),
           additionProperty))
-      implicit val availableEntries = defaultAvailableEntriesPlus(axiom)
+      given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(axiom)
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndReplacement(service)
       val controller = new StepProvingController
 
@@ -341,7 +340,7 @@ class StepProvingSpec extends ControllerSpec {
     }
 
     "prove a new target by extracting inside a bound variable" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertion(service)
       val controller = new StepProvingController
 
@@ -363,10 +362,10 @@ class StepProvingSpec extends ControllerSpec {
           :+ target(ψ),
         fillerSteps(stepIndex - 1)
           :+ target(premise)
-          :+ assertion(specification, Seq(φ($^)), Seq($))
+          :+ assertion(specification, Seq(φ($.^)), Seq($))
           :+ target(ψ),
         Seq("x"))(
-        implicitly,
+        using summon,
         localVariableDefinitions)
     }
   }

@@ -1,6 +1,6 @@
 package net.prover.books.keys
 
-import net.prover.model.StringOps
+import net.prover.model.*
 
 trait WithKeyProperty[T] {
   def getKeyProperty(t: T): String

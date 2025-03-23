@@ -1,19 +1,20 @@
 package net.prover.proving
 
-import net.prover.{BookServiceHelper, StepHelpers}
 import net.prover.controllers.BookService
 import net.prover.controllers.models.{PathData, SerializedSubstitutions, StepDefinition}
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.*
+import net.prover.model.{AvailableEntries, VariableDefinitions}
 import net.prover.proving.extraction.ExtractionDefinition
+import net.prover.{BookServiceHelper, StepHelpers}
 import org.specs2.mutable.Specification
 
 class ProveCurrentTargetByPremiseSpec extends Specification with BookServiceHelper with StepHelpers {
   "prove current target by premise" should {
     "prove a simple target" in {
-      implicit val availableEntries = defaultAvailableEntries
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
+      given availableEntries: AvailableEntries = defaultAvailableEntries
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1), Seq(a -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       val mainPremise = ForAll("x")(Implication(φ($), ψ($)))
@@ -53,10 +54,10 @@ class ProveCurrentTargetByPremiseSpec extends Specification with BookServiceHelp
     }
 
     "prove with a simple premise derivation" in {
-      implicit val availableEntries = defaultAvailableEntries
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1, χ -> 1), Seq(a -> 0))
+      given availableEntries: AvailableEntries = defaultAvailableEntries
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 1, ψ -> 1, χ -> 1), Seq(a -> 0))
 
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       val mainPremise = ForAll("x")(Implication(Conjunction(φ($), ψ($)), χ($)))

@@ -1,6 +1,6 @@
 package net.prover.model.definitions
 
-import net.prover.model.{ExpressionLenses, ProvingContext}
+import net.prover.model.*
 import net.prover.model.expressions.Term
 import net.prover.model.proof.SubstitutionContext
 

@@ -8,12 +8,12 @@ import org.specs2.execute.Result
 import org.specs2.mutable.Specification
 
 class EqualityRewriterSpec extends Specification with StepBuilderHelper {
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0))
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "rewriting a statement" should {
     def testRewrite(premises: Seq[Statement], target: Statement)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Result = {
-      implicit val stepContext = createBaseStepContext(premises)
+      given stepContext: StepContext = createBaseStepContext(premises)
 
       val stepOption = EqualityRewriter.rewrite(target)
       stepOption must beSome(beStepThatMakesValidAndCompleteTheorem(premises, target))
@@ -38,7 +38,7 @@ class EqualityRewriterSpec extends Specification with StepBuilderHelper {
       val B = TermVariablePlaceholder("B", 2)
       val C = TermVariablePlaceholder("C", 3)
       val D = TermVariablePlaceholder("D", 4)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, A -> 0, B -> 0, C -> 0, D -> 0))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, A -> 0, B -> 0, C -> 0, D -> 0))
 
       val premise = ElementOf(a, Product(Product(A, B), Product(C, D)))
       val target = Equals(a, Pair(Pair(First(First(a)), Second(First(a))), Pair(First(Second(a)), Second(Second(a)))))
@@ -63,7 +63,7 @@ class EqualityRewriterSpec extends Specification with StepBuilderHelper {
 
     "rewrite a function application inline" in {
       val F = TermVariablePlaceholder("F", 2)
-      implicit val variableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, F-> 1))
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, F-> 1))
       val premises = Seq(Equals(a, b))
       val target = Equals(F(a), F(b))
       testRewrite(premises, target)

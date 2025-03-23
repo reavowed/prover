@@ -1,18 +1,20 @@
 package net.prover.model
 
 import net.prover.entries.StepsWithContext
-import net.prover.model.definitions._
+import net.prover.model.definitions.*
 import net.prover.model.expressions.{Expression, Statement, Term}
-import net.prover.model.proof._
+import net.prover.model.proof.*
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
 import net.prover.proving.derivation.SimpleDerivation
-import net.prover.proving.extraction._
+import net.prover.proving.extraction.*
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
-import net.prover.proving.structure.inferences._
-import net.prover.proving.structure.statements.{BinaryConnective, BinaryConnectiveStatement, BinaryJoiner, BinaryRelation, BinaryRelationStatement, BinaryStatement}
+import net.prover.proving.structure.inferences.*
+import net.prover.proving.structure.statements.*
 import net.prover.theorems.GetReferencedInferences
 import net.prover.util.Direction
-import shapeless.{::, Generic, HList, HNil}
+
+import scala.deriving.Mirror
+import scala.runtime.Tuples
 
 case class ProvingContext(availableEntries: AvailableEntries, private val definitions: Definitions) {
   trait Allowable[-T] {
@@ -28,12 +30,15 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
       def isAllowed(t: T): Boolean = f(t)
     }
 
-    implicit val allowableHNil: Allowable[HNil] = alwaysAllowable
-    implicit def allowableHList[Head, Tail <: HList](implicit allowableHead: Allowable[Head], allowableTail: Allowable[Tail]): Allowable[Head :: Tail] = allowable { x =>
-      isAllowed(x.head) && isAllowed(x.tail)
+    given allowableEmptyTuple: Allowable[EmptyTuple] = alwaysAllowable
+    given allowableTuple[H, T <: Tuple](using Allowable[H], Allowable[T]): Allowable[H *: T] = allowable { t =>
+      isAllowed(t.head) && isAllowed(t.tail)
     }
-    def allowableGeneric[T, Repr](generic: Generic.Aux[T, Repr])(implicit allowableRepr: Allowable[Repr]) : Allowable[T] = allowable { x =>
-      isAllowed(generic.to(x))
+    given allowableProduct[T <: Product](
+      using mirror: Mirror.ProductOf[T],
+      allowedElemTypes: Allowable[mirror.MirroredElemTypes]
+    ): Allowable[T] = allowable { t =>
+      isAllowed(Tuple.fromProductTyped(t))
     }
 
     implicit val alwaysAllowableStatement: AlwaysAllowable[Statement] = alwaysAllowable
@@ -53,55 +58,55 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
 
     implicit val allowableSimpleDerivation: Allowable[SimpleDerivation] = allowable(derivation => derivation.inferences.forall(isAllowed))
 
-    implicit val allowableRelation: Allowable[BinaryJoiner[_ <: Expression]] = allowable(definedBinaryJoiners.contains)
-    implicit val allowableReversal: Allowable[Reversal[_ <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
-    implicit val allowableTransitivity: Allowable[Transitivity[_ <: Expression]] = allowable(r => isAllowed(r.firstPremiseJoiner) && isAllowed(r.secondPremiseJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
-    implicit val allowableExpansion: Allowable[Expansion[_ <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
-    implicit val allowableSubstitution: Allowable[Substitution] = allowableGeneric(Generic[Substitution])
+    implicit val allowableRelation: Allowable[BinaryJoiner[? <: Expression]] = allowable(definedBinaryJoiners.contains)
+    implicit val allowableReversal: Allowable[Reversal[? <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
+    implicit val allowableTransitivity: Allowable[Transitivity[? <: Expression]] = allowable(r => isAllowed(r.firstPremiseJoiner) && isAllowed(r.secondPremiseJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
+    implicit val allowableExpansion: Allowable[Expansion[? <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
+    implicit val allowableSubstitution: Allowable[Substitution] = allowableProduct[Substitution]
     implicit val allowableStep: Allowable[Step] = allowable(step => GetReferencedInferences(step).forall(isAllowed))
-    implicit val allowableKnownStatement: Allowable[KnownStatement] = allowableGeneric(Generic[KnownStatement])
-    implicit def allowableDesimplifiedPremise: Allowable[DesimplifiedPremise] = allowableGeneric(Generic[DesimplifiedPremise])
+    implicit val allowableKnownStatement: Allowable[KnownStatement] = allowableProduct[KnownStatement]
+    implicit def allowableDesimplifiedPremise: Allowable[DesimplifiedPremise] = allowableProduct[DesimplifiedPremise]
     implicit def allowablePremiseDesimplification: Allowable[DerivedPremise] = allowable {
       case DirectPremise(_) => true
       case desimplifiedPremise: DesimplifiedPremise => allowableDesimplifiedPremise.isAllowed(desimplifiedPremise)
     }
 
     implicit val alwaysAllowableOperator: Allowable[Operator] = alwaysAllowable
-    implicit val allowableEquality: Allowable[Equality] = allowableGeneric(Generic[Equality])
+    implicit val allowableEquality: Allowable[Equality] = allowableProduct[Equality]
 
-    implicit val allowableGeneralizationDefinition: Allowable[GeneralizationDefinition] = allowableGeneric(Generic[GeneralizationDefinition])
+    implicit val allowableGeneralizationDefinition: Allowable[GeneralizationDefinition] = allowableProduct[GeneralizationDefinition]
 
-    implicit val allowableExtractionDefinition: Allowable[ExtractionDefinition] = allowableGeneric(Generic[ExtractionDefinition])
-    implicit val allowableChainedRewriteStep: Allowable[PartiallyAppliedExtraction.ChainedRewriteStep] = allowableGeneric(Generic[PartiallyAppliedExtraction.ChainedRewriteStep])
-    implicit val allowablePartiallyAppliedExtraction: Allowable[PartiallyAppliedExtraction] = allowableGeneric(Generic[PartiallyAppliedExtraction])
-    implicit val allowableInferenceExtraction: Allowable[InferenceExtraction] = allowableGeneric(Generic[InferenceExtraction])
-    implicit val allowableFact: Allowable[Fact] = allowableGeneric(Generic[Fact])
-    implicit val allowableCommutativity: Allowable[Commutativity] = allowableGeneric(Generic[Commutativity])
-    implicit val allowableAssociativity: Allowable[Associativity] = allowableGeneric(Generic[Associativity])
-    implicit val allowableLeftIdentity: Allowable[LeftIdentity] = allowableGeneric(Generic[LeftIdentity])
-    implicit val allowableRightIdentity: Allowable[RightIdentity] = allowableGeneric(Generic[RightIdentity])
-    implicit val allowableDoubleSidedIdentity: Allowable[DoubleSidedIdentity] = allowableGeneric(Generic[DoubleSidedIdentity])
-    implicit val allowableLeftAbsorber: Allowable[LeftAbsorber] = allowableGeneric(Generic[LeftAbsorber])
-    implicit val allowableRightAbsorber: Allowable[RightAbsorber] = allowableGeneric(Generic[RightAbsorber])
-    implicit val allowableLeftInverse: Allowable[LeftInverse] = allowableGeneric(Generic[LeftInverse])
-    implicit val allowableRightInverse: Allowable[RightInverse] = allowableGeneric(Generic[RightInverse])
-    implicit val allowableDoubleSidedInverse: Allowable[DoubleSidedInverse] = allowableGeneric(Generic[DoubleSidedInverse])
+    implicit val allowableExtractionDefinition: Allowable[ExtractionDefinition] = allowableProduct[ExtractionDefinition]
+    implicit val allowableChainedRewriteStep: Allowable[PartiallyAppliedExtraction.ChainedRewriteStep] = allowableProduct[PartiallyAppliedExtraction.ChainedRewriteStep]
+    implicit val allowablePartiallyAppliedExtraction: Allowable[PartiallyAppliedExtraction] = allowableProduct[PartiallyAppliedExtraction]
+    implicit val allowableInferenceExtraction: Allowable[InferenceExtraction] = allowableProduct[InferenceExtraction]
+    implicit val allowableFact: Allowable[Fact] = allowableProduct[Fact]
+    implicit val allowableCommutativity: Allowable[Commutativity] = allowableProduct[Commutativity]
+    implicit val allowableAssociativity: Allowable[Associativity] = allowableProduct[Associativity]
+    implicit val allowableLeftIdentity: Allowable[LeftIdentity] = allowableProduct[LeftIdentity]
+    implicit val allowableRightIdentity: Allowable[RightIdentity] = allowableProduct[RightIdentity]
+    implicit val allowableDoubleSidedIdentity: Allowable[DoubleSidedIdentity] = allowableProduct[DoubleSidedIdentity]
+    implicit val allowableLeftAbsorber: Allowable[LeftAbsorber] = allowableProduct[LeftAbsorber]
+    implicit val allowableRightAbsorber: Allowable[RightAbsorber] = allowableProduct[RightAbsorber]
+    implicit val allowableLeftInverse: Allowable[LeftInverse] = allowableProduct[LeftInverse]
+    implicit val allowableRightInverse: Allowable[RightInverse] = allowableProduct[RightInverse]
+    implicit val allowableDoubleSidedInverse: Allowable[DoubleSidedInverse] = allowableProduct[DoubleSidedInverse]
 
-    implicit val allowableRearrangeableOperator: Allowable[RearrangeableOperator] = allowableGeneric(Generic[RearrangeableOperator])
-    implicit val allowableLeftDistributivity: Allowable[LeftDistributivity] = allowableGeneric(Generic[LeftDistributivity])
-    implicit val allowableRightDistributivity: Allowable[RightDistributivity] = allowableGeneric(Generic[RightDistributivity])
-    implicit val allowableLeftOperatorExtraction: Allowable[LeftOperatorExtraction] = allowableGeneric(Generic[LeftOperatorExtraction])
-    implicit val allowableRightOperatorExtraction: Allowable[RightOperatorExtraction] = allowableGeneric(Generic[RightOperatorExtraction])
+    implicit val allowableRearrangeableOperator: Allowable[RearrangeableOperator] = allowableProduct[RearrangeableOperator]
+    implicit val allowableLeftDistributivity: Allowable[LeftDistributivity] = allowableProduct[LeftDistributivity]
+    implicit val allowableRightDistributivity: Allowable[RightDistributivity] = allowableProduct[RightDistributivity]
+    implicit val allowableLeftOperatorExtraction: Allowable[LeftOperatorExtraction] = allowableProduct[LeftOperatorExtraction]
+    implicit val allowableRightOperatorExtraction: Allowable[RightOperatorExtraction] = allowableProduct[RightOperatorExtraction]
 
-    implicit val allowableDeductionEliminationInference: Allowable[DeductionEliminationInference] = allowableGeneric(Generic[DeductionEliminationInference])
-    implicit val allowableSpecificationInference: Allowable[SpecificationInference] = allowableGeneric(Generic[SpecificationInference])
-    implicit val allowableStatementExtractionInference: Allowable[StatementExtractionInference] = allowableGeneric(Generic[StatementExtractionInference])
-    implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowableGeneric(Generic[PremiseRelationSimplificationInference])
-    implicit val allowablePremiseRelationRewriteInference: Allowable[RelationRewriteInference] = allowableGeneric(Generic[RelationRewriteInference])
-    implicit val allowableConclusionRelationSimplificationInference: Allowable[ConclusionRelationSimplificationInference] = allowableGeneric(Generic[ConclusionRelationSimplificationInference])
-    implicit val allowableChainableRewriteInference: Allowable[ChainableRewriteInference] = allowableGeneric(Generic[ChainableRewriteInference])
+    implicit val allowableDeductionEliminationInference: Allowable[DeductionEliminationInference] = allowableProduct[DeductionEliminationInference]
+    implicit val allowableSpecificationInference: Allowable[SpecificationInference] = allowableProduct[SpecificationInference]
+    implicit val allowableStatementExtractionInference: Allowable[StatementExtractionInference] = allowableProduct[StatementExtractionInference]
+    implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowableProduct[PremiseRelationSimplificationInference]
+    implicit val allowablePremiseRelationRewriteInference: Allowable[RelationRewriteInference] = allowableProduct[RelationRewriteInference]
+    implicit val allowableConclusionRelationSimplificationInference: Allowable[ConclusionRelationSimplificationInference] = allowableProduct[ConclusionRelationSimplificationInference]
+    implicit val allowableChainableRewriteInference: Allowable[ChainableRewriteInference] = allowableProduct[ChainableRewriteInference]
 
-    implicit val allowableTermRewriteInference: Allowable[TermRewriteInference] = allowableGeneric(Generic[TermRewriteInference])
+    implicit val allowableTermRewriteInference: Allowable[TermRewriteInference] = allowableProduct[TermRewriteInference]
 
     implicit def allowableTuple2[A, B](
       implicit allowableA: Allowable[A],

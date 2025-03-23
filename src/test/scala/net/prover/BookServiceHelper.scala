@@ -1,20 +1,20 @@
 package net.prover
 
 import net.prover.controllers.BookService
-import net.prover.controllers.models._
+import net.prover.controllers.models.*
 import net.prover.entries.StepsWithContext
 import net.prover.model.expressions.StatementVariable
-import net.prover.model.proof.{Step, SubstitutionContext}
+import net.prover.model.proof.{Step, StepContext, SubstitutionContext}
 import net.prover.model.{AvailableEntries, VariableDefinitions}
 import net.prover.util.FunctorTypes.WithValue
 import org.mockito.Mockito
 import org.specs2.SpecificationLike
-import org.specs2.matcher.{MatchResult, Matcher}
-import org.specs2.mock.mockito.{CalledMatchers, MockitoMatchers}
+import org.specs2.execute.Result
+import org.specs2.matcher.Matcher
 
 import scala.util.{Success, Try}
 
-trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with ContextHelper with CustomMockitoStubs with MockitoMatchers with CalledMatchers {
+trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with ContextHelper with MockitoHelpers {
   private def eq[T](t: T) = org.mockito.ArgumentMatchers.eq(t)
 
   def createService = {
@@ -23,7 +23,7 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
   }
 
   def mockReplaceStepsForInsertionAndReplacement(service: BookService): Unit = {
-    service.replaceSteps[WithValue[InsertionAndReplacementProps]#Type](any, any, any, any, any)(any)(any) returns
+    service.replaceSteps[WithValue[InsertionAndReplacementProps]#Type](any, any, any, any, any)(any)(using any) returns
       Success((
         ProofUpdateProps(
           MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.TargetStep(StatementVariable(i)))),
@@ -35,7 +35,7 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
   }
 
   def mockReplaceStepsForInsertionAndMultipleReplacement(service: BookService): Unit = {
-    service.replaceSteps[WithValue[InsertionAndMultipleReplacementProps]#Type](any, any, any, any, any)(any)(any) returns
+    service.replaceSteps[WithValue[InsertionAndMultipleReplacementProps]#Type](any, any, any, any, any)(any)(using any) returns
       Success((
         ProofUpdateProps(
           MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.TargetStep(StatementVariable(i)))),
@@ -47,7 +47,7 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
   }
 
   def mockReplaceStepsForInsertion(service: BookService): Unit = {
-    service.replaceSteps[WithValue[StepInsertionProps]#Type](any, any, any, any, any)(any)(any) returns
+    service.replaceSteps[WithValue[StepInsertionProps]#Type](any, any, any, any, any)(any)(using any) returns
       Success((
         ProofUpdateProps(
           MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.TargetStep(StatementVariable(i)))),
@@ -57,8 +57,8 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
   }
 
   def mockReplaceStepsForSimpleReplacement(service: BookService): Unit = {
-    service.replaceSteps[WithValue[Seq[Step]]#Type](any, any, any, any, any)(any)(any) returns Success((ProofUpdateProps(MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.TargetStep(StatementVariable(i)))), null, null), Nil))
-    Mockito.when(service.replaceStep[Step.TargetStep](any, any, any, any, any)(any)(any)).thenCallRealMethod()
+    service.replaceSteps[WithValue[Seq[Step]]#Type](any, any, any, any, any)(any)(using any) returns Success((ProofUpdateProps(MultipleStepReplacementProps(Nil, 0, 0, (0 until stepIndex + 1).map(i => Step.TargetStep(StatementVariable(i)))), null, null), Nil))
+    Mockito.when(service.replaceStep[Step.TargetStep](any, any, any, any, any)(any)(using any)).thenCallRealMethod()
   }
 
   def checkModifySteps(
@@ -66,9 +66,9 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
     existingStepsConstructor: SubstitutionContext => Seq[Step],
     expectedStepsConstructor: SubstitutionContext => Seq[Step],
     boundVariables: Seq[String] = Nil)(
-    implicit availableEntries: AvailableEntries,
+    using availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
-  ): MatchResult[Any] = {
+  ): Result = {
     val existingSteps = createStepsWithContext(existingStepsConstructor, boundVariables)
     there was one(service).replaceSteps[WithValue[InsertionAndReplacementProps]#Type](
       eq(bookKey),
@@ -78,9 +78,13 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
       eq(outerStepPath))(
       modifyStepsCallback(
         existingSteps,
-        matchSteps(expectedStepsConstructor, boundVariables)(availableEntries, variableDefinitions),
+        matchSteps(
+          expectedStepsConstructor,
+          boundVariables)(
+          using availableEntries,
+          variableDefinitions),
         boundVariables))(
-      any)
+      using any)
   }
 
   def checkModifyStepsWithoutProps(
@@ -88,9 +92,9 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
     existingStepsConstructor: SubstitutionContext => Seq[Step],
     expectedStepsConstructor: SubstitutionContext => Seq[Step],
     boundVariables: Seq[String] = Nil)(
-    implicit availableEntries: AvailableEntries,
+    using availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
-  ): MatchResult[Any] = {
+  ): Result = {
     val existingSteps = createStepsWithContext(existingStepsConstructor, boundVariables)
     there was one(service).replaceSteps[WithValue[Seq[Step]]#Type](
       eq(bookKey),
@@ -100,9 +104,13 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
       eq(outerStepPath))(
       modifyStepsCallbackWithoutProps(
         existingSteps,
-        matchSteps(expectedStepsConstructor, boundVariables)(availableEntries, variableDefinitions),
+        matchSteps(
+          expectedStepsConstructor,
+          boundVariables)(
+          using availableEntries,
+          variableDefinitions),
         boundVariables))(
-      any)
+      using any)
   }
 
   def checkModifyStepsWithMatcher(
@@ -110,9 +118,9 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
     existingStepsConstructor: SubstitutionContext => Seq[Step],
     stepsMatcher: Matcher[Seq[Step]],
     boundVariables: Seq[String] = Nil)(
-    implicit availableEntries: AvailableEntries,
+    using availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
-  ): MatchResult[Any] = {
+  ): Result = {
     val existingSteps = createStepsWithContext(existingStepsConstructor, boundVariables)
     there was one(service).replaceSteps[WithValue[InsertionAndReplacementProps]#Type](
       eq(bookKey),
@@ -124,12 +132,12 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
         existingSteps,
         stepsMatcher,
         boundVariables))(
-      any)
+      using any)
   }
 
-  private def createStepsWithContext(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): StepsWithContext = {
+  private def createStepsWithContext(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(using availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): StepsWithContext = {
     val steps = createSteps(stepsConstructor, boundVariables)
-    implicit val outerStepContext = createOuterStepContext(boundVariables)
+    given outerStepContext: StepContext = createOuterStepContext(boundVariables)
     createStepsWithContext(steps)
   }
 
@@ -137,25 +145,33 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
     existingSteps: StepsWithContext,
     stepsMatcher: Matcher[Seq[Step]],
     boundVariables: Seq[String])(
-    implicit availableEntries: AvailableEntries,
+    using availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
   ): StepsWithContext => Try[(Seq[Step], Seq[Step])] = {
-    implicit val outerStepContext = createOuterStepContext(boundVariables)
-    existingSteps  -> beSuccessfulTry[(Seq[Step], Seq[Step])].withValue((stepsMatcher and beStepsThatMakeValidTheorem(boundVariables)) ^^ { t: (Seq[Step], Seq[Step]) => recalculateReferences(t._1) })
+    given outerStepContext: StepContext = createOuterStepContext(boundVariables)
+    existingSteps -> beSuccessfulTry[(Seq[Step], Seq[Step])].withValue((stepsMatcher and beStepsThatMakeValidTheorem(boundVariables)) ^^ { (t: (Seq[Step], Seq[Step])) => recalculateReferences(t._1) })
   }
 
   private def modifyStepsCallback(
     existingSteps: StepsWithContext,
     stepsMatcher: Matcher[Seq[Step]],
     boundVariables: Seq[String])(
-    implicit availableEntries: AvailableEntries,
+    using availableEntries: AvailableEntries,
     variableDefinitions: VariableDefinitions
   ): StepsWithContext => Try[(Seq[Step], InsertionAndReplacementProps)] = {
-    implicit val outerStepContext = createOuterStepContext(boundVariables)
-    existingSteps -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)].withValue((stepsMatcher and beStepsThatMakeValidTheorem(boundVariables)) ^^ { t: (Seq[Step], InsertionAndReplacementProps) => recalculateReferences(t._1) })
+    given outerStepContext: StepContext = createOuterStepContext(boundVariables)
+    existingSteps -> beSuccessfulTry[(Seq[Step], InsertionAndReplacementProps)]
+      .withValue(
+        (stepsMatcher and beStepsThatMakeValidTheorem(boundVariables)) ^^
+          { (t: (Seq[Step], InsertionAndReplacementProps)) => recalculateReferences(t._1) })
   }
 
-  def matchSteps(stepsConstructor: SubstitutionContext => Seq[Step], boundVariables: Seq[String] = Nil)(implicit availableEntries: AvailableEntries, variableDefinitions: VariableDefinitions): Matcher[Seq[Step]] = {
+  def matchSteps(
+    stepsConstructor: SubstitutionContext => Seq[Step],
+    boundVariables: Seq[String] = Nil)(
+    using availableEntries: AvailableEntries,
+    variableDefinitions: VariableDefinitions
+  ): Matcher[Seq[Step]] = {
     beEqualTo(createSteps(stepsConstructor, boundVariables)(availableEntries, variableDefinitions))
   }
 }

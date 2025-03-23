@@ -1,8 +1,8 @@
 package net.prover.entries
 
+import net.prover.model.*
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.entries.{ChapterEntry, Theorem}
-import net.prover.model.{AvailableEntries, ExpressionParsingContext, Inference, ProvingContext}
 
 case class TypedEntryWithContext[+T <: ChapterEntry](
     entry: T,

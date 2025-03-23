@@ -2,20 +2,20 @@ package net.prover.controllers
 
 import net.prover.controllers.StepChainingController.ChainedTargetDefinition
 import net.prover.controllers.models.PathData
-import net.prover.model.TestDefinitions
-import net.prover.model.TestDefinitions._
+import net.prover.model.{AvailableEntries, TestDefinitions, VariableDefinitions}
+import net.prover.model.TestDefinitions.*
 import net.prover.proving.extraction.ExtractionDefinition
 
 class StepChainingSpec extends ControllerSpec {
   val lessThan = TestDefinitions.lessThan _ // prevent clash between this definition and the specs2 matcher of the same name
 
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Seq(a -> 0, b -> 0))
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0, ω -> 0), Seq(a -> 0, b -> 0))
 
   "adding a target" should {
 
     "add new chain correctly" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
@@ -31,7 +31,7 @@ class StepChainingSpec extends ControllerSpec {
     }
 
     "add into existing chain correctly" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
@@ -55,7 +55,7 @@ class StepChainingSpec extends ControllerSpec {
   "adding a premise" should {
     "add left premise to new transitivity" in {
       val premise = Equivalence(φ, ψ)
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
@@ -68,7 +68,7 @@ class StepChainingSpec extends ControllerSpec {
     }
     "add right premise to new transitivity" in {
       val premise = Equivalence(ψ, χ)
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 
@@ -84,7 +84,7 @@ class StepChainingSpec extends ControllerSpec {
   "rewriting a component" should {
 
     "rewrite LHS using equality substitution" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -101,7 +101,7 @@ class StepChainingSpec extends ControllerSpec {
             assertion(substitutionOfEquals, Seq(lessThan($, b)), Seq(add(a, Zero), a))))
     }
     "rewrite RHS using equality substitution" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -120,8 +120,8 @@ class StepChainingSpec extends ControllerSpec {
     }
 
     "rewrite LHS using statement expansion" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 1), Seq(a -> 0))
-      implicit val service = mock[BookService]
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 1), Seq(a -> 0))
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -140,8 +140,8 @@ class StepChainingSpec extends ControllerSpec {
     }
 
     "rewrite RHS using statement expansion" in {
-      implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 1), Seq(a -> 0))
-      implicit val service = mock[BookService]
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 1), Seq(a -> 0))
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -162,7 +162,7 @@ class StepChainingSpec extends ControllerSpec {
     }
 
     "rewrite RHS of a non-transitive relation" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepRewriteController
 
@@ -183,7 +183,7 @@ class StepChainingSpec extends ControllerSpec {
 
   "proving with inference" should {
     "not add new RHS target if not necessary" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForInsertionAndMultipleReplacement(service)
       val controller = new StepChainingController(service)
 

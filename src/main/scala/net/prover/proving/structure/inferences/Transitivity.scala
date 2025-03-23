@@ -1,9 +1,9 @@
 package net.prover.proving.structure.inferences
 
+import net.prover.model.*
 import net.prover.model.definitions.RearrangementStep
 import net.prover.model.expressions.Expression
-import net.prover.model.proof._
-import net.prover.model.{Inference, ProvingContext}
+import net.prover.model.proof.*
 import net.prover.proving.structure.statements.BinaryJoiner
 
 case class Transitivity[TComponent <: Expression](

@@ -1,5 +1,7 @@
 package net.prover.controllers
 
+import jakarta.servlet.http.HttpServletRequest
+import net.prover.model.*
 import net.prover.model.expressions.DefinedStatement
 import net.prover.model.proof.Step
 import net.prover.theorems.GetReferencedInferences
@@ -8,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 
 import java.util.regex.Pattern
-import jakarta.servlet.http.HttpServletRequest
 
 @RestController
 @RequestMapping(Array("/stats"))

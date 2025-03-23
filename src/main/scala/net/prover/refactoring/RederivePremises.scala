@@ -25,7 +25,7 @@ object RederivePremises extends CompoundTheoremUpdater[Try] {
     val assertionStepWithContext = TypedStepWithContext(
       step.assertionStep,
       stepWithContext.proofWithContext)(
-      implicitly,
+      using summon,
       stepWithContext.stepContext.forChild().addSteps(step.premises.flatMap(_.toProofSteps)))
     val premises = GetReferencedPremises(assertionStepWithContext).map(_.statement)
     val (knownStatements, targets) = DerivationOrTargetFinder.findDerivationsOrTargets(premises) (stepWithContext)

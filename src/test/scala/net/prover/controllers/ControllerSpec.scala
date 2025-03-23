@@ -1,11 +1,11 @@
 package net.prover.controllers
 
-import net.prover.controllers.models._
-import net.prover.model.TestDefinitions._
+import net.prover.controllers.models.*
+import net.prover.model.*
+import net.prover.model.TestDefinitions.*
 import net.prover.model.definitions.StatementDefinition
 import net.prover.model.expressions.{Statement, StatementVariable, Term, TermVariable}
-import net.prover.model.proof._
-import net.prover.model.{AvailableEntries, Inference, Substitutions, VariableDefinitions}
+import net.prover.model.proof.*
 import net.prover.proving.extraction.{ExtractionCalculator, ExtractionDefinition}
 import net.prover.{BookServiceHelper, ContextHelper, StepHelpers}
 import org.specs2.matcher.ValueChecks

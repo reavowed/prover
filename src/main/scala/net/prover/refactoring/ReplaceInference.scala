@@ -67,7 +67,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
             proofWithContext).map(_._1)
         } yield premise
       case RewritePremise.Known(KnownStatement(_, SimpleDerivation(Seq(SimpleDerivationStep.Assertion(step))))) if step.inference == oldInference =>
-        val stepWithContext = TypedStepWithContext(step, proofWithContext)(implicitly, stepContext.forChild())
+        val stepWithContext = TypedStepWithContext(step, proofWithContext)(using summon, stepContext.forChild())
         for {
           (newExtraction, newPremises) <- reproveExtraction(stepWithContext)
           premise <- RecalculateReferences.updateRewritePremise(

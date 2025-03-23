@@ -421,9 +421,9 @@ object TestDefinitions extends TestVariableDefinitions with TestExpressionDefini
     createAvailableEntries(defaultAvailableEntries.allEntries ++ entries)
   }
 
-  implicit class AvailableEntriesOps(availableEntries: AvailableEntries) {
+  extension (availableEntries: AvailableEntries) {
     def addEntry(chapterEntry: ChapterEntry): AvailableEntries = {
-      availableEntries.addEntry(createEntryWithContext(chapterEntry)(availableEntries))
+      availableEntries.addEntry(createEntryWithContext(chapterEntry)(using availableEntries))
     }
   }
 }

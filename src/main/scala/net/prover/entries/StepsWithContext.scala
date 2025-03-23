@@ -1,7 +1,7 @@
 package net.prover.entries
 
+import net.prover.model.*
 import net.prover.model.proof.{Step, StepContext}
-import net.prover.model.{AvailableEntries, ProvingContext}
 
 import scala.annotation.tailrec
 import scala.reflect.ClassTag
@@ -32,7 +32,7 @@ case class StepsWithContext(
     TypedStepWithContext(
       step,
       proofWithContext)(
-      implicitly,
+      using summon,
       outerStepContext.addSteps(before))
   }
 }

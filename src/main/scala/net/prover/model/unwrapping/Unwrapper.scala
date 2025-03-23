@@ -1,11 +1,11 @@
 package net.prover.model.unwrapping
 
-import net.prover.controllers._
+import net.prover.controllers.*
+import net.prover.model.*
 import net.prover.model.definitions.Wrapper
-import net.prover.model.expressions._
+import net.prover.model.expressions.*
+import net.prover.model.proof.*
 import net.prover.model.proof.Step.ExistingStatementExtractionStep
-import net.prover.model.proof._
-import net.prover.model.{Inference, ProvingContext, Substitutions}
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.proving.structure.inferences.{DeductionEliminationInference, SpecificationInference}
 import net.prover.proving.structure.statements.BinaryJoiner

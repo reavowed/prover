@@ -1,7 +1,7 @@
 package net.prover.proving.suggestions
 
-import net.prover.controllers.models._
-import net.prover.model.{Inference, ProvingContext}
+import net.prover.controllers.models.*
+import net.prover.model.*
 
 import scala.collection.immutable.SortedSet
 

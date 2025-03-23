@@ -2,18 +2,19 @@ package net.prover.proving
 
 import net.prover.controllers.BookService
 import net.prover.controllers.models.{PathData, SerializedSubstitutions, StepDefinition}
-import net.prover.model.TestDefinitions._
+import net.prover.model.TestDefinitions.*
+import net.prover.model.{AvailableEntries, VariableDefinitions}
 import net.prover.proving.extraction.ExtractionDefinition
 import net.prover.{BookServiceHelper, ContextHelper, StepHelpers}
 import org.specs2.mutable.Specification
 
 class ProveNewTargetSpec extends Specification with ContextHelper with BookServiceHelper with StepHelpers {
-  implicit val availableEntries = defaultAvailableEntries
-  implicit val variableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Seq(a -> 0))
+  given availableEntries: AvailableEntries = defaultAvailableEntries
+  given variableDefinitions: VariableDefinitions = getVariableDefinitions(Seq(φ -> 0, ψ -> 0, χ -> 0), Seq(a -> 0))
 
   "prove new target" should {
     "insert assertion step" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       ProveNewTarget(
@@ -49,7 +50,7 @@ class ProveNewTargetSpec extends Specification with ContextHelper with BookServi
     }
 
     "insert assertion in front of chain" in {
-      implicit val service = mock[BookService]
+      given service: BookService = mock[BookService]
       mockReplaceStepsForSimpleReplacement(service)
 
       ProveNewTarget(

@@ -1,6 +1,6 @@
 package net.prover.model.definitions
 
-import net.prover.model.ProvingContext
+import net.prover.model.*
 import net.prover.model.expressions.Term
 import net.prover.model.proof.SubstitutionContext
 import net.prover.util.Direction
