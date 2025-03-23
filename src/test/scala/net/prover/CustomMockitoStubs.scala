@@ -1,14 +1,10 @@
 package net.prover
 
-import org.mockito.internal.debugging.VerboseMockInvocationLogger
-import org.mockito.stubbing.Answer
 import org.mockito.invocation.InvocationOnMock
-import org.mockito.stubbing.{OngoingStubbing, Stubber}
+import org.mockito.stubbing.{Answer, OngoingStubbing}
 import org.specs2.control.ImplicitParameters.ImplicitParam
-import org.specs2.control.{Property, Use}
+import org.specs2.control.Use
 import org.specs2.mock.MockitoMocker
-import org.specs2.mock.mockito.{IgnoreStubs, MockitoStubs, MocksCreation}
-import org.specs2.reflect.ClassesOf
 
 import scala.reflect.ClassTag
 
@@ -62,7 +58,7 @@ trait CustomMockitoStubs {
   /**
     * Likewise, has the argument passed by reference.
     */
-  implicit def theCustomStubbed[T](c: => T) = new CustomStubbed(c)
+  implicit def theCustomStubbed[T](c: => T): CustomStubbed[T] = new CustomStubbed(c)
 
   class MockAnswer[T](function: Any => T) extends Answer[T] {
     def answer(invocation: InvocationOnMock): T = {
