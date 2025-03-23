@@ -9,7 +9,7 @@ import net.prover.model.expressions.Template
 import net.prover.model.{Format, Inference}
 import net.prover.parsing.Parser
 
-@JsonSerialize(using = classOf[DisplayShorthandSerializer])
+@JsonSerialize(`using` = classOf[DisplayShorthandSerializer])
 case class DisplayShorthand(template: Template, format: Format.Explicit, conditions: Seq[(String, String)]) extends ChapterEntry {
   override def name: String = DisplayShorthand.name
   override def serializedLines: Seq[String] = Seq((

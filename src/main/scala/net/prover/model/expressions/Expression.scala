@@ -8,7 +8,7 @@ import net.prover.model.proof.SubstitutionContext
 import net.prover.model.{ExpressionParsingContext, Substitutions, UsedVariables}
 import net.prover.parsing.Parser
 
-@JsonSerialize(using = classOf[ExpressionSerializer])
+@JsonSerialize(`using` = classOf[ExpressionSerializer])
 trait Expression extends TypedExpression[Expression]
 
 trait TypedExpression[+ExpressionType <: Expression] {

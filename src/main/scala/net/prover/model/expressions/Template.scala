@@ -8,7 +8,7 @@ import net.prover.model.definitions.{ExpressionDefinition, StatementDefinition, 
 import net.prover.model.expressions.Template.Match
 import net.prover.parsing.Parser
 
-@JsonSerialize(using = classOf[TemplateSerializer])
+@JsonSerialize(`using` = classOf[TemplateSerializer])
 sealed trait Template {
   def names: Seq[String]
   def matchExpression(expression: Expression): Option[Seq[Template.Match]] = matchExpression(expression, Nil, Nil)

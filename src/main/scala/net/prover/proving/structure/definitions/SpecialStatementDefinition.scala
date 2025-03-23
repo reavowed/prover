@@ -7,7 +7,7 @@ import net.prover.model.definitions.StatementDefinition
 import net.prover.model.entries.ChapterEntry
 import net.prover.model.expressions.{DefinedStatement, Statement}
 
-@JsonSerialize(using = classOf[SpecialStatementDefinitionSymbolSerializer])
+@JsonSerialize(`using` = classOf[SpecialStatementDefinitionSymbolSerializer])
 sealed trait SpecialStatementDefinition {
   val statementDefinition: StatementDefinition
   val referencedEntry: ChapterEntry = statementDefinition.associatedChapterEntry
