@@ -18,5 +18,5 @@ libraryDependencies ++= Seq(
   ("com.github.julien-truffaut" %% "monocle-macro" % monocleVersion).cross(CrossVersion.for3Use2_13))
 
 libraryDependencies ++= Seq(
-  "org.specs2" %% "specs2-core" % "4.20.9" % "test",
+  ("org.specs2" %% "specs2-core" % "4.20.9" % "test").cross(CrossVersion.for3Use2_13),
   ("org.specs2" %% "specs2-mock" % "4.20.9" % "test").cross(CrossVersion.for3Use2_13))
