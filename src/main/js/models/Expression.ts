@@ -384,8 +384,19 @@ export class PropertyExpression extends TypeLikeExpression {
   setBoundVariableName(): Expression {
     throw "Cannot set bound variable name in property expression"
   }
-  replaceAtPath(_path: number[], _expression: Expression): [Expression, number[][]] {
-    throw "Cannot replace in property expression"
+  replaceAtPath(path: number[], expression: Expression): [Expression, number[][]] {
+    if (!path.length) {
+      return [expression, [path]];
+    } else {
+      const [componentIndex, ...innerPath] = path;
+      if (componentIndex === 0) {
+        const [replacedTerm, replacedInnerPaths] = this.term.replaceAtPath(innerPath, expression);
+        return [new PropertyExpression(this.definition, this.typeDefinition, replacedTerm, this.qualifierComponents), replacedInnerPaths.map(p => [componentIndex, ...p])];
+      } else {
+        const [replacedComponents, replacedInnerPaths] = mapAtIndexWithMetadata(this.qualifierComponents, componentIndex - 1, e => e.replaceAtPath(innerPath, expression));
+        return [new PropertyExpression(this.definition, this.typeDefinition, this.term, replacedComponents), replacedInnerPaths.map(p => [componentIndex, ...p])];
+      }
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import {TypeExpression} from "../../../main/js/models/Expression";
+import {PropertyExpression, TypeExpression} from "../../../main/js/models/Expression";
 
 import {
   associativeDefinition,
@@ -53,6 +53,19 @@ test('replace qualifier component correctly in properties with and without requi
   const [newExpression, replacementPaths] = expression.replaceAtPath([0, 0, 1, 2], C);
   expect(newExpression).toEqual(new TypeExpression(functionDefinition, f, functionFromDefinition, [A, C], [injectiveDefinition, surjectiveDefinition], [], conjunctionDefinition));
   expect(replacementPaths).toEqual([[0, 0, 1, 2], [1, 2]]);
+});
+
+test('replace term in property expression', function () {
+  const expression = new PropertyExpression(surjectiveDefinition, functionDefinition, f, [A, B]);
+  const [newExpression, replacementPaths] = expression.replaceAtPath([0], g);
+  expect(newExpression).toEqual(new PropertyExpression(surjectiveDefinition, functionDefinition, g, [A, B]));
+  expect(replacementPaths).toEqual([[0]]);
+});
+test('replace qualifier component in property expression', function () {
+  const expression = new PropertyExpression(surjectiveDefinition, functionDefinition, f, [A, B]);
+  const [newExpression, replacementPaths] = expression.replaceAtPath([2], C);
+  expect(newExpression).toEqual(new PropertyExpression(surjectiveDefinition, functionDefinition, f, [A, C]));
+  expect(replacementPaths).toEqual([[2]]);
 });
 
 
