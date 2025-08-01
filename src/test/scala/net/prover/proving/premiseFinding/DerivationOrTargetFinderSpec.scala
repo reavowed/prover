@@ -64,6 +64,16 @@ class DerivationOrTargetFinderSpec extends Specification with ContextHelper with
       ))
     }
 
+    "deconstruct a compound conjunction" in {
+      findPremiseOrTarget(Conjunction(φ, Conjunction(ψ, χ)), Nil) must beEqualTo(
+        Seq(
+            assertion(combineConjunction, Seq(ψ, χ), Nil),
+            assertion(combineConjunction, Seq(φ, Conjunction(ψ, χ)), Nil)
+        )(SubstitutionContext.outsideProof),
+        Seq(φ.toVariable, ψ.toVariable, χ.toVariable)
+      )
+    }
+
     "not deconstruct a type-statement target" in {
       findPremiseOrTarget(Conjunction(Function(a), FunctionFrom(a, b, c)), Nil) must beEqualTo((Nil, Seq(Conjunction(Function(a), FunctionFrom(a, b, c)))))
     }

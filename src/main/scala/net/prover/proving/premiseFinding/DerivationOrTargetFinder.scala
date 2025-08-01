@@ -57,7 +57,7 @@ object DerivationOrTargetFinder {
       default
     } else {
       deconstruct(targetStatement) match {
-        case Some((deconstructionStep, innerTargets)) => splitTargets(innerTargets).mapLeft(deconstructionStep +: _)
+        case Some((deconstructionStep, innerTargets)) => splitTargets(innerTargets).mapLeft(_ :+ deconstructionStep)
         case None => default
       }
     }
