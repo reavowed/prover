@@ -7,13 +7,20 @@ import net.prover.books.reading.{ReadBook, ReadBookDefinitions}
 object ReloadBooks {
   def apply()(implicit bookStateManager: BookStateManager): Unit = {
     bookStateManager.updateBooks(setBooks => {
-      val bookDefinitions = ReadBookDefinitions()
-      val books = bookDefinitions.foldLeft(ListWithKeys.empty[Book]) { case (booksSoFar, bookDefinition) =>
-        val newBooks = booksSoFar :+ ReadBook(bookDefinition, booksSoFar)
-        setBooks(newBooks)
-        newBooks
-      }.list
-      BookStateManager.logger.info(s"Parsed ${books.length} books")
+      val oldBooks = bookStateManager.globalContext.booksWithKeys
+      try {
+        val bookDefinitions = ReadBookDefinitions()
+        val books = bookDefinitions.foldLeft(ListWithKeys.empty[Book]) { case (booksSoFar, bookDefinition) =>
+          val newBooks = booksSoFar :+ ReadBook(bookDefinition, booksSoFar)
+          setBooks(newBooks)
+          newBooks
+        }.list
+        BookStateManager.logger.info(s"Parsed ${books.length} books")
+      } catch {
+        case e: Throwable =>
+          setBooks(oldBooks)
+          throw e
+      }
     })
   }
 }
