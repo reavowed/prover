@@ -11,7 +11,7 @@ elided ecebcb72f5b2dacf1aef04a807dfc613b9c75d27b2e6e166eaf2b68a63cbdd6e {
     prove injectiveFunction ⍳_ℤ 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ, injectiveFunction ⍳_ℤ) () 0.1.1
   }
   prove ∧ function ⍳_ℤ injectiveFunction ⍳_ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function ⍳_ℤ, injectiveFunction ⍳_ℤ) () 0.0 0.1
-  prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ domain ⍳_ℤ codomain ⍳_ℤ bijectiveFunction ⍳_ℤ domain ⍳_ℤ codomain ⍳_ℤ ecebcb72f5b2dacf1aef04a807dfc613b9c75d27b2e6e166eaf2b68a63cbdd6e () (⍳_ℤ) 0.2
+  prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ domain ⍳_ℤ codomain ⍳_ℤ bijectiveFunction ⍳_ℤ domain ⍳_ℤ codomain ⍳_ℤ ecebcb72f5b2dacf1aef04a807dfc613b9c75d27b2e6e166eaf2b68a63cbdd6e () (⍳_ℤ, ℕ, ℤ) 0.2
 }
 elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {
   elided 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a {

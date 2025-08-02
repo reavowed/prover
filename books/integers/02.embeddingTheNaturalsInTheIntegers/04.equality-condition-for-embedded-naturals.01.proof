@@ -27,5 +27,5 @@ inferenceWithPremiseDerivations {
     }
     prove ∈ t1 domain ⍳_ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ t1 $0) (ℕ, domain ⍳_ℤ) 1.3 p1
   }
-  prove ↔ = apply ⍳_ℤ t0 apply ⍳_ℤ t1 = t0 t1 9cda76a2ebff242cf7ca2afdae0b4365943d0972d7d3b4fd98a18c1e5a40843b () (⍳_ℤ, t0, t1) 1.0 1.2 1.4
+  prove ↔ = apply ⍳_ℤ t0 apply ⍳_ℤ t1 = t0 t1 652adf66eca3680554b1c145f3f457ec68a4a280c452a767e5c0b7bb12517eb7 () (⍳_ℤ, ℕ, ℤ, t0, t1) 1.0 1.2 1.4
 }
