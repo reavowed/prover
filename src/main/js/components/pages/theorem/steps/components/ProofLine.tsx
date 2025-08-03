@@ -166,7 +166,7 @@ const SingleStatementWithPrefixContent = function({editableBoundVariable, prefix
   const context = useContext(ProofContext)!;
   const wrapEditableBoundVariable = (name: string, index: number, boundVariablePath: number[]) => {
     const callback = (newName: string) => {
-      return context.fetchJsonForStepAndReplace(path, `boundVariables/${boundVariablePath.join(".")}/${index}/`, {
+      return context.fetchJsonForStepAndReplace(path, `boundVariables/${boundVariablePath.join(".")}/${index}`, {
         method: "PUT",
         body: newName
       });
