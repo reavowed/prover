@@ -33,8 +33,13 @@ export function fetchJson(input: RequestInfo | URL, init: JsonRequestInit | unde
     headers: {"Content-Type": "application/json", ...(headers || {})}
   })
     .then(response => new Promise<any>(((resolve, reject) => {
-        const method = response.ok ? resolve : reject;
-        return response.headers.get("Content-Length") === "0" ? method(null) : response.json().then(method);
+        if (response.ok) {
+            return response.headers.get("Content-Length") === "0" ?
+                resolve(null) :
+                response.json().then(resolve, reject);
+        } else {
+            response.text().then(reject, reject);
+        }
       }))
     )
 }
