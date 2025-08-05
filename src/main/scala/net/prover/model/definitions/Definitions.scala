@@ -433,6 +433,16 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     } yield Fact(inferenceExtraction)
   }
 
+  lazy val simpleAssertionInferences: Seq[InferenceExtraction] = {
+    for {
+      inferenceExtraction <- allInferenceExtractions
+      if inferenceExtraction.premises.isEmpty &&
+        inferenceExtraction.variableDefinitions.statements.isEmpty &&
+        inferenceExtraction.variableDefinitions.terms.nonEmpty &&
+        inferenceExtraction.variableDefinitions.hasNoApplications
+    } yield inferenceExtraction
+  }
+
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, Int, Int, Direction)] = {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     for {

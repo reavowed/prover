@@ -259,6 +259,9 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   lazy val factsBySerializedStatement: Map[String, Fact] = {
     facts.map { fact => fact.statement.serialized -> fact }.toMapPreservingEarliest
   }
+  lazy val simpleAssertionInferences: Seq[InferenceExtraction] = {
+    filter(definitions.simpleAssertionInferences)
+  }
 
   lazy val statementDeductionInferences: Seq[(Inference, Statement, Statement, Int, Int, Direction)] = {
     filter(definitions.statementDeductionInferences)

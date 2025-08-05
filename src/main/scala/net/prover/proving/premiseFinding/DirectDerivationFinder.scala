@@ -18,6 +18,14 @@ object DirectDerivationFinder {
 
     def fromFact = findDerivationForStatementFromFact(targetStatement)
 
+    def fromSimpleAssertion = (for {
+      inferenceExtraction <- provingContext.simpleAssertionInferences
+      substitutions <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement).flatMap(
+        _.confirmTotality(inferenceExtraction.variableDefinitions))
+      (derivationStep, premises) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
+      if premises.isEmpty
+    } yield SimpleDerivation.empty :+ derivationStep).headOption
+
     def byRemovingTermDefinition = (for {
       termDefinition <- targetStatement.referencedDefinitions.ofType[TermDefinition].iterator
       inferenceExtraction <- provingContext.termDefinitionRemovals(termDefinition)
@@ -41,7 +49,7 @@ object DirectDerivationFinder {
       if (rewriteDerivation.nonEmpty) findDirectDerivationForStatement(rewrittenTarget).map(_ ++ rewriteDerivation) else None
     }
 
-    fromPremises orElse fromFact orElse byRemovingTermDefinition orElse bySimplifyingTarget orElse byRewriting
+    fromPremises orElse fromFact orElse fromSimpleAssertion orElse byRemovingTermDefinition orElse bySimplifyingTarget orElse byRewriting
   }
 
   private def findDerivationForStatementFromFact(

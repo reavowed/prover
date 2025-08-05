@@ -485,5 +485,14 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
         ForAll("x")(Implication(ElementOf($, Domain(f)), φ($))),
         Seq(ForAll("x")(Implication(ElementOf($, a), φ($))), Conjunction(Function(f), FunctionFrom(f, a, b))))
     }
+    
+    "find a simple reflexive equality" in {
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0))
+      checkFindPremiseSteps(
+        Equals(a, a),
+        Nil,
+        Seq(assertion(equalityIsReflexive, Nil, Seq(a)))
+      )
+    }
   }
 }
