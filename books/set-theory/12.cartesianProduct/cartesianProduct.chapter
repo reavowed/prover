@@ -129,6 +129,13 @@ premise ⊆ t1 product t3 t4
 premise ∀ a → ∈ $0 t3 ∀ b → ∈ $0 t4 ∈ with ($$0 $0) t2 t5
 conclusion ⊆ t0 t5
 
+theorem Double Replacement Set Is Subset
+termVariables(S 0, X 0, F 2, A 0, B 0, C 0)
+premise = t0 replacementSet2 a b t1 with ($0 $1) t2
+premise ⊆ t1 product t3 t4
+premise ∀ a → ∈ $0 t3 ∀ b → ∈ $0 t4 → ∈ orderedPair $$0 $0 t1 ∈ with ($$0 $0) t2 t5
+conclusion ⊆ t0 t5
+
 comment And then extend that to replacing from a cartesian product of cartesian products.
 
 term quadrupleReplacementSet ($a $b $c $d X with (a b c d) F)
