@@ -24,7 +24,7 @@ object Reprove extends CompoundTheoremUpdater[Id] {
     stepWithContext: StepWithContext
   ): Step = {
     step.extraction.extractionSteps.head match {
-      case AppliedExtractionStep.Assertion(assertionStep)
+      case assertionStep: Step.AssertionStep
         if stepWithContext.stepProvingContext.provingContext.availableEntries.statementDefinitions.exists(_.deconstructionInference.contains(assertionStep.inference)) &&
           step.premises.isEmpty
       =>

@@ -45,8 +45,8 @@ object SimpleDerivation {
   }
   def fromExtraction(appliedExtraction: AppliedExtraction): SimpleDerivation = {
     SimpleDerivation(appliedExtraction.extractionSteps.map {
-      case AppliedExtractionStep.Assertion(assertionStep) => SimpleDerivationStep.Assertion(assertionStep)
-      case AppliedExtractionStep.DefinitionDeconstruction(deconstructionStep, additionalSteps) => SimpleDerivationStep.DefinitionDeconstruction(deconstructionStep, additionalSteps)
+      case assertionStep: Step.AssertionStep => SimpleDerivationStep.Assertion(assertionStep)
+      case DefinitionDeconstruction(deconstructionStep, additionalSteps) => SimpleDerivationStep.DefinitionDeconstruction(deconstructionStep, additionalSteps)
     })
   }
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[SimpleDerivation] = {

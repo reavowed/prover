@@ -2,12 +2,12 @@ package net.prover.proving.extraction
 
 import net.prover.controllers.OptionWithResponseExceptionOps
 import net.prover.exceptions.BadRequestException
-import net.prover.model._
+import net.prover.model.*
 import net.prover.model.expressions.{DefinedStatement, Statement, TermVariable}
 import net.prover.model.proof.Step.InferenceWithPremiseDerivationsStep
-import net.prover.model.proof._
+import net.prover.model.proof.*
 import net.prover.model.unwrapping.Unwrapper
-import net.prover.proving.derivation.SimpleDerivation
+import net.prover.proving.derivation.{DefinitionDeconstruction, SimpleDerivation}
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 import net.prover.proving.structure.inferences.SpecificationInference
 import net.prover.proving.structure.statements.BinaryConnectiveStatement
@@ -382,10 +382,9 @@ object ExtractionApplier {
     def groupSteps(steps: Seq[Step.AssertionStep], retainEndSimplifications: Boolean): Unit = {
       currentMainStep match {
         case Some(step) =>
-          stepsToReturn += AppliedExtractionStep.DefinitionDeconstruction(step, removeNonEndStructuralSimplifications(steps))
+          stepsToReturn += DefinitionDeconstruction(step, removeNonEndStructuralSimplifications(steps))
         case None =>
           stepsToReturn ++= (if (retainEndSimplifications) removeNonEndStructuralSimplifications(steps) else removeStructuralSimplifications(steps))
-            .map(AppliedExtractionStep.Assertion)
       }
     }
 

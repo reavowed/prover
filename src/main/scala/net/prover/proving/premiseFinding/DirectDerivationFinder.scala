@@ -70,7 +70,7 @@ object DirectDerivationFinder {
           (premiseDerivations, premiseFacts) <- premiseStatements.map(findDerivationWithFactInferences).traverseOption.map(_.split)
           singleFact = premiseFacts.traverseOption.flatMap(_.distinct.single)
           assertionStep = Step.AssertionStep(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
-        } yield (premiseDerivations.reduce(_ ++ _) :+ AppliedExtractionStep.Assertion(assertionStep), singleFact)
+        } yield (premiseDerivations.reduce(_ ++ _) :+ assertionStep, singleFact)
       }
 
       directly orElse bySimplifying

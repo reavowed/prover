@@ -93,7 +93,7 @@ class ReplaceElidedStepsSpec extends Specification with StepBuilderHelper {
         .inferenceExtraction.extraction.extractionSteps.last.statement.asInstanceOf[DefinedStatement]
         .boundVariableNames must beEqualTo(Seq("y"))
       actualSteps.last.asInstanceOf[Step.InferenceExtractionStep]
-        .inferenceExtraction.extraction.extractionSteps.last.toProofStep.asInstanceOf[AssertionStep]
+        .inferenceExtraction.extraction.extractionSteps.last.asInstanceOf[AssertionStep]
         .substitutions.statements.last.asInstanceOf[DefinedStatement]
         .boundVariableNames must beEqualTo(Seq("y"))
       actualSteps.last.asInstanceOf[Step.InferenceExtractionStep]

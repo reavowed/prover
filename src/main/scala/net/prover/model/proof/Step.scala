@@ -2,16 +2,17 @@ package net.prover.model.proof
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import net.prover.model._
+import net.prover.model.*
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.parsing.{KnownWordParser, Parser}
+import net.prover.proving.extraction.AppliedExtractionStep.toProofStep
 import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import scalaz.Monad
-import scalaz.Scalaz._
+import scalaz.Scalaz.*
 
 import scala.annotation.tailrec
 import scala.util.Try

@@ -6,12 +6,12 @@ import net.prover.model.entries.Theorem.Proof
 import net.prover.model.{Inference, Substitutions}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step}
-import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.{DefinitionDeconstruction, SimpleDerivation, SimpleDerivationStep}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import scalaz.Monoid
-import scalaz.Scalaz._
+import scalaz.Scalaz.*
 
 abstract class RecursiveStepFinder[T : Monoid] {
   def apply(theorem: Theorem): T = theorem.proofs.toList.foldMap(apply)
@@ -84,9 +84,9 @@ abstract class RecursiveStepFinder[T : Monoid] {
 
   def apply(extraction: AppliedExtraction): T = {
     extraction.extractionSteps.toList.foldMap {
-      case AppliedExtractionStep.Assertion(step) =>
+      case step: Step.AssertionStep =>
         apply(step)
-      case AppliedExtractionStep.DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
+      case DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
         apply(deconstructionStep) |+| additionalSteps.toList.foldMap(apply)
     } |+| apply(extraction.chainedRewriteSteps)
   }

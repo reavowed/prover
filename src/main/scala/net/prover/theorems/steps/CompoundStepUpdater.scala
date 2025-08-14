@@ -5,14 +5,15 @@ import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step, StepContext, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
-import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.{DefinitionDeconstruction, SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.extraction.AppliedExtractionStep.toProofStep
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import scalaz.Monad
-import scalaz.Scalaz._
+import scalaz.Scalaz.*
 
-abstract class CompoundStepUpdater[F[_] : Monad] {
+abstract class CompoundStepUpdater[F[+_] : Monad] {
   def apply(stepsWithContext: StepsWithContext): F[List[Step]] = {
     stepsWithContext.stepsWithContexts.toList.map(apply).sequence
   }
@@ -152,14 +153,14 @@ abstract class CompoundStepUpdater[F[_] : Monad] {
   }
   def updateAppliedExtractionStep(appliedExtractionStep: AppliedExtractionStep, stepContext: StepContext, proofWithContext: ProofWithContext): F[AppliedExtractionStep] = {
     appliedExtractionStep match {
-      case AppliedExtractionStep.Assertion(step) =>
-        updateAssertion(step, stepContext, proofWithContext).map(AppliedExtractionStep.Assertion(_))
-      case AppliedExtractionStep.DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
+      case step: Step.AssertionStep =>
+        updateAssertion(step, stepContext, proofWithContext)
+      case DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
         val innerContext = stepContext.forChild()
         for {
           newDeconstructionStep <- updateAssertion(deconstructionStep, innerContext, proofWithContext)
           newAdditionalSteps <- updateAssertions(additionalSteps, innerContext.addStep(deconstructionStep), proofWithContext)
-        } yield AppliedExtractionStep.DefinitionDeconstruction(newDeconstructionStep, newAdditionalSteps)
+        } yield DefinitionDeconstruction(newDeconstructionStep, newAdditionalSteps)
     }
   }
   def updateAppliedExtraction(appliedExtraction: AppliedExtraction, stepContext: StepContext, proofWithContext: ProofWithContext): F[AppliedExtraction] = {

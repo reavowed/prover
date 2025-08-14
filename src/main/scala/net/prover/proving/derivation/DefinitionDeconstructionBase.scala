@@ -9,7 +9,7 @@ trait DefinitionDeconstructionBase extends StepLike.Wrapper {
   def additionalSteps: Seq[Step.AssertionStep]
 
   def inference: Inference = deconstructionStep.inference
-  override def substeps: Seq[StepLike] = deconstructionStep +: additionalSteps
+  override def substeps: Seq[Step.AssertionStep] = deconstructionStep +: additionalSteps
   def toProofStep: Step.AssertionOrExtraction = {
     Step.InferenceExtractionStep.ifNecessary(AppliedInferenceExtraction(
       deconstructionStep,

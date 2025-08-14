@@ -33,7 +33,7 @@ class ExtractionApplierSpec extends Specification with StepBuilderHelper {
         .inferenceExtraction.extraction.extractionSteps.last.statement.asInstanceOf[DefinedStatement]
         .boundVariableNames must beEqualTo(Seq("y"))
       extractionStep.get._1.asInstanceOf[InferenceExtractionStep]
-        .inferenceExtraction.extraction.extractionSteps.last.toProofStep.asInstanceOf[AssertionStep]
+        .inferenceExtraction.extraction.extractionSteps.last.asInstanceOf[AssertionStep]
         .substitutions.statements.last.asInstanceOf[DefinedStatement]
         .boundVariableNames must beEqualTo(Seq("y"))
       extractionStep.get._1.asInstanceOf[Step.InferenceExtractionStep]
@@ -41,7 +41,7 @@ class ExtractionApplierSpec extends Specification with StepBuilderHelper {
         .components.last.asInstanceOf[DefinedStatement]
         .boundVariableNames must beEqualTo(Seq("y"))
       extractionStep.get._1.asInstanceOf[Step.InferenceExtractionStep]
-        .inferenceExtraction.extraction.extractionSteps.init.last.toProofStep.asInstanceOf[AssertionStep]
+        .inferenceExtraction.extraction.extractionSteps.init.last.asInstanceOf[AssertionStep]
         .substitutions.statements.last.asInstanceOf[DefinedStatement]
         .components.last.asInstanceOf[DefinedStatement]
         .boundVariableNames must beEqualTo(Seq("y"))

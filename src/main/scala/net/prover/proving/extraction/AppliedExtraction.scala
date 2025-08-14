@@ -1,17 +1,18 @@
 package net.prover.proving.extraction
 
-import net.prover.model._
+import net.prover.model.*
 import net.prover.model.proof.{Step, StepContext, StepLike}
 import net.prover.parsing.{KnownWordParser, Parser}
-import net.prover.proving.derivation.DefinitionDeconstructionBase
+import net.prover.proving.derivation.{DefinitionDeconstruction, DefinitionDeconstructionBase}
+import net.prover.proving.extraction.AppliedExtractionStep.toProofStep
 
 case class AppliedExtraction(extractionSteps: Seq[AppliedExtractionStep], chainedRewriteSteps: Seq[Step.AssertionStep]) extends StepLike.Wrapper {
   override def substeps: Seq[StepLike] = extractionSteps ++ chainedRewriteSteps
   def nonEmpty: Boolean = substeps.nonEmpty
   def inferences: Seq[Inference] = {
     (extractionSteps flatMap {
-      case AppliedExtractionStep.Assertion(step) => Seq(step.inference)
-      case AppliedExtractionStep.DefinitionDeconstruction(step, steps) => (step +: steps).map(_.inference)
+      case step: Step.AssertionStep => Seq(step.inference)
+      case step: DefinitionDeconstruction => step.substeps.map(_.inference)
     }) ++ chainedRewriteSteps.map(_.inference)
   }
 
@@ -24,7 +25,7 @@ case class AppliedExtraction(extractionSteps: Seq[AppliedExtractionStep], chaine
 }
 object AppliedExtraction {
   def fromSimpleExtraction(extractionSteps: Seq[Step.AssertionStep]): AppliedExtraction = {
-    AppliedExtraction(extractionSteps.map(AppliedExtractionStep.Assertion(_)), Nil)
+    AppliedExtraction(extractionSteps, Nil)
   }
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[AppliedExtraction] = {
     for {
@@ -42,29 +43,25 @@ object AppliedExtraction {
   }
 }
 
-sealed trait AppliedExtractionStep extends StepLike.Wrapper {
-  def toProofStep: Step.AssertionOrExtraction
-}
+type AppliedExtractionStep = Step.AssertionStep | DefinitionDeconstruction
+
 object AppliedExtractionStep {
-  case class Assertion(assertionStep: Step.AssertionStep) extends AppliedExtractionStep {
-    override def substeps: Seq[StepLike] = Seq(assertionStep)
-    override def toProofStep: Step.AssertionOrExtraction = assertionStep
+  extension (step: AppliedExtractionStep) {
+    def toProofStep: Step.AssertionOrExtraction = step match {
+      case step: Step.AssertionStep => step
+      case step: DefinitionDeconstruction => step.toProofStep
+    }
   }
-  case class DefinitionDeconstruction(
-    deconstructionStep: Step.AssertionStep,
-    additionalSteps: Seq[Step.AssertionStep]
-  ) extends AppliedExtractionStep
-    with DefinitionDeconstructionBase
 
   def apply(step: Step.AssertionOrExtraction): AppliedExtractionStep = step match {
-    case step: Step.AssertionStep => Assertion(step)
+    case step: Step.AssertionStep => step
     case step: Step.InferenceExtractionStep => DefinitionDeconstruction(
       step.inferenceExtraction.assertionStep,
-      step.inferenceExtraction.extraction.extractionSteps.collect { case AppliedExtractionStep.Assertion(step) => step })
+      step.inferenceExtraction.extraction.extractionSteps.collect { case step: Step.AssertionStep => step })
   }
 
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[AppliedExtractionStep] = {
-    val assertionParser = Step.AssertionStep.parser.map(Assertion(_))
+    val assertionParser = Step.AssertionStep.parser
     val definitionParser = KnownWordParser("deconstruction") {
       val innerContext = stepContext.forChild()
       (for {

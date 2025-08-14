@@ -49,13 +49,13 @@ trait StepHelpers {
   def existingStatementExtraction(
     steps: SubstitutionContext => Seq[Step.AssertionStep]
   ): SubstitutionContext => Step.ExistingStatementExtractionStep = { sc =>
-    Step.ExistingStatementExtractionStep(Nil, AppliedExtraction(steps(sc).map(AppliedExtractionStep.Assertion(_)), Nil))
+    Step.ExistingStatementExtractionStep(Nil, AppliedExtraction(steps(sc), Nil))
   }
   def existingStatementExtraction(
     premises: SubstitutionContext => Seq[KnownStatement],
     steps: SubstitutionContext => Seq[Step.AssertionStep]
   ): SubstitutionContext => Step.ExistingStatementExtractionStep = { sc =>
-    Step.ExistingStatementExtractionStep(premises(sc), AppliedExtraction(steps(sc).map(AppliedExtractionStep.Assertion(_)), Nil))
+    Step.ExistingStatementExtractionStep(premises(sc), AppliedExtraction(steps(sc), Nil))
   }
   def inferenceExtraction(
     assertionStepConstructor: SubstitutionContext => Step.AssertionStep,

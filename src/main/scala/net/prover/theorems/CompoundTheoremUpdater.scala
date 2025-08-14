@@ -8,7 +8,7 @@ import net.prover.theorems.steps.CompoundStepUpdater
 import scalaz.Monad
 import scalaz.Scalaz._
 
-abstract class CompoundTheoremUpdater[F[_] : Monad] extends CompoundStepUpdater[F] {
+abstract class CompoundTheoremUpdater[F[+_] : Monad] extends CompoundStepUpdater[F] {
   def apply(theoremWithContext: TheoremWithContext): F[Theorem] = {
     import theoremWithContext._
     for {
