@@ -7,6 +7,7 @@ trait StepLike {
   def statement: Statement
   def length: Int
   def serializedLines: Seq[String]
+  def toProofSteps: Seq[Step]
 }
 
 object StepLike {
@@ -15,6 +16,14 @@ object StepLike {
     def statement: Statement = substeps.last.statement
     def length: Int = substeps.map(_.length).sum + 1
     def serializedLines: Seq[String] = substeps.flatMap(_.serializedLines)
+    override def toProofSteps: Seq[Step] = {
+      substeps.flatMap(_.toProofSteps)
+    }
+  }
+
+  trait SingleStep extends StepLike {
+    def toProofStep: Step
+    override def toProofSteps: Seq[Step] = Seq(toProofStep)
   }
 
   def listParser[T](

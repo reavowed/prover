@@ -37,7 +37,8 @@ class DerivationFinderSpec extends Specification with StepBuilderHelper {
 
     def findPremise(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries): Option[Seq[Step]] = {
       given stepContext: StepContext = createBaseStepContext(premises, depth)
-      DerivationFinder.findDerivationForStatement(target).map(_.toProofSteps)
+      val derivation = DerivationFinder.findDerivationForStatement(target)
+      derivation.map(_.toProofSteps)
     }
 
     "find a simplified premise without a derivation" in {

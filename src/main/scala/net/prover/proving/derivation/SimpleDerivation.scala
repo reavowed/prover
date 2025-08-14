@@ -29,7 +29,6 @@ case class SimpleDerivation(steps: Seq[SimpleDerivationStep]) extends StepLike.W
   }
   override def substeps: Seq[StepLike] = steps
   def inferences: Set[Inference] = steps.map(_.inference).toSet
-  def toProofSteps: Seq[Step.AssertionOrExtraction] = steps.map(_.toProofStep)
   def nonEmpty: Boolean = steps.nonEmpty
   def isEmpty: Boolean = steps.isEmpty
   def distinct: SimpleDerivation = SimpleDerivation(steps.distinctBy(_.statement))
@@ -61,6 +60,7 @@ object SimpleDerivation {
 sealed trait SimpleDerivationStep extends StepLike.Wrapper {
   def inference: Inference
   def toProofStep: Step.AssertionOrExtraction
+  override def toProofSteps: Seq[Step] = Seq(toProofStep)
 }
 object SimpleDerivationStep {
   case class Assertion(assertionStep: Step.AssertionStep) extends SimpleDerivationStep {

@@ -17,10 +17,11 @@ import scala.annotation.tailrec
 import scala.util.Try
 
 @JsonIgnoreProperties(Array("substitutions", "isComplete", "unwrappers", "assertionStep", "premiseSteps", "innerSteps"))
-sealed trait Step extends StepLike {
+sealed trait Step extends StepLike.SingleStep {
   @JsonSerialize
   def `type`: String = getClass.getSimpleName.stripSuffix("Step").decapitalize
   override def toString: String = serializedLines.mkString("\n")
+  override def toProofStep: Step = this
 }
 
 object Step {

@@ -18,7 +18,6 @@ case class KnownStatement(override val statement: Statement, derivation: SimpleD
   def extend(newSteps: Seq[SimpleDerivationStep]): KnownStatement = {
     KnownStatement.fromDerivation(derivation ++ newSteps)
   }
-  def toProofSteps: Seq[Step.AssertionOrExtraction] = derivation.toProofSteps
   override def serializedLines: Seq[String] = {
     if (derivation.nonEmpty)
       derivation.serializedLines.indentInLabelledBracesIfPresent("knownDerived " + statement.serialized)
