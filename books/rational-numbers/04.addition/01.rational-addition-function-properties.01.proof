@@ -188,7 +188,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                         elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                                           inferenceWithPremiseDerivations {
                                             knownDerived ∈ $$$$$0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($$$$$0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.3.0.0.0
                                                 prove → ∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.3.0.0.1
@@ -197,7 +197,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                               }
                                             }
                                             knownDerived ∈ $0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.3.0.1.0
                                                 prove → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.3.0.1.1
@@ -206,7 +206,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                               }
                                             }
                                             knownDerived ∈ $$$0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($$$0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.3.0.2.0
                                                 prove → ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.3.0.2.1
@@ -252,7 +252,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                         elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
                                           inferenceWithPremiseDerivations {
                                             knownDerived ∈ $0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.7.0.0.0
                                                 prove → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.7.0.0.1
@@ -261,7 +261,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                               }
                                             }
                                             knownDerived ∈ $$$0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($$$0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.7.0.1.0
                                                 prove → ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.7.0.1.1
@@ -329,7 +329,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                         elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                                           inferenceWithPremiseDerivations {
                                             knownDerived ∈ $$$$$0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($$$$$0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.13.0.0.0
                                                 prove → ∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.13.0.0.1
@@ -338,7 +338,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                               }
                                             }
                                             knownDerived ∈ $0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.13.0.1.0
                                                 prove → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.13.0.1.1
@@ -384,7 +384,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                         elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
                                           inferenceWithPremiseDerivations {
                                             knownDerived ∈ $0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.17.0.0.0
                                                 prove → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.3.17.0.0.1
@@ -460,7 +460,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                         elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                                           inferenceWithPremiseDerivations {
                                             knownDerived ∈ $$$0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($$$0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.3.0.0.0
                                                 prove → ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.3.0.0.1
@@ -469,7 +469,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                               }
                                             }
                                             knownDerived ∈ $0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.3.0.1.0
                                                 prove → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.3.0.1.1
@@ -515,7 +515,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                         elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
                                           inferenceWithPremiseDerivations {
                                             knownDerived ∈ $0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.7.0.0.0
                                                 prove → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.7.0.0.1
@@ -583,7 +583,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                         elided 4cf1634f41b6d7d335519b6a4e65b8b6f714b2c1a850a260a93b3db34670c89f {
                                           inferenceWithPremiseDerivations {
                                             knownDerived ∈ $$$0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($$$0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.13.0.0.0
                                                 prove → ∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $$$0 ℤ ¬ ∈ $$$0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.13.0.0.1
@@ -592,7 +592,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                               }
                                             }
                                             knownDerived ∈ $$$$$0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($$$$$0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.13.0.1.0
                                                 prove → ∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.13.0.1.1
@@ -638,7 +638,7 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
                                         elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
                                           inferenceWithPremiseDerivations {
                                             knownDerived ∈ $$$$$0 ℤ {
-                                              extraction {
+                                              inferenceExtraction {
                                                 prove ∀ a ↔ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $0 ℤ ¬ ∈ $0 singleton apply ⍳_ℤ 0ℕ e4c776166cba186d97efd2fd24e0172830ba645af61179323190c702690312a8 () (ℤ, singleton apply ⍳_ℤ 0ℕ)
                                                 prove ↔ ∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$$$$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$$$$$$0 ℤ ¬ ∈ $$$$$$$$$$0 singleton apply ⍳_ℤ 0ℕ) ($$$$$0) 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.17.0.0.0
                                                 prove → ∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $$$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ, ∧ ∈ $$$$$0 ℤ ¬ ∈ $$$$$0 singleton apply ⍳_ℤ 0ℕ) () 0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.7.17.0.0.1

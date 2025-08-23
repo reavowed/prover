@@ -154,7 +154,7 @@ take b {
           elided (Rearranged) {
             inferenceWithPremiseDerivations {
               knownDerived ∈ $0 baseSet +ℕ {
-                extraction {
+                inferenceExtraction {
                   prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                   deconstruction {
                     prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 0.1.1.0.5.0.0.0.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -164,7 +164,7 @@ take b {
                 prove ∈ $0 baseSet +ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$$$$0) (ℕ, baseSet +ℕ) 0.1.1.0.5.0.0.0 0.1.1.0.5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
               }
               knownDerived ∈ $$0 baseSet +ℕ {
-                extraction {
+                inferenceExtraction {
                   prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                   deconstruction {
                     prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 0.1.1.0.5.0.0.2.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29

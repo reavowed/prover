@@ -1,6 +1,6 @@
 inferenceWithPremiseDerivations {
   knownDerived ∧ relation ≤ℤ ℤ completeRelation ≤ℤ ℤ {
-    extraction {
+    inferenceExtraction {
       prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
       deconstruction {
         prove ∧ ∧ ∧ relation ≤ℤ ℤ antisymmetricRelation ≤ℤ ℤ transitiveRelation ≤ℤ ℤ completeRelation ≤ℤ ℤ 2cedf113aeb4961b23edc2f97dd91454c152e6058f3d6441837f1171f9a1aab5 () (≤ℤ, ℤ) 0.0.0

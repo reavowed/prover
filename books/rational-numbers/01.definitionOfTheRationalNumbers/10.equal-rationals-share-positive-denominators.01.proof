@@ -115,7 +115,7 @@ assume ∈ orderedPair apply ⍳_ℤ 0ℕ t2 <ℤ {
   elided (Rearranged) {
     inferenceWithPremiseDerivations {
       knownDerived ∈ t1 ℤ {
-        extraction {
+        inferenceExtraction {
           prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 () ()
           prove ↔ ∈ t1 ℤ^+ ∧ ∈ t1 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t1 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ) (t1) 2.0.0.0.0
           prove → ∈ t1 ℤ^+ ∧ ∈ t1 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t1 <ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ t1 ℤ^+, ∧ ∈ t1 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t1 <ℤ) () 2.0.0.0.1
@@ -129,7 +129,7 @@ assume ∈ orderedPair apply ⍳_ℤ 0ℕ t2 <ℤ {
     prove = apply ×ℤ orderedPair t2 t1 apply ×ℤ orderedPair t0 t3 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply ×ℤ orderedPair t2 t1, apply ×ℤ orderedPair t1 t2, apply ×ℤ orderedPair t0 t3) 2.0.0 2.0.1
     inferenceWithPremiseDerivations {
       knownDerived ∈ t3 ℤ {
-        extraction {
+        inferenceExtraction {
           prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 () ()
           prove ↔ ∈ t3 ℤ^+ ∧ ∈ t3 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t3 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ) (t3) 2.0.3.0.0
           prove → ∈ t3 ℤ^+ ∧ ∈ t3 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t3 <ℤ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ t3 ℤ^+, ∧ ∈ t3 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ t3 <ℤ) () 2.0.3.0.1

@@ -893,7 +893,9 @@ let x ∧ ∈ $0 ℤ ∃ y ∧ ∈ $0 ℤ^+ = t0 equivalenceClass orderedPair $$
             }
             rewrite {
               byInference {
-                prove = apply ×ℤ orderedPair $$0 $0 apply ×ℤ orderedPair $0 $$0 db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe () ($$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                inferenceExtraction {
+                  prove = apply ×ℤ orderedPair $$0 $0 apply ×ℤ orderedPair $0 $$0 db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe () ($$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                }
               }
               prove = apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 apply ×ℤ orderedPair $$0 $0 apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 apply ×ℤ orderedPair $0 $$0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply ×ℤ orderedPair $$0 $0, apply ×ℤ orderedPair $0 $$0, apply ×ℤ orderedPair gcdℤ $$$$0 $$$0 $$$$$0) 1.0.1.1.2.1.1.0
             }

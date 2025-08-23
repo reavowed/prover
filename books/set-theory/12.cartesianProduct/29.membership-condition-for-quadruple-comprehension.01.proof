@@ -1,6 +1,8 @@
 rewrite {
   byInference {
-    prove = quadrupleComprehension a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) s0 productComprehension x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) s0 d33651137768d3c411b5cf291cdd305870237f09afa6e43997fca4e350cfe42d (with ($0 $1 $2 $3) s0) (product product t1 t2 product t3 t4)
+    inferenceExtraction {
+      prove = quadrupleComprehension a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) s0 productComprehension x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) s0 d33651137768d3c411b5cf291cdd305870237f09afa6e43997fca4e350cfe42d (with ($0 $1 $2 $3) s0) (product product t1 t2 product t3 t4)
+    }
   }
   prove = t0 productComprehension x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (quadrupleComprehension a b c d product product t1 t2 product t3 t4 with ($0 $1 $2 $3) s0, productComprehension x y product product t1 t2 product t3 t4 with (first $0 second $0 first $1 second $1) s0) 0.0 p0
 }
@@ -19,13 +21,17 @@ elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
           elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
             rewrite {
               byInference {
-                prove = $$0 orderedPair first $$0 second $$0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($$0, t1, t2) 2.0.0a
+                inferenceExtraction {
+                  prove = $$0 orderedPair first $$0 second $$0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($$0, t1, t2) 2.0.0a
+                }
               }
               prove ↔ ∈ orderedPair orderedPair first $$0 second $$0 $0 t0 with (first $$0 second $$0 first $0 second $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (↔ ∈ orderedPair $$$0 $0 t0 with (first $$0 second $$0 first $0 second $0) s0) ($$0, orderedPair first $$0 second $$0) 2.0.0.0.0.1.0.0 2.0.0.0.0.0
             }
             rewrite {
               byInference {
-                prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t3, t4) 2.0.0.0.0a
+                inferenceExtraction {
+                  prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t3, t4) 2.0.0.0.0a
+                }
               }
               prove ↔ ∈ orderedPair orderedPair first $$0 second $$0 orderedPair first $0 second $0 t0 with (first $$0 second $$0 first $0 second $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (↔ ∈ orderedPair orderedPair first $$0 second $$0 $$$0 t0 with (first $$0 second $$0 first $0 second $0) s0) ($0, orderedPair first $0 second $0) 2.0.0.0.0.1.1.0 2.0.0.0.0.1.0
             }

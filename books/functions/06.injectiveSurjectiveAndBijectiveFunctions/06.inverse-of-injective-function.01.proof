@@ -283,7 +283,7 @@ subproof (Bijective) {
               prove ∧ = domain t0 t1 ⊆ codomain t0 t3 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t3) () 5.1.0.0.5.3.0
               prove ⊆ codomain t0 t3 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= domain t0 t1, ⊆ codomain t0 t3) () 5.1.0.0.5.3.1
             }
-            extraction {
+            inferenceExtraction {
               prove ∀ x → ∈ $0 codomain t0 ∈ $0 t3 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (codomain t0, t3) 5.1.0.0.5.3
               prove → ∈ apply t0 $0 codomain t0 ∈ apply t0 $0 t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 codomain t0 ∈ $$0 t3) (apply t0 $0) 5.1.0.0.5.4.0
               prove ∈ apply t0 $0 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply t0 $0 codomain t0, ∈ apply t0 $0 t3) () 5.1.0.0.5.4.1 5.1.0.0.5.2

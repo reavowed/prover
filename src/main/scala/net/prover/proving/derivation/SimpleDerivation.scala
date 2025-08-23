@@ -79,7 +79,7 @@ object SimpleDerivationStep {
     override def toProofStep: Step.AssertionOrExtraction = {
       Step.InferenceExtractionStep.ifNecessary(appliedInferenceExtraction)
     }
-    override def serializedLines: Seq[String] = super.serializedLines.indentInLabelledBracesIfPresent("extraction")
+    override def serializedLines: Seq[String] = super.serializedLines
   }
 
   def apply(appliedInferenceExtraction: AppliedInferenceExtraction): SimpleDerivationStep = {
@@ -100,9 +100,7 @@ object SimpleDerivationStep {
         )(stepContext.forChild().addStep(deconstructionStep)).map(_._1)
       } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)).inBraces
     }
-    val extractionParser = KnownWordParser("extraction") {
-      AppliedInferenceExtraction.parser.inBraces.map(InferenceExtraction(_))
-    }
+    val extractionParser = AppliedInferenceExtraction.parser.map(InferenceExtraction(_))
     KnownWordParser.select(Seq(assertionParser, definitionParser, extractionParser))
   }
 

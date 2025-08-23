@@ -394,7 +394,7 @@ object Step {
     override def inference: Inference.Summary = inferenceExtraction.inference.summary
     override def statement: Statement = inferenceExtraction.statement
     override def length: Int = inferenceExtraction.length
-    override def serializedLines: Seq[String] = inferenceExtraction.serializedLines.indentInLabelledBracesIfPresent(`type`)
+    override def serializedLines: Seq[String] = inferenceExtraction.serializedLines
   }
   object InferenceExtractionStep {
     def ifNecessary(appliedInferenceExtraction: AppliedInferenceExtraction): Step.AssertionOrExtraction = {
@@ -405,9 +405,7 @@ object Step {
       }
     }
     def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[InferenceExtractionStep] = {
-      KnownWordParser("inferenceExtraction") {
-        AppliedInferenceExtraction.parser.inBraces.map(InferenceExtractionStep(_))
-      }
+      AppliedInferenceExtraction.parser.map(InferenceExtractionStep(_))
     }
   }
 

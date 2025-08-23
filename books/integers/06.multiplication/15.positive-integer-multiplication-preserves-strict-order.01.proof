@@ -66,13 +66,17 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
             elided 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 {
               rewrite {
                 byInference {
-                  prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $$0 apply ×ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $0 apply ×ℕ orderedPair $$$$$0 $$0 ~_ℤ 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 () ($$$$$$0, $$$$$0, $$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  inferenceExtraction {
+                    prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $$0 apply ×ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $0 apply ×ℕ orderedPair $$$$$0 $$0 ~_ℤ 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 () ($$$$$$0, $$$$$0, $$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  }
                 }
                 prove ↔ ∈ orderedPair apply ×ℤ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ ∈ orderedPair equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $$0 apply ×ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $0 apply ×ℕ orderedPair $$$$$0 $$0 ~_ℤ apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $$$$$$$0 apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ) (apply ×ℤ orderedPair equivalenceClass orderedPair $$$$$$0 $$$$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ, equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $$0 apply ×ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $0 apply ×ℕ orderedPair $$$$$0 $$0 ~_ℤ) 1.0.1.0.1.0.4.0.0
               }
               rewrite {
                 byInference {
-                  prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ~_ℤ 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 () ($$$$0, $$$0, $$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  inferenceExtraction {
+                    prove = apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ~_ℤ 6abc47468300e19d38a1845e368df2fd0409733cc022cb07fae7806927091e59 () ($$$$0, $$$0, $$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  }
                 }
                 prove ↔ ∈ orderedPair equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $$0 apply ×ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $0 apply ×ℕ orderedPair $$$$$0 $$0 ~_ℤ apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ <ℤ ∈ orderedPair equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $$0 apply ×ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $0 apply ×ℕ orderedPair $$$$$0 $$0 ~_ℤ equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ~_ℤ <ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $$0 apply ×ℕ orderedPair $$$$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$$$0 $0 apply ×ℕ orderedPair $$$$$0 $$0 ~_ℤ $$$$$$$0 <ℤ) (apply ×ℤ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℤ equivalenceClass orderedPair $$0 $0 ~_ℤ, equivalenceClass orderedPair apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ~_ℤ) 1.0.1.0.1.0.4.1.0
               }
@@ -110,7 +114,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$$0 $$0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$$0, $$0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.0.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -121,7 +125,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$0, $0) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.0.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -134,7 +138,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                     prove ∈ apply ×ℕ orderedPair $$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply ×ℕ orderedPair $$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $$0) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair $$$$0 $0, apply ×ℕ orderedPair $$$0 $$0) 1.0.1.0.1.0.8.0.0.6 1.0.1.0.1.0.8.0.0.7
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.0.0.9.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -163,7 +167,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$0, $0) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.1.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -176,7 +180,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                     prove ∈ apply ×ℕ orderedPair $$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply ×ℕ orderedPair $$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $$0) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$0 $$0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair $$$$0 $0, apply ×ℕ orderedPair $$$0 $$0) 1.0.1.0.1.0.8.1.0.3 1.0.1.0.1.0.8.1.0.4
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.1.0.6.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -203,7 +207,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.3.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -214,7 +218,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$0 $$0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $$0) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.3.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -241,7 +245,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$0 $$0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $$0) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.5.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -252,7 +256,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.5.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -263,7 +267,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$0, $0) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.5.0.7.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -293,7 +297,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$$0 $$0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$$0, $$0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.7.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -304,7 +308,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$0 $$0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $$0) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.7.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -317,7 +321,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                     prove ∈ apply ×ℕ orderedPair $$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply ×ℕ orderedPair $$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$0, $0) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $0 apply ×ℕ orderedPair $$$$$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair $$$$0 $0, apply ×ℕ orderedPair $$$$$0 $0) 1.0.1.0.1.0.8.7.0.6 1.0.1.0.1.0.8.7.0.7
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.7.0.9.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -346,7 +350,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.9.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -357,7 +361,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$0, $0) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.9.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -384,7 +388,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.11.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -395,7 +399,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$0 $$0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$0, $$0) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.11.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -422,7 +426,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$0 $$0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$0, $$0) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.13.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -433,7 +437,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.13.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -446,7 +450,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                     prove ∈ apply ×ℕ orderedPair $$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $$0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply ×ℕ orderedPair $$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $0) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair $$$$0 $$0, apply ×ℕ orderedPair $$$0 $0) 1.0.1.0.1.0.8.13.0.6 1.0.1.0.1.0.8.13.0.7
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.13.0.9.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -476,7 +480,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.15.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -489,7 +493,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                     prove ∈ apply ×ℕ orderedPair $$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $$0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply ×ℕ orderedPair $$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $0) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$$0 $$0 apply ×ℕ orderedPair $$$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair $$$$0 $$0, apply ×ℕ orderedPair $$$0 $0) 1.0.1.0.1.0.8.15.0.3 1.0.1.0.1.0.8.15.0.4
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.15.0.6.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -516,7 +520,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$$0 $$0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $$0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.17.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -527,7 +531,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $0) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.17.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -538,7 +542,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.17.0.7.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -568,7 +572,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$0 $$0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$0, $$0) 1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.19.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -579,7 +583,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$$0 $$0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$0 $$0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$0, $$0) 1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.19.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -592,7 +596,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                     prove ∈ apply ×ℕ orderedPair $$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $0) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply ×ℕ orderedPair $$$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
                     prove ∈ apply +ℕ orderedPair apply ×ℕ orderedPair $$$0 $0 apply ×ℕ orderedPair $$$$$$0 $0 ℕ 3a9031cc7bb38c757e9d36e9d265e9f97904777d728e504151cd41640cd6844a () (apply ×ℕ orderedPair $$$0 $0, apply ×ℕ orderedPair $$$$$$0 $0) 1.0.1.0.1.0.8.19.0.6 1.0.1.0.1.0.8.19.0.7
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.19.0.9.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -621,7 +625,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                 inferenceWithPremiseDerivations {
                   knownDerived ∈ apply ×ℕ orderedPair $$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$0, $0) 1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.21.0.1.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -632,7 +636,7 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
                   }
                   knownDerived ∈ apply ×ℕ orderedPair $$$$$$0 $0 baseSet +ℕ {
                     prove ∈ apply ×ℕ orderedPair $$$$$$0 $0 ℕ 001a90728cbbfdde7cebe9a5efdda3d71f6a08411dbca6e856a1c13688c1105a () ($$$$$$0, $0) 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.1.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    extraction {
+                    inferenceExtraction {
                       prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
                       deconstruction {
                         prove ∧ binaryOperation +ℕ = baseSet +ℕ ℕ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℕ, ℕ) 1.0.1.0.1.0.8.21.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
@@ -739,13 +743,17 @@ let a_1 ∧ ∈ $0 ℕ ∃ a_2 ∧ ∈ $0 ℕ = t0 equivalenceClass orderedPair 
 elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
   rewrite {
     byInference {
-      prove = apply ×ℤ orderedPair t2 t0 apply ×ℤ orderedPair t0 t2 db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe () (t2, t0) p2 p0
+      inferenceExtraction {
+        prove = apply ×ℤ orderedPair t2 t0 apply ×ℤ orderedPair t0 t2 db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe () (t2, t0) p2 p0
+      }
     }
     prove ↔ ∈ orderedPair apply ×ℤ orderedPair t2 t0 apply ×ℤ orderedPair t2 t1 <ℤ ∈ orderedPair apply ×ℤ orderedPair t0 t2 apply ×ℤ orderedPair t2 t1 <ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair $0 apply ×ℤ orderedPair t2 t1 <ℤ) (apply ×ℤ orderedPair t2 t0, apply ×ℤ orderedPair t0 t2) 2.0.0
   }
   rewrite {
     byInference {
-      prove = apply ×ℤ orderedPair t2 t1 apply ×ℤ orderedPair t1 t2 db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe () (t2, t1) p2 p1
+      inferenceExtraction {
+        prove = apply ×ℤ orderedPair t2 t1 apply ×ℤ orderedPair t1 t2 db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe () (t2, t1) p2 p1
+      }
     }
     prove ↔ ∈ orderedPair apply ×ℤ orderedPair t0 t2 apply ×ℤ orderedPair t2 t1 <ℤ ∈ orderedPair apply ×ℤ orderedPair t0 t2 apply ×ℤ orderedPair t1 t2 <ℤ 9d5c51d3c2270f1c21ab063bf535d1cd662da1ef9b422e06d3ee956705cffa58 (∈ orderedPair apply ×ℤ orderedPair t0 t2 $0 <ℤ) (apply ×ℤ orderedPair t2 t1, apply ×ℤ orderedPair t1 t2) 2.1.0
   }

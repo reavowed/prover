@@ -1,6 +1,8 @@
 rewrite {
   byInference {
-    prove = productComprehension a b product t1 t2 with ($0 $1) s0 comprehension x product t1 t2 with (first $0 second $0) s0 4f7f4ef78054a5eb2b0078044ef866570f9856509ab0e937785f5b77c533826a (with ($0 $1) s0) (product t1 t2)
+    inferenceExtraction {
+      prove = productComprehension a b product t1 t2 with ($0 $1) s0 comprehension x product t1 t2 with (first $0 second $0) s0 4f7f4ef78054a5eb2b0078044ef866570f9856509ab0e937785f5b77c533826a (with ($0 $1) s0) (product t1 t2)
+    }
   }
   prove = t0 comprehension x product t1 t2 with (first $0 second $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (productComprehension a b product t1 t2 with ($0 $1) s0, comprehension x product t1 t2 with (first $0 second $0) s0) 0.0 p0
 }
@@ -18,13 +20,17 @@ take a {
           elided (Rewritten) {
             rewrite {
               byInference {
-                prove = first orderedPair $$0 $0 $$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () ($$0, $0)
+                inferenceExtraction {
+                  prove = first orderedPair $$0 $0 $$0 366704c23606b2b29e83f3ff4cf3d0281e588473d5bb8da8e1f8eb42fb1b9d1f () ($$0, $0)
+                }
               }
               prove with ($$0 second orderedPair $$0 $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($$$0 second orderedPair $$0 $0) s0) (first orderedPair $$0 $0, $$0) 2.0.0.0.0.1.0.0 2.0.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             }
             rewrite {
               byInference {
-                prove = second orderedPair $$0 $0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () ($$0, $0)
+                inferenceExtraction {
+                  prove = second orderedPair $$0 $0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () ($$0, $0)
+                }
               }
               prove with ($$0 $0) s0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (with ($$0 $$$0) s0) (second orderedPair $$0 $0, $0) 2.0.0.0.0.1.1.0 2.0.0.0.0.1.0
             }

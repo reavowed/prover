@@ -12,7 +12,9 @@ prove ∧ function singleton orderedPair t3 t4 functionFrom singleton orderedPai
 prove ∧ function ∪ t0 singleton orderedPair t3 t4 functionFrom ∪ t0 singleton orderedPair t3 t4 ∪ t1 singleton t3 ∪ t2 singleton t4 0f59e0a62abe8c28a4cb185bfca7a34f974b78247bce2650d7a08eeaed96f332 () (t0, t1, t2, singleton orderedPair t3 t4, singleton t3, singleton t4) p0 2 1
 rewrite {
   byInference {
-    prove = ∪ t2 singleton t4 t2 f4df9fd879b926cd0ee88a0393c0e910cc3f27bf67a0258ab019aa0ffe8145e1 () (t4, t2) p2
+    inferenceExtraction {
+      prove = ∪ t2 singleton t4 t2 f4df9fd879b926cd0ee88a0393c0e910cc3f27bf67a0258ab019aa0ffe8145e1 () (t4, t2) p2
+    }
   }
   prove ∧ function ∪ t0 singleton orderedPair t3 t4 functionFrom ∪ t0 singleton orderedPair t3 t4 ∪ t1 singleton t3 t2 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function ∪ t0 singleton orderedPair t3 t4 functionFrom ∪ t0 singleton orderedPair t3 t4 ∪ t1 singleton t3 $0) (∪ t2 singleton t4, t2) 4.0 3
 }

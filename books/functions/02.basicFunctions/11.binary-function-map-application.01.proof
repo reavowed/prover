@@ -1,6 +1,8 @@
 rewrite {
   byInference {
-    prove = functionMap2 a b t1 t2 with ($0 $1) t3 functionMap x product t1 t2 with (first $0 second $0) t3 d2ed19bff982c7a86e3ea5401742137044aaefd69cb8b2fa4fc7e55e934fbfb1 () (t1, t2, with ($0 $1) t3)
+    inferenceExtraction {
+      prove = functionMap2 a b t1 t2 with ($0 $1) t3 functionMap x product t1 t2 with (first $0 second $0) t3 d2ed19bff982c7a86e3ea5401742137044aaefd69cb8b2fa4fc7e55e934fbfb1 () (t1, t2, with ($0 $1) t3)
+    }
   }
   prove = t0 functionMap x product t1 t2 with (first $0 second $0) t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= t0 $0) (functionMap2 a b t1 t2 with ($0 $1) t3, functionMap x product t1 t2 with (first $0 second $0) t3) 0.0 p0
 }
@@ -14,7 +16,9 @@ elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
       }
       rewrite {
         byInference {
-          prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t1, t2) 2.0.0a
+          inferenceExtraction {
+            prove = $0 orderedPair first $0 second $0 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 () ($0, t1, t2) 2.0.0a
+          }
         }
         prove = apply t0 orderedPair first $0 second $0 with (first $0 second $0) t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= apply t0 $$0 with (first $0 second $0) t3) ($0, orderedPair first $0 second $0) 2.0.0.1.0 2.0.0.0
       }
