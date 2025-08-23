@@ -20,7 +20,7 @@ object RewritePremise {
   }
   case class ByInference(premises: Seq[KnownStatement], extraction: AppliedInferenceExtraction) extends RewritePremise {
     override def substeps: Seq[StepLike] = premises :+ extraction
-    override def toProofSteps: Seq[Step] = Seq(Step.ElidedStep.ifNecessary((premises.flatMap(_.derivation.toProofSteps) :+ extraction.toStep), extraction.inference).get)
+    override def toProofSteps: Seq[Step] = Seq(Step.ElidedStep.ifNecessary((premises.flatMap(_.derivation.toProofSteps) :+ extraction.toProofStep), extraction.inference).get)
     override def explicitInference: Option[Inference.Summary] = Some(extraction.inference.summary)
     override def serializedLines: Seq[String] = super.serializedLines.indentInLabelledBracesIfPresent("byInference")
   }

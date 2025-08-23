@@ -33,7 +33,7 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
         (source, result) = direction.swapSourceAndResult(premiseTerm, simplifiedTerm)
         (appliedExtraction, _) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(rewriteInference.inferenceExtraction, finalSubstitutions)
         expansionStep = equality.expansion.assertionStepIfNecessary(source, result, wrapper)
-      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation.toProofSteps) :+ appliedExtraction.toStep) ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
+      } yield SimplificationStepWithInference(wrapper(source), RearrangementStep(wrapper(result), (premises.flatMap(_.derivation.toProofSteps) :+ appliedExtraction.toProofStep) ++ expansionStep.toSeq, rewriteInference.baseInference), rewriteInference.baseInference)
     }
 
     def findSimplifications(premiseTerm: Term, direction: Direction, wrapper: Wrapper[Term, Term]): Seq[SimplificationStepWithInference] = {

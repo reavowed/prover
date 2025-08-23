@@ -1,22 +1,14 @@
 package net.prover.proving.derivation
 
-import net.prover.model._
+import net.prover.model.*
 import net.prover.model.proof.{Step, StepContext, StepLike}
 import net.prover.parsing.{KnownWordParser, Parser}
-import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
+import net.prover.proving.derivation.SimpleDerivationStep.{inference, toProofStep}
+import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction}
 
 case class SimpleDerivation(steps: Seq[SimpleDerivationStep]) extends StepLike.Wrapper {
-  def :+(inferenceExtraction: AppliedInferenceExtraction): SimpleDerivation = {
-    this :+ SimpleDerivationStep(inferenceExtraction)
-  }
-  def :+(assertionStep: Step.AssertionStep): SimpleDerivation = {
-    this :+ SimpleDerivationStep.Assertion(assertionStep)
-  }
   def :+(step: SimpleDerivationStep): SimpleDerivation = {
     this ++ Seq(step)
-  }
-  def +:(assertionStep: Step.AssertionStep): SimpleDerivation = {
-    SimpleDerivationStep.Assertion(assertionStep) +: this
   }
   def +:(step: SimpleDerivationStep): SimpleDerivation = {
     SimpleDerivation(step +: steps)
@@ -40,14 +32,8 @@ object SimpleDerivation {
       SimpleDerivation(derivations.flatMap(_.steps))
     }
   }
-  def fromAssertions(assertions: Seq[Step.AssertionStep]): SimpleDerivation = {
-    SimpleDerivation(assertions.map(SimpleDerivationStep.Assertion))
-  }
   def fromExtraction(appliedExtraction: AppliedExtraction): SimpleDerivation = {
-    SimpleDerivation(appliedExtraction.extractionSteps.map {
-      case assertionStep: Step.AssertionStep => SimpleDerivationStep.Assertion(assertionStep)
-      case DefinitionDeconstruction(deconstructionStep, additionalSteps) => SimpleDerivationStep.DefinitionDeconstruction(deconstructionStep, additionalSteps)
-    })
+    SimpleDerivation(appliedExtraction.extractionSteps)
   }
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[SimpleDerivation] = {
     StepLike.listParser[SimpleDerivationStep](
@@ -57,50 +43,21 @@ object SimpleDerivation {
   }
 }
 
-sealed trait SimpleDerivationStep extends StepLike.Wrapper {
-  def inference: Inference
-  def toProofStep: Step.AssertionOrExtraction
-  override def toProofSteps: Seq[Step] = Seq(toProofStep)
-}
+type SimpleDerivationStep = Step.AssertionStep | DefinitionDeconstruction | AppliedInferenceExtraction
+
 object SimpleDerivationStep {
-  case class Assertion(assertionStep: Step.AssertionStep) extends SimpleDerivationStep {
-    override def inference: Inference = assertionStep.inference
-    override def substeps: Seq[StepLike] = Seq(assertionStep)
-    override def toProofStep: Step.AssertionOrExtraction = assertionStep
-  }
-  case class DefinitionDeconstruction(
-    deconstructionStep: Step.AssertionStep,
-    additionalSteps: Seq[Step.AssertionStep]
-  ) extends SimpleDerivationStep with DefinitionDeconstructionBase
-
-  case class InferenceExtraction(appliedInferenceExtraction: AppliedInferenceExtraction) extends SimpleDerivationStep {
-    override def inference: Inference = appliedInferenceExtraction.assertionStep.inference
-    override def substeps: Seq[StepLike] = Seq(appliedInferenceExtraction)
-    override def toProofStep: Step.AssertionOrExtraction = {
-      Step.InferenceExtractionStep.ifNecessary(appliedInferenceExtraction)
+  extension (step: SimpleDerivationStep) {
+    def toProofStep: Step.AssertionOrExtraction = step match {
+      case assertionStep: Step.AssertionStep => assertionStep
+      case definitionDeconstruction: DefinitionDeconstruction => definitionDeconstruction.toProofStep
+      case appliedInferenceExtraction: AppliedInferenceExtraction => appliedInferenceExtraction.toProofStep
     }
-    override def serializedLines: Seq[String] = super.serializedLines
+    def inference: Inference = toProofStep.inference
   }
-
-  def apply(appliedInferenceExtraction: AppliedInferenceExtraction): SimpleDerivationStep = {
-    if (appliedInferenceExtraction.extraction.nonEmpty) {
-      InferenceExtraction(appliedInferenceExtraction)
-    } else {
-      Assertion(appliedInferenceExtraction.assertionStep)
-    }
-  }
-
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[SimpleDerivationStep] = {
-    val assertionParser = Step.AssertionStep.parser.map(Assertion(_))
-    val definitionParser = KnownWordParser(DefinitionDeconstructionBase.label) {
-      (for {
-        deconstructionStep <- Step.AssertionStep.parser(stepContext.forChild(), implicitly)
-        additionalSteps <- Step.listParser(stepContext =>
-          Step.AssertionStep.parser(stepContext, implicitly)
-        )(stepContext.forChild().addStep(deconstructionStep)).map(_._1)
-      } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)).inBraces
-    }
-    val extractionParser = AppliedInferenceExtraction.parser.map(InferenceExtraction(_))
+    val assertionParser = Step.AssertionStep.parser
+    val definitionParser = DefinitionDeconstruction.parser
+    val extractionParser = AppliedInferenceExtraction.parser
     KnownWordParser.select(Seq(assertionParser, definitionParser, extractionParser))
   }
 

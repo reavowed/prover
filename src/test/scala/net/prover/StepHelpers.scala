@@ -113,8 +113,8 @@ trait StepHelpers {
   ): SubstitutionContext => KnownStatement = { sc =>
     val steps = createSteps(sc)
     val derivation = SimpleDerivation(steps.map {
-      case step: Step.AssertionStep => SimpleDerivationStep.Assertion(step)
-      case step: Step.InferenceExtractionStep => SimpleDerivationStep.InferenceExtraction(step.inferenceExtraction)
+      case step: Step.AssertionStep => step
+      case step: Step.InferenceExtractionStep => step.inferenceExtraction
     })
     KnownStatement(derivation.statement, derivation)
   }

@@ -7,7 +7,6 @@ import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.parsing.{KnownWordParser, Parser}
-import net.prover.proving.extraction.AppliedExtractionStep.toProofStep
 import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
@@ -116,6 +115,7 @@ object Step {
     extends Step.AssertionOrExtraction
       with Step.WithoutSubsteps
       with Step.WithTopLevelStatement
+      with StepLike.SimpleSingleStep
   {
     override def updateStatement(f: Statement => Try[Statement]): Try[Step] = f(statement).map(a => copy(statement = a))
     override def length: Int = 1
@@ -125,6 +125,7 @@ object Step {
     def pendingPremises: Map[Seq[Int], Premise.Pending] = {
       premises.flatMapWithIndex((p, i) => p.getPendingPremises(Seq(i)).toSeq).toMap
     }
+    override def toProofStep: Step.AssertionStep = this
   }
   object AssertionStep {
     def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[AssertionStep] = {

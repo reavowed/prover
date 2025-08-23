@@ -126,7 +126,10 @@ class TermRearrangerSpec extends Specification with StepBuilderHelper {
     testReversableOperationMultipleWays("hidden inverse cancellation with extraction", addZ, addZ(mulZ(IntegerNegation(b), a), c), mulZ(a, b), c, Seq(a, b, c).map(ElementOf(_, Integers)))
 
     "rearrange using inverse with extraction" in {
-      testRearranging(Equals(addZ(mulZ(a, b), mulZ(b, IntegerNegation(a))), toZ(Zero)), Seq(ElementOf(a, Integers), ElementOf(b, Integers)))
+      testRearranging(
+        Equals(addZ(mulZ(a, b), mulZ(b, IntegerNegation(a))), toZ(Zero)),
+        Seq(ElementOf(a, Integers), ElementOf(b, Integers))
+      )
     }
 
     "rearrange using an inner distributivity" in {

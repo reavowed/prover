@@ -59,7 +59,7 @@ object ChainingMethods {
       } yield {
         secondRelation -> Step.RewriteStep.ifNecessary(
           RewritePremise.Known(KnownStatement.fromSingleStep(
-            SimpleDerivationStep.Assertion(reversal.assertionStep(intermediate, source)))),
+            reversal.assertionStep(intermediate, source))),
           substitution.assertionStep(intermediate, source, Wrapper(secondRelation(_, target)(_))))
       }
       def bySubstitutionFromSecond = for {

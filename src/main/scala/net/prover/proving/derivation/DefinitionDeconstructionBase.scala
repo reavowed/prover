@@ -4,7 +4,7 @@ import net.prover.model._
 import net.prover.model.proof.{Step, StepLike}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 
-trait DefinitionDeconstructionBase extends StepLike.Wrapper {
+trait DefinitionDeconstructionBase extends StepLike.Wrapper with StepLike.SimpleSingleStep {
   def deconstructionStep: Step.AssertionStep
   def additionalSteps: Seq[Step.AssertionStep]
 

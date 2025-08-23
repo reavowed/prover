@@ -106,11 +106,11 @@ abstract class RecursiveStepFinder[T : Monoid] {
   }
   def apply(simpleDerivation: SimpleDerivation): T = {
     simpleDerivation.steps.toList.foldMap {
-      case SimpleDerivationStep.Assertion(assertion) =>
+      case assertion: Step.AssertionStep =>
         apply(assertion)
-      case SimpleDerivationStep.DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
+      case DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
         apply(deconstructionStep) |+| additionalSteps.toList.foldMap(apply)
-      case SimpleDerivationStep.InferenceExtraction(extraction) =>
+      case extraction: AppliedInferenceExtraction =>
         apply(extraction)
     }
   }

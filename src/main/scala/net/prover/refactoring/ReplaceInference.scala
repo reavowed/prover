@@ -1,10 +1,10 @@
 package net.prover.refactoring
 
 import net.prover.books.management.BookStateManager
+import net.prover.controllers.*
 import net.prover.entries.{ProofWithContext, StepWithContext, TheoremWithContext, TypedStepWithContext}
 import net.prover.exceptions.InferenceReplacementException
-import net.prover.model._
-import net.prover.controllers._
+import net.prover.model.*
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
@@ -14,7 +14,7 @@ import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionAppl
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.theorems.{CompoundTheoremUpdater, GetReferencedPremises, RecalculateReferences}
-import net.prover.util.FunctorTypes._
+import net.prover.util.FunctorTypes.*
 
 import scala.util.Try
 
@@ -66,7 +66,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
             stepContext,
             proofWithContext).map(_._1)
         } yield premise
-      case RewritePremise.Known(KnownStatement(_, SimpleDerivation(Seq(SimpleDerivationStep.Assertion(step))))) if step.inference == oldInference =>
+      case RewritePremise.Known(KnownStatement(_, SimpleDerivation(Seq(step: Step.AssertionStep)))) if step.inference == oldInference =>
         val stepWithContext = TypedStepWithContext(step, proofWithContext)(using summon, stepContext.forChild())
         for {
           (newExtraction, newPremises) <- reproveExtraction(stepWithContext)
@@ -101,7 +101,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
   ): Try[Step] = {
     for {
       (appliedExtraction, premises) <- reproveExtraction(stepWithContext)
-      step = Step.InferenceWithPremiseDerivationsStep.ifNecessary(premises, appliedExtraction.toStep)
+      step = Step.InferenceWithPremiseDerivationsStep.ifNecessary(premises, appliedExtraction.toProofStep)
       updatedStep <- RecalculateReferences(stepWithContext.withStep(step)).map(_._1)
     } yield updatedStep
   }
@@ -178,7 +178,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
     stepWithContext: StepWithContext
   ): Try[Step] = {
     if (step.inference == oldInference) {
-      import step._
+      import step.*
       val assertion = Step.AssertionStep(statement, inference, premises, substitutions)
       for {
         updatedStep <- updateAssertion(assertion, stepWithContext)
@@ -202,7 +202,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
     step: Step.ElidedStep,
     stepWithContext: StepWithContext
   ): Try[Step] = {
-    import step._
+    import step.*
     if (highlightedInference.contains(oldInference)) {
       for {
         updatedSubsteps <- apply(stepWithContext.forSubsteps(step))

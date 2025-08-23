@@ -324,7 +324,7 @@ object ExtractionApplier {
         implicitly,
         wrappedStepContext
       ).orBadRequest("Could not apply extraction")
-      appliedExtractionStep = appliedExtraction.toStep
+      appliedExtractionStep = appliedExtraction.toProofStep
       (wrappedExtractionStep, wrappedPremises) = if (unwrappers.nonEmpty) {
         unwrappers.addNecessaryExtractions(appliedExtractionStep, premises)
       } else {

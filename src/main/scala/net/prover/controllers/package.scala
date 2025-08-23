@@ -31,7 +31,7 @@ package object controllers {
     }
   }
   implicit class OptionWithResponseExceptionOps[T](option: Option[T]) {
-    def orException(e: Exception): Try[T] = {
+    def orException(e: => Exception): Try[T] = {
       option match {
         case Some(t) => Success(t)
         case None => Failure(e)

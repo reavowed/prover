@@ -25,6 +25,10 @@ object StepLike {
     def toProofStep: Step
     override def toProofSteps: Seq[Step] = Seq(toProofStep)
   }
+  
+  trait SimpleSingleStep extends SingleStep {
+    override def toProofStep: Step.AssertionOrExtraction
+  }
 
   def listParser[T](
     getParser: StepContext => KnownWordParser[T],

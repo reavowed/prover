@@ -4,6 +4,7 @@ import net.prover.model.*
 import net.prover.model.TestDefinitions.{a, b, *}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.*
+import net.prover.proving.derivation.SimpleDerivationStep.toProofStep
 import net.prover.{ContextHelper, StepHelpers}
 import org.specs2.mutable.Specification
 

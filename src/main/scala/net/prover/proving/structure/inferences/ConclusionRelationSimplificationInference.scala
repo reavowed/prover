@@ -25,7 +25,7 @@ case class ConclusionRelationSimplificationInference(inferenceExtraction: Infere
       substitutedTypeStatement <- typePremiseOption.map(_.baseStatement.applySubstitutions(substitutions)).swap
       (simplifiedTargets, derivationSteps) <- derivedPremises.getSubstitutedPremises(substitutions)
       targetRelationStatements <- simplifiedTargets.map(provingContext.asBinaryRelationStatement).traverseOption
-    } yield (substitutedTypeStatement.toSeq, targetRelationStatements, SimpleDerivation.fromAssertions(derivationSteps) :+ extractionApplication)
+    } yield (substitutedTypeStatement.toSeq, targetRelationStatements, SimpleDerivation(derivationSteps) :+ extractionApplication)
   }
 }
 

@@ -3,8 +3,7 @@ package net.prover.proving.extraction
 import net.prover.model.*
 import net.prover.model.proof.{Step, StepContext, StepLike}
 import net.prover.parsing.{KnownWordParser, Parser}
-import net.prover.proving.derivation.{DefinitionDeconstruction, DefinitionDeconstructionBase}
-import net.prover.proving.extraction.AppliedExtractionStep.toProofStep
+import net.prover.proving.derivation.DefinitionDeconstruction
 
 case class AppliedExtraction(extractionSteps: Seq[AppliedExtractionStep], chainedRewriteSteps: Seq[Step.AssertionStep]) extends StepLike.Wrapper {
   override def substeps: Seq[StepLike] = extractionSteps ++ chainedRewriteSteps
@@ -46,13 +45,6 @@ object AppliedExtraction {
 type AppliedExtractionStep = Step.AssertionStep | DefinitionDeconstruction
 
 object AppliedExtractionStep {
-  extension (step: AppliedExtractionStep) {
-    def toProofStep: Step.AssertionOrExtraction = step match {
-      case step: Step.AssertionStep => step
-      case step: DefinitionDeconstruction => step.toProofStep
-    }
-  }
-
   def apply(step: Step.AssertionOrExtraction): AppliedExtractionStep = step match {
     case step: Step.AssertionStep => step
     case step: Step.InferenceExtractionStep => DefinitionDeconstruction(

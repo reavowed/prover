@@ -5,8 +5,8 @@ import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step, StepContext, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
+import net.prover.proving.derivation.SimpleDerivationStep.toProofStep
 import net.prover.proving.derivation.{DefinitionDeconstruction, SimpleDerivation, SimpleDerivationStep}
-import net.prover.proving.extraction.AppliedExtractionStep.toProofStep
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
@@ -210,17 +210,15 @@ abstract class CompoundStepUpdater[F[+_] : Monad] {
   }
   def updateSimpleDerivationStep(simpleDerivationStep: SimpleDerivationStep, stepContext: StepContext, proofWithContext: ProofWithContext): F[SimpleDerivationStep] = {
     simpleDerivationStep match {
-      case SimpleDerivationStep.Assertion(step) =>
+      case step: Step.AssertionStep =>
         updateAssertion(step, stepContext, proofWithContext)
-          .map(SimpleDerivationStep.Assertion(_))
-      case SimpleDerivationStep.DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
+      case DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
         for {
           newDeconstructionStep <- updateAssertion(deconstructionStep, stepContext.forChild(), proofWithContext)
           newAdditionalSteps <- updateAssertions(additionalSteps, stepContext.forChild().addStep(newDeconstructionStep), proofWithContext)
-        } yield SimpleDerivationStep.DefinitionDeconstruction(newDeconstructionStep, newAdditionalSteps)
-      case SimpleDerivationStep.InferenceExtraction(extraction) =>
+        } yield DefinitionDeconstruction(newDeconstructionStep, newAdditionalSteps)
+      case extraction: AppliedInferenceExtraction =>
         updateAppliedInferenceExtraction(extraction, stepContext, proofWithContext)
-          .map(SimpleDerivationStep(_))
     }
   }
   def updateStatement(statement: Statement, substitutionContext: SubstitutionContext): F[Statement] = Monad[F].point(statement)

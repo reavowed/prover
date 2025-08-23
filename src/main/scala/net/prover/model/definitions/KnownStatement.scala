@@ -9,8 +9,8 @@ import net.prover.proving.extraction.{AppliedInferenceExtraction, PremiseExtract
 
 case class KnownStatement(override val statement: Statement, derivation: SimpleDerivation) extends StepLike.Wrapper {
   override def substeps: Seq[StepLike] = Seq(derivation)
-  def extend(appliedInferenceExtraction: AppliedInferenceExtraction): KnownStatement = {
-    extend(Seq(SimpleDerivationStep(appliedInferenceExtraction)))
+  def extend(step: SimpleDerivationStep): KnownStatement = {
+    extend(Seq(step))
   }
   def extend(newDerivation: SimpleDerivation): KnownStatement = {
     extend(newDerivation.steps)
