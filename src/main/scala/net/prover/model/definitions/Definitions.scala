@@ -1,18 +1,18 @@
 package net.prover.model.definitions
 
 import net.prover.entries.BookWithContext
-import net.prover.model._
+import net.prover.model.*
 import net.prover.model.definitions.ExpressionDefinition.ComponentType.{StatementComponent, TermComponent}
 import net.prover.model.entries.DisplayShorthand
-import net.prover.model.expressions._
+import net.prover.model.expressions.*
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.utils.ExpressionUtils
-import net.prover.proving.extraction.{ExtractionCalculator, InferenceExtraction, StatementExtractionInference}
-import net.prover.proving.structure.inferences._
-import net.prover.proving.structure.statements._
+import net.prover.proving.extraction.{ExtractionCalculator, InferenceExtraction, SingleStatementExtractionInference, DoubleStatementExtractionInference}
+import net.prover.proving.structure.inferences.*
+import net.prover.proving.structure.statements.*
 import net.prover.util.Direction
 
-import scala.Ordering.Implicits._
+import scala.Ordering.Implicits.*
 import scala.collection.mutable
 import scala.util.Try
 
@@ -367,7 +367,8 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     }.toMap
   }
 
-  lazy val statementExtractionInferences: Seq[StatementExtractionInference] = inferenceEntries.mapCollect(StatementExtractionInference.fromInference)
+  lazy val singleStatementExtractionInferences: Seq[SingleStatementExtractionInference] = inferenceEntries.mapCollect(SingleStatementExtractionInference.fromInference)
+  lazy val doubleStatementExtractionInferences: Seq[DoubleStatementExtractionInference] = inferenceEntries.mapCollect(DoubleStatementExtractionInference.fromInference)
 
   lazy val termRewriteInferences: Seq[TermRewriteInference] = {
     implicit val substitutionContext: SubstitutionContext = SubstitutionContext.outsideProof

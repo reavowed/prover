@@ -100,7 +100,8 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
 
     implicit val allowableDeductionEliminationInference: Allowable[DeductionEliminationInference] = allowableProduct[DeductionEliminationInference]
     implicit val allowableSpecificationInference: Allowable[SpecificationInference] = allowableProduct[SpecificationInference]
-    implicit val allowableStatementExtractionInference: Allowable[StatementExtractionInference] = allowableProduct[StatementExtractionInference]
+    implicit val allowableSingleStatementExtractionInference: Allowable[SingleStatementExtractionInference] = allowableProduct[SingleStatementExtractionInference]
+    implicit val allowableDoubleStatementExtractionInference: Allowable[DoubleStatementExtractionInference] = allowableProduct[DoubleStatementExtractionInference]
     implicit val allowablePremiseRelationSimplificationInference: Allowable[PremiseRelationSimplificationInference] = allowableProduct[PremiseRelationSimplificationInference]
     implicit val allowablePremiseRelationRewriteInference: Allowable[RelationRewriteInference] = allowableProduct[RelationRewriteInference]
     implicit val allowableConclusionRelationSimplificationInference: Allowable[ConclusionRelationSimplificationInference] = allowableProduct[ConclusionRelationSimplificationInference]
@@ -234,8 +235,11 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   lazy val conclusionSimplificationInferences: Seq[Inference] = filter(definitions.conclusionSimplificationInferences)
   lazy val termDefinitionRemovals: Map[TermDefinition, Seq[InferenceExtraction]] = filter(definitions.termDefinitionRemovals)
 
-  lazy val statementExtractionInferences: Seq[StatementExtractionInference] = {
-    filter(definitions.statementExtractionInferences)
+  lazy val singleStatementExtractionInferences: Seq[SingleStatementExtractionInference] = {
+    filter(definitions.singleStatementExtractionInferences)
+  }
+  lazy val doubleStatementExtractionInferences: Seq[DoubleStatementExtractionInference] = {
+    filter(definitions.doubleStatementExtractionInferences)
   }
 
   lazy val prospectiveTermRewriteInferences: Seq[TermRewriteInference] = {

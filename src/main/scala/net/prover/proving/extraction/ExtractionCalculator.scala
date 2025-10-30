@@ -9,34 +9,28 @@ import net.prover.proving.structure.statements.BinaryConnectiveStatement
 import scala.annotation.tailrec
 
 object ExtractionCalculator {
-
-  private def getSimpleExtraction(
-    extractionSoFar: PartiallyAppliedExtraction,
-    inference: Inference,
-    extractionPremise: Statement,
-    otherPremiseOption: Option[Statement],
-    updateExtraction: (PartiallyAppliedExtraction, Step.AssertionStep) => PartiallyAppliedExtraction)(
-    implicit substitutionContext: SubstitutionContext
-  ): Option[PartiallyAppliedExtraction] = {
-    for {
-      extractionSubstitutions <- extractionPremise.calculateSubstitutions(extractionSoFar.conclusion).flatMap(_.confirmTotality(inference.variableDefinitions))
-      extractedConclusion <- inference.conclusion.applySubstitutions(extractionSubstitutions)
-      newPremiseOption <- otherPremiseOption.map(_.applySubstitutions(extractionSubstitutions)).swap
-      assertionStep = Step.AssertionStep(extractedConclusion, inference.summary, (extractionSoFar.conclusion +: newPremiseOption.toSeq).map(Premise.Pending), extractionSubstitutions)
-      newExtraction = updateExtraction(extractionSoFar, assertionStep)
-      if !newExtraction.extractionPremises.contains(newExtraction.conclusion) // Filter out spurious extractions
-    } yield newExtraction
-  }
-
-  private def getStatementExtractions(
+  private def getSingleStatementExtractions(
     extractionSoFar: PartiallyAppliedExtraction)(
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[PartiallyAppliedExtraction] = {
     for {
-      StatementExtractionInference(inference, extractionPremise, otherPremiseOption) <- provingContext.statementExtractionInferences
-      extraction <- getSimpleExtraction(extractionSoFar, inference, extractionPremise, otherPremiseOption, _.appendExtractionStep(_))
-    } yield extraction
+      singleStatementExtractionInference <- provingContext.singleStatementExtractionInferences
+      step <- singleStatementExtractionInference.applyToStatement(extractionSoFar.conclusion)
+      newExtraction = extractionSoFar.appendExtractionStep(step)
+    } yield newExtraction
+  }
+
+  private def getDoubleStatementExtractions(
+    extractionSoFar: PartiallyAppliedExtraction)(
+    implicit substitutionContext: SubstitutionContext,
+    provingContext: ProvingContext
+  ): Seq[PartiallyAppliedExtraction] = {
+    for {
+      doubleStatementExtractionInference <- provingContext.doubleStatementExtractionInferences
+      step <- doubleStatementExtractionInference.applyToStatement(extractionSoFar.conclusion)
+      newExtraction = extractionSoFar.appendExtractionStep(step)
+    } yield newExtraction
   }
 
   private def getPredicateExtraction(
@@ -77,9 +71,12 @@ object ExtractionCalculator {
     implicit substitutionContext: SubstitutionContext,
     provingContext: ProvingContext
   ): Seq[PartiallyAppliedExtraction] = {
-    getStatementExtractions(extractionSoFar) ++
+    (
+      getSingleStatementExtractions(extractionSoFar) ++
+      getDoubleStatementExtractions(extractionSoFar) ++
       getPredicateExtraction(extractionSoFar).toSeq ++
       getDefinitionDeconstructionExtractions(extractionSoFar)
+    ).filter(e => !e.extractionPremises.contains(e.conclusion)) // Filter out spurious extractions
   }
 
   private def getSimplificationExtractions(
@@ -106,9 +103,9 @@ object ExtractionCalculator {
   ): Option[PartiallyAppliedExtraction] = {
     for {
       reversal <- provingContext.reversals.find(_.joiner.unapply(extractionSoFar.conclusion).nonEmpty)
-      premise <- reversal.inference.premises.single
-      result <- getSimpleExtraction(extractionSoFar, reversal.inference, premise, None, _.appendReversal(_))
-    } yield result
+      step <- reversal.statementExtractionInference.applyToStatement(extractionSoFar.conclusion)
+      newExtraction = extractionSoFar.appendReversal(step)
+    } yield newExtraction
   }
 
   private def addLeftRewrites(

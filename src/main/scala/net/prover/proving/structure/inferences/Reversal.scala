@@ -3,7 +3,7 @@ package net.prover.proving.structure.inferences
 import net.prover.model.Inference
 import net.prover.model.expressions.{Expression, Statement}
 import net.prover.model.proof.{Premise, Step, SubstitutionContext}
-import net.prover.proving.extraction.StatementExtractionInference
+import net.prover.proving.extraction.{DoubleStatementExtractionInference, SingleStatementExtractionInference}
 import net.prover.proving.structure.statements.BinaryJoiner
 
 case class Reversal[TComponent <: Expression](joiner: BinaryJoiner[TComponent], inference: Inference.Summary, inferencePremise: Statement) {
@@ -15,8 +15,8 @@ case class Reversal[TComponent <: Expression](joiner: BinaryJoiner[TComponent], 
       joiner.fillSubstitutions(Seq(right, left)))
   }
 
-  def statementExtractionInference: StatementExtractionInference = {
-    StatementExtractionInference(inference, inferencePremise, None)
+  def statementExtractionInference: SingleStatementExtractionInference = {
+    SingleStatementExtractionInference(inference, inferencePremise)
   }
 }
 
