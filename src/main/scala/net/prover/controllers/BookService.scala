@@ -91,15 +91,21 @@ class BookService @Autowired() (implicit bookStateManager: BookStateManager) {
           (newSteps, MultipleStepReplacementProps(stepPath, 0, stepsWithContext.steps.length, newSteps))
         }))
       }.orNotFound(s"Step $stepPath").flatten
-    }.map(_.map { case (theoremUpdateProps, stepReplacementProps) =>
+    }.map(_.map { case (theoremUpdateProps: TheoremUpdateProps, stepReplacementProps: MultipleStepReplacementProps) =>
+      val newStepsAfterReferenceUpdate = if (stepPath.nonEmpty)
+        FindStep(theoremUpdateProps.theoremWithContext, proofIndex, stepPath).get
+          .step.asInstanceOf[Step.WithSubsteps]
+          .substeps
+      else
+        theoremUpdateProps.theorem.proofs(proofIndex).steps
       ProofUpdateProps(
         MultipleStepReplacementProps(
           stepPath,
           stepReplacementProps.startIndex,
           stepReplacementProps.endIndex,
-          if (stepPath.nonEmpty) FindStep(theoremUpdateProps.theoremWithContext, proofIndex, stepPath).get.step.asInstanceOf[Step.WithSubsteps].substeps else theoremUpdateProps.theorem.proofs(proofIndex).steps),
+          newStepsAfterReferenceUpdate),
         theoremUpdateProps.newInferences,
-        theoremUpdateProps.stepsWithReferenceChanges(proofIndex))
+        theoremUpdateProps.stepsWithReferenceChanges(proofIndex).filter(swc => !swc.path.startsWith(stepPath)))
     })
   }
 
