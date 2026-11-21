@@ -31,7 +31,8 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
     premisesAndSimplifications.flatMap { case (premise, simplifications) => simplifications.reverse :+ premise }
   }
 
-  private lazy val allPremiseExtractions: Seq[KnownStatement] = {
+  // Paired with whether the extraction ends in a reversal
+  private lazy val allPremiseExtractions: Seq[(KnownStatement, Boolean)] = {
     val `given` = premisesAndSimplifications.map(_._1).map(p => KnownStatement(p.statement, SimpleDerivation.empty))
     val simplified = premisesAndSimplifications.flatMap(_._2).map(p => KnownStatement(p.statement, SimpleDerivation.empty))
     val givenAndSimplified = `given` ++ simplified
@@ -39,9 +40,13 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
       premise <- allPremises
       extraction <- ExtractionCalculator.getPremiseExtractions(premise.statement)
       if extraction.premises.isEmpty && !extraction.extractionDetails.allSteps.exists(step => givenAndSimplified.exists(_.statement == step.statement))
-    } yield KnownStatement.fromExtraction(extraction)
-    (givenAndSimplified ++ extracted).deduplicate
+    } yield (KnownStatement.fromExtraction(extraction), extraction.extractionDetails.reversalStep.nonEmpty)
+    (givenAndSimplified.map(_ -> false) ++ extracted).distinctBy(_._1.statement)
   }
+  // A reversal should only come after any simplifications, so reversed extractions skip the simplification pass and
+  // rejoin for the rewrite pass (which will also reverse any simplified statements)
+  private lazy val unreversedPremiseExtractions: Seq[KnownStatement] = allPremiseExtractions.filter(!_._2).map(_._1)
+  private lazy val reversedPremiseExtractions: Seq[KnownStatement] = allPremiseExtractions.filter(_._2).map(_._1)
 
   private def simplifyAll(
     previous: Seq[KnownStatement],
@@ -64,8 +69,8 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
     }
   }
 
-  private lazy val allPremisesAfterSimplifications = simplifyAll(Nil, allPremiseExtractions, provingContext.premiseRelationSimplificationInferences)
-  lazy val knownStatementsFromPremises: Seq[KnownStatement] = simplifyAll(Nil, allPremisesAfterSimplifications, provingContext.premiseRelationRewriteInferences)
+  private lazy val allPremisesAfterSimplifications = simplifyAll(Nil, unreversedPremiseExtractions, provingContext.premiseRelationSimplificationInferences)
+  lazy val knownStatementsFromPremises: Seq[KnownStatement] = simplifyAll(Nil, (allPremisesAfterSimplifications ++ reversedPremiseExtractions).deduplicate, provingContext.premiseRelationRewriteInferences)
   lazy val knownStatementsFromPremisesBySerializedStatement: Map[String, KnownStatement] = {
     knownStatementsFromPremises.map(s => s.statement.serializedForHash -> s).toMapPreservingEarliest
   }
