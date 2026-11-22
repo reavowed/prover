@@ -13,7 +13,9 @@ assume surjectiveFunction t0 t1 t2 {
           prove ∈ orderedPair $0 $$0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ∈ $0 t1 = $$0 apply t0 $0, ∈ orderedPair $0 $$0 t0) () 0.0.0.1.0.1 0.0.0.1a
         }
         inferenceWithPremiseDerivations {
-          knownDerived ∧ ∈ $0 t1 ∈ orderedPair $0 $$0 t0 {
+          combined {
+            known ∈ $0 t1
+            known ∈ orderedPair $0 $$0 t0
             prove ∧ ∈ $0 t1 ∈ orderedPair $0 $$0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 t1, ∈ orderedPair $0 $$0 t0) () 0.0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0.1.0
           }
           prove ∃ x ∧ ∈ $0 t1 ∈ orderedPair $0 $$$0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 t1 ∈ orderedPair $$$0 $$0 t0) ($0) 0.0.0.1.1.0
@@ -53,7 +55,9 @@ assume = t2 codomain t0 {
   }
 }
 inferenceWithPremiseDerivations {
-  knownDerived ∧ → surjectiveFunction t0 t1 t2 = t2 codomain t0 → = t2 codomain t0 surjectiveFunction t0 t1 t2 {
+  combined {
+    known → surjectiveFunction t0 t1 t2 = t2 codomain t0
+    known → = t2 codomain t0 surjectiveFunction t0 t1 t2
     prove ∧ → surjectiveFunction t0 t1 t2 = t2 codomain t0 → = t2 codomain t0 surjectiveFunction t0 t1 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ surjectiveFunction t0 t1 t2 = t2 codomain t0, → = t2 codomain t0 surjectiveFunction t0 t1 t2) () 0 1
   }
   prove ↔ surjectiveFunction t0 t1 t2 = t2 codomain t0 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (surjectiveFunction t0 t1 t2, = t2 codomain t0) () 2.0

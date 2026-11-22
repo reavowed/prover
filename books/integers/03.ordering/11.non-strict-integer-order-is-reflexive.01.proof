@@ -1,5 +1,5 @@
 inferenceWithPremiseDerivations {
-  knownDerived ∧ relation ≤ℤ ℤ completeRelation ≤ℤ ℤ {
+  asserted {
     inferenceExtraction {
       prove totalOrder ≤ℤ ℤ 5f4b609ec973773b395d34e6e3be1106f60359015034826b9df9a28d2c665185 () ()
       deconstruction {

@@ -1,13 +1,23 @@
 prove ⊆ t3 t3 fff98b9c0fc51a3a1b88a451546bf03f8a2295c91df4fb09494bfedf71c31a8b () (t3)
 inferenceWithPremiseDerivations {
-  knownDerived ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t3 {
-    deconstruction {
-      prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 1.0.0
-      prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 1.0.1
+  combined {
+    known function t0
+    combined {
+      extracted {
+        known functionFrom t0 t1 t2
+        deconstruction {
+          prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t2 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t2) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+          prove ∧ = domain t0 t1 ⊆ codomain t0 t2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t2) () 1.0.0
+          prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t2) () 1.0.1
+        }
+      }
+      substituted {
+        known ⊆ t3 t3
+        known = t3 codomain t0
+        prove ⊆ codomain t0 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (⊆ $0 t3) (t3, codomain t0) p1 0
+      }
+      prove ∧ = domain t0 t1 ⊆ codomain t0 t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= domain t0 t1, ⊆ codomain t0 t3) () 1.0 1.1
     }
-    prove ⊆ codomain t0 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (⊆ $0 t3) (t3, codomain t0) p1 0
-    prove ∧ = domain t0 t1 ⊆ codomain t0 t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (= domain t0 t1, ⊆ codomain t0 t3) () 1.0 1.1
     prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t3) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.2
   }
   prove functionFrom t0 t1 t3 4709b7d46065bd8fa8af2f35abe10eb5febbad050ca07e167f5cec6235ba417a () (t0, t1, t3) 1.3
@@ -30,13 +40,20 @@ take b {
         prove = $$0 apply t0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 t1, = $$0 apply t0 $0) () 3.0.2.0.2
       }
       inferenceWithPremiseDerivations {
-        knownDerived ∧ ∈ $0 t1 = $$0 apply t0 $0 {
-          deconstruction {
-            prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t3 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t3) 2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-            prove ∧ = domain t0 t1 ⊆ codomain t0 t3 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t3) () 3.0.2.1.0.0
-            prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t3) () 3.0.2.1.0.1
+        combined {
+          substituted {
+            known ∈ $0 domain t0
+            extracted {
+              known functionFrom t0 t1 t3
+              deconstruction {
+                prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t3 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t3) 2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                prove ∧ = domain t0 t1 ⊆ codomain t0 t3 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t3) () 3.0.2.1.0.0
+                prove = domain t0 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain t0 t1, ⊆ codomain t0 t3) () 3.0.2.1.0.1
+              }
+            }
+            prove ∈ $0 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$$0) (domain t0, t1) 3.0.2.1.0 3.0.2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           }
-          prove ∈ $0 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$$0) (domain t0, t1) 3.0.2.1.0 3.0.2a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+          known = $$0 apply t0 $0
           prove ∧ ∈ $0 t1 = $$0 apply t0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 t1, = $$0 apply t0 $0) () 3.0.2.1.1 3.0.2.0
         }
         prove ∃ a ∧ ∈ $0 t1 = $$$0 apply t0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 t1 = $$0 apply t0 $$$0) ($0) 3.0.2.1.2
@@ -45,7 +62,9 @@ take b {
   }
 }
 inferenceWithPremiseDerivations {
-  knownDerived ∧ ∧ function t0 functionFrom t0 t1 t3 ∀ b → ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0 {
+  combined {
+    known ∧ function t0 functionFrom t0 t1 t3
+    known ∀ b → ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0
     prove ∧ ∧ function t0 functionFrom t0 t1 t3 ∀ b → ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function t0 functionFrom t0 t1 t3, ∀ b → ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0) () 2 3
   }
   prove surjectiveFunction t0 t1 t3 bac8c901516d40360774d8b3ef613907a74da0900ab7c4637a6fee3fc7f8b537 () (t0, t1, t3) 4.0

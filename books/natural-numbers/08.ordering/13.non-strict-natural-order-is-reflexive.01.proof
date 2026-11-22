@@ -1,5 +1,5 @@
 inferenceWithPremiseDerivations {
-  knownDerived ∧ relation ≤ℕ ℕ completeRelation ≤ℕ ℕ {
+  asserted {
     inferenceExtraction {
       prove wellOrder ≤ℕ ℕ 8d2b899ed603dcfd1ad54dbd945fd05dea4f3a61e470882b0b15f64f78e65d33 () ()
       deconstruction {

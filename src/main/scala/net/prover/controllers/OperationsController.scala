@@ -65,7 +65,7 @@ class OperationsController @Autowired() (implicit bookService: BookService, book
           _ <- bookService.modifyTheorem[Id](
             theorem.chapterWithContext.bookWithContext.bookKey,
             theorem.chapterWithContext.chapterKey,
-            theorem.entryKey)(RederivePremises(_))
+            theorem.entryKey)(theoremWithContext => Try { RederivePremises(theoremWithContext) })
         } yield "Updated"
       case None =>
         Try { RederivePremises() }

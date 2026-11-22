@@ -1,5 +1,6 @@
 inferenceWithPremiseDerivations {
-  knownDerived ∈ negatedZ t1 ℤ {
+  composed {
+    known ∈ t1 ℤ
     inferenceExtraction {
       prove ∧ ∈ negatedZ t1 ℤ ∧ = apply +ℤ orderedPair t1 negatedZ t1 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t1 t1 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () (t1) p1
       prove ∈ negatedZ t1 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ t1 ℤ, ∧ = apply +ℤ orderedPair t1 negatedZ t1 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ t1 t1 apply ⍳_ℤ 0ℕ) () 0.0.0

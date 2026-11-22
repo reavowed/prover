@@ -31,7 +31,8 @@ take a {
         elided (Rearranged) {
           elided 33d303eb36e1f0c8ae85e83f637002d074711dec9399fa4bfcac48d4a8b814d1 {
             inferenceWithPremiseDerivations {
-              knownDerived ∈ $0 ℤ {
+              simplified {
+                known ∈ $0 ℤ^+
                 inferenceExtraction {
                   prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 () ()
                   prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 ℤ^+ ∧ ∈ $$$$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 <ℤ) ($0) 0.0.1.0.3.0.0.0.0
@@ -49,7 +50,8 @@ take a {
           }
           elided db05bc93a50a613466aadfa13a65b63cbb83820060c7d4ce36e182ef41d3ecfe {
             inferenceWithPremiseDerivations {
-              knownDerived ∈ $0 ℤ {
+              simplified {
+                known ∈ $0 ℤ^+
                 inferenceExtraction {
                   prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 () ()
                   prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 ℤ^+ ∧ ∈ $$$$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 <ℤ) ($0) 0.0.1.0.3.1.0.0.0

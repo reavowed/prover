@@ -129,7 +129,7 @@ abstract class CompoundStepUpdater[F[+_] : Monad] {
       stepWithContext.stepContext
     ).map(_.asInstanceOf[Step])
   }
-  private def updateRewriteStep(step: Step.RewriteStep, stepWithContext: StepWithContext): F[Step] = {
+  def updateRewriteStep(step: Step.RewriteStep, stepWithContext: StepWithContext): F[Step] = {
     for {
       newPremise <- updateRewritePremise(step.premise, stepWithContext.stepContext.forChild(), stepWithContext.proofWithContext)
       newSubstitutionStep <- updateAssertion(

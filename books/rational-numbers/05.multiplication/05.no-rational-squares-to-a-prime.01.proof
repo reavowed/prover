@@ -150,11 +150,17 @@ assume ∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply 
         }
         elided 90ed199dd17244d5666ff5dc739697bd8b85af9624f45b8391949bd210e7efa6 {
           inferenceWithPremiseDerivations {
-            knownDerived ∈ apply ⍳_ℤ t0 ℤ {
-              prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
+            composed {
+              known ∈ t0 ℕ
+              inferenceExtraction {
+                prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
+              }
             }
-            knownDerived ∈ apply ⍳_ℤ t0 ℤ {
-              prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
+            composed {
+              known ∈ t0 ℕ
+              inferenceExtraction {
+                prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
+              }
             }
             prove ∈ orderedPair apply ×ℤ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ t0 apply ×ℤ orderedPair $$0 $$0 |ℤ 90ed199dd17244d5666ff5dc739697bd8b85af9624f45b8391949bd210e7efa6 () (apply ⍳_ℤ t0, apply ⍳_ℤ t0, $$0, $$0) 0.0.1.0.6.0.1 0.0.1.0.6.0.1 0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.1.0.5 0.0.1.0.5
           }
@@ -188,7 +194,8 @@ assume ∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply 
         }
         elided 1c734b179a0d195b98564e8c688e5d8aad606695c1ce64a9983af1941d03eaa7 {
           inferenceWithPremiseDerivations {
-            knownDerived ∈ $0 ℤ {
+            simplified {
+              known ∈ $0 ℤ^+
               inferenceExtraction {
                 prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 () ()
                 prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 ℤ^+ ∧ ∈ $$$$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 <ℤ) ($0) 0.0.1.0.8.0.0.0
@@ -197,7 +204,8 @@ assume ∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply 
                 prove ∈ $0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $0 ℤ, ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ) () 0.0.1.0.8.0.0.3
               }
             }
-            knownDerived ∈ $0 ℤ {
+            simplified {
+              known ∈ $0 ℤ^+
               inferenceExtraction {
                 prove ∀ a ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ 33df03e74e2f597e258c629c27f94141077439c140e088e5482b6d70e4513362 () ()
                 prove ↔ ∈ $0 ℤ^+ ∧ ∈ $0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $0 <ℤ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$$0 ℤ^+ ∧ ∈ $$$$0 ℤ ∈ orderedPair apply ⍳_ℤ 0ℕ $$$$0 <ℤ) ($0) 0.0.1.0.8.0.1.0
@@ -283,7 +291,9 @@ assume ∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply 
           }
           prove ¬ ∧ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t0 <ℤ de80533240b6a013871c2f0d3852de540696ecfcdfd321da7a571cee16435e26 (∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ≤ℤ, ∈ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t0 <ℤ) () 0.0.1.0.11.0
           inferenceWithPremiseDerivations {
-            knownDerived ∧ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t0 <ℤ {
+            combined {
+              known ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ≤ℤ
+              known ∈ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t0 <ℤ
               prove ∧ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t0 <ℤ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ≤ℤ, ∈ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t0 <ℤ) () 0.0.1.0.9 0.0.1.0.10
             }
             prove ⊥ b17320910f8cbe59f684fd81b2d51a5297ab7da7b50a333193de6e66ee033c17 (∧ ∈ orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ≤ℤ ∈ orderedPair apply ⍳_ℤ 1ℕ apply ⍳_ℤ t0 <ℤ) () 0.0.1.0.11.2.0 0.0.1.0.11.1

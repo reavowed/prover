@@ -11,7 +11,8 @@ let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747
         let x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 t0 ∨ ∧ with ($$$0) s0 = $0 $$$0 ∧ ¬ with ($$$0) s0 = $0 $$0, ∧ ∈ $0 t0 with ($0) s0) () 0.2.0.0a {
           assume with ($0) s0 {
             inferenceWithPremiseDerivations {
-              knownDerived ¬ ¬ with ($0) s0 {
+              combined {
+                known with ($0) s0
                 prove ¬ ¬ with ($0) s0 3df4534886dd61f6ef0a8462fb7cdbff93a3381c7b5ce4d4871f1d25450b688a (with ($0) s0) () 0.2.0.0.0.0a
               }
               inferenceExtraction {
@@ -21,7 +22,9 @@ let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747
               }
             }
             inferenceWithPremiseDerivations {
-              knownDerived ∧ ∈ $0 t0 with ($0) s0 {
+              combined {
+                known ∈ $0 t0
+                known with ($0) s0
                 prove ∧ ∈ $0 t0 with ($0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 t0, with ($0) s0) () 0.2.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.2.0.0.0.0a
               }
               prove ∧ ∈ $$0 t0 with ($$0) s0 2f09d05868429e1af035bd8050cb3d39de6550c92033f6fbc9deaa3a929b7b09 (∧ ∈ $$$$0 t0 with ($$$$0) s0) ($$0, $0) 0.2.0.0.0.0.0 0.2.0.0.0.0.1.0
@@ -29,7 +32,8 @@ let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747
           }
           assume ¬ with ($0) s0 {
             inferenceWithPremiseDerivations {
-              knownDerived ∨ ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ with ($0) s0 = $$0 $0 {
+              reversed {
+                known ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0
                 prove ∨ ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ with ($0) s0 = $$0 $0 b134472f96d09743ef31ae01b078b0eb39e40cae7af88a3daa98c677ba777f89 (∧ with ($0) s0 = $$0 $0, ∧ ¬ with ($0) s0 = $$0 $$$0) () 0.2.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               }
               inferenceExtraction {
@@ -46,16 +50,25 @@ let a ∧ ∈ $0 t0 with ($0) s0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747
       assume ∧ ∈ $0 t0 with ($0) s0 {
         prove = $0 $0 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () ($0)
         inferenceWithPremiseDerivations {
-          knownDerived ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 $$0 {
-            prove ∧ with ($0) s0 = $0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) s0, = $0 $0) () 0.2.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.2.0.1.0
-            prove ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 $$0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ with ($0) s0 = $0 $0, ∧ ¬ with ($0) s0 = $0 $$0) () 0.2.0.1.1.0
+          combined {
+            known ∈ $0 t0
+            combined {
+              combined {
+                known with ($0) s0
+                known = $0 $0
+                prove ∧ with ($0) s0 = $0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (with ($0) s0, = $0 $0) () 0.2.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.2.0.1.0
+              }
+              prove ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 $$0 6ccfde38da3fbc5937d0be48df56b30e7fce440242958bd0ca09d3eb86c6fda3 (∧ with ($0) s0 = $0 $0, ∧ ¬ with ($0) s0 = $0 $$0) () 0.2.0.1.1.0
+            }
             prove ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 $$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ $0 t0, ∨ ∧ with ($0) s0 = $0 $0 ∧ ¬ with ($0) s0 = $0 $$0) () 0.2.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.2.0.1.1.1
           }
           prove ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$$0 t0 ∨ ∧ with ($$$0) s0 = $0 $$$0 ∧ ¬ with ($$$0) s0 = $0 $$0) ($0) 0.2.0.1.1.2
         }
       }
       inferenceWithPremiseDerivations {
-        knownDerived ∧ → ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ ∈ $0 t0 with ($0) s0 → ∧ ∈ $0 t0 with ($0) s0 ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 {
+        combined {
+          known → ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ ∈ $0 t0 with ($0) s0
+          known → ∧ ∈ $0 t0 with ($0) s0 ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0
           prove ∧ → ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ ∈ $0 t0 with ($0) s0 → ∧ ∈ $0 t0 with ($0) s0 ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (→ ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ ∈ $0 t0 with ($0) s0, → ∧ ∈ $0 t0 with ($0) s0 ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0) () 0.2.0.0 0.2.0.1
         }
         prove ↔ ∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0 ∧ ∈ $0 t0 with ($0) s0 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (∃ x ∧ ∈ $0 t0 ∨ ∧ with ($0) s0 = $$0 $0 ∧ ¬ with ($0) s0 = $$0 $$$0, ∧ ∈ $0 t0 with ($0) s0) () 0.2.0.2.0

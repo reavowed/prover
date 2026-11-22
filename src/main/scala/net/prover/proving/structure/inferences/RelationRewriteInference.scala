@@ -116,12 +116,14 @@ object RelationRewriteInference {
       }
     }
 
-    // Reversals don't rewrite one relation to another, and are applied separately
-    val reversalInferenceIds = definitions.reversals.map(_.inference.id).toSet
+    // Reversals don't rewrite one relation to another, and are applied separately. This includes any extraction with
+    // the shape of a reversal, e.g. from "a = b ↔ b = a".
+    def isReversal(premise: BinaryRelationStatement, conclusion: BinaryRelationStatement): Boolean = {
+      premise.relation == conclusion.relation && premise.left == conclusion.right && premise.right == conclusion.left
+    }
 
     for {
       inferenceExtraction <- definitions.allInferenceExtractions
-      if !reversalInferenceIds.contains(inferenceExtraction.inference.id)
       (initialPremiseOption, mainPremiseStatement) <- inferenceExtraction.premises match {
         case Seq(a) => Seq((None, a))
         case Seq(a, b) => Seq((Some(a), b))
@@ -131,7 +133,7 @@ object RelationRewriteInference {
       if (initialPremiseOption.toSeq :+ inferenceExtraction.conclusion).usedVariables.contains(mainPremiseStatement.usedVariables)
       conclusion <- definitions.asBinaryRelationStatement(inferenceExtraction.conclusion).toSeq
       (mainPremise, initialSubstitutions) <- findPremiseRelation(mainPremiseStatement)
-      if isValidRewrite(mainPremise, conclusion) && isValidInitialPremise(initialPremiseOption, conclusion)
+      if isValidRewrite(mainPremise, conclusion) && isValidInitialPremise(initialPremiseOption, conclusion) && !(initialPremiseOption.isEmpty && isReversal(mainPremise, conclusion))
     } yield RelationRewriteInference(inferenceExtraction, initialPremiseOption, mainPremiseStatement, mainPremise.relation, conclusion.relation, initialSubstitutions)
   }
 }

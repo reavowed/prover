@@ -16,7 +16,10 @@ class StepProvingContextSpec extends Specification with ContextHelper with StepH
   val firstCoordinatesOfEqualOrderedPairsAreEqual = createInference("First Coordinates of Equal Ordered Pairs Are Equal", Seq(Equals(OrderedPair(a, b), OrderedPair(c, d))), Equals(a, c))
   val secondCoordinatesOfEqualOrderedPairsAreEqual = createInference("Second Coordinates of Equal Ordered Pairs Are Equal", Seq(Equals(OrderedPair(a, b), OrderedPair(c, d))), Equals(b, d))
 
-  given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(OrderedPair, firstCoordinatesOfEqualOrderedPairsAreEqual, secondCoordinatesOfEqualOrderedPairsAreEqual)
+  // An equivalence whose extraction has the same shape as a reversal, which should not be used in place of one
+  val equalityIsSymmetric = createInference("Equality Is Symmetric", Nil, Equivalence(Equals(a, b), Equals(b, a)))
+
+  given availableEntries: AvailableEntries = defaultAvailableEntriesPlus(OrderedPair, firstCoordinatesOfEqualOrderedPairsAreEqual, secondCoordinatesOfEqualOrderedPairsAreEqual, equalityIsSymmetric)
   given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "known statements from premises" should {
