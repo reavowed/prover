@@ -5,11 +5,10 @@ import net.prover.controllers.*
 import net.prover.entries.{ProofWithContext, StepWithContext, TheoremWithContext, TypedStepWithContext}
 import net.prover.exceptions.InferenceReplacementException
 import net.prover.model.*
-import net.prover.model.definitions.KnownStatement
 import net.prover.model.entries.Theorem
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step, StepContext, StepProvingContext}
-import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.DerivedStatement
 import net.prover.proving.extraction.{AppliedInferenceExtraction, ExtractionApplier, InferenceExtraction}
 import net.prover.proving.premiseFinding.DerivationOrTargetFinder
 import net.prover.proving.rewrite.RewritePremise
@@ -66,7 +65,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
             stepContext,
             proofWithContext).map(_._1)
         } yield premise
-      case RewritePremise.Known(KnownStatement(_, SimpleDerivation(Seq(step: Step.AssertionStep)))) if step.inference == oldInference =>
+      case RewritePremise.Known(ReplaceInference.SingleAssertion(step)) if step.inference == oldInference =>
         val stepWithContext = TypedStepWithContext(step, proofWithContext)(using summon, stepContext.forChild())
         for {
           (newExtraction, newPremises) <- reproveExtraction(stepWithContext)
@@ -101,14 +100,14 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
   ): Try[Step] = {
     for {
       (appliedExtraction, premises) <- reproveExtraction(stepWithContext)
-      step = Step.InferenceWithPremiseDerivationsStep.ifNecessary(premises, appliedExtraction.toProofStep)
+      step = Step.InferenceWithPremiseDerivationsStep.ifNecessary(premises.map(_.toKnownStatement), appliedExtraction.toProofStep)
       updatedStep <- RecalculateReferences(stepWithContext.withStep(step)).map(_._1)
     } yield updatedStep
   }
 
   private def reproveExtraction(
     stepWithContext: StepWithContext
-  ): Try[(AppliedInferenceExtraction, Seq[KnownStatement])] = {
+  ): Try[(AppliedInferenceExtraction, Seq[DerivedStatement])] = {
     reproveExtraction(
       Some(GetReferencedPremises(stepWithContext)),
       stepWithContext.step.statement)(
@@ -120,7 +119,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
     appliedInferenceExtraction: AppliedInferenceExtraction,
     stepContext: StepContext,
     proofWithContext: ProofWithContext
-  ): Try[(AppliedInferenceExtraction, Seq[KnownStatement])] = {
+  ): Try[(AppliedInferenceExtraction, Seq[DerivedStatement])] = {
     reproveExtraction(
       Some(GetReferencedPremises.removeInternalPremises(GetReferencedPremises(appliedInferenceExtraction), stepContext)),
       appliedInferenceExtraction.statement)(
@@ -133,18 +132,18 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
     conclusion: Statement)(
     implicit stepContext: StepContext,
     proofWithContext: ProofWithContext
-  ): Try[(AppliedInferenceExtraction, Seq[KnownStatement])] = {
+  ): Try[(AppliedInferenceExtraction, Seq[DerivedStatement])] = {
     import proofWithContext.provingContext
     for {
       (inferenceExtraction, substitutions) <- getExtraction(premisesOption, conclusion)
         .failIfUndefined(InferenceReplacementException("Could not find extraction", stepContext, proofWithContext))
       (appliedExtraction, requiredPremises) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
         .failIfUndefined(InferenceReplacementException("Could not apply extraction", stepContext, proofWithContext))
-      (knownStatements, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(
+      (derivedStatements, targetSteps) = DerivationOrTargetFinder.findDerivedStatementsOrTargets(
         requiredPremises)(
         new StepProvingContext)
       _ <- targetSteps.isEmpty.orFail(InferenceReplacementException("New extraction required targets", stepContext, proofWithContext))
-    } yield (appliedExtraction, knownStatements)
+    } yield (appliedExtraction, derivedStatements)
   }
 
   private def getExtraction(
@@ -214,6 +213,16 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
 }
 
 object ReplaceInference {
+  /**
+    * Matches a derivation that consists of a single assertion.
+    */
+  private object SingleAssertion {
+    def unapply(derivation: DerivedStatement): Option[Step.AssertionStep] = derivation.derivationSteps match {
+      case Seq(step: Step.AssertionStep) => Some(step)
+      case _ => None
+    }
+  }
+
   def apply(
     oldInferenceId: String,
     newInferenceId: String)(

@@ -6,7 +6,8 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step, StepContext, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
 import net.prover.proving.derivation.SimpleDerivationStep.toProofStep
-import net.prover.proving.derivation.{DefinitionDeconstruction, SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.DerivedStatement.DerivationContext
+import net.prover.proving.derivation.{DefinitionDeconstruction, DerivedStatement, SimpleDerivation, SimpleDerivationStep}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
@@ -155,12 +156,12 @@ abstract class CompoundStepUpdater[F[+_] : Monad] {
     appliedExtractionStep match {
       case step: Step.AssertionStep =>
         updateAssertion(step, stepContext, proofWithContext)
-      case DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
+      case DefinitionDeconstruction(deconstructionStep, additionalSteps, endsInReversal) =>
         val innerContext = stepContext.forChild()
         for {
           newDeconstructionStep <- updateAssertion(deconstructionStep, innerContext, proofWithContext)
           newAdditionalSteps <- updateAssertions(additionalSteps, innerContext.addStep(deconstructionStep), proofWithContext)
-        } yield DefinitionDeconstruction(newDeconstructionStep, newAdditionalSteps)
+        } yield DefinitionDeconstruction(newDeconstructionStep, newAdditionalSteps, endsInReversal)
     }
   }
   def updateAppliedExtraction(appliedExtraction: AppliedExtraction, stepContext: StepContext, proofWithContext: ProofWithContext): F[AppliedExtraction] = {
@@ -174,17 +175,111 @@ abstract class CompoundStepUpdater[F[+_] : Monad] {
         appliedExtraction.chainedRewriteSteps,
         stepContext.addSteps(newExtractionSteps.map(_.toProofStep)),
         proofWithContext)
-    } yield AppliedExtraction(newExtractionSteps, newRewriteSteps)
+    } yield AppliedExtraction(newExtractionSteps, AppliedExtraction.pairChainedRewriteSteps(newRewriteSteps), appliedExtraction.endsInReversal)
   }
   def updateRewritePremise(rewritePremise: RewritePremise, stepContext: StepContext, proofWithContext: ProofWithContext): F[RewritePremise] = {
     rewritePremise match {
-      case RewritePremise.Known(knownStatement) =>
-        updateKnownStatement(knownStatement, stepContext, proofWithContext).map(RewritePremise.Known(_))
+      case RewritePremise.Known(derivation) =>
+        updateDerivedStatement(derivation, stepContext, proofWithContext).map(RewritePremise.Known(_))
       case RewritePremise.ByInference(premises, extraction) =>
         for {
-          newPremises <- updateKnownStatements(premises, stepContext.forChild(), proofWithContext)
+          newPremises <- updateDerivedStatements(premises, stepContext.forChild(), proofWithContext)
           newExtraction <- updateAppliedInferenceExtraction(extraction, stepContext.forChild().addSteps(newPremises.flatMap(_.toProofSteps)), proofWithContext)
         } yield RewritePremise.ByInference(newPremises, newExtraction)
+    }
+  }
+  def updateDerivedStatements(derivedStatements: Seq[DerivedStatement], stepContext: StepContext, proofWithContext: ProofWithContext): F[Seq[DerivedStatement]] = {
+    updateAll[DerivedStatement](
+      derivedStatements,
+      stepContext,
+      updateDerivedStatement(_, _, proofWithContext),
+      (sc, d) => sc.addSteps(d.toProofSteps))
+  }
+  def updateDerivedStatement(derivedStatement: DerivedStatement, stepContext: StepContext, proofWithContext: ProofWithContext): F[DerivedStatement] = {
+    updateDerivedStatementInContext(derivedStatement, DerivationContext(stepContext), proofWithContext).map(_._1)
+  }
+  private def updateDerivedStatementInContext(
+    derivedStatement: DerivedStatement,
+    context: DerivationContext,
+    proofWithContext: ProofWithContext
+  ): F[(DerivedStatement, DerivationContext)] = {
+    def node(derivedStatement: DerivedStatement, context: DerivationContext): F[(DerivedStatement, DerivationContext)] = {
+      updateDerivedStatementInContext(derivedStatement, context, proofWithContext)
+    }
+    def nodes(derivedStatements: Seq[DerivedStatement], context: DerivationContext): F[(Seq[DerivedStatement], DerivationContext)] = {
+      derivedStatements.toList.foldLeftM((List.empty[DerivedStatement], context)) { case ((updatedSoFar, context), derivedStatement) =>
+        node(derivedStatement, context).map { case (updated, newContext) => (updatedSoFar :+ updated, newContext) }
+      }
+    }
+    def steps[T <: SimpleDerivationStep](steps: Seq[T], context: DerivationContext)(update: (T, StepContext) => F[T]): F[(Seq[T], DerivationContext)] = {
+      steps.toList.foldLeftM((List.empty[T], context)) { case ((updatedSoFar, context), step) =>
+        update(step, context.stepContext).map(updated => (updatedSoFar :+ updated, context.add(updated)))
+      }
+    }
+    def step[T <: SimpleDerivationStep](step: T, context: DerivationContext)(update: (T, StepContext) => F[T]): F[(T, DerivationContext)] = {
+      update(step, context.stepContext).map(updated => (updated, context.add(updated)))
+    }
+    def assertion(assertionStep: Step.AssertionStep, context: DerivationContext) = step(assertionStep, context)(updateAssertion(_, _, proofWithContext))
+    def inferenceExtraction(extraction: AppliedInferenceExtraction, context: DerivationContext) = step(extraction, context)(updateAppliedInferenceExtraction(_, _, proofWithContext))
+
+    derivedStatement match {
+      case DerivedStatement.Known(statement) =>
+        updateStatement(statement, context.stepContext).map(s => (DerivedStatement.Known(s), context))
+      case DerivedStatement.Unstructured(statement, derivationSteps) =>
+        for {
+          newStatement <- updateStatement(statement, context.stepContext)
+          (newSteps, newContext) <- steps(derivationSteps, context)(updateSimpleDerivationStep(_, _, proofWithContext))
+        } yield (DerivedStatement.Unstructured(newStatement, newSteps), newContext)
+      case DerivedStatement.Extracted(source, extraction) =>
+        for {
+          (newSource, contextAfterSource) <- node(source, context)
+          (newExtractionSteps, contextAfterExtraction) <- steps(extraction.extractionSteps, contextAfterSource)(updateAppliedExtractionStep(_, _, proofWithContext))
+          (newRewriteSteps, contextAfterRewrites) <- steps(extraction.chainedRewriteSteps, contextAfterExtraction)(updateAssertion(_, _, proofWithContext))
+          newExtraction = AppliedExtraction(newExtractionSteps, AppliedExtraction.pairChainedRewriteSteps(newRewriteSteps), extraction.endsInReversal)
+        } yield (DerivedStatement.Extracted(newSource, newExtraction), contextAfterRewrites)
+      case DerivedStatement.Simplified(source, simplification) =>
+        for {
+          (newSource, contextAfterSource) <- node(source, context)
+          (newSimplification, newContext) <- inferenceExtraction(simplification, contextAfterSource)
+        } yield (DerivedStatement.Simplified(newSource, newSimplification), newContext)
+      case DerivedStatement.RelationRewritten(source, supportingPremise, rewrite) =>
+        for {
+          (newSource, contextAfterSource) <- node(source, context)
+          (newSupportingPremise, contextAfterSupportingPremise) <- supportingPremise match {
+            case Some(premise) => node(premise, contextAfterSource).map { case (updated, newContext) => (Option(updated), newContext) }
+            case None => Monad[F].point((Option.empty[DerivedStatement], contextAfterSource))
+          }
+          (newRewrite, newContext) <- inferenceExtraction(rewrite, contextAfterSupportingPremise)
+        } yield (DerivedStatement.RelationRewritten(newSource, newSupportingPremise, newRewrite), newContext)
+      case DerivedStatement.Reversed(source, reversal) =>
+        for {
+          (newSource, contextAfterSource) <- node(source, context)
+          (newReversal, newContext) <- assertion(reversal, contextAfterSource)
+        } yield (DerivedStatement.Reversed(newSource, newReversal), newContext)
+      case DerivedStatement.Asserted(assertionExtraction) =>
+        inferenceExtraction(assertionExtraction, context).map { case (updated, newContext) => (DerivedStatement.Asserted(updated), newContext) }
+      case DerivedStatement.Combined(components, combination) =>
+        for {
+          (newComponents, contextAfterComponents) <- nodes(components, context)
+          (newCombination, newContext) <- assertion(combination, contextAfterComponents)
+        } yield (DerivedStatement.Combined(newComponents, newCombination), newContext)
+      case DerivedStatement.Composed(components, composition) =>
+        for {
+          (newComponents, contextAfterComponents) <- nodes(components, context)
+          (newComposition, newContext) <- step(composition, contextAfterComponents)(updateSimpleDerivationStep(_, _, proofWithContext))
+        } yield (DerivedStatement.Composed(newComponents, newComposition), newContext)
+      case DerivedStatement.Substituted(source, equality, substitution) =>
+        for {
+          (newSource, contextAfterSource) <- node(source, context)
+          (newEquality, contextAfterEquality) <- node(equality, contextAfterSource)
+          (newSubstitution, newContext) <- assertion(substitution, contextAfterEquality)
+        } yield (DerivedStatement.Substituted(newSource, newEquality, newSubstitution), newContext)
+      case DerivedStatement.Transitive(first, second, transitivity) =>
+        for {
+          (newFirst, contextAfterFirst) <- node(first, context)
+          (newSecond, contextAfterSecond) <- node(second, contextAfterFirst)
+          (newTransitivity, newContext) <- assertion(transitivity, contextAfterSecond)
+        } yield (DerivedStatement.Transitive(newFirst, newSecond, newTransitivity), newContext)
     }
   }
   def updateKnownStatements(knownStatements: Seq[KnownStatement], stepContext: StepContext, proofWithContext: ProofWithContext): F[Seq[KnownStatement]] = {
@@ -212,11 +307,11 @@ abstract class CompoundStepUpdater[F[+_] : Monad] {
     simpleDerivationStep match {
       case step: Step.AssertionStep =>
         updateAssertion(step, stepContext, proofWithContext)
-      case DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
+      case DefinitionDeconstruction(deconstructionStep, additionalSteps, endsInReversal) =>
         for {
           newDeconstructionStep <- updateAssertion(deconstructionStep, stepContext.forChild(), proofWithContext)
           newAdditionalSteps <- updateAssertions(additionalSteps, stepContext.forChild().addStep(newDeconstructionStep), proofWithContext)
-        } yield DefinitionDeconstruction(newDeconstructionStep, newAdditionalSteps)
+        } yield DefinitionDeconstruction(newDeconstructionStep, newAdditionalSteps, endsInReversal)
       case extraction: AppliedInferenceExtraction =>
         updateAppliedInferenceExtraction(extraction, stepContext, proofWithContext)
     }

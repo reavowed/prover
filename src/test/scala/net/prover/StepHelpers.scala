@@ -6,7 +6,7 @@ import net.prover.model.proof.{Step, SubstitutionContext}
 import net.prover.model.TestDefinitions._
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.proof.Step.RewriteStep
-import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.{DerivedStatement, SimpleDerivation, SimpleDerivationStep}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 
@@ -47,25 +47,31 @@ trait StepHelpers {
     Step.ElidedStep(steps(sc), None, Some(description))
   }
   def existingStatementExtraction(
-    steps: SubstitutionContext => Seq[Step.AssertionStep]
+    steps: SubstitutionContext => Seq[Step.AssertionStep])(
+    implicit provingContext: ProvingContext
   ): SubstitutionContext => Step.ExistingStatementExtractionStep = { sc =>
-    Step.ExistingStatementExtractionStep(Nil, AppliedExtraction(steps(sc), Nil))
+    Step.ExistingStatementExtractionStep(Nil, extraction(steps(sc), Nil))
   }
   def existingStatementExtraction(
     premises: SubstitutionContext => Seq[KnownStatement],
-    steps: SubstitutionContext => Seq[Step.AssertionStep]
+    steps: SubstitutionContext => Seq[Step.AssertionStep])(
+    implicit provingContext: ProvingContext
   ): SubstitutionContext => Step.ExistingStatementExtractionStep = { sc =>
-    Step.ExistingStatementExtractionStep(premises(sc), AppliedExtraction(steps(sc), Nil))
+    Step.ExistingStatementExtractionStep(premises(sc), extraction(steps(sc), Nil))
+  }
+  private def extraction(extractionSteps: Seq[AppliedExtractionStep], rewriteSteps: Seq[Step.AssertionStep])(implicit provingContext: ProvingContext): AppliedExtraction = {
+    AppliedExtraction(extractionSteps, AppliedExtraction.pairChainedRewriteSteps(rewriteSteps), AppliedExtraction.endsInReversal(extractionSteps))
   }
   def inferenceExtraction(
     assertionStepConstructor: SubstitutionContext => Step.AssertionStep,
     extractionStepsConstructor: SubstitutionContext => Seq[Step.AssertionOrExtraction],
-    rewriteStepsConstructor: SubstitutionContext => Seq[Step.AssertionStep] = (_ => Nil)
+    rewriteStepsConstructor: SubstitutionContext => Seq[Step.AssertionStep] = (_ => Nil))(
+    implicit provingContext: ProvingContext
   ): SubstitutionContext => Step.InferenceExtractionStep = { sc =>
     val assertionStep = assertionStepConstructor(sc)
     val extractionSteps = extractionStepsConstructor(sc).map(AppliedExtractionStep(_))
     val rewriteSteps = rewriteStepsConstructor(sc)
-    Step.InferenceExtractionStep(AppliedInferenceExtraction(assertionStep, AppliedExtraction(extractionSteps, rewriteSteps)))
+    Step.InferenceExtractionStep(AppliedInferenceExtraction(assertionStep, extraction(extractionSteps, rewriteSteps)))
   }
   def wrappedInferenceApplication(
     steps: SubstitutionContext => Seq[Step])(
@@ -82,13 +88,13 @@ trait StepHelpers {
       createAssertion(sc))
   }
   def rewriteStep(
-    createPremise: SubstitutionContext => KnownStatement,
+    createPremise: SubstitutionContext => DerivedStatement,
     createAssertion: SubstitutionContext => Step.AssertionStep
   ): SubstitutionContext => Step.RewriteStep = { sc =>
     Step.RewriteStep(RewritePremise.Known(createPremise(sc)), createAssertion(sc))
   }
   def rewriteStep(
-    createPremises: SubstitutionContext => Seq[KnownStatement],
+    createPremises: SubstitutionContext => Seq[DerivedStatement],
     createExtraction: SubstitutionContext => Step.AssertionOrExtraction,
     createAssertion: SubstitutionContext => Step.AssertionStep
   ): SubstitutionContext => Step.RewriteStep = { sc =>
@@ -97,11 +103,36 @@ trait StepHelpers {
         createPremises(sc),
         createExtraction(sc) match {
           case step: Step.AssertionStep =>
-            AppliedInferenceExtraction(step, AppliedExtraction(Nil, Nil))
+            AppliedInferenceExtraction(step, AppliedExtraction.empty)
           case step: Step.InferenceExtractionStep =>
             step.inferenceExtraction
         }),
       createAssertion(sc))
+  }
+  def knownPremise(statement: Statement): SubstitutionContext => DerivedStatement = { _ =>
+    DerivedStatement.Known(statement)
+  }
+  def asserted(createExtraction: SubstitutionContext => Step.InferenceExtractionStep): SubstitutionContext => DerivedStatement = { sc =>
+    DerivedStatement.Asserted(createExtraction(sc).inferenceExtraction)
+  }
+  def substituted(
+    createSource: SubstitutionContext => DerivedStatement,
+    createEquality: SubstitutionContext => DerivedStatement,
+    createSubstitution: SubstitutionContext => Step.AssertionStep
+  ): SubstitutionContext => DerivedStatement = { sc =>
+    DerivedStatement.Substituted(createSource(sc), createEquality(sc), createSubstitution(sc))
+  }
+  /**
+    * A reversal of a known statement, e.g. "b = a" from "a = b".
+    */
+  def reversed(
+    createReversal: SubstitutionContext => Step.AssertionStep
+  ): SubstitutionContext => DerivedStatement = { sc =>
+    val reversal = createReversal(sc)
+    DerivedStatement.Reversed(DerivedStatement.Known(reversal.premises.head.statement), reversal)
+  }
+  implicit def knownStatementToDerivedStatement(createKnownStatement: SubstitutionContext => KnownStatement): SubstitutionContext => DerivedStatement = { sc =>
+    DerivedStatement.Unstructured.fromKnownStatement(createKnownStatement(sc))
   }
   def known(
     statement: Statement
@@ -129,5 +160,8 @@ trait StepHelpers {
 
   implicit def seqConstructorToConstructorSeq[T](seq: Seq[SubstitutionContext => T]): SubstitutionContext => Seq[T] = { sc =>
     seq.map(_(sc))
+  }
+  implicit def knownStatementSeqToDerivedStatementSeq(seq: Seq[SubstitutionContext => KnownStatement]): SubstitutionContext => Seq[DerivedStatement] = { sc =>
+    seq.map(createKnownStatement => DerivedStatement.Unstructured.fromKnownStatement(createKnownStatement(sc)))
   }
 }

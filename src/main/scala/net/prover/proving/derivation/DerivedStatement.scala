@@ -3,14 +3,16 @@ package net.prover.proving.derivation
 import net.prover.model.*
 import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
-import net.prover.model.proof.Step
+import net.prover.model.proof.{Step, StepContext, StepLike}
+import net.prover.parsing.{KnownWordParser, Parser}
 import net.prover.proving.derivation.DerivedStatement.Tier
 import net.prover.proving.derivation.SimpleDerivationStep.{inference, toProofStep}
-import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction, PremiseExtraction}
+import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction, PremiseExtraction}
 
 /**
   * A statement available at a point in a proof, along with the structure of how it was derived from statements that
-  * were already known. Flattens to a list of proof steps in the same order the derivation was built in.
+  * were already known. Flattens to a list of proof steps in the same order the derivation was built in, omitting any
+  * step whose statement was already derived earlier in the derivation.
   */
 sealed trait DerivedStatement {
   def statement: Statement
@@ -20,23 +22,32 @@ sealed trait DerivedStatement {
     * Every inference applied in this derivation, along with how much it contributes to describing the derivation as a
     * whole.
     */
-  private[derivation] def tieredInferences(using ProvingContext): Seq[(Tier, Inference)]
+  private[derivation] def tieredInferences: Seq[(Tier, Inference)]
   /**
     * The single inference application that describes the derivation as a whole, if there is one. This is the
     * inference of the most significant tier of inferences that the derivation uses, if that tier only uses a single
     * inference. In particular, if the derivation consists of a single step, it will be the inference of that step.
     */
-  def primaryInference(using ProvingContext): Option[Inference.Summary] = {
-    val inferencesByTier = tieredInferences.groupBy(_._1)
-    Tier.values.iterator
-      .flatMap(inferencesByTier.get)
-      .nextOption()
-      .flatMap(_.map(_._2).distinctBy(_.id).single)
-      .map(_.summary)
+  def primaryInference: Option[Inference.Summary] = primaryInferenceWith(Nil)
+  /**
+    * The primary inference of rewriting another statement using this one, e.g. by substitution of equals. The rewrite
+    * itself only restates the other statement.
+    */
+  def primaryInferenceOfRewrite(rewriteStep: Step.AssertionStep): Option[Inference.Summary] = {
+    primaryInferenceWith(Seq(Tier.Rewrite -> rewriteStep.inference))
   }
+  protected def primaryInferenceWith(additionalInferences: Seq[(Tier, Inference)]): Option[Inference.Summary] = {
+    DerivedStatement.highestTierInference(tieredInferences ++ additionalInferences)
+  }
+  /**
+    * The statements that this derivation starts from, i.e. those that were already known.
+    */
+  def leafStatements: Seq[Statement]
+  def serializedLines: Seq[String]
 
   def isEmpty: Boolean = allDerivationSteps.isEmpty
   def nonEmpty: Boolean = allDerivationSteps.nonEmpty
+  def length: Int = toProofSteps.map(_.length).sum
   def inferences: Set[Inference] = derivationSteps.map(_.inference).toSet
   def toProofSteps: Seq[Step] = derivationSteps.map(_.toProofStep)
   def toSimpleDerivation: SimpleDerivation = SimpleDerivation(derivationSteps)
@@ -57,25 +68,51 @@ object DerivedStatement {
     */
   private[derivation] enum Tier {
     /**
-      * An inference that does the real work of the derivation, e.g. "(a, b) = (c, d)" to "a = c".
+      * An inference that builds a statement about terms from simpler ones, e.g. "a + b ∈ ℕ" from "a ∈ ℕ" and "b ∈ ℕ".
       */
-    case Substantive
+    case Composition
     /**
-      * An inference that only rearranges the logical structure of a statement, e.g. extracting a conjunct.
+      * An inference that rewrites a relation to a different one, e.g. "a ∈ ℤ⁺" to "0 < a".
+      */
+    case RelationRewrite
+    /**
+      * An inference with no premises, e.g. "0 ∈ ℕ".
+      */
+    case Fact
+    /**
+      * An inference that simplifies a relation, e.g. "(a, b) = (c, d)" to "a = c".
       */
     case Simplification
     /**
+      * An inference that only extracts from or builds up the logical structure of a statement, e.g. extracting a
+      * conjunct.
+      */
+    case Extraction
+    /**
       * An inference that only restates a statement, e.g. reversing an equality or substituting a known value.
       */
-    case Trivial
+    case Rewrite
   }
+
+  private def highestTierInference(tieredInferences: Seq[(Tier, Inference)]): Option[Inference.Summary] = {
+    val inferencesByTier = tieredInferences.groupBy(_._1)
+    Tier.values.iterator
+      .flatMap(inferencesByTier.get)
+      .nextOption()
+      .flatMap(_.map(_._2).distinctBy(_.id).single)
+      .map(_.summary)
+  }
+
+  private def stepLines(step: SimpleDerivationStep): Seq[String] = (step: StepLike).serializedLines
 
   /**
     * A statement that is already available, e.g. a premise, a previous step, or a target.
     */
   case class Known(statement: Statement) extends DerivedStatement {
     override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = Nil
-    override private[derivation] def tieredInferences(using ProvingContext): Seq[(Tier, Inference)] = Nil
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = Nil
+    override def leafStatements: Seq[Statement] = Seq(statement)
+    override def serializedLines: Seq[String] = Seq(s"$KnownLabel ${statement.serialized}")
   }
 
   /**
@@ -86,14 +123,14 @@ object DerivedStatement {
     override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = {
       source.allDerivationSteps ++ extraction.extractionSteps ++ extraction.chainedRewriteSteps
     }
-    override private[derivation] def tieredInferences(using provingContext: ProvingContext): Seq[(Tier, Inference)] = {
-      // A reversal may have been grouped into the extraction, and chained rewrites are joined on by transitivity
-      def isTrivial(inference: Inference): Boolean = {
-        provingContext.reversals.exists(_.inference.id == inference.id) ||
-          provingContext.transitivities.exists(_.inference.id == inference.id)
-      }
-      source.tieredInferences ++ extraction.inferences.map(i => (if (isTrivial(i)) Tier.Trivial else Tier.Simplification) -> i)
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = {
+      source.tieredInferences ++
+        extraction.extractionInferences.map(Tier.Extraction -> _) ++
+        extraction.reversalStep.map(Tier.Rewrite -> _.inference) ++
+        extraction.chainedRewrites.flatMap(r => Seq(Tier.Extraction -> r.rewriteStep.inference, Tier.Rewrite -> r.chainingStep.inference))
     }
+    override def leafStatements: Seq[Statement] = source.leafStatements
+    override def serializedLines: Seq[String] = (source.serializedLines ++ extraction.serializedLines).indentInLabelledBracesIfPresent(ExtractedLabel)
   }
   object Extracted {
     def ifNecessary(source: DerivedStatement, extraction: AppliedExtraction): DerivedStatement = {
@@ -108,9 +145,11 @@ object DerivedStatement {
   case class Simplified(source: DerivedStatement, simplification: AppliedInferenceExtraction) extends DerivedStatement {
     override def statement: Statement = simplification.statement
     override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = source.allDerivationSteps :+ simplification
-    override private[derivation] def tieredInferences(using ProvingContext): Seq[(Tier, Inference)] = {
-      source.tieredInferences :+ (Tier.Substantive -> simplification.inference)
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = {
+      source.tieredInferences :+ (Tier.Simplification -> simplification.inference)
     }
+    override def leafStatements: Seq[Statement] = source.leafStatements
+    override def serializedLines: Seq[String] = (source.serializedLines ++ simplification.serializedLines).indentInLabelledBracesIfPresent(SimplifiedLabel)
   }
 
   /**
@@ -122,8 +161,12 @@ object DerivedStatement {
     override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = {
       source.allDerivationSteps ++ supportingPremise.toSeq.flatMap(_.allDerivationSteps) :+ rewrite
     }
-    override private[derivation] def tieredInferences(using ProvingContext): Seq[(Tier, Inference)] = {
-      source.tieredInferences ++ supportingPremise.toSeq.flatMap(_.tieredInferences) :+ (Tier.Substantive -> rewrite.inference)
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = {
+      source.tieredInferences ++ supportingPremise.toSeq.flatMap(_.tieredInferences) :+ (Tier.RelationRewrite -> rewrite.inference)
+    }
+    override def leafStatements: Seq[Statement] = source.leafStatements ++ supportingPremise.toSeq.flatMap(_.leafStatements)
+    override def serializedLines: Seq[String] = {
+      (source.serializedLines ++ supportingPremise.toSeq.flatMap(_.serializedLines) ++ rewrite.serializedLines).indentInLabelledBracesIfPresent(RelationRewrittenLabel)
     }
   }
 
@@ -133,9 +176,11 @@ object DerivedStatement {
   case class Reversed(source: DerivedStatement, reversal: Step.AssertionStep) extends DerivedStatement {
     override def statement: Statement = reversal.statement
     override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = source.allDerivationSteps :+ reversal
-    override private[derivation] def tieredInferences(using ProvingContext): Seq[(Tier, Inference)] = {
-      source.tieredInferences :+ (Tier.Trivial -> reversal.inference)
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = {
+      source.tieredInferences :+ (Tier.Rewrite -> reversal.inference)
     }
+    override def leafStatements: Seq[Statement] = source.leafStatements
+    override def serializedLines: Seq[String] = (source.serializedLines ++ reversal.serializedLines).indentInLabelledBracesIfPresent(ReversedLabel)
   }
 
   /**
@@ -144,24 +189,52 @@ object DerivedStatement {
   case class Asserted(assertion: AppliedInferenceExtraction) extends DerivedStatement {
     override def statement: Statement = assertion.statement
     override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = Seq(assertion)
-    override private[derivation] def tieredInferences(using ProvingContext): Seq[(Tier, Inference)] = {
-      Seq(Tier.Substantive -> assertion.inference)
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = {
+      Seq(Tier.Fact -> assertion.inference)
     }
+    override def leafStatements: Seq[Statement] = Nil
+    override def serializedLines: Seq[String] = assertion.serializedLines.indentInLabelledBracesIfPresent(AssertedLabel)
   }
 
   /**
-    * A statement built up from simpler components, found by breaking down the statement as a target, e.g.
-    * "φ ∧ ψ" from "φ" and "ψ", or "a + b ∈ ℕ" from "a ∈ ℕ" and "b ∈ ℕ". The component derivations are in the order they
-    * appear in the proof, which may not match the order of the inference's premises.
+    * A statement combined from its components by its logical structure alone, found by breaking down the statement as a
+    * target, e.g. "φ ∧ ψ" from "φ" and "ψ". This is the counterpart of extracting the components. The component
+    * derivations are in the order they appear in the proof, which may not match the order of the inference's premises.
+    */
+  case class Combined(components: Seq[DerivedStatement], combination: Step.AssertionStep) extends DerivedStatement {
+    override def statement: Statement = combination.statement
+    override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = components.flatMap(_.allDerivationSteps) :+ combination
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = {
+      components.flatMap(_.tieredInferences) :+ (Tier.Extraction -> combination.inference)
+    }
+    // A combination only describes the derivation if nothing other than rewrites had to happen to find its components.
+    // This only applies to the combination as a whole - as part of a larger derivation, it contributes its inferences
+    // as normal.
+    override protected def primaryInferenceWith(additionalInferences: Seq[(Tier, Inference)]): Option[Inference.Summary] = {
+      (tieredInferences ++ additionalInferences)
+        .filter(_._1 != Tier.Rewrite)
+        .map(_._2)
+        .distinctBy(_.id)
+        .single
+        .map(_.summary)
+    }
+    override def leafStatements: Seq[Statement] = components.flatMap(_.leafStatements)
+    override def serializedLines: Seq[String] = (components.flatMap(_.serializedLines) ++ combination.serializedLines).indentInLabelledBracesIfPresent(CombinedLabel)
+  }
+
+  /**
+    * A statement built up from simpler components, found by breaking down the statement as a target, e.g. "a + b ∈ ℕ"
+    * from "a ∈ ℕ" and "b ∈ ℕ". The component derivations are in the order they appear in the proof, which may not
+    * match the order of the inference's premises.
     */
   case class Composed(components: Seq[DerivedStatement], composition: SimpleDerivationStep) extends DerivedStatement {
     override def statement: Statement = composition.statement
     override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = components.flatMap(_.allDerivationSteps) :+ composition
-    override private[derivation] def tieredInferences(using provingContext: ProvingContext): Seq[(Tier, Inference)] = {
-      // Combining a defined statement from its components is the counterpart of extracting them
-      val tier = if (provingContext.statementDefinitionDeconstructions.exists(_.id == composition.inference.id)) Tier.Simplification else Tier.Substantive
-      components.flatMap(_.tieredInferences) :+ (tier -> composition.inference)
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = {
+      components.flatMap(_.tieredInferences) :+ (Tier.Composition -> composition.inference)
     }
+    override def leafStatements: Seq[Statement] = components.flatMap(_.leafStatements)
+    override def serializedLines: Seq[String] = (components.flatMap(_.serializedLines) ++ stepLines(composition)).indentInLabelledBracesIfPresent(ComposedLabel)
   }
 
   /**
@@ -172,8 +245,12 @@ object DerivedStatement {
     override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = {
       (source.allDerivationSteps ++ equality.allDerivationSteps) :+ substitution
     }
-    override private[derivation] def tieredInferences(using ProvingContext): Seq[(Tier, Inference)] = {
-      (source.tieredInferences ++ equality.tieredInferences) :+ (Tier.Trivial -> substitution.inference)
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = {
+      (source.tieredInferences ++ equality.tieredInferences) :+ (Tier.Rewrite -> substitution.inference)
+    }
+    override def leafStatements: Seq[Statement] = source.leafStatements ++ equality.leafStatements
+    override def serializedLines: Seq[String] = {
+      (source.serializedLines ++ equality.serializedLines ++ substitution.serializedLines).indentInLabelledBracesIfPresent(SubstitutedLabel)
     }
   }
 
@@ -185,10 +262,47 @@ object DerivedStatement {
     override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = {
       (first.allDerivationSteps ++ second.allDerivationSteps) :+ transitivity
     }
-    override private[derivation] def tieredInferences(using ProvingContext): Seq[(Tier, Inference)] = {
-      (first.tieredInferences ++ second.tieredInferences) :+ (Tier.Trivial -> transitivity.inference)
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = {
+      (first.tieredInferences ++ second.tieredInferences) :+ (Tier.Rewrite -> transitivity.inference)
+    }
+    override def leafStatements: Seq[Statement] = first.leafStatements ++ second.leafStatements
+    override def serializedLines: Seq[String] = {
+      (first.serializedLines ++ second.serializedLines ++ transitivity.serializedLines).indentInLabelledBracesIfPresent(TransitiveLabel)
     }
   }
+
+  /**
+    * A derivation saved before derivations were structured, as a flat list of steps. Its primary inference is the
+    * single inference it uses, if there is one.
+    */
+  case class Unstructured(statement: Statement, steps: Seq[SimpleDerivationStep]) extends DerivedStatement {
+    override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = steps
+    // All steps are treated equally, as there is no structure to distinguish them
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = steps.map(Tier.Composition -> _.inference)
+    override def leafStatements: Seq[Statement] = Seq(statement)
+    override def serializedLines: Seq[String] = steps.flatMap(stepLines).indentInLabelledBracesIfPresent(s"$UnstructuredLabel ${statement.serialized}")
+  }
+  object Unstructured {
+    def fromKnownStatement(knownStatement: KnownStatement): DerivedStatement = {
+      if (knownStatement.derivation.isEmpty)
+        Known(knownStatement.statement)
+      else
+        Unstructured(knownStatement.statement, knownStatement.derivation.steps)
+    }
+  }
+
+  private val KnownLabel = "known"
+  private val ExtractedLabel = "extracted"
+  private val SimplifiedLabel = "simplified"
+  private val RelationRewrittenLabel = "relationRewritten"
+  private val ReversedLabel = "reversed"
+  private val AssertedLabel = "asserted"
+  private val CombinedLabel = "combined"
+  private val ComposedLabel = "composed"
+  private val SubstitutedLabel = "substituted"
+  private val TransitiveLabel = "transitive"
+  private val UnstructuredLabel = "knownDerived"
+  private val LegacyKnownLabel = "knownDirect"
 
   /**
     * The derivation of a statement extracted from a premise. A final reversal is split out into its own node where the
@@ -210,5 +324,122 @@ object DerivedStatement {
 
   implicit class SeqOps(derivedStatements: Seq[DerivedStatement]) {
     def deduplicate: Seq[DerivedStatement] = derivedStatements.distinctBy(_.statement)
+  }
+
+  /**
+    * Tracks the step context while moving through a derivation in order, adding each step to the context unless a step
+    * with the same statement has already been added. This matches the proof steps that the derivation flattens to.
+    */
+  case class DerivationContext(stepContext: StepContext, derivedStatements: Set[Statement]) {
+    def add(step: SimpleDerivationStep): DerivationContext = {
+      if (derivedStatements.contains(step.statement))
+        this
+      else
+        DerivationContext(stepContext.addStep(step.toProofStep), derivedStatements + step.statement)
+    }
+    def addAll(steps: Seq[SimpleDerivationStep]): DerivationContext = steps.foldLeft(this)(_.add(_))
+  }
+  object DerivationContext {
+    def apply(stepContext: StepContext): DerivationContext = DerivationContext(stepContext, Set.empty)
+  }
+
+  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[DerivedStatement] = {
+    parserInContext(DerivationContext(stepContext)).map(_._1)
+  }
+  /**
+    * Parses a list of separate derivations, each of which is flattened on its own.
+    */
+  def listParser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[(Seq[DerivedStatement], StepContext)] = {
+    StepLike.listParser[DerivedStatement](parser(_, implicitly), (sc, d) => sc.addSteps(d.toProofSteps))
+  }
+
+  private def parserInContext(context: DerivationContext)(implicit provingContext: ProvingContext): KnownWordParser[(DerivedStatement, DerivationContext)] = {
+    def statementParser = Statement.parser(ExpressionParsingContext.atStep(context.stepContext, provingContext))
+    def stepParser[T <: SimpleDerivationStep](getParser: StepContext => Parser[T])(context: DerivationContext): Parser[(T, DerivationContext)] = {
+      getParser(context.stepContext).map(step => (step, context.add(step)))
+    }
+    def assertionParser(context: DerivationContext) = stepParser(Step.AssertionStep.parser(_, provingContext))(context)
+    def inferenceExtractionParser(context: DerivationContext) = stepParser(AppliedInferenceExtraction.parser(_, provingContext))(context)
+    def nodeParser(context: DerivationContext) = parserInContext(context)
+    def nodesParser(context: DerivationContext): Parser[(Seq[DerivedStatement], DerivationContext)] = {
+      KnownWordParser.mapFoldWhileDefined(context)(nodeParser)
+    }
+    def withSource(label: String)(f: (DerivedStatement, DerivationContext) => Parser[(DerivedStatement, DerivationContext)]) = {
+      KnownWordParser(label) {
+        nodeParser(context).flatMap(f.tupled).inBraces
+      }
+    }
+
+    val known = KnownWordParser(KnownLabel)(statementParser.map(s => (Known(s), context)))
+    val legacyKnown = KnownWordParser(LegacyKnownLabel)(statementParser.map(s => (Known(s), context)))
+    val unstructured = KnownWordParser(UnstructuredLabel) {
+      for {
+        statement <- statementParser
+        stepsAndContext <- Parser.mapFoldWhileDefined[SimpleDerivationStep, DerivationContext](context) { (_, context) =>
+          SimpleDerivationStep.parser(context.stepContext, provingContext).optional.mapMap(step => step -> context.add(step))
+        }.inBraces
+      } yield (Unstructured(statement, stepsAndContext._1), stepsAndContext._2)
+    }
+    val extracted = withSource(ExtractedLabel) { (source, context) =>
+      extractionParser(context).map(_.mapLeft(Extracted(source, _)))
+    }
+    val simplified = withSource(SimplifiedLabel) { (source, context) =>
+      inferenceExtractionParser(context).map(_.mapLeft(Simplified(source, _)))
+    }
+    val relationRewritten = withSource(RelationRewrittenLabel) { (source, context) =>
+      for {
+        (supportingPremise, contextAfterSupportingPremise) <- nodeParser(context).optional.map(_.map(_.mapLeft(Some(_))).getOrElse((None, context)))
+        (rewrite, contextAfterRewrite) <- inferenceExtractionParser(contextAfterSupportingPremise)
+      } yield (RelationRewritten(source, supportingPremise, rewrite), contextAfterRewrite)
+    }
+    val reversed = withSource(ReversedLabel) { (source, context) =>
+      assertionParser(context).map(_.mapLeft(Reversed(source, _)))
+    }
+    val asserted = KnownWordParser(AssertedLabel) {
+      inferenceExtractionParser(context).map(_.mapLeft(Asserted(_))).inBraces
+    }
+    val combined = KnownWordParser(CombinedLabel) {
+      (for {
+        (components, contextAfterComponents) <- nodesParser(context)
+        (combination, contextAfterCombination) <- assertionParser(contextAfterComponents)
+      } yield (Combined(components, combination), contextAfterCombination)).inBraces
+    }
+    val composed = KnownWordParser(ComposedLabel) {
+      (for {
+        (components, contextAfterComponents) <- nodesParser(context)
+        (composition, contextAfterComposition) <- stepParser(SimpleDerivationStep.parser(_, provingContext))(contextAfterComponents)
+      } yield (Composed(components, composition), contextAfterComposition)).inBraces
+    }
+    val substituted = withSource(SubstitutedLabel) { (source, context) =>
+      for {
+        (equality, contextAfterEquality) <- nodeParser(context)
+        (substitution, contextAfterSubstitution) <- assertionParser(contextAfterEquality)
+      } yield (Substituted(source, equality, substitution), contextAfterSubstitution)
+    }
+    val transitive = withSource(TransitiveLabel) { (first, context) =>
+      for {
+        (second, contextAfterSecond) <- nodeParser(context)
+        (transitivity, contextAfterTransitivity) <- assertionParser(contextAfterSecond)
+      } yield (Transitive(first, second, transitivity), contextAfterTransitivity)
+    }
+    KnownWordParser.select(Seq(known, legacyKnown, unstructured, extracted, simplified, relationRewritten, reversed, asserted, combined, composed, substituted, transitive))
+  }
+
+  /**
+    * Parses the steps of an extraction, as written by [[AppliedExtraction.serializedLines]].
+    */
+  private def extractionParser(context: DerivationContext)(implicit provingContext: ProvingContext): Parser[(AppliedExtraction, DerivationContext)] = {
+    for {
+      (extractionSteps, contextAfterExtraction) <- Parser.mapFoldWhileDefined[AppliedExtractionStep, DerivationContext](context) { (_, context) =>
+        AppliedExtractionStep.parser(context.stepContext, provingContext).optional.mapMap(step => step -> context.add(step))
+      }
+      (rewriteSteps, contextAfterRewrites) <- KnownWordParser("chainedRewrite") {
+        Parser.mapFoldWhileDefined[Step.AssertionStep, DerivationContext](contextAfterExtraction) { (_, context) =>
+          Step.AssertionStep.parser(context.stepContext, provingContext).optional.mapMap(step => step -> context.add(step))
+        }.inBraces
+      }.optional.map(_.getOrElse((Nil, contextAfterExtraction)))
+    } yield (
+      AppliedExtraction(extractionSteps, AppliedExtraction.pairChainedRewriteSteps(rewriteSteps), AppliedExtraction.endsInReversal(extractionSteps)),
+      contextAfterRewrites)
   }
 }

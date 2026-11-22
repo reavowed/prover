@@ -349,7 +349,12 @@ object ExtractionApplier {
     } yield (extraction.conclusion, extractionStep, targetSteps)
   }
 
-  def groupStepsByDefinition(steps: Seq[Step.AssertionStep])(implicit provingContext: ProvingContext): Seq[AppliedExtractionStep] = {
+  /**
+    * Groups the steps of an extraction by the definition deconstructions they follow.
+    *
+    * @param endsInReversal Whether the last step is a reversal of the extracted statement.
+    */
+  def groupStepsByDefinition(steps: Seq[Step.AssertionStep], endsInReversal: Boolean)(implicit provingContext: ProvingContext): Seq[AppliedExtractionStep] = {
     val deconstructionInferenceIds = provingContext.availableEntries.statementDefinitions.mapCollect(_.deconstructionInference).map(_.id).toSet
     val structuralSimplificationIds = provingContext.structuralSimplificationInferences.map(_._1.id).toSet
 
@@ -379,12 +384,12 @@ object ExtractionApplier {
       whileStructuralAtEnd(steps, Nil)
     }
 
-    def groupSteps(steps: Seq[Step.AssertionStep], retainEndSimplifications: Boolean): Unit = {
+    def groupSteps(steps: Seq[Step.AssertionStep], isFinalGroup: Boolean): Unit = {
       currentMainStep match {
         case Some(step) =>
-          stepsToReturn += DefinitionDeconstruction(step, removeNonEndStructuralSimplifications(steps))
+          stepsToReturn += DefinitionDeconstruction(step, removeNonEndStructuralSimplifications(steps), isFinalGroup && endsInReversal)
         case None =>
-          stepsToReturn ++= (if (retainEndSimplifications) removeNonEndStructuralSimplifications(steps) else removeStructuralSimplifications(steps))
+          stepsToReturn ++= (if (isFinalGroup) removeNonEndStructuralSimplifications(steps) else removeStructuralSimplifications(steps))
       }
     }
 

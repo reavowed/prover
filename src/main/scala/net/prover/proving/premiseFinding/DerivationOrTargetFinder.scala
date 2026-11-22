@@ -17,13 +17,22 @@ object DerivationOrTargetFinder {
     })
   }
 
+  def findDerivedStatementsOrTargets(
+    premiseStatements: Seq[Statement])(
+    implicit stepProvingContext: StepProvingContext
+  ): (Seq[DerivedStatement], Seq[Step.TargetStep]) = {
+    findDerivationsOrTargetsWithSuccessResult(premiseStatements).strip3.mapLeft(premiseStatements.zip(_).map { case (premiseStatement, derivation) =>
+      derivation.withKnownStatement(premiseStatement)
+    })
+  }
+
   private def findDerivationsOrTargetsWithSuccessResult(
     premiseStatements: Seq[Statement])(
     implicit stepProvingContext: StepProvingContext
   ): (Seq[DerivedStatement], Seq[Step.TargetStep], Boolean) = {
-    premiseStatements.foldLeft((Seq.empty[DerivedStatement], Seq.empty[Step.TargetStep], false)) { case ((knownStatementsSoFar, targetStepsSoFar, wasSuccessfulSoFar), premiseStatement) =>
-      val (knownStatement, targetsForThisPremise, wasThisStatementSuccessful) = findDerivationOrTargetsWithSuccessResult(premiseStatement)
-      (knownStatementsSoFar :+ knownStatement, targetStepsSoFar ++ targetsForThisPremise, wasSuccessfulSoFar || wasThisStatementSuccessful)
+    premiseStatements.foldLeft((Seq.empty[DerivedStatement], Seq.empty[Step.TargetStep], false)) { case ((derivationsSoFar, targetStepsSoFar, wasSuccessfulSoFar), premiseStatement) =>
+      val (derivation, targetsForThisPremise, wasThisStatementSuccessful) = findDerivationOrTargetsWithSuccessResult(premiseStatement)
+      (derivationsSoFar :+ derivation, targetStepsSoFar ++ targetsForThisPremise, wasSuccessfulSoFar || wasThisStatementSuccessful)
     }
   }
 
@@ -35,9 +44,9 @@ object DerivationOrTargetFinder {
 
     def byDeconstructing = for {
       (step, deconstructedStatements) <- deconstruct(premiseStatement)
-      (innerKnown, innerTargets, wasSuccessful) = findDerivationsOrTargetsWithSuccessResult(deconstructedStatements)
+      (innerDerivations, innerTargets, wasSuccessful) = findDerivationsOrTargetsWithSuccessResult(deconstructedStatements)
       if wasSuccessful
-    } yield (DerivedStatement.Composed(innerKnown, step), innerTargets, true)
+    } yield (DerivedStatement.Combined(innerDerivations, step), innerTargets, true)
 
     def asTarget = {
       val (rewrittenStatement, applyRewritesOption) = DerivationFinder.rewriteWithKnownValues(premiseStatement)
@@ -58,7 +67,7 @@ object DerivationOrTargetFinder {
       default
     } else {
       deconstruct(targetStatement) match {
-        case Some((deconstructionStep, innerTargets)) => splitTargets(innerTargets).mapLeft(DerivedStatement.Composed(_, deconstructionStep))
+        case Some((deconstructionStep, innerTargets)) => splitTargets(innerTargets).mapLeft(DerivedStatement.Combined(_, deconstructionStep))
         case None => default
       }
     }

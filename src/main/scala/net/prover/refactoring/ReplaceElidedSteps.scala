@@ -67,7 +67,7 @@ object ReplaceElidedSteps extends CompoundTheoremUpdater[Id] {
     } yield Step.RewriteStep(
       RewritePremise.ByInference(
         Nil,
-        AppliedInferenceExtraction(firstAssertion, AppliedExtraction(Nil, Nil))),
+        AppliedInferenceExtraction(firstAssertion, AppliedExtraction.empty)),
       lastAssertion)
   }
 }

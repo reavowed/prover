@@ -3,10 +3,16 @@ package net.prover.proving.derivation
 import net.prover.model.ProvingContext
 import net.prover.model.proof.{Step, StepContext}
 import net.prover.parsing.KnownWordParser
+import net.prover.proving.extraction.AppliedExtraction
 
+/**
+  * @param endsInReversal Whether the final additional step is a reversal that ends the extraction this deconstruction
+  *                       is part of.
+  */
 case class DefinitionDeconstruction(
   deconstructionStep: Step.AssertionStep,
-  additionalSteps: Seq[Step.AssertionStep]
+  additionalSteps: Seq[Step.AssertionStep],
+  endsInReversal: Boolean
 ) extends DefinitionDeconstructionBase
 
 object DefinitionDeconstruction {
@@ -16,6 +22,6 @@ object DefinitionDeconstruction {
       additionalSteps <- Step.listParser(stepContext =>
         Step.AssertionStep.parser(stepContext, implicitly)
       )(stepContext.forChild().addStep(deconstructionStep)).map(_._1)
-    } yield DefinitionDeconstruction(deconstructionStep, additionalSteps)).inBraces
+    } yield DefinitionDeconstruction(deconstructionStep, additionalSteps, AppliedExtraction.endsInReversal(additionalSteps))).inBraces
   }
 }

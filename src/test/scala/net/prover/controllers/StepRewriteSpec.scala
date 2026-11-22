@@ -39,7 +39,7 @@ class StepRewriteSpec extends ControllerSpec {
         fillerSteps(stepIndex - 1) :+ target(equalityPremise) :+
           target(φ(b)) :+
           rewriteStep(
-            known(Seq(assertion(reverseEquality, Nil, Seq(a, b)))),
+            reversed(assertion(reverseEquality, Nil, Seq(a, b))),
             assertion(substitutionOfEquals, Seq(φ($)), Seq(b, a))))
     }
 
@@ -115,7 +115,7 @@ class StepRewriteSpec extends ControllerSpec {
         fillerSteps(stepIndex - 2) :+ target(equalityPremise) :+ target(premiseToRewrite) :+ target(ψ),
         fillerSteps(stepIndex - 2) :+ target(equalityPremise) :+ target(premiseToRewrite) :+
           rewriteStep(
-            known(Seq(assertion(reverseEquality, Nil, Seq(a, b)))),
+            reversed(assertion(reverseEquality, Nil, Seq(a, b))),
             assertion(substitutionOfEquals, Seq(φ($)), Seq(b, a))) :+
           target(ψ))
     }
@@ -145,7 +145,7 @@ class StepRewriteSpec extends ControllerSpec {
           assertion(substitutionOfEqualsIntoFunction, Nil, Seq(b, Zero, add(a, $))) :+
           target(lessThan(add(a, Zero), c)) :+
           rewriteStep(
-            known(Seq(assertion(reverseEquality, Nil, Seq(add(a, b), add(a, Zero))))),
+            reversed(assertion(reverseEquality, Nil, Seq(add(a, b), add(a, Zero)))),
             assertion(substitutionOfEquals, Seq(lessThan($, c)), Seq(add(a, Zero), add(a, b)))))
     }
 
@@ -172,11 +172,11 @@ class StepRewriteSpec extends ControllerSpec {
         fillerSteps(stepIndex - 1) :+
           target(equalityPremise) :+
           rewriteStep(
-            known(Seq(assertion(reverseEquality, Nil, Seq(Zero, b)))),
+            reversed(assertion(reverseEquality, Nil, Seq(Zero, b))),
             assertion(substitutionOfEqualsIntoFunction, Nil, Seq(b, Zero, add(a, $)))) :+
           target(lessThan(add(a, Zero), c)) :+
           rewriteStep(
-            known(Seq(assertion(reverseEquality, Nil, Seq(add(a, b), add(a, Zero))))),
+            reversed(assertion(reverseEquality, Nil, Seq(add(a, b), add(a, Zero)))),
             assertion(substitutionOfEquals, Seq(lessThan($, c)), Seq(add(a, Zero), add(a, b)))))
     }
 
@@ -204,7 +204,7 @@ class StepRewriteSpec extends ControllerSpec {
           target(equalityPremise) :+
           target(lessThan(a, add(b, Zero))) :+
           rewriteStep(
-            known(Seq(assertion(reverseEquality, Nil, Seq(c, Zero)))),
+            reversed(assertion(reverseEquality, Nil, Seq(c, Zero))),
             assertion(substitutionOfEqualsIntoFunction, Nil, Seq(Zero, c, add(b, $)))) :+
           assertion(substitutionOfEquals, Seq(lessThan(a, $)), Seq(add(b, Zero), add(b, c))))
     }
@@ -602,7 +602,7 @@ class StepRewriteSpec extends ControllerSpec {
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(statement),
         fillerSteps(stepIndex - 1) :+ target(premise) :+ target(ForAllIn("x", a)(φ($, $.^^))) :+
           rewriteStep(
-            known(Seq(assertion(reverseEquality, Nil, Seq($, $.^)))),
+            reversed(assertion(reverseEquality, Nil, Seq($, $.^))),
             assertion(substitutionOfEquals, Seq(ForAllIn("x", a)(φ($, $.^^^))), Seq($.^, $))),
         boundVariables)
     }
@@ -634,20 +634,22 @@ class StepRewriteSpec extends ControllerSpec {
           elided(integerAdditionIsCommutative, Seq(
             rewriteStep(
               Seq(
-                known(Seq(
-                  inferenceExtraction(
+                substituted(
+                  knownPremise(ElementOf(a, Integers)),
+                  asserted(inferenceExtraction(
                     assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
                     Seq(inferenceExtraction(
                       assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
-                      Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
-                  assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(Integers, BaseSet(IntegerAddition))))),
-                known(Seq(
-                  inferenceExtraction(
+                      Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers))))))),
+                  assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(Integers, BaseSet(IntegerAddition)))),
+                substituted(
+                  knownPremise(ElementOf(b, Integers)),
+                  asserted(inferenceExtraction(
                     assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
                     Seq(inferenceExtraction(
                       assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
-                      Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
-                  assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(Integers, BaseSet(IntegerAddition)))))),
+                      Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers))))))),
+                  assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(Integers, BaseSet(IntegerAddition))))),
                 inferenceExtraction(
                   assertion(integerAdditionIsCommutative, Nil, Nil),
                   Seq(
@@ -661,20 +663,22 @@ class StepRewriteSpec extends ControllerSpec {
                 assertion(substitutionOfEqualsIntoFunction, Nil, Seq(addZ(a, b), addZ(b, a), F($, addZ(c, d))))),
             rewriteStep(
               Seq(
-                known(Seq(
-                  inferenceExtraction(
+                substituted(
+                  knownPremise(ElementOf(c, Integers)),
+                  asserted(inferenceExtraction(
                     assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
                     Seq(inferenceExtraction(
                       assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
-                      Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
-                  assertion(substitutionOfEquals, Seq(ElementOf(c, $)), Seq(Integers, BaseSet(IntegerAddition))))),
-                known(Seq(
-                  inferenceExtraction(
+                      Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers))))))),
+                  assertion(substitutionOfEquals, Seq(ElementOf(c, $)), Seq(Integers, BaseSet(IntegerAddition)))),
+                substituted(
+                  knownPremise(ElementOf(d, Integers)),
+                  asserted(inferenceExtraction(
                     assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
                     Seq(inferenceExtraction(
                       assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
-                      Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
-                  assertion(substitutionOfEquals, Seq(ElementOf(d, $)), Seq(Integers, BaseSet(IntegerAddition)))))),
+                      Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers))))))),
+                  assertion(substitutionOfEquals, Seq(ElementOf(d, $)), Seq(Integers, BaseSet(IntegerAddition))))),
               inferenceExtraction(
                 assertion(integerAdditionIsCommutative, Nil, Nil),
                 Seq(

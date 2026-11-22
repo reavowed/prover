@@ -45,25 +45,25 @@ object DerivationFinder {
       .getOrElse(DirectDerivationFinder.findDirectDerivationForStatement(targetStatement))
   }
 
-  def findKnownStatementBySubstituting(
+  def findDerivedStatementBySubstituting(
     unsubstitutedPremiseStatement: Statement,
     initialSubstitutions: Substitutions.Possible,
-    knownStatements: Seq[DerivedStatement])(
+    derivedStatements: Seq[DerivedStatement])(
     implicit substitutionContext: SubstitutionContext
   ): Seq[(DerivedStatement, Substitutions.Possible)] = {
     for {
-      knownStatement <- knownStatements
-      finalSubstitutions <- unsubstitutedPremiseStatement.calculateSubstitutions(knownStatement.statement, initialSubstitutions).toSeq
-    } yield (knownStatement, finalSubstitutions)
+      derivedStatement <- derivedStatements
+      finalSubstitutions <- unsubstitutedPremiseStatement.calculateSubstitutions(derivedStatement.statement, initialSubstitutions).toSeq
+    } yield (derivedStatement, finalSubstitutions)
   }
 
   def findDerivationForStatementBySubstituting(
     unsubstitutedPremiseStatement: Statement,
     initialSubstitutions: Substitutions.Possible,
-    knownStatements: Seq[DerivedStatement])(
+    derivedStatements: Seq[DerivedStatement])(
     implicit stepProvingContext: StepProvingContext
   ): Seq[(DerivedStatement, Substitutions.Possible)] = {
-    def directly = findKnownStatementBySubstituting(unsubstitutedPremiseStatement, initialSubstitutions, knownStatements)
+    def directly = findDerivedStatementBySubstituting(unsubstitutedPremiseStatement, initialSubstitutions, derivedStatements)
 
     def fromFact = for {
       (fact, substitutions) <- ProofHelper.findFactBySubstituting(unsubstitutedPremiseStatement, initialSubstitutions)
@@ -73,13 +73,13 @@ object DerivationFinder {
       deconstructionInference <- stepProvingContext.provingContext.statementDefinitionDeconstructions
       initialDeconstructionSubstitutions <- deconstructionInference.conclusion.calculateSubstitutions(unsubstitutedPremiseStatement).flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
       deconstructedUnsubstitutedPremiseStatements <- deconstructionInference.premises.map(_.applySubstitutions(initialDeconstructionSubstitutions)).traverseOption
-      (foundStatements, innerSubstitutions) <- findDerivationsForStatementsBySubstituting(deconstructedUnsubstitutedPremiseStatements, initialSubstitutions, knownStatements)
+      (foundStatements, innerSubstitutions) <- findDerivationsForStatementsBySubstituting(deconstructedUnsubstitutedPremiseStatements, initialSubstitutions, derivedStatements)
       deconstructionPremisesWithDeconstructedStatements <- deconstructionInference.premises.zipStrict(foundStatements)
-      finalDeconstructionSubstitutions <- deconstructionPremisesWithDeconstructedStatements.foldLeft(Option(Substitutions.Possible.empty)) { case (substitutionsOption, (premise, knownStatement)) =>
-        substitutionsOption.flatMap(premise.calculateSubstitutions(knownStatement.statement, _))
+      finalDeconstructionSubstitutions <- deconstructionPremisesWithDeconstructedStatements.foldLeft(Option(Substitutions.Possible.empty)) { case (substitutionsOption, (premise, derivedStatement)) =>
+        substitutionsOption.flatMap(premise.calculateSubstitutions(derivedStatement.statement, _))
       }.flatMap(_.confirmTotality(deconstructionInference.variableDefinitions))
       deconstructionStep <- Step.AssertionStep.forInference(deconstructionInference, finalDeconstructionSubstitutions)
-    } yield (DerivedStatement.Composed(foundStatements, deconstructionStep), innerSubstitutions)
+    } yield (DerivedStatement.Combined(foundStatements, deconstructionStep), innerSubstitutions)
 
     unsubstitutedPremiseStatement.tryApplySubstitutions(initialSubstitutions) match {
       case Some(substitutedPremiseStatement) =>
@@ -94,14 +94,14 @@ object DerivationFinder {
   def findDerivationsForStatementsBySubstituting(
     unsubstitutedPremiseStatements: Seq[Statement],
     substitutions: Substitutions.Possible,
-    knownStatements: Seq[DerivedStatement])(
+    derivedStatements: Seq[DerivedStatement])(
     implicit stepProvingContext: StepProvingContext
   ): Option[(Seq[DerivedStatement], Substitutions.Possible)] = {
     def helper(remainingUnsubstitutedPremises: Seq[Statement], currentSubstitutions: Substitutions.Possible, foundStatementsSoFar: Seq[DerivedStatement]): Option[(Seq[DerivedStatement], Substitutions.Possible)] = {
       remainingUnsubstitutedPremises match {
         case unsubstitutedPremise +: otherUnsubstitutedPremises =>
           (for {
-            (foundStatement, newSubstitutions) <- findDerivationForStatementBySubstituting(unsubstitutedPremise, currentSubstitutions, knownStatements)
+            (foundStatement, newSubstitutions) <- findDerivationForStatementBySubstituting(unsubstitutedPremise, currentSubstitutions, derivedStatements)
             result <- helper(otherUnsubstitutedPremises, newSubstitutions, foundStatementsSoFar :+ foundStatement)
           } yield result).headOption
         case Nil =>
@@ -117,7 +117,7 @@ object DerivationFinder {
     substitutions: Substitutions.Possible)(
     implicit stepProvingContext: StepProvingContext
   ): Option[(Seq[DerivedStatement], Substitutions.Possible)] = {
-    findDerivationsForStatementsBySubstituting(unsubstitutedPremiseStatements, substitutions, stepProvingContext.knownStatementsFromPremises)
+    findDerivationsForStatementsBySubstituting(unsubstitutedPremiseStatements, substitutions, stepProvingContext.derivedStatementsFromPremises)
   }
 
   /**

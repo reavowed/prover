@@ -97,7 +97,7 @@ class StepChainingSpec extends ControllerSpec {
           assertion(zeroIsRightIdentityForAddition, Nil, Seq(a)) :+
           target(lessThan(add(a, Zero), b)) :+
           rewriteStep(
-            known(Seq(assertion(reverseEquality, Nil, Seq(a, add(a, Zero))))),
+            reversed(assertion(reverseEquality, Nil, Seq(a, add(a, Zero)))),
             assertion(substitutionOfEquals, Seq(lessThan($, b)), Seq(add(a, Zero), a))))
     }
     "rewrite RHS using equality substitution" in {

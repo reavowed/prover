@@ -90,7 +90,7 @@ object GetDisplaySteps {
       case step: Step.RewriteStep =>
         DisplayStep.ElidedInference(
           step.statement,
-          step.premise.explicitInference.getOrElse(step.substitutionStep.inference),
+          step.premise.primaryInference(Some(step.substitutionStep)).getOrElse(step.substitutionStep.inference),
           stepPath,
           apply(step.premise.toProofSteps :+ step.substitutionStep, stepPath))
     }

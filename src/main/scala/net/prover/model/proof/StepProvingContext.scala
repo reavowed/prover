@@ -70,15 +70,15 @@ class StepProvingContext(implicit val stepContext: StepContext, val provingConte
   // Only binary relations are rewritten, so only their reversals are needed alongside the rewrites
   private lazy val binaryRelationReversals: Seq[Reversal[_ <: Expression]] = provingContext.reversals.filter(_.joiner.isInstanceOf[BinaryRelation])
   private lazy val allPremisesAfterSimplifications = simplifyAll(Nil, unreversedPremiseExtractions, provingContext.premiseRelationSimplificationInferences, Nil)
-  lazy val knownStatementsFromPremises: Seq[DerivedStatement] = simplifyAll(Nil, (allPremisesAfterSimplifications ++ reversedPremiseExtractions).deduplicate, provingContext.premiseRelationRewriteInferences, binaryRelationReversals)
-  lazy val knownStatementsFromPremisesBySerializedStatement: Map[String, DerivedStatement] = {
-    knownStatementsFromPremises.map(s => s.statement.serializedForHash -> s).toMapPreservingEarliest
+  lazy val derivedStatementsFromPremises: Seq[DerivedStatement] = simplifyAll(Nil, (allPremisesAfterSimplifications ++ reversedPremiseExtractions).deduplicate, provingContext.premiseRelationRewriteInferences, binaryRelationReversals)
+  lazy val derivedStatementsFromPremisesBySerializedStatement: Map[String, DerivedStatement] = {
+    derivedStatementsFromPremises.map(s => s.statement.serializedForHash -> s).toMapPreservingEarliest
   }
 
   lazy val knownEqualities: Seq[KnownEquality] = {
     for {
       equality <- provingContext.equalityOption.toSeq
-      derivation <- knownStatementsFromPremises ++ provingContext.facts.map(_.toDerivedStatement)
+      derivation <- derivedStatementsFromPremises ++ provingContext.facts.map(_.toDerivedStatement)
       (lhs, rhs) <- equality.unapply(derivation.statement)
     } yield KnownEquality(lhs, rhs, equality, derivation)
   }

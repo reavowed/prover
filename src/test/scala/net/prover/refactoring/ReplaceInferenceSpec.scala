@@ -27,20 +27,22 @@ class ReplaceInferenceSpec extends Specification with StepBuilderHelper {
 
       val expectedStep = recalculateReferences(rewriteStep(
         Seq(
-          known(Seq(
-            inferenceExtraction(
+          substituted(
+            knownPremise(ElementOf(a, Integers)),
+            asserted(inferenceExtraction(
               assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
               Seq(inferenceExtraction(
                 assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
-                Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
-            assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(Integers, BaseSet(IntegerAddition))))),
-          known(Seq(
-            inferenceExtraction(
+                Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers))))))),
+            assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(Integers, BaseSet(IntegerAddition)))),
+          substituted(
+            knownPremise(ElementOf(b, Integers)),
+            asserted(inferenceExtraction(
               assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
               Seq(inferenceExtraction(
                 assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
-                Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
-            assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(Integers, BaseSet(IntegerAddition)))))),
+                Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers))))))),
+            assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(Integers, BaseSet(IntegerAddition))))),
         inferenceExtraction(
           assertion(integerAdditionIsCommutative, Nil, Nil),
           Seq(

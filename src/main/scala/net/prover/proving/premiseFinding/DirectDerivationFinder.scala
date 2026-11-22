@@ -14,7 +14,7 @@ object DirectDerivationFinder {
     implicit stepProvingContext: StepProvingContext
   ): Option[DerivedStatement] = {
     import stepProvingContext._
-    def fromPremises = knownStatementsFromPremisesBySerializedStatement.get(targetStatement.serializedForHash)
+    def fromPremises = derivedStatementsFromPremisesBySerializedStatement.get(targetStatement.serializedForHash)
 
     def fromFact = findDerivationForStatementFromFact(targetStatement)
 
@@ -35,13 +35,14 @@ object DirectDerivationFinder {
       premiseDerivations <- DerivationFinder.findDerivationForUnwrappedStatements(premises)
     } yield DerivedStatement.Composed(premiseDerivations, derivationStep)).headOption
 
-    def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>
+    def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { conclusionSimplificationInference =>
+      val inference = conclusionSimplificationInference.inference
       for {
         substitutions <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inference.variableDefinitions))
         premiseStatements <- inference.substitutePremises(substitutions)
         premiseDerivations <- DerivationFinder.findDerivationForUnwrappedStatements(premiseStatements)
         assertionStep = Step.AssertionStep(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
-      } yield DerivedStatement.Composed(premiseDerivations, assertionStep)
+      } yield conclusionSimplificationInference.derive(premiseDerivations, assertionStep)
     }
 
     def byRewriting = for {
@@ -64,7 +65,7 @@ object DirectDerivationFinder {
         (fact.extraction.extractionSteps, Some(fact.inference))
       )
 
-      def bySimplifying = conclusionSimplificationInferences.iterator.findFirst { inference =>
+      def bySimplifying = conclusionSimplificationInferences.iterator.map(_.inference).findFirst { inference =>
         for {
           substitutions <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inference.variableDefinitions))
           premiseStatements <- inference.substitutePremises(substitutions)
@@ -84,7 +85,8 @@ object DirectDerivationFinder {
           factInference.summary,
           Nil,
           Substitutions.empty)
-        Some(DerivedStatement.Asserted(AppliedInferenceExtraction(assertion, AppliedExtraction(derivation.distinctBy(_.statement), Nil))))
+        val extractionSteps = derivation.distinctBy(_.statement)
+        Some(DerivedStatement.Asserted(AppliedInferenceExtraction(assertion, AppliedExtraction(extractionSteps, Nil, AppliedExtraction.endsInReversal(extractionSteps)))))
       case _ =>
         None
     }

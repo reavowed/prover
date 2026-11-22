@@ -527,7 +527,7 @@ object Step {
   object RewriteStep {
     def ifNecessary(premise: RewritePremise, substitutionStep: Step.AssertionStep): Step = {
       premise match {
-        case RewritePremise.Known(knownStatement) if knownStatement.derivation.isEmpty =>
+        case RewritePremise.Known(derivation) if derivation.isEmpty =>
           substitutionStep
         case _ =>
           RewriteStep(premise, substitutionStep)

@@ -21,7 +21,7 @@ class ExistingStatementExtractionStepSpec extends Specification with StepHelpers
             Seq(
               assertion(specification, Seq(Implication(Conjunction(φ($), ψ($)), χ($))), Seq(a)),
               assertion(modusPonens, Seq(Conjunction(φ(a), ψ(a)), χ(a)), Nil))
-          )(SubstitutionContext.outsideProof))
+          ).apply(SubstitutionContext.outsideProof))
       ).get._1
       val displayStep = GetDisplaySteps(step, Seq(0)).asInstanceOf[DisplayStep.ElidedWithDescription]
 

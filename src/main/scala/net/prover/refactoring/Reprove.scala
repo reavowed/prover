@@ -6,6 +6,7 @@ import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step, StepProvingContext}
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
+import net.prover.proving.derivation.DerivedStatement
 import net.prover.proving.extraction._
 import net.prover.proving.fromExistingStatement.SuggestExistingStatementsBase
 import net.prover.proving.rewrite.RewritePremise
@@ -28,7 +29,7 @@ object Reprove extends CompoundTheoremUpdater[Id] {
         if stepWithContext.stepProvingContext.provingContext.availableEntries.statementDefinitions.exists(_.deconstructionInference.contains(assertionStep.inference)) &&
           step.premises.isEmpty
       =>
-        Step.InferenceExtractionStep(AppliedInferenceExtraction(assertionStep, AppliedExtraction(step.extraction.extractionSteps.tail, step.extraction.chainedRewriteSteps)))
+        Step.InferenceExtractionStep(AppliedInferenceExtraction(assertionStep, AppliedExtraction(step.extraction.extractionSteps.tail, step.extraction.chainedRewrites, step.extraction.endsInReversal)))
 
       case _ =>
         reproveExistingStatementExtraction(
@@ -80,7 +81,7 @@ object Reprove extends CompoundTheoremUpdater[Id] {
         if provingContext.substitutions.exists(_.inference == step.inference) ||
           provingContext.expansions.exists(_.inference == step.inference)
         assertion <- step.assertionStep.asOptionalInstanceOf[Step.AssertionStep]
-      } yield Step.RewriteStep(RewritePremise.Known(premise), assertion)
+      } yield Step.RewriteStep(RewritePremise.Known(DerivedStatement.Unstructured.fromKnownStatement(premise)), assertion)
     ) getOrElse super.updateInferenceWithPremiseDerivations(step, stepWithContext)
   }
 

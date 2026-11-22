@@ -316,11 +316,12 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
     implicit val substitutionContext = SubstitutionContext.outsideProof
     def directly = DirectPremise(premise)
     def byDesimplifying = for {
-      inference <- conclusionSimplificationInferences
+      conclusionSimplificationInference <- conclusionSimplificationInferences
+      inference = conclusionSimplificationInference.inference
       substitutions <- inference.conclusion.calculateSubstitutions(premise).flatMap(_.confirmTotality(inference.variableDefinitions)).toSeq
       substitutedInferencePremises <- inference.premises.map(_.applySubstitutions(substitutions)).traverseOption.toSeq
       innerDesimplifications <- getPossiblePremiseDesimplifications(substitutedInferencePremises)
-    } yield DesimplifiedPremise(premise, inference, innerDesimplifications)
+    } yield DesimplifiedPremise(premise, conclusionSimplificationInference, innerDesimplifications)
 
     directly +: byDesimplifying
   }
@@ -343,7 +344,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
 
   // An inference such as `φ,ψ ⊢ φ∧ψ` or `φ ⊢ φ∨ψ` that can be run in reverse to allow a target conclusion to be
   // decomposed into smaller parts
-  lazy val conclusionSimplificationInferences: Seq[Inference] = allInferences.filter {
+  lazy val conclusionSimplificationInferences: Seq[ConclusionSimplificationInference] = allInferences.filter {
     case inference
       if inference.premises.nonEmpty &&
         inference.premises.forall(_.complexity < inference.conclusion.complexity) &&
@@ -354,7 +355,7 @@ case class Definitions(allAvailableEntries: AvailableEntries) {
       true
     case _ =>
       false
-  }
+  }.map(ConclusionSimplificationInference(_))
 
   lazy val termDefinitionRemovals: Map[TermDefinition, Seq[InferenceExtraction]] = {
     allAvailableEntries.termDefinitions.map { termDefinition =>

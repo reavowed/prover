@@ -4,7 +4,7 @@ import net.prover.model._
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepContext, StepLike}
 import net.prover.parsing.{KnownWordParser, Parser}
-import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.SimpleDerivation
 
 case class KnownStatement(override val statement: Statement, derivation: SimpleDerivation) extends StepLike.Wrapper {
   override def substeps: Seq[StepLike] = Seq(derivation)
@@ -17,11 +17,6 @@ case class KnownStatement(override val statement: Statement, derivation: SimpleD
 }
 
 object KnownStatement {
-  def fromSingleStep(derivationStep: SimpleDerivationStep): KnownStatement = {
-    val derivation = SimpleDerivation(Seq(derivationStep))
-    KnownStatement(derivation.statement, derivation)
-  }
-
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[KnownStatement] = {
     val directParser = KnownWordParser("knownDirect") {
       Statement.parser.map(KnownStatement(_, SimpleDerivation.empty))

@@ -65,6 +65,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowableSubstitution: Allowable[Substitution] = allowableProduct[Substitution]
     implicit val allowableStep: Allowable[Step] = allowable(step => GetReferencedInferences(step).forall(isAllowed))
     implicit val allowableKnownStatement: Allowable[KnownStatement] = allowableProduct[KnownStatement]
+    implicit val allowableConclusionSimplificationInference: Allowable[ConclusionSimplificationInference] = allowable(s => isAllowed(s.inference))
     implicit def allowableDesimplifiedPremise: Allowable[DesimplifiedPremise] = allowableProduct[DesimplifiedPremise]
     implicit def allowablePremiseDesimplification: Allowable[DerivedPremise] = allowable {
       case DirectPremise(_) => true
@@ -232,7 +233,7 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
   lazy val chainableRewriteInferences: Seq[ChainableRewriteInference] = filter(definitions.chainableRewriteInferences)
 
   lazy val conclusionRelationSimplificationInferences: Map[BinaryRelation, Seq[ConclusionRelationSimplificationInference]] = filter(definitions.conclusionRelationSimplificationInferences)
-  lazy val conclusionSimplificationInferences: Seq[Inference] = filter(definitions.conclusionSimplificationInferences)
+  lazy val conclusionSimplificationInferences: Seq[ConclusionSimplificationInference] = filter(definitions.conclusionSimplificationInferences)
   lazy val termDefinitionRemovals: Map[TermDefinition, Seq[InferenceExtraction]] = filter(definitions.termDefinitionRemovals)
 
   lazy val singleStatementExtractionInferences: Seq[SingleStatementExtractionInference] = {

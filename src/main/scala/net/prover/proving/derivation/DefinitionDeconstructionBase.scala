@@ -7,13 +7,14 @@ import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, 
 trait DefinitionDeconstructionBase extends StepLike.Wrapper with StepLike.SimpleSingleStep {
   def deconstructionStep: Step.AssertionStep
   def additionalSteps: Seq[Step.AssertionStep]
+  def endsInReversal: Boolean
 
   def inference: Inference = deconstructionStep.inference
   override def substeps: Seq[Step.AssertionStep] = deconstructionStep +: additionalSteps
   def toProofStep: Step.AssertionOrExtraction = {
     Step.InferenceExtractionStep.ifNecessary(AppliedInferenceExtraction(
       deconstructionStep,
-      AppliedExtraction.fromSimpleExtraction(additionalSteps)))
+      AppliedExtraction(additionalSteps, Nil, endsInReversal)))
   }
   override def serializedLines: Seq[String] = {
     super.serializedLines.indentInLabelledBracesIfPresent(DefinitionDeconstructionBase.label)

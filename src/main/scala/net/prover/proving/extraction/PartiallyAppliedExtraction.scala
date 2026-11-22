@@ -86,8 +86,9 @@ case class PartiallyAppliedExtraction(
   def allInferences: Seq[Inference] = allSteps.map(_.inference)
   def finalise(implicit provingContext: ProvingContext): AppliedExtraction = {
     AppliedExtraction(
-      ExtractionApplier.groupStepsByDefinition(extractionSteps ++ reversalStep.toSeq),
-      leftRewrite.toSeq.flatMap(_.substeps) ++ rightRewrite.toSeq.flatMap(_.substeps))
+      ExtractionApplier.groupStepsByDefinition(extractionSteps ++ reversalStep.toSeq, reversalStep.nonEmpty),
+      leftRewrite.toSeq ++ rightRewrite.toSeq,
+      reversalStep.nonEmpty)
   }
 }
 

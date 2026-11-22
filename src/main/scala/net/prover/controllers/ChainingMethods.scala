@@ -1,11 +1,11 @@
 package net.prover.controllers
 
 import net.prover.model._
-import net.prover.model.definitions.{KnownStatement, Wrapper}
+import net.prover.model.definitions.Wrapper
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.{Step, SubstitutionContext}
 import net.prover.parsing.Parser
-import net.prover.proving.derivation.SimpleDerivationStep
+import net.prover.proving.derivation.DerivedStatement
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.inferences.{Reversal, Transitivity}
 import net.prover.proving.structure.statements.{BinaryConnective, BinaryJoiner, BinaryRelation}
@@ -58,7 +58,8 @@ object ChainingMethods {
         reversal <- provingContext.reversals.ofType[Reversal[Term]].find(_.joiner == firstRelation)
       } yield {
         secondRelation -> Step.RewriteStep.ifNecessary(
-          RewritePremise.Known(KnownStatement.fromSingleStep(
+          RewritePremise.Known(DerivedStatement.Reversed(
+            DerivedStatement.Known(reversal.joiner(source, intermediate)),
             reversal.assertionStep(intermediate, source))),
           substitution.assertionStep(intermediate, source, Wrapper(secondRelation(_, target)(_))))
       }

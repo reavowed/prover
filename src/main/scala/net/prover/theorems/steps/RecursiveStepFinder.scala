@@ -6,7 +6,7 @@ import net.prover.model.entries.Theorem.Proof
 import net.prover.model.{Inference, Substitutions}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step}
-import net.prover.proving.derivation.{DefinitionDeconstruction, SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.{DefinitionDeconstruction, DerivedStatement, SimpleDerivation, SimpleDerivationStep}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
@@ -86,17 +86,20 @@ abstract class RecursiveStepFinder[T : Monoid] {
     extraction.extractionSteps.toList.foldMap {
       case step: Step.AssertionStep =>
         apply(step)
-      case DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
+      case DefinitionDeconstruction(deconstructionStep, additionalSteps, _) =>
         apply(deconstructionStep) |+| additionalSteps.toList.foldMap(apply)
     } |+| apply(extraction.chainedRewriteSteps)
   }
   def apply(premise: RewritePremise): T = {
     premise match {
-      case RewritePremise.Known(knownStatement) =>
-        apply(knownStatement)
+      case RewritePremise.Known(derivation) =>
+        apply(derivation)
       case RewritePremise.ByInference(premises, extraction) =>
         premises.toList.foldMap(apply) |+| apply(extraction)
     }
+  }
+  def apply(derivedStatement: DerivedStatement): T = {
+    derivedStatement.leafStatements.toList.foldMap(apply) |+| apply(derivedStatement.toSimpleDerivation)
   }
   def apply(knownStatement: KnownStatement): T = {
     apply(knownStatement.statement) |+| apply(knownStatement.derivation)
@@ -108,7 +111,7 @@ abstract class RecursiveStepFinder[T : Monoid] {
     simpleDerivation.steps.toList.foldMap {
       case assertion: Step.AssertionStep =>
         apply(assertion)
-      case DefinitionDeconstruction(deconstructionStep, additionalSteps) =>
+      case DefinitionDeconstruction(deconstructionStep, additionalSteps, _) =>
         apply(deconstructionStep) |+| additionalSteps.toList.foldMap(apply)
       case extraction: AppliedInferenceExtraction =>
         apply(extraction)

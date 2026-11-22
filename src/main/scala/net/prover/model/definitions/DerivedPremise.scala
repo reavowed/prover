@@ -4,6 +4,7 @@ import net.prover.model.*
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, SubstitutionContext}
 import net.prover.proving.derivation.DerivedStatement
+import net.prover.proving.structure.inferences.ConclusionSimplificationInference
 
 sealed trait DerivedPremise {
   def getRootPremises: Seq[Statement]
@@ -43,7 +44,8 @@ case class DirectPremise(premise: Statement) extends DerivedPremise {
     } yield (Seq(substitutedPremise), _.head)
   }
 }
-case class DesimplifiedPremise(premise: Statement, inference: Inference, innerPremises: Seq[DerivedPremise]) extends DerivedPremise {
+case class DesimplifiedPremise(premise: Statement, conclusionSimplificationInference: ConclusionSimplificationInference, innerPremises: Seq[DerivedPremise]) extends DerivedPremise {
+  def inference: Inference = conclusionSimplificationInference.inference
   def getRootPremises: Seq[Statement] = innerPremises.flatMap(_.getRootPremises)
   def getSubstitutedPremises(substitutions: Substitutions)(implicit substitutionContext: SubstitutionContext): Option[(Seq[Statement], Seq[DerivedStatement] => DerivedStatement)] = {
     for {
@@ -51,6 +53,6 @@ case class DesimplifiedPremise(premise: Statement, inference: Inference, innerPr
       inferenceSubstitutions <- inference.conclusion.calculateSubstitutions(substitutedPremise).flatMap(_.confirmTotality(inference.variableDefinitions))
       assertionStep <- Step.AssertionStep.forInference(inference, inferenceSubstitutions)
       (rootPremises, deriveInnerPremises) <- innerPremises.getSubstitutedPremises(substitutions)
-    } yield (rootPremises, rootDerivations => DerivedStatement.Composed(deriveInnerPremises(rootDerivations), assertionStep))
+    } yield (rootPremises, rootDerivations => conclusionSimplificationInference.derive(deriveInnerPremises(rootDerivations), assertionStep))
   }
 }

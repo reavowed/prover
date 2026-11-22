@@ -29,7 +29,7 @@ case class RelationRewriteInference(
       substitutionsAfterMainPremise <- mainPremise.calculateSubstitutions(currentStatement.statement, initialSubstitutions)
       (initialPremiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
         case Some(initialPremise) =>
-          DerivationFinder.findKnownStatementBySubstituting(initialPremise, substitutionsAfterMainPremise, existingPremises).headOption.map(_.mapLeft(Some(_)))
+          DerivationFinder.findDerivedStatementBySubstituting(initialPremise, substitutionsAfterMainPremise, existingPremises).headOption.map(_.mapLeft(Some(_)))
         case None =>
           Some((None, substitutionsAfterMainPremise))
       }
@@ -46,7 +46,7 @@ case class RelationRewriteInference(
       substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement, initialSubstitutions)
       (initialPremiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
         case Some(initialPremise) =>
-          DerivationFinder.findDerivationForStatementBySubstituting(initialPremise, substitutionsAfterConclusion, stepProvingContext.knownStatementsFromPremises).headOption.map(_.mapLeft(Some(_)))
+          DerivationFinder.findDerivationForStatementBySubstituting(initialPremise, substitutionsAfterConclusion, stepProvingContext.derivedStatementsFromPremises).headOption.map(_.mapLeft(Some(_)))
         case None =>
           Some((None, substitutionsAfterConclusion))
       }
