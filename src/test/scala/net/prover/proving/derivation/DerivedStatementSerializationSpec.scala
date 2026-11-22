@@ -43,12 +43,6 @@ class DerivedStatementSerializationSpec extends Specification with StepBuilderHe
       check(derivation)
   }
 
-  def parseLegacy(lines: Seq[String], premises: Seq[Statement]): RewritePremise = {
-    given outerStepContext: StepContext = createBaseStepContext(premises)
-    val stepContext = createTargetStepWithContext(φ(a)).stepContext
-    RewritePremise.parser(using stepContext, availableEntriesToProvingContext).parseFromString(lines.mkString("\n"), "rewrite premise")
-  }
-
   "derived statement serialization" should {
     "round trip a reversal" in {
       roundTrip(Equals(a, b), Seq(Equals(b, a))) { derivation =>
@@ -136,24 +130,6 @@ class DerivedStatementSerializationSpec extends Specification with StepBuilderHe
           assertion(equalityIsTransitive, Nil, Seq(a, b, c))(summon)),
         assertion(substitutionOfEquals, Seq(φ($)), Seq(a, c))(summon))
       checkRoundTrip(derivation, Seq(φ(a), Equals(a, b), Equals(b, c)))
-    }
-
-    "parse a legacy derived statement as an unstructured derivation, and save it unchanged" in {
-      val lines = Seq(
-        s"knownDerived ${Equals(a, b).serialized} {",
-        s"  prove ${Equals(a, b).serialized} ${reverseEquality.id} () (t1, t0) p0",
-        "}")
-      val premise = parseLegacy(lines, Seq(Equals(b, a)))
-      (premise must beLike[RewritePremise] {
-        case RewritePremise.Known(derivation @ DerivedStatement.Unstructured(_, Seq(_: Step.AssertionStep))) =>
-          derivation.primaryInference must beSome(reverseEquality.summary)
-      }) and
-        (premise.serializedLines must beEqualTo(lines))
-    }
-
-    "parse a legacy direct statement as a known statement" in {
-      val premise = parseLegacy(Seq(s"knownDirect ${Equals(b, a).serialized}"), Seq(Equals(b, a)))
-      premise must beEqualTo(RewritePremise.Known(DerivedStatement.Known(Equals(b, a))))
     }
   }
 }

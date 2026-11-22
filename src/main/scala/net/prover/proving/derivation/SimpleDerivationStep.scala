@@ -1,26 +1,9 @@
 package net.prover.proving.derivation
 
 import net.prover.model.*
-import net.prover.model.proof.{Step, StepContext, StepLike}
-import net.prover.parsing.{KnownWordParser, Parser}
-import net.prover.proving.derivation.SimpleDerivationStep.{inference, toProofStep}
+import net.prover.model.proof.{Step, StepContext}
+import net.prover.parsing.KnownWordParser
 import net.prover.proving.extraction.AppliedInferenceExtraction
-
-case class SimpleDerivation(steps: Seq[SimpleDerivationStep]) extends StepLike.Wrapper {
-  override def substeps: Seq[StepLike] = steps
-  def inferences: Set[Inference] = steps.map(_.inference).toSet
-  def nonEmpty: Boolean = steps.nonEmpty
-  def isEmpty: Boolean = steps.isEmpty
-}
-object SimpleDerivation {
-  val empty: SimpleDerivation = SimpleDerivation(Nil)
-  def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[SimpleDerivation] = {
-    StepLike.listParser[SimpleDerivationStep](
-      SimpleDerivationStep.parser(_, implicitly),
-      (sc, sds) => sc.addStep(sds.toProofStep)
-    ).map(_._1).map(SimpleDerivation(_))
-  }
-}
 
 type SimpleDerivationStep = Step.AssertionStep | DefinitionDeconstruction | AppliedInferenceExtraction
 

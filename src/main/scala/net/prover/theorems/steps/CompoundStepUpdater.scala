@@ -224,11 +224,6 @@ abstract class CompoundStepUpdater[F[+_] : Monad] {
     derivedStatement match {
       case DerivedStatement.Known(statement) =>
         updateStatement(statement, context.stepContext).map(s => (DerivedStatement.Known(s), context))
-      case DerivedStatement.Unstructured(statement, derivationSteps) =>
-        for {
-          newStatement <- updateStatement(statement, context.stepContext)
-          (newSteps, newContext) <- steps(derivationSteps, context)(updateSimpleDerivationStep(_, _, proofWithContext))
-        } yield (DerivedStatement.Unstructured(newStatement, newSteps), newContext)
       case DerivedStatement.Extracted(source, extraction) =>
         for {
           (newSource, contextAfterSource) <- node(source, context)

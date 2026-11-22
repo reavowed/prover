@@ -41,13 +41,13 @@ class ReproveSpec extends Specification with StepBuilderHelper {
       val initialSteps = recalculateReferences(Seq(
         target(φ(a)),
         premiseDerivation(
-          Seq(known(Seq(assertion(zeroIsLeftIdentityForAddition, Nil, Seq(a))))),
+          Seq(assertedStep(assertion(zeroIsLeftIdentityForAddition, Nil, Seq(a)))),
           assertion(substitutionOfEquals, Seq(φ($)), Seq(a, add(Zero, a))))
       )(outerStepContext))
       val expectedSteps = recalculateReferences(Seq(
         target(φ(a)),
         rewriteStep(
-          known(Seq(assertion(zeroIsLeftIdentityForAddition, Nil, Seq(a)))),
+          assertedStep(assertion(zeroIsLeftIdentityForAddition, Nil, Seq(a))),
           assertion(substitutionOfEquals, Seq(φ($)), Seq(a, add(Zero, a))))
       )(outerStepContext))
 

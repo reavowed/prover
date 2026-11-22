@@ -21,7 +21,7 @@ class ReplaceInferenceSpec extends Specification with StepBuilderHelper {
         ElementOf(b, Integers)))
 
       val initialStep = recalculateReferences(rewriteStep(
-        known(Seq(assertion(simpleIntegerAdditionIsCommutative, Nil, Seq(a, b)))),
+        composed(assertion(simpleIntegerAdditionIsCommutative, Nil, Seq(a, b))),
         assertion(equivalenceOfSubstitutedEquals, Seq(φ($)), Seq(addZ(a, b), addZ(b, a)))
       )(SubstitutionContext.outsideProof))
 

@@ -73,12 +73,6 @@ object GetDisplaySteps {
           step.inference,
           stepPath,
           apply(step.substeps, stepPath))
-      case step: Step.WrappedPremiseDerivationStep =>
-        DisplayStep.ElidedWithDescription(
-          step.statement,
-          Some("Premise derivation"), // TODO: Could potentially point at an inference
-          stepPath,
-          apply(step.substeps, stepPath))
       case step: Step.InferenceWithPremiseDerivationsStep =>
         DisplayStep.ElidedInference(
           step.statement,

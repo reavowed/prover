@@ -4,9 +4,8 @@ import net.prover.model.{Inference, ProvingContext, Substitutions}
 import net.prover.model.expressions.{Statement, Term, TermVariable}
 import net.prover.model.proof.{Step, SubstitutionContext}
 import net.prover.model.TestDefinitions._
-import net.prover.model.definitions.KnownStatement
 import net.prover.model.proof.Step.RewriteStep
-import net.prover.proving.derivation.{DerivedStatement, SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.DerivedStatement
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 
@@ -140,23 +139,22 @@ trait StepHelpers {
     val combination = createCombination(sc)
     DerivedStatement.Combined(combination.premises.map(p => DerivedStatement.Known(p.statement)), combination)
   }
-  implicit def knownStatementToDerivedStatement(createKnownStatement: SubstitutionContext => KnownStatement): SubstitutionContext => DerivedStatement = { sc =>
-    DerivedStatement.Unstructured.fromKnownStatement(createKnownStatement(sc))
+  /**
+    * A statement composed from known statements, e.g. "a + b ∈ ℕ" from "a ∈ ℕ" and "b ∈ ℕ".
+    */
+  def composed(
+    createComposition: SubstitutionContext => Step.AssertionStep
+  ): SubstitutionContext => DerivedStatement = { sc =>
+    val composition = createComposition(sc)
+    DerivedStatement.Composed(composition.premises.map(p => DerivedStatement.Known(p.statement)), composition)
   }
-  def known(
-    statement: Statement
-  ): SubstitutionContext => KnownStatement = { sc =>
-    KnownStatement(statement, SimpleDerivation.empty)
-  }
-  def known(
-    createSteps: SubstitutionContext => Seq[Step.AssertionOrExtraction]
-  ): SubstitutionContext => KnownStatement = { sc =>
-    val steps = createSteps(sc)
-    val derivation = SimpleDerivation(steps.map {
-      case step: Step.AssertionStep => step
-      case step: Step.InferenceExtractionStep => step.inferenceExtraction
-    })
-    KnownStatement(derivation.statement, derivation)
+  /**
+    * A statement proved by a single assertion with no premises.
+    */
+  def assertedStep(
+    createAssertion: SubstitutionContext => Step.AssertionStep
+  ): SubstitutionContext => DerivedStatement = { sc =>
+    DerivedStatement.Asserted(AppliedInferenceExtraction(createAssertion(sc), AppliedExtraction.empty))
   }
 
   def fillerSteps(number: Int): SubstitutionContext => Seq[Step] = (0 until number).map(i => target(ForAll("x")(Equals($, add($, $)))))
@@ -169,8 +167,5 @@ trait StepHelpers {
 
   implicit def seqConstructorToConstructorSeq[T](seq: Seq[SubstitutionContext => T]): SubstitutionContext => Seq[T] = { sc =>
     seq.map(_(sc))
-  }
-  implicit def knownStatementSeqToDerivedStatementSeq(seq: Seq[SubstitutionContext => KnownStatement]): SubstitutionContext => Seq[DerivedStatement] = { sc =>
-    seq.map(createKnownStatement => DerivedStatement.Unstructured.fromKnownStatement(createKnownStatement(sc)))
   }
 }

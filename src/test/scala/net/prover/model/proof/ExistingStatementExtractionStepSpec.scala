@@ -19,7 +19,7 @@ class ExistingStatementExtractionStepSpec extends Specification with StepHelpers
       val step = RecalculateReferences(
         createStepWithContext(
           existingStatementExtraction(
-            Seq(known(Seq(assertion(combineConjunction, Seq(φ(a), ψ(a)), Nil)))),
+            Seq(combined(assertion(combineConjunction, Seq(φ(a), ψ(a)), Nil))),
             Seq(
               assertion(specification, Seq(Implication(Conjunction(φ($), ψ($)), χ($))), Seq(a)),
               assertion(modusPonens, Seq(Conjunction(φ(a), ψ(a)), χ(a)), Nil))

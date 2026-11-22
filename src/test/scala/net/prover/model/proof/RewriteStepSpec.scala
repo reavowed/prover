@@ -20,20 +20,22 @@ class RewriteStepSpec extends Specification with StepHelpers with StepBuilderHel
         createStepWithContext(
           rewriteStep( // 0
             Seq(
-              known(Seq(
-                inferenceExtraction( // 0.0
+              substituted(
+                knownPremise(ElementOf(a, Integers)),
+                asserted(inferenceExtraction( // 0.0
                   assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil), // 0.0.0
                   Seq(inferenceExtraction( // 0.0.1
                     assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)), // 0.0.1.0
-                    Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))), // 0.0.1.1
-                assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(Integers, BaseSet(IntegerAddition))))), // 0.1
-              known(Seq(
-                inferenceExtraction( // 0.2
+                    Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers))))))), // 0.0.1.1
+                assertion(substitutionOfEquals, Seq(ElementOf(a, $)), Seq(Integers, BaseSet(IntegerAddition)))), // 0.1
+              substituted(
+                knownPremise(ElementOf(b, Integers)),
+                asserted(inferenceExtraction( // 0.2
                   assertion(IntegerAdditionDefinition.definitionInference, Nil, Nil),
                   Seq(inferenceExtraction(
                     assertion(BinaryOperationOn.deconstructionInference, Nil, Seq(IntegerAddition, Integers)),
-                    Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers)))))),
-                assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(Integers, BaseSet(IntegerAddition)))))),
+                    Seq(assertion(reverseEquality, Nil, Seq(BaseSet(IntegerAddition), Integers))))))),
+                assertion(substitutionOfEquals, Seq(ElementOf(b, $)), Seq(Integers, BaseSet(IntegerAddition))))),
             inferenceExtraction(
               assertion(integerAdditionIsCommutative, Nil, Nil),
               Seq(

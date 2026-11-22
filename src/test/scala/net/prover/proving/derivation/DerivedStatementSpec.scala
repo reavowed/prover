@@ -141,9 +141,5 @@ class DerivedStatementSpec extends Specification with StepHelpers with ContextHe
     check("be the extraction for an extraction with a single inference", extractedLeftConjunct(known), Some(extractLeftConjunct))
     check("be absent for an extraction with multiple inferences", Extracted(known, AppliedExtraction.fromSimpleExtraction(Seq(step(specification, Seq(φ($)), Seq(a)), step(extractLeftConjunct, Seq(φ, ψ), Nil)))), None)
     check("be the extraction for an extraction ending in a reversal", Extracted(known, AppliedExtraction(Seq(step(extractLeftConjunct, Seq(φ, ψ), Nil), termStep(reverseEquality)), Nil, true)), Some(extractLeftConjunct))
-
-    // Derivations saved before derivations were structured
-    check("be the single inference of an unstructured derivation", Unstructured(φ, Seq(termStep(reverseEquality), termStep(reverseEquality))), Some(reverseEquality))
-    check("be absent for an unstructured derivation with multiple inferences", Unstructured(φ, Seq(applied(firstCoordinates), termStep(reverseEquality))), None)
   }
 }

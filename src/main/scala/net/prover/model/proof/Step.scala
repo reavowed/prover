@@ -442,31 +442,6 @@ object Step {
     }
   }
 
-  case class WrappedPremiseDerivationStep(
-      unwrappers: Seq[Unwrapper],
-      innerSteps: Seq[Step.PremiseDerivation])
-    extends Step.Wrapped
-      with Step.PremiseDerivation
-  {
-    override protected def replaceSubstepsInternal(newSubsteps: Seq[Step])(implicit stepProvingContext: StepProvingContext): Step = {
-      WrappedPremiseDerivationStep(newSubsteps)
-    }
-  }
-  object WrappedPremiseDerivationStep {
-    def apply(steps: Seq[Step])(implicit provingContext: ProvingContext): WrappedPremiseDerivationStep = {
-      Wrapped.extractWrappers(steps) { (unwrappers, steps) =>
-        WrappedPremiseDerivationStep(unwrappers, steps.map(_.asInstanceOf[Step.PremiseDerivation]))
-      }
-    }
-    def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[WrappedPremiseDerivationStep] = {
-      KnownWordParser("wrappedPremiseDerivation") {
-        for {
-          substeps <- childStepsParser.inBraces
-        } yield WrappedPremiseDerivationStep(substeps)
-      }
-    }
-  }
-
   case class InferenceWithPremiseDerivationsStep(
       premises: Seq[DerivedStatement],
       assertionStep: Step.InferenceApplicationWithoutPremises)
@@ -556,7 +531,6 @@ object Step {
       ExistingStatementExtractionStep.parser,
       InferenceExtractionStep.parser,
       WrappedInferenceApplicationStep.parser,
-      WrappedPremiseDerivationStep.parser,
       InferenceWithPremiseDerivationsStep.parser,
       RewriteStep.parser))
   }

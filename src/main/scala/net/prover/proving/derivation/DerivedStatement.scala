@@ -1,7 +1,6 @@
 package net.prover.proving.derivation
 
 import net.prover.model.*
-import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepContext, StepLike}
 import net.prover.parsing.{KnownWordParser, Parser}
@@ -50,7 +49,6 @@ sealed trait DerivedStatement {
   def length: Int = toProofSteps.map(_.length).sum
   def inferences: Set[Inference] = derivationSteps.map(_.inference).toSet
   def toProofSteps: Seq[Step] = derivationSteps.map(_.toProofStep)
-  def toSimpleDerivation: SimpleDerivation = SimpleDerivation(derivationSteps)
   /**
     * Uses the given statement (equal to this one, but possibly with different bound variable names) if this statement
     * was already known.
@@ -291,27 +289,6 @@ object DerivedStatement {
     }
   }
 
-  /**
-    * A derivation saved before derivations were structured, as a flat list of steps. Its primary inference is the
-    * single inference it uses, if there is one.
-    */
-  case class Unstructured(statement: Statement, steps: Seq[SimpleDerivationStep]) extends DerivedStatement {
-    override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = steps
-    // There is no structure to distinguish the steps, so they are all treated equally. They are put in the lowest tier,
-    // so that as part of a larger derivation (e.g. as the premise of a rewrite) they never outrank structured parts.
-    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = steps.map(Tier.Rewrite -> _.inference)
-    override def leafStatements: Seq[Statement] = Seq(statement)
-    override def serializedLines: Seq[String] = steps.flatMap(stepLines).indentInLabelledBracesIfPresent(s"$UnstructuredLabel ${statement.serialized}")
-  }
-  object Unstructured {
-    def fromKnownStatement(knownStatement: KnownStatement): DerivedStatement = {
-      if (knownStatement.derivation.isEmpty)
-        Known(knownStatement.statement)
-      else
-        Unstructured(knownStatement.statement, knownStatement.derivation.steps)
-    }
-  }
-
   private val KnownLabel = "known"
   private val ExtractedLabel = "extracted"
   private val SimplifiedLabel = "simplified"
@@ -322,8 +299,6 @@ object DerivedStatement {
   private val ComposedLabel = "composed"
   private val SubstitutedLabel = "substituted"
   private val TransitiveLabel = "transitive"
-  private val UnstructuredLabel = "knownDerived"
-  private val LegacyKnownLabel = "knownDirect"
 
   /**
     * The derivation of a statement extracted from a premise. A final reversal is split out into its own node where the
@@ -392,15 +367,6 @@ object DerivedStatement {
     }
 
     val known = KnownWordParser(KnownLabel)(statementParser.map(s => (Known(s), context)))
-    val legacyKnown = KnownWordParser(LegacyKnownLabel)(statementParser.map(s => (Known(s), context)))
-    val unstructured = KnownWordParser(UnstructuredLabel) {
-      for {
-        statement <- statementParser
-        stepsAndContext <- Parser.mapFoldWhileDefined[SimpleDerivationStep, DerivationContext](context) { (_, context) =>
-          SimpleDerivationStep.parser(context.stepContext, provingContext).optional.mapMap(step => step -> context.add(step))
-        }.inBraces
-      } yield (Unstructured(statement, stepsAndContext._1), stepsAndContext._2)
-    }
     val extracted = withSource(ExtractedLabel) { (source, context) =>
       extractionParser(context).map(_.mapLeft(Extracted(source, _)))
     }
@@ -443,7 +409,7 @@ object DerivedStatement {
         (transitivity, contextAfterTransitivity) <- assertionParser(contextAfterSecond)
       } yield (Transitive(first, second, transitivity), contextAfterTransitivity)
     }
-    KnownWordParser.select(Seq(known, legacyKnown, unstructured, extracted, simplified, relationRewritten, reversed, asserted, combined, composed, substituted, transitive))
+    KnownWordParser.select(Seq(known, extracted, simplified, relationRewritten, reversed, asserted, combined, composed, substituted, transitive))
   }
 
   /**

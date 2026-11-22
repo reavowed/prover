@@ -5,7 +5,7 @@ import net.prover.model.entries.Theorem.Proof
 import net.prover.model.{Inference, Substitutions}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step}
-import net.prover.proving.derivation.{DefinitionDeconstruction, DerivedStatement, SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.{DefinitionDeconstruction, DerivedStatement, SimpleDerivationStep}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
@@ -98,13 +98,13 @@ abstract class RecursiveStepFinder[T : Monoid] {
     }
   }
   def apply(derivedStatement: DerivedStatement): T = {
-    derivedStatement.leafStatements.toList.foldMap(apply) |+| apply(derivedStatement.toSimpleDerivation)
+    derivedStatement.leafStatements.toList.foldMap(apply) |+| derivedStatement.derivationSteps.toList.foldMap(applyDerivationStep)
   }
   def apply(appliedInferenceExtraction: AppliedInferenceExtraction): T = {
     apply(appliedInferenceExtraction.assertionStep) |+| apply(appliedInferenceExtraction.extraction)
   }
-  def apply(simpleDerivation: SimpleDerivation): T = {
-    simpleDerivation.steps.toList.foldMap {
+  private def applyDerivationStep(step: SimpleDerivationStep): T = {
+    step match {
       case assertion: Step.AssertionStep =>
         apply(assertion)
       case DefinitionDeconstruction(deconstructionStep, additionalSteps, _) =>
