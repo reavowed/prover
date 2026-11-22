@@ -3,7 +3,6 @@ package net.prover.refactoring
 import net.prover.books.management.BookStateManager
 import net.prover.entries.StepWithContext
 import net.prover.model._
-import net.prover.model.definitions.KnownStatement
 import net.prover.model.proof.Step
 import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction, ExtractionApplier, ExtractionCalculator}
 import net.prover.proving.premiseFinding.DerivationFinder

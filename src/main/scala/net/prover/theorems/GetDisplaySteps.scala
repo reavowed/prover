@@ -50,18 +50,16 @@ object GetDisplaySteps {
               apply(step.substeps, stepPath))
         }
       case step: Step.ExistingStatementExtractionStep =>
-        if (step.premises.nonEmpty) {
-          DisplayStep.ElidedWithDescription(
-            step.statement,
-            Some("Extraction from previous step"),
-            stepPath,
-            apply(step.premises.flatMap(_.toProofSteps) :+ step.copy(premises = Nil), stepPath))
+        val substeps = if (step.premises.nonEmpty) {
+          apply(step.premises.flatMap(_.toProofSteps) :+ step.copy(premises = Nil), stepPath)
         } else {
-          DisplayStep.ElidedWithDescription(
-            step.statement,
-            Some("Extraction from previous step"),
-            stepPath,
-            apply(step.extraction.toProofSteps, stepPath))
+          apply(step.extraction.toProofSteps, stepPath)
+        }
+        step.primaryInference match {
+          case Some(inference) =>
+            DisplayStep.ElidedInference(step.statement, inference, stepPath, substeps)
+          case None =>
+            DisplayStep.ElidedWithDescription(step.statement, Some("Extraction from previous step"), stepPath, substeps)
         }
       case step: Step.InferenceExtractionStep =>
         DisplayStep.ElidedInference(

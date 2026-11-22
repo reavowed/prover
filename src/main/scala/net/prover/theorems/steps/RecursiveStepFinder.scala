@@ -1,6 +1,5 @@
 package net.prover.theorems.steps
 
-import net.prover.model.definitions.KnownStatement
 import net.prover.model.entries.Theorem
 import net.prover.model.entries.Theorem.Proof
 import net.prover.model.{Inference, Substitutions}
@@ -100,9 +99,6 @@ abstract class RecursiveStepFinder[T : Monoid] {
   }
   def apply(derivedStatement: DerivedStatement): T = {
     derivedStatement.leafStatements.toList.foldMap(apply) |+| apply(derivedStatement.toSimpleDerivation)
-  }
-  def apply(knownStatement: KnownStatement): T = {
-    apply(knownStatement.statement) |+| apply(knownStatement.derivation)
   }
   def apply(appliedInferenceExtraction: AppliedInferenceExtraction): T = {
     apply(appliedInferenceExtraction.assertionStep) |+| apply(appliedInferenceExtraction.extraction)

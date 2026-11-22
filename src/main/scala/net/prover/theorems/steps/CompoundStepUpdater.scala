@@ -1,13 +1,12 @@
 package net.prover.theorems.steps
 
 import net.prover.entries.{ProofWithContext, StepWithContext, StepsWithContext, TypedStepWithContext}
-import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Premise, Step, StepContext, SubstitutionContext}
 import net.prover.model.{Inference, Substitutions}
 import net.prover.proving.derivation.SimpleDerivationStep.toProofStep
 import net.prover.proving.derivation.DerivedStatement.DerivationContext
-import net.prover.proving.derivation.{DefinitionDeconstruction, DerivedStatement, SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.{DefinitionDeconstruction, DerivedStatement, SimpleDerivationStep}
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
@@ -115,7 +114,7 @@ abstract class CompoundStepUpdater[F[+_] : Monad] {
   }
   def updateInferenceWithPremiseDerivations(step: Step.InferenceWithPremiseDerivationsStep, stepWithContext: StepWithContext): F[Step] = {
     Step.InferenceWithPremiseDerivationsStep.builder(
-      sc => updateKnownStatements(step.premises, sc, stepWithContext.proofWithContext),
+      sc => updateDerivedStatements(step.premises, sc, stepWithContext.proofWithContext),
       sc => apply(TypedStepWithContext(step.assertionStep, stepWithContext.proofWithContext)(using summon, sc))
         .map(_.asInstanceOf[Step.InferenceApplicationWithoutPremises]))(
       using summon,
@@ -124,7 +123,7 @@ abstract class CompoundStepUpdater[F[+_] : Monad] {
   }
   def updateExistingStatementExtraction(step: Step.ExistingStatementExtractionStep, stepWithContext: StepWithContext): F[Step] = {
     Step.ExistingStatementExtractionStep.builder(
-      sc => updateKnownStatements(step.premises, sc, stepWithContext.proofWithContext),
+      sc => updateDerivedStatements(step.premises, sc, stepWithContext.proofWithContext),
       sc => updateAppliedExtraction(step.extraction, sc, stepWithContext.proofWithContext))(
       using summon,
       stepWithContext.stepContext
@@ -281,27 +280,6 @@ abstract class CompoundStepUpdater[F[+_] : Monad] {
           (newTransitivity, newContext) <- assertion(transitivity, contextAfterSecond)
         } yield (DerivedStatement.Transitive(newFirst, newSecond, newTransitivity), newContext)
     }
-  }
-  def updateKnownStatements(knownStatements: Seq[KnownStatement], stepContext: StepContext, proofWithContext: ProofWithContext): F[Seq[KnownStatement]] = {
-    updateAll[KnownStatement](
-      knownStatements,
-      stepContext,
-      updateKnownStatement(_, _, proofWithContext),
-      (sc, ks) => sc.addSteps(ks.toProofSteps))
-  }
-  def updateKnownStatement(knownStatement: KnownStatement, stepContext: StepContext, proofWithContext: ProofWithContext): F[KnownStatement] = {
-    for {
-      newStatement <- updateStatement(knownStatement.statement, stepContext)
-      newDerivation <- updateSimpleDerivation(knownStatement.derivation, stepContext, proofWithContext)
-    } yield KnownStatement(newStatement, newDerivation)
-  }
-  def updateSimpleDerivation(simpleDerivation: SimpleDerivation, stepContext: StepContext, proofWithContext: ProofWithContext): F[SimpleDerivation] = {
-    updateAll[SimpleDerivationStep](
-      simpleDerivation.steps,
-      stepContext,
-      updateSimpleDerivationStep(_, _, proofWithContext),
-      (sc, s) => sc.addStep(s.toProofStep)
-    ).map(SimpleDerivation(_))
   }
   def updateSimpleDerivationStep(simpleDerivationStep: SimpleDerivationStep, stepContext: StepContext, proofWithContext: ProofWithContext): F[SimpleDerivationStep] = {
     simpleDerivationStep match {

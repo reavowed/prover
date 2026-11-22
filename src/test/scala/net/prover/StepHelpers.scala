@@ -53,7 +53,7 @@ trait StepHelpers {
     Step.ExistingStatementExtractionStep(Nil, extraction(steps(sc), Nil))
   }
   def existingStatementExtraction(
-    premises: SubstitutionContext => Seq[KnownStatement],
+    premises: SubstitutionContext => Seq[DerivedStatement],
     steps: SubstitutionContext => Seq[Step.AssertionStep])(
     implicit provingContext: ProvingContext
   ): SubstitutionContext => Step.ExistingStatementExtractionStep = { sc =>
@@ -80,7 +80,7 @@ trait StepHelpers {
     Step.WrappedInferenceApplicationStep(steps(sc))(provingContext)
   }
   def premiseDerivation(
-    createPremises: SubstitutionContext => Seq[KnownStatement],
+    createPremises: SubstitutionContext => Seq[DerivedStatement],
     createAssertion: SubstitutionContext => Step.InferenceApplicationWithoutPremises
   ): SubstitutionContext => Step.InferenceWithPremiseDerivationsStep = { sc =>
     Step.InferenceWithPremiseDerivationsStep(
@@ -130,6 +130,15 @@ trait StepHelpers {
   ): SubstitutionContext => DerivedStatement = { sc =>
     val reversal = createReversal(sc)
     DerivedStatement.Reversed(DerivedStatement.Known(reversal.premises.head.statement), reversal)
+  }
+  /**
+    * A combination of known statements, e.g. "φ ∧ ψ" from "φ" and "ψ".
+    */
+  def combined(
+    createCombination: SubstitutionContext => Step.AssertionStep
+  ): SubstitutionContext => DerivedStatement = { sc =>
+    val combination = createCombination(sc)
+    DerivedStatement.Combined(combination.premises.map(p => DerivedStatement.Known(p.statement)), combination)
   }
   implicit def knownStatementToDerivedStatement(createKnownStatement: SubstitutionContext => KnownStatement): SubstitutionContext => DerivedStatement = { sc =>
     DerivedStatement.Unstructured.fromKnownStatement(createKnownStatement(sc))

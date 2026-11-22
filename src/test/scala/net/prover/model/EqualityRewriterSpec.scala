@@ -61,6 +61,24 @@ class EqualityRewriterSpec extends Specification with StepBuilderHelper {
       testRewrite(premises, target)
     }
 
+    "describe a rewrite using a known equality by its expansion" in {
+      val F = TermVariablePlaceholder("F", 2)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, F -> 1))
+      given stepContext: StepContext = createBaseStepContext(Seq(Equals(a, b)))
+      EqualityRewriter.rewrite(Equals(F(a), F(b))) must beSome(beLike[Step] {
+        case step: Step.AssertionStep => step.inference must beEqualTo(substitutionOfEqualsIntoFunction.summary)
+      })
+    }
+
+    "not describe a rewrite using a reversed known equality by the reversal" in {
+      val F = TermVariablePlaceholder("F", 2)
+      given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, F -> 1))
+      given stepContext: StepContext = createBaseStepContext(Seq(Equals(b, a)))
+      EqualityRewriter.rewrite(Equals(F(a), F(b))) must beSome(beLike[Step] {
+        case step: Step.ElidedStep => (step.highlightedInference must beNone) and (step.description must beSome("Rewritten"))
+      })
+    }
+
     "rewrite a function application inline" in {
       val F = TermVariablePlaceholder("F", 2)
       given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, F-> 1))

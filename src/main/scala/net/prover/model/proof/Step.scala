@@ -3,10 +3,10 @@ package net.prover.model.proof
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import net.prover.model.*
-import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.unwrapping.{DeductionUnwrapper, GeneralizationUnwrapper, Unwrapper}
 import net.prover.parsing.{KnownWordParser, Parser}
+import net.prover.proving.derivation.DerivedStatement
 import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction}
 import net.prover.proving.rewrite.RewritePremise
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
@@ -346,21 +346,22 @@ object Step {
   }
 
   case class ExistingStatementExtractionStep(
-    premises: Seq[KnownStatement],
+    premises: Seq[DerivedStatement],
     extraction: AppliedExtraction
   ) extends Step.PremiseDerivation {
+    def primaryInference: Option[Inference.Summary] = DerivedStatement.primaryInferenceOfExtraction(premises, extraction)
     override def statement: Statement = extraction.statement
     override def length: Int = extraction.length
     override def serializedLines: Seq[String] = {
-      (premises :+ extraction).flatMap(_.serializedLines).indentInLabelledBracesIfPresent(`type`)
+      (premises.flatMap(_.serializedLines) ++ extraction.serializedLines).indentInLabelledBracesIfPresent(`type`)
     }
   }
   object ExistingStatementExtractionStep {
     def ifNecessary(substeps: Seq[Step.AssertionStep]): Option[Step.PremiseDerivation] = {
       ifNecessary(Nil, AppliedExtraction.fromSimpleExtraction(substeps))
     }
-    def ifNecessary(premises: Seq[KnownStatement], extraction: AppliedExtraction): Option[Step.PremiseDerivation] = {
-      val nonemptyPremises = premises.filter(_.derivation.nonEmpty)
+    def ifNecessary(premises: Seq[DerivedStatement], extraction: AppliedExtraction): Option[Step.PremiseDerivation] = {
+      val nonemptyPremises = premises.filter(_.nonEmpty)
       val hasPremiseSteps = nonemptyPremises.nonEmpty
       extraction.extractionSteps match {
         case Nil if !hasPremiseSteps => None
@@ -369,7 +370,7 @@ object Step {
       }
     }
     def builder[F[_]: Monad](
-      getPremises: StepContext => F[Seq[KnownStatement]],
+      getPremises: StepContext => F[Seq[DerivedStatement]],
       getExtraction: StepContext => F[AppliedExtraction])(
       implicit stepContext: StepContext
     ): F[ExistingStatementExtractionStep] = {
@@ -384,7 +385,7 @@ object Step {
     def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[ExistingStatementExtractionStep] = {
       KnownWordParser("existingStatementExtraction") {
         builder[Parser](
-          sc => KnownStatement.listParser(sc, implicitly).map(_._1),
+          sc => DerivedStatement.listParser(sc, implicitly).map(_._1),
           sc => AppliedExtraction.parser(sc, implicitly)
         ).inBraces
       }
@@ -467,7 +468,7 @@ object Step {
   }
 
   case class InferenceWithPremiseDerivationsStep(
-      premises: Seq[KnownStatement],
+      premises: Seq[DerivedStatement],
       assertionStep: Step.InferenceApplicationWithoutPremises)
     extends Step.InferenceApplication
   {
@@ -475,15 +476,15 @@ object Step {
     override def statement: Statement = assertionStep.statement
     override def length: Int = premises.map(_.length).sum + assertionStep.length
     override def serializedLines: Seq[String] = {
-      (premises :+ assertionStep).flatMap(_.serializedLines).indentInLabelledBracesIfPresent(`type`)
+      (premises.flatMap(_.serializedLines) ++ assertionStep.serializedLines).indentInLabelledBracesIfPresent(`type`)
     }
   }
   object InferenceWithPremiseDerivationsStep {
     def ifNecessary(
-      premises: Seq[KnownStatement],
+      premises: Seq[DerivedStatement],
       assertion: Step.InferenceApplicationWithoutPremises
     ): Step.InferenceApplication = {
-      val nonemptyPremises = premises.filter(_.derivation.nonEmpty)
+      val nonemptyPremises = premises.filter(_.nonEmpty)
       val hasPremiseSteps = nonemptyPremises.nonEmpty
       if (hasPremiseSteps) {
         InferenceWithPremiseDerivationsStep(nonemptyPremises, assertion)
@@ -493,7 +494,7 @@ object Step {
     }
 
     def builder[F[_] : Monad](
-      getPremises: StepContext => F[Seq[KnownStatement]],
+      getPremises: StepContext => F[Seq[DerivedStatement]],
       getAssertion: StepContext => F[InferenceApplicationWithoutPremises])(
       implicit stepContext: StepContext
     ): F[InferenceWithPremiseDerivationsStep] = {
@@ -508,7 +509,7 @@ object Step {
     def parser(implicit stepContext: StepContext, provingContext: ProvingContext): KnownWordParser[Step] = {
       KnownWordParser("inferenceWithPremiseDerivations") {
         builder[Parser](
-          sc => KnownStatement.listParser(sc, implicitly).map(_._1),
+          sc => DerivedStatement.listParser(sc, implicitly).map(_._1),
           sc => Step.parser(sc, implicitly).map(_.asInstanceOf[InferenceApplicationWithoutPremises])
         ).inBraces
       }

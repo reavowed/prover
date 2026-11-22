@@ -51,7 +51,6 @@ sealed trait DerivedStatement {
   def inferences: Set[Inference] = derivationSteps.map(_.inference).toSet
   def toProofSteps: Seq[Step] = derivationSteps.map(_.toProofStep)
   def toSimpleDerivation: SimpleDerivation = SimpleDerivation(derivationSteps)
-  def toKnownStatement: KnownStatement = KnownStatement(statement, toSimpleDerivation)
   /**
     * Uses the given statement (equal to this one, but possibly with different bound variable names) if this statement
     * was already known.
@@ -105,6 +104,35 @@ object DerivedStatement {
 
   private def stepLines(step: SimpleDerivationStep): Seq[String] = (step: StepLike).serializedLines
 
+  private def extractionTieredInferences(extraction: AppliedExtraction): Seq[(Tier, Inference)] = {
+    extraction.extractionInferences.map(Tier.Extraction -> _) ++
+      extraction.reversalStep.map(Tier.Rewrite -> _.inference) ++
+      extraction.chainedRewrites.flatMap(r => Seq(Tier.Extraction -> r.rewriteStep.inference, Tier.Rewrite -> r.chainingStep.inference))
+  }
+
+  /**
+    * The single inference used, other than rewrites, if there is one. Used for a statement built from parts that were
+    * derived separately, which is only described by its own inference if nothing other than rewrites was needed to
+    * derive those parts.
+    */
+  private def singleInferenceIgnoringRewrites(tieredInferences: Seq[(Tier, Inference)]): Option[Inference.Summary] = {
+    tieredInferences
+      .filter(_._1 != Tier.Rewrite)
+      .map(_._2)
+      .distinctBy(_.id)
+      .single
+      .map(_.summary)
+  }
+
+  /**
+    * The primary inference of an extraction from an existing statement, whose extraction premises were derived
+    * separately. As with a combination, the extraction only describes the whole if nothing other than rewrites was
+    * needed to derive the premises.
+    */
+  def primaryInferenceOfExtraction(premiseDerivations: Seq[DerivedStatement], extraction: AppliedExtraction): Option[Inference.Summary] = {
+    singleInferenceIgnoringRewrites(premiseDerivations.flatMap(_.tieredInferences) ++ extractionTieredInferences(extraction))
+  }
+
   /**
     * A statement that is already available, e.g. a premise, a previous step, or a target.
     */
@@ -124,10 +152,7 @@ object DerivedStatement {
       source.allDerivationSteps ++ extraction.extractionSteps ++ extraction.chainedRewriteSteps
     }
     override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = {
-      source.tieredInferences ++
-        extraction.extractionInferences.map(Tier.Extraction -> _) ++
-        extraction.reversalStep.map(Tier.Rewrite -> _.inference) ++
-        extraction.chainedRewrites.flatMap(r => Seq(Tier.Extraction -> r.rewriteStep.inference, Tier.Rewrite -> r.chainingStep.inference))
+      source.tieredInferences ++ extractionTieredInferences(extraction)
     }
     override def leafStatements: Seq[Statement] = source.leafStatements
     override def serializedLines: Seq[String] = (source.serializedLines ++ extraction.serializedLines).indentInLabelledBracesIfPresent(ExtractedLabel)
@@ -211,12 +236,7 @@ object DerivedStatement {
     // This only applies to the combination as a whole - as part of a larger derivation, it contributes its inferences
     // as normal.
     override protected def primaryInferenceWith(additionalInferences: Seq[(Tier, Inference)]): Option[Inference.Summary] = {
-      (tieredInferences ++ additionalInferences)
-        .filter(_._1 != Tier.Rewrite)
-        .map(_._2)
-        .distinctBy(_.id)
-        .single
-        .map(_.summary)
+      singleInferenceIgnoringRewrites(tieredInferences ++ additionalInferences)
     }
     override def leafStatements: Seq[Statement] = components.flatMap(_.leafStatements)
     override def serializedLines: Seq[String] = (components.flatMap(_.serializedLines) ++ combination.serializedLines).indentInLabelledBracesIfPresent(CombinedLabel)
@@ -277,8 +297,9 @@ object DerivedStatement {
     */
   case class Unstructured(statement: Statement, steps: Seq[SimpleDerivationStep]) extends DerivedStatement {
     override private[derivation] def allDerivationSteps: Seq[SimpleDerivationStep] = steps
-    // All steps are treated equally, as there is no structure to distinguish them
-    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = steps.map(Tier.Composition -> _.inference)
+    // There is no structure to distinguish the steps, so they are all treated equally. They are put in the lowest tier,
+    // so that as part of a larger derivation (e.g. as the premise of a rewrite) they never outrank structured parts.
+    override private[derivation] def tieredInferences: Seq[(Tier, Inference)] = steps.map(Tier.Rewrite -> _.inference)
     override def leafStatements: Seq[Statement] = Seq(statement)
     override def serializedLines: Seq[String] = steps.flatMap(stepLines).indentInLabelledBracesIfPresent(s"$UnstructuredLabel ${statement.serialized}")
   }

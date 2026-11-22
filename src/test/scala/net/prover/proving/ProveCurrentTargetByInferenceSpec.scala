@@ -252,7 +252,7 @@ class ProveCurrentTargetByInferenceSpec extends Specification with BookServiceHe
           target(φ) :+
           target(ψ) :+
           premiseDerivation(
-            Seq(known(Seq(assertion(combineConjunction, Seq(φ, ψ), Nil)))),
+            Seq(combined(assertion(combineConjunction, Seq(φ, ψ), Nil))),
             assertion(modusPonens, Seq(Conjunction(φ, ψ), χ), Nil)))
     }
 

@@ -330,8 +330,8 @@ object ExtractionApplier {
       } else {
         (appliedExtractionStep, premises)
       }
-      (knownStatements, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(wrappedPremises)
-    } yield (InferenceWithPremiseDerivationsStep.ifNecessary(knownStatements, wrappedExtractionStep), targetSteps)
+      (premiseDerivations, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(wrappedPremises)
+    } yield (InferenceWithPremiseDerivationsStep.ifNecessary(premiseDerivations, wrappedExtractionStep), targetSteps)
   }
 
   def getPremiseExtractionStepWithPremises(
@@ -344,8 +344,8 @@ object ExtractionApplier {
   ): Try[(Statement, Option[Step], Seq[Step.TargetStep])] = {
     for {
       extraction <- ExtractionApplier.applyExtractionsForPremise(premise, premiseExtraction.extractionDefinition, substitutions, intendedPremises, intendedConclusion)
-      (knownStatements, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(extraction.extractionPremises)
-      extractionStep = Step.ExistingStatementExtractionStep.ifNecessary(knownStatements, extraction.finalise)
+      (premiseDerivations, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(extraction.extractionPremises)
+      extractionStep = Step.ExistingStatementExtractionStep.ifNecessary(premiseDerivations, extraction.finalise)
     } yield (extraction.conclusion, extractionStep, targetSteps)
   }
 

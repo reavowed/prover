@@ -18,7 +18,7 @@ class DerivationOrTargetFinderSpec extends Specification with ContextHelper with
     def findPremiseOrTarget(target: Statement, premises: Seq[Statement], depth: Int = 0)(implicit availableEntries: AvailableEntries): (Seq[Step], Seq[Statement]) = {
       given stepContext: StepContext = createBaseStepContext(premises, depth)
       DerivationOrTargetFinder.findDerivationsOrTargets(Seq(target))
-        .mapLeft(ks => ks.flatMap(_.derivation.steps).distinct.map(_.toProofStep))
+        .mapLeft(_.flatMap(_.toProofSteps).distinct)
         .mapRight(_.map(_.statement))
     }
 

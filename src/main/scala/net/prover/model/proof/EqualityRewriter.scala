@@ -8,7 +8,7 @@ import net.prover.proving.extraction.ExtractionApplier
 import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.proving.structure.inferences.Equality
 import net.prover.proving.structure.statements.BinaryJoiner
-import net.prover.util.{Direction, PossibleSingleMatch}
+import net.prover.util.Direction
 
 import scala.Ordering.Implicits._
 import scala.util.{Failure, Success, Try}
@@ -78,17 +78,10 @@ case class EqualityRewriter(equality: Equality)(implicit stepProvingContext: Ste
       }
       def findDirectly = {
         for {
-          premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatement(equality(premiseTerm, targetTerm))
+          premiseDerivation <- DerivationFinder.findDerivationForUnwrappedStatement(equality(premiseTerm, targetTerm))
           wrappingStepOption = equality.expansion.assertionStepIfNecessary(premiseTerm, targetTerm, wrapper)
-          inference = premiseSteps.inferences.singleMatch match {
-            case PossibleSingleMatch.NoMatches =>
-              Some(equality.expansion.inference).filter(_ => !wrapper.isIdentity)
-            case PossibleSingleMatch.SingleMatch(inference) =>
-              Some(inference.summary)
-            case PossibleSingleMatch.MultipleMatches =>
-              None
-          }
-        } yield Seq(RearrangementStepWithInference(RearrangementStep(wrapper(targetTerm), premiseSteps.toProofSteps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
+          inference = wrappingStepOption.map(premiseDerivation.primaryInferenceOfRewrite).getOrElse(premiseDerivation.primaryInference)
+        } yield Seq(RearrangementStepWithInference(RearrangementStep(wrapper(targetTerm), premiseDerivation.toProofSteps ++ wrappingStepOption.toSeq, EqualityRewriter.rewriteElider(inference)), inference))
       }
       findExactly orElse findDirectly
     }

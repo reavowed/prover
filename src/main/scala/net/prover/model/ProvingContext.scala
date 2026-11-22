@@ -5,7 +5,6 @@ import net.prover.model.definitions.*
 import net.prover.model.expressions.{Expression, Statement, Term}
 import net.prover.model.proof.*
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
-import net.prover.proving.derivation.SimpleDerivation
 import net.prover.proving.extraction.*
 import net.prover.proving.structure.definitions.{DeductionDefinition, GeneralizationDefinition}
 import net.prover.proving.structure.inferences.*
@@ -56,7 +55,6 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowableStatementDefinition: Allowable[StatementDefinition] = allowable(d => availableEntries.statementDefinitionsBySymbol.contains(d.symbol))
     implicit val allowableTermDefinition: Allowable[TermDefinition] = allowable(d => availableEntries.termDefinitionsBySymbol.contains(d.symbol))
 
-    implicit val allowableSimpleDerivation: Allowable[SimpleDerivation] = allowable(derivation => derivation.inferences.forall(isAllowed))
 
     implicit val allowableRelation: Allowable[BinaryJoiner[? <: Expression]] = allowable(definedBinaryJoiners.contains)
     implicit val allowableReversal: Allowable[Reversal[? <: Expression]] = allowable(r => isAllowed(r.joiner) && isAllowed(r.inference))
@@ -64,7 +62,6 @@ case class ProvingContext(availableEntries: AvailableEntries, private val defini
     implicit val allowableExpansion: Allowable[Expansion[? <: Expression]] = allowable(r => isAllowed(r.sourceJoiner) && isAllowed(r.resultJoiner) && isAllowed(r.inference))
     implicit val allowableSubstitution: Allowable[Substitution] = allowableProduct[Substitution]
     implicit val allowableStep: Allowable[Step] = allowable(step => GetReferencedInferences(step).forall(isAllowed))
-    implicit val allowableKnownStatement: Allowable[KnownStatement] = allowableProduct[KnownStatement]
     implicit val allowableConclusionSimplificationInference: Allowable[ConclusionSimplificationInference] = allowable(s => isAllowed(s.inference))
     implicit def allowableDesimplifiedPremise: Allowable[DesimplifiedPremise] = allowableProduct[DesimplifiedPremise]
     implicit def allowablePremiseDesimplification: Allowable[DerivedPremise] = allowable {

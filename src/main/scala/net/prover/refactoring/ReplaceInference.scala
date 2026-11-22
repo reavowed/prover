@@ -100,7 +100,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
   ): Try[Step] = {
     for {
       (appliedExtraction, premises) <- reproveExtraction(stepWithContext)
-      step = Step.InferenceWithPremiseDerivationsStep.ifNecessary(premises.map(_.toKnownStatement), appliedExtraction.toProofStep)
+      step = Step.InferenceWithPremiseDerivationsStep.ifNecessary(premises, appliedExtraction.toProofStep)
       updatedStep <- RecalculateReferences(stepWithContext.withStep(step)).map(_._1)
     } yield updatedStep
   }
@@ -139,7 +139,7 @@ case class ReplaceInference(oldInference: Inference, newInference: Inference) ex
         .failIfUndefined(InferenceReplacementException("Could not find extraction", stepContext, proofWithContext))
       (appliedExtraction, requiredPremises) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
         .failIfUndefined(InferenceReplacementException("Could not apply extraction", stepContext, proofWithContext))
-      (derivedStatements, targetSteps) = DerivationOrTargetFinder.findDerivedStatementsOrTargets(
+      (derivedStatements, targetSteps) = DerivationOrTargetFinder.findDerivationsOrTargets(
         requiredPremises)(
         new StepProvingContext)
       _ <- targetSteps.isEmpty.orFail(InferenceReplacementException("New extraction required targets", stepContext, proofWithContext))

@@ -1,7 +1,6 @@
 package net.prover.proving.premiseFinding
 
 import net.prover.model.*
-import net.prover.model.definitions.KnownStatement
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.{Step, StepProvingContext}
 import net.prover.model.utils.ExpressionUtils
@@ -9,15 +8,6 @@ import net.prover.proving.derivation.DerivedStatement
 
 object DerivationOrTargetFinder {
   def findDerivationsOrTargets(
-    premiseStatements: Seq[Statement])(
-    implicit stepProvingContext: StepProvingContext
-  ): (Seq[KnownStatement], Seq[Step.TargetStep]) = {
-    findDerivationsOrTargetsWithSuccessResult(premiseStatements).strip3.mapLeft(premiseStatements.zip(_).map { case (premiseStatement, derivation) =>
-      KnownStatement(premiseStatement, derivation.toSimpleDerivation)
-    })
-  }
-
-  def findDerivedStatementsOrTargets(
     premiseStatements: Seq[Statement])(
     implicit stepProvingContext: StepProvingContext
   ): (Seq[DerivedStatement], Seq[Step.TargetStep]) = {
