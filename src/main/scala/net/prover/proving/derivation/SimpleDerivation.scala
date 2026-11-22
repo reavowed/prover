@@ -4,37 +4,16 @@ import net.prover.model.*
 import net.prover.model.proof.{Step, StepContext, StepLike}
 import net.prover.parsing.{KnownWordParser, Parser}
 import net.prover.proving.derivation.SimpleDerivationStep.{inference, toProofStep}
-import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction}
+import net.prover.proving.extraction.AppliedInferenceExtraction
 
 case class SimpleDerivation(steps: Seq[SimpleDerivationStep]) extends StepLike.Wrapper {
-  def :+(step: SimpleDerivationStep): SimpleDerivation = {
-    this ++ Seq(step)
-  }
-  def +:(step: SimpleDerivationStep): SimpleDerivation = {
-    SimpleDerivation(step +: steps)
-  }
-  def ++(other: SimpleDerivation): SimpleDerivation = {
-    this ++ other.steps
-  }
-  def ++(otherSteps: Seq[SimpleDerivationStep]): SimpleDerivation = {
-    SimpleDerivation(steps ++ otherSteps)
-  }
   override def substeps: Seq[StepLike] = steps
   def inferences: Set[Inference] = steps.map(_.inference).toSet
   def nonEmpty: Boolean = steps.nonEmpty
   def isEmpty: Boolean = steps.isEmpty
-  def distinct: SimpleDerivation = SimpleDerivation(steps.distinctBy(_.statement))
 }
 object SimpleDerivation {
   val empty: SimpleDerivation = SimpleDerivation(Nil)
-  implicit class SeqOps(derivations: Seq[SimpleDerivation]) {
-    def join: SimpleDerivation = {
-      SimpleDerivation(derivations.flatMap(_.steps))
-    }
-  }
-  def fromExtraction(appliedExtraction: AppliedExtraction): SimpleDerivation = {
-    SimpleDerivation(appliedExtraction.extractionSteps)
-  }
   def parser(implicit stepContext: StepContext, provingContext: ProvingContext): Parser[SimpleDerivation] = {
     StepLike.listParser[SimpleDerivationStep](
       SimpleDerivationStep.parser(_, implicitly),

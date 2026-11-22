@@ -1,11 +1,11 @@
 package net.prover.proving.structure.inferences
 
 import net.prover.model.*
-import net.prover.model.definitions.{Definitions, KnownStatement}
+import net.prover.model.definitions.Definitions
 import net.prover.model.expressions.{Statement, Term, TermVariable}
 import net.prover.model.proof.{StepProvingContext, SubstitutionContext}
 import net.prover.model.utils.ExpressionUtils
-import net.prover.proving.derivation.SimpleDerivation
+import net.prover.proving.derivation.DerivedStatement
 import net.prover.proving.extraction.{ExtractionApplier, InferenceExtraction}
 import net.prover.proving.premiseFinding.DerivationFinder
 import net.prover.proving.structure.statements.{BinaryRelation, BinaryRelationFromGeneralShorthand, BinaryRelationStatement}
@@ -24,33 +24,37 @@ case class RelationRewriteInference(
     initialSubstitutions: Substitutions.Possible)
   extends PremiseSimplificationInference
 {
-  def getPremiseSimplification(currentStatement: KnownStatement, existingPremises: Seq[KnownStatement])(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[KnownStatement] = {
+  def getPremiseSimplification(currentStatement: DerivedStatement, existingPremises: Seq[DerivedStatement])(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[DerivedStatement] = {
     for {
       substitutionsAfterMainPremise <- mainPremise.calculateSubstitutions(currentStatement.statement, initialSubstitutions)
-      (premiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
+      (initialPremiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
         case Some(initialPremise) =>
-          DerivationFinder.findKnownStatementBySubstituting(initialPremise, substitutionsAfterMainPremise, existingPremises).headOption.map(_.mapLeft(_.derivation))
+          DerivationFinder.findKnownStatementBySubstituting(initialPremise, substitutionsAfterMainPremise, existingPremises).headOption.map(_.mapLeft(Some(_)))
         case None =>
-          Some((SimpleDerivation.empty, substitutionsAfterMainPremise))
+          Some((None, substitutionsAfterMainPremise))
       }
       substitutions <- substitutionsAfterInitialPremise.confirmTotality(inferenceExtraction.variableDefinitions)
       (derivationStep, _) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
-    } yield currentStatement.extend(premiseDerivation :+ derivationStep)
+    } yield DerivedStatement.RelationRewritten(currentStatement, initialPremiseDerivation, derivationStep)
   }
-  def rewriteTarget(targetStatement: Statement)(implicit stepProvingContext: StepProvingContext): Option[(BinaryRelationStatement, SimpleDerivation)] = {
+  /**
+    * Finds a statement that this inference would rewrite to the given target, along with a function that takes a
+    * derivation of that statement to a derivation of the target.
+    */
+  def rewriteTarget(targetStatement: Statement)(implicit stepProvingContext: StepProvingContext): Option[(BinaryRelationStatement, DerivedStatement => DerivedStatement)] = {
     for {
       substitutionsAfterConclusion <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement, initialSubstitutions)
-      (premiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
+      (initialPremiseDerivation, substitutionsAfterInitialPremise) <- initialPremiseOption match {
         case Some(initialPremise) =>
-          DerivationFinder.findDerivationForStatementBySubstituting(initialPremise, substitutionsAfterConclusion, stepProvingContext.knownStatementsFromPremises).headOption.map(_.mapLeft(_.derivation))
+          DerivationFinder.findDerivationForStatementBySubstituting(initialPremise, substitutionsAfterConclusion, stepProvingContext.knownStatementsFromPremises).headOption.map(_.mapLeft(Some(_)))
         case None =>
-          Some((SimpleDerivation.empty, substitutionsAfterConclusion))
+          Some((None, substitutionsAfterConclusion))
       }
       substitutions <- substitutionsAfterInitialPremise.confirmTotality(inferenceExtraction.variableDefinitions)
       (derivationStep, _) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
       substitutedPremise <- mainPremise.applySubstitutions(substitutions)
       premiseRelationStatement <- stepProvingContext.provingContext.asBinaryRelationStatement(substitutedPremise)
-    } yield (premiseRelationStatement, premiseDerivation :+ derivationStep)
+    } yield (premiseRelationStatement, DerivedStatement.RelationRewritten(_, initialPremiseDerivation, derivationStep))
   }
 }
 
@@ -112,8 +116,12 @@ object RelationRewriteInference {
       }
     }
 
+    // Reversals don't rewrite one relation to another, and are applied separately
+    val reversalInferenceIds = definitions.reversals.map(_.inference.id).toSet
+
     for {
       inferenceExtraction <- definitions.allInferenceExtractions
+      if !reversalInferenceIds.contains(inferenceExtraction.inference.id)
       (initialPremiseOption, mainPremiseStatement) <- inferenceExtraction.premises match {
         case Seq(a) => Seq((None, a))
         case Seq(a, b) => Seq((Some(a), b))

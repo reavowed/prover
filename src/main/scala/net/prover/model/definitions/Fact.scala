@@ -3,7 +3,7 @@ package net.prover.model.definitions
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.Step
 import net.prover.model.{Inference, ProvingContext, Substitutions}
-import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.DerivedStatement
 import net.prover.proving.extraction.{AppliedExtraction, AppliedInferenceExtraction, ExtractionApplier, InferenceExtraction}
 
 case class Fact(inferenceExtraction: InferenceExtraction) {
@@ -25,7 +25,7 @@ case class Fact(inferenceExtraction: InferenceExtraction) {
     Step.InferenceExtractionStep(toExtraction)
   }
 
-  def toKnownStatement(implicit provingContext: ProvingContext): KnownStatement = {
-    KnownStatement.fromSingleStep(toExtraction)
+  def toDerivedStatement(implicit provingContext: ProvingContext): DerivedStatement = {
+    DerivedStatement.Asserted(toExtraction)
   }
 }

@@ -5,6 +5,7 @@ import net.prover.model.*
 import net.prover.model.TestDefinitions.{a, b, *}
 import net.prover.model.expressions.Statement
 import net.prover.model.proof.StepProvingContext
+import net.prover.proving.derivation.DerivedStatement
 import net.prover.proving.derivation.SimpleDerivationStep.inference
 import org.specs2.mutable.Specification
 
@@ -17,11 +18,12 @@ class StepProvingContextSpec extends Specification with ContextHelper {
   given variableDefinitions: VariableDefinitions = getVariableDefinitions(Nil, Seq(a -> 0, b -> 0, c -> 0, d -> 0))
 
   "known statements from premises" should {
-    def getDerivationInferenceNames(premises: Seq[Statement], knownStatement: Statement): Option[Seq[String]] = {
+    def getDerivation(premises: Seq[Statement], knownStatement: Statement): Option[DerivedStatement] = {
       given stepContext: StepContext = createBaseStepContext(premises)
-      implicitly[StepProvingContext].knownStatementsFromPremisesBySerializedStatement
-        .get(knownStatement.serializedForHash)
-        .map(_.derivation.steps.map(_.inference.name))
+      implicitly[StepProvingContext].knownStatementsFromPremisesBySerializedStatement.get(knownStatement.serializedForHash)
+    }
+    def getDerivationInferenceNames(premises: Seq[Statement], knownStatement: Statement): Option[Seq[String]] = {
+      getDerivation(premises, knownStatement).map(_.derivationSteps.map(_.inference.name))
     }
 
     val pairEquality = Equals(OrderedPair(a, b), OrderedPair(c, d))
@@ -34,6 +36,23 @@ class StepProvingContextSpec extends Specification with ContextHelper {
     "apply a reversal after simplifying an equality premise, rather than before" in {
       getDerivationInferenceNames(Seq(pairEquality), Equals(c, a)) must beSome(Seq(firstCoordinatesOfEqualOrderedPairsAreEqual.name, reverseEquality.name))
       getDerivationInferenceNames(Seq(pairEquality), Equals(d, b)) must beSome(Seq(secondCoordinatesOfEqualOrderedPairsAreEqual.name, reverseEquality.name))
+    }
+
+    "record a reversal after a simplification in the derivation structure" in {
+      getDerivation(Seq(pairEquality), Equals(c, a)) must beSome(beLike[DerivedStatement] {
+        case DerivedStatement.Reversed(DerivedStatement.Simplified(DerivedStatement.Known(`pairEquality`), _), _) => ok
+      })
+    }
+
+    "use a simplification as the primary inference of a reversed simplification" in {
+      getDerivation(Seq(pairEquality), Equals(c, a)).flatMap(_.primaryInference) must beSome(firstCoordinatesOfEqualOrderedPairsAreEqual.summary)
+      getDerivation(Seq(pairEquality), Equals(d, b)).flatMap(_.primaryInference) must beSome(secondCoordinatesOfEqualOrderedPairsAreEqual.summary)
+    }
+
+    "use a reversal as the primary inference of a premise that is only reversed" in {
+      getDerivation(Seq(pairEquality), Equals(OrderedPair(c, d), OrderedPair(a, b))) must beSome(beLike[DerivedStatement] {
+        case derivation @ DerivedStatement.Reversed(DerivedStatement.Known(`pairEquality`), _) => derivation.primaryInference must beSome(reverseEquality.summary)
+      })
     }
   }
 }

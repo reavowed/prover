@@ -5,16 +5,16 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof._
 import net.prover.model._
 import net.prover.model.{Inference, Substitutions}
-import net.prover.proving.derivation.{SimpleDerivation, SimpleDerivationStep}
+import net.prover.proving.derivation.DerivedStatement
 import net.prover.proving.extraction.{AppliedExtraction, AppliedExtractionStep, AppliedInferenceExtraction, ExtractionApplier}
 
 object DirectDerivationFinder {
   def findDirectDerivationForStatement(
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[SimpleDerivation] = {
+  ): Option[DerivedStatement] = {
     import stepProvingContext._
-    def fromPremises = knownStatementsFromPremisesBySerializedStatement.get(targetStatement.serializedForHash).map(_.derivation)
+    def fromPremises = knownStatementsFromPremisesBySerializedStatement.get(targetStatement.serializedForHash)
 
     def fromFact = findDerivationForStatementFromFact(targetStatement)
 
@@ -24,7 +24,7 @@ object DirectDerivationFinder {
         _.confirmTotality(inferenceExtraction.variableDefinitions))
       (derivationStep, premises) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
       if premises.isEmpty
-    } yield SimpleDerivation.empty :+ derivationStep).headOption
+    } yield DerivedStatement.Asserted(derivationStep)).headOption
 
     def byRemovingTermDefinition = (for {
       termDefinition <- targetStatement.referencedDefinitions.ofType[TermDefinition].iterator
@@ -32,22 +32,23 @@ object DirectDerivationFinder {
       substitutions <- inferenceExtraction.conclusion.calculateSubstitutions(targetStatement).flatMap(
         _.confirmTotality(inferenceExtraction.variableDefinitions))
       (derivationStep, premises) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
-      premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatements(premises)
-    } yield premiseSteps :+ derivationStep).headOption
+      premiseDerivations <- DerivationFinder.findDerivationForUnwrappedStatements(premises)
+    } yield DerivedStatement.Composed(premiseDerivations, derivationStep)).headOption
 
     def bySimplifyingTarget = provingContext.conclusionSimplificationInferences.iterator.findFirst { inference =>
       for {
         substitutions <- inference.conclusion.calculateSubstitutions(targetStatement).flatMap(_.confirmTotality(inference.variableDefinitions))
         premiseStatements <- inference.substitutePremises(substitutions)
-        premiseSteps <- DerivationFinder.findDerivationForUnwrappedStatements(premiseStatements)
+        premiseDerivations <- DerivationFinder.findDerivationForUnwrappedStatements(premiseStatements)
         assertionStep = Step.AssertionStep(targetStatement, inference.summary, premiseStatements.map(Premise.Pending), substitutions)
-      } yield premiseSteps :+ assertionStep
+      } yield DerivedStatement.Composed(premiseDerivations, assertionStep)
     }
 
-    def byRewriting = {
-      val (rewriteDerivation, rewrittenTarget) = DerivationFinder.rewriteWithKnownValues(targetStatement)
-      if (rewriteDerivation.nonEmpty) findDirectDerivationForStatement(rewrittenTarget).map(_ ++ rewriteDerivation) else None
-    }
+    def byRewriting = for {
+      (rewrittenTarget, applyRewritesOption) <- Some(DerivationFinder.rewriteWithKnownValues(targetStatement))
+      applyRewrites <- applyRewritesOption
+      rewrittenTargetDerivation <- findDirectDerivationForStatement(rewrittenTarget)
+    } yield applyRewrites(rewrittenTargetDerivation)
 
     fromPremises orElse fromFact orElse fromSimpleAssertion orElse byRemovingTermDefinition orElse bySimplifyingTarget orElse byRewriting
   }
@@ -55,7 +56,7 @@ object DirectDerivationFinder {
   private def findDerivationForStatementFromFact(
     targetStatement: Statement)(
     implicit stepProvingContext: StepProvingContext
-  ): Option[SimpleDerivation] = {
+  ): Option[DerivedStatement] = {
     import stepProvingContext.provingContext._
 
     def findDerivationWithFactInferences(targetStatement: Statement): Option[(Seq[AppliedExtractionStep], Option[Inference])] = {
@@ -83,7 +84,7 @@ object DirectDerivationFinder {
           factInference.summary,
           Nil,
           Substitutions.empty)
-        Some(SimpleDerivation.empty :+ AppliedInferenceExtraction(assertion, AppliedExtraction(derivation.distinctBy(_.statement), Nil)))
+        Some(DerivedStatement.Asserted(AppliedInferenceExtraction(assertion, AppliedExtraction(derivation.distinctBy(_.statement), Nil))))
       case _ =>
         None
     }

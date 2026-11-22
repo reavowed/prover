@@ -6,7 +6,7 @@ import net.prover.model.expressions.Statement
 import net.prover.model.proof.SubstitutionContext
 import net.prover.model.utils.ExpressionUtils
 import net.prover.model.utils.ExpressionUtils.TypeLikeStatement
-import net.prover.proving.derivation.SimpleDerivation
+import net.prover.proving.derivation.DerivedStatement
 import net.prover.proving.extraction.{ExtractionApplier, InferenceExtraction}
 import net.prover.proving.structure.statements.{BinaryRelation, BinaryRelationStatement}
 
@@ -17,15 +17,27 @@ import scala.Ordering.Implicits._
   * Used in premise finding to break a target premise down into simpler possibilities.
   */
 case class ConclusionRelationSimplificationInference(inferenceExtraction: InferenceExtraction, typePremiseOption: Option[TypeLikeStatement], derivedPremises: Seq[DerivedPremise]) extends DerivedInference {
-  def getConclusionSimplification(target: Statement)(implicit provingContext: ProvingContext, substitutionContext: SubstitutionContext): Option[(Seq[Statement], Seq[BinaryRelationStatement], SimpleDerivation)] = {
+  /**
+    * Returns the simplified targets - an optional type statement and a set of binary relations - and a function that
+    * takes derivations of each set of simplified targets (in the same order) to a derivation of the target.
+    */
+  def getConclusionSimplification(
+    target: Statement)(
+    implicit provingContext: ProvingContext,
+    substitutionContext: SubstitutionContext
+  ): Option[(Seq[Statement], Seq[BinaryRelationStatement], (Seq[DerivedStatement], Seq[DerivedStatement]) => DerivedStatement)] = {
     for {
       substitutions <- conclusion.calculateSubstitutions(target).flatMap(_.confirmTotality(variableDefinitions))
       (extractionApplication, _) <- ExtractionApplier.applyInferenceExtractionWithoutPremises(inferenceExtraction, substitutions)
       if extractionApplication.statement == target
       substitutedTypeStatement <- typePremiseOption.map(_.baseStatement.applySubstitutions(substitutions)).swap
-      (simplifiedTargets, derivationSteps) <- derivedPremises.getSubstitutedPremises(substitutions)
+      (simplifiedTargets, derivePremises) <- derivedPremises.getSubstitutedPremises(substitutions)
       targetRelationStatements <- simplifiedTargets.map(provingContext.asBinaryRelationStatement).traverseOption
-    } yield (substitutedTypeStatement.toSeq, targetRelationStatements, SimpleDerivation(derivationSteps) :+ extractionApplication)
+    } yield (
+      substitutedTypeStatement.toSeq,
+      targetRelationStatements,
+      (typeStatementDerivations, simplifiedTargetDerivations) =>
+        DerivedStatement.Composed(typeStatementDerivations ++ derivePremises(simplifiedTargetDerivations), extractionApplication))
   }
 }
 
