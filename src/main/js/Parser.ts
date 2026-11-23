@@ -181,7 +181,8 @@ export class Parser {
         } else if (typeRelationDefinition) {
           const [firstTerm, tokensAfterFirstTerm] = parseExpressionFromTokens(tokensAfterFirst);
           const [secondTerm, tokensAfterSecondTerm] = parseExpressionFromTokens(tokensAfterFirstTerm);
-          return [new TypeRelationExpression(typeRelationDefinition, firstTerm, secondTerm), tokensAfterSecondTerm];
+          const [qualifierComponents, tokensAfterQualifierComponents] = parseExpressionsFromTokens(tokensAfterSecondTerm, typeRelationDefinition.numberOfQualifierComponents ?? 0);
+          return [new TypeRelationExpression(typeRelationDefinition, firstTerm, secondTerm, qualifierComponents), tokensAfterQualifierComponents];
         }else if (standalonePropertyDefinition) {
           const [term, tokensAfterTerm] = parseExpressionFromTokens(tokensAfterFirst);
           return [new StandalonePropertyExpression(standalonePropertyDefinition, term), tokensAfterTerm];

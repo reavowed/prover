@@ -9,16 +9,16 @@ term + ()
 write apply +ℚ orderedPair a b as addQ
 
 theorem Rational Addition Function Properties
-conclusion ∧ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ
+conclusion ∧ binaryOperation +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ
 
 theorem Rational Addition Is Associative
-conclusion associativeBinaryOperation +ℚ
+conclusion associativeBinaryOperation +ℚ ℚ
 
 theorem Rational Addition Is Commutative
-conclusion commutativeBinaryOperation +ℚ
+conclusion commutativeBinaryOperation +ℚ ℚ
 
 theorem Identity for Rational Addition
-conclusion identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 0ℕ +ℚ
+conclusion identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 0ℕ +ℚ ℚ
 
 theorem Rational Addition Is Invertible
-conclusion invertibleBinaryOperation +ℚ
+conclusion invertibleBinaryOperation +ℚ ℚ

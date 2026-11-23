@@ -14,7 +14,7 @@ premise = t0 functionMap4 a b c d ℕ ℕ ℕ ℕ equivalenceClass orderedPair a
 conclusion ∀ a_1 → ∈ $0 ℕ ∀ b_1 → ∈ $0 ℕ ∀ a_2 → ∈ $0 ℕ ∀ b_2 → ∈ $0 ℕ ∀ c_1 → ∈ $0 ℕ ∀ d_1 → ∈ $0 ℕ ∀ c_2 → ∈ $0 ℕ ∀ d_2 → ∈ $0 ℕ → ∧ ∈ orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$$$0 $$$$$0 ~_ℤ ∈ orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 ~_ℤ = apply t0 orderedPair orderedPair $$$$$$$$0 $$$$$$$0 orderedPair $$$$0 $$$0 apply t0 orderedPair orderedPair $$$$$$0 $$$$$0 orderedPair $$0 $0
 
 theorem +_ℤ is a binary operation on ℤ
-conclusion ∧ binaryOperation +ℤ binaryOperationOn +ℤ ℤ
+conclusion binaryOperation +ℤ ℤ
 
 theorem +_ℤ is a function
 conclusion function +ℤ product ℤ ℤ ℤ

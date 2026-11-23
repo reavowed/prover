@@ -1,4 +1,4 @@
-let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $0 $3 apply ×ℤ orderedPair $1 $2 apply ×ℤ orderedPair $1 $3 ~_ℚ 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∧ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) (functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $0 $3 apply ×ℤ orderedPair $1 $2 apply ×ℤ orderedPair $1 $3 ~_ℚ) {
+let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $0 $3 apply ×ℤ orderedPair $1 $2 apply ×ℤ orderedPair $1 $3 ~_ℚ 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∧ binaryOperation +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) (functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $0 $3 apply ×ℤ orderedPair $1 $2 apply ×ℤ orderedPair $1 $3 ~_ℚ) {
   prove = +ℚ quadrupleQuotientFunction functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $0 $3 apply ×ℤ orderedPair $1 $2 apply ×ℤ orderedPair $1 $3 ~_ℚ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℚ ~_ℚ ~_ℚ 7bcfbac1fecba725f8fb15337b5e6814ddc1def0c2dc23b68dc61eb7139abe6b () ()
   rewrite {
     reversed {
@@ -822,12 +822,12 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
       }
     }
   }
-  elided e161c1625348bf3bffd9fdad65c82450de07f0cbce837f0fd46db02d08e97102 {
+  elided 44b4f059da1aa2944565771079f53190f37c1c3980a73e049eadf2b15196da52 {
     target function +ℚ product ℚ ℚ ℚ
     inferenceExtraction {
-      prove ↔ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ function +ℚ product ℚ ℚ ℚ e161c1625348bf3bffd9fdad65c82450de07f0cbce837f0fd46db02d08e97102 () (+ℚ, ℚ)
-      prove → function +ℚ product ℚ ℚ ℚ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ, function +ℚ product ℚ ℚ ℚ) () 0.5.1.0
-      prove ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (function +ℚ product ℚ ℚ ℚ, ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ) () 0.5.1.1 0.5.0
+      prove ↔ binaryOperation +ℚ ℚ function +ℚ product ℚ ℚ ℚ 44b4f059da1aa2944565771079f53190f37c1c3980a73e049eadf2b15196da52 () (+ℚ, ℚ)
+      prove → function +ℚ product ℚ ℚ ℚ binaryOperation +ℚ ℚ 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (binaryOperation +ℚ ℚ, function +ℚ product ℚ ℚ ℚ) () 0.5.1.0
+      prove binaryOperation +ℚ ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (function +ℚ product ℚ ℚ ℚ, binaryOperation +ℚ ℚ) () 0.5.1.1 0.5.0
     }
   }
   take a {
@@ -868,5 +868,5 @@ let f = $0 functionMap4 a b c d ℤ diff ℤ singleton apply ⍳_ℤ 0ℕ ℤ di
       }
     }
   }
-  prove ∧ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) () 0.5 0.6
+  prove ∧ binaryOperation +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation +ℚ ℚ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) () 0.5 0.6
 }

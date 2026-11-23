@@ -5,7 +5,7 @@ conclusion ∃! f ∧ function $0 product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ =
 
 term + ()
   disambiguator ℕ
-  (∧ ∧ binaryOperation $0 binaryOperationOn $0 ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0)
+  (∧ binaryOperation $0 ℕ ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 successor apply $$$0 orderedPair $$0 $0)
   shorthand (+N)
   attributes (infix-function)
 
@@ -40,10 +40,10 @@ premise ∈ t0 ℕ
 conclusion = successor t0 apply +ℕ orderedPair t0 1ℕ
 
 theorem Natural Addition is Commutative
-conclusion commutativeBinaryOperation +ℕ
+conclusion commutativeBinaryOperation +ℕ ℕ
 
 theorem Natural Addition is Associative
-conclusion associativeBinaryOperation +ℕ
+conclusion associativeBinaryOperation +ℕ ℕ
 
 theorem Natural Addition is Right-Cancellable
 termVariables(n 0, m 0, r 0)

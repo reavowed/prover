@@ -1,36 +1,36 @@
-prove ∃ x identityBinaryOperation $0 t0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (identityBinaryOperation $0 t0) (t1) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+prove ∃ x identityBinaryOperation $0 t0 t2 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (identityBinaryOperation $0 t0 t2) (t1) p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
 wrappedInferenceApplication {
   take x {
     take y {
-      assume ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 {
-        prove = $$0 $0 38ffda3c650335ebc0a91b154174e46dc3de5a3e283e17ef27b4ad1e0948f70d () (t0, $$0, $0) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      assume ∧ identityBinaryOperation $$0 t0 t2 identityBinaryOperation $0 t0 t2 {
+        prove = $$0 $0 cde845cb05fa93e8862929b18b83ba8055814f20934644d53bad34cb31451d23 () (t0, $$0, $0, t2) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.0.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       }
     }
   }
 }
 inferenceWithPremiseDerivations {
   combined {
-    known ∃ x identityBinaryOperation $0 t0
-    known ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 = $$0 $0
-    prove ∧ ∃ x identityBinaryOperation $0 t0 ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x identityBinaryOperation $0 t0, ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 identityBinaryOperation $0 t0 = $$0 $0) () 0 1
+    known ∃ x identityBinaryOperation $0 t0 t2
+    known ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 t2 identityBinaryOperation $0 t0 t2 = $$0 $0
+    prove ∧ ∃ x identityBinaryOperation $0 t0 t2 ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 t2 identityBinaryOperation $0 t0 t2 = $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃ x identityBinaryOperation $0 t0 t2, ∀ x ∀ y → ∧ identityBinaryOperation $$0 t0 t2 identityBinaryOperation $0 t0 t2 = $$0 $0) () 0 1
   }
-  prove ∃! x identityBinaryOperation $0 t0 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (identityBinaryOperation $0 t0) () 2.0
+  prove ∃! x identityBinaryOperation $0 t0 t2 0c3a5186d5f93625063f4a3ad88ad8dc282ce0ae96076b123612f47f9fa437a9 (identityBinaryOperation $0 t0 t2) () 2.0
 }
 take e' {
-  assume identityBinaryOperation $0 t0 {
-    prove = t1 $0 38ffda3c650335ebc0a91b154174e46dc3de5a3e283e17ef27b4ad1e0948f70d () (t0, t1, $0) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 3.0a
-    prove ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$$0 = apply t0 orderedPair $0 $$0 $$$$0) (t1, $0) 3.0.0 p1
+  assume identityBinaryOperation $0 t0 t2 {
+    prove = t1 $0 cde845cb05fa93e8862929b18b83ba8055814f20934644d53bad34cb31451d23 () (t0, t1, $0, t2) p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a p0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 3.0a
+    prove ∀ a → ∈ $0 t2 ∃ b ∧ ∈ $0 t2 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∀ a → ∈ $0 t2 ∃ b ∧ ∈ $0 t2 ∧ = apply t0 orderedPair $$0 $0 $$$$0 = apply t0 orderedPair $0 $$0 $$$$0) (t1, $0) 3.0.0 p1
   }
 }
 inferenceWithPremiseDerivations {
   combined {
-    known binaryOperation t0
+    known binaryOperation t0 t2
     combined {
-      known ∃! x identityBinaryOperation $0 t0
-      known ∀ e' → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0
-      prove ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃! e identityBinaryOperation $0 t0, ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () 2 3
+      known ∃! x identityBinaryOperation $0 t0 t2
+      known ∀ e' → identityBinaryOperation $0 t0 t2 ∀ a → ∈ $0 t2 ∃ b ∧ ∈ $0 t2 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0
+      prove ∧ ∃! e identityBinaryOperation $0 t0 t2 ∀ e → identityBinaryOperation $0 t0 t2 ∀ a → ∈ $0 t2 ∃ b ∧ ∈ $0 t2 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∃! e identityBinaryOperation $0 t0 t2, ∀ e → identityBinaryOperation $0 t0 t2 ∀ a → ∈ $0 t2 ∃ b ∧ ∈ $0 t2 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () 2 3
     }
-    prove ∧ binaryOperation t0 ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, ∧ ∃! e identityBinaryOperation $0 t0 ∀ e → identityBinaryOperation $0 t0 ∀ a → ∈ $0 baseSet t0 ∃ b ∧ ∈ $0 baseSet t0 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 4.0
+    prove ∧ binaryOperation t0 t2 ∧ ∃! e identityBinaryOperation $0 t0 t2 ∀ e → identityBinaryOperation $0 t0 t2 ∀ a → ∈ $0 t2 ∃ b ∧ ∈ $0 t2 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0 t2, ∧ ∃! e identityBinaryOperation $0 t0 t2 ∀ e → identityBinaryOperation $0 t0 t2 ∀ a → ∈ $0 t2 ∃ b ∧ ∈ $0 t2 ∧ = apply t0 orderedPair $$0 $0 $$$0 = apply t0 orderedPair $0 $$0 $$$0) () p0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 4.0
   }
-  prove invertibleBinaryOperation t0 d245bfc920e28fd63b7cb18c90d5a0024346bfbb2428277ce29ff0abd379e7d6 () (t0) 4.1
+  prove invertibleBinaryOperation t0 t2 83ce586309c4cef40ecb14e20ee09b1eedb0cfd5e7b68fae9c2d8677430e65bc () (t0, t2) 4.1
 }

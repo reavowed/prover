@@ -17,7 +17,13 @@ case class TypeQualifierDefinitionSummary(symbol: String, qualifiedSymbol: Strin
 case class RelatedObjectDefinitionSummary(symbol: String, qualifiedSymbol: String, name: String, article: String, mainVariableDefinition: SimpleVariableDefinition, requiredParentQualifier: Option[String])
 case class StandalonePropertyDefinitionSummary(symbol: String, qualifiedSymbol: String, name: String, mainVariableDefinition: SimpleVariableDefinition)
 case class QualifierSummary(format: String, variableDefinitions: Seq[SimpleVariableDefinition])
-case class TypeRelationDefinitionSummary(symbol: String, linkingPhrase: String)
+case class TypeRelationQualifierSummary(format: String, componentIndices: Seq[Int])
+case class TypeRelationDefinitionSummary(
+  symbol: String,
+  linkingPhrase: String,
+  numberOfQualifierComponents: Int,
+  firstQualifier: Option[TypeRelationQualifierSummary],
+  secondQualifier: Option[TypeRelationQualifierSummary])
 
 object TypeDefinitionSummary {
   def getSummary(typeDefinition: TypeDefinition)(implicit availableEntries: AvailableEntries): TypeDefinitionSummary = {
@@ -55,6 +61,12 @@ object StandalonePropertyDefinitionSummary {
 
 object TypeRelationDefinitionSummary {
   def getAllFromContext(availableEntries: AvailableEntries): Map[String, TypeRelationDefinitionSummary] = {
-    availableEntries.typeRelationDefinitions.map(d => d.symbol -> TypeRelationDefinitionSummary(d.symbol, d.linkingPhrase)).toMap
+    availableEntries.typeRelationDefinitions.map(d => d.symbol -> TypeRelationDefinitionSummary(
+      d.symbol,
+      d.linkingPhrase,
+      d.qualifierVariableDefinitions.length,
+      d.firstType.defaultQualifier.map(q => TypeRelationQualifierSummary(q.format.baseFormatString, d.firstQualifierIndices)),
+      d.secondType.defaultQualifier.map(q => TypeRelationQualifierSummary(q.format.baseFormatString, d.secondQualifierIndices)))
+    ).toMap
   }
 }

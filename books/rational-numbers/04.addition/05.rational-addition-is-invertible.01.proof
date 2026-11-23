@@ -4,7 +4,7 @@ take a {
     let a_1 ∧ ∈ $0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 ℤ ∃ a_2 ∧ ∈ $0 ℤ^+ = $$0 equivalenceClass orderedPair $$$0 $0 ~_ℚ, ∃ b ∧ ∈ $0 ℚ ∧ = apply +ℚ orderedPair $$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) () 0.0.0 {
       let a_2 ∧ ∈ $0 ℤ^+ = $$$0 equivalenceClass orderedPair $$0 $0 ~_ℚ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 ℤ^+ = $$0 equivalenceClass orderedPair $0 $$$0 ~_ℚ, ∃ b ∧ ∈ $0 ℚ ∧ = apply +ℚ orderedPair $$$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) () 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 {
         prove = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply +ℚ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () ($$$0, equivalenceClass orderedPair $$0 $0 ~_ℚ, apply +ℚ orderedPair $$$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ) 0.0.1.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        elided ac61855b19ac32afee72eccba64043473ef1d1e3915b345687db044260e31833 {
+        elided 719439ac8b4f3eeb6f4c008e99666ff02048322f13f440f3ef37b71e9fc26447 {
           prove ⊆ ℤ^+ diff ℤ singleton apply ⍳_ℤ 0ℕ 12eaa1fd89f53d0b5c2eb4fd7ba05ce6bc58a4b887590031ea49de9a7a485150 () ()
           inferenceExtraction {
             prove ∀ x → ∈ $0 ℤ^+ ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (ℤ^+, diff ℤ singleton apply ⍳_ℤ 0ℕ) 0.0.1.0.1.0
@@ -16,7 +16,7 @@ take a {
             prove ∈ negatedZ $$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $$0 ℤ, ∧ = apply +ℤ orderedPair $$0 negatedZ $$0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $$0 $$0 apply ⍳_ℤ 0ℕ) () 0.0.1.0.1.2.0
           }
           inferenceExtraction {
-            prove ∧ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ ac61855b19ac32afee72eccba64043473ef1d1e3915b345687db044260e31833 () ()
+            prove ∧ binaryOperation +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ 719439ac8b4f3eeb6f4c008e99666ff02048322f13f440f3ef37b71e9fc26447 () ()
             prove → ∈ $$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) ($$0) 0.0.1.0.1.3.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
             prove ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$0 ℤ, ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) () 0.0.1.0.1.3.1 0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             prove → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$$$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$$$$0 $$0 apply ×ℤ orderedPair $$$$$$0 $0 ~_ℚ) ($0) 0.0.1.0.1.3.2
@@ -97,8 +97,8 @@ take a {
           prove = equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $0 $0 ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ b516ca595aabe0babf169d8f05f41a011f00562f617e19de32b89bca91598168 () (apply ×ℤ orderedPair $0 $0) 0.0.1.0.5.2
         }
         prove = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply ⍳_ℚ apply ⍳_ℤ 0ℕ 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () (apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ, equivalenceClass orderedPair apply ⍳_ℤ 0ℕ apply ×ℤ orderedPair $0 $0 ~_ℚ, apply ⍳_ℚ apply ⍳_ℤ 0ℕ) 0.0.1.0.4 0.0.1.0.5
-        elided 01c5adef7d54992f382f8611c511fa644ab5f590053cebbf2c325075a3b20d45 {
-          elided 01c5adef7d54992f382f8611c511fa644ab5f590053cebbf2c325075a3b20d45 {
+        elided 71aeae968eb207337cb27e8222628ffa7a03f9cb8c9d9f1c5f47bb1a3c2470f1 {
+          elided 71aeae968eb207337cb27e8222628ffa7a03f9cb8c9d9f1c5f47bb1a3c2470f1 {
             inferenceExtraction {
               prove ∧ ∈ negatedZ $$0 ℤ ∧ = apply +ℤ orderedPair $$0 negatedZ $$0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $$0 $$0 apply ⍳_ℤ 0ℕ a2f6760db55c25e5c58ee0dcaa7348559433bffec66501494169207af03c1416 () ($$0) 0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
               prove ∈ negatedZ $$0 ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ negatedZ $$0 ℤ, ∧ = apply +ℤ orderedPair $$0 negatedZ $$0 apply ⍳_ℤ 0ℕ = apply +ℤ orderedPair negatedZ $$0 $$0 apply ⍳_ℤ 0ℕ) () 0.0.1.0.7.0.0.0
@@ -110,30 +110,18 @@ take a {
               prove ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℤ^+, ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ) () 0.0.1.0.7.0.2.1 0.0.1.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             }
             prove ∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ ℚ 396dbf4232e257c4c4d6a5e5dbe7bfd3814ce1b72ae08f15a04defb592a96742 () (negatedZ $$0, $0) 0.0.1.0.7.0.0 0.0.1.0.7.0.2
+            prove = ℚ ℚ 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (ℚ)
+            prove ∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ $$$$0) (ℚ, ℚ) 0.0.1.0.7.0.4 0.0.1.0.7.0.3
+            prove = ℚ ℚ 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (ℚ)
+            prove ∈ $$$0 ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$0 $$$$0) (ℚ, ℚ) 0.0.1.0.7.0.6 0.0a
             inferenceExtraction {
-              prove ∧ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ ac61855b19ac32afee72eccba64043473ef1d1e3915b345687db044260e31833 () ()
+              prove commutativeBinaryOperation +ℚ ℚ 71aeae968eb207337cb27e8222628ffa7a03f9cb8c9d9f1c5f47bb1a3c2470f1 () ()
               deconstruction {
-                prove ∧ binaryOperation +ℚ = baseSet +ℚ ℚ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℚ, ℚ) 0.0.1.0.7.0.4.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                prove = ℚ baseSet +ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet +ℚ, ℚ) 0.0.1.0.7.0.4.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              }
-            }
-            prove ∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ baseSet +ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ $$$$0) (ℚ, baseSet +ℚ) 0.0.1.0.7.0.4 0.0.1.0.7.0.3
-            inferenceExtraction {
-              prove ∧ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ ac61855b19ac32afee72eccba64043473ef1d1e3915b345687db044260e31833 () ()
-              deconstruction {
-                prove ∧ binaryOperation +ℚ = baseSet +ℚ ℚ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℚ, ℚ) 0.0.1.0.7.0.6.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                prove = ℚ baseSet +ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet +ℚ, ℚ) 0.0.1.0.7.0.6.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              }
-            }
-            prove ∈ $$$0 baseSet +ℚ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$0 $$$$0) (ℚ, baseSet +ℚ) 0.0.1.0.7.0.6 0.0a
-            inferenceExtraction {
-              prove commutativeBinaryOperation +ℚ 01c5adef7d54992f382f8611c511fa644ab5f590053cebbf2c325075a3b20d45 () ()
-              deconstruction {
-                prove ∧ binaryOperation +ℚ ∀ a → ∈ $0 baseSet +ℚ ∀ b → ∈ $0 baseSet +ℚ = apply +ℚ orderedPair $$0 $0 apply +ℚ orderedPair $0 $$0 782bf7dfb5726a3972e07a38cf2218d635c499552a812ce9cf87cdf23696b312 () (+ℚ) 0.0.1.0.7.0.8.0
-                prove → ∈ $$$0 baseSet +ℚ ∀ b → ∈ $0 baseSet +ℚ = apply +ℚ orderedPair $$$$0 $0 apply +ℚ orderedPair $0 $$$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 baseSet +ℚ ∀ b → ∈ $0 baseSet +ℚ = apply +ℚ orderedPair $$$$$0 $0 apply +ℚ orderedPair $0 $$$$$0) ($$$0) 0.0.1.0.7.0.8.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                prove ∀ b → ∈ $0 baseSet +ℚ = apply +ℚ orderedPair $$$$0 $0 apply +ℚ orderedPair $0 $$$$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$0 baseSet +ℚ, ∀ b → ∈ $0 baseSet +ℚ = apply +ℚ orderedPair $$$$0 $0 apply +ℚ orderedPair $0 $$$$0) () 0.0.1.0.7.0.8.1.1 0.0.1.0.7.0.7
-                prove → ∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ baseSet +ℚ = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply +ℚ orderedPair equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ $$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 baseSet +ℚ = apply +ℚ orderedPair $$$0 $$$$0 apply +ℚ orderedPair $$$$0 $$$0) (equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ) 0.0.1.0.7.0.8.1.2
-                prove = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply +ℚ orderedPair equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ $$$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ baseSet +ℚ, = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply +ℚ orderedPair equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ $$$0) () 0.0.1.0.7.0.8.1.3 0.0.1.0.7.0.5
+                prove ∧ binaryOperation +ℚ ℚ ∀ a → ∈ $0 ℚ ∀ b → ∈ $0 ℚ = apply +ℚ orderedPair $$0 $0 apply +ℚ orderedPair $0 $$0 3aed7a9bb88bcca3469af6f1188cffea86c0a6623c7c0cd34a9d35e92a8dbb6a () (+ℚ, ℚ) 0.0.1.0.7.0.8.0
+                prove → ∈ $$$0 ℚ ∀ b → ∈ $0 ℚ = apply +ℚ orderedPair $$$$0 $0 apply +ℚ orderedPair $0 $$$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℚ ∀ b → ∈ $0 ℚ = apply +ℚ orderedPair $$$$$0 $0 apply +ℚ orderedPair $0 $$$$$0) ($$$0) 0.0.1.0.7.0.8.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+                prove ∀ b → ∈ $0 ℚ = apply +ℚ orderedPair $$$$0 $0 apply +ℚ orderedPair $0 $$$$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $$$0 ℚ, ∀ b → ∈ $0 ℚ = apply +ℚ orderedPair $$$$0 $0 apply +ℚ orderedPair $0 $$$$0) () 0.0.1.0.7.0.8.1.1 0.0.1.0.7.0.7
+                prove → ∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ ℚ = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply +ℚ orderedPair equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ $$$0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℚ = apply +ℚ orderedPair $$$0 $$$$0 apply +ℚ orderedPair $$$$0 $$$0) (equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ) 0.0.1.0.7.0.8.1.2
+                prove = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply +ℚ orderedPair equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ $$$0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ ℚ, = apply +ℚ orderedPair $$$0 equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ apply +ℚ orderedPair equivalenceClass orderedPair negatedZ $$0 $0 ~_ℚ $$$0) () 0.0.1.0.7.0.8.1.3 0.0.1.0.7.0.5
               }
             }
           }
@@ -159,21 +147,11 @@ take a {
     }
   }
 }
-elided 122defbd1ecbb66d35fd7422f2a5d2f4beab253a7c3d2f3c5b4b00661363946d {
-  inferenceExtraction {
-    prove ∧ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ ac61855b19ac32afee72eccba64043473ef1d1e3915b345687db044260e31833 () ()
-    prove ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ, ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ) () 1.0.0
-    prove binaryOperation +ℚ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (binaryOperation +ℚ, binaryOperationOn +ℚ ℚ) () 1.0.1
-  }
-  prove identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 0ℕ +ℚ 72a7202f86694cd93c338590634442b94919febe20a50676eb1d5727936acb45 () ()
-  prove ∧ binaryOperation +ℚ identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 0ℕ +ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation +ℚ, identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 0ℕ +ℚ) () 1.0 1.1
-  inferenceExtraction {
-    prove ∧ ∧ binaryOperation +ℚ binaryOperationOn +ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply +ℤ orderedPair apply ×ℤ orderedPair $$$$0 $0 apply ×ℤ orderedPair $$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ ac61855b19ac32afee72eccba64043473ef1d1e3915b345687db044260e31833 () ()
-    deconstruction {
-      prove ∧ binaryOperation +ℚ = baseSet +ℚ ℚ f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (+ℚ, ℚ) 1.3.0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-      prove = ℚ baseSet +ℚ da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet +ℚ, ℚ) 1.3.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-    }
-  }
-  prove ∀ a → ∈ $0 baseSet +ℚ ∃ b ∧ ∈ $0 baseSet +ℚ ∧ = apply +ℚ orderedPair $$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∀ a → ∈ $0 $$0 ∃ b ∧ ∈ $0 $$$0 ∧ = apply +ℚ orderedPair $$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) (ℚ, baseSet +ℚ) 1.3 0
-  prove invertibleBinaryOperation +ℚ 122defbd1ecbb66d35fd7422f2a5d2f4beab253a7c3d2f3c5b4b00661363946d () (+ℚ, apply ⍳_ℚ apply ⍳_ℤ 0ℕ) 1.2 1.4
+elided 7fa39d3f2de41380c26bd468924b437678a7b32b1157935be6d68b278089efa4 {
+  target binaryOperation +ℚ ℚ
+  prove identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 0ℕ +ℚ ℚ 407560460d58b018d70c259ba7a1265702c70ebdc7a90f716d2a36ac8c665778 () ()
+  prove ∧ binaryOperation +ℚ ℚ identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 0ℕ +ℚ ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation +ℚ ℚ, identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 0ℕ +ℚ ℚ) () 1.0 1.1
+  prove = ℚ ℚ 12132c1c387352ed15f80fb5954b5d7a80c2cb58f6f290f43d9b4417b54bc465 () (ℚ)
+  prove ∀ a → ∈ $0 ℚ ∃ b ∧ ∈ $0 ℚ ∧ = apply +ℚ orderedPair $$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∀ a → ∈ $0 $$0 ∃ b ∧ ∈ $0 $$$0 ∧ = apply +ℚ orderedPair $$0 $0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ = apply +ℚ orderedPair $0 $$0 apply ⍳_ℚ apply ⍳_ℤ 0ℕ) (ℚ, ℚ) 1.3 0
+  prove invertibleBinaryOperation +ℚ ℚ 7fa39d3f2de41380c26bd468924b437678a7b32b1157935be6d68b278089efa4 () (+ℚ, apply ⍳_ℚ apply ⍳_ℤ 0ℕ, ℚ) 1.2 1.4
 }

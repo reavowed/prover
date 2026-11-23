@@ -1,7 +1,7 @@
 package net.prover.controllers
 
 import net.prover.books.management.BookStateManager
-import net.prover.refactoring.{RederivePremises, ReplaceElidedSteps, ReplaceInference, Reprove, RestructureFunctionDefinition}
+import net.prover.refactoring.{RederivePremises, ReplaceElidedSteps, ReplaceInference, Reprove, RestructureFunctionDefinition, RestructureOperationDefinitions}
 import net.prover.theorems.{ClearInference, RecalculateReferences}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.{GetMapping, PathVariable, RequestMapping, RequestParam, RestController}
@@ -15,6 +15,11 @@ class OperationsController @Autowired() (implicit bookService: BookService, book
   @GetMapping(value = Array("restructureFunctionDefinition"), produces = Array("text/plain;charset=UTF-8"))
   def restructureFunctionDefinition(): String = {
     RestructureFunctionDefinition().toString
+  }
+
+  @GetMapping(value = Array("restructureOperationDefinitions"), produces = Array("text/plain;charset=UTF-8"))
+  def restructureOperationDefinitions(): String = {
+    RestructureOperationDefinitions().toString
   }
 
   @GetMapping(value = Array("recalculateReferences"))

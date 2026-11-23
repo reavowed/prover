@@ -422,15 +422,16 @@ export class RelatedObjectExpression extends TypeLikeExpression {
 }
 
 export class TypeRelationExpression extends Expression {
-  constructor(public definition: TypeRelationDefinitionSummary, public firstTerm: Expression, public secondTerm: Expression) { super(); }
+  constructor(public definition: TypeRelationDefinitionSummary, public firstTerm: Expression, public secondTerm: Expression, public qualifierComponents: Expression[] = []) { super(); }
   serialize(): string {
-    return [this.definition.symbol, this.firstTerm.serialize(), this.secondTerm.serialize()].join(" ")
+    return [this.definition.symbol, this.firstTerm.serialize(), this.secondTerm.serialize(), ...this.qualifierComponents.map(c => c.serialize())].join(" ")
   }
   serializeNicely(boundVariableLists: string[][], variableDefinitions: VariableDefinitions): string {
     return [
       this.definition.symbol,
       this.firstTerm.serializeNicely(boundVariableLists, variableDefinitions),
-      this.secondTerm.serializeNicely(boundVariableLists, variableDefinitions)
+      this.secondTerm.serializeNicely(boundVariableLists, variableDefinitions),
+      ...this.qualifierComponents.map(c => c.serializeNicely(boundVariableLists, variableDefinitions))
     ].join(" ")
   }
   setBoundVariableName(): Expression {

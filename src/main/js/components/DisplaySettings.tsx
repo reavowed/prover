@@ -144,7 +144,7 @@ function getDisambiguatorsForExpression(expression: Expression, availableEntries
   } else if (expression instanceof TypeLikeExpression) {
     return getDisambiguatorsForExpressions([expression.term, ...expression.qualifierComponents], availableEntries);
   } else if (expression instanceof TypeRelationExpression) {
-    return getDisambiguatorsForExpressions([expression.firstTerm, expression.secondTerm], availableEntries);
+    return getDisambiguatorsForExpressions([expression.firstTerm, expression.secondTerm, ...expression.qualifierComponents], availableEntries);
   }
   return {};
 }

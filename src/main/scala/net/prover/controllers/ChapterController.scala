@@ -316,7 +316,10 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
         secondType <- getTypeDefinition(newTypeRelationDefinition.secondType)
         secondVariableDefinition <- getSimpleVariableDefinition(newTypeRelationDefinition.secondVariableDefinition, "Second variable definition")
         linkingPhrase <- getMandatoryString(newTypeRelationDefinition.linkingPhrase, "Linking phrase")
-        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(Seq(firstVariableDefinition, secondVariableDefinition))
+        // Default to the qualifier variable names from each type's own definition, so that e.g. two types on "A" share it
+        firstQualifierVariableNames = firstType.defaultQualifier.variableDefinitions.map(_.name)
+        secondQualifierVariableNames = secondType.defaultQualifier.variableDefinitions.map(_.name)
+        expressionParsingContext = ExpressionParsingContext.forTypeDefinition(TypeRelationDefinition.variableDefinitions(firstVariableDefinition, secondVariableDefinition, firstQualifierVariableNames, secondQualifierVariableNames))
         definition <- Statement.parser(expressionParsingContext).parseFromString(newTypeRelationDefinition.definingStatement, "definition").recoverWithBadRequest
         conjunctionDefinition <- availableEntries.conjunctionDefinitionOption.orBadRequest("Cannot create property without conjunction")
         newPropertyDefinition = TypeRelationDefinition(
@@ -325,6 +328,8 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
           secondType,
           firstVariableDefinition,
           secondVariableDefinition,
+          firstQualifierVariableNames,
+          secondQualifierVariableNames,
           linkingPhrase,
           name,
           definition,

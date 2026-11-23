@@ -21,6 +21,7 @@ import {formatHtml, formatHtmlWithoutWrapping, replacePlaceholders} from "../hel
 import {joinAsList} from "../helpers/reactFunctions";
 import {matchDisambiguatorAdder, matchDisplayShorthand} from "./ShorthandMatching";
 import {QualifierDefinition} from "../definitions/DefinitionParts";
+import {TypeRelationQualifierSummary} from "../definitions/EntryDefinitionSummaries";
 import {CompoundReactNode, isDefined, SimpleReactNode, startsWith} from "../../utils";
 
 export type RenderExpressionOptions<T extends Expression | string> = {
@@ -348,7 +349,22 @@ export default {
     const {expression} = props;
     const formattedFirstTerm = this.renderChildExpression(expression.firstTerm, [0], props);
     const formattedSecondTerm = this.renderChildExpression(expression.secondTerm, [1], props);
-    return addBrackets([formattedFirstTerm, " " + expression.definition.linkingPhrase + " ", formattedSecondTerm], props);
+    // Components are (first term, second term, ...qualifier components), and each qualifier refers to them by index
+    const formattedComponents = [formattedFirstTerm, formattedSecondTerm, ..._.map(expression.qualifierComponents, (c, i) => this.renderChildExpression(c, [i + 2], props))];
+    const renderQualifier = (qualifier: TypeRelationQualifierSummary) =>
+      formatHtml(qualifier.format, s => replacePlaceholders(s, _.map(qualifier.componentIndices, i => formattedComponents[i])));
+    const {firstQualifier, secondQualifier} = expression.definition;
+    // If both qualifiers say the same thing, only state it once at the end
+    const qualifiersMatch = firstQualifier && secondQualifier && firstQualifier.format === secondQualifier.format && _.isEqual(firstQualifier.componentIndices, secondQualifier.componentIndices);
+    const result: SimpleReactNode[] = [formattedFirstTerm];
+    if (firstQualifier && !qualifiersMatch) {
+      result.push(" ", renderQualifier(firstQualifier));
+    }
+    result.push(" " + expression.definition.linkingPhrase + " ", formattedSecondTerm);
+    if (secondQualifier) {
+      result.push(" ", renderQualifier(secondQualifier));
+    }
+    return addBrackets(result, props);
   },
   renderStandalonePropertyExpression(props: RenderExpressionOptions<StandalonePropertyExpression>): SimpleReactNode[] {
     const {expression, path} = props;

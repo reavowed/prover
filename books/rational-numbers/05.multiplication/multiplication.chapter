@@ -9,16 +9,16 @@ term × ()
 write apply ×ℚ orderedPair a b as mulQ
 
 theorem Rational Multiplication Function Properties
-conclusion ∧ ∧ binaryOperation ×ℚ binaryOperationOn ×ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ
+conclusion ∧ binaryOperation ×ℚ ℚ ∀ a → ∈ $0 ℤ ∀ b → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ ∀ c → ∈ $0 ℤ ∀ d → ∈ $0 diff ℤ singleton apply ⍳_ℤ 0ℕ = apply ×ℚ orderedPair equivalenceClass orderedPair $$$$0 $$$0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair apply ×ℤ orderedPair $$$$0 $$0 apply ×ℤ orderedPair $$$0 $0 ~_ℚ
 
 theorem Rational Multiplication Is Associative
-conclusion associativeBinaryOperation ×ℚ
+conclusion associativeBinaryOperation ×ℚ ℚ
 
 theorem Rational Multiplication Is Commutative
-conclusion commutativeBinaryOperation ×ℚ
+conclusion commutativeBinaryOperation ×ℚ ℚ
 
 theorem Identity for Rational Multiplication
-conclusion identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 1ℕ ×ℚ
+conclusion identityBinaryOperation apply ⍳_ℚ apply ⍳_ℤ 1ℕ ×ℚ ℚ
 
 theorem No Rational Squares to a Prime
 termVariables(p 0)
@@ -27,4 +27,4 @@ premise prime t0
 conclusion ¬ ∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply ⍳_ℤ t0
 
 theorem Rational Multiplication Distributes over Rational Addition
-conclusion distributes ×ℚ +ℚ
+conclusion distributes ×ℚ +ℚ ℚ

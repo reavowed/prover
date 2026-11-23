@@ -1,11 +1,11 @@
 inferenceExtraction {
-  prove ∧ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 5edc5b479c27eac21b022bac74ecceeef88c26fba2275c0b334641ddb91844a7 () ()
-  prove ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ, ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0) () 0.0
+  prove ∧ binaryOperation +ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0 fd6b79d3bbc4443970b02edc9671c098958fcd8be807a450b41cf7356659e8af () ()
+  prove binaryOperation +ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (binaryOperation +ℕ ℕ, ∧ ∀ n → ∈ $0 ℕ = apply +ℕ orderedPair $0 0ℕ $0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply +ℕ orderedPair $$0 successor $0 successor apply +ℕ orderedPair $$0 $0) () 0.0
 }
 inferenceExtraction {
-  prove ↔ ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ function +ℕ product ℕ ℕ ℕ e161c1625348bf3bffd9fdad65c82450de07f0cbce837f0fd46db02d08e97102 () (+ℕ, ℕ)
-  prove → ∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ function +ℕ product ℕ ℕ ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ, function +ℕ product ℕ ℕ ℕ) () 1.0
-  prove function +ℕ product ℕ ℕ ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ binaryOperation +ℕ binaryOperationOn +ℕ ℕ, function +ℕ product ℕ ℕ ℕ) () 1.1 0
+  prove ↔ binaryOperation +ℕ ℕ function +ℕ product ℕ ℕ ℕ 44b4f059da1aa2944565771079f53190f37c1c3980a73e049eadf2b15196da52 () (+ℕ, ℕ)
+  prove → binaryOperation +ℕ ℕ function +ℕ product ℕ ℕ ℕ 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (binaryOperation +ℕ ℕ, function +ℕ product ℕ ℕ ℕ) () 1.0
+  prove function +ℕ product ℕ ℕ ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (binaryOperation +ℕ ℕ, function +ℕ product ℕ ℕ ℕ) () 1.1 0
 }
 inferenceWithPremiseDerivations {
   composed {

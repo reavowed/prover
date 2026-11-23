@@ -42,9 +42,17 @@ export interface TypeQualifierDefinitionSummary {
     qualifier: QualifierDefinition;
 }
 
+export interface TypeRelationQualifierSummary {
+    format: string;
+    componentIndices: number[];
+}
+
 export interface TypeRelationDefinitionSummary {
     symbol: string;
     linkingPhrase: string;
+    numberOfQualifierComponents: number;
+    firstQualifier: TypeRelationQualifierSummary | null;
+    secondQualifier: TypeRelationQualifierSummary | null;
 }
 
 export interface PropertyDefinitionSummary {
