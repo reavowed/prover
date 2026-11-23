@@ -7,18 +7,18 @@ take c {
       prove ∃ a ∧ ∈ $0 t5 = $$0 apply compose t3 t0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 applySet compose t3 t0 t5, ∃ a ∧ ∈ $0 t5 = $$0 apply compose t3 t0 $0) () 0.0.0.2 0.0a
     }
     let a ∧ ∈ $0 t5 = $$0 apply compose t3 t0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 t5 = $0 apply compose t3 t0 $$0, ∈ $0 applySet t3 applySet t0 t5) () 0.0.0 {
-      elided dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc {
-        elided dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc {
+      elided 50fbe4cd4239f2a39705f671330a8445204095e407f5f2d665ed2ca3b6205e32 {
+        elided 50fbe4cd4239f2a39705f671330a8445204095e407f5f2d665ed2ca3b6205e32 {
           inferenceExtraction {
             prove ∀ x → ∈ $0 t5 ∈ $0 t1 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t5, t1) p2
             prove → ∈ $0 t5 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$0 t5 ∈ $$$0 t1) ($0) 0.0.1.0.0.0.0
             prove ∈ $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t5, ∈ $0 t1) () 0.0.1.0.0.0.1 0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
           }
-          prove = apply compose t3 t0 $0 apply t3 apply t0 $0 dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc () (t0, t1, t2, t3, t4, $0) p0 p1 0.0.1.0.0.0
+          prove = apply compose t3 t0 $0 apply t3 apply t0 $0 50fbe4cd4239f2a39705f671330a8445204095e407f5f2d665ed2ca3b6205e32 () (t0, t1, t2, t3, t4, $0) p0 p1 0.0.1.0.0.0
         }
         prove = $$0 apply t3 apply t0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$0 $$$0) (apply compose t3 t0 $0, apply t3 apply t0 $0) 0.0.1.0.0 0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
       }
-      prove ∈ apply t0 $0 applySet t0 t5 607bd5a8ada96378f280d7c7cb8d745a371b352047e4ecc23ff766131cfce9b5 () (t0, t1, t2, t5, $0) p0 p2 0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+      prove ∈ apply t0 $0 applySet t0 t5 df361ddd4d444aad5bd34665d467272b3063c05ab652e8bd49a66622068966c6 () (t0, t1, t2, t5, $0) p0 p2 0.0.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
       inferenceWithPremiseDerivations {
         combined {
           known ∈ apply t0 $0 applySet t0 t5
@@ -36,7 +36,7 @@ take c {
     }
   }
   assume ∈ $0 applySet t3 applySet t0 t5 {
-    prove ⊆ applySet t0 t5 t2 3ef2af93629640049e93b8506346d0907585c5856cb1daf63cf4e190c250d6f7 () (t0, t1, t2, t5) p0 p2
+    prove ⊆ applySet t0 t5 t2 c7726004352c00a0a47196e40be03736afc9011d4bd5d99fad0f3cb5659a1c52 () (t0, t1, t2, t5) p0 p2
     inferenceExtraction {
       prove ∀ b ↔ ∈ $0 applySet t3 applySet t0 t5 ∃ a ∧ ∈ $0 applySet t0 t5 = $$0 apply t3 $0 2d53839253ae79456a823bb9196b815acf9752fa7abdaffaaf36a01f6c0d1f40 () (t3, applySet t0 t5)
       prove ↔ ∈ $0 applySet t3 applySet t0 t5 ∃ a ∧ ∈ $0 applySet t0 t5 = $$0 apply t3 $0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 applySet t3 applySet t0 t5 ∃ a ∧ ∈ $0 applySet t0 t5 = $$$0 apply t3 $0) ($0) 0.1.1.0
@@ -52,15 +52,15 @@ take c {
       }
       let a ∧ ∈ $0 t5 = $$0 apply t0 $0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 t5 = $0 apply t0 $$$0, ∈ $$0 applySet compose t3 t0 t5) () 0.1.2.0 {
         prove = $$$0 apply t3 apply t0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$0 apply t3 $$$$0) ($$0, apply t0 $0) 0.1.2.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 0.1.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-        elided dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc {
-          elided dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc {
+        elided 50fbe4cd4239f2a39705f671330a8445204095e407f5f2d665ed2ca3b6205e32 {
+          elided 50fbe4cd4239f2a39705f671330a8445204095e407f5f2d665ed2ca3b6205e32 {
             inferenceExtraction {
               prove ∀ x → ∈ $0 t5 ∈ $0 t1 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (t5, t1) p2
               prove → ∈ $0 t5 ∈ $0 t1 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t5 ∈ $$$$0 t1) ($0) 0.1.2.1.1.0.0.0
               prove ∈ $0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t5, ∈ $0 t1) () 0.1.2.1.1.0.0.1 0.1.2.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
             }
             inferenceExtraction {
-              prove = apply compose t3 t0 $0 apply t3 apply t0 $0 dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc () (t0, t1, t2, t3, t4, $0) p0 p1 0.1.2.1.1.0.0
+              prove = apply compose t3 t0 $0 apply t3 apply t0 $0 50fbe4cd4239f2a39705f671330a8445204095e407f5f2d665ed2ca3b6205e32 () (t0, t1, t2, t3, t4, $0) p0 p1 0.1.2.1.1.0.0
               prove = apply t3 apply t0 $0 apply compose t3 t0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply compose t3 t0 $0, apply t3 apply t0 $0) 0.1.2.1.1.0.1.0
             }
           }

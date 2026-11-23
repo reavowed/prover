@@ -8,4 +8,4 @@ wrappedInferenceApplication {
     prove → ∈ $0 ∩ t1 t4 = apply t0 $0 apply t3 $0 fa02c308b535e06a6fd425d8073ebbf2e2e6127a20a17a8bf3fe76840855133f (∈ $0 ∩ t1 t4, = apply t0 $0 apply t3 $0) () 1.0.0
   }
 }
-prove ∧ function ∪ t0 t3 functionFrom ∪ t0 t3 ∪ t1 t4 ∪ t2 t5 9811a422d24853ac499a0df7c3695cccc20f7cd33a99eb7dcffb2315a727b0e8 () (t0, t1, t2, t3, t4, t5) p0 p1 1
+prove function ∪ t0 t3 ∪ t1 t4 ∪ t2 t5 24151d4fc82731fed892263722d6e8565762ca692dc86885513d133c9881794b () (t0, t1, t2, t3, t4, t5) p0 p1 1

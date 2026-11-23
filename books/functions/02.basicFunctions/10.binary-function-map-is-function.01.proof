@@ -18,4 +18,4 @@ take x {
     }
   }
 }
-prove ∧ function t0 functionFrom t0 product t1 t2 t4 49727ac5186e6b8f7eb3d0851aac61a302ea69932f3ee7bfdf036e6054f6a9fc () (t0, product t1 t2, with (first $0 second $0) t3, t4) 0 1
+prove function t0 product t1 t2 t4 40a4783797910bfdf1397ac6be47e6f6d00ffb2166a5c4f3c5153ad6c6a88dc4 () (t0, product t1 t2, with (first $0 second $0) t3, t4) 0 1

@@ -1,6 +1,6 @@
 inferenceExtraction {
-  prove ∧ ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0 ef0d2f0431928f572fdfe726aae713fb41fefc4eb46b8a1ab021fde4bfcefd0b () ()
-  prove ∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function ×ℕ functionFrom ×ℕ product ℕ ℕ ℕ, ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0) () 0.0
+  prove ∧ function ×ℕ product ℕ ℕ ℕ ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0 3459d9f9fa41bf6c4879ee8001dd25314fd1968a69e9661dd9634cb656a3ae1c () ()
+  prove function ×ℕ product ℕ ℕ ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (function ×ℕ product ℕ ℕ ℕ, ∧ ∀ n → ∈ $0 ℕ = apply ×ℕ orderedPair $0 0ℕ 0ℕ ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply ×ℕ orderedPair $$0 successor $0 apply +ℕ orderedPair apply ×ℕ orderedPair $$0 $0 $$0) () 0.0
 }
 prove ∈ orderedPair t0 t1 product ℕ ℕ 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () (t0, ℕ, t1, ℕ) p0 p1
-prove ∈ apply ×ℕ orderedPair t0 t1 ℕ 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (×ℕ, product ℕ ℕ, ℕ, orderedPair t0 t1) 0 1
+prove ∈ apply ×ℕ orderedPair t0 t1 ℕ a0270736167df59c0ddede14afd7d77da58b5a4ba82f0256b27ace701f423df2 () (×ℕ, product ℕ ℕ, ℕ, orderedPair t0 t1) 0 1

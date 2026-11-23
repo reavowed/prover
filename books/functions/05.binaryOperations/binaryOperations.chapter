@@ -7,14 +7,14 @@ term baseSet (X)
 
 type binaryOperation ∘ (infix-function)
   name (binary operation)
-  definition (∧ function t0 functionFrom t0 product baseSet t0 baseSet t0 baseSet t0)
+  definition (function t0 product baseSet t0 baseSet t0 baseSet t0)
 
 qualifier on on binaryOperation (A) (on A)
   definition (= baseSet t0 t1)
 
 theorem Alternative Definition for Binary Operation on a Set
 termVariables(∘ 0 (infix-function), A 0)
-conclusion ↔ ∧ binaryOperation t0 binaryOperationOn t0 t1 ∧ function t0 functionFrom t0 product t1 t1 t1
+conclusion ↔ ∧ binaryOperation t0 binaryOperationOn t0 t1 function t0 product t1 t1 t1
 
 property associative on binaryOperation
   definition (∀ a → ∈ $0 baseSet t0 ∀ b → ∈ $0 baseSet t0 ∀ c → ∈ $0 baseSet t0 = apply t0 orderedPair $$$0 apply t0 orderedPair $$0 $0 apply t0 orderedPair apply t0 orderedPair $$$0 $$0 $0)

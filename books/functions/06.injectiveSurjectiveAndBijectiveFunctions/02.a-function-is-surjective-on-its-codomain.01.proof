@@ -1,5 +1,5 @@
 prove ⊆ t3 t3 fff98b9c0fc51a3a1b88a451546bf03f8a2295c91df4fb09494bfedf71c31a8b () (t3)
-prove ∧ function t0 functionFrom t0 t1 t3 a318993f6736e6fa1ee0f615e0c0d03c44e8cd84f54c2e5a84c76cac91600a89 () (t0, t1, t2, t3) p0 p1
+prove function t0 t1 t3 33d34705bcf244446e049ddd8b129df4159cad7bf656215c2c341f0dceaad570 () (t0, t1, t2, t3) p0 p1
 take b {
   assume ∈ $0 t3 {
     prove ∈ $0 codomain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (t3, codomain t0) p1 2.0a
@@ -11,7 +11,7 @@ take b {
     }
     let a ∧ ∈ $0 domain t0 ∈ orderedPair $0 $$0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 domain t0 ∈ orderedPair $$0 $0 t0, ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0) () 2.0.1 {
       inferenceExtraction {
-        prove ↔ ∈ orderedPair $0 $$0 t0 ∧ ∈ $0 t1 = $$0 apply t0 $0 bb6e73c5af6b52effc899b0eaf72cfeee34544d11992ec4f34d969062d906a31 () (t0, t1, t2, $0, $$0) p0
+        prove ↔ ∈ orderedPair $0 $$0 t0 ∧ ∈ $0 t1 = $$0 apply t0 $0 7294f8e5fc556b684872be809a4ec24d7243bc1c9a46eb8d2561b949ec334bfd () (t0, t1, t2, $0, $$0) p0
         prove → ∈ orderedPair $0 $$0 t0 ∧ ∈ $0 t1 = $$0 apply t0 $0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ orderedPair $0 $$0 t0, ∧ ∈ $0 t1 = $$0 apply t0 $0) () 2.0.2.0.0
         prove ∧ ∈ $0 t1 = $$0 apply t0 $0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ orderedPair $0 $$0 t0, ∧ ∈ $0 t1 = $$0 apply t0 $0) () 2.0.2.0.1 2.0.2a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
         prove = $$0 apply t0 $0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (∈ $0 t1, = $$0 apply t0 $0) () 2.0.2.0.2
@@ -22,10 +22,10 @@ take b {
 }
 inferenceWithPremiseDerivations {
   combined {
-    known ∧ function t0 functionFrom t0 t1 t3
+    known function t0 t1 t3
     known ∀ b → ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0
-    prove ∧ ∧ function t0 functionFrom t0 t1 t3 ∀ b → ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function t0 functionFrom t0 t1 t3, ∀ b → ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0) () 1 2
+    prove ∧ function t0 t1 t3 ∀ b → ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function t0 t1 t3, ∀ b → ∈ $0 t3 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0) () 1 2
   }
-  prove surjectiveFunction t0 t1 t3 bac8c901516d40360774d8b3ef613907a74da0900ab7c4637a6fee3fc7f8b537 () (t0, t1, t3) 3.0
+  prove surjectiveFunction t0 t1 t3 93bfb2b32301acdd189b8853e1e00c9905a816f8159491c16b99433353f12553 () (t0, t1, t3) 3.0
 }
-prove ∧ ∧ function t0 functionFrom t0 t1 t3 surjectiveFunction t0 t1 t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function t0 functionFrom t0 t1 t3, surjectiveFunction t0 t1 t3) () 1 3
+prove ∧ function t0 t1 t3 surjectiveFunction t0 t1 t3 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function t0 t1 t3, surjectiveFunction t0 t1 t3) () 1 3

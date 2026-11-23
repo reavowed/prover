@@ -134,17 +134,17 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
       }
       prove ⊆ $0 ℤ^≥0 ec7fc0729669e6268d01ee93cfc031e0baa57e3a4871bcbc82ca754bc591f204 () ($0, ℤ^≥0) 0.0.0.0
     }
-    prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 7ae5090fca5999242361d5b07852607fa86f38b9adbcdecaa9313aa633fa2393 () ()
+    prove ∧ function ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0 f2061eef165454859a0daaa34769452a8f50f2e22b5879041fd914363416ffb4 () ()
     inferenceExtraction {
-      prove ∧ ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0 7f1d4469d01fcdbd7e0e94e1639b981e42b358155cf529fe13275928cf9fe0df () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.1
-      prove ∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function inverseFunction ⍳_ℤ functionFrom inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ, ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0) () 0.0.2.0
+      prove ∧ ∧ function inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0 99f6422c03704e129cd8a2a72ebd97eafdb7370331d95bfc7bd4f2bf6dcfcf6f () (⍳_ℤ, ℕ, ℤ^≥0) 0.0.1
+      prove ∧ function inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function inverseFunction ⍳_ℤ ℤ^≥0 ℕ bijectiveFunction inverseFunction ⍳_ℤ ℤ^≥0 ℕ, ∧ = compose inverseFunction ⍳_ℤ ⍳_ℤ identityFunction ℕ = compose ⍳_ℤ inverseFunction ⍳_ℤ identityFunction ℤ^≥0) () 0.0.2.0
     }
-    prove ⊆ applySet inverseFunction ⍳_ℤ $0 ℕ 3ef2af93629640049e93b8506346d0907585c5856cb1daf63cf4e190c250d6f7 () (inverseFunction ⍳_ℤ, ℤ^≥0, ℕ, $0) 0.0.2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0
+    prove ⊆ applySet inverseFunction ⍳_ℤ $0 ℕ c7726004352c00a0a47196e40be03736afc9011d4bd5d99fad0f3cb5659a1c52 () (inverseFunction ⍳_ℤ, ℤ^≥0, ℕ, $0) 0.0.2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0
     subproof (Inverse image of S^+ is non-empty) {
       prove ∃ s ∈ $0 t0 3533f6dbdbf8d0f28da330a846256442487d9d249dba242bb407d5b7ec57865d () (t0) p1
       let s ∈ $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∈ $$$0 t0, ¬ = applySet inverseFunction ⍳_ℤ $0 ∅) () 0.0.4.0 {
         prove ∈ apply -ℤ orderedPair $0 $$$0 $$0 c9f2bb871030aba7cefe90ec5d1063e3fede02bed65e9e77472830a9b98bcc95 () ($$0, t0, apply -ℤ orderedPair $$$$0 $$$0, $0) 0.0a 0.0.4.1a
-        prove ∈ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$0 applySet inverseFunction ⍳_ℤ $$0 607bd5a8ada96378f280d7c7cb8d745a371b352047e4ecc23ff766131cfce9b5 () (inverseFunction ⍳_ℤ, ℤ^≥0, ℕ, $$0, apply -ℤ orderedPair $0 $$$0) 0.0.2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0 0.0.4.1.0
+        prove ∈ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$0 applySet inverseFunction ⍳_ℤ $$0 df361ddd4d444aad5bd34665d467272b3063c05ab652e8bd49a66622068966c6 () (inverseFunction ⍳_ℤ, ℤ^≥0, ℕ, $$0, apply -ℤ orderedPair $0 $$$0) 0.0.2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0 0.0.4.1.0
         prove ¬ = applySet inverseFunction ⍳_ℤ $$0 ∅ d197f0469101dba16f72c9b3e6c622698a14a37bfe377f0d1e1e06962e7f87ec () (apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$0, applySet inverseFunction ⍳_ℤ $$0) 0.0.4.1.1
       }
     }
@@ -158,20 +158,20 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
       }
     }
     let n ∧ ∈ $0 applySet inverseFunction ⍳_ℤ $$0 ∀ s → ∈ $0 applySet inverseFunction ⍳_ℤ $$$0 ∈ orderedPair $$0 $0 ≤ℕ 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$$0 applySet inverseFunction ⍳_ℤ $0 ∀ s → ∈ $0 applySet inverseFunction ⍳_ℤ $$0 ∈ orderedPair $$$$0 $0 ≤ℕ, ∃ x ∧ ∈ $0 t0 ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ) () 0.0.5 {
-      elided 607bd5a8ada96378f280d7c7cb8d745a371b352047e4ecc23ff766131cfce9b5 {
+      elided df361ddd4d444aad5bd34665d467272b3063c05ab652e8bd49a66622068966c6 {
         inferenceExtraction {
-          prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
-          prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0.6.0.0.0
-          prove ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ, injectiveFunction ⍳_ℤ) () 0.0.6.0.0.1
+          prove ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b () ()
+          prove ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0.6.0.0.0
+          prove function ⍳_ℤ ℕ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (function ⍳_ℤ ℕ ℤ, injectiveFunction ⍳_ℤ ℕ ℤ) () 0.0.6.0.0.1
         }
-        prove ∈ apply ⍳_ℤ $0 applySet ⍳_ℤ applySet inverseFunction ⍳_ℤ $$0 607bd5a8ada96378f280d7c7cb8d745a371b352047e4ecc23ff766131cfce9b5 () (⍳_ℤ, ℕ, ℤ, applySet inverseFunction ⍳_ℤ $$0, $0) 0.0.6.0.0 0.0.3 0.0.6a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+        prove ∈ apply ⍳_ℤ $0 applySet ⍳_ℤ applySet inverseFunction ⍳_ℤ $$0 df361ddd4d444aad5bd34665d467272b3063c05ab652e8bd49a66622068966c6 () (⍳_ℤ, ℕ, ℤ, applySet inverseFunction ⍳_ℤ $$0, $0) 0.0.6.0.0 0.0.3 0.0.6a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
       }
       rewrite {
         byInference {
           asserted {
             inferenceExtraction {
-              prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
-              prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0.6.1.0.0.0
+              prove ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b () ()
+              prove ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0.6.1.0.0.0
             }
           }
           asserted {
@@ -182,7 +182,7 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
           }
           known ⊆ $$0 ℤ^≥0
           inferenceExtraction {
-            prove = applySet ⍳_ℤ applySet inverseFunction ⍳_ℤ $$0 $$0 fabed459fe943918c3f2f6d47efca844039be84e7eb6b7836cf736aacae86747 () (⍳_ℤ, ℕ, ℤ, ℤ^≥0, $$0) 0.0.6.1.0.0 0.0.6.1.0.1 0.0.0
+            prove = applySet ⍳_ℤ applySet inverseFunction ⍳_ℤ $$0 $$0 e5d7e74f844f17c006417abb85cff0ff892a6cdbda77c509617e4af832c80344 () (⍳_ℤ, ℕ, ℤ, ℤ^≥0, $$0) 0.0.6.1.0.0 0.0.6.1.0.1 0.0.0
           }
         }
         prove ∈ apply ⍳_ℤ $0 $$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ apply ⍳_ℤ $0 $$$$0) (applySet ⍳_ℤ applySet inverseFunction ⍳_ℤ $$0, $$0) 0.0.6.1.0 0.0.6.0
@@ -260,7 +260,7 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
         take s {
           assume ∈ $0 t0 {
             prove ∈ apply -ℤ orderedPair $0 $$$$$0 $$$$0 c9f2bb871030aba7cefe90ec5d1063e3fede02bed65e9e77472830a9b98bcc95 () ($$$$0, t0, apply -ℤ orderedPair $$$$$$0 $$$$$0, $0) 0.0a 0.0.6.3.2.0a
-            prove ∈ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 applySet inverseFunction ⍳_ℤ $$$$0 607bd5a8ada96378f280d7c7cb8d745a371b352047e4ecc23ff766131cfce9b5 () (inverseFunction ⍳_ℤ, ℤ^≥0, ℕ, $$$$0, apply -ℤ orderedPair $0 $$$$$0) 0.0.2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0 0.0.6.3.2.0.0
+            prove ∈ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 applySet inverseFunction ⍳_ℤ $$$$0 df361ddd4d444aad5bd34665d467272b3063c05ab652e8bd49a66622068966c6 () (inverseFunction ⍳_ℤ, ℤ^≥0, ℕ, $$$$0, apply -ℤ orderedPair $0 $$$$$0) 0.0.2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0.0 0.0.6.3.2.0.0
             existingStatementExtraction {
               prove → ∈ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 applySet inverseFunction ⍳_ℤ $$$$0 ∈ orderedPair $$$0 apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 ≤ℕ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$$$0 applySet inverseFunction ⍳_ℤ $$$$0 ∈ orderedPair $$$0 $$$$$$0 ≤ℕ) (apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0) 0.0.6a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove ∈ orderedPair $$$0 apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 ≤ℕ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 applySet inverseFunction ⍳_ℤ $$$$0, ∈ orderedPair $$$0 apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 ≤ℕ) () 0.0.6.3.2.0.2.0 0.0.6.3.2.0.1
@@ -294,8 +294,8 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
               byInference {
                 asserted {
                   inferenceExtraction {
-                    prove ∧ ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 679687fe62398f602d2928419898f0ea5fc7a1d945121cb455ca1e356a99ef8a () ()
-                    prove ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0.6.3.2.0.4.0.0.0
+                    prove ∧ ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ 2686b54c3803d68ff7965397901c61ee176f03c8e6ed66121b492812c7dd568b () ()
+                    prove ∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∧ function ⍳_ℤ ℕ ℤ injectiveFunction ⍳_ℤ ℕ ℤ, ∀ n → ∈ $0 ℕ = apply ⍳_ℤ $0 equivalenceClass orderedPair $0 0ℕ ~_ℤ) () 0.0.6.3.2.0.4.0.0.0
                   }
                 }
                 asserted {
@@ -314,7 +314,7 @@ let b_ℤ ∧ ∈ $0 ℤ ∀ s → ∈ $0 t0 ∈ orderedPair $$0 $0 ≤ℤ 30412
                   }
                 }
                 inferenceExtraction {
-                  prove = apply ⍳_ℤ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 apply -ℤ orderedPair $0 $$$$$0 9af9c63a83f6a18e2b54d2b0e047339a0be57fe0ac2ffcacd570b90659143776 () (⍳_ℤ, ℕ, ℤ, ℤ^≥0, apply -ℤ orderedPair $0 $$$$$0) 0.0.6.3.2.0.4.0.0 0.0.6.3.2.0.4.0.1 0.0.6.3.2.0.4.0.2
+                  prove = apply ⍳_ℤ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0 apply -ℤ orderedPair $0 $$$$$0 4331198e13b3f80fdeab679364c7498ed12b9b69dbf844847d13477652fc5086 () (⍳_ℤ, ℕ, ℤ, ℤ^≥0, apply -ℤ orderedPair $0 $$$$$0) 0.0.6.3.2.0.4.0.0 0.0.6.3.2.0.4.0.1 0.0.6.3.2.0.4.0.2
                 }
               }
               prove ∈ orderedPair apply ⍳_ℤ $$$0 apply -ℤ orderedPair $0 $$$$$0 ≤ℤ 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ orderedPair apply ⍳_ℤ $$$0 $$$$$$0 ≤ℤ) (apply ⍳_ℤ apply inverseFunction ⍳_ℤ apply -ℤ orderedPair $0 $$$$$0, apply -ℤ orderedPair $0 $$$$$0) 0.0.6.3.2.0.4.0 0.0.6.3.2.0.3

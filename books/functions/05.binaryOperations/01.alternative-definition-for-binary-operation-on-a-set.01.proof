@@ -1,14 +1,14 @@
 assume ∧ binaryOperation t0 binaryOperationOn t0 t1 {
-  prove ∧ function t0 functionFrom t0 product baseSet t0 baseSet t0 baseSet t0 f495d0479711bafa144326d86109ce6ee78538a2ee268e7779996098952fba71 () (t0) 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+  prove function t0 product baseSet t0 baseSet t0 baseSet t0 b8acc8d0a14c5bb0aae5ab6009720e9894b9bedd0c5d08a745f12b7c06c14eb5 () (t0) 0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
   inferenceExtraction {
     prove ∧ binaryOperation t0 = baseSet t0 t1 f339f65a27880a4720090590b1617dce820b6d04c53ec5a1f3f279169fec2943 () (t0, t1) 0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
     prove = baseSet t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (binaryOperation t0, = baseSet t0 t1) () 0.1.0
   }
-  prove ∧ function t0 functionFrom t0 product t1 t1 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∧ function t0 functionFrom t0 product $0 $0 $0) (baseSet t0, t1) 0.1 0.0
+  prove function t0 product t1 t1 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (function t0 product $0 $0 $0) (baseSet t0, t1) 0.1 0.0
 }
-assume ∧ function t0 functionFrom t0 product t1 t1 t1 {
+assume function t0 product t1 t1 t1 {
   inferenceExtraction {
-    prove = product t1 t1 domain t0 98ec5c667b4987db6d28f68bd22becfba8c24b9d1e6bc24f2ac00808ce87cda0 () (t0, product t1 t1, t1) 1a
+    prove = product t1 t1 domain t0 01d968c220d4b772454f25041f43b5f85c5a565f69d415deaa04f34c7a16b567 () (t0, product t1 t1, t1) 1a
     prove = domain t0 product t1 t1 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (product t1 t1, domain t0) 1.0.0
   }
   assume = t1 ∅ {
@@ -52,36 +52,56 @@ assume ∧ function t0 functionFrom t0 product t1 t1 t1 {
     prove = baseSet t0 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $0 t1) (domain domain t0, baseSet t0) 1.5.0 1.4
   }
   elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-    rewrite {
-      reversed {
-        known = baseSet t0 t1
-        prove = t1 baseSet t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet t0, t1) 1.5
+    inferenceWithPremiseDerivations {
+      combined {
+        substituted {
+          extracted {
+            known function t0 product t1 t1 t1
+            deconstruction {
+              prove ∧ ⊆ t0 product product t1 t1 t1 ∀ x → ∈ $0 product t1 t1 ∃! b ∈ orderedPair $$0 $0 t0 874c0ad949fc426ebad7b844e6892422843ae09edf15db41e1e9009c5788b344 () (t0, product t1 t1, t1) 1a
+              prove ⊆ t0 product product t1 t1 t1 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (⊆ t0 product product t1 t1 t1, ∀ x → ∈ $0 product t1 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 1.6.0.0.0
+            }
+          }
+          reversed {
+            known = baseSet t0 t1
+            prove = t1 baseSet t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet t0, t1) 1.5
+          }
+          prove ⊆ t0 product product baseSet t0 t1 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (⊆ t0 product product $0 t1 t1) (t1, baseSet t0) 1.6.0.1 1.6.0.0
+        }
+        substituted {
+          extracted {
+            known function t0 product t1 t1 t1
+            deconstruction {
+              prove ∧ ⊆ t0 product product t1 t1 t1 ∀ x → ∈ $0 product t1 t1 ∃! b ∈ orderedPair $$0 $0 t0 874c0ad949fc426ebad7b844e6892422843ae09edf15db41e1e9009c5788b344 () (t0, product t1 t1, t1) 1a
+              prove ∀ x → ∈ $0 product t1 t1 ∃! b ∈ orderedPair $$0 $0 t0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (⊆ t0 product product t1 t1 t1, ∀ x → ∈ $0 product t1 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 1.6.0.3.0
+            }
+          }
+          reversed {
+            known = baseSet t0 t1
+            prove = t1 baseSet t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet t0, t1) 1.5
+          }
+          prove ∀ x → ∈ $0 product baseSet t0 t1 ∃! b ∈ orderedPair $$0 $0 t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∀ x → ∈ $0 product $$0 t1 ∃! b ∈ orderedPair $$0 $0 t0) (t1, baseSet t0) 1.6.0.1 1.6.0.3
+        }
+        prove ∧ ⊆ t0 product product baseSet t0 t1 t1 ∀ x → ∈ $0 product baseSet t0 t1 ∃! b ∈ orderedPair $$0 $0 t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ t0 product product baseSet t0 t1 t1, ∀ x → ∈ $0 product baseSet t0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 1.6.0.2 1.6.0.4
       }
-      prove functionFrom t0 product baseSet t0 t1 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (functionFrom t0 product $0 t1 t1) (t1, baseSet t0) 1.6.0.0 1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove function t0 product baseSet t0 t1 t1 488dde65906f5741c93d4f558d6f81841e4b75363854a2c0c99b0b848e898f54 () (t0, product baseSet t0 t1, t1) 1.6.0.5
     }
     rewrite {
       reversed {
         known = baseSet t0 t1
         prove = t1 baseSet t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet t0, t1) 1.5
       }
-      prove functionFrom t0 product baseSet t0 baseSet t0 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (functionFrom t0 product baseSet t0 $0 t1) (t1, baseSet t0) 1.6.1.0 1.6.0
+      prove function t0 product baseSet t0 baseSet t0 t1 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (function t0 product baseSet t0 $0 t1) (t1, baseSet t0) 1.6.1.0 1.6.0
     }
     rewrite {
       reversed {
         known = baseSet t0 t1
         prove = t1 baseSet t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (baseSet t0, t1) 1.5
       }
-      prove functionFrom t0 product baseSet t0 baseSet t0 baseSet t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (functionFrom t0 product baseSet t0 baseSet t0 $0) (t1, baseSet t0) 1.6.2.0 1.6.1
+      prove function t0 product baseSet t0 baseSet t0 baseSet t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (function t0 product baseSet t0 baseSet t0 $0) (t1, baseSet t0) 1.6.2.0 1.6.1
     }
   }
-  inferenceWithPremiseDerivations {
-    combined {
-      known function t0
-      known functionFrom t0 product baseSet t0 baseSet t0 baseSet t0
-      prove ∧ function t0 functionFrom t0 product baseSet t0 baseSet t0 baseSet t0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function t0, functionFrom t0 product baseSet t0 baseSet t0 baseSet t0) () 1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 1.6
-    }
-    prove binaryOperation t0 8334de482ad12b3bc03fa22cfdef464a342ffcbba3408754bf741a3d3abe27b3 () (t0) 1.7.0
-  }
+  prove binaryOperation t0 810b7e4031764cd62f9ebda73891d819169e2b835c13886f5f9239a206edca43 () (t0) 1.6
   inferenceWithPremiseDerivations {
     combined {
       known binaryOperation t0
@@ -92,4 +112,4 @@ assume ∧ function t0 functionFrom t0 product t1 t1 t1 {
   }
   prove ∧ binaryOperation t0 binaryOperationOn t0 t1 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (binaryOperation t0, binaryOperationOn t0 t1) () 1.7 1.8
 }
-prove ↔ ∧ binaryOperation t0 binaryOperationOn t0 t1 ∧ function t0 functionFrom t0 product t1 t1 t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ binaryOperation t0 binaryOperationOn t0 t1, ∧ function t0 functionFrom t0 product t1 t1 t1) () 0 1
+prove ↔ ∧ binaryOperation t0 binaryOperationOn t0 t1 function t0 product t1 t1 t1 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∧ binaryOperation t0 binaryOperationOn t0 t1, function t0 product t1 t1 t1) () 0 1

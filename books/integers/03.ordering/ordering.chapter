@@ -88,7 +88,7 @@ theorem Codomain of ⍳_ℤ Is the Non-Negative Integers
 conclusion = codomain ⍳_ℤ ℤ^≥0
 
 theorem ⍳_ℤ Bijects ℕ with ℤ^≥0
-conclusion ∧ ∧ function ⍳_ℤ functionFrom ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0
+conclusion ∧ function ⍳_ℤ ℕ ℤ^≥0 bijectiveFunction ⍳_ℤ ℕ ℤ^≥0
 
 theorem Non-Negative Integer Has a Corresponding Natural
 termVariables(a 0)

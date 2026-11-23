@@ -14,4 +14,4 @@ take x {
     }
   }
 }
-prove = t0 t4 d062dc18912b8cffa422e3e7fc85cd6f2f4146355f0ba48999b4e1cc1a2cd96b () (t0, product t1 t2, t3, t4) p0 p1 0
+prove = t0 t4 a0242fd72580cefc1d9ca8db4240beb6ee284359ac93b96cbb208e7723e04592 () (t0, product t1 t2, t3, t4) p0 p1 0

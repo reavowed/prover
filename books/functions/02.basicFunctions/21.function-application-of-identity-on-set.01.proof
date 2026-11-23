@@ -1,4 +1,4 @@
-prove ∧ function identityFunction t1 functionFrom identityFunction t1 t1 t1 37f9c10d2262f9702affece9d218edf9ed2014fdfd000076706be2880a10ae24 () (t1)
+prove function identityFunction t1 t1 t1 ab50857f2beb15fb30b6ac9d0ff254875b2d3631e841a1e17a8149b43c1b8679 () (t1)
 take a {
   assume ∈ $0 applySet identityFunction t1 t0 {
     inferenceExtraction {

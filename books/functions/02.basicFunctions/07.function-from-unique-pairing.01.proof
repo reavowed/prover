@@ -1,4 +1,4 @@
-let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∃! f ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0) (comprehension x product t0 t1 with (first $0 second $0) s0) {
+let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∃! f ∧ function $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0) (comprehension x product t0 t1 with (first $0 second $0) s0) {
   subproof (f_φ is a function) {
     prove ⊆ $0 product t0 t1 a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (with (first $$0 second $$0) s0) ($0, product t0 t1) 0a
     take a {
@@ -67,19 +67,19 @@ let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594
         prove ∃! b ∈ orderedPair $$0 $0 $$$0 45888b214c786b95cbdc045febde3b5f80f88a7352acc53e819310ef8adc15e7 (∧ ∈ $$$0 t1 with ($0 $$$0) s0, ∈ orderedPair $0 $$$0 $$0) () 0.0.1.0.0 0.0.1.0.1
       }
     }
-    elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
-      prove ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ $0 product t0 t1, ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.0 0.0.1
-      inferenceExtraction {
-        prove ↔ ∧ function $0 functionFrom $0 t0 t1 ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () ($0, t0, t1)
-        prove → ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 ∧ function $0 functionFrom $0 t0 t1 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∧ function $0 functionFrom $0 t0 t1, ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.2.1.0
-        prove ∧ function $0 functionFrom $0 t0 t1 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0, ∧ function $0 functionFrom $0 t0 t1) () 0.0.2.1.1 0.0.2.0
+    inferenceWithPremiseDerivations {
+      combined {
+        known ⊆ $0 product t0 t1
+        known ∀ a → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0
+        prove ∧ ⊆ $0 product t0 t1 ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ $0 product t0 t1, ∀ x → ∈ $0 t0 ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.0 0.0.1
       }
+      prove function $0 t0 t1 488dde65906f5741c93d4f558d6f81841e4b75363854a2c0c99b0b848e898f54 () ($0, t0, t1) 0.0.2.0
     }
   }
   subproof (f_φ satisfies φ) {
     take a {
       assume ∈ $0 t0 {
-        prove ∈ orderedPair $0 apply $$0 $0 $$0 5c9b61f2b64b3a70c59e4c410535c1c12e54cf47be5e53d570e52c0839232a9f () ($$0, t0, t1, $0) 0.0 0.1.0.0a
+        prove ∈ orderedPair $0 apply $$0 $0 $$0 b4974b40d31b2dfe5e838ebf2e47d5dae20227eccbb468436dad830684212a42 () ($$0, t0, t1, $0) 0.0 0.1.0.0a
         inferenceExtraction {
           prove ∀ y ↔ ∈ $0 $$$0 ∧ ∈ $0 product t0 t1 with (first $0 second $0) s0 6182c4f89ff3e95edcf4678ad5622f078eb321080692cb692a77dd4080579754 (with (first $$$0 second $$$0) s0) ($$0, product t0 t1) 0a
           prove ↔ ∈ orderedPair $0 apply $$0 $0 $$0 ∧ ∈ orderedPair $0 apply $$0 $0 product t0 t1 with (first orderedPair $0 apply $$0 $0 second orderedPair $0 apply $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 $$0 ∧ ∈ $$$0 product t0 t1 with (first $$$0 second $$$0) s0) (orderedPair $0 apply $$0 $0) 0.1.0.0.1.0
@@ -108,19 +108,19 @@ let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594
   }
   subproof (f_φ is unique) {
     take f {
-      assume ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0 {
+      assume ∧ function $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0 {
         take a {
           assume ∈ $0 t0 {
             existingStatementExtraction {
               prove → ∈ $0 t0 ∃! b ∧ ∈ $0 t1 with ($$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t0 ∃! x ∧ ∈ $0 t1 with ($$$$$0 $0) s0) ($0) p0
               prove ∃! b ∧ ∈ $0 t1 with ($$0 $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, ∃! x ∧ ∈ $0 t1 with ($$0 $0) s0) () 0.2.0.0.0.0.0.0 0.2.0.0.0.0a
             }
-            prove ∈ apply $$0 $0 t1 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () ($$0, t0, t1, $0) 0.2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.2.0.0.0.0a
+            prove ∈ apply $$0 $0 t1 a0270736167df59c0ddede14afd7d77da58b5a4ba82f0256b27ace701f423df2 () ($$0, t0, t1, $0) 0.2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.2.0.0.0.0a
             existingStatementExtraction {
               prove → ∈ $0 t0 with ($0 apply $$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t0 with ($$$$0 apply $$0 $$$$0) s0) ($0) 0.2.0.0a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove with ($0 apply $$0 $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, with ($0 apply $$0 $0) s0) () 0.2.0.0.0.0.2.0 0.2.0.0.0.0a
             }
-            prove ∈ apply $$$0 $0 t1 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () ($$$0, t0, t1, $0) 0.0 0.2.0.0.0.0a
+            prove ∈ apply $$$0 $0 t1 a0270736167df59c0ddede14afd7d77da58b5a4ba82f0256b27ace701f423df2 () ($$$0, t0, t1, $0) 0.0 0.2.0.0.0.0a
             existingStatementExtraction {
               prove → ∈ $0 t0 with ($0 apply $$$0 $0) s0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 t0 with ($$$$0 apply $$$0 $$$$0) s0) ($0) 0.1
               prove with ($0 apply $$$0 $0) s0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t0, with ($0 apply $$$0 $0) s0) () 0.2.0.0.0.0.4.0 0.2.0.0.0.0a
@@ -140,16 +140,16 @@ let f_φ = $0 comprehension x product t0 t1 with (first $0 second $0) s0 70db594
             }
           }
         }
-        prove = $0 $$0 d062dc18912b8cffa422e3e7fc85cd6f2f4146355f0ba48999b4e1cc1a2cd96b () ($0, t0, t1, $$0) 0.2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0 0.2.0.0.0
+        prove = $0 $$0 a0242fd72580cefc1d9ca8db4240beb6ee284359ac93b96cbb208e7723e04592 () ($0, t0, t1, $$0) 0.2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0 0.2.0.0.0
       }
     }
   }
   inferenceWithPremiseDerivations {
     combined {
-      known ∧ function $0 functionFrom $0 t0 t1
+      known function $0 t0 t1
       known ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0
-      prove ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function $0 functionFrom $0 t0 t1, ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0) () 0.0 0.1
+      prove ∧ function $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function $0 t0 t1, ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0) () 0.0 0.1
     }
-    prove ∃! f ∧ ∧ function $0 functionFrom $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ ∧ function $$0 functionFrom $$0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$$0 $0) s0) ($0) 0.3.0 0.2
+    prove ∃! f ∧ function $0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$0 $0) s0 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ function $$0 t0 t1 ∀ a → ∈ $0 t0 with ($0 apply $$$0 $0) s0) ($0) 0.3.0 0.2
   }
 }

@@ -32,11 +32,11 @@ assume ∃ a ∧ ∈ $0 ℚ = apply ×ℚ orderedPair $0 $0 apply ⍳_ℚ apply 
           }
           prove = equivalenceClass orderedPair apply ×ℤ orderedPair $$0 $$0 apply ×ℤ orderedPair $0 $0 ~_ℚ apply ⍳_ℚ apply ⍳_ℤ t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (= $$$$0 apply ⍳_ℚ apply ⍳_ℤ t0) (apply ×ℚ orderedPair equivalenceClass orderedPair $$0 $0 ~_ℚ equivalenceClass orderedPair $$0 $0 ~_ℚ, equivalenceClass orderedPair apply ×ℤ orderedPair $$0 $$0 apply ×ℤ orderedPair $0 $0 ~_ℚ) 0.0.1.0.1.0 0.0.1.0.0
         }
-        elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
-          elided f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 {
+        elided c594b01087e4a1231cc646cc27ff97eb136c3a89687cbd24e5a177f2966bc2d8 {
+          elided c594b01087e4a1231cc646cc27ff97eb136c3a89687cbd24e5a177f2966bc2d8 {
             prove ∈ apply ⍳_ℤ t0 ℤ 321818633c1431a236d4483f536b4d7a29c4013db61f23367d0f5f556d9ebfe1 () (t0) p0
             inferenceExtraction {
-              prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ f3211c65b173ad3cc352dcd5368af2a74c6d00cb8974ebdc0b831d35f7a31376 () ()
+              prove ∧ ∧ function ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ℤ ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ c594b01087e4a1231cc646cc27ff97eb136c3a89687cbd24e5a177f2966bc2d8 () ()
               prove → ∈ apply ⍳_ℤ t0 ℤ = apply ⍳_ℚ apply ⍳_ℤ t0 equivalenceClass orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ~_ℚ b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$$$0 ℤ = apply ⍳_ℚ $$$$0 equivalenceClass orderedPair $$$$0 apply ⍳_ℤ 1ℕ ~_ℚ) (apply ⍳_ℤ t0) 0.0.1.0.2.0.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
               prove = apply ⍳_ℚ apply ⍳_ℤ t0 equivalenceClass orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ~_ℚ 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply ⍳_ℤ t0 ℤ, = apply ⍳_ℚ apply ⍳_ℤ t0 equivalenceClass orderedPair apply ⍳_ℤ t0 apply ⍳_ℤ 1ℕ ~_ℚ) () 0.0.1.0.2.0.1.1 0.0.1.0.2.0.0
             }

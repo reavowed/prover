@@ -8,12 +8,12 @@ write apply f orderedPair a b as apply2
 
 theorem Binary Functions with Same Values are Equal
 termVariables(f 0, A 0, B 0, C 0, g 0)
-premise ∧ function t0 functionFrom t0 product t1 t2 t3
-premise ∧ function t4 functionFrom t4 product t1 t2 t3
+premise function t0 product t1 t2 t3
+premise function t4 product t1 t2 t3
 premise ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply t0 orderedPair $$0 $0 apply t4 orderedPair $$0 $0
 conclusion = t0 t4
 
 theorem Uncurry Function
 termVariables(f 0, A 0, B 0, C 0)
-premise ∧ function t0 functionFrom t0 t1 functionSpace t2 t3
-conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0
+premise function t0 t1 functionSpace t2 t3
+conclusion ∃! g ∧ function $0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0

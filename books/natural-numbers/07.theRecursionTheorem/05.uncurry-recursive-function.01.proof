@@ -1,9 +1,9 @@
 wrappedInferenceApplication {
   take f {
     inferenceExtraction {
-      prove ∀ f ↔ ∈ $0 functionSpace ℕ t0 ∧ function $0 functionFrom $0 ℕ t0 39a4a0b58fd0350180fbaa5054a7ac890a57bb416bf5f07a71553e8d94706219 () (ℕ, t0)
-      prove ↔ ∈ $0 functionSpace ℕ t0 ∧ function $0 functionFrom $0 ℕ t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 functionSpace ℕ t0 ∧ function $$0 functionFrom $$0 ℕ t0) ($0) 0.0.0.0
-      prove ↔ ∧ function $0 functionFrom $0 ℕ t0 ∈ $0 functionSpace ℕ t0 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ $0 functionSpace ℕ t0, ∧ function $0 functionFrom $0 ℕ t0) () 0.0.0.1
+      prove ∀ f ↔ ∈ $0 functionSpace ℕ t0 function $0 ℕ t0 e745977f896521cc12cf58a8ab62d9da9cea9c5807a9c4be7da017978561a957 () (ℕ, t0)
+      prove ↔ ∈ $0 functionSpace ℕ t0 function $0 ℕ t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 functionSpace ℕ t0 function $$0 ℕ t0) ($0) 0.0.0.0
+      prove ↔ function $0 ℕ t0 ∈ $0 functionSpace ℕ t0 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∈ $0 functionSpace ℕ t0, function $0 ℕ t0) () 0.0.0.1
     }
   }
 }
@@ -11,19 +11,19 @@ wrappedInferenceApplication {
   take n {
     assume ∈ $0 ℕ {
       existingStatementExtraction {
-        prove → ∈ $0 ℕ ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$$0 apply $$0 $0) t2) ($0) p0
-        prove ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2) () 1.0.0.0.0 1.0.0a
+        prove → ∈ $0 ℕ ∃! f ∧ function $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 ℕ ∃! f ∧ function $0 ℕ t0 ∧ = apply $0 0ℕ with ($$$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$$0 apply $$0 $0) t2) ($0) p0
+        prove ∃! f ∧ function $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 ℕ, ∃! f ∧ function $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2) () 1.0.0.0.0 1.0.0a
       }
-      prove ∃! f ∧ ∈ $0 functionSpace ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 6f9d482ed3e2f6556597c50fa69557c764daac7d53092439e673f5c6a9d92028 (∧ function $$0 functionFrom $$0 ℕ t0, ∧ = apply $$0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply $$$0 successor $0 with ($$0 apply $$$0 $0) t2, ∈ $$0 functionSpace ℕ t0) () 1.0.0.0 0
+      prove ∃! f ∧ ∈ $0 functionSpace ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2 6f9d482ed3e2f6556597c50fa69557c764daac7d53092439e673f5c6a9d92028 (function $$0 ℕ t0, ∧ = apply $$0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply $$$0 successor $0 with ($$0 apply $$$0 $0) t2, ∈ $$0 functionSpace ℕ t0) () 1.0.0.0 0
     }
   }
 }
-prove ∃! f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2 68b01f5ab65d0995f0c75d8c5549250cf53acdf9aeb8051355c7f9f91c7b1758 (∧ = apply $1 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply $$1 successor $0 with ($$0 apply $$1 $0) t2) (ℕ, functionSpace ℕ t0) 1
-let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2, ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2) () 2 {
-  prove ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 0f288e6d953d0e4246260cd926e823969cbfa3d913d01937d6394711c1857652 () ($0, ℕ, ℕ, t0) 3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+prove ∃! f ∧ function $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2 f84f0cc2e82af3e1510ece908401a8e83503eb8090ec641a2f74723cb5a385b2 (∧ = apply $1 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply $$1 successor $0 with ($$0 apply $$1 $0) t2) (ℕ, functionSpace ℕ t0) 1
+let f ∧ function $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∧ function $0 ℕ functionSpace ℕ t0 ∀ n → ∈ $0 ℕ ∧ = apply apply $$0 $0 0ℕ with ($0) t1 ∀ m → ∈ $0 ℕ = apply apply $$$0 $$0 successor $0 with ($$0 apply apply $$$0 $$0 $0) t2, ∃! g ∧ function $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2) () 2 {
+  prove ∃! g ∧ function $0 product ℕ ℕ t0 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 1eda56f594e3a9a7d7bb18f77e0b883ad48ddd253b893fedfbce8ab01bfd708d () ($0, ℕ, ℕ, t0) 3a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
   subproof (Equivalence of definitions) {
     take g {
-      assume ∧ function $0 functionFrom $0 product ℕ ℕ t0 {
+      assume function $0 product ℕ ℕ t0 {
         subproof (Forward implication) {
           assume ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 $0 apply apply $$$$0 $$0 $0 {
             take n {
@@ -124,5 +124,5 @@ let f ∧ ∧ function $0 functionFrom $0 ℕ functionSpace ℕ t0 ∀ n → ∈
       }
     }
   }
-  prove ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 fa494b94116d4ec710d4ceb82c71d51b73634a10ba39f8dac40ed155bda028b6 (∧ function $$0 functionFrom $$0 product ℕ ℕ t0, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 $0 apply apply $$$0 $$0 $0, ∧ ∀ n → ∈ $0 ℕ = apply $$$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 successor $0 with ($$0 apply $$$$0 orderedPair $$0 $0) t2) () 3.0 3.1
+  prove ∃! g ∧ function $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2 fa494b94116d4ec710d4ceb82c71d51b73634a10ba39f8dac40ed155bda028b6 (function $$0 product ℕ ℕ t0, ∀ a → ∈ $0 ℕ ∀ b → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 $0 apply apply $$$0 $$0 $0, ∧ ∀ n → ∈ $0 ℕ = apply $$$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$$0 orderedPair $$0 successor $0 with ($$0 apply $$$$0 orderedPair $$0 $0) t2) () 3.0 3.1
 }

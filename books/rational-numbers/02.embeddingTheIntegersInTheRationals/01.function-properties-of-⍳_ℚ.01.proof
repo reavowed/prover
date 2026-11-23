@@ -36,7 +36,7 @@ subproof (Function) {
       }
     }
   }
-  prove ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ 49727ac5186e6b8f7eb3d0851aac61a302ea69932f3ee7bfdf036e6054f6a9fc () (⍳_ℚ, ℤ, equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ, ℚ) 0 1.0
+  prove function ⍳_ℚ ℤ ℚ 40a4783797910bfdf1397ac6be47e6f6d00ffb2166a5c4f3c5153ad6c6a88dc4 () (⍳_ℚ, ℤ, equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ, ℚ) 0 1.0
 }
 subproof (Injective) {
   take a {
@@ -112,7 +112,7 @@ subproof (Injective) {
       }
     }
   }
-  target injectiveFunction ⍳_ℚ
+  target injectiveFunction ⍳_ℚ ℤ ℚ
 }
 subproof (Function value) {
   take a {
@@ -127,9 +127,9 @@ subproof (Function value) {
 }
 inferenceWithPremiseDerivations {
   combined {
-    known ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ
-    known injectiveFunction ⍳_ℚ
-    prove ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ, injectiveFunction ⍳_ℚ) () 1 2
+    known function ⍳_ℚ ℤ ℚ
+    known injectiveFunction ⍳_ℚ ℤ ℚ
+    prove ∧ function ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ℤ ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function ⍳_ℚ ℤ ℚ, injectiveFunction ⍳_ℚ ℤ ℚ) () 1 2
   }
-  prove ∧ ∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ ∧ function ⍳_ℚ functionFrom ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 4.0 3
+  prove ∧ ∧ function ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ℤ ℚ ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function ⍳_ℚ ℤ ℚ injectiveFunction ⍳_ℚ ℤ ℚ, ∀ a → ∈ $0 ℤ = apply ⍳_ℚ $0 equivalenceClass orderedPair $0 apply ⍳_ℤ 1ℕ ~_ℚ) () 4.0 3
 }

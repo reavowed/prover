@@ -2,30 +2,30 @@ Prove the recursion theorem for recursively constructing functions on ℕ.
 
 theorem An Inductive Function Is Unique
 termVariables(A 0, a_0 0, a 1)
-premise ∃ f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2
-conclusion ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2
+premise ∃ f ∧ function $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2
+conclusion ∃! f ∧ function $0 ℕ t0 ∧ = apply $0 0ℕ t1 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 with (apply $$0 $0) t2
 
 theorem 𝒫(ℕ × X) Contains All Functions from a Natural Number to X
 termVariables(n 0, f 0, A 0)
 premise ∈ t0 ℕ
-premise ∧ function t1 functionFrom t1 t0 t2
+premise function t1 t0 t2
 conclusion ∈ t1 powerSet product ℕ t2
 
 theorem Extend Function from a Natural Number to Its Successor
 termVariables(n 0, f 0, A 0, a 0, g 0)
 premise ∈ t0 ℕ
-premise ∧ function t1 functionFrom t1 t0 t2
+premise function t1 t0 t2
 premise ∈ t3 t2
 premise = t4 ∪ t1 singleton orderedPair t0 t3
-conclusion ∧ function t4 functionFrom t4 successor t0 t2
+conclusion function t4 successor t0 t2
 
 theorem Recursion Theorem
 termVariables(f 0, X 0, g_0 0)
-premise ∧ function t0 functionFrom t0 t1 t1
+premise function t0 t1 t1
 premise ∈ t2 t1
-conclusion ∃! g ∧ ∧ function $0 functionFrom $0 ℕ t1 ∧ = apply $0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply t0 apply $$0 $0
+conclusion ∃! g ∧ function $0 ℕ t1 ∧ = apply $0 0ℕ t2 ∀ n → ∈ $0 ℕ = apply $$0 successor $0 apply t0 apply $$0 $0
 
 theorem Uncurry Recursive Function
 termVariables(A 0, F_0 1, F_+ 2)
-premise ∀ n → ∈ $0 ℕ ∃! f ∧ ∧ function $0 functionFrom $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2
-conclusion ∃! g ∧ ∧ function $0 functionFrom $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2
+premise ∀ n → ∈ $0 ℕ ∃! f ∧ function $0 ℕ t0 ∧ = apply $0 0ℕ with ($$0) t1 ∀ m → ∈ $0 ℕ = apply $$0 successor $0 with ($$$0 apply $$0 $0) t2
+conclusion ∃! g ∧ function $0 product ℕ ℕ t0 ∧ ∀ n → ∈ $0 ℕ = apply $$0 orderedPair $0 0ℕ with ($0) t1 ∀ n → ∈ $0 ℕ ∀ m → ∈ $0 ℕ = apply $$$0 orderedPair $$0 successor $0 with ($$0 apply $$$0 orderedPair $$0 $0) t2

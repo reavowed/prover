@@ -1,5 +1,5 @@
 prove ∀ a → ∈ $0 t1 ∃! b ∧ ∈ $0 t1 ∧ = apply t0 orderedPair $$0 $0 t2 = apply t0 orderedPair $0 $$0 t2 2700255a9b3dfb95c1d05a020d242a92f2bb7a8bfbe31ff3dfe0f9784b0d9cce () (t0, t1, t2) p0
-prove ∃! f ∧ ∧ function $0 functionFrom $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 68b01f5ab65d0995f0c75d8c5549250cf53acdf9aeb8051355c7f9f91c7b1758 (∧ = apply t0 orderedPair $0 $1 t2 = apply t0 orderedPair $1 $0 t2) (t1, t1) 0
+prove ∃! f ∧ function $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 f84f0cc2e82af3e1510ece908401a8e83503eb8090ec641a2f74723cb5a385b2 (∧ = apply t0 orderedPair $0 $1 t2 = apply t0 orderedPair $1 $0 t2) (t1, t1) 0
 take f {
   assume ∧ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 {
     take e' {
@@ -48,12 +48,12 @@ take f {
     }
     prove ∧ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ unaryOperation $0 unaryOperationOn $0 t1, ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2) () 2.1.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2.1.1
   }
-  elided 95c024ce2ef4a03364afda1a7c852e0b430fa0695e09f442be98208a215ba4fa {
+  elided 1ec25af6a4ce0a755c1faaa11e498c7d86cfce5f3f0126d159114cf24e745e50 {
     inferenceExtraction {
-      prove ↔ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∧ function $0 functionFrom $0 t1 t1 95c024ce2ef4a03364afda1a7c852e0b430fa0695e09f442be98208a215ba4fa () ($0, t1)
-      prove ↔ ∧ function $0 functionFrom $0 t1 t1 ∧ unaryOperation $0 unaryOperationOn $0 t1 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∧ unaryOperation $0 unaryOperationOn $0 t1, ∧ function $0 functionFrom $0 t1 t1) () 2.2.0.0
+      prove ↔ ∧ unaryOperation $0 unaryOperationOn $0 t1 function $0 t1 t1 1ec25af6a4ce0a755c1faaa11e498c7d86cfce5f3f0126d159114cf24e745e50 () ($0, t1)
+      prove ↔ function $0 t1 t1 ∧ unaryOperation $0 unaryOperationOn $0 t1 aa193db8867522e62655c7959498cfb2239448f91fe98d5c2c37950e6208c00e (∧ unaryOperation $0 unaryOperationOn $0 t1, function $0 t1 t1) () 2.2.0.0
     }
-    prove ↔ ∧ ∧ function $0 functionFrom $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 ∧ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 45a8b6d473989bfc000d64033c09e16878a9f8a96199533105d5309bc26f23ff (∧ function $0 functionFrom $0 t1 t1, ∧ unaryOperation $0 unaryOperationOn $0 t1, ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2) () 2.2.0
+    prove ↔ ∧ function $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 ∧ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 45a8b6d473989bfc000d64033c09e16878a9f8a96199533105d5309bc26f23ff (function $0 t1 t1, ∧ unaryOperation $0 unaryOperationOn $0 t1, ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2) () 2.2.0
   }
   inferenceWithPremiseDerivations {
     combined {
@@ -63,6 +63,6 @@ take f {
     }
     prove ↔ ∧ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 invertingOperationBinaryOperation $0 t0 t1 fcd6be84f18cba56f84bc882990dd1d598df8f0e87b25a3d152e7cf9ce7b372c (∧ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2, invertingOperationBinaryOperation $0 t0 t1) () 2.3.0
   }
-  prove ↔ ∧ ∧ function $0 functionFrom $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 invertingOperationBinaryOperation $0 t0 t1 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∧ ∧ function $0 functionFrom $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2, ∧ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2, invertingOperationBinaryOperation $0 t0 t1) () 2.2 2.3
+  prove ↔ ∧ function $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2 invertingOperationBinaryOperation $0 t0 t1 cec21669ef0e834789f9682d49e3ffb23e4cd84e0617d289ae684bc1f1a8092c (∧ function $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2, ∧ ∧ unaryOperation $0 unaryOperationOn $0 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2, invertingOperationBinaryOperation $0 t0 t1) () 2.2 2.3
 }
-prove ∃! f invertingOperationBinaryOperation $0 t0 t1 45888b214c786b95cbdc045febde3b5f80f88a7352acc53e819310ef8adc15e7 (∧ ∧ function $0 functionFrom $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2, invertingOperationBinaryOperation $0 t0 t1) () 1 2
+prove ∃! f invertingOperationBinaryOperation $0 t0 t1 45888b214c786b95cbdc045febde3b5f80f88a7352acc53e819310ef8adc15e7 (∧ function $0 t1 t1 ∀ a → ∈ $0 t1 ∧ = apply t0 orderedPair $0 apply $$0 $0 t2 = apply t0 orderedPair apply $$0 $0 $0 t2, invertingOperationBinaryOperation $0 t0 t1) () 1 2

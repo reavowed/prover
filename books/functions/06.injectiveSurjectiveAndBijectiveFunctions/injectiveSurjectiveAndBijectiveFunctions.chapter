@@ -1,39 +1,37 @@
 Define injectivity, surjectivity and bijectivity for functions.
 
 property injective on function
-  definition (∀ x → ∈ $0 domain t0 ∀ y → ∈ $0 domain t0 → = apply t0 $$0 apply t0 $0 = $$0 $0)
+  definition (∀ x → ∈ $0 t1 ∀ y → ∈ $0 t1 → = apply t0 $$0 apply t0 $0 = $$0 $0)
 
 property surjective on function
-  parentQualifier from
   definition (∀ b → ∈ $0 t2 ∃ a ∧ ∈ $0 t1 = $$0 apply t0 $0)
 
 property bijective on function
-  parentQualifier from
-  definition (∧ injectiveFunction t0 surjectiveFunction t0 t1 t2)
+  definition (∧ injectiveFunction t0 t1 t2 surjectiveFunction t0 t1 t2)
 
 theorem Injective Function Value Is Unique
 termVariables(f 0, A 0, B 0, a_1 0, a_2 0)
-premise ∧ ∧ function t0 functionFrom t0 t1 t2 injectiveFunction t0
+premise ∧ function t0 t1 t2 injectiveFunction t0 t1 t2
 premise ∈ t3 t1
 premise ∈ t4 t1
 conclusion ↔ = apply t0 t3 apply t0 t4 = t3 t4
 
 theorem A Function Is Surjective on Its Codomain
 termVariables(f 0, A 0, B 0, C 0)
-premise ∧ function t0 functionFrom t0 t1 t2
+premise function t0 t1 t2
 premise = t3 codomain t0
-conclusion ∧ ∧ function t0 functionFrom t0 t1 t3 surjectiveFunction t0 t1 t3
+conclusion ∧ function t0 t1 t3 surjectiveFunction t0 t1 t3
 
 theorem Codomain Condition for Surjective Function
 termVariables(f 0, A 0, B 0)
-premise ∧ function t0 functionFrom t0 t1 t2
+premise function t0 t1 t2
 conclusion ↔ surjectiveFunction t0 t1 t2 = t2 codomain t0
 
 theorem Injective Function Is Bijective with Its Codomain
 termVariables(f 0, A 0, B 0, C 0)
-premise ∧ ∧ function t0 functionFrom t0 t1 t2 injectiveFunction t0
+premise ∧ function t0 t1 t2 injectiveFunction t0 t1 t2
 premise = t3 codomain t0
-conclusion ∧ ∧ function t0 functionFrom t0 t1 t3 bijectiveFunction t0 t1 t3
+conclusion ∧ function t0 t1 t3 bijectiveFunction t0 t1 t3
 
 comment Inverses for bijective functions.
 
@@ -44,42 +42,42 @@ term inverseFunction (f)
 
 theorem Element of Inverse Function
 termVariables(f 0, A 0, B 0)
-premise ∧ function t0 functionFrom t0 t1 t2
+premise function t0 t1 t2
 conclusion ∀ a ∀ b ↔ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 inverseFunction t0
 
 theorem Inverse of Injective Function
 termVariables(f 0, A 0, B 0, C 0)
-premise ∧ ∧ function t0 functionFrom t0 t1 t2 injectiveFunction t0
+premise ∧ function t0 t1 t2 injectiveFunction t0 t1 t2
 premise = t3 codomain t0
-conclusion ∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 t3 t1 bijectiveFunction inverseFunction t0 t3 t1 ∧ = compose inverseFunction t0 t0 identityFunction t1 = compose t0 inverseFunction t0 identityFunction t3
+conclusion ∧ ∧ function inverseFunction t0 t3 t1 bijectiveFunction inverseFunction t0 t3 t1 ∧ = compose inverseFunction t0 t0 identityFunction t1 = compose t0 inverseFunction t0 identityFunction t3
 
 theorem Inverse of Bijective Function
 termVariables(f 0, A 0, B 0)
-premise ∧ ∧ function t0 functionFrom t0 t1 t2 bijectiveFunction t0 t1 t2
-conclusion ∧ ∧ ∧ function inverseFunction t0 functionFrom inverseFunction t0 t2 t1 bijectiveFunction inverseFunction t0 t2 t1 ∧ = compose inverseFunction t0 t0 identityFunction t1 = compose t0 inverseFunction t0 identityFunction t2
+premise ∧ function t0 t1 t2 bijectiveFunction t0 t1 t2
+conclusion ∧ ∧ function inverseFunction t0 t2 t1 bijectiveFunction inverseFunction t0 t2 t1 ∧ = compose inverseFunction t0 t0 identityFunction t1 = compose t0 inverseFunction t0 identityFunction t2
 
 theorem Inverse Function Is Left-Cancellable
 termVariables(f 0, A 0, B 0, a 0)
-premise ∧ ∧ function t0 functionFrom t0 t1 t2 injectiveFunction t0
+premise ∧ function t0 t1 t2 injectiveFunction t0 t1 t2
 premise ∈ t3 t1
 conclusion = apply inverseFunction t0 apply t0 t3 t3
 
 theorem Inverse Function Is Right-Cancellable
 termVariables(f 0, A 0, B 0, B' 0, b 0)
-premise ∧ ∧ function t0 functionFrom t0 t1 t2 injectiveFunction t0
+premise ∧ function t0 t1 t2 injectiveFunction t0 t1 t2
 premise = t3 codomain t0
 premise ∈ t4 t3
 conclusion = apply t0 apply inverseFunction t0 t4 t4
 
 theorem Inverse Function on Set Is Left-Cancellable
 termVariables(f 0, A 0, B 0, X 0)
-premise ∧ ∧ function t0 functionFrom t0 t1 t2 injectiveFunction t0
+premise ∧ function t0 t1 t2 injectiveFunction t0 t1 t2
 premise ⊆ t3 t1
 conclusion = applySet inverseFunction t0 applySet t0 t3 t3
 
 theorem Inverse Function on Set Is Right-Cancellable
 termVariables(f 0, A 0, B 0, B' 0, Y 0)
-premise ∧ ∧ function t0 functionFrom t0 t1 t2 injectiveFunction t0
+premise ∧ function t0 t1 t2 injectiveFunction t0 t1 t2
 premise = t3 codomain t0
 premise ⊆ t4 t3
 conclusion = applySet t0 applySet inverseFunction t0 t4 t4

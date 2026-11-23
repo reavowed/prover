@@ -4,4 +4,4 @@ wrappedInferenceApplication {
     prove → ∈ $0 t0 ∈ $0 t0 63500f6a7c1a7b85ce93afa136207b6b60d4951f9d03ce5b51b05532f3d5517b (∈ $0 t0) ()
   }
 }
-prove ∧ function identityFunction t0 functionFrom identityFunction t0 t0 t0 49727ac5186e6b8f7eb3d0851aac61a302ea69932f3ee7bfdf036e6054f6a9fc () (identityFunction t0, t0, $0, t0) 0 1
+prove function identityFunction t0 t0 t0 40a4783797910bfdf1397ac6be47e6f6d00ffb2166a5c4f3c5153ad6c6a88dc4 () (identityFunction t0, t0, $0, t0) 0 1

@@ -1,4 +1,4 @@
-let g_f = $0 comprehension x product product t1 t2 t3 = second $0 apply apply t0 first first $0 second first $0 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∃! g ∧ ∧ function $0 functionFrom $0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0) (comprehension x product product t1 t2 t3 = second $0 apply apply t0 first first $0 second first $0) {
+let g_f = $0 comprehension x product product t1 t2 t3 = second $0 apply apply t0 first first $0 second first $0 70db594f573e921867af9e9ef002f3a90d2342cb14c114a76825a573e18d9d2d (∃! g ∧ function $0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0) (comprehension x product product t1 t2 t3 = second $0 apply apply t0 first first $0 second first $0) {
   subproof (Function) {
     prove ⊆ $0 product product t1 t2 t3 a80a890bab96f7eb21ca7668b9d322f51718750d9bfc2c0e86b271897879763b (= second $$0 apply apply t0 first first $$0 second first $$0) ($0, product product t1 t2 t3) 0a
     take x {
@@ -10,13 +10,13 @@ let g_f = $0 comprehension x product product t1 t2 t3 = second $0 apply apply t0
               prove ∈ first $0 t1 cd1f94ee8299863888c98a47378b6376d91a7331bb0aebf63c936c461daa6476 () ($0, t1, t2) 0.0.1.0a
             }
           }
-          prove ∈ apply t0 first $0 functionSpace t2 t3 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (t0, t1, functionSpace t2 t3, first $0) p0 0.0.1.0.0.0
+          prove ∈ apply t0 first $0 functionSpace t2 t3 a0270736167df59c0ddede14afd7d77da58b5a4ba82f0256b27ace701f423df2 () (t0, t1, functionSpace t2 t3, first $0) p0 0.0.1.0.0.0
         }
         inferenceExtraction {
-          prove ∀ f ↔ ∈ $0 functionSpace t2 t3 ∧ function $0 functionFrom $0 t2 t3 39a4a0b58fd0350180fbaa5054a7ac890a57bb416bf5f07a71553e8d94706219 () (t2, t3)
-          prove ↔ ∈ apply t0 first $0 functionSpace t2 t3 ∧ function apply t0 first $0 functionFrom apply t0 first $0 t2 t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 functionSpace t2 t3 ∧ function $$$0 functionFrom $$$0 t2 t3) (apply t0 first $0) 0.0.1.0.1.0
-          prove → ∈ apply t0 first $0 functionSpace t2 t3 ∧ function apply t0 first $0 functionFrom apply t0 first $0 t2 t3 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ apply t0 first $0 functionSpace t2 t3, ∧ function apply t0 first $0 functionFrom apply t0 first $0 t2 t3) () 0.0.1.0.1.1
-          prove ∧ function apply t0 first $0 functionFrom apply t0 first $0 t2 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply t0 first $0 functionSpace t2 t3, ∧ function apply t0 first $0 functionFrom apply t0 first $0 t2 t3) () 0.0.1.0.1.2 0.0.1.0.0
+          prove ∀ f ↔ ∈ $0 functionSpace t2 t3 function $0 t2 t3 e745977f896521cc12cf58a8ab62d9da9cea9c5807a9c4be7da017978561a957 () (t2, t3)
+          prove ↔ ∈ apply t0 first $0 functionSpace t2 t3 function apply t0 first $0 t2 t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$$0 functionSpace t2 t3 function $$$0 t2 t3) (apply t0 first $0) 0.0.1.0.1.0
+          prove → ∈ apply t0 first $0 functionSpace t2 t3 function apply t0 first $0 t2 t3 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ apply t0 first $0 functionSpace t2 t3, function apply t0 first $0 t2 t3) () 0.0.1.0.1.1
+          prove function apply t0 first $0 t2 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply t0 first $0 functionSpace t2 t3, function apply t0 first $0 t2 t3) () 0.0.1.0.1.2 0.0.1.0.0
         }
         inferenceWithPremiseDerivations {
           simplified {
@@ -25,7 +25,7 @@ let g_f = $0 comprehension x product product t1 t2 t3 = second $0 apply apply t0
               prove ∈ second $0 t2 52b5948faaee67e7ad5b998748a31f01a29ac11757ac4194b9160a0fae8ae224 () ($0, t1, t2) 0.0.1.0a
             }
           }
-          prove ∈ apply apply t0 first $0 second $0 t3 5565cf3b6aaa18ace381f021cc46cc1327bf2c32e1dbcb5e70e2725f02d78e43 () (apply t0 first $0, t2, t3, second $0) 0.0.1.0.1 0.0.1.0.2.0
+          prove ∈ apply apply t0 first $0 second $0 t3 a0270736167df59c0ddede14afd7d77da58b5a4ba82f0256b27ace701f423df2 () (apply t0 first $0, t2, t3, second $0) 0.0.1.0.1 0.0.1.0.2.0
         }
         prove ∈ orderedPair $0 apply apply t0 first $0 second $0 product product t1 t2 t3 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($0, product t1 t2, apply apply t0 first $0 second $0, t3) 0.0.1.0a 0.0.1.0.2
         prove = second orderedPair $0 apply apply t0 first $0 second $0 apply apply t0 first $0 second $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () ($0, apply apply t0 first $0 second $0)
@@ -73,13 +73,13 @@ let g_f = $0 comprehension x product product t1 t2 t3 = second $0 apply apply t0
         prove ∃! y ∈ orderedPair $$0 $0 $$$0 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∈ orderedPair $0 $$$0 $$0) (apply apply t0 first $0 second $0) 0.0.1.0.7 0.0.1.0.8
       }
     }
-    elided a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 {
-      prove ∧ ⊆ $0 product product t1 t2 t3 ∀ x → ∈ $0 product t1 t2 ∃! b ∈ orderedPair $$0 $0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ $0 product product t1 t2 t3, ∀ x → ∈ $0 product t1 t2 ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.0 0.0.1
-      inferenceExtraction {
-        prove ↔ ∧ function $0 functionFrom $0 product t1 t2 t3 ∧ ⊆ $0 product product t1 t2 t3 ∀ x → ∈ $0 product t1 t2 ∃! b ∈ orderedPair $$0 $0 $$$0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () ($0, product t1 t2, t3)
-        prove → ∧ ⊆ $0 product product t1 t2 t3 ∀ x → ∈ $0 product t1 t2 ∃! b ∈ orderedPair $$0 $0 $$$0 ∧ function $0 functionFrom $0 product t1 t2 t3 282eb8b17a1260b27adcabbcf0e8b894697750b7d7f4fb3aacf467cf90ad46d6 (∧ function $0 functionFrom $0 product t1 t2 t3, ∧ ⊆ $0 product product t1 t2 t3 ∀ x → ∈ $0 product t1 t2 ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.2.1.0
-        prove ∧ function $0 functionFrom $0 product t1 t2 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ ⊆ $0 product product t1 t2 t3 ∀ x → ∈ $0 product t1 t2 ∃! b ∈ orderedPair $$0 $0 $$$0, ∧ function $0 functionFrom $0 product t1 t2 t3) () 0.0.2.1.1 0.0.2.0
+    inferenceWithPremiseDerivations {
+      combined {
+        known ⊆ $0 product product t1 t2 t3
+        known ∀ x → ∈ $0 product t1 t2 ∃! y ∈ orderedPair $$0 $0 $$$0
+        prove ∧ ⊆ $0 product product t1 t2 t3 ∀ x → ∈ $0 product t1 t2 ∃! b ∈ orderedPair $$0 $0 $$$0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (⊆ $0 product product t1 t2 t3, ∀ x → ∈ $0 product t1 t2 ∃! b ∈ orderedPair $$0 $0 $$$0) () 0.0.0 0.0.1
       }
+      prove function $0 product t1 t2 t3 488dde65906f5741c93d4f558d6f81841e4b75363854a2c0c99b0b848e898f54 () ($0, product t1 t2, t3) 0.0.2.0
     }
   }
   subproof (Function has same values) {
@@ -93,7 +93,7 @@ let g_f = $0 comprehension x product product t1 t2 t3 = second $0 apply apply t0
                 known ∈ $0 t2
                 prove ∈ orderedPair $$0 $0 product t1 t2 3983cfbab853e4ac07fdadf0b3ef348485c84f8649c119dd45bbaa849af44c7b () ($$0, t1, $0, t2) 0.1.0.0a 0.1.0.0.0.0a
               }
-              prove ∈ orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 $$$0 5c9b61f2b64b3a70c59e4c410535c1c12e54cf47be5e53d570e52c0839232a9f () ($$$0, product t1 t2, t3, orderedPair $$0 $0) 0.0 0.1.0.0.0.0.0.0
+              prove ∈ orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 $$$0 b4974b40d31b2dfe5e838ebf2e47d5dae20227eccbb468436dad830684212a42 () ($$$0, product t1 t2, t3, orderedPair $$0 $0) 0.0 0.1.0.0.0.0.0.0
             }
             inferenceExtraction {
               prove = second orderedPair orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 apply $$$0 orderedPair $$0 $0 d7ee9726164430b41d58fa6fd8ab7c809ef7b0bddcf98825ee3f893bd514172b () (orderedPair $$0 $0, apply $$$0 orderedPair $$0 $0)
@@ -141,7 +141,7 @@ let g_f = $0 comprehension x product product t1 t2 t3 = second $0 apply apply t0
   }
   subproof (Uniqueness) {
     take g {
-      assume ∧ ∧ function $0 functionFrom $0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0 {
+      assume ∧ function $0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0 {
         take a {
           assume ∈ $0 t1 {
             take b {
@@ -164,16 +164,16 @@ let g_f = $0 comprehension x product product t1 t2 t3 = second $0 apply apply t0
             }
           }
         }
-        prove = $0 $$0 4f11575281fef7853c7f4ec1999ff06fdddd02aed0896213a56edde196addbd9 () ($0, t1, t2, t3, $$0) 0.2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0 0.2.0.0.0
+        prove = $0 $$0 13c3e2a9c8237c6dba8d3633cfb4128a26d0fc0ead6d01593c8e74a322164033 () ($0, t1, t2, t3, $$0) 0.2.0.0a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.0 0.2.0.0.0
       }
     }
   }
   inferenceWithPremiseDerivations {
     combined {
-      known ∧ function $0 functionFrom $0 product t1 t2 t3
+      known function $0 product t1 t2 t3
       known ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0
-      prove ∧ ∧ function $0 functionFrom $0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∧ function $0 functionFrom $0 product t1 t2 t3, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0) () 0.0 0.1
+      prove ∧ function $0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (function $0 product t1 t2 t3, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0) () 0.0 0.1
     }
-    prove ∃! g ∧ ∧ function $0 functionFrom $0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ ∧ function $$0 functionFrom $$0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$$0 orderedPair $$0 $0 apply apply t0 $$0 $0) ($0) 0.3.0 0.2
+    prove ∃! g ∧ function $0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$0 orderedPair $$0 $0 apply apply t0 $$0 $0 f82d7ae8f8f16fba9bb02201901712f7868f112d1ae3a8c72815fa0921d99fd1 (∧ function $$0 product t1 t2 t3 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 = apply $$$$0 orderedPair $$0 $0 apply apply t0 $$0 $0) ($0) 0.3.0 0.2
   }
 }

@@ -298,10 +298,10 @@ elided c77bb73bca1f02d6d38280eab9fda22237ae20b85ed00393014b5566bfb5948b {
     }
   }
 }
-prove ∃! g ∧ ∧ function $0 functionFrom $0 product equivalenceQuotient product t1 t2 t0 equivalenceQuotient product t4 t5 t3 t7 ∀ x → ∈ $0 product t1 t2 ∀ y → ∈ $0 product t4 t5 = apply $$$0 orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t3 apply t6 orderedPair $$0 $0 085789cbc21b85abb1c0200d8456801da06fc1c3238fbff461d0cd053fb707b6 () (t0, product t1 t2, t3, product t4 t5, t6, t7) p0 p1 p2 0
+prove ∃! g ∧ function $0 product equivalenceQuotient product t1 t2 t0 equivalenceQuotient product t4 t5 t3 t7 ∀ x → ∈ $0 product t1 t2 ∀ y → ∈ $0 product t4 t5 = apply $$$0 orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t3 apply t6 orderedPair $$0 $0 da46ae9b8c697b99e3d4f5c4c7b7447a0d55d878457b049cd4025aa5bb02664d () (t0, product t1 t2, t3, product t4 t5, t6, t7) p0 p1 p2 0
 subproof (Conditions are equivalent) {
   take g {
-    assume ∧ function $0 functionFrom $0 product equivalenceQuotient product t1 t2 t0 equivalenceQuotient product t4 t5 t3 t7 {
+    assume function $0 product equivalenceQuotient product t1 t2 t0 equivalenceQuotient product t4 t5 t3 t7 {
       elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
         elided 0d9874e10c8a554e3e3e9d5aaaae5098d3b9491326f1456c84d92adee078e327 {
           take x {
@@ -404,4 +404,4 @@ subproof (Conditions are equivalent) {
     }
   }
 }
-prove ∃! g ∧ ∧ function $0 functionFrom $0 product equivalenceQuotient product t1 t2 t0 equivalenceQuotient product t4 t5 t3 t7 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t4 ∀ d → ∈ $0 t5 = apply $$$$$0 orderedPair equivalenceClass orderedPair $$$$0 $$$0 t0 equivalenceClass orderedPair $$0 $0 t3 apply t6 orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 fa494b94116d4ec710d4ceb82c71d51b73634a10ba39f8dac40ed155bda028b6 (∧ function $0 functionFrom $0 product equivalenceQuotient product t1 t2 t0 equivalenceQuotient product t4 t5 t3 t7, ∀ x → ∈ $0 product t1 t2 ∀ y → ∈ $0 product t4 t5 = apply $$$0 orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t3 apply t6 orderedPair $$0 $0, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t4 ∀ d → ∈ $0 t5 = apply $$$$$0 orderedPair equivalenceClass orderedPair $$$$0 $$$0 t0 equivalenceClass orderedPair $$0 $0 t3 apply t6 orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) () 1 2
+prove ∃! g ∧ function $0 product equivalenceQuotient product t1 t2 t0 equivalenceQuotient product t4 t5 t3 t7 ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t4 ∀ d → ∈ $0 t5 = apply $$$$$0 orderedPair equivalenceClass orderedPair $$$$0 $$$0 t0 equivalenceClass orderedPair $$0 $0 t3 apply t6 orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0 fa494b94116d4ec710d4ceb82c71d51b73634a10ba39f8dac40ed155bda028b6 (function $0 product equivalenceQuotient product t1 t2 t0 equivalenceQuotient product t4 t5 t3 t7, ∀ x → ∈ $0 product t1 t2 ∀ y → ∈ $0 product t4 t5 = apply $$$0 orderedPair equivalenceClass $$0 t0 equivalenceClass $0 t3 apply t6 orderedPair $$0 $0, ∀ a → ∈ $0 t1 ∀ b → ∈ $0 t2 ∀ c → ∈ $0 t4 ∀ d → ∈ $0 t5 = apply $$$$$0 orderedPair equivalenceClass orderedPair $$$$0 $$$0 t0 equivalenceClass orderedPair $$0 $0 t3 apply t6 orderedPair orderedPair $$$$0 $$$0 orderedPair $$0 $0) () 1 2

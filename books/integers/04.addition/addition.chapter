@@ -17,7 +17,7 @@ theorem +_ℤ is a binary operation on ℤ
 conclusion ∧ binaryOperation +ℤ binaryOperationOn +ℤ ℤ
 
 theorem +_ℤ is a function
-conclusion ∧ function +ℤ functionFrom +ℤ product ℤ ℤ ℤ
+conclusion function +ℤ product ℤ ℤ ℤ
 
 theorem Addition Is Closed on the Integers
 termVariables(a 0, b 0)

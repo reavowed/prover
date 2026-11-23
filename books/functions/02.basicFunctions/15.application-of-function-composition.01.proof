@@ -1,4 +1,4 @@
-prove = t1 domain t0 98ec5c667b4987db6d28f68bd22becfba8c24b9d1e6bc24f2ac00808ce87cda0 () (t0, t1, t2) p0
+prove = t1 domain t0 01d968c220d4b772454f25041f43b5f85c5a565f69d415deaa04f34c7a16b567 () (t0, t1, t2) p0
 prove = compose t3 t0 functionMap a domain t0 apply t3 apply t0 $0 ece00383af090dc62ff992ffc66e68b761085eab964fd9ca5c2f5f0124c89ac7 () (t3, t0)
 rewrite {
   reversed {
