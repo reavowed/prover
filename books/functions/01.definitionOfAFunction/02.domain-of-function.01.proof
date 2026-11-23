@@ -1,0 +1,37 @@
+take x {
+  assume ∈ $0 t1 {
+    inferenceExtraction {
+      prove ↔ ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (t0, t1, t2)
+      prove → ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ function t0 functionFrom t0 t1 t2, ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.0.0.0
+      prove ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ function t0 functionFrom t0 t1 t2, ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.0.0.1 p0
+      prove → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 t1 ∃! b ∈ orderedPair $$$0 $0 t0) ($0) 0.0.0.2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ∃! b ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 t1, ∃! b ∈ orderedPair $$0 $0 t0) () 0.0.0.3 0.0a
+    }
+    let b ∈ orderedPair $$0 $0 t0 c01064f3c40cf0c57562a46738008cfc111791cbb62645d70fcc9a9ae81f4e3f (∈ orderedPair $0 $$0 t0, ∈ $0 domain t0) () 0.0.0 {
+      inferenceExtraction {
+        prove ∧ ∈ $$0 domain t0 ∈ $0 codomain t0 37bbbff81d87bde6bda256b59f8b683a15aa26274728988ac25f225bf80f174a () ($$0, $0, t0) 0.0.1a
+        prove ∈ $$0 domain t0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (∈ $$0 domain t0, ∈ $0 codomain t0) () 0.0.1.0.0
+      }
+    }
+  }
+  assume ∈ $0 domain t0 {
+    inferenceExtraction {
+      prove ∀ a ↔ ∈ $0 domain t0 ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 599dfc696517a7bb4212a58bf9846f4d911a39afcb1c77c4033044ada81fe184 () (t0)
+      prove ↔ ∈ $0 domain t0 ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (↔ ∈ $$0 domain t0 ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$$0 $0 t0) ($0) 0.1.0.0
+      prove → ∈ $0 domain t0 ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∈ $0 domain t0, ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0) () 0.1.0.1
+      prove ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ $0 domain t0, ∃ b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0) () 0.1.0.2 0.1a
+    }
+    let b ∧ ∈ $0 codomain t0 ∈ orderedPair $$0 $0 t0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ $$0 codomain t0 ∈ orderedPair $0 $$0 t0, ∈ $0 t1) () 0.1.0 {
+      inferenceExtraction {
+        prove ↔ ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 a1de867cf14296f25faf7ce1fcdcc0e761193208244075dd06f196941e29ea13 () (t0, t1, t2)
+        prove → ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 3dee2da91a324273fff20924f29a7df9b6388f1f48ae09e93b292e42b3546ae7 (∧ function t0 functionFrom t0 t1 t2, ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.1.1.0.0
+        prove ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∧ function t0 functionFrom t0 t1 t2, ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.1.1.0.1 p0
+        prove ⊆ t0 product t1 t2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (⊆ t0 product t1 t2, ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0) () 0.1.1.0.2
+      }
+      prove ∈ orderedPair $$0 $0 product t1 t2 f9d937ffa0b4c7068d922c2a548727a612996a02128f5f8fca658589c746a35b () (t0, product t1 t2, orderedPair $$0 $0) 0.1.1.0 0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
+      prove ∈ $$0 t1 d11bbd37c6fefa5e8dbe884b3da1ee0f83d418f4b8a63ce00ebf6c4d136af7b0 () ($$0, $0, t1, t2) 0.1.1.1
+    }
+  }
+  prove ↔ ∈ $0 t1 ∈ $0 domain t0 df9994032af3276a9a030eb7b809e059dd53a14d6de2e12273242729e90a2a91 (∈ $0 t1, ∈ $0 domain t0) () 0.0 0.1
+}
+prove = t1 domain t0 65dcb85d85a1b0c0107a9c47ec499c5d9828ccf4b6880d399f0b456d994b576b () (t1, domain t0) 0

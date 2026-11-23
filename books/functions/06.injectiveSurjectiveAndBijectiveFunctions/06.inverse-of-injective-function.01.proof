@@ -101,20 +101,7 @@ subproof (Left inverse) {
   prove ∧ function identityFunction t1 functionFrom identityFunction t1 t1 t1 37f9c10d2262f9702affece9d218edf9ed2014fdfd000076706be2880a10ae24 () (t1)
   take a {
     assume ∈ $0 t1 {
-      inferenceWithPremiseDerivations {
-        substituted {
-          known ∈ $0 t1
-          extracted {
-            known functionFrom t0 t1 t3
-            deconstruction {
-              prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t3 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t3) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove = t1 domain t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain t0, t1) 3.2.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-            }
-          }
-          prove ∈ $0 domain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (t1, domain t0) 3.2.0.0.0 3.2.0a
-        }
-        prove ∈ orderedPair $0 apply t0 $0 t0 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb () (t0, $0) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 3.2.0.0.1
-      }
+      target ∈ orderedPair $0 apply t0 $0 t0
       inferenceExtraction {
         prove ∀ a ∀ b ↔ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 inverseFunction t0 ee133c91b74deccc89d316af66dd217cbe9936a61c6e4a193c1a032fa66130f3 () (t0, t1, t3) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         prove ∀ b ↔ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 inverseFunction t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ b ↔ ∈ orderedPair $$$0 $0 t0 ∈ orderedPair $0 $$$0 inverseFunction t0) ($0) 3.2.0.1.0
@@ -144,20 +131,7 @@ subproof (Right inverse) {
   prove ∧ function identityFunction t3 functionFrom identityFunction t3 t3 t3 37f9c10d2262f9702affece9d218edf9ed2014fdfd000076706be2880a10ae24 () (t3)
   take a {
     assume ∈ $0 t3 {
-      inferenceWithPremiseDerivations {
-        substituted {
-          known ∈ $0 t3
-          extracted {
-            known functionFrom inverseFunction t0 t3 t1
-            deconstruction {
-              prove ∧ function inverseFunction t0 ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (inverseFunction t0, t3, t1) 2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove = t3 domain inverseFunction t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain inverseFunction t0, t3) 4.2.0.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-            }
-          }
-          prove ∈ $0 domain inverseFunction t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (t3, domain inverseFunction t0) 4.2.0.0.0 4.2.0a
-        }
-        prove ∈ orderedPair $0 apply inverseFunction t0 $0 inverseFunction t0 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb () (inverseFunction t0, $0) 2 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 4.2.0.0.1
-      }
+      target ∈ orderedPair $0 apply inverseFunction t0 $0 inverseFunction t0
       inferenceExtraction {
         prove ∀ a ∀ b ↔ ∈ orderedPair $$0 $0 t0 ∈ orderedPair $0 $$0 inverseFunction t0 ee133c91b74deccc89d316af66dd217cbe9936a61c6e4a193c1a032fa66130f3 () (t0, t1, t3) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
         prove ∀ b ↔ ∈ orderedPair apply inverseFunction t0 $$0 $0 t0 ∈ orderedPair $0 apply inverseFunction t0 $$0 inverseFunction t0 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (∀ b ↔ ∈ orderedPair $$$0 $0 t0 ∈ orderedPair $0 $$$0 inverseFunction t0) (apply inverseFunction t0 $0) 4.2.0.1.0
@@ -189,24 +163,7 @@ subproof (Bijective) {
         take y {
           assume ∈ $0 domain inverseFunction t0 {
             assume = apply inverseFunction t0 $$0 apply inverseFunction t0 $0 {
-              inferenceWithPremiseDerivations {
-                substituted {
-                  known ∈ $$0 domain inverseFunction t0
-                  extracted {
-                    known functionFrom inverseFunction t0 t3 t1
-                    deconstruction {
-                      prove ∧ function inverseFunction t0 ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (inverseFunction t0, t3, t1) 2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                      prove ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function inverseFunction t0, ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1) () 5.0.0.0.0.0.0.0.0.0
-                      prove = domain inverseFunction t0 t3 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain inverseFunction t0 t3, ⊆ codomain inverseFunction t0 t1) () 5.0.0.0.0.0.0.0.0.1
-                    }
-                  }
-                  prove ∈ $$0 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$0 $$$0) (domain inverseFunction t0, t3) 5.0.0.0.0.0.0.0.0 5.0.0.0a
-                }
-                inferenceExtraction {
-                  prove = apply identityFunction t3 $$0 $$0 12943fec453bd8b1d073280cbf411da07a378b1979e8355c5a48fe3c2fe11fd8 () ($$0, t3) 5.0.0.0.0.0.0.0.1
-                  prove = $$0 apply identityFunction t3 $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply identityFunction t3 $$0, $$0) 5.0.0.0.0.0.0.0.2.0
-                }
-              }
+              target = $$0 apply identityFunction t3 $$0
               rewrite {
                 reversed {
                   known = compose t0 inverseFunction t0 identityFunction t3
@@ -215,60 +172,15 @@ subproof (Bijective) {
                 prove = apply identityFunction t3 $$0 apply compose t0 inverseFunction t0 $$0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (identityFunction t3, compose t0 inverseFunction t0, apply $$$0 $$0) 5.0.0.0.0.0.0.1.0
               }
               prove = $$0 apply compose t0 inverseFunction t0 $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$0, apply identityFunction t3 $$0, apply compose t0 inverseFunction t0 $$0) 5.0.0.0.0.0.0.0 5.0.0.0.0.0.0.1
-              inferenceWithPremiseDerivations {
-                substituted {
-                  known ∈ $$0 domain inverseFunction t0
-                  extracted {
-                    known functionFrom inverseFunction t0 t3 t1
-                    deconstruction {
-                      prove ∧ function inverseFunction t0 ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (inverseFunction t0, t3, t1) 2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                      prove ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function inverseFunction t0, ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1) () 5.0.0.0.0.0.0.3.0.0
-                      prove = domain inverseFunction t0 t3 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain inverseFunction t0 t3, ⊆ codomain inverseFunction t0 t1) () 5.0.0.0.0.0.0.3.0.1
-                    }
-                  }
-                  prove ∈ $$0 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$0 $$$0) (domain inverseFunction t0, t3) 5.0.0.0.0.0.0.3.0 5.0.0.0a
-                }
-                prove = apply compose t0 inverseFunction t0 $$0 apply t0 apply inverseFunction t0 $$0 dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc () (inverseFunction t0, t3, t1, t0, t3, $$0) 2 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 5.0.0.0.0.0.0.3.1
-              }
+              target = apply compose t0 inverseFunction t0 $$0 apply t0 apply inverseFunction t0 $$0
               prove = $$0 apply t0 apply inverseFunction t0 $$0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$0, apply compose t0 inverseFunction t0 $$0, apply t0 apply inverseFunction t0 $$0) 5.0.0.0.0.0.0.2 5.0.0.0.0.0.0.3
               prove = apply t0 apply inverseFunction t0 $$0 apply t0 apply inverseFunction t0 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (apply inverseFunction t0 $$0, apply inverseFunction t0 $0, apply t0 $$$0) 5.0.0.0.0.0.0a
               prove = $$0 apply t0 apply inverseFunction t0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$0, apply t0 apply inverseFunction t0 $$0, apply t0 apply inverseFunction t0 $0) 5.0.0.0.0.0.0.4 5.0.0.0.0.0.0.5
-              inferenceWithPremiseDerivations {
-                substituted {
-                  known ∈ $0 domain inverseFunction t0
-                  extracted {
-                    known functionFrom inverseFunction t0 t3 t1
-                    deconstruction {
-                      prove ∧ function inverseFunction t0 ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (inverseFunction t0, t3, t1) 2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                      prove ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function inverseFunction t0, ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1) () 5.0.0.0.0.0.0.7.0.0
-                      prove = domain inverseFunction t0 t3 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain inverseFunction t0 t3, ⊆ codomain inverseFunction t0 t1) () 5.0.0.0.0.0.0.7.0.1
-                    }
-                  }
-                  prove ∈ $0 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$$0) (domain inverseFunction t0, t3) 5.0.0.0.0.0.0.7.0 5.0.0.0.0.0a
-                }
-                inferenceExtraction {
-                  prove = apply compose t0 inverseFunction t0 $0 apply t0 apply inverseFunction t0 $0 dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc () (inverseFunction t0, t3, t1, t0, t3, $0) 2 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 5.0.0.0.0.0.0.7.1
-                  prove = apply t0 apply inverseFunction t0 $0 apply compose t0 inverseFunction t0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (apply compose t0 inverseFunction t0 $0, apply t0 apply inverseFunction t0 $0) 5.0.0.0.0.0.0.7.2.0
-                }
-              }
+              target = apply t0 apply inverseFunction t0 $0 apply compose t0 inverseFunction t0 $0
               prove = $$0 apply compose t0 inverseFunction t0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$0, apply t0 apply inverseFunction t0 $0, apply compose t0 inverseFunction t0 $0) 5.0.0.0.0.0.0.6 5.0.0.0.0.0.0.7
               prove = apply compose t0 inverseFunction t0 $0 apply identityFunction t3 $0 b3cf65da10b2d31bf0e17308e57437ad84e56e1c8aa7bf0e452b4577173e2f54 () (compose t0 inverseFunction t0, identityFunction t3, apply $$$0 $0) 4
               prove = $$0 apply identityFunction t3 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$0, apply compose t0 inverseFunction t0 $0, apply identityFunction t3 $0) 5.0.0.0.0.0.0.8 5.0.0.0.0.0.0.9
-              inferenceWithPremiseDerivations {
-                substituted {
-                  known ∈ $0 domain inverseFunction t0
-                  extracted {
-                    known functionFrom inverseFunction t0 t3 t1
-                    deconstruction {
-                      prove ∧ function inverseFunction t0 ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (inverseFunction t0, t3, t1) 2 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                      prove ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function inverseFunction t0, ∧ = domain inverseFunction t0 t3 ⊆ codomain inverseFunction t0 t1) () 5.0.0.0.0.0.0.11.0.0
-                      prove = domain inverseFunction t0 t3 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain inverseFunction t0 t3, ⊆ codomain inverseFunction t0 t1) () 5.0.0.0.0.0.0.11.0.1
-                    }
-                  }
-                  prove ∈ $0 t3 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$$0) (domain inverseFunction t0, t3) 5.0.0.0.0.0.0.11.0 5.0.0.0.0.0a
-                }
-                prove = apply identityFunction t3 $0 $0 12943fec453bd8b1d073280cbf411da07a378b1979e8355c5a48fe3c2fe11fd8 () ($0, t3) 5.0.0.0.0.0.0.11.1
-              }
+              target = apply identityFunction t3 $0 $0
               prove = $$0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($$0, apply identityFunction t3 $0, $0) 5.0.0.0.0.0.0.10 5.0.0.0.0.0.0.11
             }
           }
@@ -301,45 +213,7 @@ subproof (Bijective) {
         prove = $0 apply compose inverseFunction t0 t0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($0, apply identityFunction t1 $0, apply compose inverseFunction t0 t0 $0) 5.1.0.0.0 5.1.0.0.1
         prove = apply compose inverseFunction t0 t0 $0 apply inverseFunction t0 apply t0 $0 dbd05f1fa17cd4c72d1f6b771276ad4abf55b53590767f522d373e8180b61afc () (t0, t1, t3, inverseFunction t0, t1, $0) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 2 5.1.0.0a
         prove = $0 apply inverseFunction t0 apply t0 $0 4d294cd8ce2d316264853ed793d2a0aea267db95a20130ad5f0f7c0540ae5e83 () ($0, apply compose inverseFunction t0 t0 $0, apply inverseFunction t0 apply t0 $0) 5.1.0.0.2 5.1.0.0.3
-        inferenceWithPremiseDerivations {
-          combined {
-            relationRewritten {
-              composed {
-                known function t0
-                substituted {
-                  known ∈ $0 t1
-                  extracted {
-                    known functionFrom t0 t1 t3
-                    deconstruction {
-                      prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t3 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t3) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                      prove = t1 domain t0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain t0, t1) 5.1.0.0.5.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                    }
-                  }
-                  prove ∈ $0 domain t0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $0 $$0) (t1, domain t0) 5.1.0.0.5.0 5.1.0.0a
-                }
-                inferenceExtraction {
-                  prove ∈ apply t0 $0 codomain t0 efc99ff765a81eb7b927af90cd2691becadb0bf21892d67709f64f02d0c5ff95 () (t0, $0) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 5.1.0.0.5.1
-                }
-              }
-              extracted {
-                known functionFrom t0 t1 t3
-                deconstruction {
-                  prove ∧ function t0 ∧ = domain t0 t1 ⊆ codomain t0 t3 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (t0, t1, t3) 0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                  prove ∧ = domain t0 t1 ⊆ codomain t0 t3 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function t0, ∧ = domain t0 t1 ⊆ codomain t0 t3) () 5.1.0.0.5.3.0
-                  prove ⊆ codomain t0 t3 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (= domain t0 t1, ⊆ codomain t0 t3) () 5.1.0.0.5.3.1
-                }
-              }
-              inferenceExtraction {
-                prove ∀ x → ∈ $0 codomain t0 ∈ $0 t3 59a7a75a2feae42c0d95e4e9d96bef2181b841b7cb7cf9f053067278ac132833 () (codomain t0, t3) 5.1.0.0.5.3
-                prove → ∈ apply t0 $0 codomain t0 ∈ apply t0 $0 t3 b501ae82c9cd785ac59610aad18f8065a5643b29c10ad4d5821c383cbf7cd34f (→ ∈ $$0 codomain t0 ∈ $$0 t3) (apply t0 $0) 5.1.0.0.5.4.0
-                prove ∈ apply t0 $0 t3 00f52187d02fb3be4132cd306e1d837f6d5c90acd4e3ff73fc02416356b758b4 (∈ apply t0 $0 codomain t0, ∈ apply t0 $0 t3) () 5.1.0.0.5.4.1 5.1.0.0.5.2
-              }
-            }
-            known = $0 apply inverseFunction t0 apply t0 $0
-            prove ∧ ∈ apply t0 $0 t3 = $0 apply inverseFunction t0 apply t0 $0 301900ba992fe47a3f300cf9f14f0fd6a948ca32c488285b6f4cf2d02efc3a61 (∈ apply t0 $0 t3, = $0 apply inverseFunction t0 apply t0 $0) () 5.1.0.0.5.4 5.1.0.0.4
-          }
-          prove ∃ a ∧ ∈ $0 t3 = $$0 apply inverseFunction t0 $0 0de244e67f8bd3b7ed1f30bff6577fb62d16c4e035fb38e91455fabc625f43f2 (∧ ∈ $$0 t3 = $0 apply inverseFunction t0 $$0) (apply t0 $0) 5.1.0.0.5.5
-        }
+        target ∃ a ∧ ∈ $0 t3 = $$0 apply inverseFunction t0 $0
       }
     }
     inferenceWithPremiseDerivations {

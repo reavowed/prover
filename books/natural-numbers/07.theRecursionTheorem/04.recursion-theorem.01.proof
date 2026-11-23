@@ -116,9 +116,8 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
             }
             elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
               inferenceExtraction {
-                prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () ($$0, $0, t1) 0.3.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                prove ∧ = domain $$0 $0 ⊆ codomain $$0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function $$0, ∧ = domain $$0 $0 ⊆ codomain $$0 t1) () 0.3.0.0.1.1.1.0.0
-                prove = domain $$0 $0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain $$0 $0, ⊆ codomain $$0 t1) () 0.3.0.0.1.1.1.0.1
+                prove = $0 domain $$0 98ec5c667b4987db6d28f68bd22becfba8c24b9d1e6bc24f2ac00808ce87cda0 () ($$0, $0, t1) 0.3.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                prove = domain $$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, domain $$0) 0.3.0.0.1.1.1.0.0
               }
               prove ∈ 0ℕ $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ 0ℕ $$$$$0) (domain $$0, $0) 0.3.0.0.1.1.1.0 0.3.0.0.1.1.0
             }
@@ -174,9 +173,8 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                     }
                     elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
                       inferenceExtraction {
-                        prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () ($$0, $0, t1) 0.5.0.0.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                        prove ∧ = domain $$0 $0 ⊆ codomain $$0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function $$0, ∧ = domain $$0 $0 ⊆ codomain $$0 t1) () 0.5.0.0.0.0.1.1.0.0.1.0.0
-                        prove = domain $$0 $0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain $$0 $0, ⊆ codomain $$0 t1) () 0.5.0.0.0.0.1.1.0.0.1.0.1
+                        prove = $0 domain $$0 98ec5c667b4987db6d28f68bd22becfba8c24b9d1e6bc24f2ac00808ce87cda0 () ($$0, $0, t1) 0.5.0.0.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                        prove = domain $$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, domain $$0) 0.5.0.0.0.0.1.1.0.0.1.0.0
                       }
                       prove ∈ $$$$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$$0 $$$$$$0) (domain $$0, $0) 0.5.0.0.0.0.1.1.0.0.1.0 0.5.0.0.0.0.1.1.0.0.0
                     }
@@ -464,24 +462,14 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
                             }
                             elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
                               inferenceExtraction {
-                                prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () ($$0, $0, t1) 0.5.0.0.0.0.1.1.1.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                                prove ∧ = domain $$0 $0 ⊆ codomain $$0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function $$0, ∧ = domain $$0 $0 ⊆ codomain $$0 t1) () 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.0
-                                prove = domain $$0 $0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain $$0 $0, ⊆ codomain $$0 t1) () 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.1
+                                prove = $0 domain $$0 98ec5c667b4987db6d28f68bd22becfba8c24b9d1e6bc24f2ac00808ce87cda0 () ($$0, $0, t1) 0.5.0.0.0.0.1.1.1.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                                prove = domain $$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, domain $$0) 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0.0
                               }
                               prove ∈ successor $$$$$$$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ successor $$$$$$$0 $$$$$$$$$0) (domain $$0, $0) 0.5.0.0.0.0.1.1.1.0.0.1.1.0.1.0 0.5.0.0.0.0.1.1.1.0.0.1.1.0.0
                             }
                           }
                           prove ∈ $$$$$$$0 $0 c0287415c569731e330b195d8350651cdcc0dfb1bfbc133cd897f99767715b2c () ($0, $$$$$$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.5.0.0.0.0.1.1.1.0.0.1.1.0
-                          elided 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb {
-                            elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-                              inferenceExtraction {
-                                prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () ($$0, $0, t1) 0.5.0.0.0.0.1.1.1.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                                prove = $0 domain $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain $$0, $0) 0.5.0.0.0.0.1.1.1.0.0.1.1.2.0.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-                              }
-                              prove ∈ $$$$$$$0 domain $$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ $$$$$$$0 $$$$$$$$$0) ($0, domain $$0) 0.5.0.0.0.0.1.1.1.0.0.1.1.2.0.0 0.5.0.0.0.0.1.1.1.0.0.1.1.1
-                            }
-                            prove ∈ orderedPair $$$$$$$0 apply $$0 $$$$$$$0 $$0 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb () ($$0, $$$$$$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.5.0.0.0.0.1.1.1.0.0.1.1.2.0
-                          }
+                          prove ∈ orderedPair $$$$$$$0 apply $$0 $$$$$$$0 $$0 5c9b61f2b64b3a70c59e4c410535c1c12e54cf47be5e53d570e52c0839232a9f () ($$0, $0, t1, $$$$$$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.5.0.0.0.0.1.1.1.0.0.1.1.1
                           prove ∈ orderedPair $$$$$$$0 apply $$0 $$$$$$$0 union $$$$$$$$0 159dff654ef0a4ccce97c93a3c3e9bf88a22dd35833fdba434500a11753671f0 () (orderedPair $$$$$$$0 apply $$0 $$$$$$$0, $$0, $$$$$$$$0) 0.5.0.0.0.0.1.1.1.0.0.1.1.2 0.5.0.0.0.0.1.1.1.0.0.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
                           prove = $$$$$$0 apply $$0 $$$$$$$0 4898cb54a63080b480e002526e9d67618f5f4426ba100ecd74ec34f1143c110d (∈ orderedPair $$$$$$$0 $$$$$$$$$0 union $$$$$$$$0) ($$$$$$0, apply $$0 $$$$$$$0) 0.5.0.0.0a 0.5.0.0.0.0a 0.5.0.0.0.0.1.1.1.0.0.1.1.3
                           elided (Extracted) {
@@ -550,16 +538,12 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
   subproof (Function value - inductive case) {
     take n {
       assume ∈ $0 ℕ {
-        elided 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb {
-          prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 0.9.0.0a
-          elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
-            inferenceExtraction {
-              prove ∧ function union $$0 ∧ = domain union $$0 ℕ ⊆ codomain union $$0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () (union $$0, ℕ, t1) 0.7 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-              prove = ℕ domain union $$0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () (domain union $$0, ℕ) 0.9.0.0.0.1.0.0 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
-            }
-            prove ∈ successor $0 domain union $$0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ successor $0 $$$0) (ℕ, domain union $$0) 0.9.0.0.0.1.0 0.9.0.0.0.0
+        inferenceWithPremiseDerivations {
+          composed {
+            known ∈ $0 ℕ
+            prove ∈ successor $0 ℕ f4c38eae5410642d91e8b6c0a110fc14a6074bd1c9a2f656ec519fcd721f6bbd () ($0) 0.9.0.0a
           }
-          prove ∈ orderedPair successor $0 apply union $$0 successor $0 union $$0 1a4234ff3a8cfb7a5fbdf4f9a1f7c9a17d54cf19898508c353f097bb72d96eeb () (union $$0, successor $0) 0.7 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 0.9.0.0.0.1
+          prove ∈ orderedPair successor $0 apply union $$0 successor $0 union $$0 5c9b61f2b64b3a70c59e4c410535c1c12e54cf47be5e53d570e52c0839232a9f () (union $$0, ℕ, t1, successor $0) 0.7 0.9.0.0.0.0
         }
         prove ∃ g ∧ ∈ orderedPair successor $$0 apply union $$$0 successor $$0 $0 ∈ $0 $$$0 ce5a9a7773b7207b1433fe33c1f6357cff535a178c0d2991eb1e5b5781102e99 () (orderedPair successor $0 apply union $$0 successor $0, $$0) 0.9.0.0.0
         let g_n ∧ ∈ orderedPair successor $$0 apply union $$$0 successor $$0 $0 ∈ $0 $$$0 30412315b8eb88fa8dd1fa23362d9aea6a428afe70be747bb9e02eea9ec6b3f7 (∧ ∈ orderedPair successor $0 apply union $$0 successor $0 $$$0 ∈ $$$0 $$0, = apply union $$0 successor $0 apply t0 apply union $$0 $0) () 0.9.0.0.1 {
@@ -578,9 +562,8 @@ let S = $0 comprehension g powerSet product ℕ t1 ∃ n ∧ ∈ $0 ℕ ∧ ∧ 
               }
               elided 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed {
                 inferenceExtraction {
-                  prove ∧ function $$0 ∧ = domain $$0 $0 ⊆ codomain $$0 t1 4d4507246c71a4bc0b40086accc8b84c9afca296ba01f595bd5ca9030d2a698b () ($$0, $0, t1) 0.9.0.0.2.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29
-                  prove ∧ = domain $$0 $0 ⊆ codomain $$0 t1 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 (function $$0, ∧ = domain $$0 $0 ⊆ codomain $$0 t1) () 0.9.0.0.2.1.0.1.0.0
-                  prove = domain $$0 $0 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a (= domain $$0 $0, ⊆ codomain $$0 t1) () 0.9.0.0.2.1.0.1.0.1
+                  prove = $0 domain $$0 98ec5c667b4987db6d28f68bd22becfba8c24b9d1e6bc24f2ac00808ce87cda0 () ($$0, $0, t1) 0.9.0.0.2.1a 062123718abc1909811caf4720d2507f5265f54ca9003f4bda14c8d757d44a29 827ecc2b1b19ca976022860dade4c605eef6eb2908bc2934591a9a8abf32ab5a
+                  prove = domain $$0 $0 da679729d278df4b182648b422dd5be34e04602616257aa55b676ca4f04bce58 () ($0, domain $$0) 0.9.0.0.2.1.0.1.0.0
                 }
                 prove ∈ successor $$$0 $0 0bc84cc60c63f0bedf5c3154e0f6f9cea15795bc911992d3489e79c2f021d6ed (∈ successor $$$0 $$$$$0) (domain $$0, $0) 0.9.0.0.2.1.0.1.0 0.9.0.0.2.1.0.0
               }

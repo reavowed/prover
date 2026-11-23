@@ -10,10 +10,15 @@ theorem Subset Condition for Function From
 termVariables(f 0, A 0, B 0)
 conclusion ↔ ∧ function t0 functionFrom t0 t1 t2 ∧ ⊆ t0 product t1 t2 ∀ x → ∈ $0 t1 ∃! b ∈ orderedPair $$0 $0 t0
 
-theorem Any Function Is From Its Domain to Its Codomain
-termVariables(f 0)
-premise function t0
-conclusion ∧ function t0 functionFrom t0 domain t0 codomain t0
+theorem Domain of Function
+termVariables(f 0, A 0, B 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+conclusion = t1 domain t0
+
+theorem Codomain of Function
+termVariables(f 0, A 0, B 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+conclusion ⊆ codomain t0 t2
 
 term apply (f a)
   name (Function Application)
@@ -21,11 +26,11 @@ term apply (f a)
   premises (function t0, ∈ t1 domain t0)
   (∈ orderedPair t1 $0 t0)
 
-theorem Function Application Is Element of Codomain
-termVariables(f 0, a 0)
-premise function t0
-premise ∈ t1 domain t0
-conclusion ∈ apply t0 t1 codomain t0
+theorem Replacement Definition of Function Application
+termVariables(f 0, A 0, B 0, a 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise ∈ t3 t1
+conclusion ∈ orderedPair t3 apply t0 t3 t0
 
 theorem Function Application Is Element of Explicit Range
 termVariables(f 0, A 0, B 0, a 0)
@@ -98,3 +103,9 @@ premise ∧ function t0 functionFrom t0 t1 t2
 premise ⊆ t3 t1
 premise ∈ t4 t3
 conclusion ∈ apply t0 t4 applySet t0 t3
+
+theorem Function Range as Codomain
+termVariables(f 0, A 0, B 0, C 0)
+premise ∧ function t0 functionFrom t0 t1 t2
+premise = t3 codomain t0
+conclusion ∧ function t0 functionFrom t0 t1 t3
