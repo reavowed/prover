@@ -77,7 +77,7 @@ class StepNamingController @Autowired() (val bookService: BookService) {
           (substep: Step) => Step.NamingStep(
             variableName,
             substitutedAssumption,
-            step.statement,
+            resultStatement,
             Seq(substep),
             namingInference.baseInference.summary,
             Seq(Premise.Pending(premiseStatement)),

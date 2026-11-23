@@ -113,6 +113,28 @@ trait BookServiceHelper extends SpecificationLike with StepBuilderHelper with Co
       using any)
   }
 
+  def checkModifyStepsWithoutPropsWithMatcher(
+    service: BookService,
+    existingStepsConstructor: SubstitutionContext => Seq[Step],
+    stepsMatcher: Matcher[Seq[Step]],
+    boundVariables: Seq[String] = Nil)(
+    using availableEntries: AvailableEntries,
+    variableDefinitions: VariableDefinitions
+  ): Result = {
+    val existingSteps = createStepsWithContext(existingStepsConstructor, boundVariables)
+    there was one(service).replaceSteps[WithValue[Seq[Step]]#Type](
+      eq(bookKey),
+      eq(chapterKey),
+      eq(theoremKey),
+      eq(proofIndex),
+      eq(outerStepPath))(
+      modifyStepsCallbackWithoutProps(
+        existingSteps,
+        stepsMatcher,
+        boundVariables))(
+      using any)
+  }
+
   def checkModifyStepsWithMatcher(
     service: BookService,
     existingStepsConstructor: SubstitutionContext => Seq[Step],
