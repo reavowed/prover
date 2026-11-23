@@ -76,7 +76,7 @@ class ChapterController @Autowired() (val bookService: BookService) extends Usag
     (for {
       chapterWithContext <- bookService.findChapter(bookKey, chapterKey)
     } yield {
-      createReactView("Chapter", getChapterProps(chapterWithContext))
+      createReactView("Chapter", chapterWithContext.chapter.title, getChapterProps(chapterWithContext))
     }).toResponseEntity
   }
 

@@ -44,7 +44,7 @@ class BookController @Autowired() (val bookService: BookService) extends UsageFi
     (for {
       bookWithContext <- bookService.findBook(bookKey)
     } yield {
-      createReactView("Book", BookProps(bookWithContext))
+      createReactView("Book", bookWithContext.book.title, BookProps(bookWithContext))
     }).toResponseEntity
   }
 

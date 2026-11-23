@@ -21,7 +21,7 @@ class BooksController @Autowired() (implicit val bookStateManager: BookStateMana
 
   @GetMapping(produces = Array("text/html;charset=UTF-8"))
   def get: ResponseEntity[_] = {
-    new ResponseEntity(createReactView("Books", createBooksProps(bookStateManager.globalContext)), HttpStatus.OK)
+    new ResponseEntity(createReactView("Books", "Books", createBooksProps(bookStateManager.globalContext)), HttpStatus.OK)
   }
 
   @GetMapping(value = Array("reloadFromDisk"))

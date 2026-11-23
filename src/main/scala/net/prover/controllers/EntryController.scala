@@ -58,7 +58,7 @@ class EntryController @Autowired() (val bookService: BookService) extends UsageF
       val index = chapterWithContext.entriesWithContexts.findIndexWhere(_.entry == entry).getOrElse(throw new Exception("Entry somehow didn't exist"))
       val previous = chapterWithContext.entriesWithContexts.lift(index - 1).map(LinkSummary(_))
       val next = chapterWithContext.entriesWithContexts.lift(index + 1).map(LinkSummary(_))
-      createReactView(viewName, baseProps ++ Map(
+      createReactView(viewName, entry.name, baseProps ++ Map(
         "url" -> BookService.getEntryUrl(entryWithContext),
         "bookLink" -> LinkSummary(chapterWithContext.bookWithContext),
         "chapterLink" -> LinkSummary(chapterWithContext),

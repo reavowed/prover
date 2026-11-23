@@ -8,11 +8,11 @@ import net.prover.model.entries.DisplayShorthand
 import scala.xml.Unparsed
 
 trait ReactViews {
-  protected def createReactView(viewName: String, props: AnyRef): String = {
+  protected def createReactView(viewName: String, pageTitle: String, props: AnyRef): String = {
     "<!doctype html>" +
     <html>
       <head>
-        <title>Prover</title>
+        <title>Prover - {pageTitle}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
         <link rel="stylesheet" href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" />
